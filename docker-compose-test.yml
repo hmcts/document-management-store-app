@@ -1,0 +1,18 @@
+---
+version: '2.1'
+
+services:
+  tests:
+    image: docker.artifactory.reform.hmcts.net/evidence/integration-tests
+    environment:
+      - EM_BASE_URI=http://document-management-api-gateway-web:8080
+      - IDAM_USER_BASE_URI=http://idam-api:8080
+      - IDAM_BASE_URI=http://service-auth-provider-api:8080
+    links:
+      - document-management-api-gateway-web
+      - idam-api
+      - service-auth-provider-api
+    depends_on:
+      - document-management-api-gateway-web
+      - idam-api
+      - service-auth-provider-api
