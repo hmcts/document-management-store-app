@@ -36,8 +36,8 @@ public class AuditedStoredDocumentOperationsService {
     public List<StoredDocument> createStoredDocuments(List<MultipartFile> files,
                                                       Classifications classification,
                                                       List<String> roles,
-                                                      Map<String, String> metadata) {
-        List<StoredDocument> storedDocuments = storedDocumentService.saveItems(files, classification, roles, metadata);
+                                                      Map<String, String > metadata) {
+        List<StoredDocument> storedDocuments = storedDocumentService.saveDocuments(files, classification, roles, metadata);
         storedDocuments.forEach(storedDocument -> {
             auditEntryService.createAndSaveEntry(storedDocument, AuditActions.CREATED);
             auditEntryService.createAndSaveEntry(storedDocument.getDocumentContentVersions().get(0), AuditActions.CREATED);
@@ -81,6 +81,24 @@ public class AuditedStoredDocumentOperationsService {
     }
 
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
+    public StoredDocument hardDeleteStoredDocument(UUID id) {
+
+        return hardDeleteStoredDocument( storedDocumentService.findOne(id) );
+
+    }
+
+    @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
+    public StoredDocument hardDeleteStoredDocument(StoredDocument storedDocument) {
+        if (storedDocument == null) {
+            return null;
+        }
+        storedDocumentService.hardDeleteDocument(storedDocument);
+
+        return storedDocument;
+    }
+
+
+    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
     public StoredDocument deleteStoredDocument(UUID id) {
         return deleteStoredDocument(storedDocumentService.findOne(id));
     }
@@ -91,7 +109,7 @@ public class AuditedStoredDocumentOperationsService {
             return null;
         }
 
-        storedDocumentService.deleteItem(storedDocument);
+        storedDocumentService.deleteDocument(storedDocument);
 
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
 

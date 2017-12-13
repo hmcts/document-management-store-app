@@ -77,8 +77,8 @@ public class StoredDocumentServiceTests {
 
 
     @Test
-    public void testSaveItems() {
-        List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TestUtil.TEST_FILE));
+    public void testSaveItems() throws Exception {
+        List<StoredDocument> documents = storedDocumentService.saveDocuments(singletonList(TestUtil.TEST_FILE));
 
         final DocumentContentVersion latestVersion = documents.get(0).getDocumentContentVersions().get(0);
 
@@ -107,7 +107,7 @@ public class StoredDocumentServiceTests {
     @Test
     public void testDelete() {
         StoredDocument storedDocument = new StoredDocument();
-        storedDocumentService.deleteItem(storedDocument);
+        storedDocumentService.deleteDocument(storedDocument);
 
         assertThat(storedDocument.isDeleted(), is(true));
         verify(storedDocumentRepository).save(storedDocument);
@@ -116,7 +116,7 @@ public class StoredDocumentServiceTests {
     @Test
     public void testDeleteWithNull() {
         StoredDocument storedDocument = null;
-        storedDocumentService.deleteItem(storedDocument);
+        storedDocumentService.deleteDocument(storedDocument);
 
         verify(storedDocumentRepository, never()).save(storedDocument);
     }

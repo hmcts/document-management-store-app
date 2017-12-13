@@ -82,8 +82,8 @@ public class UploadDocumentTest {
         final String url = getSelfUrlFromResponse(response);
 
         mvc.perform(delete(url)
-            .headers(headers))
-            .andExpect(status().is(405));
+                .headers(headers))
+                .andExpect(status().is(410));
 
         // mvc.perform(get(url)
         //     .headers(headers))

@@ -8,6 +8,7 @@ public enum AuditActions {
     CREATED,
     READ,
     UPDATED,
-    DELETED
+    DELETED,
+    HARD_DELETED;
 
 }

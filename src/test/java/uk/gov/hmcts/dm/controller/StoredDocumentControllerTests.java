@@ -335,10 +335,11 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     @Test
     public void testDelete() throws Exception {
         restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .delete("/documents/" + id)
-            .andExpect(status().is(405));
+                .withAuthorizedUser("userId")
+                .withAuthorizedService("divorce")
+                .delete("/documents/" + id)
+                .andExpect(status().is(410));
+
     }
 
     @Test

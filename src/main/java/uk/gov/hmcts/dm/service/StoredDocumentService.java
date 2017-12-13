@@ -57,10 +57,10 @@ public class StoredDocumentService {
         folderRepository.save(folder);
     }
 
-    public List<StoredDocument> saveItems(List<MultipartFile> files,
-                                          Classifications classification,
-                                          List<String> roles,
-                                          Map<String, String> metadata)  {
+    public List<StoredDocument> saveDocuments(List<MultipartFile> files,
+                                              Classifications classification,
+                                              List<String> roles,
+                                              Map<String, String > metadata)  {
         return files.stream().map(file -> {
             StoredDocument document = new StoredDocument();
             document.setClassification(classification);
@@ -73,8 +73,8 @@ public class StoredDocumentService {
 
     }
 
-    public List<StoredDocument> saveItems(List<MultipartFile> files)  {
-        return saveItems(files, null, null, null);
+    public List<StoredDocument> saveDocuments(List<MultipartFile> files)  {
+        return saveDocuments(files, null, null, null);
     }
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
@@ -85,10 +85,16 @@ public class StoredDocumentService {
     }
 
 
-    public void deleteItem(StoredDocument storedDocument) {
+    public void deleteDocument(StoredDocument storedDocument) {
         if (storedDocument != null) {
             storedDocument.setDeleted(true);
             storedDocumentRepository.save(storedDocument);
+        }
+    }
+
+    public void hardDeleteDocument(StoredDocument storedDocument) {
+        if (storedDocument != null) {
+            storedDocumentRepository.delete(storedDocument);
         }
     }
 }

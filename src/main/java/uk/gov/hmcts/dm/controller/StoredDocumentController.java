@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -105,11 +106,18 @@ public class StoredDocumentController {
 
     @DeleteMapping(value = "{id}")
     @ApiOperation("(Soft) Deletes a Stored Document.")
-    @ApiResponses(value = {
-        @ApiResponse(code = 405, message = "Method not implemented at the moment")
-    })
+
     public ResponseEntity<Object> delete(@PathVariable UUID id) {
-        return ResponseEntity.status(405).build();
+        auditedStoredDocumentOperationsService.deleteStoredDocument(id);
+        return ResponseEntity.status(HttpStatus.GONE).build();
+    }
+
+    @DeleteMapping(value = "{id}/removePermanently")
+    @ApiOperation("Hard deletes a Stored Document.")
+
+    public ResponseEntity<Object> removePermanently(@PathVariable UUID id) {
+        auditedStoredDocumentOperationsService.hardDeleteStoredDocument(id);
+        return ResponseEntity.status(HttpStatus.GONE).build();
     }
 
     @GetMapping(value = "{id}/binary")
@@ -153,5 +161,4 @@ public class StoredDocumentController {
     }
 
 }
-
 
