@@ -5,7 +5,7 @@
 
     <groupId>uk.gov.hmcts.em</groupId>
     <artifactId>document-management-store-app</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 
     <!-- Inherit defaults from Spring Boot -->
     <parent>
