@@ -38,7 +38,7 @@ public class PermissionTest {
     private HttpHeaders headersUserCaseWorker = Helper.getHeaders("userCaseWorker");
 
     @Test
-    public void should_be_able_to_read_own_doc() throws Exception {
+    public void shouldBeAbleToReadOwnDoc() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
 
         mvc.perform(get(url)
@@ -48,7 +48,7 @@ public class PermissionTest {
 
     @Test
     @Ignore("not currently implemented")
-    public void should_be_able_to_delete_own_doc() throws Exception {
+    public void shouldBeAbleToDeleteOwnDoc() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
 
         mvc.perform(delete(url)
@@ -58,7 +58,7 @@ public class PermissionTest {
 
     @Test
     @Ignore("not currently implemented")
-    public void should_not_be_able_to_delete_another_users_doc_if_citizen() throws Exception {
+    public void shouldNotBeAbleToDeleteAnotherUsersDocIfCitizen() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
 
         mvc.perform(delete(url)
@@ -68,7 +68,7 @@ public class PermissionTest {
 
     @Test
     @Ignore("not currently implemented")
-    public void should_not_be_able_to_delete_another_users_doc_if_caseworker() throws Exception {
+    public void shouldNotBeAbleToDeleteAnotherUsersDocIfCaseworker() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
 
         mvc.perform(delete(url)
@@ -77,7 +77,7 @@ public class PermissionTest {
     }
 
     @Test
-    public void should_be_able_to_read_another_users_doc_if_a_caseworker() throws Exception {
+    public void shouldBeAbleToReadAnotherUsersDocIfACaseworker() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
 
         mvc.perform(get(url)

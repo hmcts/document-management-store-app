@@ -15,7 +15,7 @@ import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDeta
 @EnableJpaAuditing
 public class PersistenceConfig {
     @Bean
-    AuditorAware<String> auditorProvider() {
+    public AuditorAware<String> auditorProvider() {
         return new AuditorAwareImpl();
     }
 }

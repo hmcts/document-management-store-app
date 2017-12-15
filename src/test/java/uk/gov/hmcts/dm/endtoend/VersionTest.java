@@ -51,7 +51,7 @@ public class VersionTest {
     }
 
     @Test
-    public void should_upload_a_second_version_of_a_document() throws Exception {
+    public void shouldUploadASecondVersionOfADocument() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
                 .file(FILE_V1)
                 .param("classification", Classifications.PRIVATE.toString())

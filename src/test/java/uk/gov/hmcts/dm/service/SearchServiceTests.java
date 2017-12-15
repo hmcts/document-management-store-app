@@ -28,10 +28,10 @@ import static org.mockito.Mockito.when;
 public class SearchServiceTests {
 
     @Mock
-    StoredDocumentRepository storedDocumentRepository;
+    private StoredDocumentRepository storedDocumentRepository;
 
     @InjectMocks
-    SearchService searchService;
+    private SearchService searchService;
 
     @Test
     public void testSearchMetadata() throws Exception {

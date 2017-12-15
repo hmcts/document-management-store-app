@@ -25,7 +25,6 @@ public class DMBuildInfo implements InfoContributor {
     private final String commit;
     private final String date;
 
-
     private static final String BUILD_INFO = "META-INF/build-info.properties";
     private static final String UNKNOWN = "unknown";
     private static final String EMPTY = "";

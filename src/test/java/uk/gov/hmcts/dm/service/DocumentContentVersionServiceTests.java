@@ -28,13 +28,13 @@ import static org.mockito.Mockito.when;
 public class DocumentContentVersionServiceTests {
 
     @Mock
-    DocumentContentVersionRepository documentContentVersionRepository;
+    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    StoredDocumentRepository storedDocumentRepository;
+    private StoredDocumentRepository storedDocumentRepository;
 
     @InjectMocks
-    DocumentContentVersionService documentContentVersionService;
+    private DocumentContentVersionService documentContentVersionService;
 
     @Test
     public void testStreamingOfFileContentVersion() throws Exception {

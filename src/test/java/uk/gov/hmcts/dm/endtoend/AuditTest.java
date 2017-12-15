@@ -47,7 +47,7 @@ public class AuditTest {
     private HttpHeaders headers = Helper.getHeaders();
 
     @Test
-    public void should_audit_upload_a_document() throws Exception {
+    public void shouldAuditUploadADocument() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 
         final MvcResult auditResponse = mvc.perform(get(url + "/auditEntries")
@@ -63,7 +63,7 @@ public class AuditTest {
     }
 
     @Test
-    public void should_audit_retrieval() throws Exception {
+    public void shouldAuditRetrieval() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 
         mvc.perform(get(url)
@@ -81,7 +81,7 @@ public class AuditTest {
     }
 
 //    @Test
-//    public void should_audit_delete() throws Exception {
+//    public void shouldAuditDelete() throws Exception {
 //        final String url = uploadFileAndReturnSelfUrl();
 //
 //        mvc.perform(delete(url)

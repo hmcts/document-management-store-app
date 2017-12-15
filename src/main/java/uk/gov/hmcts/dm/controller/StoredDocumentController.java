@@ -42,11 +42,11 @@ public class StoredDocumentController {
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    private MethodParameter uploadDocumentsCommandMethodParamter;
+    private MethodParameter uploadDocumentsCommandMethodParameter;
 
     @PostConstruct
-    private void init() throws Exception {
-        uploadDocumentsCommandMethodParamter = new MethodParameter(
+    public void init() throws Exception {
+        uploadDocumentsCommandMethodParameter = new MethodParameter(
                 StoredDocumentController.class.getMethod(
                         "createFrom",
                         UploadDocumentsCommand.class,
@@ -63,7 +63,7 @@ public class StoredDocumentController {
             BindingResult result) throws MethodArgumentNotValidException {
 
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParamter, result);
+            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
             List<StoredDocument> storedDocuments =
                     auditedStoredDocumentOperationsService.createStoredDocuments(

@@ -23,13 +23,13 @@ import static org.mockito.Mockito.when;
 public class AuditedDocumentContentVersionOperationsServiceTests {
 
     @Mock
-    DocumentContentVersionService documentContentVersionService;
+    private DocumentContentVersionService documentContentVersionService;
 
     @Mock
-    AuditEntryService auditEntryService;
+    private AuditEntryService auditEntryService;
 
     @InjectMocks
-    AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+    private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @Test
     public void testReadFileContentVersionBinary() throws Exception {

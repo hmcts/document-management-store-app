@@ -12,7 +12,6 @@ import static org.junit.Assert.assertThat;
 
 public class DMBuildInfoTest {
 
-    private static final String BUILD_INFO = "META-INF/build-info.properties";
     private static final String BUILD_INFO_WITH_BUILD_NO = "META-INF/build-info-with-build-no.properties";
 
 

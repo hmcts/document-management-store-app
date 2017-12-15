@@ -29,18 +29,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class StoredDocumentControllerTests extends ComponentTestBase {
 
-    final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));
-    
-    final UUID id = UUID.randomUUID();
+    private final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));
 
-    final DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
+    private final UUID id = UUID.randomUUID();
+
+    private final DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
             .id(id)
             .mimeType("text/plain")
             .originalDocumentName("filename.txt")
             .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
             .documentContent(documentContent).build();
 
-    final StoredDocument storedDocument = StoredDocument.builder().id(id)
+    private final StoredDocument storedDocument = StoredDocument.builder().id(id)
                         .folder(Folder.builder().id(id).build()).documentContentVersions(
                         Stream.of(documentContentVersion)
                                 .collect(Collectors.toList())

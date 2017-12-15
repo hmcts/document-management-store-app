@@ -26,7 +26,7 @@ public class UserResolverBackdoor implements SubjectResolver<User> {
             throw new AuthCheckerException("Token not found");
         }
 
-        if (token.equals("userCaseWorker")) {
+        if ("userCaseWorker".equals(token)) {
             return new User(userId, ImmutableSet.of("caseworker-probate"));
         }
         return new User(userId, ImmutableSet.of("citizen"));

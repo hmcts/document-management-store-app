@@ -33,7 +33,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     private AuditEntryService auditEntryService;
 
     @InjectMocks
-    AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
+    private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
 
     @Test

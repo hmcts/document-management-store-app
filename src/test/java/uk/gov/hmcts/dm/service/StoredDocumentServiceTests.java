@@ -35,19 +35,19 @@ import static org.mockito.Mockito.*;
 public class StoredDocumentServiceTests {
 
     @Mock
-    StoredDocumentRepository storedDocumentRepository;
+    private StoredDocumentRepository storedDocumentRepository;
+
+//    @Mock
+//    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    DocumentContentVersionRepository documentContentVersionRepository;
+    private BlobCreator blobCreator;
 
-    @Mock
-    BlobCreator blobCreator;
-
-    @Mock
-    FolderRepository folderRepository;
+//    @Mock
+//    private FolderRepository folderRepository;
 
     @InjectMocks
-    StoredDocumentService storedDocumentService;
+    private StoredDocumentService storedDocumentService;
 
     @Before
     public void setUp() throws Exception {

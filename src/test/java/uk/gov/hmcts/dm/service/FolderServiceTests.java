@@ -21,10 +21,10 @@ import static org.mockito.Mockito.*;
 public class FolderServiceTests {
 
     @Mock
-    FolderRepository folderRepository;
+    private FolderRepository folderRepository;
 
     @InjectMocks
-    FolderService folderService;
+    private FolderService folderService;
 
     @Test
     public void testFindOne() throws Exception {

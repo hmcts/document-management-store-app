@@ -34,7 +34,7 @@ public class AuditEntryServiceTests {
     private DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository;
 
     @InjectMocks
-    AuditEntryService auditEntryService;
+    protected AuditEntryService auditEntryService;
 
     @Test
     public void testCreateAndSaveEntryForStoredDocument() {

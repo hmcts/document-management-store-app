@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.exception.DMRuntimeException;
 import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
 import uk.gov.hmcts.reform.auth.checker.core.user.UserRequestAuthorizer;
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
@@ -75,7 +76,6 @@ public class RestActions {
                 .headers(httpHeaders)
                 .content(toJson(requestBody))
                 .contentType(APPLICATION_JSON)));
-
     }
 
     public ResultActions postDocuments(String urlTemplate, List<MultipartFile> files, Classifications classification, List<String> roles) {
@@ -89,7 +89,6 @@ public class RestActions {
         return translateException(() -> mvc.perform(
             builder.headers(httpHeaders)
         ));
-
     }
 
     public ResultActions postDocument(String urlTemplate, MultipartFile file) {
@@ -97,7 +96,6 @@ public class RestActions {
                     MockMvcRequestBuilders.fileUpload(urlTemplate).file((MockMultipartFile)file)
                         .headers(httpHeaders)
                 ));
-
     }
 
     public ResultActions postDocumentVersion(String urlTemplate, MockMultipartFile file) {
@@ -116,7 +114,6 @@ public class RestActions {
                     .file(file)
                     .headers(httpHeaders)
         ));
-
     }
 
     private String toJson(Object o) {
@@ -127,7 +124,7 @@ public class RestActions {
         try {
             return callable.call();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DMRuntimeException(e);
         }
     }
 

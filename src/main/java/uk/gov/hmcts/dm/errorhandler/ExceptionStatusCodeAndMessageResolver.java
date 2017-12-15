@@ -29,7 +29,7 @@ public class ExceptionStatusCodeAndMessageResolver {
         exceptionToMessageMap.put(MethodArgumentNotValidException.class, "Request validation failed");
     }
 
-    ErrorStatusCodeAndMessage resolveStatusCodeAndMessage(
+    public ErrorStatusCodeAndMessage resolveStatusCodeAndMessage(
             Throwable throwable,
             String defaultMessage,
           Integer defaultStatusCode) {

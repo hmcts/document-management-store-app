@@ -42,7 +42,7 @@ public class UploadDocumentTest {
     private HttpHeaders headers = Helper.getHeaders();
 
     @Test
-    public void should_upload_a_document() throws Exception {
+    public void shouldUploadADocument() throws Exception {
         mvc.perform(fileUpload("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
@@ -58,7 +58,7 @@ public class UploadDocumentTest {
     }
 
     @Test
-    public void should_upload_and_retrieve_a_document() throws Exception {
+    public void shouldUploadAndRetrieveADocument() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
                 .file(FILE)
                 .param("classification", Classifications.PRIVATE.toString())
@@ -73,7 +73,7 @@ public class UploadDocumentTest {
     }
 
     @Test
-    public void should_upload_and_delete_a_document() throws Exception {
+    public void shouldUploadAndDeleteADocument() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
                 .file(FILE)
                 .param("classification", Classifications.PRIVATE.toString())

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RunWith(MockitoJUnitRunner.class)
 public class DomainPermissionEvaluatorTests {
 
-    DomainPermissionEvaluator domainPermissionEvaluator = new DomainPermissionEvaluator();
+    private DomainPermissionEvaluator domainPermissionEvaluator = new DomainPermissionEvaluator();
 
     @Test
     public void testAsCreatorIAmGrantedAllPermissions() {

@@ -24,10 +24,10 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
     private boolean globalIncludeStackTrace = true;
 
     @Autowired
-    private ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
+    protected ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
 
     @Autowired
-    private MessageSource messageSource;
+    protected MessageSource messageSource;
 
     @Override
     public Map<String, Object> getErrorAttributes(

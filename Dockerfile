@@ -1,5 +1,8 @@
 FROM openjdk:8-jre
 
+MAINTAINER "HMCTS Evidence Team <https://github.com/hmcts>"
+LABEL maintainer="HMCTS Evidence Team <https://github.com/hmcts>"
+
 RUN mkdir -p /usr/local/bin
 
 COPY docker/lib/wait-for-it.sh /usr/local/bin

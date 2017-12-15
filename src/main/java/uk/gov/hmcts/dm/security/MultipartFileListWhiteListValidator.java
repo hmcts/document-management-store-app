@@ -1,16 +1,22 @@
 package uk.gov.hmcts.dm.security;
 
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.actuate.health.WebChecker;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
 public class MultipartFileListWhiteListValidator implements ConstraintValidator<MultipartFileListWhiteList,List<MultipartFile>> {
+
+    private static final Logger log = LoggerFactory.getLogger(MultipartFileListWhiteListValidator.class);
+
 
     @Getter
     private final List<String> mimeTypeList;
@@ -21,7 +27,10 @@ public class MultipartFileListWhiteListValidator implements ConstraintValidator<
     }
 
     @Override
-    public void initialize(MultipartFileListWhiteList fileWhiteList) {}
+    public void initialize(MultipartFileListWhiteList fileWhiteList) {
+        String msg = fileWhiteList.message();
+        log.info("MultipartFileListWhiteListValidator initialize ", msg);
+    }
 
     @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
@@ -31,7 +40,5 @@ public class MultipartFileListWhiteListValidator implements ConstraintValidator<
                 .distinct()
                 .allMatch(ft -> getMimeTypeList().contains(ft));
     }
-
-
 
 }

@@ -1,6 +1,8 @@
 package uk.gov.hmcts.dm.security;
 
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,6 +13,9 @@ import java.util.List;
 
 public class MultipartFileWhiteListValidator implements ConstraintValidator<MultipartFileWhiteList,MultipartFile> {
 
+    private static final Logger log = LoggerFactory.getLogger(MultipartFileWhiteListValidator.class);
+
+
     @Getter
     private final List<String> mimeTypeList;
 
@@ -20,7 +25,10 @@ public class MultipartFileWhiteListValidator implements ConstraintValidator<Mult
     }
 
     @Override
-    public void initialize(MultipartFileWhiteList fileWhiteList) {}
+    public void initialize(MultipartFileWhiteList fileWhiteList) {
+        String msg = fileWhiteList.message();
+        log.info("MultipartFileListWhiteListValidator initialize ", msg);
+    }
 
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {

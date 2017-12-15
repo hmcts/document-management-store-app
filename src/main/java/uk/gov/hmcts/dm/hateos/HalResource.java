@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import org.springframework.hateoas.ResourceSupport;
+import uk.gov.hmcts.dm.exception.DMRuntimeException;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ public abstract class HalResource extends ResourceSupport {
         try {
             return getLink("self") != null ? new URI(getLink("self").getHref()) : null;
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new DMRuntimeException(e.getMessage());
         }
     }
 }

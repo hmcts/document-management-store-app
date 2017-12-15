@@ -78,17 +78,17 @@ public abstract class ComponentTestBase {
         this.restActions = new RestActions(mvc, serviceRequestAuthorizer, userRequestAuthorizer, objectMapper);
     }
 
-    CustomResultMatcher body() {
+    protected CustomResultMatcher body() {
         return new CustomResultMatcher(objectMapper);
     }
 
     @SneakyThrows
-    String contentsOf(String fileName) {
+    protected String contentsOf(String fileName) {
         String content = new String(Files.readAllBytes(Paths.get(ResourceUtils.getURL("classpath:" + fileName).toURI())), StandardCharsets.UTF_8);
         return resolvePlaceholders(content);
     }
 
-    String resolvePlaceholders(String content) {
+    private String resolvePlaceholders(String content) {
         return configurableListableBeanFactory.resolveEmbeddedValue(content);
     }
 }
