@@ -27,27 +27,23 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by pawel on 11/07/2017.
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class StoredDocumentServiceTests {
 
     @Mock
-    private StoredDocumentRepository storedDocumentRepository;
-
-//    @Mock
-//    private DocumentContentVersionRepository documentContentVersionRepository;
+    protected StoredDocumentRepository storedDocumentRepository;
 
     @Mock
-    private BlobCreator blobCreator;
+    protected DocumentContentVersionRepository documentContentVersionRepository;
 
-//    @Mock
-//    private FolderRepository folderRepository;
+    @Mock
+    protected BlobCreator blobCreator;
+
+    @Mock
+    protected FolderRepository folderRepository;
 
     @InjectMocks
-    private StoredDocumentService storedDocumentService;
+    protected StoredDocumentService storedDocumentService;
 
     @Before
     public void setUp() throws Exception {
