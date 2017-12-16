@@ -7,8 +7,7 @@ before_install:
 
 install: true
 
-#script:
-#- mvn clean test
+script: true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
