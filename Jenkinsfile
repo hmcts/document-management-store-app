@@ -172,21 +172,21 @@ try {
 
         if ("master" == "${env.BRANCH_NAME}") {
 
+            stage('Publish Docker') {
+                dockerImage(imageName: "evidence/${app}")
+                dockerImage(imageName: "evidence/${app}-database", context: 'docker/database')
+            }
+
             stage('Package (RPM)') {
-                rpmVersion = packager.javaRPM(app, '$(ls build/libs/document-management-store-app-*.jar)', 'springboot', 'src/main/resources/application.yaml')
+                rpmVersion = packager.javaRPM(app, 'build/libs/claim-store-$(./gradlew -q printVersion)-all.jar', 'springboot', 'src/main/resources/application.yaml')
                 version = "{ app: ${app}, rpmversion: ${rpmVersion}}"
             }
 
             stage('Publish RPM') {
                 packager.publishJavaRPM(app)
-                def rpmName = packager.rpmName(app, rpmVersion)
-                rpmTagger = new RPMTagger(this, app, rpmName, artifactorySourceRepo)
+                rpmTagger = new RPMTagger(this, app, packager.rpmName(app, rpmVersion), artifactorySourceRepo)
             }
 
-            stage('Publish Docker') {
-                dockerImage(imageName: "evidence/${app}")
-                dockerImage(imageName: "evidence/${app}-database", context: 'docker/database')
-            }
 
             stage('Deploy and Test on Dev') {
                 build job: 'document-deploy', parameters: [
@@ -194,6 +194,8 @@ try {
                     [$class: 'StringParameterValue', name: 'BUILD_VERSION', value: rpmVersion],
                     [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: 'dev']
                 ]
+                rpmTagger.tagDeploymentSuccessfulOn('dev')
+                rpmTagger.tagTestingPassedOn('dev')
             }
 
 //            stage('Deploy and Test on Test') {
@@ -202,7 +204,17 @@ try {
 //                        [$class: 'StringParameterValue', name: 'BUILD_VERSION', value: rpmVersion],
 //                        [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: 'test']
 //                ]
+//                rpmTagger.tagDeploymentSuccessfulOn('test')
 //                rpmTagger.tagTestingPassedOn("test")
+//            }
+//            stage('Deploy and Test on Demo') {
+//                build job: 'document-deploy', parameters: [
+//                        [$class: 'StringParameterValue', name: 'BUILD_APP', value: app],
+//                        [$class: 'StringParameterValue', name: 'BUILD_VERSION', value: rpmVersion],
+//                        [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: 'demo']
+//                ]
+//                rpmTagger.tagDeploymentSuccessfulOn('demo')
+//                rpmTagger.tagTestingPassedOn("demo")
 //            }
         }
         stage('Slack Notification') {
