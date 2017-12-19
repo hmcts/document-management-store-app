@@ -164,21 +164,7 @@ dependencies {
 
 }
 
-jacocoTestReport {
-    executionData(test)
-
-    reports {
-        xml {
-            enabled true
-        }
-
-        html {
-            enabled true
-        }
-    }
-}
-
-def sonarExclusions = [
+def coverageExclusionList = [
     '**uk/gov/hmcts/dm/domain/',
     '**uk/gov/hmcts/dm/DmApp.java',
     '**uk/gov/hmcts/dm/hateos/*',
@@ -194,14 +180,32 @@ def sonarExclusions = [
 //(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
     toolVersion = '0.7.9' // jacocoMavenPluginVersion
+    reportsDir = file("$buildDir/reports/jacoco")
 }
+
+jacocoTestReport {
+    executionData(test)
+
+    reports {
+        xml.enabled = true
+        csv.enabled = true
+    }
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: coverageExclusionList)
+        })
+    }
+}
+
+
 
 //(./gradlew sonarqube)
 sonarqube {
     properties {
         property "sonar.projectName", "em-api-proto"
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
-        property "sonar.exclusions", sonarExclusions.join(", ")
+        property "sonar.exclusions", coverageExclusionList.join(", ")
     }
 }
 
