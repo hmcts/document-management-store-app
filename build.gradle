@@ -28,6 +28,13 @@ compileTestJava {
     options.compilerArgs << '-parameters' << '-Xlint:deprecation'
 }
 
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+}
+
 tasks.withType(Test)  {
     maxParallelForks = 1
 }
