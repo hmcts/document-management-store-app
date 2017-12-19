@@ -1,9 +1,18 @@
 language: java
 
+before_cache:
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 before_install:
   - sudo apt-get install jq
   - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
   - curl https://raw.githubusercontent.com/hmcts/reform-api-docs/master/bin/publish-swagger-docs.sh > publish-swagger-docs.sh
+
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
 
 install: ./gradlew clean assemble --info
 
@@ -13,8 +22,6 @@ script:
   - ./gradlew jacocoTestReport
 #  - ./gradlew sonarqube -Dsonar.host.url=$SONARQUBE_URL
   - ./gradlew installDist bootRepackage
-
-
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
