@@ -1,5 +1,7 @@
 #!/bin/sh
-mvn clean compile test
-mvn jacoco:report
-xdg-open target/site/jacoco/index.html
-open target/site/jacoco/index.html
+./gradlew jacocoTestReport --info
+
+xdg-open build/reports/jacoco/test/html/index.html
+open build/reports/jacoco/test/html/index.html
+
+./gradlew sonarqube -Dsonar.host.url=$SONARQUBE_URL

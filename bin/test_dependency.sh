@@ -1,4 +1,5 @@
 #!/bin/sh
-mvn dependency-check:check -Powasp
-xdg-open target/dependency-check-report.html
-open target/dependency-check-report.html
+./gradlew dependencyCheckAnalyze -DdependencyCheck.failBuild=false
+
+xdg-open build/reports/dependency-check-report.html
+open build/reports/dependency-check-report.html
