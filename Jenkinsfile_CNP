@@ -14,7 +14,7 @@ properties([
 @Library("Infrastructure")
 
 def type = "java"
-def product = "document-management-store-app"
-def component = "service"
+def product = "dm"
+def component = "document-management-store-app"
 
 withPipeline(type , product, component) {}

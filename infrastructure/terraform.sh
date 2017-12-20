@@ -4,7 +4,7 @@ state_store_resource_group="contino-moj-tf-state"
 state_store_storage_acccount="continomojtfstate"
 bootstrap_state_storage_container="contino-moj-tfstate-container"
 productEnvironment="local"
-#product="document-management-store-app"
+product="dm"
 
 getCreds() {
 
@@ -14,6 +14,7 @@ getCreds() {
     export ARM_TENANT_ID="$(azure keyvault secret show contino-devops terraform-creds --json | jq -r .value | jq -r .azure_tenant_id)"
 
 }
+
 
 getCreds
 

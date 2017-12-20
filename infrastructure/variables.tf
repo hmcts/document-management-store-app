@@ -1,20 +1,18 @@
 variable "product" {
-  type    = "string"
-  default = "document-management-store-app"
+    type    = "string"
+    default = "dm"
 }
 
 variable "location" {
-  type    = "string"
-  default = "UK South"
+    type    = "string"
+    default = "UK South"
 }
 
 variable "env" {
-  type = "string"
+    type = "string"
 }
 
-variable "ssenv" {
-  type = "string"
-  default = "prd"
+variable "infrastructure_env" {
+    default     = "dev"
+    description = "Infrastructure environment to point to"
 }
-
-variable "ilbIp"{}

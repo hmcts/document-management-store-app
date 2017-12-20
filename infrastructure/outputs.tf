@@ -1,3 +1,3 @@
-output "recipe_backend_deployment_endpoint" {
-  value = "${module.recipe-backend.gitendpoint}"
+output "frontend_deployment_endpoint" {
+    value = "${module.document-management-store-app.gitendpoint}"
 }
