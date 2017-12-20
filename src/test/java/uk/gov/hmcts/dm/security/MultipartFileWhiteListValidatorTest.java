@@ -17,24 +17,23 @@ import static org.junit.Assert.assertTrue;
 public class MultipartFileWhiteListValidatorTest {
 
     private final MultipartFileListWhiteListValidator fileWhiteListValidator = new MultipartFileListWhiteListValidator(
-            Arrays.asList(
-                    "text/plain",
-                    "text/csv",
-                    "image/gif",
-                    "image/tiff",
-                    "image/jpeg",
-                    "image/png",
-                    "image/webp",
-                    "application/pdf"
-            )
+        Arrays.asList(
+            "text/plain",
+            "text/csv",
+            "image/gif",
+            "image/tiff",
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "application/pdf"
+        )
     );
 
-//    Success scenarios
-
+    //    Success scenarios
     @Test
     public void testUploadDocumentsSuccess() {
         List<MultipartFile> files = Stream.of(
-                new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8))
+            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
         boolean b = fileWhiteListValidator.isValid(files, null);
@@ -54,8 +53,8 @@ public class MultipartFileWhiteListValidatorTest {
     @Test
     public void testUploadMultipleDifferentDocumentsTypesSuccess() {
         List<MultipartFile> files = Stream.of(
-                new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
-                new MockMultipartFile("files", "filename.txt", "application/pdf", "hello".getBytes(StandardCharsets.UTF_8))
+            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
+            new MockMultipartFile("files", "filename.txt", "application/pdf", "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
         boolean b = fileWhiteListValidator.isValid(files, null);
@@ -66,8 +65,8 @@ public class MultipartFileWhiteListValidatorTest {
     @Test
     public void testUploadMultipleDocumentsSuccess() {
         List<MultipartFile> files = Stream.of(
-                new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
-                new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8))
+            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
+            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
         boolean b = fileWhiteListValidator.isValid(files, null);
@@ -75,12 +74,11 @@ public class MultipartFileWhiteListValidatorTest {
         assertTrue(b);
     }
 
-//    Fail scenarios
-
+    //    Fail scenarios
     @Test
     public void testUploadDocumentsFail() {
         List<MultipartFile> files = Stream.of(
-                new MockMultipartFile("files", "filename.txt", "text/html", "hello".getBytes(StandardCharsets.UTF_8))
+            new MockMultipartFile("files", "filename.txt", "text/html", "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
         boolean b = fileWhiteListValidator.isValid(files, null);
@@ -91,7 +89,7 @@ public class MultipartFileWhiteListValidatorTest {
     @Test
     public void testUploadDocumentsMalformedFail() {
         List<MultipartFile> files = Stream.of(
-                new MockMultipartFile("files", "filename.txt", "tex", "hello".getBytes(StandardCharsets.UTF_8))
+            new MockMultipartFile("files", "filename.txt", "tex", "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
         boolean b = fileWhiteListValidator.isValid(files, null);
@@ -102,8 +100,8 @@ public class MultipartFileWhiteListValidatorTest {
     @Test
     public void testUploadMultipleDocumentsFail() {
         List<MultipartFile> files = Stream.of(
-                new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
-                new MockMultipartFile("files", "filename.txt", "text/html", "hello".getBytes(StandardCharsets.UTF_8))
+            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
+            new MockMultipartFile("files", "filename.txt", "text/html", "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
         boolean b = fileWhiteListValidator.isValid(files, null);

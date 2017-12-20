@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
 import uk.gov.hmcts.reform.auth.checker.core.user.UserRequestAuthorizer;
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
+import uk.gov.hmcts.dm.exception.DmRuntimeException;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.List;
@@ -55,7 +56,7 @@ public class RestActions {
 
     public ResultActions delete(String urlTemplate) {
         return translateException(() -> mvc.perform(MockMvcRequestBuilders.delete(urlTemplate)
-                .headers(httpHeaders))
+            .headers(httpHeaders))
         );
     }
 
@@ -72,10 +73,9 @@ public class RestActions {
 
     public ResultActions put(String urlTemplate, Object requestBody) {
         return translateException(() -> mvc.perform(MockMvcRequestBuilders.put(urlTemplate)
-                .headers(httpHeaders)
-                .content(toJson(requestBody))
-                .contentType(APPLICATION_JSON)));
-
+            .headers(httpHeaders)
+            .content(toJson(requestBody))
+            .contentType(APPLICATION_JSON)));
     }
 
     public ResultActions postDocuments(String urlTemplate, List<MultipartFile> files, Classifications classification, List<String> roles) {
@@ -84,26 +84,24 @@ public class RestActions {
 
         builder.param("classification", classification.toString());
 
-        files.forEach( f -> builder.file((MockMultipartFile) f) );
+        files.forEach(f -> builder.file((MockMultipartFile) f));
 
         return translateException(() -> mvc.perform(
             builder.headers(httpHeaders)
         ));
-
     }
 
     public ResultActions postDocument(String urlTemplate, MultipartFile file) {
         return translateException(() -> mvc.perform(
-                    MockMvcRequestBuilders.fileUpload(urlTemplate).file((MockMultipartFile)file)
-                        .headers(httpHeaders)
-                ));
-
+            MockMvcRequestBuilders.fileUpload(urlTemplate).file((MockMultipartFile) file)
+                .headers(httpHeaders)
+        ));
     }
 
     public ResultActions postDocumentVersion(String urlTemplate, MockMultipartFile file) {
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.fileUpload(urlTemplate);
+            MockMvcRequestBuilders.fileUpload(urlTemplate);
 
 
         builder.with(request -> {
@@ -112,11 +110,10 @@ public class RestActions {
         });
 
         return translateException(() -> mvc.perform(
-                builder
-                    .file(file)
-                    .headers(httpHeaders)
+            builder
+                .file(file)
+                .headers(httpHeaders)
         ));
-
     }
 
     private String toJson(Object o) {
@@ -127,7 +124,7 @@ public class RestActions {
         try {
             return callable.call();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DmRuntimeException(e);
         }
     }
 

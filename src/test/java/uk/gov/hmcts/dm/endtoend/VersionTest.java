@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +22,22 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = DmApp.class)
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    classes = DmApp.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
 @TestPropertySource(
-        locations = "classpath:application-local.yaml")
+    locations = "classpath:application-local.yaml")
 public class VersionTest {
 
     public static final MockMultipartFile FILE_V1 =
-            new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
+        new MockMultipartFile("files", "test.txt", "text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
     public static final MockMultipartFile FILE_V2 =
-            new MockMultipartFile("file", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
+        new MockMultipartFile("file", "test.txt", "text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
     @Autowired
     private MockMvc mvc;
@@ -51,20 +49,20 @@ public class VersionTest {
     }
 
     @Test
-    public void should_upload_a_second_version_of_a_document() throws Exception {
+    public void shouldUploadASecondVersionOfADocument() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
-                .file(FILE_V1)
-                .param("classification", Classifications.PRIVATE.toString())
-                .headers(headers))
-                .andReturn().getResponse();
+            .file(FILE_V1)
+            .param("classification", Classifications.PRIVATE.toString())
+            .headers(headers))
+            .andReturn().getResponse();
 
-        final String url = getSelfUrlFromResponse(response);
+        final String url = Helper.getSelfUrlFromResponse(response);
 
         mvc.perform(fileUpload(url)
-                .file(FILE_V2)
-                .with(VersionTest::setMethodToPost)
-                .headers(headers))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$._links.length()", is(3)));
+            .file(FILE_V2)
+            .with(VersionTest::setMethodToPost)
+            .headers(headers))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$._links.length()", is(3)));
     }
 }

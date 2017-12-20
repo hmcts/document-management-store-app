@@ -26,10 +26,10 @@ import static org.mockito.Mockito.when;
 public class BlobCreatorTests {
 
     @Autowired
-    EntityManager entityManager;
+    protected EntityManager entityManager;
 
     @Autowired
-    BlobCreator blobCreator;
+    private BlobCreator blobCreator;
 
     @Test(expected = RuntimeException.class)
     public void testRuntimeException() throws Exception {

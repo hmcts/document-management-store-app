@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.repository;
 
-
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +12,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.UUID;
 
-/**
- * Created by pawel on 23/05/2017.
- */
 @Repository
 public interface StoredDocumentRepository extends PagingAndSortingRepository<StoredDocument, UUID> {
 

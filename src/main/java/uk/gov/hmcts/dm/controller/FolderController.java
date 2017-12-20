@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.Folder;
+import uk.gov.hmcts.dm.service.FolderService;
 import uk.gov.hmcts.dm.hateos.FolderHalResource;
-import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.util.List;
 import java.util.UUID;

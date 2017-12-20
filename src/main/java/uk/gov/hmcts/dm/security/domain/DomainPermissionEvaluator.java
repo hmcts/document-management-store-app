@@ -1,9 +1,5 @@
 package uk.gov.hmcts.dm.security.domain;
 
-/**
- * Created by pawel on 02/10/2017.
- */
-
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.dm.security.Classifications;
@@ -30,16 +26,15 @@ public class DomainPermissionEvaluator {
         if (!result && permission == Permissions.READ && creatorAware instanceof RolesAware) {
             RolesAware rolesAware = (RolesAware) creatorAware;
             if (rolesAware.getRoles() != null
-                    && authenticatedUserRoles != null
-                    && rolesAware.getClassification() != null
-                    && (Classifications.RESTRICTED.equals(rolesAware.getClassification()) ||
-                    Classifications.PUBLIC.equals(rolesAware.getClassification())
+                && authenticatedUserRoles != null
+                && rolesAware.getClassification() != null
+                && (Classifications.RESTRICTED.equals(rolesAware.getClassification())
+                || Classifications.PUBLIC.equals(rolesAware.getClassification())
             )) {
-
                 HashSet<String> authenticatedUserRolesSet = new HashSet<>(authenticatedUserRoles);
                 authenticatedUserRolesSet.retainAll(rolesAware.getRoles());
 
-                if (authenticatedUserRolesSet.size() > 0) {
+                if (!authenticatedUserRolesSet.isEmpty()) {
                     result = true;
                 }
             }
@@ -51,7 +46,7 @@ public class DomainPermissionEvaluator {
 
             authenticatedUserRolesSet.retainAll(caseWorkerRoles);
 
-            if (authenticatedUserRolesSet.size() > 0 ) {
+            if (!authenticatedUserRolesSet.isEmpty()) {
                 result = true;
             }
         }

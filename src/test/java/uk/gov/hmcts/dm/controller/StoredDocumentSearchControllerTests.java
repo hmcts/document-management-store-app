@@ -29,21 +29,21 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
         MetadataSearchCommand searchCommand = new MetadataSearchCommand("name", "thename");
 
         List<StoredDocument> documents = Arrays.asList(
-                new StoredDocument(),
-                new StoredDocument(),
-                new StoredDocument());
+            new StoredDocument(),
+            new StoredDocument(),
+            new StoredDocument());
 
         Pageable pageable = new PageRequest(0, 2);
 
         when(
             this.searchService
                 .findStoredDocumentsByMetadata(eq(searchCommand), any(Pageable.class)))
-        .thenReturn(new PageImpl<>(documents, pageable, 3));
+            .thenReturn(new PageImpl<>(documents, pageable, 3));
 
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-        .post("/documents/filter", searchCommand)
+            .post("/documents/filter", searchCommand)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.page.size", is(2)))
             .andExpect(jsonPath("$.page.totalElements", is(3)))
@@ -62,10 +62,10 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
         MetadataSearchCommand searchCommand = new MetadataSearchCommand("thename", null);
 
         restActions
-                .withAuthorizedUser("userId")
-                .withAuthorizedService("divorce")
-                .post("/documents/filter", searchCommand)
-                .andExpect(status().is4xxClientError());
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .post("/documents/filter", searchCommand)
+            .andExpect(status().is4xxClientError());
 
     }
 

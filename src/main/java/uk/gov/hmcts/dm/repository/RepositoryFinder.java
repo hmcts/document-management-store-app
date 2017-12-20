@@ -7,9 +7,9 @@ import org.springframework.data.repository.support.Repositories;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.dm.exception.RepositoryCouldNotBeFoundException;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Iterator;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by pawel on 02/10/2017.
@@ -28,7 +28,7 @@ public class RepositoryFinder {
         }
     }
 
-    @SuppressWarnings(value="unchecked")
+    @SuppressWarnings(value = "unchecked")
     public CrudRepository<Object, Serializable> find(@NotNull Class<?> domainClass) {
         Repositories repositories = new Repositories(listableBeanFactory);
 
@@ -36,7 +36,7 @@ public class RepositoryFinder {
         while (it.hasNext()) {
             Object repository = repositories.getRepositoryFor(domainClass);
             if (repository != null && repository instanceof CrudRepository) {
-                return (CrudRepository<Object, Serializable>)repository;
+                return (CrudRepository<Object, Serializable>) repository;
             }
         }
 

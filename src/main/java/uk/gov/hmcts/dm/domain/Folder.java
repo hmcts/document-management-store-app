@@ -9,8 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.hmcts.dm.security.domain.CreatorAware;
 
-import javax.persistence.*;
 import java.util.*;
+import javax.persistence.*;
 
 
 /**
@@ -28,11 +28,15 @@ public class Folder implements CreatorAware {
     @Setter
     private UUID id;
 
-    @Getter @Setter private String name;
+    @Getter
+    @Setter
+    private String name;
 
     @OneToMany(mappedBy = "folder")
-    @OrderColumn(name="ds_idx")
-    @Getter @Setter private List<StoredDocument> storedDocuments;
+    @OrderColumn(name = "ds_idx")
+    @Getter
+    @Setter
+    private List<StoredDocument> storedDocuments;
 
     @Getter
     @Setter
@@ -65,32 +69,33 @@ public class Folder implements CreatorAware {
         setCreatedOn(createdOn);
     }
 
-    public Folder(){
+    public Folder() {
         storedDocuments = new ArrayList<>();
     }
 
-    public Date getModifiedOn(){
+    public Date getModifiedOn() {
         return (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public void setModifiedOn(Date modifiedOn){
+    public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public Date getCreatedOn(){
+    public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
-        this.createdOn = (createdOn == null) ? null : new Date (createdOn.getTime());
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public static class FolderBuilder{
-        public Folder.FolderBuilder modifiedOn(Date modifiedOn){
+    public static class FolderBuilder {
+        public Folder.FolderBuilder modifiedOn(Date modifiedOn) {
             this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
             return this;
         }
-        public Folder.FolderBuilder createdOn(Date createdOn){
+
+        public Folder.FolderBuilder createdOn(Date createdOn) {
             this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
             return this;
         }

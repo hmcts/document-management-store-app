@@ -10,16 +10,13 @@ import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 import uk.gov.hmcts.dm.utils.StringUtils;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.sql.Blob;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-/**
- * Created by pawel on 08/06/2017.
- */
 @Entity
 @NoArgsConstructor
 @Builder
@@ -53,7 +50,7 @@ public class DocumentContentVersion implements RolesAware {
     @NotNull
     @Getter
     @Setter
-    @JoinColumn(name="document_content_version_id")
+    @JoinColumn(name = "document_content_version_id")
     private DocumentContent documentContent;
 
     @ManyToOne
@@ -93,16 +90,16 @@ public class DocumentContentVersion implements RolesAware {
         this.size = size;
     }
 
-    public Date getCreatedOn(){
+    public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
+    public void setCreatedOn(Date createdOn) {
         this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
     public static class DocumentContentVersionBuilder {
-        public DocumentContentVersionBuilder createdOn(Date createdOn){
+        public DocumentContentVersionBuilder createdOn(Date createdOn) {
             this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
             return this;
         }

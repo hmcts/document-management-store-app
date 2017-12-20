@@ -16,8 +16,8 @@ public class Helper {
     public static String getBinaryUrlFromResponse(MockHttpServletResponse response) throws IOException {
         final String path = "/_links/binary/href";
         return getPathFromResponse(response, path);
-
     }
+
     public static String getSelfUrlFromResponse(MockHttpServletResponse response) throws IOException {
         final String path = "/_links/self/href";
         return getPathFromResponse(response, path);
@@ -26,15 +26,15 @@ public class Helper {
     private static String getPathFromResponse(MockHttpServletResponse response, String path) throws IOException {
         final String content = response.getContentAsString();
         return getNodeAtPath(path, content)
-                .asText()
-                .replace("http://localhost", "");
+            .asText()
+            .replace("http://localhost", "");
     }
 
     private static JsonNode getNodeAtPath(String path, String content) throws IOException {
         return MAPPER
-                .readTree(content)
-                .at("/_embedded/documents").get(0)
-                .at(path);
+            .readTree(content)
+            .at("/_embedded/documents").get(0)
+            .at(path);
     }
 
     public static HttpHeaders getHeaders() {
@@ -44,7 +44,7 @@ public class Helper {
     public static HttpHeaders getHeaders(String user) {
         final HttpHeaders headers = new HttpHeaders();
         headers.putAll(ImmutableMap.of("Authorization", Collections.singletonList(user),
-                "ServiceAuthorization", Collections.singletonList("sscs")));
+            "ServiceAuthorization", Collections.singletonList("sscs")));
         return headers;
     }
 }

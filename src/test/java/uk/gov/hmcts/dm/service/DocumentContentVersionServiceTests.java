@@ -9,14 +9,14 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
+import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
+import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
-import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,13 +28,13 @@ import static org.mockito.Mockito.when;
 public class DocumentContentVersionServiceTests {
 
     @Mock
-    DocumentContentVersionRepository documentContentVersionRepository;
+    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    StoredDocumentRepository storedDocumentRepository;
+    private StoredDocumentRepository storedDocumentRepository;
 
     @InjectMocks
-    DocumentContentVersionService documentContentVersionService;
+    private DocumentContentVersionService documentContentVersionService;
 
     @Test
     public void testStreamingOfFileContentVersion() throws Exception {

@@ -3,12 +3,10 @@ package uk.gov.hmcts.dm.domain;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by pawel on 24/07/2017.
@@ -41,18 +39,18 @@ public abstract class AuditEntry {
     @Temporal(TemporalType.TIMESTAMP)
     private Date recordedDateTime;
 
-    public Date getRecordedDateTime(){
-        if(recordedDateTime == null){
+    public Date getRecordedDateTime() {
+        if (recordedDateTime == null) {
             return null;
-        }else{
+        } else {
             return new Date(recordedDateTime.getTime());
         }
     }
 
-    public void setRecordedDateTime(Date recordedDateTime){
-        if(recordedDateTime == null){
-                throw new IllegalArgumentException();
-        }else {
+    public void setRecordedDateTime(Date recordedDateTime) {
+        if (recordedDateTime == null) {
+            throw new IllegalArgumentException();
+        } else {
             this.recordedDateTime = new Date(recordedDateTime.getTime());
         }
     }

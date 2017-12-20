@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
@@ -28,32 +27,31 @@ import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = DmApp.class)
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    classes = DmApp.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
 @Ignore
 public class AuditTest {
 
     public static final MockMultipartFile FILE =
-            new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
+        new MockMultipartFile("files", "test.txt", "text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
     @Autowired
     private MockMvc mvc;
     private HttpHeaders headers = Helper.getHeaders();
 
     @Test
-    public void should_audit_upload_a_document() throws Exception {
+    public void shouldAuditUploadADocument() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 
         final MvcResult auditResponse = mvc.perform(get(url + "/auditEntries")
-                .headers(headers))
-                .andExpect(status().isOk())
-                .andReturn();
+            .headers(headers))
+            .andExpect(status().isOk())
+            .andReturn();
 
         final JsonNode auditEntries = getAuditEntriesFromResponse(auditResponse);
 
@@ -63,16 +61,16 @@ public class AuditTest {
     }
 
     @Test
-    public void should_audit_retrieval() throws Exception {
+    public void shouldAuditRetrieval() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 
         mvc.perform(get(url)
-                .headers(headers));
+            .headers(headers));
 
         final MvcResult auditResponse = mvc.perform(get(url + "/auditEntries")
-                .headers(headers))
-                .andExpect(status().isOk())
-                .andReturn();
+            .headers(headers))
+            .andExpect(status().isOk())
+            .andReturn();
 
         final JsonNode auditEntries = getAuditEntriesFromResponse(auditResponse);
 
@@ -81,16 +79,16 @@ public class AuditTest {
     }
 
 //    @Test
-//    public void should_audit_delete() throws Exception {
+//    public void shouldAuditDelete() throws Exception {
 //        final String url = uploadFileAndReturnSelfUrl();
 //
 //        mvc.perform(delete(url)
-//                .headers(headers));
+//            .headers(headers));
 //
 //        final MvcResult auditResponse = mvc.perform(get(url + "/auditEntries")
-//                .headers(headers))
-//                .andExpect(status().isOk())
-//                .andReturn();
+//            .headers(headers))
+//            .andExpect(status().isOk())
+//            .andReturn();
 //
 //        final JsonNode auditEntries = getAuditEntriesFromResponse(auditResponse);
 //
@@ -100,17 +98,17 @@ public class AuditTest {
 
     private JsonNode getAuditEntriesFromResponse(MvcResult auditResponse) throws IOException {
         return new ObjectMapper().readTree(auditResponse.getResponse().getContentAsString())
-                .at("/_embedded/auditEntries");
+            .at("/_embedded/auditEntries");
     }
 
     private String uploadFileAndReturnSelfUrl() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
-                .file(FILE)
-                .param("classification", Classifications.PRIVATE.toString())
-                .headers(headers))
-                .andReturn().getResponse();
+            .file(FILE)
+            .param("classification", Classifications.PRIVATE.toString())
+            .headers(headers))
+            .andReturn().getResponse();
 
-        return getSelfUrlFromResponse(response);
+        return Helper.getSelfUrlFromResponse(response);
     }
 
 }

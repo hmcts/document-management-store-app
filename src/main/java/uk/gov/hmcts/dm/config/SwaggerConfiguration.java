@@ -23,45 +23,45 @@ import java.util.stream.Stream;
 
 @Configuration
 @EnableSwagger2
-@ComponentScan("uk.gov.hmcts.dm.controller")
+@ComponentScan("uk.gov.hmcts.reform.dm.controller")
 public class SwaggerConfiguration {
 
     @Value("${api.version}")
     private String apiVersion;
 
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.regex("/documents(.*)"))
-                .build()
-                .globalOperationParameters(
-                        Stream.of(new ParameterBuilder()
-                                .name("Authorization")
-                                .description("User Auth")
-                                .modelRef(new ModelRef("string"))
-                                .parameterType("header")
-                                .required(true)
-                                .build()).collect(Collectors.toList()))
-                .globalOperationParameters(
-                        Stream.of(new ParameterBuilder()
-                                .name("ServiceAuthorization")
-                                .description("Service Auth. Use it when accessing the API on App Tier level.")
-                                .modelRef(new ModelRef("string"))
-                                .parameterType("header")
-                                .required(true)
-                                .build()).collect(Collectors.toList()))
-                .apiInfo(apiInfo());
+            .select()
+            .apis(RequestHandlerSelectors.any())
+            .paths(PathSelectors.regex("/documents(.*)"))
+            .build()
+            .globalOperationParameters(
+                Stream.of(new ParameterBuilder()
+                    .name("Authorization")
+                    .description("User Auth")
+                    .modelRef(new ModelRef("string"))
+                    .parameterType("header")
+                    .required(true)
+                    .build()).collect(Collectors.toList()))
+            .globalOperationParameters(
+                Stream.of(new ParameterBuilder()
+                    .name("ServiceAuthorization")
+                    .description("Service Auth. Use it when accessing the API on App Tier level.")
+                    .modelRef(new ModelRef("string"))
+                    .parameterType("header")
+                    .required(true)
+                    .build()).collect(Collectors.toList()))
+            .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Document Management API")
-                .description("Documented API for the interim document management solution." +
-                        "To use the API calls generate an Authorization JWT Tokens (user and service) which is required in the header.")
-                .version(apiVersion)
-                .build();
+            .title("Document Management API")
+            .description("Documented API for the interim document management solution."
+                + "To use the API calls generate an Authorization JWT Tokens (user and service) which is required in the header.")
+            .version(apiVersion)
+            .build();
     }
 
 }

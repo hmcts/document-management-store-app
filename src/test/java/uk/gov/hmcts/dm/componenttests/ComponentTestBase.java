@@ -15,10 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
-import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
+import uk.gov.hmcts.reform.dm.service.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -78,17 +79,17 @@ public abstract class ComponentTestBase {
         this.restActions = new RestActions(mvc, serviceRequestAuthorizer, userRequestAuthorizer, objectMapper);
     }
 
-    CustomResultMatcher body() {
+    protected CustomResultMatcher body() {
         return new CustomResultMatcher(objectMapper);
     }
 
     @SneakyThrows
-    String contentsOf(String fileName) {
+    protected String contentsOf(String fileName) {
         String content = new String(Files.readAllBytes(Paths.get(ResourceUtils.getURL("classpath:" + fileName).toURI())), StandardCharsets.UTF_8);
         return resolvePlaceholders(content);
     }
 
-    String resolvePlaceholders(String content) {
+    private String resolvePlaceholders(String content) {
         return configurableListableBeanFactory.resolveEmbeddedValue(content);
     }
 }

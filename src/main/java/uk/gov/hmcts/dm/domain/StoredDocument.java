@@ -11,12 +11,9 @@ import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 
-import javax.persistence.*;
 import java.util.*;
+import javax.persistence.*;
 
-/**
- * Created by pawel on 22/05/2017.
- */
 @Entity
 @Builder
 @EntityListeners(AuditingEntityListener.class)
@@ -59,7 +56,7 @@ public class StoredDocument implements RolesAware {
     @Getter
     @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument")
-    @OrderColumn(name="itm_idx")
+    @OrderColumn(name = "itm_idx")
     private List<DocumentContentVersion> documentContentVersions;
 
     @Getter
@@ -75,18 +72,18 @@ public class StoredDocument implements RolesAware {
     @ElementCollection
     @Getter
     @Setter
-    @CollectionTable(name="documentroles", joinColumns=@JoinColumn(name="documentroles_id"))
+    @CollectionTable(name = "documentroles", joinColumns = @JoinColumn(name = "documentroles_id"))
     private Set<String> roles;
 
     @ElementCollection
-    @MapKeyColumn(name="name")
-    @Column(name="value")
+    @MapKeyColumn(name = "name")
+    @Column(name = "value")
     @Getter
     @Setter
-    @CollectionTable(name="documentmetadata", joinColumns=@JoinColumn(name="documentmetadata_id"))
+    @CollectionTable(name = "documentmetadata", joinColumns = @JoinColumn(name = "documentmetadata_id"))
     private Map<String, String> metadata;
 
-    public StoredDocument(){
+    public StoredDocument() {
         documentContentVersions = new ArrayList<>();
     }
 
@@ -109,31 +106,32 @@ public class StoredDocument implements RolesAware {
     }
 
     public DocumentContentVersion getMostRecentDocumentContentVersion() {
-        return CollectionUtils.isEmpty(documentContentVersions) ? null : documentContentVersions.get(documentContentVersions.size()-1);
+        return CollectionUtils.isEmpty(documentContentVersions) ? null : documentContentVersions.get(documentContentVersions.size() - 1);
     }
 
-    public Date getModifiedOn(){
+    public Date getModifiedOn() {
         return (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public void setModifiedOn(Date modifiedOn){
+    public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public Date getCreatedOn(){
+    public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
+    public void setCreatedOn(Date createdOn) {
         this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
     public static class StoredDocumentBuilder {
-        public StoredDocumentBuilder modifiedOn(Date modifiedOn){
+        public StoredDocumentBuilder modifiedOn(Date modifiedOn) {
             this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
             return this;
         }
-        public StoredDocumentBuilder createdOn(Date createdOn){
+
+        public StoredDocumentBuilder createdOn(Date createdOn) {
             this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
             return this;
         }

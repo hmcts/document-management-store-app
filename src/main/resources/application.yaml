@@ -53,7 +53,7 @@ security:
 logging:
   level:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
-    uk.gov.hmcts.dm: ${LOG_LEVEL_DM:INFO}
+    uk.gov.hmcts.reform.dm: ${LOG_LEVEL_DM:INFO}
 
 liquibase:
   enabled: true

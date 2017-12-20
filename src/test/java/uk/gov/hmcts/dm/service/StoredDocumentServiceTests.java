@@ -27,27 +27,23 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by pawel on 11/07/2017.
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class StoredDocumentServiceTests {
 
     @Mock
-    StoredDocumentRepository storedDocumentRepository;
+    protected StoredDocumentRepository storedDocumentRepository;
 
     @Mock
-    DocumentContentVersionRepository documentContentVersionRepository;
+    protected DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    BlobCreator blobCreator;
+    protected BlobCreator blobCreator;
 
     @Mock
-    FolderRepository folderRepository;
+    protected FolderRepository folderRepository;
 
     @InjectMocks
-    StoredDocumentService storedDocumentService;
+    protected StoredDocumentService storedDocumentService;
 
     @Before
     public void setUp() throws Exception {
@@ -92,7 +88,7 @@ public class StoredDocumentServiceTests {
         StoredDocument storedDocument = new StoredDocument();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
-                storedDocument, TestUtil.TEST_FILE
+            storedDocument, TestUtil.TEST_FILE
         );
 
         assertThat(storedDocument.getDocumentContentVersions().size(), equalTo(1));
@@ -125,7 +121,7 @@ public class StoredDocumentServiceTests {
     public void testSaveItemsToBucket() throws Exception {
         Folder folder = new Folder();
 
-        storedDocumentService.saveItemsToBucket(folder, Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()) );
+        storedDocumentService.saveItemsToBucket(folder, Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()));
 
         assertThat(folder.getStoredDocuments().size(), equalTo(1));
 

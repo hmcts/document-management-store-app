@@ -21,10 +21,10 @@ import static org.mockito.Mockito.*;
 public class FolderServiceTests {
 
     @Mock
-    FolderRepository folderRepository;
+    private FolderRepository folderRepository;
 
     @InjectMocks
-    FolderService folderService;
+    private FolderService folderService;
 
     @Test
     public void testFindOne() throws Exception {
@@ -54,7 +54,7 @@ public class FolderServiceTests {
 
         when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
 
-        StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
+        StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID, 0);
 
         Assert.assertEquals(TestUtil.folder.getStoredDocuments().get(0), storedDocument);
     }
@@ -64,7 +64,7 @@ public class FolderServiceTests {
 
         when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
 
-        StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
+        StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID, 0);
 
         Assert.assertEquals(null, storedDocument);
     }

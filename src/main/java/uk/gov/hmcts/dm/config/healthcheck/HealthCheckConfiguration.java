@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class HealthCheckConfiguration {
 
     @Bean
-    DiskSpaceHealthIndicator diskSpaceHealthIndicator(@Value("${health.disk.threshold}") long threshold) {
+    public DiskSpaceHealthIndicator diskSpaceHealthIndicator(@Value("${health.disk.threshold}") long threshold) {
         DiskSpaceHealthIndicatorProperties diskSpaceHealthIndicatorProperties =
                 new DiskSpaceHealthIndicatorProperties();
         diskSpaceHealthIndicatorProperties.setThreshold(threshold);

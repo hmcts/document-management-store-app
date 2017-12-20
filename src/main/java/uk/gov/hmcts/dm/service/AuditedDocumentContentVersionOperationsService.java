@@ -7,13 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
-
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
+import javax.validation.constraints.NotNull;
 
-/**
- * Created by pawel on 28/07/2017.
- */
 @Service
 @Transactional
 public class AuditedDocumentContentVersionOperationsService {
@@ -30,7 +26,7 @@ public class AuditedDocumentContentVersionOperationsService {
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
     }
 
-    @PreAuthorize("hasPermission(#versionId, 'uk.gov.hmcts.dm.domain.DocumentContentVersion', 'READ')")
+    @PreAuthorize("hasPermission(#versionId, 'uk.gov.hmcts.reform.dm.domain.DocumentContentVersion', 'READ')")
     public DocumentContentVersion readDocumentContentVersion(@NotNull UUID versionId) {
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {

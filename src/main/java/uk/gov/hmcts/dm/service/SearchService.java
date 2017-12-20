@@ -19,7 +19,7 @@ public class SearchService {
     private StoredDocumentRepository storedDocumentRepository;
 
     public Page<StoredDocument> findStoredDocumentsByMetadata(
-            @NonNull MetadataSearchCommand metadataSearchCommand, @NonNull Pageable pageable) {
+        @NonNull MetadataSearchCommand metadataSearchCommand, @NonNull Pageable pageable) {
         return storedDocumentRepository.findAllByMetadata(metadataSearchCommand, pageable);
     }
 

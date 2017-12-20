@@ -17,7 +17,7 @@ public class WebChecker {
     private static final Logger log = LoggerFactory.getLogger(WebChecker.class);
 
     @Autowired
-    public WebChecker(String name, String url, RestTemplate restTemplate){
+    public WebChecker(String name, String url, RestTemplate restTemplate) {
         this.name = name;
         this.restTemplate = restTemplate;
         this.url = url;
@@ -31,17 +31,13 @@ public class WebChecker {
 
     private boolean getStatus() {
         try {
-            final HealthCheckResponse healthCheckResponse = restTemplate.getForObject(url + "/health", HealthCheckResponse.class);
+            final HealthCheckResponse healthCheckResponse = restTemplate
+                .getForObject(url + "/health", HealthCheckResponse.class);
             return "UP".equalsIgnoreCase(healthCheckResponse.getStatus());
         } catch (Exception ex) {
-            log.error(name + " " + url + " Failed",keyValue("stackTrace",ex));
+            log.error(name + " " + url + " caused an error", keyValue("stackTrace", ex));
             return false;
         }
     }
-
-
-
-
-
 
 }

@@ -120,15 +120,15 @@ try {
                     sh './gradlew jacocoTestReport --info'
                 }finally {
                     jacoco(execPattern: 'build/jacoco/test.exec', buildOverBuild: true,
-                        exclusionPattern: 'uk/gov/hmcts/dm/DmApp.java,'+
-                            'uk/gov/hmcts/dm/hateos/*,'+
-                            'uk/gov/hmcts/dm/exception/*,'+
-                            'uk/gov/hmcts/dm/domain/*,'+
-                            'uk/gov/hmcts/dm/commandobject/*,'+
-                            'uk/gov/hmcts/dm/hibernate/*,'+
-                            'uk/gov/hmcts/dm/config/**/*,'+
-                            'uk/gov/hmcts/dm/errorhandler/*,'+
-                            'uk/gov/hmcts/dm/repository/RepositoryFinder.java')
+                        exclusionPattern: 'uk/gov/hmcts/reform/dm/DmApp.java,'+
+                            'uk/gov/hmcts/reform/dm/hateos/*,'+
+                            'uk/gov/hmcts/reform/dm/exception/*,'+
+                            'uk/gov/hmcts/reform/dm/domain/*,'+
+                            'uk/gov/hmcts/reform/dm/commandobject/*,'+
+                            'uk/gov/hmcts/reform/dm/hibernate/*,'+
+                            'uk/gov/hmcts/reform/dm/config/**/*,'+
+                            'uk/gov/hmcts/reform/dm/errorhandler/*,'+
+                            'uk/gov/hmcts/reform/dm/repository/RepositoryFinder.java')
                     publishHTML([
                         allowMissing         : false,
                         alwaysLinkToLastBuild: false,

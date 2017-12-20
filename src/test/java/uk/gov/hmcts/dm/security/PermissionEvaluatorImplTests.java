@@ -20,18 +20,18 @@ import static org.mockito.Mockito.mock;
 public class PermissionEvaluatorImplTests {
 
     @Mock
-    DomainPermissionEvaluator domainPermissionEvaluator;
+    protected DomainPermissionEvaluator domainPermissionEvaluator;
 
     @Mock
-    RepositoryFinder repositoryFinder;
+    protected RepositoryFinder repositoryFinder;
 
     @InjectMocks
-    PermissionEvaluatorImpl permissionEvaluator;
+    protected PermissionEvaluatorImpl permissionEvaluator;
 
-    Authentication authentication;
+    protected Authentication authentication;
 
     @Before
-    public void setup() {
+    public void setUp() {
         authentication = mock(Authentication.class);
     }
 

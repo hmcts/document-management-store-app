@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.Folder;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -42,7 +44,7 @@ public class StoredDocumentService {
         storedDocumentRepository.save(storedDocument);
     }
 
-    public void saveItemsToBucket(Folder folder, List<MultipartFile> files)  {
+    public void saveItemsToBucket(Folder folder, List<MultipartFile> files) {
         List<StoredDocument> items = files.stream().map(aFile -> {
             StoredDocument storedDocument = new StoredDocument();
             storedDocument.setFolder(folder);
@@ -60,7 +62,7 @@ public class StoredDocumentService {
     public List<StoredDocument> saveItems(List<MultipartFile> files,
                                           Classifications classification,
                                           List<String> roles,
-                                          Map<String, String > metadata)  {
+                                          Map<String, String> metadata) {
         return files.stream().map(file -> {
             StoredDocument document = new StoredDocument();
             document.setClassification(classification);
@@ -73,11 +75,11 @@ public class StoredDocumentService {
 
     }
 
-    public List<StoredDocument> saveItems(List<MultipartFile> files)  {
+    public List<StoredDocument> saveItems(List<MultipartFile> files) {
         return saveItems(files, null, null, null);
     }
 
-    public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
+    public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument, file, blobCreator.createBlob(file));
         documentContentVersionRepository.save(documentContentVersion);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);

@@ -9,11 +9,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
+import uk.gov.hmcts.reform.dm.domain.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,11 +35,10 @@ public class AuditEntryServiceTests {
     private DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository;
 
     @InjectMocks
-    AuditEntryService auditEntryService;
+    protected AuditEntryService auditEntryService;
 
     @Test
     public void testCreateAndSaveEntryForStoredDocument() {
-        StoredDocument storedDocument = new StoredDocument();
 
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
@@ -50,6 +50,7 @@ public class AuditEntryServiceTests {
 
         SecurityContextHolder.setContext(securityContext);
 
+        StoredDocument storedDocument = new StoredDocument();
         StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(storedDocument, AuditActions.READ);
 
         Assert.assertEquals("x", entry.getUsername());
@@ -67,8 +68,8 @@ public class AuditEntryServiceTests {
     @Test
     public void testFindStoredDocumentAudits() {
         when(storedDocumentAuditEntryRepository
-                .findByStoredDocumentOrderByRecordedDateTimeAsc(TestUtil.STORED_DOCUMENT))
-                .thenReturn(Stream.of(new StoredDocumentAuditEntry()).collect(Collectors.toList()));
+            .findByStoredDocumentOrderByRecordedDateTimeAsc(TestUtil.STORED_DOCUMENT))
+            .thenReturn(Stream.of(new StoredDocumentAuditEntry()).collect(Collectors.toList()));
         List<StoredDocumentAuditEntry> entries = auditEntryService.findStoredDocumentAudits(TestUtil.STORED_DOCUMENT);
         Assert.assertEquals(1, entries.size());
     }

@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.dm.controller.FolderController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
-import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.Date;
@@ -61,38 +63,38 @@ public class StoredDocumentHalResource extends HalResource {
             BeanUtils.copyProperties(mostRecentDocumentContentVersion, this);
         }
 
-        add(linkTo(methodOn(StoredDocumentController.class).getMetaData(storedDocument.getId())).withSelfRel());
+        add(ControllerLinkBuilder.linkTo(methodOn(StoredDocumentController.class).getMetaData(storedDocument.getId())).withSelfRel());
 
         if (mostRecentDocumentContentVersion != null) {
             add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId())).withRel("binary"));
         }
 
         if (storedDocument.getFolder() != null) {
-            add(linkTo(methodOn(FolderController.class).get(storedDocument.getFolder().getId())).withRel("folder"));
+            add(ControllerLinkBuilder.linkTo(methodOn(FolderController.class).get(storedDocument.getFolder().getId())).withRel("folder"));
         }
 
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {
             Resources<DocumentContentVersionHalResource> versionResources =
-                    new Resources<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList()));
+                new Resources<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList()));
             embedResource("allDocumentVersions", versionResources);
 
         }
     }
 
-    public Date getModifiedOn(){
+    public Date getModifiedOn() {
         return (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public void setModifiedOn(Date modifiedOn){
+    public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public Date getCreatedOn(){
+    public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
-        this.createdOn = (createdOn == null) ? null : new Date (createdOn.getTime());
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
 }

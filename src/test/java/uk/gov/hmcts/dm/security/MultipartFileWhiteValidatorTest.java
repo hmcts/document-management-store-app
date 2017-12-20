@@ -25,8 +25,7 @@ public class MultipartFileWhiteValidatorTest {
             )
     );
 
-//    Success scenarios
-
+    //    Success scenarios
     @Test
     public void testUploadDocumentsSuccess() {
         MultipartFile file = new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8));
@@ -48,8 +47,7 @@ public class MultipartFileWhiteValidatorTest {
         assertTrue(b);
     }
 
-//    Fail scenarios
-
+    //    Fail scenarios
     @Test
     public void testUploadDocumentsFail() {
         MultipartFile file =  new MockMultipartFile("filse", "filename.txt", "text/html", "hello".getBytes(StandardCharsets.UTF_8));

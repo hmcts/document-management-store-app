@@ -6,9 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import uk.gov.hmcts.dm.controller.FolderController;
 import uk.gov.hmcts.dm.domain.Folder;
-
 
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -16,9 +16,6 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-/**
- * Created by pawel on 09/06/2017.
- */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -39,28 +36,28 @@ public class FolderHalResource extends HalResource {
         BeanUtils.copyProperties(folder, this);
         if (folder.getStoredDocuments() != null) {
             Resources<StoredDocumentHalResource> itemResources =
-                    new Resources<>(folder.getStoredDocuments()
-                            .stream()
-                            .map(StoredDocumentHalResource::new)
-                        .collect(Collectors.toList()));
+                new Resources<>(folder.getStoredDocuments()
+                    .stream()
+                    .map(StoredDocumentHalResource::new)
+                    .collect(Collectors.toList()));
             embedResource("items", itemResources);
         }
-        add(linkTo(methodOn(FolderController.class).get(folder.getId())).withSelfRel());
+        add(ControllerLinkBuilder.linkTo(methodOn(FolderController.class).get(folder.getId())).withSelfRel());
     }
 
-    public Date getModifiedOn(){
+    public Date getModifiedOn() {
         return (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public void setModifiedOn(Date modifiedOn){
+    public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public Date getCreatedOn(){
+    public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
+    public void setCreatedOn(Date createdOn) {
         this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 

@@ -5,8 +5,8 @@ import uk.gov.hmcts.reform.auth.checker.core.SubjectResolver;
 import uk.gov.hmcts.reform.auth.checker.core.exceptions.AuthCheckerException;
 import uk.gov.hmcts.reform.auth.checker.core.user.User;
 
-import javax.annotation.PostConstruct;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
 
 public class UserResolverBackdoor implements SubjectResolver<User> {
     private final ConcurrentHashMap<String, String> tokenToUserMap = new ConcurrentHashMap<>();
@@ -26,7 +26,7 @@ public class UserResolverBackdoor implements SubjectResolver<User> {
             throw new AuthCheckerException("Token not found");
         }
 
-        if (token.equals("userCaseWorker")) {
+        if ("userCaseWorker".equals(token)) {
             return new User(userId, ImmutableSet.of("caseworker-probate"));
         }
         return new User(userId, ImmutableSet.of("citizen"));

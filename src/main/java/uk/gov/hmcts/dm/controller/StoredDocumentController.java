@@ -11,25 +11,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
-import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
-import javax.annotation.PostConstruct;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 
 /**
  * Created by pawel on 08/06/2017.
  */
 @RestController
 @RequestMapping(
-        path = "/documents")
+    path = "/documents")
 @Api("Endpoint for Stored Document Management")
 public class StoredDocumentController {
 
@@ -42,46 +44,46 @@ public class StoredDocumentController {
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    private MethodParameter uploadDocumentsCommandMethodParamter;
+    private MethodParameter uploadDocumentsCommandMethodParameter;
 
     @PostConstruct
-    private void init() throws Exception {
-        uploadDocumentsCommandMethodParamter = new MethodParameter(
-                StoredDocumentController.class.getMethod(
-                        "createFrom",
-                        UploadDocumentsCommand.class,
-                        BindingResult.class), 0);
+    public void init() throws NoSuchMethodException {
+        uploadDocumentsCommandMethodParameter = new MethodParameter(
+            StoredDocumentController.class.getMethod(
+                "createFrom",
+                UploadDocumentsCommand.class,
+                BindingResult.class), 0);
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation("Creates a list of Stored Documents by uploading a list of binary/text files.")
-    @ApiResponses(value={
-        @ApiResponse(code=200, message = "Success", response = StoredDocumentHalResourceCollection.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Success", response = StoredDocumentHalResourceCollection.class)
     })
-    public ResponseEntity<Object> createFrom (
-            @Valid UploadDocumentsCommand uploadDocumentsCommand,
-            BindingResult result) throws MethodArgumentNotValidException {
+    public ResponseEntity<Object> createFrom(
+        @Valid UploadDocumentsCommand uploadDocumentsCommand,
+        BindingResult result) throws MethodArgumentNotValidException {
 
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParamter, result);
+            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
             List<StoredDocument> storedDocuments =
-                    auditedStoredDocumentOperationsService.createStoredDocuments(
-                            uploadDocumentsCommand.getFiles(),
-                            uploadDocumentsCommand.getClassification(),
-                            uploadDocumentsCommand.getRoles(),
-                            null);
+                auditedStoredDocumentOperationsService.createStoredDocuments(
+                    uploadDocumentsCommand.getFiles(),
+                    uploadDocumentsCommand.getClassification(),
+                    uploadDocumentsCommand.getRoles(),
+                    null);
             return ResponseEntity
-                    .ok()
-                    .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
-                    .body(new StoredDocumentHalResourceCollection(storedDocuments));
+                .ok()
+                .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
+                .body(new StoredDocumentHalResourceCollection(storedDocuments));
         }
     }
 
     @GetMapping(value = "{id}")
     @ApiOperation("Retrieves JSON representation of a Stored Document.")
-    @ApiResponses(value={
-        @ApiResponse(code=200, message = "Success", response = StoredDocumentHalResource.class)
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Success", response = StoredDocumentHalResource.class)
     })
     public ResponseEntity<Object> getMetaData(@PathVariable UUID id) {
 
@@ -92,15 +94,15 @@ public class StoredDocumentController {
         }
 
         return ResponseEntity
-                .ok()
-                .contentType(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE)
-                .body(new StoredDocumentHalResource(storedDocument));
+            .ok()
+            .contentType(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE)
+            .body(new StoredDocumentHalResource(storedDocument));
     }
 
     @DeleteMapping(value = "{id}")
     @ApiOperation("(Soft) Deletes a Stored Document.")
-    @ApiResponses(value={
-        @ApiResponse(code=405, message = "Method not implemented at the moment")
+    @ApiResponses(value = {
+        @ApiResponse(code = 405, message = "Method not implemented at the moment")
     })
     public ResponseEntity<Object> delete(@PathVariable UUID id) {
         return ResponseEntity.status(405).build();
@@ -108,13 +110,13 @@ public class StoredDocumentController {
 
     @GetMapping(value = "{id}/binary")
     @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
-    @ApiResponses(value={
-        @ApiResponse(code=200, message = "Returns contents of a file")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Returns contents of a file")
     })
     public ResponseEntity<Object> getBinary(@PathVariable UUID id) {
 
         DocumentContentVersion documentContentVersion =
-                documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id);
+            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             return ResponseEntity.notFound().build();
@@ -124,8 +126,6 @@ public class StoredDocumentController {
         return null;
 
     }
-
-
 
 }
 

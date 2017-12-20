@@ -5,9 +5,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.List;
@@ -36,11 +36,14 @@ public class AuditedStoredDocumentOperationsService {
     public List<StoredDocument> createStoredDocuments(List<MultipartFile> files,
                                                       Classifications classification,
                                                       List<String> roles,
-                                                      Map<String, String > metadata) {
+                                                      Map<String, String> metadata) {
         List<StoredDocument> storedDocuments = storedDocumentService.saveItems(files, classification, roles, metadata);
         storedDocuments.forEach(storedDocument -> {
             auditEntryService.createAndSaveEntry(storedDocument, AuditActions.CREATED);
-            auditEntryService.createAndSaveEntry(storedDocument.getDocumentContentVersions().get(0), AuditActions.CREATED);
+            auditEntryService.createAndSaveEntry(
+                storedDocument.getDocumentContentVersions().get(0),
+                AuditActions.CREATED
+            );
         });
         return storedDocuments;
     }
@@ -50,8 +53,7 @@ public class AuditedStoredDocumentOperationsService {
     }
 
 
-
-    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'READ')")
+    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.reform.dm.domain.StoredDocument', 'READ')")
     public StoredDocument readStoredDocument(UUID id) {
         StoredDocument storedDocument = storedDocumentService.findOne(id);
 
@@ -73,17 +75,19 @@ public class AuditedStoredDocumentOperationsService {
 
     @PreAuthorize("hasPermission(#storedDocument, 'UPDATE')")
     public DocumentContentVersion addDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
-        DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(storedDocument, file);
+        DocumentContentVersion documentContentVersion = storedDocumentService
+            .addStoredDocumentVersion(storedDocument, file);
+
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
 
         return documentContentVersion;
     }
 
-    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
+    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.reform.dm.domain.StoredDocument', 'DELETE')")
     public StoredDocument deleteStoredDocument(UUID id) {
 
-        return deleteStoredDocument( storedDocumentService.findOne(id) );
+        return deleteStoredDocument(storedDocumentService.findOne(id));
 
     }
 
