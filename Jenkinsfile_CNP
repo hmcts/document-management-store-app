@@ -1,0 +1,20 @@
+#!groovy
+
+properties([
+    [
+        $class: 'GithubProjectProperty',
+        displayName: 'Document Management Store App',
+        projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
+    ],
+    pipelineTriggers([
+        [$class: 'GitHubPushTrigger']
+    ])
+])
+
+@Library("Infrastructure")
+
+def type = "java"
+def product = "document-management-store-app"
+def component = "service"
+
+withPipeline(type , product, component) {}

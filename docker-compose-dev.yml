@@ -2,7 +2,7 @@
 version: '2.1'
 
 services:
-  document-management-api-gateway-web:
+  document-management-store-api-gateway-web:
     ports:
      - 8080:8080
 
