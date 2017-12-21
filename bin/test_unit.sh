@@ -1,5 +1,5 @@
 #!/bin/sh
-./gradlew check
+./gradlew clean check
 
 xdg-open build/reports/checkstyle/main.html
 open build/reports/checkstyle/main.html
