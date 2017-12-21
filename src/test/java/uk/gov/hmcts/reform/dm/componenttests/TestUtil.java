@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import uk.gov.hmcts.reform.dm.domain.DocumentContent;
+import uk.gov.hmcts.reform.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.reform.dm.domain.Folder;
 import uk.gov.hmcts.reform.dm.domain.StoredDocument;
 import uk.gov.hmcts.reform.dm.exception.DmRuntimeException;
-import uk.gov.hmcts.reform.dm.domain.DocumentContent;
-import uk.gov.hmcts.reform.dm.domain.DocumentContentVersion;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

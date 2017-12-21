@@ -5,9 +5,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.reform.dm.domain.StoredDocument;
 import uk.gov.hmcts.reform.dm.domain.AuditActions;
 import uk.gov.hmcts.reform.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.reform.dm.domain.StoredDocument;
 import uk.gov.hmcts.reform.dm.security.Classifications;
 
 import java.util.List;

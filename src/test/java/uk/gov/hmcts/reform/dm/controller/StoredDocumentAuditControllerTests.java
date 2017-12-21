@@ -1,9 +1,9 @@
 package uk.gov.hmcts.reform.dm.controller;
 
 import org.junit.Test;
+import uk.gov.hmcts.reform.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.reform.dm.componenttests.TestUtil;
 import uk.gov.hmcts.reform.dm.domain.StoredDocumentAuditEntry;
-import uk.gov.hmcts.reform.dm.componenttests.ComponentTestBase;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

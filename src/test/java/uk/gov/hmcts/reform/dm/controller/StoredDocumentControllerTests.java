@@ -24,10 +24,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-/**
- * Created by pawel on 26/05/2017.
- */
-@Ignore
 public class StoredDocumentControllerTests extends ComponentTestBase {
 
     private final DocumentContent documentContent = new DocumentContent(

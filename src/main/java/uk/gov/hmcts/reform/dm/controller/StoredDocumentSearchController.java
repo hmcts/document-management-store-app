@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.reform.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.reform.dm.config.V1MediaType;
-import uk.gov.hmcts.reform.dm.service.SearchService;
 import uk.gov.hmcts.reform.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.reform.dm.hateos.StoredDocumentHalResourceCollection;
+import uk.gov.hmcts.reform.dm.service.SearchService;
 
 import javax.validation.Valid;
 

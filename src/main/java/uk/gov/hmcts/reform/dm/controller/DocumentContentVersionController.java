@@ -12,14 +12,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.reform.dm.commandobject.UploadDocumentVersionCommand;
 import uk.gov.hmcts.reform.dm.config.V1MediaType;
+import uk.gov.hmcts.reform.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.reform.dm.domain.StoredDocument;
+import uk.gov.hmcts.reform.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.reform.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.reform.dm.exception.ValidationErrorException;
-import uk.gov.hmcts.reform.dm.service.AuditedStoredDocumentOperationsService;
-import uk.gov.hmcts.reform.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.reform.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.reform.dm.hateos.DocumentContentVersionHalResource;
 import uk.gov.hmcts.reform.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.reform.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.reform.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.reform.dm.service.StoredDocumentService;
 

@@ -9,11 +9,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.reform.dm.componenttests.TestUtil;
-import uk.gov.hmcts.reform.dm.exception.CantReadDocumentContentVersionBinaryException;
-import uk.gov.hmcts.reform.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.reform.dm.domain.DocumentContent;
 import uk.gov.hmcts.reform.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.reform.dm.exception.CantReadDocumentContentVersionBinaryException;
 import uk.gov.hmcts.reform.dm.repository.DocumentContentVersionRepository;
+import uk.gov.hmcts.reform.dm.repository.StoredDocumentRepository;
 
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
@@ -21,9 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by pawel on 11/07/2017.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentContentVersionServiceTests {
 

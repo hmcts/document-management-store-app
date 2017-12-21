@@ -7,10 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.reform.dm.domain.StoredDocument;
 import uk.gov.hmcts.reform.dm.componenttests.TestUtil;
 import uk.gov.hmcts.reform.dm.domain.AuditActions;
 import uk.gov.hmcts.reform.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.reform.dm.domain.StoredDocument;
 import uk.gov.hmcts.reform.dm.security.Classifications;
 
 import java.util.Arrays;

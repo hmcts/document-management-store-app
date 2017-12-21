@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.reform.dm.componenttests.backdoors.ServiceResolverBackdoor;
+import uk.gov.hmcts.reform.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.reform.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.reform.dm.componenttests.sugar.RestActions;
-import uk.gov.hmcts.reform.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.reform.dm.service.*;
 
 import java.nio.charset.StandardCharsets;

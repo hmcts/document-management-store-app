@@ -9,11 +9,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
 import uk.gov.hmcts.reform.dm.componenttests.TestUtil;
+import uk.gov.hmcts.reform.dm.domain.*;
 import uk.gov.hmcts.reform.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.reform.dm.repository.StoredDocumentAuditEntryRepository;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
-import uk.gov.hmcts.reform.dm.domain.*;
 
 import java.util.List;
 import java.util.stream.Collectors;

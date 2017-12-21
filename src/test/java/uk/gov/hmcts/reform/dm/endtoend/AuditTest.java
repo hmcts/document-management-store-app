@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.dm.endtoend;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     classes = DmApp.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
-@Ignore
+
 public class AuditTest {
 
     public static final MockMultipartFile FILE =

@@ -2,8 +2,8 @@ package uk.gov.hmcts.reform.dm.controller;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import uk.gov.hmcts.reform.dm.componenttests.TestUtil;
 import uk.gov.hmcts.reform.dm.componenttests.ComponentTestBase;
+import uk.gov.hmcts.reform.dm.componenttests.TestUtil;
 import uk.gov.hmcts.reform.dm.security.Classifications;
 
 import java.util.stream.Collectors;
@@ -13,7 +13,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Ignore
 public class FolderControllerTests extends ComponentTestBase {
 
     @Test
@@ -105,7 +104,6 @@ public class FolderControllerTests extends ComponentTestBase {
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
             .delete("/folders/" + TestUtil.RANDOM_UUID).andExpect(status().isNoContent());
-
     }
 
     @Test

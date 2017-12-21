@@ -13,8 +13,8 @@ import uk.gov.hmcts.reform.dm.config.V1MediaType;
 import uk.gov.hmcts.reform.dm.domain.StoredDocument;
 import uk.gov.hmcts.reform.dm.domain.StoredDocumentAuditEntry;
 import uk.gov.hmcts.reform.dm.exception.StoredDocumentNotFoundException;
-import uk.gov.hmcts.reform.dm.service.AuditEntryService;
 import uk.gov.hmcts.reform.dm.hateos.StoredDocumentAuditEntryHalResource;
+import uk.gov.hmcts.reform.dm.service.AuditEntryService;
 import uk.gov.hmcts.reform.dm.service.StoredDocumentService;
 
 import java.util.List;
