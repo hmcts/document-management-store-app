@@ -13,3 +13,7 @@ EOSQL
 psql -v ON_ERROR_STOP=1 --dbname=evidence --username "$POSTGRES_USER" <<-EOSQL
     CREATE SCHEMA evidence AUTHORIZATION evidence;
 EOSQL
+
+psql -v ON_ERROR_STOP=1 --dbname=evidence --username "$POSTGRES_USER" <<-EOSQL
+    CREATE EXTENSION lo;
+EOSQL
