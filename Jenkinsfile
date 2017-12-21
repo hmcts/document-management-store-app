@@ -178,7 +178,7 @@ try {
             }
 
             stage('Package (RPM)') {
-                rpmVersion = packager.javaRPM(app, 'build/libs/claim-store-$(./gradlew -q printVersion)-all.jar', 'springboot', 'src/main/resources/application.yaml')
+                rpmVersion = packager.javaRPM(app, 'build/libs/document-management-store-app-$(./gradlew -q printVersion)-all.jar', 'springboot', 'src/main/resources/application.yaml')
                 version = "{ app: ${app}, rpmversion: ${rpmVersion}}"
             }
 
