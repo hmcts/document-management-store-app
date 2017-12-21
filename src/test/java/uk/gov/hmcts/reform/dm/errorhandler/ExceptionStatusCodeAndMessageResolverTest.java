@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 public class ExceptionStatusCodeAndMessageResolverTest {
 
-    private ExceptionStatusCodeAndMessageResolver resolver = new ExceptionStatusCodeAndMessageResolver();
+    private final ExceptionStatusCodeAndMessageResolver resolver = new ExceptionStatusCodeAndMessageResolver();
 
     @Before
     public void setUp() throws Exception {

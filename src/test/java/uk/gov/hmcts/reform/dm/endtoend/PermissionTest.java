@@ -31,9 +31,9 @@ public class PermissionTest {
 
     @Autowired
     private MockMvc mvc;
-    private HttpHeaders headersUser = Helper.getHeaders("user");
-    private HttpHeaders headersUser2Citizen = Helper.getHeaders("user2");
-    private HttpHeaders headersUserCaseWorker = Helper.getHeaders("userCaseWorker");
+    private final HttpHeaders headersUser = Helper.getHeaders("user");
+    private final HttpHeaders headersUser2Citizen = Helper.getHeaders("user2");
+    private final HttpHeaders headersUserCaseWorker = Helper.getHeaders("userCaseWorker");
 
     @Test
     public void shouldBeAbleToReadOwnDoc() throws Exception {

@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.core.Relation;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import uk.gov.hmcts.reform.dm.controller.DocumentContentVersionController;
 import uk.gov.hmcts.reform.dm.controller.StoredDocumentController;
 import uk.gov.hmcts.reform.dm.domain.DocumentContentVersion;
@@ -35,10 +34,10 @@ public class DocumentContentVersionHalResource extends HalResource {
     public DocumentContentVersionHalResource(DocumentContentVersion documentContentVersion) {
         BeanUtils.copyProperties(documentContentVersion, this);
 
-        add(ControllerLinkBuilder.linkTo(methodOn(StoredDocumentController.class)
+        add(linkTo(methodOn(StoredDocumentController.class)
             .getMetaData(documentContentVersion.getStoredDocument().getId())).withRel("document"));
 
-        add(ControllerLinkBuilder.linkTo(methodOn(DocumentContentVersionController.class).getDocumentContentVersionDocument(
+        add(linkTo(methodOn(DocumentContentVersionController.class).getDocumentContentVersionDocument(
             documentContentVersion.getStoredDocument().getId(),
             documentContentVersion.getId())).withRel("self"));
 

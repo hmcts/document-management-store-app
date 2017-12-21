@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
-import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.reform.dm.controller.FolderController;
 import uk.gov.hmcts.reform.dm.controller.StoredDocumentController;
@@ -63,14 +62,14 @@ public class StoredDocumentHalResource extends HalResource {
             BeanUtils.copyProperties(mostRecentDocumentContentVersion, this);
         }
 
-        add(ControllerLinkBuilder.linkTo(methodOn(StoredDocumentController.class).getMetaData(storedDocument.getId())).withSelfRel());
+        add(linkTo(methodOn(StoredDocumentController.class).getMetaData(storedDocument.getId())).withSelfRel());
 
         if (mostRecentDocumentContentVersion != null) {
             add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId())).withRel("binary"));
         }
 
         if (storedDocument.getFolder() != null) {
-            add(ControllerLinkBuilder.linkTo(methodOn(FolderController.class).get(storedDocument.getFolder().getId())).withRel("folder"));
+            add(linkTo(methodOn(FolderController.class).get(storedDocument.getFolder().getId())).withRel("folder"));
         }
 
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {

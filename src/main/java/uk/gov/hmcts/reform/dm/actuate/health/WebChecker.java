@@ -25,7 +25,7 @@ public class WebChecker {
 
     public Health health() {
         final Health.Builder healthBuilder = new Health.Builder();
-        return (getStatus()) ? healthBuilder.up().build() : healthBuilder.down().build();
+        return getStatus() ? healthBuilder.up().build() : healthBuilder.down().build();
     }
 
 

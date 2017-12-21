@@ -36,7 +36,7 @@ public class UploadDocumentTest {
 
     @Autowired
     private MockMvc mvc;
-    private HttpHeaders headers = Helper.getHeaders();
+    private final HttpHeaders headers = Helper.getHeaders();
 
     @Test
     public void shouldUploadADocument() throws Exception {

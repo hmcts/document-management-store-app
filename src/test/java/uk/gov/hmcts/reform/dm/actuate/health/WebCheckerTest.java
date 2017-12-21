@@ -16,7 +16,7 @@ public class WebCheckerTest {
     private static final String URL = "http://test.com";
     private static final String HEALTH_URL = URL + "/health";
 
-    private RestTemplate restTemplate = mock(RestTemplate.class);
+    private final RestTemplate restTemplate = mock(RestTemplate.class);
 
     @Test
     public void healthUp() throws Exception {

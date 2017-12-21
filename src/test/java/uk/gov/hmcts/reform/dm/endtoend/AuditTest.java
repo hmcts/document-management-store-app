@@ -41,7 +41,7 @@ public class AuditTest {
 
     @Autowired
     private MockMvc mvc;
-    private HttpHeaders headers = Helper.getHeaders();
+    private final HttpHeaders headers = Helper.getHeaders();
 
     @Test
     public void shouldAuditUploadADocument() throws Exception {
