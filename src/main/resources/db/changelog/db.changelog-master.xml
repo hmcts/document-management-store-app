@@ -9,5 +9,6 @@
     <include relativeToChangelogFile="true" file="./db.changelog-diff-20171005-1419.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-20171108-1409.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-20171122-1046.xml"/>
+    <include relativeToChangelogFile="true" file="./db.changelog-diff-20171220-1242.xml"/>
 
 </databaseChangeLog>
