@@ -8,3 +8,8 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
 
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    uk.gov.hmcts.dm: DEBUG
