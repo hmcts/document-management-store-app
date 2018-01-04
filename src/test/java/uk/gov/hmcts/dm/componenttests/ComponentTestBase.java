@@ -85,6 +85,8 @@ public abstract class ComponentTestBase {
     public void setUp() {
         MockMvc mvc = webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
         this.restActions = new RestActions(mvc, serviceRequestAuthorizer, userRequestAuthorizer, objectMapper);
+        filter.setCheckForPrincipalChanges(true);
+        filter.setInvalidateSessionOnPrincipalChange(true);
     }
 
     @After

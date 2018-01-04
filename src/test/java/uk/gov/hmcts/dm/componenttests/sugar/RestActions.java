@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.componenttests.sugar;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -49,7 +50,8 @@ public class RestActions {
 
     public ResultActions get(String urlTemplate) {
         return translateException(() -> mvc.perform(MockMvcRequestBuilders.get(urlTemplate)
-            .headers(httpHeaders))
+            .headers(httpHeaders)
+            .principal(new UsernamePasswordAuthenticationToken(UUID.randomUUID().toString(), null)))
         );
     }
 
