@@ -14,10 +14,10 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
 
-install: ./gradlew clean assemble --info
+install: ./gradlew clean assemble
 
 script:
-  - ./gradlew dependencyCheckAnalyze -DdependencyCheck.failBuild=false
+#  - ./gradlew dependencyCheckAnalyze -DdependencyCheck.failBuild=false
   - ./gradlew check --info
   - ./gradlew jacocoTestReport
 #  - ./gradlew sonarqube -Dsonar.host.url=$SONARQUBE_URL
