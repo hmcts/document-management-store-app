@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.componenttests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.AuthCheckerServiceAndUserFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -56,6 +58,9 @@ public abstract class ComponentTestBase {
     @Autowired
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
+    @Autowired
+    protected AuthCheckerServiceAndUserFilter filter;
+
     @MockBean
     protected FolderService folderService;
 
@@ -80,7 +85,11 @@ public abstract class ComponentTestBase {
     public void setUp() {
         MockMvc mvc = webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
         this.restActions = new RestActions(mvc, serviceRequestAuthorizer, userRequestAuthorizer, objectMapper);
-        SecurityContextHolder.getContext().setAuthentication(null);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        SecurityContextHolder.clearContext();
     }
 
     CustomResultMatcher body() {
