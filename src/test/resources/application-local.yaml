@@ -10,6 +10,6 @@ spring:
 
 logging:
   level:
-    org.springframework.web: DEBUG
+    org.springframework.web: INFO
     org.springframework.security: DEBUG
-    uk.gov.hmcts.dm: DEBUG
+    uk.gov.hmcts: DEBUG

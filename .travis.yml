@@ -14,7 +14,7 @@ cache:
   - $HOME/.gradle/caches/
   - $HOME/.gradle/wrapper/
 
-install: ./gradlew clean assemble --info
+install: ./gradlew clean assemble
 
 script:
 #  - ./gradlew dependencyCheckAnalyze -DdependencyCheck.failBuild=false
