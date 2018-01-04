@@ -135,7 +135,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.23.0.RELEASE'
 
-    compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.0'
+    compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.2.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: '1.2.1'
 

@@ -17,8 +17,8 @@ cache:
 install: ./gradlew clean assemble --info
 
 script:
-  - ./gradlew dependencyCheckAnalyze -DdependencyCheck.failBuild=false
-  - ./gradlew check --info
+#  - ./gradlew dependencyCheckAnalyze -DdependencyCheck.failBuild=false
+  - ./gradlew check --debug
   - ./gradlew jacocoTestReport
 #  - ./gradlew sonarqube -Dsonar.host.url=$SONARQUBE_URL
   - ./gradlew installDist bootRepackage
