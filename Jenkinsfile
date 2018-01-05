@@ -120,7 +120,8 @@ try {
                     sh './gradlew jacocoTestReport --info'
                 }finally {
                     jacoco(execPattern: 'build/jacoco/test.exec', buildOverBuild: true,
-                        exclusionPattern: 'uk/gov/hmcts/dm/DmApp.java,'+
+                        exclusionPattern: '**/test/*' +
+                            '**/uk/gov/hmcts/dm/DmApp.java,'+
                             '**/uk/gov/hmcts/dm/hateos/*,'+
                             '**/uk/gov/hmcts/dm/exception/*,'+
                             '**/uk/gov/hmcts/dm/domain/*,'+
