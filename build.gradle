@@ -143,6 +143,7 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.2.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: '1.2.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '1.1.0'
     compile (group: 'org.liquibase', name: 'liquibase-core', version: "3.5.3")
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
