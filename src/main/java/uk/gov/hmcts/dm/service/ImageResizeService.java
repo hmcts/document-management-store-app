@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class ImageResizeService implements ThumbnailCreator {
+public class ImageResizeService implements FileSpecificThumbnailCreator {
     public static final List<String> SUPPORTED_MIME_TYPES = Arrays.asList(
         MediaType.IMAGE_GIF_VALUE,
         MediaType.IMAGE_JPEG_VALUE,
