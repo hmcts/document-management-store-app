@@ -20,7 +20,7 @@ services:
       - JSON_CONSOLE_PRETTY_PRINT=false
       - REFORM_SERVICE_TYPE=node
       - REFORM_SERVICE_NAME=document-management-api-gateway-web
-      - REFORM_TEAM=cc
+      - REFORM_TEAM=evidence
       - REFORM_ENVIRONMENT=docker
 #      healthcheck env vars
       - PACKAGES_ENVIRONMENT=docker

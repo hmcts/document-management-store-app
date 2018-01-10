@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -41,6 +42,9 @@ public class StoredDocumentController {
 
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+
+    @Autowired
+    private DocumentThumbnailService documentThumbnailService;
 
     private MethodParameter uploadDocumentsCommandMethodParamter;
 
@@ -130,17 +134,16 @@ public class StoredDocumentController {
     @ApiResponses(value={
         @ApiResponse(code=200, message = "Returns thumbnail of a file")
     })
-    public ResponseEntity<Object> getPreviewThumbnail(@PathVariable UUID id) {
+    public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID id) {
 
-//        DocumentContentVersion documentContentVersion =
-//            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id);
-//
-//        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
-        return null;
+        DocumentContentVersion documentContentVersion =
+            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id);
+
+        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(documentThumbnailService.generateThumbnail(documentContentVersion));
 
     }
 
