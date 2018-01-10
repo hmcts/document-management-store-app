@@ -125,7 +125,24 @@ public class StoredDocumentController {
 
     }
 
+    @GetMapping(value = "{id}/thumbnail")
+    @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
+    @ApiResponses(value={
+        @ApiResponse(code=200, message = "Returns thumbnail of a file")
+    })
+    public ResponseEntity<Object> getPreviewThumbnail(@PathVariable UUID id) {
 
+//        DocumentContentVersion documentContentVersion =
+//            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id);
+//
+//        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
+        return null;
+
+    }
 
 }
 
