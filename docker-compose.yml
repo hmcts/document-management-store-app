@@ -80,6 +80,8 @@ services:
      - document-management-store-database
      - idam-api
      - service-auth-provider-api
+    ports:
+    - $SERVER_PORT:8080
 
   document-management-store-database:
     build:
