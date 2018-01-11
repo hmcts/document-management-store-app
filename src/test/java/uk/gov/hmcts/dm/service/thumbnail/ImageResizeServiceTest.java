@@ -1,8 +1,7 @@
-package uk.gov.hmcts.dm.service;
+package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.junit.Test;
 import org.springframework.http.MediaType;
-import org.springframework.util.MimeType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

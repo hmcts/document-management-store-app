@@ -19,6 +19,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;

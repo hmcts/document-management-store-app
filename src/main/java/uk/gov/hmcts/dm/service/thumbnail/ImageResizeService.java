@@ -1,4 +1,4 @@
-package uk.gov.hmcts.dm.service;
+package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;

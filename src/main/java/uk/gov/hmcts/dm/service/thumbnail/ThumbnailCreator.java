@@ -1,4 +1,4 @@
-package uk.gov.hmcts.dm.service;
+package uk.gov.hmcts.dm.service.thumbnail;
 
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
