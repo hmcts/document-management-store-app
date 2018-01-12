@@ -35,7 +35,7 @@ spring:
 
 dm:
   multipart:
-    whitelist: ${DM_MULTIPART_WHITELIST:text/plain,text/csv,image/gif,image/tiff,image/jpeg,image/png,image/webp,image/svg+xml,image/bmp,application/pdf,application/rtf,application/msword,application/vnd.ms-powerpoint,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.presentation,application/xml,audio/wav,audio/midi,audio/mpeg,audio/webm,audio/ogg,video/ogg,audio/3gpp,video/3gpp,audio/3gpp2,video/3gpp2,audio/x-wav,audio/wav,video/webm,video/mpeg}
+    whitelist: ${DM_MULTIPART_WHITELIST:text/plain,text/csv,image/gif,image/tiff,image/jpeg,image/png,image/webp,image/bmp,application/pdf,application/rtf,application/msword,application/vnd.ms-powerpoint,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.presentation,audio/wav,audio/midi,audio/mpeg,audio/webm,audio/ogg,video/ogg,audio/3gpp,video/3gpp,audio/3gpp2,video/3gpp2,audio/x-wav,audio/wav,video/webm,video/mpeg}
 
 auth:
   idam:
