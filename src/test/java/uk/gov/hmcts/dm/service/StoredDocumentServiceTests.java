@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
-import org.hamcrest.CoreMatchers;
+import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,13 +15,13 @@ import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.sql.Blob;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,6 +44,9 @@ public class StoredDocumentServiceTests {
 
     @Mock
     DocumentContentVersionRepository documentContentVersionRepository;
+
+    @Mock
+    DocumentContentRepository documentContentRepository;
 
     @Mock
     BlobCreator blobCreator;
@@ -128,9 +131,10 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testHardDelete() {
+        DocumentContent documentContent = new DocumentContent(mock(Blob.class));
         StoredDocument storedDocumentWithContent = StoredDocument.builder()
-            .documentContentVersions(Collections.singletonList(DocumentContentVersion.builder()
-                .documentContent(new DocumentContent(Mockito.mock(Blob.class)))
+            .documentContentVersions(ImmutableList.of(DocumentContentVersion.builder()
+                .documentContent(documentContent)
                 .build()))
             .build();
 
@@ -138,15 +142,17 @@ public class StoredDocumentServiceTests {
 
         assertThat(storedDocumentWithContent.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
+        verify(documentContentRepository).delete(documentContent);
     }
+
     @Test
     public void testHardDeleteWithManyVersions() {
         DocumentContentVersion contentVersion = DocumentContentVersion.builder()
-            .documentContent(new DocumentContent(Mockito.mock(Blob.class)))
+            .documentContent(new DocumentContent(mock(Blob.class)))
             .build();
 
         DocumentContentVersion secondContentVersion = DocumentContentVersion.builder()
-            .documentContent(new DocumentContent(Mockito.mock(Blob.class)))
+            .documentContent(new DocumentContent(mock(Blob.class)))
             .build();
 
         StoredDocument storedDocumentWithContent = StoredDocument.builder()
@@ -159,6 +165,7 @@ public class StoredDocumentServiceTests {
             assertThat(documentContentVersion.getDocumentContent(), nullValue());
         });
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
+        verify(documentContentRepository, times(2)).delete(Mockito.any(DocumentContent.class));
     }
 
     @Test

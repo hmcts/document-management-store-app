@@ -37,7 +37,8 @@ public class AuditedStoredDocumentOperationsService {
                                                       Classifications classification,
                                                       List<String> roles,
                                                       Map<String, String > metadata) {
-        List<StoredDocument> storedDocuments = storedDocumentService.saveDocuments(files, classification, roles, metadata);
+        List<StoredDocument> storedDocuments =
+            storedDocumentService.saveDocuments(files, classification, roles, metadata);
         storedDocuments.forEach(storedDocument -> {
             auditEntryService.createAndSaveEntry(storedDocument, AuditActions.CREATED);
             auditEntryService.createAndSaveEntry(storedDocument.getDocumentContentVersions().get(0), AuditActions.CREATED);
@@ -73,7 +74,8 @@ public class AuditedStoredDocumentOperationsService {
 
     @PreAuthorize("hasPermission(#storedDocument, 'UPDATE')")
     public DocumentContentVersion addDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
-        DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(storedDocument, file);
+        DocumentContentVersion documentContentVersion =
+            storedDocumentService.addStoredDocumentVersion(storedDocument, file);
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
 
@@ -83,7 +85,7 @@ public class AuditedStoredDocumentOperationsService {
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
     public StoredDocument hardDeleteStoredDocument(UUID id) {
 
-        return hardDeleteStoredDocument( storedDocumentService.findOne(id) );
+        return hardDeleteStoredDocument(storedDocumentService.findOne(id) );
 
     }
 

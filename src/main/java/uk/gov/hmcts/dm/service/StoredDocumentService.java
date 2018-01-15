@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -30,6 +31,9 @@ public class StoredDocumentService {
 
     @Autowired
     private DocumentContentVersionRepository documentContentVersionRepository;
+
+    @Autowired
+    private DocumentContentRepository documentContentRepository;
 
     @Autowired
     private BlobCreator blobCreator;
@@ -95,7 +99,10 @@ public class StoredDocumentService {
     public void hardDeleteDocument(StoredDocument storedDocument) {
         if (storedDocument != null) {
             deleteDocument(storedDocument);
-            storedDocument.hardDelete();
+            storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
+                documentContentRepository.delete(documentContentVersion.getDocumentContent());
+                documentContentVersion.setDocumentContent(null);
+            });
             storedDocumentRepository.save(storedDocument);
         }
     }
