@@ -4,18 +4,16 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.io.InputStream;
+import java.net.URL;
 
 @Service
 public class UnsupportedThumbnailService implements ThumbnailCreator {
 
-    public static final String DEFAULT_FILE_THUMBNAIL = "img/default-file.jpg";
+    public static final String DEFAULT_FILE_THUMBNAIL = "/img/default-file.jpg";
 
     @Override
     public InputStream getThumbnail(DocumentContentVersion documentContentVersion) {
-        InputStream inputStream = getClass().getResourceAsStream(DEFAULT_FILE_THUMBNAIL);
-
-        inputStream.available();
-        return
+        return getClass().getResourceAsStream(DEFAULT_FILE_THUMBNAIL);
     }
 
 }
