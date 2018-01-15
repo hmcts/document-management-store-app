@@ -94,7 +94,7 @@ public class StoredDocumentController {
 
         StoredDocument storedDocument = auditedStoredDocumentOperationsService.readStoredDocument(id);
 
-        if (storedDocument == null) {
+        if (storedDocument == null || storedDocument.isDeleted()) {
             return ResponseEntity.notFound().build();
         }
 

@@ -128,6 +128,11 @@ public class StoredDocument implements RolesAware {
         this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
+    public void hardDelete() {
+        getDocumentContentVersions()
+            .forEach(documentContentVersion -> documentContentVersion.setDocumentContent(null));
+    }
+
     public static class StoredDocumentBuilder {
         public StoredDocumentBuilder modifiedOn(Date modifiedOn) {
             this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());

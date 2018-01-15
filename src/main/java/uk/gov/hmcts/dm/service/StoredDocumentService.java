@@ -94,7 +94,9 @@ public class StoredDocumentService {
 
     public void hardDeleteDocument(StoredDocument storedDocument) {
         if (storedDocument != null) {
-            storedDocumentRepository.delete(storedDocument);
+            deleteDocument(storedDocument);
+            storedDocument.hardDelete();
+            storedDocumentRepository.save(storedDocument);
         }
     }
 }

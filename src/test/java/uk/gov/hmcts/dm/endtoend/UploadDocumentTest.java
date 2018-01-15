@@ -85,10 +85,28 @@ public class UploadDocumentTest {
                 .headers(headers))
                 .andExpect(status().is(410));
 
-        // mvc.perform(get(url)
-        //     .headers(headers))
-        //    .andExpect(status().isNotFound());
+        mvc.perform(get(url)
+                .headers(headers))
+                .andExpect(status().isNotFound());
+    }
 
+    @Test
+    public void should_upload_and_hard_delete_a_document() throws Exception {
+        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+                .file(FILE)
+                .param("classification", Classifications.PRIVATE.toString())
+                .headers(headers))
+                .andReturn().getResponse();
+
+        final String url = getSelfUrlFromResponse(response);
+
+        mvc.perform(delete(url + "/removePermanently")
+                .headers(headers))
+                .andExpect(status().is(410));
+
+        mvc.perform(get(url)
+                .headers(headers))
+                .andExpect(status().isNotFound());
     }
 
 }

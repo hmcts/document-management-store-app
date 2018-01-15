@@ -89,9 +89,9 @@ public class AuditedStoredDocumentOperationsServiceTests {
     public void testCreateStoredDocuments() {
         List<MultipartFile> multipartFiles = Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList());
         List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
-        when(storedDocumentService.saveItems(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null)).thenReturn(storedDocuments);
+        when(storedDocumentService.saveDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null)).thenReturn(storedDocuments);
         auditedStoredDocumentOperationsService.createStoredDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null);
-        verify(storedDocumentService, times(1)).saveItems(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null);
+        verify(storedDocumentService, times(1)).saveDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null);
         verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT, AuditActions.CREATED);
         verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT.getDocumentContentVersions().get(0), AuditActions.CREATED);
     }
