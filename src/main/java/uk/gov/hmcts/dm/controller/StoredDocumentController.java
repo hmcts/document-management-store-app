@@ -4,7 +4,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.core.io.Resource;
@@ -45,6 +47,9 @@ public class StoredDocumentController {
 
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+
+    @Value("${toggle.deleteenabled:false}")
+    private boolean deleteEnabled;
 
     @Autowired
     private DocumentThumbnailService documentThumbnailService;
@@ -108,16 +113,21 @@ public class StoredDocumentController {
     @ApiOperation("(Soft) Deletes a Stored Document.")
 
     public ResponseEntity<Object> delete(@PathVariable UUID id) {
-        auditedStoredDocumentOperationsService.deleteStoredDocument(id);
-        return ResponseEntity.status(HttpStatus.GONE).build();
+        if (deleteEnabled) {
+            auditedStoredDocumentOperationsService.deleteStoredDocument(id);
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
     @DeleteMapping(value = "{id}/removePermanently")
     @ApiOperation("Hard deletes a Stored Document.")
-
     public ResponseEntity<Object> removePermanently(@PathVariable UUID id) {
-        auditedStoredDocumentOperationsService.hardDeleteStoredDocument(id);
-        return ResponseEntity.status(HttpStatus.GONE).build();
+        if (deleteEnabled) {
+            auditedStoredDocumentOperationsService.hardDeleteStoredDocument(id);
+            return ResponseEntity.status(HttpStatus.GONE).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
     @GetMapping(value = "{id}/binary")

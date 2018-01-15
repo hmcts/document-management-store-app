@@ -18,3 +18,6 @@ thumbnail:
     imageThumbnailCreator: image/jpeg,image/png,image/gif,image/webp,image/bmp
     pdfThumbnailCreator: application/pdf
 
+
+toggle:
+    deleteenabled: true
