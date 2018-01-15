@@ -84,9 +84,7 @@ public class AuditedStoredDocumentOperationsService {
 
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
     public StoredDocument hardDeleteStoredDocument(UUID id) {
-
         return hardDeleteStoredDocument(storedDocumentService.findOne(id) );
-
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
@@ -99,10 +97,9 @@ public class AuditedStoredDocumentOperationsService {
         return storedDocument;
     }
 
-
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
     public StoredDocument deleteStoredDocument(UUID id) {
-        return deleteStoredDocument(storedDocumentService.findOne(id));
+        return deleteStoredDocument(storedDocumentService.findOne(id) );
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
@@ -110,11 +107,8 @@ public class AuditedStoredDocumentOperationsService {
         if (storedDocument == null || storedDocument.isDeleted()) {
             return null;
         }
-
         storedDocumentService.deleteDocument(storedDocument);
-
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
-
         return storedDocument;
     }
 
