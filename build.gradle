@@ -79,6 +79,8 @@ repositories {
     mavenLocal()
 }
 
+apply from: 'liquibase.gradle'
+
 def springBootVersion = plugins.getPlugin('org.springframework.boot').class.package.implementationVersion
 
 dependencyManagement {
@@ -139,6 +141,7 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.2.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: '1.2.1'
+    compile (group: 'org.liquibase', name: 'liquibase-core', version: "3.5.3")
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
