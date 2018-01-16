@@ -69,6 +69,25 @@ public class DocumentContentVersionController {
 
     }
 
+    @GetMapping(value = "/versions/{versionId}/thumbnail")
+    @ApiOperation("Streams a specific version of the content of a Stored Document.")
+    @ApiResponses(value={
+        @ApiResponse(code=200, message = "Returns contents of a document version")
+    })
+    public ResponseEntity<InputStreamResource> getDocumentContentVersionDocumentPreviewThumbnail(
+        @PathVariable UUID documentId,
+        @PathVariable UUID versionId) {
+
+        DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
+
+        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
+            throw new DocumentContentVersionNotFoundException(String.format("ID: %s", versionId.toString()));
+        } else {
+           return auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion);
+        }
+        }
+
+
     @GetMapping(value = "/versions/{versionId}")
     @ApiOperation("Returns a specific version of the content of a Stored Document.")
     @ApiResponses(value={

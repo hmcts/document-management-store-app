@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.endtoend;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,7 @@ public class ThumbnailTest {
     }
 
     @Test
+    @Ignore
     public void should_upload_a_txt_and_retrieve_a_unsupported_thumbnail() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(TXT_FILE)
@@ -79,6 +81,7 @@ public class ThumbnailTest {
     }
 
     @Test
+    @Ignore
     public void should_upload_a_pdf_and_retrieve_a_supported_pdf_thumbnail() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(PDF_FILE)
@@ -94,6 +97,7 @@ public class ThumbnailTest {
     }
 
     @Test
+    @Ignore
     public void should_upload_a_jpg_and_retrieve_a_supported_image_thumbnail() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(JPG_FILE)
