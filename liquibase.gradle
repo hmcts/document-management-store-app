@@ -1,3 +1,4 @@
+
 configurations {
     liquibase
 }
@@ -13,13 +14,11 @@ liquibaseProps.load(new FileInputStream("src/main/resources/liquibase.properties
 task liquibaseDiffChangelog(type: JavaExec) {
     group = "liquibase"
 
-
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.liquibase
     main = "liquibase.integration.commandline.Main"
 
-    args "--changeLogFile=" + liquibaseProps.getProperty('changeLogFile')
-//    args "--diffChangeLog=src/main/resources/db.changelog/db.changelog-diff-" + buildTimestamp() + ".xml"
+    args "--changeLogFile=" + "src/main/resources/db/changelog/db.changelog-diff-" + buildTimestamp() + ".xml"
     args "--referenceUrl=hibernate:spring:uk.gov.hmcts.dm.domain?dialect=org.hibernate.dialect.PostgreSQL94Dialect"
     args "--username=" + liquibaseProps.getProperty('username')
     args "--password=" + liquibaseProps.getProperty('password')
