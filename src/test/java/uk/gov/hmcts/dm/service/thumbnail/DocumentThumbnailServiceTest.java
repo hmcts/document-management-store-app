@@ -17,6 +17,7 @@ import uk.gov.hmcts.dm.service.thumbnail.UnsupportedThumbnailService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,18 +27,28 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentThumbnailServiceTest {
 
-    private DocumentThumbnailService documentThumbnailService;
+    private DocumentThumbnailService singleDocumentThumbnailService;
+
+    private DocumentThumbnailService multiDocumentThumbnailService;
 
     @Mock
-    private FileSpecificThumbnailCreator mockFileSpecificThumbnailCreator;
+    private FileSpecificThumbnailCreator mockFileSpecificThumbnailCreator1;
+
+    @Mock
+    private FileSpecificThumbnailCreator mockFileSpecificThumbnailCreator2;
 
     @Mock
     private UnsupportedThumbnailService mockUnsupportedThumbnailService;
 
     @Before
-    public void setUp() throws Exception {
-        List<FileSpecificThumbnailCreator> fileSpecificThumbnailCreators = Collections.singletonList(mockFileSpecificThumbnailCreator);
-        documentThumbnailService = new DocumentThumbnailService(fileSpecificThumbnailCreators,mockUnsupportedThumbnailService);
+    public void setUp() {
+        List<FileSpecificThumbnailCreator> singleFileSpecificThumbnailCreators = Collections
+            .singletonList(mockFileSpecificThumbnailCreator1);
+        singleDocumentThumbnailService = new DocumentThumbnailService(singleFileSpecificThumbnailCreators,mockUnsupportedThumbnailService);
+
+        List<FileSpecificThumbnailCreator> mutipleFileSpecificThumbnailCreators = Arrays
+            .asList(mockFileSpecificThumbnailCreator1, mockFileSpecificThumbnailCreator2);
+        multiDocumentThumbnailService = new DocumentThumbnailService(mutipleFileSpecificThumbnailCreators,mockUnsupportedThumbnailService);
     }
 
     @Test
@@ -49,13 +60,34 @@ public class DocumentThumbnailServiceTest {
         when(documentContentVersion.getMimeType())
             .thenReturn(MediaType.IMAGE_JPEG_VALUE);
 
-        when(mockFileSpecificThumbnailCreator.supports(MediaType.IMAGE_JPEG_VALUE))
+        when(mockFileSpecificThumbnailCreator1.supports(MediaType.IMAGE_JPEG_VALUE))
             .thenReturn(true);
 
-        when(mockFileSpecificThumbnailCreator.getThumbnail(documentContentVersion))
+        when(mockFileSpecificThumbnailCreator1.getThumbnail(documentContentVersion))
             .thenReturn(expectedInputStream);
 
-        Resource generateThumbnail = documentThumbnailService.generateThumbnail(documentContentVersion);
+        Resource generateThumbnail = singleDocumentThumbnailService.generateThumbnail(documentContentVersion);
+
+        Assert.assertThat(generateThumbnail.getInputStream(), equalTo(expectedInputStream));
+    }
+
+    @Test
+    public void returnPDFThumbnail() throws IOException {
+
+        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        InputStream expectedInputStream = new ByteArrayInputStream(new byte[]{0});
+
+        when(documentContentVersion.getMimeType())
+            .thenReturn(MediaType.APPLICATION_PDF_VALUE);
+
+        when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_PDF_VALUE))
+            .thenReturn(true);
+
+        when(mockFileSpecificThumbnailCreator1.getThumbnail(documentContentVersion))
+            .thenReturn(expectedInputStream);
+
+
+        Resource generateThumbnail = singleDocumentThumbnailService.generateThumbnail(documentContentVersion);
 
         Assert.assertThat(generateThumbnail.getInputStream(), equalTo(expectedInputStream));
     }
@@ -68,13 +100,42 @@ public class DocumentThumbnailServiceTest {
         when(documentContentVersion.getMimeType())
             .thenReturn(MediaType.APPLICATION_OCTET_STREAM_VALUE);
 
-        when(mockFileSpecificThumbnailCreator.supports(MediaType.APPLICATION_OCTET_STREAM_VALUE))
+        when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_OCTET_STREAM_VALUE))
             .thenReturn(false);
 
         when(mockUnsupportedThumbnailService.getThumbnail(documentContentVersion))
             .thenReturn(expectedInputStream);
 
-        Resource generateThumbnail = documentThumbnailService.generateThumbnail(documentContentVersion);
+        Resource generateThumbnail = singleDocumentThumbnailService.generateThumbnail(documentContentVersion);
+
+        Assert.assertThat(generateThumbnail.getInputStream(), equalTo(expectedInputStream));
+    }
+
+
+
+    @Test
+    public void returnMultipleThumbnail() throws IOException {
+
+        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        InputStream expectedInputStream = new ByteArrayInputStream(new byte[]{0});
+        InputStream notexpectedInputStream = new ByteArrayInputStream(new byte[]{1});
+
+        when(documentContentVersion.getMimeType())
+            .thenReturn(MediaType.APPLICATION_PDF_VALUE);
+
+        when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_PDF_VALUE))
+            .thenReturn(true);
+
+        when(mockFileSpecificThumbnailCreator2.supports(MediaType.APPLICATION_PDF_VALUE))
+            .thenReturn(false);
+
+        when(mockFileSpecificThumbnailCreator1.getThumbnail(documentContentVersion))
+            .thenReturn(expectedInputStream);
+
+        when(mockFileSpecificThumbnailCreator2.getThumbnail(documentContentVersion))
+            .thenReturn(notexpectedInputStream);
+
+        Resource generateThumbnail = multiDocumentThumbnailService.generateThumbnail(documentContentVersion);
 
         Assert.assertThat(generateThumbnail.getInputStream(), equalTo(expectedInputStream));
     }

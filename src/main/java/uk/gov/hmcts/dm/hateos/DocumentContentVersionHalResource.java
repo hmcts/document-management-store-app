@@ -44,6 +44,10 @@ public class DocumentContentVersionHalResource extends HalResource {
         add(linkTo(methodOn(DocumentContentVersionController.class).getDocumentContentVersionDocumentBinary(
                 documentContentVersion.getStoredDocument().getId(),
                 documentContentVersion.getId())).withRel("binary"));
+
+        add(linkTo(methodOn(StoredDocumentController.class).getPreviewThumbnail(
+                documentContentVersion.getStoredDocument().getId())
+        ).withRel("thumbnail"));
     }
 
     public Date getCreatedOn(){
@@ -53,5 +57,5 @@ public class DocumentContentVersionHalResource extends HalResource {
     public void setCreatedOn(Date createdOn){
         this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
-    
+
 }
