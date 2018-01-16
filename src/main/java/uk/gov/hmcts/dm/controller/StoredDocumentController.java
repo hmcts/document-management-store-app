@@ -49,6 +49,7 @@ public class StoredDocumentController {
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @Value("${toggle.deleteenabled:false}")
+    @Setter
     private boolean deleteEnabled;
 
     @Autowired

@@ -337,7 +337,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .andExpect(status().isNotFound());
     }
 
-
     @Test
     public void testDelete() throws Exception {
         restActions
