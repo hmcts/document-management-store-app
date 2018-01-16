@@ -83,7 +83,7 @@ public class UploadDocumentTest {
 
         mvc.perform(delete(url)
                 .headers(headers))
-                .andExpect(status().is(410));
+                .andExpect(status().is(204));
 
         mvc.perform(get(url)
                 .headers(headers))
@@ -102,7 +102,7 @@ public class UploadDocumentTest {
 
         mvc.perform(delete(url + "/removePermanently")
                 .headers(headers))
-                .andExpect(status().is(410));
+                .andExpect(status().is(204));
 
         mvc.perform(get(url)
                 .headers(headers))

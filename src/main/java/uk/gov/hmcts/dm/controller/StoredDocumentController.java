@@ -100,8 +100,12 @@ public class StoredDocumentController {
 
         StoredDocument storedDocument = auditedStoredDocumentOperationsService.readStoredDocument(id);
 
-        if (storedDocument == null || storedDocument.isDeleted()) {
+        if (storedDocument == null) {
             return ResponseEntity.notFound().build();
+        }
+
+        if (storedDocument.isDeleted()) {
+            return ResponseEntity.status(HttpStatus.GONE).build();
         }
 
         return ResponseEntity
@@ -115,7 +119,7 @@ public class StoredDocumentController {
     public ResponseEntity<Object> delete(@PathVariable UUID id) {
         if (deleteEnabled) {
             auditedStoredDocumentOperationsService.deleteStoredDocument(id);
-            return ResponseEntity.status(HttpStatus.GONE).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
@@ -125,7 +129,7 @@ public class StoredDocumentController {
     public ResponseEntity<Object> removePermanently(@PathVariable UUID id) {
         if (deleteEnabled) {
             auditedStoredDocumentOperationsService.hardDeleteStoredDocument(id);
-            return ResponseEntity.status(HttpStatus.GONE).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }

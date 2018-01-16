@@ -343,8 +343,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                 .withAuthorizedUser("userId")
                 .withAuthorizedService("divorce")
                 .delete("/documents/" + id)
-                .andExpect(status().is(410));
-
+                .andExpect(status().is(204));
     }
 
     @Test
