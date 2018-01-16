@@ -1,10 +1,10 @@
 package uk.gov.hmcts.dm.controller;
 
-import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
@@ -68,7 +68,7 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
                 .withAuthorizedUser("userId")
                 .withAuthorizedService("divorce")
                 .delete("/documents/" + id)
-                .andExpect(status().is(HttpStatus.SC_NOT_IMPLEMENTED));
+                .andExpect(status().is(HttpStatus.NOT_IMPLEMENTED.value()));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
                 .withAuthorizedUser("userId")
                 .withAuthorizedService("divorce")
                 .delete("/documents/" + id + "/removePermanently")
-                .andExpect(status().is(HttpStatus.SC_NOT_IMPLEMENTED));
+                .andExpect(status().is(HttpStatus.NOT_IMPLEMENTED.value()));
     }
 
 

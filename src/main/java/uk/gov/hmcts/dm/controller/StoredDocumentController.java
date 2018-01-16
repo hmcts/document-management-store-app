@@ -112,7 +112,6 @@ public class StoredDocumentController {
 
     @DeleteMapping(value = "{id}")
     @ApiOperation("(Soft) Deletes a Stored Document.")
-
     public ResponseEntity<Object> delete(@PathVariable UUID id) {
         if (deleteEnabled) {
             auditedStoredDocumentOperationsService.deleteStoredDocument(id);
