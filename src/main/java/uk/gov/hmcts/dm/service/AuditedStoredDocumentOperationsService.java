@@ -84,7 +84,7 @@ public class AuditedStoredDocumentOperationsService {
 
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
     public StoredDocument hardDeleteStoredDocument(UUID id) {
-        return hardDeleteStoredDocument(storedDocumentService.findOne(id) );
+        return hardDeleteStoredDocument(storedDocumentService.findOne(id));
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
