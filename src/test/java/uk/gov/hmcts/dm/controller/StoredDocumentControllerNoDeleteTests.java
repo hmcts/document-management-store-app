@@ -72,9 +72,8 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
         restActions
                 .withAuthorizedUser("userId")
                 .withAuthorizedService("divorce")
-                .delete("/documents/" + id + "/removePermanently")
+                .delete("/documents/" + id + "?permanent=true")
                 .andExpect(status().is(HttpStatus.NOT_IMPLEMENTED.value()));
     }
-
 
 }

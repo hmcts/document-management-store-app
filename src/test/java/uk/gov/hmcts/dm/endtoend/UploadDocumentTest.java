@@ -100,7 +100,7 @@ public class UploadDocumentTest {
 
         final String url = getSelfUrlFromResponse(response);
 
-        mvc.perform(delete(url + "/removePermanently")
+        mvc.perform(delete(url + "?permanent=true")
                 .headers(headers))
                 .andExpect(status().is(204));
 

@@ -104,10 +104,6 @@ public class StoredDocumentController {
             return ResponseEntity.notFound().build();
         }
 
-        if (storedDocument.isDeleted()) {
-            return ResponseEntity.status(HttpStatus.GONE).build();
-        }
-
         return ResponseEntity
                 .ok()
                 .contentType(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE)
@@ -124,12 +120,16 @@ public class StoredDocumentController {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }
 
-    @DeleteMapping(value = "{id}/removePermanently")
+    @DeleteMapping(value = "{id}", params = "permanent")
     @ApiOperation("Hard deletes a Stored Document.")
-    public ResponseEntity<Object> removePermanently(@PathVariable UUID id) {
+    public ResponseEntity<Object> removePermanently(@PathVariable UUID id,
+                                                    @RequestParam("permanent") boolean permanent) {
         if (deleteEnabled) {
-            auditedStoredDocumentOperationsService.hardDeleteStoredDocument(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            if (permanent) {
+                auditedStoredDocumentOperationsService.hardDeleteStoredDocument(id);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            }
+            return delete(id);
         }
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
     }

@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import javax.sql.rowset.serial.SerialBlob;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -340,6 +341,29 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                 .withAuthorizedService("divorce")
                 .delete("/documents/" + id)
                 .andExpect(status().is(204));
+        verify(auditedStoredDocumentOperationsService).deleteStoredDocument(id);
+    }
+
+    @Test
+    public void testHardDelete() throws Exception {
+        restActions
+                .withAuthorizedUser("userId")
+                .withAuthorizedService("divorce")
+                .delete("/documents/" + id + "?permanent=true")
+                .andExpect(status().is(204));
+
+        verify(auditedStoredDocumentOperationsService).hardDeleteStoredDocument(id);
+    }
+
+    @Test
+    public void testSoftDeleteWithParam() throws Exception {
+        restActions
+                .withAuthorizedUser("userId")
+                .withAuthorizedService("divorce")
+                .delete("/documents/" + id + "?permanent=false")
+                .andExpect(status().is(204));
+
+        verify(auditedStoredDocumentOperationsService).deleteStoredDocument(id);
     }
 
     @Test
