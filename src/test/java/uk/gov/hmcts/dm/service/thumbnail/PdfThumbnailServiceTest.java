@@ -59,7 +59,7 @@ public class PdfThumbnailServiceTest {
     public void getPdfThumbnailNoPages() {
         try {
             pdfThumbnailService.getImg(new ByteArrayInputStream(new byte[]{0}));
-        } catch (CantCreateThumbnailException e){
+        } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -70,7 +70,7 @@ public class PdfThumbnailServiceTest {
     public void getPdfThumbnailNull() {
         try {
             pdfThumbnailService.getImg(null);
-        } catch (CantCreateThumbnailException e){
+        } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -84,7 +84,7 @@ public class PdfThumbnailServiceTest {
         InputStream pdf = Files.newInputStream(file.toPath());
         try {
             pdfThumbnailService.getImg(pdf);
-        } catch (CantCreateThumbnailException e){
+        } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
         }
