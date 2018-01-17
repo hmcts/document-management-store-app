@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.core.io.Resource;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
@@ -29,6 +31,11 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by pawel on 08/06/2017.
@@ -58,12 +65,19 @@ public class StoredDocumentController {
     private MethodParameter uploadDocumentsCommandMethodParamter;
 
     @PostConstruct
-    private void init() throws Exception {
+    private void init() throws NoSuchMethodException {
         uploadDocumentsCommandMethodParamter = new MethodParameter(
                 StoredDocumentController.class.getMethod(
                         "createFrom",
                         UploadDocumentsCommand.class,
                         BindingResult.class), 0);
+    }
+
+    @InitBinder
+    public void bindingPreparation(WebDataBinder binder) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+        CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
+        binder.registerCustomEditor(Date.class, orderDateEditor);
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
