@@ -80,7 +80,7 @@ public class ImageResizeServiceTest {
 
         try {
             imageResizeService.getImg(image);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e){
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -88,12 +88,10 @@ public class ImageResizeServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionOnNull() throws IOException {
-        InputStream nullInputStream = Files.newInputStream(null);
-
+    public void shouldThrowExceptionOnNull() {
         try {
-            imageResizeService.getImg(nullInputStream);
-        }catch (RuntimeException e){
+            imageResizeService.getImg(null);
+        } catch (RuntimeException e){
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -106,7 +104,7 @@ public class ImageResizeServiceTest {
 
         try {
             imageResizeService.getImg(nullInputStream);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e){
             assertTrue(e.getMessage(),true);
             return;
         }

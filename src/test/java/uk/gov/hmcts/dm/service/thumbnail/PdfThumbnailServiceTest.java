@@ -60,7 +60,7 @@ public class PdfThumbnailServiceTest {
 
         try {
             pdfThumbnailService.getImg(pdf);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e){
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -69,11 +69,9 @@ public class PdfThumbnailServiceTest {
 
     @Test
     public void getPdfThumbnailNull() {
-        InputStream pdf = new ByteArrayInputStream(null);
-
         try {
-            pdfThumbnailService.getImg(pdf);
-        }catch (RuntimeException e){
+            pdfThumbnailService.getImg(null);
+        } catch (RuntimeException e){
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -87,7 +85,7 @@ public class PdfThumbnailServiceTest {
         InputStream pdf = Files.newInputStream(file.toPath());
         try {
             pdfThumbnailService.getImg(pdf);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e){
             assertTrue(e.getMessage(),true);
             return;
         }
