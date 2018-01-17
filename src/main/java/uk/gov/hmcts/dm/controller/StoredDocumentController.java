@@ -24,6 +24,9 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.*;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import java.util.List;
 import java.util.UUID;
@@ -117,7 +120,7 @@ public class StoredDocumentController {
             auditedStoredDocumentOperationsService.deleteStoredDocument(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
     @DeleteMapping(value = "{id}", params = "permanent")
@@ -131,7 +134,7 @@ public class StoredDocumentController {
             }
             return delete(id);
         }
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).build();
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
     @GetMapping(value = "{id}/binary")
