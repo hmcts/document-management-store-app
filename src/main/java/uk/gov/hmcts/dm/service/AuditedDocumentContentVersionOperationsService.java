@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class AuditedDocumentContentVersionOperationsService {
     }
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
-    public ResponseEntity<InputStreamResource> readDocumentContentVersionThumbnail(@NotNull DocumentContentVersion documentContentVersion) {
+    public Resource readDocumentContentVersionThumbnail(@NotNull DocumentContentVersion documentContentVersion) {
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
         return documentThumbnailService.generateThumbnail(documentContentVersion);
     }

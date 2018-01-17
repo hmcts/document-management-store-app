@@ -9,6 +9,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -135,6 +136,7 @@ public class StoredDocumentController {
     @ApiResponses(value={
         @ApiResponse(code=200, message = "Returns thumbnail of a file")
     })
+    @Transactional(readOnly = true)
     public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID id) {
 
         DocumentContentVersion documentContentVersion =
@@ -144,7 +146,9 @@ public class StoredDocumentController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(documentThumbnailService.generateThumbnail(documentContentVersion));
+        return ResponseEntity.ok()
+            .contentType(MediaType.IMAGE_JPEG)
+            .body(documentThumbnailService.generateThumbnail(documentContentVersion));
 
     }
 

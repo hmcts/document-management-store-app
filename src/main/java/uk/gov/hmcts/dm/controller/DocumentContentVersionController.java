@@ -6,8 +6,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentVersionCommand;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping(
-        path = "/documents/{documentId}")
+    path = "/documents/{documentId}")
 @Api("Endpoint for Document Content Version")
 public class DocumentContentVersionController {
 
@@ -54,8 +56,8 @@ public class DocumentContentVersionController {
         @ApiResponse(code=200, message = "Returns contents of a document version")
     })
     public ResponseEntity<InputStreamResource> getDocumentContentVersionDocumentBinary(
-            @PathVariable UUID documentId,
-            @PathVariable UUID versionId) {
+        @PathVariable UUID documentId,
+        @PathVariable UUID versionId) {
 
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
 
@@ -74,18 +76,24 @@ public class DocumentContentVersionController {
     @ApiResponses(value={
         @ApiResponse(code=200, message = "Returns contents of a document version")
     })
-    public ResponseEntity<InputStreamResource> getDocumentContentVersionDocumentPreviewThumbnail(
+    @Transactional(readOnly = true)
+    public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(
         @PathVariable UUID documentId,
         @PathVariable UUID versionId) {
 
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            throw new DocumentContentVersionNotFoundException(String.format("ID: %s", versionId.toString()));
+//            throw new DocumentContentVersionNotFoundException(String.format("ID: %s", versionId.toString()));
+            return ResponseEntity.notFound().build();
         } else {
-           return auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion);
+            return
+                ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion));
         }
-        }
+    }
 
 
     @GetMapping(value = "/versions/{versionId}")
@@ -94,16 +102,16 @@ public class DocumentContentVersionController {
         @ApiResponse(code=200, message = "JSON representation of a document version")
     })
     public ResponseEntity<Object> getDocumentContentVersionDocument(
-            @PathVariable UUID documentId,
-            @PathVariable UUID versionId) {
+        @PathVariable UUID documentId,
+        @PathVariable UUID versionId) {
 
         DocumentContentVersion documentContentVersion =
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersion(versionId);
+            auditedDocumentContentVersionOperationsService.readDocumentContentVersion(versionId);
 
         return ResponseEntity
-                .ok()
-                .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
-                .body(new DocumentContentVersionHalResource(documentContentVersion));
+            .ok()
+            .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
+            .body(new DocumentContentVersionHalResource(documentContentVersion));
 
     }
 
@@ -127,14 +135,14 @@ public class DocumentContentVersionController {
             } else {
 
                 DocumentContentVersionHalResource resource =
-                        new DocumentContentVersionHalResource(
-                                auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
-                        );
+                    new DocumentContentVersionHalResource(
+                        auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
+                    );
 
                 return ResponseEntity
-                        .created(resource.getURI())
-                        .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
-                        .body(resource);
+                    .created(resource.getURI())
+                    .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
+                    .body(resource);
             }
         }
     }
