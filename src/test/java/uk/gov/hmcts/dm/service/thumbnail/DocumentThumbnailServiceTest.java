@@ -19,6 +19,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -108,6 +110,27 @@ public class DocumentThumbnailServiceTest {
         Assert.assertThat(generateThumbnail.getInputStream(), equalTo(expectedInputStream));
     }
 
+    @Test
+    public void throwExceptionWhenDocumentContentVersionIsNull() {
+        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+
+        when(documentContentVersion.getMimeType())
+            .thenReturn(null);
+
+        when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_OCTET_STREAM_VALUE))
+            .thenReturn(false);
+
+        when(mockUnsupportedThumbnailService.getThumbnail(documentContentVersion))
+            .thenReturn(null);
+
+        try{
+            singleDocumentThumbnailService.generateThumbnail(documentContentVersion);
+        } catch(RuntimeException e){
+            assertTrue(e.getMessage(),true);
+            return;
+        }
+        fail();
+    }
 
 
     @Test

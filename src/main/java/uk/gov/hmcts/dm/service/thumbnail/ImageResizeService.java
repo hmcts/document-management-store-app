@@ -35,7 +35,7 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
     }
 
     public static BufferedImage resizeImage(BufferedImage bufferedImage) {
-        Image scaledInstance = bufferedImage.getScaledInstance(DEFAULT_WIDTH,apsectRatio(bufferedImage), Image.SCALE_SMOOTH);
+        Image scaledInstance = bufferedImage.getScaledInstance(DEFAULT_WIDTH, aspectRatio(bufferedImage), Image.SCALE_SMOOTH);
 
         BufferedImage resizedBuffedImage = new BufferedImage(
             scaledInstance.getWidth(null),
@@ -61,11 +61,11 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
         return resizedBuffedImage;
     }
 
-    public static int apsectRatio(BufferedImage bufferedImage) {
-        return apsectRatio(bufferedImage.getHeight(),bufferedImage.getWidth());
+    public static int aspectRatio(BufferedImage bufferedImage) {
+        return aspectRatio(bufferedImage.getHeight(),bufferedImage.getWidth());
     }
 
-    public static int apsectRatio(int h, int w) {
+    public static int aspectRatio(int h, int w) {
         float ratio = (float) DEFAULT_WIDTH / w;
         return Math.round(h * ratio);
     }
