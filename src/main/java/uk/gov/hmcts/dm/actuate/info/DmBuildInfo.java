@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.actuate.info;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.info.Info;
@@ -15,7 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Component
-public class DMBuildInfo implements InfoContributor {
+public class DmBuildInfo implements InfoContributor {
 
     private final String environment;
     private final String project;
@@ -31,7 +30,7 @@ public class DMBuildInfo implements InfoContributor {
     private static final String EMPTY = "";
 
     @Autowired
-    public DMBuildInfo(
+    public DmBuildInfo(
             @Value("${info.app.name}") String name,
             @Value("${info.app.environment}") String environment,
             @Value("${info.app.project}") String project
@@ -39,11 +38,11 @@ public class DMBuildInfo implements InfoContributor {
         this(name,environment,project,BUILD_INFO);
     }
 
-    DMBuildInfo(String name,String environment,String project, String versionPath)throws IOException {
+    DmBuildInfo(String name, String environment, String project, String versionPath)throws IOException {
 
         Properties prop = new Properties();
         URL buildInfoUrl = (versionPath == null) ? null : this.getClass().getClassLoader().getResource(versionPath);
-        if(buildInfoUrl != null){
+        if (buildInfoUrl != null) {
             prop.load(this.getClass().getClassLoader().getResourceAsStream(versionPath));
         }
 
@@ -63,7 +62,7 @@ public class DMBuildInfo implements InfoContributor {
         map.put("environment",environment);
         map.put("project", project);
         map.put("name", name);
-        map.put("version", version + ((EMPTY.equals(build))? "" : "-" + build));
+        map.put("version", version + ((EMPTY.equals(build)) ? "" : "-" + build));
         map.put("commit", commit);
         map.put("date", date);
         map.put("extra",new HashMap<>());

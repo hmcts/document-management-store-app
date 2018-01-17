@@ -30,7 +30,7 @@ public class SwaggerConfiguration {
     private String apiVersion;
 
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
@@ -58,8 +58,8 @@ public class SwaggerConfiguration {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Document Management API")
-                .description("Documented API for the interim document management solution." +
-                        "To use the API calls generate an Authorization JWT Tokens (user and service) which is required in the header.")
+                .description("Documented API for the interim document management solution."
+                    + "To use the API calls generate an Authorization JWT Tokens (user and service) which is required in the header.")
                 .version(apiVersion)
                 .build();
     }

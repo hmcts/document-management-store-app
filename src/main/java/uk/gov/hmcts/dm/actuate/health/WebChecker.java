@@ -17,7 +17,7 @@ public class WebChecker {
     private static final Logger log = LoggerFactory.getLogger(WebChecker.class);
 
     @Autowired
-    public WebChecker(String name, String url, RestTemplate restTemplate){
+    public WebChecker(String name, String url, RestTemplate restTemplate) {
         this.name = name;
         this.restTemplate = restTemplate;
         this.url = url;

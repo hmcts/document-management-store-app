@@ -20,7 +20,7 @@ public class DocumentThumbnailService {
     @Autowired
     public DocumentThumbnailService(List<FileSpecificThumbnailCreator> thumbnailCreators,
                                     UnsupportedThumbnailService unsupportedThumbnailService) {
-        this.thumbnailCreators = new ArrayList<>(thumbnailCreators) ;
+        this.thumbnailCreators = new ArrayList<>(thumbnailCreators);
         this.unsupportedThumbnailService = unsupportedThumbnailService;
     }
 

@@ -30,12 +30,11 @@ public class DomainPermissionEvaluator {
         if (!result && permission == Permissions.READ && creatorAware instanceof RolesAware) {
             RolesAware rolesAware = (RolesAware) creatorAware;
             if (rolesAware.getRoles() != null
-                    && authenticatedUserRoles != null
-                    && rolesAware.getClassification() != null
-                    && (Classifications.RESTRICTED.equals(rolesAware.getClassification()) ||
-                    Classifications.PUBLIC.equals(rolesAware.getClassification())
-            )) {
-
+                && authenticatedUserRoles != null
+                && rolesAware.getClassification() != null
+                && (Classifications.RESTRICTED.equals(rolesAware.getClassification())
+                || Classifications.PUBLIC.equals(rolesAware.getClassification()))
+                ) {
                 HashSet<String> authenticatedUserRolesSet = new HashSet<>(authenticatedUserRoles);
                 authenticatedUserRolesSet.retainAll(rolesAware.getRoles());
 
@@ -51,7 +50,7 @@ public class DomainPermissionEvaluator {
 
             authenticatedUserRolesSet.retainAll(caseWorkerRoles);
 
-            if (authenticatedUserRolesSet.size() > 0 ) {
+            if (authenticatedUserRolesSet.size() > 0) {
                 result = true;
             }
         }

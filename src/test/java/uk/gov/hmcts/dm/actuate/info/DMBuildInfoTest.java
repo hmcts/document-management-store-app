@@ -18,7 +18,7 @@ public class DMBuildInfoTest {
 
     @Test
     public void shouldAddBuildInfoToBuilder() throws Exception {
-        DMBuildInfo dmBuildInfo = new DMBuildInfo("name","env","project");
+        DmBuildInfo dmBuildInfo = new DmBuildInfo("name","env","project");
 
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);
@@ -42,7 +42,7 @@ public class DMBuildInfoTest {
 
     @Test
     public void shouldAddBuildInfoToBuilderNullBuildInfo() throws Exception {
-        DMBuildInfo dmBuildInfo = new DMBuildInfo("name","env","project",null);
+        DmBuildInfo dmBuildInfo = new DmBuildInfo("name","env","project",null);
 
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);
@@ -66,7 +66,7 @@ public class DMBuildInfoTest {
 
     @Test
     public void shouldAddBuildInfoToBuilderIncludesBuildNumber() throws Exception {
-        DMBuildInfo dmBuildInfo = new DMBuildInfo("name","env","project",BUILD_INFO_WITH_BUILD_NO);
+        DmBuildInfo dmBuildInfo = new DmBuildInfo("name","env","project",BUILD_INFO_WITH_BUILD_NO);
 
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);

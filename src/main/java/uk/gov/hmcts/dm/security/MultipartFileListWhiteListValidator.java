@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.List;
 
 public class MultipartFileListWhiteListValidator implements ConstraintValidator<MultipartFileListWhiteList,List<MultipartFile>> {
 
@@ -16,7 +16,7 @@ public class MultipartFileListWhiteListValidator implements ConstraintValidator<
     private final List<String> mimeTypeList;
 
     @Autowired
-    public MultipartFileListWhiteListValidator(@Value("#{'${dm.multipart.whitelist}'.split(',')}") List<String> mimeTypeList){
+    public MultipartFileListWhiteListValidator(@Value("#{'${dm.multipart.whitelist}'.split(',')}") List<String> mimeTypeList) {
         this.mimeTypeList = mimeTypeList;
     }
 
@@ -25,8 +25,8 @@ public class MultipartFileListWhiteListValidator implements ConstraintValidator<
 
     @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
-        return  CollectionUtils.isEmpty(multipartFiles) ||
-                multipartFiles.stream()
+        return  CollectionUtils.isEmpty(multipartFiles)
+            || multipartFiles.stream()
                 .map(MultipartFile::getContentType)
                 .distinct()
                 .allMatch(ft -> getMimeTypeList().contains(ft));

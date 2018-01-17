@@ -40,11 +40,11 @@ public class StoredDocumentSearchController {
 
     @PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Search stored documents using metadata.")
-    @ApiResponses(value={
-        @ApiResponse(code=200, message = "Returns search results", response = StoredDocumentHalResourceCollection.class),
-        @ApiResponse(code=400, message = "Error when search criteria not specified")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Returns search results", response = StoredDocumentHalResourceCollection.class),
+        @ApiResponse(code = 400, message = "Error when search criteria not specified")
     })
-    public ResponseEntity<Object> search (
+    public ResponseEntity<Object> search(
         @Valid @RequestBody MetadataSearchCommand metadataSearchCommand,
         Pageable pageable,
         PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
@@ -60,11 +60,11 @@ public class StoredDocumentSearchController {
 
     @PostMapping(value = "/owned")
     @ApiOperation("Search stored documents by ownership.")
-    @ApiResponses(value={
-            @ApiResponse(code=200, message = "Returns search results", response = StoredDocumentHalResourceCollection.class),
-            @ApiResponse(code=400, message = "Error when search criteria not specified")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Returns search results", response = StoredDocumentHalResourceCollection.class),
+            @ApiResponse(code = 400, message = "Error when search criteria not specified")
     })
-    public ResponseEntity<Object> searchOwned (
+    public ResponseEntity<Object> searchOwned(
             Pageable pageable,
             PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
 

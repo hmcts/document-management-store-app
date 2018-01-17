@@ -8,14 +8,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
+import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
+import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
 
 /**
  * Created by pawel on 26/05/2017.

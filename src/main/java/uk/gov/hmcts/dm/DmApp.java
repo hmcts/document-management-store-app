@@ -6,9 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
-/**
- * Created by davicres on 22/11/2016.
- */
 @SpringBootApplication
 @EnableSwagger2
 @EnableAutoConfiguration

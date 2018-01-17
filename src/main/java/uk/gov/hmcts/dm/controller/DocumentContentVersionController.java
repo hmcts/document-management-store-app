@@ -25,9 +25,9 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
-import javax.validation.Valid;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 
 /**
  * Created by pawel on 08/06/2017.
@@ -52,8 +52,8 @@ public class DocumentContentVersionController {
 
     @GetMapping(value = "/versions/{versionId}/binary")
     @ApiOperation("Streams a specific version of the content of a Stored Document.")
-    @ApiResponses(value={
-        @ApiResponse(code=200, message = "Returns contents of a document version")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Returns contents of a document version")
     })
     public ResponseEntity<InputStreamResource> getDocumentContentVersionDocumentBinary(
         @PathVariable UUID documentId,
@@ -73,8 +73,8 @@ public class DocumentContentVersionController {
 
     @GetMapping(value = "/versions/{versionId}/thumbnail")
     @ApiOperation("Streams a specific version of the content of a Stored Document.")
-    @ApiResponses(value={
-        @ApiResponse(code=200, message = "Returns contents of a document version")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Returns contents of a document version")
     })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(
@@ -84,22 +84,22 @@ public class DocumentContentVersionController {
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-//            throw new DocumentContentVersionNotFoundException(String.format("ID: %s", versionId.toString()));
             return ResponseEntity.notFound().build();
         } else {
             return
                 ResponseEntity
                     .ok()
                     .contentType(MediaType.IMAGE_JPEG)
-                    .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion));
+                    .body(auditedDocumentContentVersionOperationsService
+                        .readDocumentContentVersionThumbnail(documentContentVersion));
         }
     }
 
 
     @GetMapping(value = "/versions/{versionId}")
     @ApiOperation("Returns a specific version of the content of a Stored Document.")
-    @ApiResponses(value={
-        @ApiResponse(code=200, message = "JSON representation of a document version")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "JSON representation of a document version")
     })
     public ResponseEntity<Object> getDocumentContentVersionDocument(
         @PathVariable UUID documentId,
@@ -117,14 +117,16 @@ public class DocumentContentVersionController {
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation("Adds a Document Content Version and associates it with a given Stored Document.")
-    @ApiResponses(value={
-        @ApiResponse(code=201, message = "JSON representation of a document version")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "JSON representation of a document version")
     })
     public ResponseEntity<Object> addDocumentContentVersion(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
                                                             BindingResult result) {
         if (result.hasErrors()) {
-            throw new ValidationErrorException(result.getFieldErrors().stream().map(fe -> String.format("%s - %s", fe.getField(), fe.getCode())).collect(Collectors.joining(",")));
+            throw new ValidationErrorException(result.getFieldErrors().stream()
+                .map(fe -> String.format("%s - %s", fe.getField(), fe.getCode()))
+                .collect(Collectors.joining(",")));
         } else {
             StoredDocument storedDocument = storedDocumentService.findOne(documentId);
 

@@ -15,7 +15,7 @@ public class IdamServiceHealth implements HealthIndicator {
     private final WebChecker idamServiceWebChecker;
 
     @Autowired
-    public IdamServiceHealth(@Value("${auth.provider.service.client.baseUrl}") String idamService){
+    public IdamServiceHealth(@Value("${auth.provider.service.client.baseUrl}") String idamService) {
         idamServiceWebChecker = new WebChecker("Idam Service", idamService, new RestTemplate());
     }
 

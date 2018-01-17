@@ -50,11 +50,11 @@ public class DocumentContentVersionHalResource extends HalResource {
             documentContentVersion.getId())).withRel("thumbnail"));
     }
 
-    public Date getCreatedOn(){
+    public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
+    public void setCreatedOn(Date createdOn) {
         this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 

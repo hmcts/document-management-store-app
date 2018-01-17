@@ -60,7 +60,7 @@ public class StoredDocumentService {
     public List<StoredDocument> saveItems(List<MultipartFile> files,
                                           Classifications classification,
                                           List<String> roles,
-                                          Map<String, String > metadata)  {
+                                          Map<String, String> metadata)  {
         return files.stream().map(file -> {
             StoredDocument document = new StoredDocument();
             document.setClassification(classification);

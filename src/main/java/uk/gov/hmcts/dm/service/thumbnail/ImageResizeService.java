@@ -3,13 +3,13 @@ package uk.gov.hmcts.dm.service.thumbnail;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import javax.imageio.ImageIO;
 
 @Service
 public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
@@ -26,7 +26,7 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
         return SUPPORTED_MIME_TYPES.contains(mimeType);
     }
 
-    public BufferedImage getImg(InputStream img){
+    public BufferedImage getImg(InputStream img) {
         try {
             BufferedImage bufferedImage = ImageIO.read(img);
             return resizeImage(bufferedImage);
@@ -38,16 +38,16 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
     public static BufferedImage resizeImage(BufferedImage bufferedImage) {
         Image scaledInstance = bufferedImage.getScaledInstance(DEFAULT_WIDTH,apsectRatio(bufferedImage), Image.SCALE_SMOOTH);
 
-        BufferedImage bimage = new BufferedImage(
+        BufferedImage resizedBuffedImage = new BufferedImage(
             scaledInstance.getWidth(null),
             scaledInstance.getHeight(null),
             BufferedImage.TYPE_INT_RGB
         );
 
-        Graphics2D bGr = bimage.createGraphics();
+        Graphics2D resizedBuffedImageGraphics = resizedBuffedImage.createGraphics();
 
         // Apply scaled Image to the Buffered Image Graphic.
-        bGr.drawImage(
+        resizedBuffedImageGraphics.drawImage(
             scaledInstance,
             0,
             0,
@@ -57,9 +57,9 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
             null
         );
 
-        bGr.dispose();
+        resizedBuffedImageGraphics.dispose();
 
-        return bimage;
+        return resizedBuffedImage;
     }
 
 //    Unsure if needed
@@ -88,13 +88,13 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
 //        }
-//    }
+//   }
 
-    public static int apsectRatio(BufferedImage bufferedImage){
+    public static int apsectRatio(BufferedImage bufferedImage) {
         return apsectRatio(bufferedImage.getHeight(),bufferedImage.getWidth());
     }
 
-    public static int apsectRatio(int h, int w){
+    public static int apsectRatio(int h, int w) {
         float ratio = (float) DEFAULT_WIDTH / w;
         return Math.round(h * ratio);
     }

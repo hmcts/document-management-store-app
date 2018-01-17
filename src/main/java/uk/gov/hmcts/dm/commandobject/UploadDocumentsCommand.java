@@ -5,9 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteList;
 
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 /**
  * Created by pawel on 04/10/2017.
@@ -16,7 +16,7 @@ import java.util.List;
 public class UploadDocumentsCommand {
 
     @NotNull(message = "Provide collection of files to be uploaded")
-    @Size(min=1, message = "Collection of files must be bigger than 1")
+    @Size(min = 1, message = "Collection of files must be bigger than 1")
     @MultipartFileListWhiteList(message = "One of the mime-types is not white-listed")
     private List<MultipartFile> files;
 
