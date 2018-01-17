@@ -5,6 +5,7 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
@@ -31,7 +32,7 @@ public class PdfThumbnailService extends AbstractFileSpecificThumbnailCreator {
             BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
             return ImageResizeService.resizeImage(bufferedImage);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CantCreateThumbnailException(e);
         }
     }
 }

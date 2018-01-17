@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -20,7 +21,7 @@ public abstract class AbstractFileSpecificThumbnailCreator implements FileSpecif
             ImageIO.write(bufferedImage,THUMBNAIL_FORMAT, os);
             return new ByteArrayInputStream(os.toByteArray());
         } catch (IOException | SQLException e) {
-            throw new RuntimeException(e);
+            throw new CantCreateThumbnailException(e);
         }
     }
 

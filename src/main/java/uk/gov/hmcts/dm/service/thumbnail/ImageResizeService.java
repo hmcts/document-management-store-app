@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -30,7 +31,7 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
             BufferedImage bufferedImage = ImageIO.read(img);
             return resizeImage(bufferedImage);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CantCreateThumbnailException(e);
         }
     }
 
