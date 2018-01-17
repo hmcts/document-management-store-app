@@ -84,6 +84,19 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
+    public void testGetDocumentVersion() throws Exception {
+
+        when(this.documentContentVersionService.findOne(id))
+            .thenReturn(documentContentVersion);
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .get("/documents/" + id + "/versions/" + id);
+
+    }
+
+    @Test
     public void testGetDocumentVersionBinary() throws Exception {
 
         when(this.documentContentVersionService.findOne(id))
@@ -106,6 +119,24 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                 .withAuthorizedUser("userId")
                 .withAuthorizedService("divorce")
                 .get("/documents/" + id + "/versions/" + id + "/thumbnail");
+
+    }
+
+    @Test
+    public void testGetDocumentVersionThatStoredDocumentWasDeleted() throws Exception {
+
+        DocumentContentVersion documentContentVersion =new DocumentContentVersion();
+        documentContentVersion.setStoredDocument(new StoredDocument());
+        documentContentVersion.getStoredDocument().setDeleted(true);
+
+        when(this.documentContentVersionService.findOne(id))
+                .thenReturn(documentContentVersion);
+
+        restActions
+                .withAuthorizedUser("userId")
+                .withAuthorizedService("divorce")
+                .get("/documents/" + id + "/versions/" + id)
+                .andExpect(status().isNotFound());
 
     }
 
@@ -141,6 +172,20 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                 .withAuthorizedUser("userId")
                 .withAuthorizedService("divorce")
                 .get("/documents/" + id + "/versions/" + id + "/thumbnail")
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    public void testGetDocumentVersionThatDoesntExist() throws Exception {
+
+        when(this.documentContentVersionService.findOne(id))
+                .thenReturn(null);
+
+        restActions
+                .withAuthorizedUser("userId")
+                .withAuthorizedService("divorce")
+                .get("/documents/" + id + "/versions/" + id)
                 .andExpect(status().isNotFound());
 
     }
@@ -281,6 +326,16 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .get("/documents/" + id + "/thumbnail")
             .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void testGetThatDoesNotExist() throws Exception {
+        restActions
+                .withAuthorizedUser("userId")
+                .withAuthorizedService("divorce")
+                .get("/documents/" + id)
+                .andExpect(status().isNotFound());
 
     }
 
