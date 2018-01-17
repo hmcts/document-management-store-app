@@ -72,27 +72,45 @@ public class ImageResizeServiceTest {
         assertThat(resizedImage.getHeight(), equalTo(256));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldThrowExceptionOnResizePdf() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("files/1MB.pdf").getFile());
         InputStream image = Files.newInputStream(file.toPath());
 
-        imageResizeService.getImg(image);
+        try {
+            imageResizeService.getImg(image);
+        }catch (RuntimeException e){
+            assertTrue(e.getMessage(),true);
+            return;
+        }
+        fail();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldThrowExceptionOnNull() throws IOException {
         InputStream nullInputStream = Files.newInputStream(null);
 
-        imageResizeService.getImg(nullInputStream);
+        try {
+            imageResizeService.getImg(nullInputStream);
+        }catch (RuntimeException e){
+            assertTrue(e.getMessage(),true);
+            return;
+        }
+        fail();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void shouldThrowExceptionOnEmptyStream() {
         InputStream nullInputStream =  new ByteArrayInputStream(new byte[]{0});
 
-        imageResizeService.getImg(nullInputStream);
+        try {
+            imageResizeService.getImg(nullInputStream);
+        }catch (RuntimeException e){
+            assertTrue(e.getMessage(),true);
+            return;
+        }
+        fail();
     }
 
     @Test

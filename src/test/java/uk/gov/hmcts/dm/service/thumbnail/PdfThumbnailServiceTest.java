@@ -54,24 +54,44 @@ public class PdfThumbnailServiceTest {
         assertThat(resizedImage.getWidth(), equalTo(ImageResizeService.DEFAULT_WIDTH));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void getPdfThumbnailNoPages() {
         InputStream pdf = new ByteArrayInputStream(new byte[]{0});
-        pdfThumbnailService.getImg(pdf);
+
+        try {
+            pdfThumbnailService.getImg(pdf);
+        }catch (RuntimeException e){
+            assertTrue(e.getMessage(),true);
+            return;
+        }
+        fail();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void getPdfThumbnailNull() {
         InputStream pdf = new ByteArrayInputStream(null);
-        pdfThumbnailService.getImg(pdf);
+
+        try {
+            pdfThumbnailService.getImg(pdf);
+        }catch (RuntimeException e){
+            assertTrue(e.getMessage(),true);
+            return;
+        }
+        fail();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void getPdfThumbnailWrongFileType() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("files/document-png-example.png").getFile());
         InputStream pdf = Files.newInputStream(file.toPath());
-        pdfThumbnailService.getImg(pdf);
+        try {
+            pdfThumbnailService.getImg(pdf);
+        }catch (RuntimeException e){
+            assertTrue(e.getMessage(),true);
+            return;
+        }
+        fail();
     }
 
 }
