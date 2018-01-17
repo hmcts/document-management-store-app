@@ -23,10 +23,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-/**
- * Created by pawel on 26/05/2017.
- */
 public class StoredDocumentControllerTests extends ComponentTestBase {
 
     final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));
