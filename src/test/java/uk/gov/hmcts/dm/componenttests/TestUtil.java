@@ -20,9 +20,9 @@ import java.util.stream.Stream;
  */
 public class TestUtil {
 
-    public final static String BLOB_DATA = "data";
+    public static final String BLOB_DATA = "data";
 
-    public final static DocumentContent DOCUMENT_CONTENT;
+    public static final DocumentContent DOCUMENT_CONTENT;
     static {
         try {
             DOCUMENT_CONTENT = new DocumentContent(new SerialBlob(BLOB_DATA.getBytes(StandardCharsets.UTF_8)));
@@ -62,7 +62,7 @@ public class TestUtil {
     }
 
 
-    public final static DocumentContentVersion DOCUMENT_CONTENT_VERSION = DocumentContentVersion.builder()
+    public static final DocumentContentVersion DOCUMENT_CONTENT_VERSION = DocumentContentVersion.builder()
             .id(RANDOM_UUID)
             .mimeType("text/plain")
             .originalDocumentName("filename.txt")
@@ -70,7 +70,7 @@ public class TestUtil {
             .storedDocument(StoredDocument.builder().id(RANDOM_UUID).folder(Folder.builder().id(RANDOM_UUID).build()).build())
             .documentContent(DOCUMENT_CONTENT).build();
 
-    public final static Folder folder = Folder.builder()
+    public static final Folder folder = Folder.builder()
             .id(RANDOM_UUID)
             .storedDocuments(
                     Stream.of(StoredDocument.builder().id(RANDOM_UUID).documentContentVersions(
@@ -80,7 +80,7 @@ public class TestUtil {
             )
             .build();
 
-    public final static StoredDocument STORED_DOCUMENT = StoredDocument.builder().id(RANDOM_UUID)
+    public static final StoredDocument STORED_DOCUMENT = StoredDocument.builder().id(RANDOM_UUID)
             .folder(Folder.builder().id(RANDOM_UUID).build()).documentContentVersions(
                     Stream.of(DOCUMENT_CONTENT_VERSION)
                             .collect(Collectors.toList())

@@ -25,7 +25,6 @@ public class DMBuildInfoTest {
 
         Info info = builder.build();
 
-        Map<String,Object> map = new HashMap<>();
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
         buildInfo.put("project", "project");
@@ -35,6 +34,7 @@ public class DMBuildInfoTest {
         buildInfo.put("commit", "unknown");
         buildInfo.put("extra", Collections.EMPTY_MAP);
 
+        Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
 
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));
@@ -49,7 +49,6 @@ public class DMBuildInfoTest {
 
         Info info = builder.build();
 
-        Map<String,Object> map = new HashMap<>();
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
         buildInfo.put("project", "project");
@@ -59,6 +58,7 @@ public class DMBuildInfoTest {
         buildInfo.put("commit", "unknown");
         buildInfo.put("extra", Collections.EMPTY_MAP);
 
+        Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
 
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));
@@ -73,7 +73,6 @@ public class DMBuildInfoTest {
 
         Info info = builder.build();
 
-        Map<String,Object> map = new HashMap<>();
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
         buildInfo.put("project", "project");
@@ -83,6 +82,7 @@ public class DMBuildInfoTest {
         buildInfo.put("commit", "aaaaaaa");
         buildInfo.put("extra", Collections.EMPTY_MAP);
 
+        Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
 
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));

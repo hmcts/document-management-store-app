@@ -95,7 +95,7 @@ public class FolderControllerTests extends ComponentTestBase {
 
     @Test
     @Ignore("Code Removed at the moment called as 405")
-    public void testDeleteSuccess() throws Exception{
+    public void testDeleteSuccess() throws Exception {
 
         when(this.folderService.findOne(TestUtil.RANDOM_UUID))
                 .thenReturn(TestUtil.TEST_FOLDER);

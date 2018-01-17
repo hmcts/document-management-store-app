@@ -24,6 +24,7 @@ public class Helper {
         return getPathFromResponse(response, path);
 
     }
+    
     public static String getSelfUrlFromResponse(MockHttpServletResponse response) throws IOException {
         final String path = "/_links/self/href";
         return getPathFromResponse(response, path);

@@ -56,10 +56,8 @@ public class PdfThumbnailServiceTest {
 
     @Test
     public void getPdfThumbnailNoPages() {
-        InputStream pdf = new ByteArrayInputStream(new byte[]{0});
-
         try {
-            pdfThumbnailService.getImg(pdf);
+            pdfThumbnailService.getImg(new ByteArrayInputStream(new byte[]{0}));
         } catch (RuntimeException e){
             assertTrue(e.getMessage(),true);
             return;
