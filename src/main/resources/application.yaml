@@ -111,3 +111,4 @@ toggle:
   folderendpoint: ${ENABLE_FOLDER_API:true}
   includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
   deleteenabled: ${ENABLED_DELETE:false}
+  ttl: ${ENABLE_TTL:true}

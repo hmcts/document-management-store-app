@@ -79,11 +79,7 @@ public class StoredDocumentController {
             throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParamter, result);
         } else {
             List<StoredDocument> storedDocuments =
-                    auditedStoredDocumentOperationsService.createStoredDocuments(
-                            uploadDocumentsCommand.getFiles(),
-                            uploadDocumentsCommand.getClassification(),
-                            uploadDocumentsCommand.getRoles(),
-                            null);
+                    auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
             return ResponseEntity
                     .ok()
                     .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)

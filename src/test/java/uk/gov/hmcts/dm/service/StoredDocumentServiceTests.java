@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
@@ -53,6 +54,9 @@ public class StoredDocumentServiceTests {
 
     @Mock
     FolderRepository folderRepository;
+
+    @Mock
+    ToggleConfiguration toggleConfiguration;
 
     @InjectMocks
     StoredDocumentService storedDocumentService;

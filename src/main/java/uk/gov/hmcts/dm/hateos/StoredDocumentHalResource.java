@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.hateos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -50,6 +51,8 @@ public class StoredDocumentHalResource extends HalResource {
     private List<String> roles;
 
     private Map<String, String> metadata;
+
+    private Date ttl;
 
     public StoredDocumentHalResource(StoredDocument storedDocument) {
         BeanUtils.copyProperties(storedDocument, this);
