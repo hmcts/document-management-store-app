@@ -10,9 +10,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
-import uk.gov.hmcts.dm.service.thumbnail.FileSpecificThumbnailCreator;
-import uk.gov.hmcts.dm.service.thumbnail.UnsupportedThumbnailService;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -72,7 +69,7 @@ public class DocumentThumbnailServiceTest {
     }
 
     @Test
-    public void returnPDFThumbnail() throws IOException {
+    public void returnPdfThumbnail() throws IOException {
 
         DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
         InputStream expectedInputStream = new ByteArrayInputStream(new byte[]{0});

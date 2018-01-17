@@ -20,7 +20,6 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
         MediaType.IMAGE_PNG_VALUE
     );
 
-
     @Override
     public boolean supports(String mimeType) {
         return SUPPORTED_MIME_TYPES.contains(mimeType);
@@ -61,34 +60,6 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
 
         return resizedBuffedImage;
     }
-
-//    Unsure if needed
-//    public static int getWidth(InputStream img){
-//        try {
-//            BufferedImage bufferedImage = ImageIO.read(img);
-//            return bufferedImage.getWidth();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    public static int getHeight(InputStream img){
-//        try {
-//            BufferedImage bufferedImage = ImageIO.read(img);
-//            return bufferedImage.getHeight();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-//
-//    public static int apsectRatio(InputStream img){
-//        try {
-//            BufferedImage bufferedImage = ImageIO.read(img);
-//            return apsectRatio(bufferedImage.getHeight(),bufferedImage.getWidth());
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//   }
 
     public static int apsectRatio(BufferedImage bufferedImage) {
         return apsectRatio(bufferedImage.getHeight(),bufferedImage.getWidth());

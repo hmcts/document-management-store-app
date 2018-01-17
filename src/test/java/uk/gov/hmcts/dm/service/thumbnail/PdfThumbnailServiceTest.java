@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -20,7 +19,7 @@ public class PdfThumbnailServiceTest {
     private PdfThumbnailService pdfThumbnailService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         pdfThumbnailService = new PdfThumbnailService();
     }
 
@@ -28,16 +27,19 @@ public class PdfThumbnailServiceTest {
     public void shouldNotSupportJpeg() {
         assertFalse(pdfThumbnailService.supports(MediaType.IMAGE_JPEG_VALUE));
     }
+
     @Test
     public void shouldNotSupportPng() {
         assertFalse(pdfThumbnailService.supports(MediaType.IMAGE_PNG_VALUE));
     }
+
     @Test
     public void shouldNotSupportGif() {
         assertFalse(pdfThumbnailService.supports(MediaType.IMAGE_GIF_VALUE));
     }
+
     @Test
-    public void shouldSupportPDF() {
+    public void shouldSupportPdf() {
         assertTrue(pdfThumbnailService.supports(MediaType.APPLICATION_PDF_VALUE));
     }
 
@@ -45,15 +47,11 @@ public class PdfThumbnailServiceTest {
     public void getPdfThumbnail() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("files/1MB.pdf").getFile());
-
         InputStream pdf = Files.newInputStream(file.toPath());
 
         BufferedImage resizedImage = pdfThumbnailService.getImg(pdf);
-        File outputFile = new File("pdf-test-thumbnail.jpg");
-        ImageIO.write(resizedImage, "jpg", outputFile);
 
         assertThat(resizedImage.getWidth(), equalTo(ImageResizeService.DEFAULT_WIDTH));
-//        assertThat(resizedImage.getHeight(), equalTo(194));
     }
 
     @Test(expected = RuntimeException.class)
@@ -62,14 +60,18 @@ public class PdfThumbnailServiceTest {
         pdfThumbnailService.getImg(pdf);
     }
 
+    @Test(expected = RuntimeException.class)
+    public void getPdfThumbnailNull() {
+        InputStream pdf = new ByteArrayInputStream(null);
+        pdfThumbnailService.getImg(pdf);
+    }
 
     @Test(expected = RuntimeException.class)
     public void getPdfThumbnailWrongFileType() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("files/document-png-example.png").getFile());
-        InputStream pdf = Files.newInputStream(null);
+        InputStream pdf = Files.newInputStream(file.toPath());
         pdfThumbnailService.getImg(pdf);
     }
-
 
 }

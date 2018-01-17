@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -51,14 +50,11 @@ public class ImageResizeServiceTest {
     @Test
     public void shouldResizeAnimatedGifImage() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
-//      Taken from http://www.adamgrimshaw.com/gifs/turn_turn_turn.gif
+        // Taken from http://www.adamgrimshaw.com/gifs/turn_turn_turn.gif
         File file = new File(classLoader.getResource("files/document-gif-animated-example.gif").getFile());
         InputStream image = Files.newInputStream(file.toPath());
 
         BufferedImage resizedImage = imageResizeService.getImg(image);
-        File outputfile = new File("evidence-management-resize.jpg");
-        ImageIO.write(resizedImage, "jpg", outputfile);
-
 
         assertThat(resizedImage.getWidth(), equalTo(ImageResizeService.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(204));
@@ -99,14 +95,6 @@ public class ImageResizeServiceTest {
         imageResizeService.getImg(nullInputStream);
     }
 
-
-
-//
-//    @Test
-//    public void getThumbnail(){
-//        imageResizeService.getThumbnail()
-//    }
-
     @Test
     public void shouldSupportJpeg() {
         assertTrue(imageResizeService.supports(MediaType.IMAGE_JPEG_VALUE));
@@ -123,7 +111,7 @@ public class ImageResizeServiceTest {
     }
 
     @Test
-    public void shouldNotSupportPDF() {
+    public void shouldNotSupportPdf() {
         assertFalse(imageResizeService.supports(MediaType.APPLICATION_PDF_VALUE));
     }
 }

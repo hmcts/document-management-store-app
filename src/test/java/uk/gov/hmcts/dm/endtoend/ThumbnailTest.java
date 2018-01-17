@@ -1,8 +1,6 @@
 package uk.gov.hmcts.dm.endtoend;
 
-
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,39 +33,34 @@ import static uk.gov.hmcts.dm.endtoend.Helper.getThumbnailUrlFromResponse;
     classes = DmApp.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
-@TestPropertySource(
-    locations = "classpath:application-local.yaml")
+@TestPropertySource(locations = "classpath:application-local.yaml")
 public class ThumbnailTest {
 
     @Autowired
     private MockMvc mvc;
 
+    private final HttpHeaders headers = Helper.getHeaders();
 
-    private HttpHeaders headers = Helper.getHeaders();
-    private HttpHeaders anotherUser = Helper.getHeaders("anotherUser");
+    private final MockMultipartFile txtFile;
+    private final MockMultipartFile jpgFile;
+    private final MockMultipartFile pngFile;
+    private final MockMultipartFile gifFile;
+    private final MockMultipartFile gifAniFile;
+    private final MockMultipartFile pdfFile;
 
-
-    private MockMultipartFile TXT_FILE;
-    private MockMultipartFile JPG_FILE;
-    private MockMultipartFile PNG_FILE;
-    private MockMultipartFile GIF_FILE;
-    private MockMultipartFile GIF_ANI_FILE;
-    private MockMultipartFile PDF_FILE;
-
-    @Before
-    public void setUp() throws Exception {
-        PDF_FILE = createMockMultipartFile("1MB.pdf",MediaType.APPLICATION_PDF_VALUE);
-        GIF_FILE = createMockMultipartFile("document-gif-example.gif",MediaType.IMAGE_GIF_VALUE);
-        GIF_ANI_FILE = createMockMultipartFile("document-gif-animated-example.gif",MediaType.IMAGE_GIF_VALUE);
-        JPG_FILE = createMockMultipartFile("document-jpg-example.jpg",MediaType.IMAGE_JPEG_VALUE);
-        PNG_FILE = createMockMultipartFile("document-png-example.png",MediaType.IMAGE_PNG_VALUE);
-        TXT_FILE = createMockMultipartFile("test.txt","test".getBytes(StandardCharsets.UTF_8), MediaType.TEXT_PLAIN_VALUE);
+    public ThumbnailTest() throws IOException {
+        txtFile = createMockMultipartFile("test.txt","test".getBytes(StandardCharsets.UTF_8), MediaType.TEXT_PLAIN_VALUE);
+        jpgFile = createMockMultipartFile("document-jpg-example.jpg",MediaType.IMAGE_JPEG_VALUE);
+        pngFile = createMockMultipartFile("document-png-example.png",MediaType.IMAGE_PNG_VALUE);
+        gifFile = createMockMultipartFile("document-gif-example.gif",MediaType.IMAGE_GIF_VALUE);
+        gifAniFile = createMockMultipartFile("document-gif-animated-example.gif",MediaType.IMAGE_GIF_VALUE);
+        pdfFile = createMockMultipartFile("1MB.pdf",MediaType.APPLICATION_PDF_VALUE);
     }
 
     @Test
     public void should_upload_a_txt_and_retrieve_a_unsupported_thumbnail() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
-            .file(TXT_FILE)
+            .file(txtFile)
             .param("classification", Classifications.PRIVATE.toString())
             .headers(headers))
             .andReturn().getResponse();
@@ -82,7 +75,7 @@ public class ThumbnailTest {
     @Test
     public void should_upload_a_pdf_and_retrieve_a_supported_pdf_thumbnail() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
-            .file(PDF_FILE)
+            .file(pdfFile)
             .param("classification", Classifications.PRIVATE.toString())
             .headers(headers))
             .andReturn().getResponse();
@@ -97,7 +90,52 @@ public class ThumbnailTest {
     @Test
     public void should_upload_a_jpg_and_retrieve_a_supported_image_thumbnail() throws Exception {
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
-            .file(JPG_FILE)
+            .file(jpgFile)
+            .param("classification", Classifications.PRIVATE.toString())
+            .headers(headers))
+            .andReturn().getResponse();
+
+        final String url = getThumbnailUrlFromResponse(response);
+
+        mvc.perform(get(url)
+            .headers(headers))
+            .andExpect(content().contentType(MediaType.IMAGE_JPEG_VALUE));
+    }
+
+    @Test
+    public void should_upload_a_png_and_retrieve_a_supported_image_thumbnail() throws Exception {
+        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+            .file(pngFile)
+            .param("classification", Classifications.PRIVATE.toString())
+            .headers(headers))
+            .andReturn().getResponse();
+
+        final String url = getThumbnailUrlFromResponse(response);
+
+        mvc.perform(get(url)
+            .headers(headers))
+            .andExpect(content().contentType(MediaType.IMAGE_JPEG_VALUE));
+    }
+
+    @Test
+    public void should_upload_a_gif_and_retrieve_a_supported_image_thumbnail() throws Exception {
+        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+            .file(gifFile)
+            .param("classification", Classifications.PRIVATE.toString())
+            .headers(headers))
+            .andReturn().getResponse();
+
+        final String url = getThumbnailUrlFromResponse(response);
+
+        mvc.perform(get(url)
+            .headers(headers))
+            .andExpect(content().contentType(MediaType.IMAGE_JPEG_VALUE));
+    }
+
+    @Test
+    public void should_upload_a_gif_ani_and_retrieve_a_supported_image_thumbnail() throws Exception {
+        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+            .file(gifAniFile)
             .param("classification", Classifications.PRIVATE.toString())
             .headers(headers))
             .andReturn().getResponse();
@@ -116,9 +154,10 @@ public class ThumbnailTest {
     }
 
     private MockMultipartFile createMockMultipartFile(String file,String mimeType) throws IOException {
-        byte[] f = fileToByteArray("files/"+file);
+        byte[] f = fileToByteArray("files/" + file);
         return new MockMultipartFile("files", file, mimeType, f);
     }
+
     private MockMultipartFile createMockMultipartFile(String file, byte[] f, String mimeType) {
         return new MockMultipartFile("files", file,mimeType, f);
     }

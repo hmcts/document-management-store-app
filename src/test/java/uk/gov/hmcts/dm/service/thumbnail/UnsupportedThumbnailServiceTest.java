@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 

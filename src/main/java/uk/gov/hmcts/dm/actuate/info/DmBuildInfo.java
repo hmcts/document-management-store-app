@@ -62,7 +62,7 @@ public class DmBuildInfo implements InfoContributor {
         map.put("environment",environment);
         map.put("project", project);
         map.put("name", name);
-        map.put("version", version + ((EMPTY.equals(build)) ? "" : "-" + build));
+        map.put("version", version + (EMPTY.equals(build) ? "" : "-" + build));
         map.put("commit", commit);
         map.put("date", date);
         map.put("extra",new HashMap<>());
