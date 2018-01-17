@@ -81,7 +81,7 @@ public class ImageResizeServiceTest {
 
         try {
             imageResizeService.getImg(image);
-        } catch (CantCreateThumbnailException e){
+        } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -92,7 +92,7 @@ public class ImageResizeServiceTest {
     public void shouldThrowExceptionOnNull() {
         try {
             imageResizeService.getImg(null);
-        } catch (CantCreateThumbnailException e){
+        } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -105,7 +105,7 @@ public class ImageResizeServiceTest {
 
         try {
             imageResizeService.getImg(nullInputStream);
-        } catch (CantCreateThumbnailException e){
+        } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
         }

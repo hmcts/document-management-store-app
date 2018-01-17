@@ -1,8 +1,8 @@
 package uk.gov.hmcts.dm.componenttests.backdoors;
 
 import com.google.common.collect.ImmutableSet;
-import uk.gov.hmcts.reform.auth.checker.core.exceptions.AuthCheckerException;
 import uk.gov.hmcts.reform.auth.checker.core.SubjectResolver;
+import uk.gov.hmcts.reform.auth.checker.core.exceptions.AuthCheckerException;
 import uk.gov.hmcts.reform.auth.checker.core.user.User;
 
 import java.util.concurrent.ConcurrentHashMap;

@@ -6,9 +6,7 @@ import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 import javax.imageio.ImageIO;
 
 public abstract class AbstractFileSpecificThumbnailCreator implements FileSpecificThumbnailCreator {

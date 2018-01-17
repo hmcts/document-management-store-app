@@ -124,9 +124,9 @@ public class DocumentThumbnailServiceTest {
         when(mockFileSpecificThumbnailCreator1.getThumbnail(documentContentVersion))
             .thenReturn(null);
 
-        try{
+        try {
             singleDocumentThumbnailService.generateThumbnail(documentContentVersion);
-        } catch (CantCreateThumbnailException e){
+        } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
         }
