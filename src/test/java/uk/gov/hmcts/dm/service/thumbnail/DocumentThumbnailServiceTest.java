@@ -10,6 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -125,7 +126,7 @@ public class DocumentThumbnailServiceTest {
 
         try{
             singleDocumentThumbnailService.generateThumbnail(documentContentVersion);
-        } catch(RuntimeException e){
+        } catch (CantCreateThumbnailException e){
             assertTrue(e.getMessage(),true);
             return;
         }

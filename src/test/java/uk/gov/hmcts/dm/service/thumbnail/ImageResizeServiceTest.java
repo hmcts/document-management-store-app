@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.service.thumbnail;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -80,7 +81,7 @@ public class ImageResizeServiceTest {
 
         try {
             imageResizeService.getImg(image);
-        } catch (RuntimeException e){
+        } catch (CantCreateThumbnailException e){
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -91,7 +92,7 @@ public class ImageResizeServiceTest {
     public void shouldThrowExceptionOnNull() {
         try {
             imageResizeService.getImg(null);
-        } catch (RuntimeException e){
+        } catch (CantCreateThumbnailException e){
             assertTrue(e.getMessage(),true);
             return;
         }
@@ -104,7 +105,7 @@ public class ImageResizeServiceTest {
 
         try {
             imageResizeService.getImg(nullInputStream);
-        } catch (RuntimeException e){
+        } catch (CantCreateThumbnailException e){
             assertTrue(e.getMessage(),true);
             return;
         }
