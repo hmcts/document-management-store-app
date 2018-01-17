@@ -30,36 +30,40 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
         try {
             BufferedImage bufferedImage = ImageIO.read(img);
             return resizeImage(bufferedImage);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new CantCreateThumbnailException(e);
         }
     }
 
     public static BufferedImage resizeImage(BufferedImage bufferedImage) {
-        Image scaledInstance = bufferedImage.getScaledInstance(DEFAULT_WIDTH, aspectRatio(bufferedImage), Image.SCALE_SMOOTH);
+        try {
+            Image scaledInstance = bufferedImage.getScaledInstance(DEFAULT_WIDTH, aspectRatio(bufferedImage), Image.SCALE_SMOOTH);
 
-        BufferedImage resizedBuffedImage = new BufferedImage(
-            scaledInstance.getWidth(null),
-            scaledInstance.getHeight(null),
-            BufferedImage.TYPE_INT_RGB
-        );
+            BufferedImage resizedBuffedImage = new BufferedImage(
+                scaledInstance.getWidth(null),
+                scaledInstance.getHeight(null),
+                BufferedImage.TYPE_INT_RGB
+            );
 
-        Graphics2D resizedBuffedImageGraphics = resizedBuffedImage.createGraphics();
+            Graphics2D resizedBuffedImageGraphics = resizedBuffedImage.createGraphics();
 
-        // Apply scaled Image to the Buffered Image Graphic.
-        resizedBuffedImageGraphics.drawImage(
-            scaledInstance,
-            0,
-            0,
-            scaledInstance.getWidth(null),
-            scaledInstance.getHeight(null),
-            Color.WHITE,
-            null
-        );
+            // Apply scaled Image to the Buffered Image Graphic.
+            resizedBuffedImageGraphics.drawImage(
+                scaledInstance,
+                0,
+                0,
+                scaledInstance.getWidth(null),
+                scaledInstance.getHeight(null),
+                Color.WHITE,
+                null
+            );
 
-        resizedBuffedImageGraphics.dispose();
+            resizedBuffedImageGraphics.dispose();
 
-        return resizedBuffedImage;
+            return resizedBuffedImage;
+        } catch (Exception e) {
+            throw new CantCreateThumbnailException(e);
+        }
     }
 
     public static int aspectRatio(BufferedImage bufferedImage) {

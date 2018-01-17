@@ -20,7 +20,7 @@ public abstract class AbstractFileSpecificThumbnailCreator implements FileSpecif
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage,THUMBNAIL_FORMAT, os);
             return new ByteArrayInputStream(os.toByteArray());
-        } catch (IOException | SQLException e) {
+        } catch (Exception e) {
             throw new CantCreateThumbnailException(e);
         }
     }

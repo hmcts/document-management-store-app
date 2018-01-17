@@ -5,7 +5,9 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,8 +27,13 @@ public class DocumentThumbnailService {
     }
 
     public Resource generateThumbnail(DocumentContentVersion documentContentVersion) {
-        return new InputStreamResource(selectThumbnailCreator(documentContentVersion)
-            .getThumbnail(documentContentVersion));
+        ThumbnailCreator thumbnailCreator = selectThumbnailCreator(documentContentVersion);
+        InputStream inputStream = thumbnailCreator.getThumbnail(documentContentVersion);
+        if (inputStream != null) {
+            return new InputStreamResource(inputStream);
+        } else {
+            throw new CantCreateThumbnailException("Input Stream is null");
+        }
     }
 
     private ThumbnailCreator selectThumbnailCreator(DocumentContentVersion documentContentVersion) {

@@ -31,7 +31,7 @@ public class PdfThumbnailService extends AbstractFileSpecificThumbnailCreator {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
             return ImageResizeService.resizeImage(bufferedImage);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new CantCreateThumbnailException(e);
         }
     }

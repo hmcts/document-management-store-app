@@ -119,9 +119,9 @@ public class DocumentThumbnailServiceTest {
             .thenReturn(null);
 
         when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_OCTET_STREAM_VALUE))
-            .thenReturn(false);
+            .thenReturn(true);
 
-        when(mockUnsupportedThumbnailService.getThumbnail(documentContentVersion))
+        when(mockFileSpecificThumbnailCreator1.getThumbnail(documentContentVersion))
             .thenReturn(null);
 
         try{
