@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.hateos;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +10,8 @@ import org.springframework.hateoas.core.Relation;
 import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.dm.controller.FolderController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
-import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.Date;

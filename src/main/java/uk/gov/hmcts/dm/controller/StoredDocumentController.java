@@ -24,6 +24,9 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.*;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
@@ -68,7 +71,7 @@ public class StoredDocumentController {
     private MethodParameter uploadDocumentsCommandMethodParameter;
 
     @PostConstruct
-    private void init() throws NoSuchMethodException {
+    void init() throws NoSuchMethodException {
         uploadDocumentsCommandMethodParameter = new MethodParameter(
                 StoredDocumentController.class.getMethod(
                         "createFrom",

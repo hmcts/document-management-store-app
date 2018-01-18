@@ -3,7 +3,6 @@ package uk.gov.hmcts.dm.commandobject;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteList;
@@ -14,6 +13,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by pawel on 04/10/2017.
