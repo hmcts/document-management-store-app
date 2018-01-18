@@ -20,7 +20,7 @@ public class DomainPermissionEvaluatorTests {
     private static final String MRS_CASE_WORKER = "Mrs Case Worker";
     private static final String MR_A = "Mr A";
 
-    private DomainPermissionEvaluator domainPermissionEvaluator = new DomainPermissionEvaluator();
+    private final DomainPermissionEvaluator domainPermissionEvaluator = new DomainPermissionEvaluator();
 
     @Test
     public void testAsCreatorIAmGrantedAllPermissions() {
