@@ -1,22 +1,16 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -68,16 +62,16 @@ public class UnsupportedThumbnailCreatorTest {
 
     @Test
     public void shouldSupportJpgDocumentContent() {
-        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
 
         when(documentContentVersion.getMimeType()).thenReturn(MediaType.IMAGE_JPEG_VALUE);
 
         assertTrue(unsupportedThumbnailCreator.supports(documentContentVersion));
     }
-    
+
     @Test
     public void shouldSupportPngDocumentContent() {
-        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
 
         when(documentContentVersion.getMimeType()).thenReturn(MediaType.IMAGE_PNG_VALUE);
 

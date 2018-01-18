@@ -89,7 +89,7 @@ public abstract class ComponentTestBase {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         SecurityContextHolder.clearContext();
     }
 

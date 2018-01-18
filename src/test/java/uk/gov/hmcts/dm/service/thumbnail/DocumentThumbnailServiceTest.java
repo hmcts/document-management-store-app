@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
@@ -22,6 +21,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -54,7 +54,7 @@ public class DocumentThumbnailServiceTest {
     @Test
     public void returnImageThumbnail() throws IOException {
 
-        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
         InputStream expectedInputStream = new ByteArrayInputStream(new byte[]{0});
 
         when(documentContentVersion.getMimeType())
@@ -77,7 +77,7 @@ public class DocumentThumbnailServiceTest {
     @Test
     public void returnPdfThumbnail() throws IOException {
 
-        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
         InputStream expectedInputStream = new ByteArrayInputStream(new byte[]{0});
 
         when(documentContentVersion.getMimeType())
@@ -100,7 +100,7 @@ public class DocumentThumbnailServiceTest {
 
     @Test
     public void returnUnsupportedThumbnail() throws IOException {
-        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
         InputStream expectedInputStream = new ByteArrayInputStream(new byte[]{0});
 
         when(documentContentVersion.getMimeType())
@@ -119,7 +119,7 @@ public class DocumentThumbnailServiceTest {
 
     @Test
     public void throwExceptionWhenDocumentContentVersionIsNull() {
-        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
 
         when(documentContentVersion.getMimeType())
             .thenReturn(null);
@@ -142,7 +142,7 @@ public class DocumentThumbnailServiceTest {
     @Test
     public void returnMultipleThumbnail() throws IOException {
 
-        DocumentContentVersion documentContentVersion = Mockito.mock(DocumentContentVersion.class);
+        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
         InputStream expectedInputStream = new ByteArrayInputStream(new byte[]{0});
         InputStream notexpectedInputStream = new ByteArrayInputStream(new byte[]{1});
 

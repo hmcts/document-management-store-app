@@ -9,6 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableSwagger2
 @EnableAutoConfiguration
+@SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, its not a utility class
 public class DmApp {
 
     public static void main(String[] args) {

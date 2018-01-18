@@ -3,9 +3,7 @@ package uk.gov.hmcts.dm.service.thumbnail;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
-import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.net.URL;
 
 @Service
 public class UnsupportedThumbnailCreator implements ThumbnailCreator {

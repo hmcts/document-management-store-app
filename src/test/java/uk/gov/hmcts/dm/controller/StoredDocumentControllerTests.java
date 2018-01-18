@@ -58,7 +58,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentBinary() throws Exception {
+    public void testGetDocumentBinary() {
 
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
                 .thenReturn(documentContentVersion);
@@ -71,7 +71,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentThumbnail() throws Exception {
+    public void testGetDocumentThumbnail() {
 
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
                 .thenReturn(documentContentVersion);
@@ -84,7 +84,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentVersion() throws Exception {
+    public void testGetDocumentVersion() {
 
         when(this.documentContentVersionService.findOne(id))
             .thenReturn(documentContentVersion);
@@ -97,7 +97,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentVersionBinary() throws Exception {
+    public void testGetDocumentVersionBinary() {
 
         when(this.documentContentVersionService.findOne(id))
                 .thenReturn(documentContentVersion);
@@ -110,7 +110,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentVersionThumbnail() throws Exception {
+    public void testGetDocumentVersionThumbnail() {
 
         when(this.documentContentVersionService.findOne(id))
                 .thenReturn(documentContentVersion);

@@ -27,7 +27,7 @@ public class FolderServiceTests {
     FolderService folderService;
 
     @Test
-    public void testFindOne() throws Exception {
+    public void testFindOne() {
 
         when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
 
@@ -38,7 +38,7 @@ public class FolderServiceTests {
     }
 
     @Test
-    public void testSave() throws Exception {
+    public void testSave() {
 
         Folder folder = new Folder();
 
@@ -50,7 +50,7 @@ public class FolderServiceTests {
 
 
     @Test
-    public void testFindOneItem() throws Exception {
+    public void testFindOneItem() {
 
         when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
 
@@ -60,7 +60,7 @@ public class FolderServiceTests {
     }
 
     @Test
-    public void testFindOneItemFolderNull() throws Exception {
+    public void testFindOneItemFolderNull() {
 
         when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
 
@@ -70,7 +70,7 @@ public class FolderServiceTests {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void testDelete() {
 
         when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
 

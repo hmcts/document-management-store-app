@@ -34,7 +34,7 @@ public class SearchServiceTests {
     SearchService searchService;
 
     @Test
-    public void testSearchMetadata() throws Exception {
+    public void testSearchMetadata() {
 
         MetadataSearchCommand searchCommand = new MetadataSearchCommand("name", "thename");
 
@@ -56,7 +56,7 @@ public class SearchServiceTests {
     }
 
     @Test(expected = NullPointerException.class)
-    public void testSearchMetadataNullArg() throws Exception {
+    public void testSearchMetadataNullArg() {
         searchService.findStoredDocumentsByMetadata(null, null);
     }
 
