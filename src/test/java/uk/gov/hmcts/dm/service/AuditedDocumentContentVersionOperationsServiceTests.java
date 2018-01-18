@@ -32,7 +32,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @Test
-    public void testReadFileContentVersionBinary() throws Exception {
+    public void testReadFileContentVersionBinary() {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
         auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
 
@@ -41,7 +41,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     }
 
     @Test
-    public void testReadFileContentVersionThatExists() throws Exception {
+    public void testReadFileContentVersionThatExists() {
         StoredDocument storedDocument = new StoredDocument();
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
         documentContentVersion.setStoredDocument(storedDocument);
@@ -53,7 +53,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     }
 
     @Test(expected = DocumentContentVersionNotFoundException.class)
-    public void testReadFileContentVersionThatBelongsToDeletedDocument() throws Exception {
+    public void testReadFileContentVersionThatBelongsToDeletedDocument() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
@@ -68,7 +68,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     }
 
     @Test(expected = DocumentContentVersionNotFoundException.class)
-    public void testReadFileContentVersionThatDoesNotExists() throws Exception {
+    public void testReadFileContentVersionThatDoesNotExists() {
 
         UUID uuid = UUID.randomUUID();
 

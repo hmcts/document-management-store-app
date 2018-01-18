@@ -5,8 +5,8 @@ import uk.gov.hmcts.reform.auth.checker.core.SubjectResolver;
 import uk.gov.hmcts.reform.auth.checker.core.exceptions.AuthCheckerException;
 import uk.gov.hmcts.reform.auth.checker.core.user.User;
 
-import javax.annotation.PostConstruct;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
 
 public class UserResolverBackdoor implements SubjectResolver<User> {
     private final ConcurrentHashMap<String, String> tokenToUserMap = new ConcurrentHashMap<>();

@@ -9,7 +9,6 @@ import org.springframework.hateoas.core.Relation;
 import uk.gov.hmcts.dm.controller.FolderController;
 import uk.gov.hmcts.dm.domain.Folder;
 
-
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -48,19 +47,19 @@ public class FolderHalResource extends HalResource {
         add(linkTo(methodOn(FolderController.class).get(folder.getId())).withSelfRel());
     }
 
-    public Date getModifiedOn(){
+    public Date getModifiedOn() {
         return (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public void setModifiedOn(Date modifiedOn){
+    public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public Date getCreatedOn(){
+    public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
+    public void setCreatedOn(Date createdOn) {
         this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 

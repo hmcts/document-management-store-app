@@ -2,6 +2,13 @@
 version: '2.1'
 
 services:
+
+  document-management-viewer:
+    image: docker.artifactory.reform.hmcts.net/evidence/document-management-viewer:latest
+    environment:
+    - NODE_ENV=development
+    - PORT=8080
+
   document-management-store-api-gateway-web:
     image: docker.artifactory.reform.hmcts.net/evidence/document-management-store-api-gateway-web:latest
     environment:
@@ -13,14 +20,14 @@ services:
       - IDAM_SERVICE_KEY=AAAAAAAAAAAAAAAA
       - IDAM_SERVICE_NAME=em_gw
       - CORS_ORIGIN_METHODS=GET,POST,PUT,DELETE,OPTIONS
-      - CORS_ORIGIN_WHITELIST=http://document-management-store:8080
+      - CORS_ORIGIN_WHITELIST=*
       #      logging env vars
       - ROOT_APPENDER=JSON_CONSOLE
       - LOG_OUTPUT=single
       - JSON_CONSOLE_PRETTY_PRINT=false
       - REFORM_SERVICE_TYPE=node
       - REFORM_SERVICE_NAME=document-management-api-gateway-web
-      - REFORM_TEAM=cc
+      - REFORM_TEAM=evidence
       - REFORM_ENVIRONMENT=docker
 #      healthcheck env vars
       - PACKAGES_ENVIRONMENT=docker
@@ -87,6 +94,27 @@ services:
     build:
       context: ./docker/database
     image: docker.artifactory.reform.hmcts.net/evidence/document-management-store-database:latest
+
+  idam-authentication-web:
+    image: docker.artifactory.reform.hmcts.net/auth/authentication-web:latest
+    environment:
+    - IDAM_CONTINUE_URL_VALIDATOR_ENFORCE_TLS=false
+    - IDAM_ENABLE_PROXY=true
+    - IDAM_API_URL=http://idam-api:8080
+    links:
+    - idam-api
+    - service-auth-provider-api
+
+  idam-registration-web:
+    image: docker.artifactory.reform.hmcts.net/auth/registration-web:latest
+    environment:
+    - IDAM_API_URL=http://idam-api:8080
+    - IDAM_LOGIN_URL=http://idam-api:8080/login
+    - IDAM_REGISTRATION_URL=http://idam-api:8080/register
+    - IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_REGISTRATION_WEB=AAAAAAAAAAAAAAAA
+    links:
+    - idam-api
+    - service-auth-provider-api
 
   idam-api:
     image: docker.artifactory.reform.hmcts.net/auth/idam-api:latest

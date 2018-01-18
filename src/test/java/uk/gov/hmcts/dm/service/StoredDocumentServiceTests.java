@@ -50,26 +50,26 @@ public class StoredDocumentServiceTests {
     StoredDocumentService storedDocumentService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         when(blobCreator.createBlob(any(MultipartFile.class))).thenReturn(mock(Blob.class));
     }
 
     @Test
-    public void testFindOne() throws Exception {
+    public void testFindOne() {
         when(this.storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.STORED_DOCUMENT);
         StoredDocument storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertThat(storedDocument, equalTo(TestUtil.STORED_DOCUMENT));
     }
 
     @Test
-    public void testFindOneThatDoesNotExist() throws Exception {
+    public void testFindOneThatDoesNotExist() {
         when(this.storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
         StoredDocument storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertThat(storedDocument, equalTo(null));
     }
 
     @Test
-    public void testSave() throws Exception {
+    public void testSave() {
         final StoredDocument storedDocument = TestUtil.STORED_DOCUMENT;
         storedDocumentService.save(storedDocument);
         verify(storedDocumentRepository).save(storedDocument);
@@ -77,7 +77,7 @@ public class StoredDocumentServiceTests {
 
 
     @Test
-    public void testSaveItems() throws Exception {
+    public void testSaveItems() {
         List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TestUtil.TEST_FILE));
 
         final DocumentContentVersion latestVersion = documents.get(0).getDocumentContentVersions().get(0);
@@ -88,7 +88,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testAddStoredDocumentVersion() throws Exception {
+    public void testAddStoredDocumentVersion() {
         StoredDocument storedDocument = new StoredDocument();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
@@ -105,7 +105,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    public void testDelete() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocumentService.deleteItem(storedDocument);
 
@@ -114,7 +114,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testDeleteWithNull() throws Exception {
+    public void testDeleteWithNull() {
         StoredDocument storedDocument = null;
         storedDocumentService.deleteItem(storedDocument);
 
@@ -122,10 +122,10 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testSaveItemsToBucket() throws Exception {
+    public void testSaveItemsToBucket() {
         Folder folder = new Folder();
 
-        storedDocumentService.saveItemsToBucket(folder, Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()) );
+        storedDocumentService.saveItemsToBucket(folder, Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()));
 
         assertThat(folder.getStoredDocuments().size(), equalTo(1));
 

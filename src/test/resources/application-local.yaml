@@ -13,3 +13,8 @@ logging:
     org.springframework.web: INFO
     org.springframework.security: DEBUG
     uk.gov.hmcts: DEBUG
+
+thumbnail:
+    imageThumbnailCreator: image/jpeg,image/png,image/gif,image/webp,image/bmp
+    pdfThumbnailCreator: application/pdf
+

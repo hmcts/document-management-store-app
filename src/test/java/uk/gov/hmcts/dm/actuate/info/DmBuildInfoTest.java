@@ -10,22 +10,20 @@ import java.util.Map;
 
 import static org.junit.Assert.assertThat;
 
-public class DMBuildInfoTest {
+public class DmBuildInfoTest {
 
-    private static final String BUILD_INFO = "META-INF/build-info.properties";
+    // private static final String BUILD_INFO = "META-INF/build-info.properties";
     private static final String BUILD_INFO_WITH_BUILD_NO = "META-INF/build-info-with-build-no.properties";
 
 
     @Test
     public void shouldAddBuildInfoToBuilder() throws Exception {
-        DMBuildInfo dmBuildInfo = new DMBuildInfo("name","env","project");
+        DmBuildInfo dmBuildInfo = new DmBuildInfo("name","env","project");
 
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);
 
-        Info info = builder.build();
 
-        Map<String,Object> map = new HashMap<>();
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
         buildInfo.put("project", "project");
@@ -35,21 +33,21 @@ public class DMBuildInfoTest {
         buildInfo.put("commit", "unknown");
         buildInfo.put("extra", Collections.EMPTY_MAP);
 
+        Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
+
+        Info info = builder.build();
 
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));
     }
 
     @Test
     public void shouldAddBuildInfoToBuilderNullBuildInfo() throws Exception {
-        DMBuildInfo dmBuildInfo = new DMBuildInfo("name","env","project",null);
+        DmBuildInfo dmBuildInfo = new DmBuildInfo("name","env","project",null);
 
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);
 
-        Info info = builder.build();
-
-        Map<String,Object> map = new HashMap<>();
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
         buildInfo.put("project", "project");
@@ -59,21 +57,21 @@ public class DMBuildInfoTest {
         buildInfo.put("commit", "unknown");
         buildInfo.put("extra", Collections.EMPTY_MAP);
 
+        Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
+
+        Info info = builder.build();
 
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));
     }
 
     @Test
     public void shouldAddBuildInfoToBuilderIncludesBuildNumber() throws Exception {
-        DMBuildInfo dmBuildInfo = new DMBuildInfo("name","env","project",BUILD_INFO_WITH_BUILD_NO);
+        DmBuildInfo dmBuildInfo = new DmBuildInfo("name","env","project",BUILD_INFO_WITH_BUILD_NO);
 
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);
 
-        Info info = builder.build();
-
-        Map<String,Object> map = new HashMap<>();
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
         buildInfo.put("project", "project");
@@ -83,7 +81,10 @@ public class DMBuildInfoTest {
         buildInfo.put("commit", "aaaaaaa");
         buildInfo.put("extra", Collections.EMPTY_MAP);
 
+        Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
+
+        Info info = builder.build();
 
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));
     }

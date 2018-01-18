@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * Created by pawel on 13/10/2017.
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
-public class DocumentContentVersionNotFoundException extends RuntimeException{
+public class DocumentContentVersionNotFoundException extends RuntimeException {
 
     public DocumentContentVersionNotFoundException(String message) {
         super(message);

@@ -39,8 +39,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @DirtiesContext
 public abstract class ComponentTestBase {
 
-//    @Autowired
-//    protected DbBackdoor db;
+    // @Autowired
+    // protected DbBackdoor db;
 
     @Autowired
     protected ServiceResolverBackdoor serviceRequestAuthorizer;
@@ -89,7 +89,7 @@ public abstract class ComponentTestBase {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         SecurityContextHolder.clearContext();
     }
 

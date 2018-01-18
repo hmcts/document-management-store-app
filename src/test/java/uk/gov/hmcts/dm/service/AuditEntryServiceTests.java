@@ -9,11 +9,11 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,8 +38,6 @@ public class AuditEntryServiceTests {
 
     @Test
     public void testCreateAndSaveEntryForStoredDocument() {
-        StoredDocument storedDocument = new StoredDocument();
-
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
         ServiceAndUserDetails serviceAndUserDetails = mock(ServiceAndUserDetails.class);
@@ -50,7 +48,7 @@ public class AuditEntryServiceTests {
 
         SecurityContextHolder.setContext(securityContext);
 
-        StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(storedDocument, AuditActions.READ);
+        StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(new StoredDocument(), AuditActions.READ);
 
         Assert.assertEquals("x", entry.getUsername());
 

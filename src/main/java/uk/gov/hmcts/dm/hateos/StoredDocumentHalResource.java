@@ -65,6 +65,7 @@ public class StoredDocumentHalResource extends HalResource {
 
         if (mostRecentDocumentContentVersion != null) {
             add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId())).withRel("binary"));
+            add(linkTo(methodOn(StoredDocumentController.class).getPreviewThumbnail(storedDocument.getId())).withRel("thumbnail"));
         }
 
         if (storedDocument.getFolder() != null) {
@@ -79,20 +80,20 @@ public class StoredDocumentHalResource extends HalResource {
         }
     }
 
-    public Date getModifiedOn(){
+    public Date getModifiedOn() {
         return (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public void setModifiedOn(Date modifiedOn){
+    public void setModifiedOn(Date modifiedOn) {
         this.modifiedOn = (modifiedOn == null) ? null : new Date(modifiedOn.getTime());
     }
 
-    public Date getCreatedOn(){
+    public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
-        this.createdOn = (createdOn == null) ? null : new Date (createdOn.getTime());
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
 }

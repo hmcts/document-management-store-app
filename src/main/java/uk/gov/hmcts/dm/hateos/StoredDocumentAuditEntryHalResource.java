@@ -50,11 +50,11 @@ public class StoredDocumentAuditEntryHalResource extends HalResource {
         }
     }
 
-    public Date getRecordedDateTime(){
+    public Date getRecordedDateTime() {
         return (recordedDateTime == null) ? null : new Date(recordedDateTime.getTime());
     }
 
-    public void getRecordedDateTime(Date recordedDateTime){
+    public void getRecordedDateTime(Date recordedDateTime) {
         this.recordedDateTime = (recordedDateTime == null) ? null : new Date(recordedDateTime.getTime());
     }
 

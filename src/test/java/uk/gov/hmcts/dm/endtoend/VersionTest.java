@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +64,6 @@ public class VersionTest {
                 .with(VersionTest::setMethodToPost)
                 .headers(headers))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$._links.length()", is(3)));
+                .andExpect(jsonPath("$._links.length()", is(4)));
     }
 }

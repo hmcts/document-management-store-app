@@ -17,161 +17,156 @@ import java.util.stream.Collectors;
 @RunWith(MockitoJUnitRunner.class)
 public class DomainPermissionEvaluatorTests {
 
-    DomainPermissionEvaluator domainPermissionEvaluator = new DomainPermissionEvaluator();
+    private static final String MRS_CASE_WORKER = "Mrs Case Worker";
+    private static final String MR_A = "Mr A";
+
+    private final DomainPermissionEvaluator domainPermissionEvaluator = new DomainPermissionEvaluator();
 
     @Test
     public void testAsCreatorIAmGrantedAllPermissions() {
-
-        String credentials = "Mr A";
+        String credentials = MR_A;
 
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy(credentials);
 
 
         Assert.assertTrue(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.READ,
-                        credentials,
-                        Arrays.asList("granted", "x"),
-                        Arrays.asList("granted", "y")
-                        ));
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                credentials,
+                Arrays.asList("granted", "x"),
+                Arrays.asList("granted", "y")
+            ));
         Assert.assertTrue(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.UPDATE,
-                        credentials,
-                        Arrays.asList("granted", "x"),
-                        Arrays.asList("granted", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.UPDATE,
+                credentials,
+                Arrays.asList("granted", "x"),
+                Arrays.asList("granted", "y")
+            ));
         Assert.assertTrue(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.CREATE,
-                        credentials,
-                        Arrays.asList("granted", "x"),
-                        Arrays.asList("granted", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.CREATE,
+                credentials,
+                Arrays.asList("granted", "x"),
+                Arrays.asList("granted", "y")
+            ));
         Assert.assertTrue(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.DELETE,
-                        credentials,
-                        Arrays.asList("granted", "x"),
-                        Arrays.asList("granted", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.DELETE,
+                credentials,
+                Arrays.asList("granted", "x"),
+                Arrays.asList("granted", "y")
+            ));
     }
 
     @Test
-    public void testAsCaseWorkerIHaveOnlyREADPermission() {
-        String creatorCredentials = "Mr A";
-        String caseWorkerCredentials = "Mrs Case Worker";
+    public void testAsCaseWorkerIHaveOnlyReadPermission() {
+        String caseWorkerCredentials = MRS_CASE_WORKER;
 
         StoredDocument storedFile = new StoredDocument();
-        storedFile.setCreatedBy(creatorCredentials);
+        storedFile.setCreatedBy(MR_A);
 
 
         Assert.assertTrue(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.READ,
-                        caseWorkerCredentials,
-                        Arrays.asList("case-worker", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                caseWorkerCredentials,
+                Arrays.asList("case-worker", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.UPDATE,
-                        caseWorkerCredentials,
-                        Arrays.asList("case-worker", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.UPDATE,
+                caseWorkerCredentials,
+                Arrays.asList("case-worker", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.CREATE,
-                        caseWorkerCredentials,
-                        Arrays.asList("case-worker", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.CREATE,
+                caseWorkerCredentials,
+                Arrays.asList("case-worker", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.DELETE,
-                        caseWorkerCredentials,
-                        Arrays.asList("case-worker", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.DELETE,
+                caseWorkerCredentials,
+                Arrays.asList("case-worker", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
     }
 
     @Test
     public void testAsNotCreatorAndNotTestWorkerIdontHavePermissions() {
-        String creatorCredentials = "Mr A";
-        String notCaseWorkerCredentials = "Mrs Case Worker";
+        String notCaseWorkerCredentials = MRS_CASE_WORKER;
 
         StoredDocument storedFile = new StoredDocument();
-        storedFile.setCreatedBy(creatorCredentials);
+        storedFile.setCreatedBy(MR_A);
 
 
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.READ,
-                        notCaseWorkerCredentials,
-                        Arrays.asList("a", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.UPDATE,
-                        notCaseWorkerCredentials,
-                        Arrays.asList("a", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.UPDATE,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.CREATE,
-                        notCaseWorkerCredentials,
-                        Arrays.asList("a", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.CREATE,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.DELETE,
-                        notCaseWorkerCredentials,
-                        Arrays.asList("a", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.DELETE,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
     }
 
     @Test
     public void testRolesReadPermissionsWithClassificationRestrictedAndMatchingRoles() {
-        String authenticatedUsedId = "Mrs Case Worker";
-
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
         storedFile.setRoles(Arrays.asList(new String[] { "allowingrole" }).stream().collect(Collectors.toSet()));
         storedFile.setClassification(Classifications.RESTRICTED);
 
-
         Assert.assertTrue(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.READ,
-                        authenticatedUsedId,
-                        Arrays.asList("allowingrole", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                MRS_CASE_WORKER,
+                Arrays.asList("allowingrole", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
     }
 
     @Test
     public void testRolesReadPermissionsWithClassificationPrivateAndMatchingRoles() {
-        String authenticatedUsedId = "Mrs Case Worker";
-
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
         storedFile.setRoles(Arrays.asList(new String[] { "allowingrole" }).stream().collect(Collectors.toSet()));
@@ -179,20 +174,18 @@ public class DomainPermissionEvaluatorTests {
 
 
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.READ,
-                        authenticatedUsedId,
-                        Arrays.asList("allowingrole", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                MRS_CASE_WORKER,
+                Arrays.asList("allowingrole", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
     }
 
 
     @Test
     public void testRolesReadPermissionsWithClassificationPublicAndMatchingRoles() {
-        String authenticatedUsedId = "Mrs Case Worker";
-
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
         storedFile.setRoles(Arrays.asList(new String[] { "allowingrole" }).stream().collect(Collectors.toSet()));
@@ -200,19 +193,17 @@ public class DomainPermissionEvaluatorTests {
 
 
         Assert.assertTrue(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.READ,
-                        authenticatedUsedId,
-                        Arrays.asList("allowingrole", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                MRS_CASE_WORKER,
+                Arrays.asList("allowingrole", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
     }
 
     @Test
     public void testRolesReadPermissionsWithClassificationRestrictedAndNotMatchingRoles() {
-        String authenticatedUsedId = "Mrs Case Worker";
-
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
         storedFile.setRoles(Arrays.asList(new String[] { "notallowingrole" }).stream().collect(Collectors.toSet()));
@@ -220,13 +211,13 @@ public class DomainPermissionEvaluatorTests {
 
 
         Assert.assertFalse(domainPermissionEvaluator
-                .hasPermission(
-                        storedFile,
-                        Permissions.READ,
-                        authenticatedUsedId,
-                        Arrays.asList("allowingrole", "x"),
-                        Arrays.asList("case-worker", "y")
-                ));
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                MRS_CASE_WORKER,
+                Arrays.asList("allowingrole", "x"),
+                Arrays.asList("case-worker", "y")
+            ));
     }
 
 }

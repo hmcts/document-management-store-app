@@ -8,9 +8,9 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
 import java.sql.Blob;
 import java.util.Date;
+import javax.persistence.*;
 
 /**
  * Created by pawel on 08/06/2017.
@@ -59,11 +59,11 @@ public class DocumentContent {
     }
 
 
-    public Date getCreatedOn(){
-        return (createdOn == null) ? null : new Date (createdOn.getTime());
+    public Date getCreatedOn() {
+        return (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 
-    public void setCreatedOn(Date createdOn){
+    public void setCreatedOn(Date createdOn) {
         this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
     }
 

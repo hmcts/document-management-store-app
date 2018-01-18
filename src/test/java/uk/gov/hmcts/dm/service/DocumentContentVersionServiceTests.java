@@ -11,12 +11,12 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -63,19 +63,19 @@ public class DocumentContentVersionServiceTests {
     }
 
     @Test(expected = CantReadDocumentContentVersionBinaryException.class)
-    public void testStreamingOfFileContentVersionContentNull() throws Exception {
+    public void testStreamingOfFileContentVersionContentNull() {
         documentContentVersionService.streamDocumentContentVersion(new DocumentContentVersion());
     }
 
     @Test(expected = CantReadDocumentContentVersionBinaryException.class)
-    public void testStreamingOfFileContentVersionContentDataNull() throws Exception {
+    public void testStreamingOfFileContentVersionContentDataNull() {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
         documentContentVersion.setDocumentContent(new DocumentContent());
         documentContentVersionService.streamDocumentContentVersion(documentContentVersion);
     }
 
     @Test(expected = NullPointerException.class)
-    public void testStreamingOfFileContentVersionNull() throws Exception {
+    public void testStreamingOfFileContentVersionNull() {
         documentContentVersionService.streamDocumentContentVersion(null);
     }
 
@@ -89,19 +89,19 @@ public class DocumentContentVersionServiceTests {
     }
 
     @Test
-    public void testFindOne() throws Exception {
+    public void testFindOne() {
         when(documentContentVersionRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(new DocumentContentVersion());
         Assert.assertNotNull(documentContentVersionService.findOne(TestUtil.RANDOM_UUID));
     }
 
     @Test
-    public void testMostRecentFileContentVersionByStoredFileId() throws Exception {
+    public void testMostRecentFileContentVersionByStoredFileId() {
         when(storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.STORED_DOCUMENT);
         Assert.assertEquals(TestUtil.STORED_DOCUMENT.getMostRecentDocumentContentVersion(), documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 
     @Test
-    public void testMostRecentFileContentVersionByStoredFileIdOnNullStoredFile() throws Exception {
+    public void testMostRecentFileContentVersionByStoredFileIdOnNullStoredFile() {
         when(storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
         Assert.assertNull(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }

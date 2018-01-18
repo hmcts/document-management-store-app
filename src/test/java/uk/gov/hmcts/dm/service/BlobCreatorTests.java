@@ -32,7 +32,7 @@ public class BlobCreatorTests {
     BlobCreator blobCreator;
 
     @Test(expected = RuntimeException.class)
-    public void testRuntimeException() throws Exception {
+    public void testRuntimeException() {
         EntityManager riggedEntityManager = mock(EntityManager.class);
         when(riggedEntityManager.unwrap(any())).thenThrow(new Exception("x"));
         blobCreator.setEntityManager(riggedEntityManager);
@@ -40,7 +40,7 @@ public class BlobCreatorTests {
     }
 
     @Test(expected = RuntimeException.class)
-    public void testCreateBlob() throws Exception {
+    public void testCreateBlob() {
         EntityManager entityManager = mock(EntityManager.class);
         when(entityManager.unwrap(any())).thenThrow(new Exception("x"));
         blobCreator.setEntityManager(entityManager);

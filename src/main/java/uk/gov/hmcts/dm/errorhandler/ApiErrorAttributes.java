@@ -38,7 +38,8 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
 
         Throwable throwable = getError(requestAttributes);
 
-        ErrorStatusCodeAndMessage errorStatusCodeAndMessage = exceptionStatusCodeAndMessageResolver.resolveStatusCodeAndMessage(
+        ErrorStatusCodeAndMessage errorStatusCodeAndMessage = exceptionStatusCodeAndMessageResolver
+            .resolveStatusCodeAndMessage(
                 throwable,
                 (String) errorAttributes.get("message"),
                 (Integer) requestAttributes.getAttribute("javax.servlet.error.status_code", 0));

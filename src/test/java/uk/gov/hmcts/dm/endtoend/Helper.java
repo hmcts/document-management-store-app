@@ -13,11 +13,20 @@ public class Helper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    private Helper(){}
+
+    public static String getThumbnailUrlFromResponse(MockHttpServletResponse response) throws IOException {
+        final String path = "/_links/thumbnail/href";
+        return getPathFromResponse(response, path);
+
+    }
+
     public static String getBinaryUrlFromResponse(MockHttpServletResponse response) throws IOException {
         final String path = "/_links/binary/href";
         return getPathFromResponse(response, path);
 
     }
+
     public static String getSelfUrlFromResponse(MockHttpServletResponse response) throws IOException {
         final String path = "/_links/self/href";
         return getPathFromResponse(response, path);

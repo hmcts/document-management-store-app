@@ -18,7 +18,7 @@ public class ExceptionStatusCodeAndMessageResolverTest {
     private ExceptionStatusCodeAndMessageResolver resolver = new ExceptionStatusCodeAndMessageResolver();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         resolver.init();
     }
 
@@ -35,7 +35,7 @@ public class ExceptionStatusCodeAndMessageResolverTest {
     }
 
     @Test
-    public void should_find_cause_from_exception_and_return_appropriate_code() throws Exception {
+    public void should_find_cause_from_exception_and_return_appropriate_code() {
         final FileUploadBase.FileSizeLimitExceededException fileSizeLimitExceededException =
                 new FileUploadBase.FileSizeLimitExceededException("Too Big", 1234, 1024);
         final MultipartException multipartException =
@@ -48,7 +48,7 @@ public class ExceptionStatusCodeAndMessageResolverTest {
     }
 
     @Test
-    public void should_return_default_code_when_exception_not_in_map() throws Exception {
+    public void should_return_default_code_when_exception_not_in_map() {
         final int defaultStatusCode = 500;
         final String message = "It broke";
         final ErrorStatusCodeAndMessage errorStatusCodeAndMessage =

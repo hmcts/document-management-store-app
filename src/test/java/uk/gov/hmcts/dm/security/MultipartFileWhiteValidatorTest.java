@@ -25,7 +25,7 @@ public class MultipartFileWhiteValidatorTest {
             )
     );
 
-//    Success scenarios
+    // Success scenarios
 
     @Test
     public void testUploadDocumentsSuccess() {
@@ -48,7 +48,7 @@ public class MultipartFileWhiteValidatorTest {
         assertTrue(b);
     }
 
-//    Fail scenarios
+    // Fail scenarios
 
     @Test
     public void testUploadDocumentsFail() {
