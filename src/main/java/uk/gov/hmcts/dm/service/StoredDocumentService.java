@@ -71,8 +71,8 @@ public class StoredDocumentService {
         return uploadDocumentsCommand.getFiles().stream().map(file -> {
             StoredDocument document = new StoredDocument();
             document.setClassification(uploadDocumentsCommand.getClassification());
-            document.setRoles(uploadDocumentsCommand.getRoles() != null ?
-                uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
+            document.setRoles(uploadDocumentsCommand.getRoles() != null
+                ? uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
 
             if (toggleConfiguration.getMetadatasearchendpoint()) {
                 document.setMetadata(uploadDocumentsCommand.getMetadata());
