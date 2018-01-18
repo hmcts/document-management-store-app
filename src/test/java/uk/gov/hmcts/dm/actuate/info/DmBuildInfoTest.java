@@ -10,9 +10,9 @@ import java.util.Map;
 
 import static org.junit.Assert.assertThat;
 
-public class DMBuildInfoTest {
+public class DmBuildInfoTest {
 
-    private static final String BUILD_INFO = "META-INF/build-info.properties";
+    // private static final String BUILD_INFO = "META-INF/build-info.properties";
     private static final String BUILD_INFO_WITH_BUILD_NO = "META-INF/build-info-with-build-no.properties";
 
 
@@ -23,7 +23,6 @@ public class DMBuildInfoTest {
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);
 
-        Info info = builder.build();
 
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
@@ -36,6 +35,8 @@ public class DMBuildInfoTest {
 
         Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
+
+        Info info = builder.build();
 
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));
     }
@@ -47,8 +48,6 @@ public class DMBuildInfoTest {
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);
 
-        Info info = builder.build();
-
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
         buildInfo.put("project", "project");
@@ -61,6 +60,8 @@ public class DMBuildInfoTest {
         Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
 
+        Info info = builder.build();
+
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));
     }
 
@@ -70,8 +71,6 @@ public class DMBuildInfoTest {
 
         Info.Builder builder = new Info.Builder();
         dmBuildInfo.contribute(builder);
-
-        Info info = builder.build();
 
         Map<String,Object> buildInfo = new HashMap<>();
         buildInfo.put("environment", "env");
@@ -84,6 +83,8 @@ public class DMBuildInfoTest {
 
         Map<String,Object> map = new HashMap<>();
         map.put("buildInfo",buildInfo);
+
+        Info info = builder.build();
 
         assertThat(info.getDetails(), CoreMatchers.equalTo(map));
     }

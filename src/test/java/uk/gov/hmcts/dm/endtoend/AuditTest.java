@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
@@ -25,10 +24,12 @@ import java.nio.charset.StandardCharsets;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -80,23 +81,24 @@ public class AuditTest {
         assertThat(auditEntries.get(2).get("action").asText(), equalTo("READ"));
     }
 
-//    @Test
-//    public void should_audit_delete() throws Exception {
-//        final String url = uploadFileAndReturnSelfUrl();
-//
-//        mvc.perform(delete(url)
-//                .headers(headers));
-//
-//        final MvcResult auditResponse = mvc.perform(get(url + "/auditEntries")
-//                .headers(headers))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        final JsonNode auditEntries = getAuditEntriesFromResponse(auditResponse);
-//
-//        assertThat(auditEntries.size(), is(3));
-//        assertThat(auditEntries.get(2).get("action").asText(), equalTo("DELETED"));
-//    }
+    @Test
+    @Ignore("not sure what this does")
+    public void should_audit_delete() throws Exception {
+        final String url = uploadFileAndReturnSelfUrl();
+
+        mvc.perform(delete(url)
+                .headers(headers));
+
+        final MvcResult auditResponse = mvc.perform(get(url + "/auditEntries")
+                .headers(headers))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        final JsonNode auditEntries = getAuditEntriesFromResponse(auditResponse);
+
+        assertThat(auditEntries.size(), is(3));
+        assertThat(auditEntries.get(2).get("action").asText(), equalTo("DELETED"));
+    }
 
     private JsonNode getAuditEntriesFromResponse(MvcResult auditResponse) throws IOException {
         return new ObjectMapper().readTree(auditResponse.getResponse().getContentAsString())

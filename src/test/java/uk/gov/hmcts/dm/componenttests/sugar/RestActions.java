@@ -9,11 +9,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
-import uk.gov.hmcts.reform.auth.checker.core.user.UserRequestAuthorizer;
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.security.Classifications;
+import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
+import uk.gov.hmcts.reform.auth.checker.core.user.UserRequestAuthorizer;
 
 import java.util.List;
 import java.util.UUID;
@@ -86,7 +86,7 @@ public class RestActions {
 
         builder.param("classification", classification.toString());
 
-        files.forEach( f -> builder.file((MockMultipartFile) f) );
+        files.forEach(f -> builder.file((MockMultipartFile) f));
 
         return translateException(() -> mvc.perform(
             builder.headers(httpHeaders)

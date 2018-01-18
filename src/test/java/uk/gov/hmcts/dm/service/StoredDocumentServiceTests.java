@@ -125,7 +125,7 @@ public class StoredDocumentServiceTests {
     public void testSaveItemsToBucket() {
         Folder folder = new Folder();
 
-        storedDocumentService.saveItemsToBucket(folder, Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()) );
+        storedDocumentService.saveItemsToBucket(folder, Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()));
 
         assertThat(folder.getStoredDocuments().size(), equalTo(1));
 

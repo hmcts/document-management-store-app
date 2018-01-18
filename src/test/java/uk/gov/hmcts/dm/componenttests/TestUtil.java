@@ -7,22 +7,21 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.*;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.sql.rowset.serial.SerialBlob;
 
-/**
- * Created by MatejNavara on 31/05/2017.
- */
+
 public class TestUtil {
 
     public static final String BLOB_DATA = "data";
 
     public static final DocumentContent DOCUMENT_CONTENT;
+
     static {
         try {
             DOCUMENT_CONTENT = new DocumentContent(new SerialBlob(BLOB_DATA.getBytes(StandardCharsets.UTF_8)));
@@ -32,6 +31,7 @@ public class TestUtil {
     }
 
     public static final MockMultipartFile TEST_FILE;
+
     static {
         try {
             TEST_FILE = new MockMultipartFile("file", "filename.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
@@ -41,6 +41,7 @@ public class TestUtil {
     }
 
     public static final MockMultipartFile TEST_FILE_WITH_FUNNY_NAME;
+
     static {
         try {
             TEST_FILE_WITH_FUNNY_NAME = new MockMultipartFile("file", "filename!@£$%^&*()<>.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
@@ -81,6 +82,7 @@ public class TestUtil {
                 .collect(Collectors.toList())
         ).build();
 
+    private TestUtil() {}
 
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
         ObjectMapper om = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);

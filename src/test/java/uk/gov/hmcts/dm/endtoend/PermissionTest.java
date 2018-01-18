@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -8,11 +8,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import static uk.gov.hmcts.dm.service.thumbnail.TestResource.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
 public class PdfThumbnailCreatorTest {
+
+    private static final String EXAMPLE_JPG_FILE = "files/document-jpg-example.jpg";
+    private static final String EXAMPLE_PDF_FILE = "files/1MB.pdf";
 
     private PdfThumbnailCreator pdfThumbnailService;
 
