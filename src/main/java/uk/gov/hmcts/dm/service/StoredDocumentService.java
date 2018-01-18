@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -32,6 +33,9 @@ public class StoredDocumentService {
     private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
+    private DocumentContentRepository documentContentRepository;
+
+    @Autowired
     private BlobCreator blobCreator;
 
     public StoredDocument findOne(UUID id) {
@@ -57,10 +61,10 @@ public class StoredDocumentService {
         folderRepository.save(folder);
     }
 
-    public List<StoredDocument> saveItems(List<MultipartFile> files,
-                                          Classifications classification,
-                                          List<String> roles,
-                                          Map<String, String> metadata)  {
+    public List<StoredDocument> saveDocuments(List<MultipartFile> files,
+                                              Classifications classification,
+                                              List<String> roles,
+                                              Map<String, String> metadata)  {
         return files.stream().map(file -> {
             StoredDocument document = new StoredDocument();
             document.setClassification(classification);
@@ -73,8 +77,8 @@ public class StoredDocumentService {
 
     }
 
-    public List<StoredDocument> saveItems(List<MultipartFile> files)  {
-        return saveItems(files, null, null, null);
+    public List<StoredDocument> saveDocuments(List<MultipartFile> files)  {
+        return saveDocuments(files, null, null, null);
     }
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
@@ -84,11 +88,14 @@ public class StoredDocumentService {
         return documentContentVersion;
     }
 
-
-    public void deleteItem(StoredDocument storedDocument) {
-        if (storedDocument != null) {
-            storedDocument.setDeleted(true);
-            storedDocumentRepository.save(storedDocument);
+    public void deleteDocument(StoredDocument storedDocument, boolean permanent) {
+        storedDocument.setDeleted(true);
+        if (permanent) {
+            storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
+                documentContentRepository.delete(documentContentVersion.getDocumentContent());
+                documentContentVersion.setDocumentContent(null);
+            });
         }
+        storedDocumentRepository.save(storedDocument);
     }
 }

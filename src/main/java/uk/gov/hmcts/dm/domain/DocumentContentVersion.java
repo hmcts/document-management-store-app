@@ -50,7 +50,6 @@ public class DocumentContentVersion implements RolesAware {
     private Date createdOn;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion")
-    @NotNull
     @Getter
     @Setter
     @JoinColumn(name = "document_content_version_id")

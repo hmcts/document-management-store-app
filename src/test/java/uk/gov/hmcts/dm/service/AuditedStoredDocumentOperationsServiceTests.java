@@ -89,9 +89,9 @@ public class AuditedStoredDocumentOperationsServiceTests {
     public void testCreateStoredDocuments() {
         List<MultipartFile> multipartFiles = Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList());
         List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
-        when(storedDocumentService.saveItems(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null)).thenReturn(storedDocuments);
+        when(storedDocumentService.saveDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null)).thenReturn(storedDocuments);
         auditedStoredDocumentOperationsService.createStoredDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null);
-        verify(storedDocumentService, times(1)).saveItems(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null);
+        verify(storedDocumentService, times(1)).saveDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null);
         verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT, AuditActions.CREATED);
         verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT.getDocumentContentVersions().get(0), AuditActions.CREATED);
     }
@@ -100,9 +100,9 @@ public class AuditedStoredDocumentOperationsServiceTests {
     public void testDeleteStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
-        auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID);
+        auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
-        verify(storedDocumentService, times(1)).deleteItem(storedDocument);
+        verify(storedDocumentService, times(1)).deleteDocument(storedDocument, false);
         verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.DELETED);
     }
 
@@ -111,9 +111,9 @@ public class AuditedStoredDocumentOperationsServiceTests {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
-        auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID);
+        auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
-        verify(storedDocumentService, times(0)).deleteItem(storedDocument);
+        verify(storedDocumentService, times(0)).deleteDocument(storedDocument, false);
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.DELETED);
     }
 
@@ -121,10 +121,9 @@ public class AuditedStoredDocumentOperationsServiceTests {
     public void testDeleteNullStoredDocument() {
         StoredDocument storedDocument = null;
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
-        auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID);
+        auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
-        verify(storedDocumentService, times(0)).deleteItem(storedDocument);
+        verify(storedDocumentService, times(0)).deleteDocument(storedDocument, false);
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.DELETED);
     }
-
 }
