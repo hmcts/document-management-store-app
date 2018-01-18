@@ -36,7 +36,7 @@ public class AuditedStoredDocumentOperationsService {
     public List<StoredDocument> createStoredDocuments(List<MultipartFile> files,
                                                       Classifications classification,
                                                       List<String> roles,
-                                                      Map<String, String > metadata) {
+                                                      Map<String, String> metadata) {
         List<StoredDocument> storedDocuments =
             storedDocumentService.saveDocuments(files, classification, roles, metadata);
         storedDocuments.forEach(storedDocument -> {

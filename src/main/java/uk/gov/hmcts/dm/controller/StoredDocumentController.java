@@ -24,9 +24,6 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.*;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
-import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
-import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
-import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import java.util.List;
 import java.util.UUID;
