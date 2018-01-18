@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-public class ImageResizeServiceTest {
+public class ImageThumbnailCreatorTest {
 
     private ImageThumbnailCreator imageResizeService;
 
@@ -114,7 +114,6 @@ public class ImageResizeServiceTest {
 
     @Test
     public void shouldSupportJpeg() {
-
         assertTrue(imageResizeService.supports(MediaType.IMAGE_JPEG_VALUE));
     }
 
@@ -126,6 +125,18 @@ public class ImageResizeServiceTest {
     @Test
     public void shouldSupportGif() {
         assertTrue(imageResizeService.supports(MediaType.IMAGE_GIF_VALUE));
+    }
+
+
+    @Test
+    public void shouldSupportTiff() {
+        assertTrue(imageResizeService.supports(MediaType.IMAGE_GIF_VALUE));
+    }
+
+
+    @Test
+    public void shouldSupportWebp() {
+        assertTrue(imageResizeService.supports(MediaType));
     }
 
     @Test

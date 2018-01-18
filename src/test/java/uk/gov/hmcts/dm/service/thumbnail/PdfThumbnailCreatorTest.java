@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-public class PdfThumbnailServiceTest {
+public class PdfThumbnailCreatorTest {
 
     private PdfThumbnailCreator pdfThumbnailService;
 
