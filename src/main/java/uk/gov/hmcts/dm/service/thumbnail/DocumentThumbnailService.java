@@ -9,20 +9,20 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 
 @Service
 public class DocumentThumbnailService {
 
-    private final List<ThumbnailCreator> thumbnailCreators;
+    private final Map<String,ThumbnailCreator> thumbnailCreatorsMimeMap;
     private final ThumbnailCreator unsupportedThumbnailService;
 
     @Autowired
-    public DocumentThumbnailService(@Qualifier("thumbnailCreators") List<ThumbnailCreator> thumbnailCreators,
+    public DocumentThumbnailService(
+        @Qualifier("thumbnailCreatorsMimeMap") Map<String,ThumbnailCreator> thumbnailCreatorsMimeMap,
                                     UnsupportedThumbnailCreator unsupportedThumbnailService) {
-        this.thumbnailCreators = new ArrayList<>(thumbnailCreators);
+        this.thumbnailCreatorsMimeMap = thumbnailCreatorsMimeMap;
         this.unsupportedThumbnailService = unsupportedThumbnailService;
     }
 
@@ -37,9 +37,7 @@ public class DocumentThumbnailService {
     }
 
     private ThumbnailCreator selectThumbnailCreator(DocumentContentVersion documentContentVersion) {
-        return thumbnailCreators.stream()
-            .filter(tc -> tc.supports(documentContentVersion))
-            .findFirst().orElse(unsupportedThumbnailService);
+        return thumbnailCreatorsMimeMap.getOrDefault(documentContentVersion.getMimeType(), unsupportedThumbnailService);
     }
 
 }

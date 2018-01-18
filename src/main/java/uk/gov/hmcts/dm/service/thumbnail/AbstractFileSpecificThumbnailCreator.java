@@ -23,11 +23,6 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
         }
     }
 
-    @Override
-    public boolean supports(DocumentContentVersion documentContentVersion) {
-        return supports(documentContentVersion.getMimeType());
-    }
-
     abstract BufferedImage getImg(InputStream inputStream);
 
 }

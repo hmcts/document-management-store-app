@@ -1,27 +1,13 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import org.springframework.http.MediaType;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
 import javax.imageio.ImageIO;
 
 public class ImageThumbnailCreator extends AbstractFileSpecificThumbnailCreator {
-
-    public static final List<String> SUPPORTED_MIME_TYPES = Arrays.asList(
-        MediaType.IMAGE_GIF_VALUE,
-        MediaType.IMAGE_JPEG_VALUE,
-        MediaType.IMAGE_PNG_VALUE
-    );
-
-    @Override
-    public boolean supports(String mimeType) {
-        return SUPPORTED_MIME_TYPES.contains(mimeType);
-    }
 
     @Override
     public BufferedImage getImg(InputStream img) {

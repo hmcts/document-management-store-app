@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -149,8 +150,7 @@ public class ThumbnailTest {
 
     private byte[] fileToByteArray(String file) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
-        File f = new File(classLoader.getResource(file).getFile());
-        return IOUtils.toByteArray(Files.newInputStream(f.toPath()));
+        return IOUtils.toByteArray(classLoader.getResourceAsStream(file));
     }
 
     private MockMultipartFile createMockMultipartFile(String file,String mimeType) throws IOException {

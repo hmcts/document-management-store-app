@@ -2,16 +2,13 @@ package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.MediaType;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 
+import static uk.gov.hmcts.dm.service.thumbnail.TestResource.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
@@ -25,32 +22,10 @@ public class PdfThumbnailCreatorTest {
     }
 
     @Test
-    public void shouldNotSupportJpeg() {
-        assertFalse(pdfThumbnailService.supports(MediaType.IMAGE_JPEG_VALUE));
-    }
+    public void getPdfThumbnail() {
+        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE);
 
-    @Test
-    public void shouldNotSupportPng() {
-        assertFalse(pdfThumbnailService.supports(MediaType.IMAGE_PNG_VALUE));
-    }
-
-    @Test
-    public void shouldNotSupportGif() {
-        assertFalse(pdfThumbnailService.supports(MediaType.IMAGE_GIF_VALUE));
-    }
-
-    @Test
-    public void shouldSupportPdf() {
-        assertTrue(pdfThumbnailService.supports(MediaType.APPLICATION_PDF_VALUE));
-    }
-
-    @Test
-    public void getPdfThumbnail() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("files/1MB.pdf").getFile());
-        InputStream pdf = Files.newInputStream(file.toPath());
-
-        BufferedImage resizedImage = pdfThumbnailService.getImg(pdf);
+        BufferedImage resizedImage = pdfThumbnailService.getImg(file);
 
         assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
     }
@@ -78,12 +53,10 @@ public class PdfThumbnailCreatorTest {
     }
 
     @Test
-    public void getPdfThumbnailWrongFileType() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("files/document-png-example.png").getFile());
-        InputStream pdf = Files.newInputStream(file.toPath());
+    public void getPdfThumbnailWrongFileType() {
+        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
         try {
-            pdfThumbnailService.getImg(pdf);
+            pdfThumbnailService.getImg(file);
         } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;

@@ -15,14 +15,4 @@ public class UnsupportedThumbnailCreator implements ThumbnailCreator {
         return getClass().getResourceAsStream(DEFAULT_FILE_THUMBNAIL);
     }
 
-    @Override
-    public boolean supports(String mimeType) {
-        return true;
-    }
-
-    @Override
-    public boolean supports(DocumentContentVersion mimeType) {
-        return true;
-    }
-
 }

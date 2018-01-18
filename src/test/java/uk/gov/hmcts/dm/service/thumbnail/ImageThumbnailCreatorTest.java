@@ -2,22 +2,21 @@ package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.http.MediaType;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
+
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static uk.gov.hmcts.dm.service.thumbnail.TestResource.*;
 
 public class ImageThumbnailCreatorTest {
 
     private ImageThumbnailCreator imageResizeService;
+
 
     @Before
     public void setUp() {
@@ -25,62 +24,51 @@ public class ImageThumbnailCreatorTest {
     }
 
     @Test
-    public void shouldResizeJpegImage() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("files/document-jpg-example.jpg").getFile());
-        InputStream image = Files.newInputStream(file.toPath());
+    public void shouldResizeJpegImage() {
+        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
 
-        BufferedImage resizedImage = imageResizeService.getImg(image);
+        BufferedImage resizedImage = imageResizeService.getImg(file);
 
         assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(194));
     }
 
     @Test
-    public void shouldResizeGifImage() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("files/document-gif-example.gif").getFile());
-        InputStream image = Files.newInputStream(file.toPath());
+    public void shouldResizeGifImage() {
+        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_GIF_FILE);
 
-        BufferedImage resizedImage = imageResizeService.getImg(image);
+        BufferedImage resizedImage = imageResizeService.getImg(file);
 
         assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(194));
     }
 
     @Test
-    public void shouldResizeAnimatedGifImage() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        // Taken from http://www.adamgrimshaw.com/gifs/turn_turn_turn.gif
-        File file = new File(classLoader.getResource("files/document-gif-animated-example.gif").getFile());
-        InputStream image = Files.newInputStream(file.toPath());
+    public void shouldResizeAnimatedGifImage() {
+        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_GIF_ANI_FILE);
 
-        BufferedImage resizedImage = imageResizeService.getImg(image);
+        BufferedImage resizedImage = imageResizeService.getImg(file);
 
         assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(204));
     }
 
     @Test
-    public void shouldResizePngImage() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("files/document-png-example.png").getFile());
-        InputStream image = Files.newInputStream(file.toPath());
+    public void shouldResizePngImage() {
+        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_PNG_FILE);
 
-        BufferedImage resizedImage = imageResizeService.getImg(image);
+        BufferedImage resizedImage = imageResizeService.getImg(file);
 
         assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(256));
     }
 
     @Test
-    public void shouldThrowExceptionOnResizePdf() throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("files/1MB.pdf").getFile());
-        InputStream image = Files.newInputStream(file.toPath());
+    public void shouldThrowExceptionOnResizePdf() {
+        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE);
 
         try {
-            imageResizeService.getImg(image);
+            imageResizeService.getImg(file);
         } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
@@ -101,10 +89,8 @@ public class ImageThumbnailCreatorTest {
 
     @Test
     public void shouldThrowExceptionOnEmptyStream() {
-        InputStream nullInputStream =  new ByteArrayInputStream(new byte[]{0});
-
         try {
-            imageResizeService.getImg(nullInputStream);
+            imageResizeService.getImg(new ByteArrayInputStream(new byte[]{0}));
         } catch (CantCreateThumbnailException e) {
             assertTrue(e.getMessage(),true);
             return;
@@ -112,35 +98,4 @@ public class ImageThumbnailCreatorTest {
         fail();
     }
 
-    @Test
-    public void shouldSupportJpeg() {
-        assertTrue(imageResizeService.supports(MediaType.IMAGE_JPEG_VALUE));
-    }
-
-    @Test
-    public void shouldSupportPng() {
-        assertTrue(imageResizeService.supports(MediaType.IMAGE_PNG_VALUE));
-    }
-
-    @Test
-    public void shouldSupportGif() {
-        assertTrue(imageResizeService.supports(MediaType.IMAGE_GIF_VALUE));
-    }
-
-
-    @Test
-    public void shouldSupportTiff() {
-        assertTrue(imageResizeService.supports(MediaType.IMAGE_GIF_VALUE));
-    }
-
-
-    @Test
-    public void shouldSupportWebp() {
-        assertTrue(imageResizeService.supports(MediaType));
-    }
-
-    @Test
-    public void shouldNotSupportPdf() {
-        assertFalse(imageResizeService.supports(MediaType.APPLICATION_PDF_VALUE));
-    }
 }
