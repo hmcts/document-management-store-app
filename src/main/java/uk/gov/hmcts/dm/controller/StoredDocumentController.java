@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +53,9 @@ public class StoredDocumentController {
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
+    @Autowired
+    private CustomDateEditor customDateEditor;
+    
     @Value("${toggle.deleteenabled:false}")
     @Setter
     private boolean deleteEnabled;
@@ -64,9 +65,11 @@ public class StoredDocumentController {
 
     private MethodParameter uploadDocumentsCommandMethodParamter;
 
+    private MethodParameter uploadDocumentsCommandMethodParameter;
+
     @PostConstruct
     private void init() throws NoSuchMethodException {
-        uploadDocumentsCommandMethodParamter = new MethodParameter(
+        uploadDocumentsCommandMethodParameter = new MethodParameter(
                 StoredDocumentController.class.getMethod(
                         "createFrom",
                         UploadDocumentsCommand.class,
@@ -75,9 +78,7 @@ public class StoredDocumentController {
 
     @InitBinder
     public void bindingPreparation(WebDataBinder binder) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
-        CustomDateEditor orderDateEditor = new CustomDateEditor(dateFormat, true);
-        binder.registerCustomEditor(Date.class, orderDateEditor);
+        binder.registerCustomEditor(Date.class, customDateEditor);
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -90,7 +91,7 @@ public class StoredDocumentController {
             BindingResult result) throws MethodArgumentNotValidException {
 
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParamter, result);
+            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
             List<StoredDocument> storedDocuments =
                     auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
