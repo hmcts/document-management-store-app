@@ -6,11 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
-import uk.gov.hmcts.dm.domain.*;
-import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -19,9 +18,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * Created by pawel on 26/05/2017.
- */
 @Transactional
 @Service
 public class StoredDocumentService {

@@ -27,17 +27,13 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
-import uk.gov.hmcts.dm.service.*;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
 
 /**
  * Created by pawel on 08/06/2017.
@@ -59,7 +55,7 @@ public class StoredDocumentController {
 
     @Autowired
     private CustomDateEditor customDateEditor;
-    
+
     @Value("${toggle.deleteenabled:false}")
     @Setter
     private boolean deleteEnabled;
