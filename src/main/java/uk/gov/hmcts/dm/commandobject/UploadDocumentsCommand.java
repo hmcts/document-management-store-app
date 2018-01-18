@@ -16,9 +16,6 @@ import java.util.Map;
 
 
 
-/**
- * Created by pawel on 04/10/2017.
- */
 @Data
 public class UploadDocumentsCommand {
 

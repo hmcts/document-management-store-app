@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,6 @@ public class PermissionTest {
     }
 
     @Test
-    @Ignore("not currently implemented")
     public void should_be_able_to_delete_own_doc() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
 
@@ -56,7 +54,6 @@ public class PermissionTest {
     }
 
     @Test
-    @Ignore("not currently implemented")
     public void should_not_be_able_to_delete_another_users_doc_if_citizen() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
 
@@ -66,7 +63,6 @@ public class PermissionTest {
     }
 
     @Test
-    @Ignore("not currently implemented")
     public void should_not_be_able_to_delete_another_users_doc_if_caseworker() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
 

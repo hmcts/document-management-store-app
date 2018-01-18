@@ -37,7 +37,6 @@ import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
         classes = DmApp.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
-@Ignore
 public class AuditTest {
 
     public static final MockMultipartFile FILE =
@@ -82,7 +81,6 @@ public class AuditTest {
     }
 
     @Test
-    @Ignore("not sure what this does")
     public void should_audit_delete() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 
