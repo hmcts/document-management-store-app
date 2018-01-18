@@ -1,6 +1,8 @@
 package uk.gov.hmcts.dm.service;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import org.apache.catalina.Store;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContent;
@@ -20,9 +23,13 @@ import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
+import uk.gov.hmcts.dm.security.Classifications;
 
 import java.sql.Blob;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -89,6 +96,57 @@ public class StoredDocumentServiceTests {
 
 
     @Test
+    public void testSaveItemsWithCommand() throws Exception {
+        UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
+        uploadDocumentsCommand.setFiles(singletonList(TestUtil.TEST_FILE));
+        uploadDocumentsCommand.setRoles(ImmutableList.of("a", "b"));
+        uploadDocumentsCommand.setClassification(Classifications.PRIVATE);
+        uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
+        uploadDocumentsCommand.setTtl(new Date());
+
+        List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand);
+
+        final StoredDocument storedDocument = documents.get(0);
+        final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
+
+        Assert.assertEquals(1, documents.size());
+        Assert.assertEquals(storedDocument.getRoles(), new HashSet(ImmutableList.of("a", "b")));
+        Assert.assertEquals(storedDocument.getClassification(), Classifications.PRIVATE);
+        Assert.assertNull(storedDocument.getMetadata());
+        Assert.assertNull(storedDocument.getTtl());
+        Assert.assertEquals(TestUtil.TEST_FILE.getContentType(), latestVersion.getMimeType());
+        Assert.assertEquals(TestUtil.TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+    }
+
+
+    @Test
+    public void testSaveItemsWithCommandAndToggleConfiguration() throws Exception {
+
+        when(toggleConfiguration.getMetadatasearchendpoint()).thenReturn(true);
+        when(toggleConfiguration.getTtl()).thenReturn(true);
+
+        UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
+        uploadDocumentsCommand.setFiles(singletonList(TestUtil.TEST_FILE));
+        uploadDocumentsCommand.setRoles(ImmutableList.of("a", "b"));
+        uploadDocumentsCommand.setClassification(Classifications.PRIVATE);
+        uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
+        uploadDocumentsCommand.setTtl(new Date());
+
+        List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand);
+
+        final StoredDocument storedDocument = documents.get(0);
+        final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
+
+        Assert.assertEquals(1, documents.size());
+        Assert.assertEquals(storedDocument.getRoles(), new HashSet(ImmutableList.of("a", "b")));
+        Assert.assertEquals(storedDocument.getClassification(), Classifications.PRIVATE);
+        Assert.assertEquals(storedDocument.getMetadata(), ImmutableMap.of("prop1", "value1"));
+        Assert.assertNotNull(storedDocument.getTtl());
+        Assert.assertEquals(TestUtil.TEST_FILE.getContentType(), latestVersion.getMimeType());
+        Assert.assertEquals(TestUtil.TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+    }
+
+    @Test
     public void testSaveItems() throws Exception {
         List<StoredDocument> documents = storedDocumentService.saveDocuments(singletonList(TestUtil.TEST_FILE));
 
@@ -98,6 +156,8 @@ public class StoredDocumentServiceTests {
         Assert.assertEquals(TestUtil.TEST_FILE.getContentType(), latestVersion.getMimeType());
         Assert.assertEquals(TestUtil.TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
     }
+
+
 
     @Test
     public void testAddStoredDocumentVersion() {
