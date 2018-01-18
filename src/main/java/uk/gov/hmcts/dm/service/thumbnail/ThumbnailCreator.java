@@ -10,4 +10,7 @@ public interface ThumbnailCreator {
 
     InputStream getThumbnail(DocumentContentVersion documentContentVersion);
 
+    boolean supports(DocumentContentVersion mimeType);
+    boolean supports(String mimeType);
+
 }

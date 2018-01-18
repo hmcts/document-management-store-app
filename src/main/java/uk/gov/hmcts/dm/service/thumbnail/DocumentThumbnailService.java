@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,12 @@ import java.util.Optional;
 @Service
 public class DocumentThumbnailService {
 
-    private final List<FileSpecificThumbnailCreator> thumbnailCreators;
+    private final List<ThumbnailCreator> thumbnailCreators;
     private final ThumbnailCreator unsupportedThumbnailService;
 
     @Autowired
-    public DocumentThumbnailService(List<FileSpecificThumbnailCreator> thumbnailCreators,
-                                    UnsupportedThumbnailService unsupportedThumbnailService) {
+    public DocumentThumbnailService(@Qualifier("thumbnailCreators") List<ThumbnailCreator> thumbnailCreators,
+                                    UnsupportedThumbnailCreator unsupportedThumbnailService) {
         this.thumbnailCreators = new ArrayList<>(thumbnailCreators);
         this.unsupportedThumbnailService = unsupportedThumbnailService;
     }
@@ -37,13 +38,9 @@ public class DocumentThumbnailService {
     }
 
     private ThumbnailCreator selectThumbnailCreator(DocumentContentVersion documentContentVersion) {
-        Optional<? extends ThumbnailCreator> maybeThumbnailCreator = thumbnailCreators.stream()
-            .filter(tc -> tc.supports(documentContentVersion.getMimeType()))
-            .findFirst();
-        if (maybeThumbnailCreator.isPresent()) {
-            return maybeThumbnailCreator.get();
-        }
-        return unsupportedThumbnailService;
+        return thumbnailCreators.stream()
+            .filter(tc -> tc.supports(documentContentVersion))
+            .findFirst().orElse(unsupportedThumbnailService);
     }
 
 }

@@ -17,11 +17,11 @@ import static org.junit.Assert.*;
 
 public class ImageResizeServiceTest {
 
-    private ImageResizeService imageResizeService;
+    private ImageThumbnailCreator imageResizeService;
 
     @Before
     public void setUp() {
-        imageResizeService = new ImageResizeService();
+        imageResizeService = new ImageThumbnailCreator();
     }
 
     @Test
@@ -32,7 +32,7 @@ public class ImageResizeServiceTest {
 
         BufferedImage resizedImage = imageResizeService.getImg(image);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageResizeService.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(194));
     }
 
@@ -44,7 +44,7 @@ public class ImageResizeServiceTest {
 
         BufferedImage resizedImage = imageResizeService.getImg(image);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageResizeService.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(194));
     }
 
@@ -57,7 +57,7 @@ public class ImageResizeServiceTest {
 
         BufferedImage resizedImage = imageResizeService.getImg(image);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageResizeService.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(204));
     }
 
@@ -69,7 +69,7 @@ public class ImageResizeServiceTest {
 
         BufferedImage resizedImage = imageResizeService.getImg(image);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageResizeService.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
         assertThat(resizedImage.getHeight(), equalTo(256));
     }
 
@@ -114,6 +114,7 @@ public class ImageResizeServiceTest {
 
     @Test
     public void shouldSupportJpeg() {
+
         assertTrue(imageResizeService.supports(MediaType.IMAGE_JPEG_VALUE));
     }
 

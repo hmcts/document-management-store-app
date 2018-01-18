@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 
-public abstract class AbstractFileSpecificThumbnailCreator implements FileSpecificThumbnailCreator {
+public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailCreator {
     @Override
     public InputStream getThumbnail(DocumentContentVersion documentContentVersion) {
         try {
@@ -23,5 +23,11 @@ public abstract class AbstractFileSpecificThumbnailCreator implements FileSpecif
         }
     }
 
+    @Override
+    public boolean supports(DocumentContentVersion documentContentVersion) {
+        return supports(documentContentVersion.getMimeType());
+    }
+
     abstract BufferedImage getImg(InputStream inputStream);
+
 }

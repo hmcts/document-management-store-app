@@ -32,21 +32,21 @@ public class DocumentThumbnailServiceTest {
     private DocumentThumbnailService multiDocumentThumbnailService;
 
     @Mock
-    private FileSpecificThumbnailCreator mockFileSpecificThumbnailCreator1;
+    private ThumbnailCreator mockFileSpecificThumbnailCreator1;
 
     @Mock
-    private FileSpecificThumbnailCreator mockFileSpecificThumbnailCreator2;
+    private ThumbnailCreator mockFileSpecificThumbnailCreator2;
 
     @Mock
-    private UnsupportedThumbnailService mockUnsupportedThumbnailService;
+    private UnsupportedThumbnailCreator mockUnsupportedThumbnailService;
 
     @Before
     public void setUp() {
-        List<FileSpecificThumbnailCreator> singleFileSpecificThumbnailCreators = Collections
+        List<ThumbnailCreator> singleFileSpecificThumbnailCreators = Collections
             .singletonList(mockFileSpecificThumbnailCreator1);
         singleDocumentThumbnailService = new DocumentThumbnailService(singleFileSpecificThumbnailCreators,mockUnsupportedThumbnailService);
 
-        List<FileSpecificThumbnailCreator> mutipleFileSpecificThumbnailCreators = Arrays
+        List<ThumbnailCreator> mutipleFileSpecificThumbnailCreators = Arrays
             .asList(mockFileSpecificThumbnailCreator1, mockFileSpecificThumbnailCreator2);
         multiDocumentThumbnailService = new DocumentThumbnailService(mutipleFileSpecificThumbnailCreators,mockUnsupportedThumbnailService);
     }
@@ -59,6 +59,9 @@ public class DocumentThumbnailServiceTest {
 
         when(documentContentVersion.getMimeType())
             .thenReturn(MediaType.IMAGE_JPEG_VALUE);
+
+        when(mockFileSpecificThumbnailCreator1.supports(documentContentVersion))
+            .thenReturn(true);
 
         when(mockFileSpecificThumbnailCreator1.supports(MediaType.IMAGE_JPEG_VALUE))
             .thenReturn(true);
@@ -80,6 +83,9 @@ public class DocumentThumbnailServiceTest {
         when(documentContentVersion.getMimeType())
             .thenReturn(MediaType.APPLICATION_PDF_VALUE);
 
+        when(mockFileSpecificThumbnailCreator1.supports(documentContentVersion))
+            .thenReturn(true);
+
         when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_PDF_VALUE))
             .thenReturn(true);
 
@@ -100,7 +106,7 @@ public class DocumentThumbnailServiceTest {
         when(documentContentVersion.getMimeType())
             .thenReturn(MediaType.APPLICATION_OCTET_STREAM_VALUE);
 
-        when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_OCTET_STREAM_VALUE))
+        when(mockFileSpecificThumbnailCreator1.supports(documentContentVersion))
             .thenReturn(false);
 
         when(mockUnsupportedThumbnailService.getThumbnail(documentContentVersion))
@@ -118,7 +124,7 @@ public class DocumentThumbnailServiceTest {
         when(documentContentVersion.getMimeType())
             .thenReturn(null);
 
-        when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_OCTET_STREAM_VALUE))
+        when(mockFileSpecificThumbnailCreator1.supports(documentContentVersion))
             .thenReturn(true);
 
         when(mockFileSpecificThumbnailCreator1.getThumbnail(documentContentVersion))
@@ -133,7 +139,6 @@ public class DocumentThumbnailServiceTest {
         fail();
     }
 
-
     @Test
     public void returnMultipleThumbnail() throws IOException {
 
@@ -144,10 +149,10 @@ public class DocumentThumbnailServiceTest {
         when(documentContentVersion.getMimeType())
             .thenReturn(MediaType.APPLICATION_PDF_VALUE);
 
-        when(mockFileSpecificThumbnailCreator1.supports(MediaType.APPLICATION_PDF_VALUE))
+        when(mockFileSpecificThumbnailCreator1.supports(documentContentVersion))
             .thenReturn(true);
 
-        when(mockFileSpecificThumbnailCreator2.supports(MediaType.APPLICATION_PDF_VALUE))
+        when(mockFileSpecificThumbnailCreator2.supports(documentContentVersion))
             .thenReturn(false);
 
         when(mockFileSpecificThumbnailCreator1.getThumbnail(documentContentVersion))

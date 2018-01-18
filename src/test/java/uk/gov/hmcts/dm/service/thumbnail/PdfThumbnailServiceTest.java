@@ -17,11 +17,11 @@ import static org.junit.Assert.*;
 
 public class PdfThumbnailServiceTest {
 
-    private PdfThumbnailService pdfThumbnailService;
+    private PdfThumbnailCreator pdfThumbnailService;
 
     @Before
     public void setUp() {
-        pdfThumbnailService = new PdfThumbnailService();
+        pdfThumbnailService = new PdfThumbnailCreator();
     }
 
     @Test
@@ -52,7 +52,7 @@ public class PdfThumbnailServiceTest {
 
         BufferedImage resizedImage = pdfThumbnailService.getImg(pdf);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageResizeService.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
     }
 
     @Test

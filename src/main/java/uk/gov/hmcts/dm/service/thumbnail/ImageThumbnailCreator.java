@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.*;
@@ -11,8 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.imageio.ImageIO;
 
-@Service
-public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
+public class ImageThumbnailCreator extends AbstractFileSpecificThumbnailCreator {
 
     public static final List<String> SUPPORTED_MIME_TYPES = Arrays.asList(
         MediaType.IMAGE_GIF_VALUE,
@@ -25,6 +23,7 @@ public class ImageResizeService extends AbstractFileSpecificThumbnailCreator {
         return SUPPORTED_MIME_TYPES.contains(mimeType);
     }
 
+    @Override
     public BufferedImage getImg(InputStream img) {
         try {
             BufferedImage bufferedImage = ImageIO.read(img);
