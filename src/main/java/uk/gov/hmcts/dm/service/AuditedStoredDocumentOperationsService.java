@@ -83,33 +83,16 @@ public class AuditedStoredDocumentOperationsService {
     }
 
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
-    public StoredDocument hardDeleteStoredDocument(UUID id) {
-        return hardDeleteStoredDocument(storedDocumentService.findOne(id));
+    public void deleteStoredDocument(UUID id, boolean permanent) {
+        deleteStoredDocument(storedDocumentService.findOne(id), permanent);
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
-    public StoredDocument hardDeleteStoredDocument(StoredDocument storedDocument) {
-        if (storedDocument == null) {
-            return null;
+    public void deleteStoredDocument(StoredDocument storedDocument, boolean permanent) {
+        if (storedDocument != null && !storedDocument.isDeleted()) {
+            storedDocumentService.deleteDocument(storedDocument, permanent);
+            auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
         }
-        storedDocumentService.hardDeleteDocument(storedDocument);
-
-        return storedDocument;
-    }
-
-    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
-    public StoredDocument deleteStoredDocument(UUID id) {
-        return deleteStoredDocument(storedDocumentService.findOne(id) );
-    }
-
-    @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
-    public StoredDocument deleteStoredDocument(StoredDocument storedDocument) {
-        if (storedDocument == null || storedDocument.isDeleted()) {
-            return null;
-        }
-        storedDocumentService.deleteDocument(storedDocument);
-        auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
-        return storedDocument;
     }
 
 }

@@ -88,22 +88,14 @@ public class StoredDocumentService {
         return documentContentVersion;
     }
 
-
-    public void deleteDocument(StoredDocument storedDocument) {
-        if (storedDocument != null) {
-            storedDocument.setDeleted(true);
-            storedDocumentRepository.save(storedDocument);
-        }
-    }
-
-    public void hardDeleteDocument(StoredDocument storedDocument) {
-        if (storedDocument != null) {
-            deleteDocument(storedDocument);
+    public void deleteDocument(StoredDocument storedDocument, boolean permanent) {
+        storedDocument.setDeleted(true);
+        if (permanent) {
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
                 documentContentRepository.delete(documentContentVersion.getDocumentContent());
                 documentContentVersion.setDocumentContent(null);
             });
-            storedDocumentRepository.save(storedDocument);
         }
+        storedDocumentRepository.save(storedDocument);
     }
 }

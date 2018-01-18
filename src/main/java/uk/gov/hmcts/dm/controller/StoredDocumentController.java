@@ -114,25 +114,17 @@ public class StoredDocumentController {
     }
 
     @DeleteMapping(value = "{id}")
-    @ApiOperation("(Soft) Deletes a Stored Document.")
-    public ResponseEntity<Object> delete(@PathVariable UUID id) {
+    @ApiOperation("Deletes a Stored Document.")
+    public ResponseEntity<Object> removePermanently(@PathVariable
+                                                    UUID id,
+                                                    @RequestParam(
+                                                        value = "permanent",
+                                                        required = false,
+                                                        defaultValue = "false")
+                                                    boolean permanent) {
         if (deleteEnabled) {
-            auditedStoredDocumentOperationsService.deleteStoredDocument(id);
+            auditedStoredDocumentOperationsService.deleteStoredDocument(id, permanent);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
-    }
-
-    @DeleteMapping(value = "{id}", params = "permanent")
-    @ApiOperation("Hard deletes a Stored Document.")
-    public ResponseEntity<Object> removePermanently(@PathVariable UUID id,
-                                                    @RequestParam("permanent") boolean permanent) {
-        if (deleteEnabled) {
-            if (permanent) {
-                auditedStoredDocumentOperationsService.hardDeleteStoredDocument(id);
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-            }
-            return delete(id);
         }
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }

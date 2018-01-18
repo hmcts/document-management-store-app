@@ -115,18 +115,10 @@ public class StoredDocumentServiceTests {
     @Test
     public void testDelete() {
         StoredDocument storedDocument = new StoredDocument();
-        storedDocumentService.deleteDocument(storedDocument);
+        storedDocumentService.deleteDocument(storedDocument, false);
 
         assertThat(storedDocument.isDeleted(), is(true));
         verify(storedDocumentRepository).save(storedDocument);
-    }
-
-    @Test
-    public void testDeleteWithNull() {
-        StoredDocument storedDocument = null;
-        storedDocumentService.deleteDocument(storedDocument);
-
-        verify(storedDocumentRepository, never()).save(storedDocument);
     }
 
     @Test
@@ -138,7 +130,7 @@ public class StoredDocumentServiceTests {
                 .build()))
             .build();
 
-        storedDocumentService.hardDeleteDocument(storedDocumentWithContent);
+        storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
         assertThat(storedDocumentWithContent.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
@@ -159,7 +151,7 @@ public class StoredDocumentServiceTests {
             .documentContentVersions(Arrays.asList(contentVersion, secondContentVersion))
             .build();
 
-        storedDocumentService.hardDeleteDocument(storedDocumentWithContent);
+        storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
         storedDocumentWithContent.getDocumentContentVersions().forEach(documentContentVersion -> {
             assertThat(documentContentVersion.getDocumentContent(), nullValue());

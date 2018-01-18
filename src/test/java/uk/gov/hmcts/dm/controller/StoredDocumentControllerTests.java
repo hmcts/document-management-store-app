@@ -341,7 +341,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                 .withAuthorizedService("divorce")
                 .delete("/documents/" + id)
                 .andExpect(status().is(204));
-        verify(auditedStoredDocumentOperationsService).deleteStoredDocument(id);
+        verify(auditedStoredDocumentOperationsService).deleteStoredDocument(id, false);
     }
 
     @Test
@@ -352,7 +352,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                 .delete("/documents/" + id + "?permanent=true")
                 .andExpect(status().is(204));
 
-        verify(auditedStoredDocumentOperationsService).hardDeleteStoredDocument(id);
+        verify(auditedStoredDocumentOperationsService).deleteStoredDocument(id, true);
     }
 
     @Test
@@ -363,7 +363,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                 .delete("/documents/" + id + "?permanent=false")
                 .andExpect(status().is(204));
 
-        verify(auditedStoredDocumentOperationsService).deleteStoredDocument(id);
+        verify(auditedStoredDocumentOperationsService).deleteStoredDocument(id, false);
     }
 
     @Test
