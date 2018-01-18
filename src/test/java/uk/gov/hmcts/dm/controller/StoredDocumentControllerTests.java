@@ -26,9 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class StoredDocumentControllerTests extends ComponentTestBase {
 
-    final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));
-
-    final UUID id = UUID.randomUUID();
+    private final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));
 
     private final UUID id = UUID.randomUUID();
 
