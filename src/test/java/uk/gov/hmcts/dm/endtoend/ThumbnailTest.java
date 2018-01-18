@@ -17,11 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

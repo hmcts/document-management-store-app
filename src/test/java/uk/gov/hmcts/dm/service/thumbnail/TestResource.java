@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-public class TestResource {
+class TestResource {
     static final String EXAMPLE_JPG_FILE = "files/document-jpg-example.jpg";
     static final String EXAMPLE_GIF_FILE = "files/document-gif-example.gif";
     // Taken from http://www.adamgrimshaw.com/gifs/turn_turn_turn.gif
