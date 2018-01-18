@@ -41,9 +41,8 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
                         vendorSpecificTypes.add(V1MediaType.V1_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE);
                         vendorSpecificTypes.add(V1MediaType.V1_AUDIT_ENTRY_MEDIA_TYPE);
                         ((MappingJackson2HttpMessageConverter) converter).setSupportedMediaTypes(vendorSpecificTypes);
-                }
-            });
-
+                    }
+                });
         }
         return bean;
 

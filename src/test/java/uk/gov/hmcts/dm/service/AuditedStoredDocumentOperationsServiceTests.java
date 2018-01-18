@@ -89,12 +89,12 @@ public class AuditedStoredDocumentOperationsServiceTests {
     @Test
     public void testCreateStoredDocuments() {
         List<MultipartFile> multipartFiles = Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList());
-        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
         UploadDocumentsCommand documentsCommand = new UploadDocumentsCommand();
         documentsCommand.setFiles(multipartFiles);
         documentsCommand.setClassification(Classifications.PRIVATE);
         documentsCommand.setRoles(Arrays.asList("role1"));
 
+        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
         when(storedDocumentService.saveItems(documentsCommand)).thenReturn(storedDocuments);
         auditedStoredDocumentOperationsService.createStoredDocuments(documentsCommand);
         verify(storedDocumentService, times(1)).saveItems(documentsCommand);

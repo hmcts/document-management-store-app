@@ -90,7 +90,7 @@ public class StoredDocument implements RolesAware {
     @Setter
     private Date ttl;
 
-    public StoredDocument(){
+    public StoredDocument() {
         documentContentVersions = new ArrayList<>();
     }
 

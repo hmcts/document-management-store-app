@@ -146,7 +146,7 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testSaveItems() throws Exception {
-        List<StoredDocument> documents = storedDocumentService.saveDocuments(singletonList(TestUtil.TEST_FILE));
+        List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TestUtil.TEST_FILE));
 
         final DocumentContentVersion latestVersion = documents.get(0).getDocumentContentVersions().get(0);
 
@@ -162,7 +162,7 @@ public class StoredDocumentServiceTests {
         StoredDocument storedDocument = new StoredDocument();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
-                storedDocument, TestUtil.TEST_FILE
+            storedDocument, TestUtil.TEST_FILE
         );
 
         assertThat(storedDocument.getDocumentContentVersions().size(), equalTo(1));
