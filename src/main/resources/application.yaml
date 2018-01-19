@@ -102,7 +102,7 @@ management:
 
 thumbnail:
     imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
-    pdfThumbnailCreator: ${SUPPORT_PDF_THUMBNAIL_MIME_TYPES:application/pdf }
+    pdfThumbnailCreator: ${SUPPORT_PDF_THUMBNAIL_MIME_TYPES:application/pdf}
 
 
 toggle:
