@@ -207,7 +207,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void updateDocument() throws Exception {
+        public void updateDocument() throws Exception {
         when(this.storedDocumentService.findOne(id))
             .thenReturn(storedDocument);
 

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import org.h2.command.dml.Update;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
@@ -132,4 +134,16 @@ public class AuditedStoredDocumentOperationsServiceTests {
         verify(storedDocumentService, times(0)).deleteDocument(storedDocument, false);
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.DELETED);
     }
+
+    @Test
+    public void testUpdateDocument() {
+        StoredDocument storedDocument = new StoredDocument();;
+        UpdateDocumentCommand command = new UpdateDocumentCommand();
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
+        auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
+        verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
+        verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument, command);
+        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
+    }
 }
+

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
@@ -54,7 +55,7 @@ public class StoredDocumentHalResource extends HalResource {
 
     private Date ttl;
 
-    public StoredDocumentHalResource(StoredDocument storedDocument) {
+    public StoredDocumentHalResource(@NonNull StoredDocument storedDocument) {
         BeanUtils.copyProperties(storedDocument, this);
 
         roles = storedDocument.getRoles() != null ? storedDocument.getRoles().stream().sorted().collect(Collectors.toList()) : null;

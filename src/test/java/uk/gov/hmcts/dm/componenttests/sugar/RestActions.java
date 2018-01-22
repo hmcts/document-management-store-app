@@ -65,6 +65,14 @@ public class RestActions {
         return post(urlTemplate, null);
     }
 
+    public ResultActions patch(String urlTemplate, Object requestBody) {
+
+        return translateException(() -> mvc.perform(MockMvcRequestBuilders.patch(urlTemplate)
+            .headers(httpHeaders)
+            .content(toJson(requestBody))
+            .contentType(APPLICATION_JSON)));
+    }
+
     public ResultActions post(String urlTemplate, Object requestBody) {
         return translateException(() -> mvc.perform(MockMvcRequestBuilders.post(urlTemplate)
             .headers(httpHeaders)
