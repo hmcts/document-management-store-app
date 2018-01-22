@@ -55,17 +55,12 @@ public class StoredDocumentController {
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    @Autowired
-    private CustomDateEditor customDateEditor;
-
     @Value("${toggle.deleteenabled:false}")
     @Setter
     private boolean deleteEnabled;
 
     @Autowired
     private DocumentThumbnailService documentThumbnailService;
-
-    private MethodParameter uploadDocumentsCommandMethodParamter;
 
     private MethodParameter uploadDocumentsCommandMethodParameter;
 
