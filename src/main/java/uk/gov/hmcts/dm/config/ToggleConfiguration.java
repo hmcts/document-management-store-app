@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class ToggleConfiguration {
 
-    private Boolean metadatasearchendpoint;
-    private Boolean documentandmetadatauploadendpoint;
-    private Boolean folderendpoint;
-    private Boolean includeidamhealth;
-    private Boolean ttl;
+    private boolean metadatasearchendpoint;
+    private boolean documentandmetadatauploadendpoint;
+    private boolean folderendpoint;
+    private boolean includeidamhealth;
+    private boolean ttl;
 
 }

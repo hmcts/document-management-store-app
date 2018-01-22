@@ -29,12 +29,12 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
             new StoredDocument(),
             new StoredDocument());
 
-        PageRequest r = new PageRequest(0, 2);
+        PageRequest pageRequest = new PageRequest(0, 2);
 
         when(
             this.searchService
                 .findStoredDocumentsByMetadata(eq(searchCommand), any(Pageable.class)))
-            .thenReturn(new PageImpl<>(documents, r, 3));
+            .thenReturn(new PageImpl<>(documents, pageRequest, 3));
 
         restActions
             .withAuthorizedUser("userId")

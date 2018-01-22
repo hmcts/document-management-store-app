@@ -29,8 +29,10 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -78,7 +80,9 @@ public class StoredDocumentController {
 
     @InitBinder
     public void bindingPreparation(WebDataBinder binder) {
-        binder.registerCustomEditor(Date.class, customDateEditor);
+        //putting SimpleDateFormat here makes it thread-safe
+        binder.registerCustomEditor(Date.class,
+            new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.UK), true));
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

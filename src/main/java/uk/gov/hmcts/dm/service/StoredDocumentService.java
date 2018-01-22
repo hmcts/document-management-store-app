@@ -70,10 +70,10 @@ public class StoredDocumentService {
             document.setRoles(uploadDocumentsCommand.getRoles() != null
                 ? uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
 
-            if (toggleConfiguration.getMetadatasearchendpoint()) {
+            if (toggleConfiguration.isMetadatasearchendpoint()) {
                 document.setMetadata(uploadDocumentsCommand.getMetadata());
             }
-            if (toggleConfiguration.getTtl()) {
+            if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
             document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, blobCreator.createBlob(file)));
