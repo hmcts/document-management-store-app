@@ -208,6 +208,16 @@ try {
 //                rpmTagger.tagDeploymentSuccessfulOn('test')
 //                rpmTagger.tagTestingPassedOn("test")
             }
+
+            stage('Deploy on Demo') {
+                build job: 'document-deploy', parameters: [
+                        [$class: 'StringParameterValue', name: 'BUILD_APP', value: app],
+                        [$class: 'StringParameterValue', name: 'BUILD_VERSION', value: rpmVersion],
+                        [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: 'demo']
+                ]
+//                rpmTagger.tagDeploymentSuccessfulOn('demo')
+//                rpmTagger.tagTestingPassedOn("demo")
+            }
         }
         stage('Slack Notification') {
             notifyBuildFixed channel: channel
