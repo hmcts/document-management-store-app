@@ -120,8 +120,8 @@ public class StoredDocumentServiceTests {
     @Test
     public void testSaveItemsWithCommandAndToggleConfiguration() throws Exception {
 
-        when(toggleConfiguration.getMetadatasearchendpoint()).thenReturn(true);
-        when(toggleConfiguration.getTtl()).thenReturn(true);
+        when(toggleConfiguration.isMetadatasearchendpoint()).thenReturn(true);
+        when(toggleConfiguration.isTtl()).thenReturn(true);
 
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(singletonList(TestUtil.TEST_FILE));
