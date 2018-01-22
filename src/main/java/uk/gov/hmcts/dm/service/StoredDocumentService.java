@@ -4,21 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.Folder;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * Created by pawel on 26/05/2017.
- */
 @Transactional
 @Service
 public class StoredDocumentService {
@@ -37,6 +36,9 @@ public class StoredDocumentService {
 
     @Autowired
     private BlobCreator blobCreator;
+
+    @Autowired
+    private ToggleConfiguration toggleConfiguration;
 
     public StoredDocument findOne(UUID id) {
         return storedDocumentRepository.findOne(id);
@@ -61,15 +63,19 @@ public class StoredDocumentService {
         folderRepository.save(folder);
     }
 
-    public List<StoredDocument> saveDocuments(List<MultipartFile> files,
-                                              Classifications classification,
-                                              List<String> roles,
-                                              Map<String, String> metadata)  {
-        return files.stream().map(file -> {
+    public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand)  {
+        return uploadDocumentsCommand.getFiles().stream().map(file -> {
             StoredDocument document = new StoredDocument();
-            document.setClassification(classification);
-            document.setRoles(roles != null ? roles.stream().collect(Collectors.toSet()) : null);
-            document.setMetadata(metadata);
+            document.setClassification(uploadDocumentsCommand.getClassification());
+            document.setRoles(uploadDocumentsCommand.getRoles() != null
+                ? uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
+
+            if (toggleConfiguration.isMetadatasearchendpoint()) {
+                document.setMetadata(uploadDocumentsCommand.getMetadata());
+            }
+            if (toggleConfiguration.isTtl()) {
+                document.setTtl(uploadDocumentsCommand.getTtl());
+            }
             document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, blobCreator.createBlob(file)));
             save(document);
             return document;
@@ -77,8 +83,10 @@ public class StoredDocumentService {
 
     }
 
-    public List<StoredDocument> saveDocuments(List<MultipartFile> files)  {
-        return saveDocuments(files, null, null, null);
+    public List<StoredDocument> saveItems(List<MultipartFile> files)  {
+        UploadDocumentsCommand command = new UploadDocumentsCommand();
+        command.setFiles(files);
+        return saveItems(command);
     }
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {

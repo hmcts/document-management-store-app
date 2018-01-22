@@ -86,6 +86,10 @@ public class StoredDocument implements RolesAware {
     @CollectionTable(name = "documentmetadata", joinColumns = @JoinColumn(name = "documentmetadata_id"))
     private Map<String, String> metadata;
 
+    @Getter
+    @Setter
+    private Date ttl;
+
     public StoredDocument() {
         documentContentVersions = new ArrayList<>();
     }
@@ -93,7 +97,7 @@ public class StoredDocument implements RolesAware {
     public StoredDocument(UUID id, String createdBy, String lastModifiedBy, Date modifiedOn, Date createdOn,
                           boolean deleted, Folder folder, List<DocumentContentVersion> documentContentVersions,
                           Set<StoredDocumentAuditEntry> auditEntries,
-                          Classifications classification, Set<String> roles, Map<String, String> metadata) {
+                          Classifications classification, Set<String> roles, Map<String, String> metadata, Date ttl) {
         setId(id);
         setCreatedBy(createdBy);
         this.lastModifiedBy = lastModifiedBy;
@@ -106,6 +110,7 @@ public class StoredDocument implements RolesAware {
         setClassification(classification);
         setRoles(roles);
         setMetadata(metadata);
+        setTtl(ttl);
     }
 
     public DocumentContentVersion getMostRecentDocumentContentVersion() {

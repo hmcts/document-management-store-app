@@ -5,13 +5,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -33,12 +32,8 @@ public class AuditedStoredDocumentOperationsService {
         return storedDocument;
     }
 
-    public List<StoredDocument> createStoredDocuments(List<MultipartFile> files,
-                                                      Classifications classification,
-                                                      List<String> roles,
-                                                      Map<String, String> metadata) {
-        List<StoredDocument> storedDocuments =
-            storedDocumentService.saveDocuments(files, classification, roles, metadata);
+    public List<StoredDocument> createStoredDocuments(UploadDocumentsCommand uploadDocumentsCommand) {
+        List<StoredDocument> storedDocuments = storedDocumentService.saveItems(uploadDocumentsCommand);
         storedDocuments.forEach(storedDocument -> {
             auditEntryService.createAndSaveEntry(storedDocument, AuditActions.CREATED);
             auditEntryService.createAndSaveEntry(storedDocument.getDocumentContentVersions().get(0), AuditActions.CREATED);
@@ -47,7 +42,9 @@ public class AuditedStoredDocumentOperationsService {
     }
 
     public List<StoredDocument> createStoredDocuments(List<MultipartFile> files) {
-        return createStoredDocuments(files, null, null, null);
+        UploadDocumentsCommand command = new UploadDocumentsCommand();
+        command.setFiles(files);
+        return createStoredDocuments(command);
     }
 
 

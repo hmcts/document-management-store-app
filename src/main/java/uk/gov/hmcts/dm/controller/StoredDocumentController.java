@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.core.io.Resource;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
@@ -22,10 +24,15 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
-import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -55,15 +62,22 @@ public class StoredDocumentController {
     @Autowired
     private DocumentThumbnailService documentThumbnailService;
 
-    private MethodParameter uploadDocumentsCommandMethodParamter;
+    private MethodParameter uploadDocumentsCommandMethodParameter;
 
     @PostConstruct
-    private void init() throws Exception {
-        uploadDocumentsCommandMethodParamter = new MethodParameter(
+    void init() throws NoSuchMethodException {
+        uploadDocumentsCommandMethodParameter = new MethodParameter(
                 StoredDocumentController.class.getMethod(
                         "createFrom",
                         UploadDocumentsCommand.class,
                         BindingResult.class), 0);
+    }
+
+    @InitBinder
+    public void bindingPreparation(WebDataBinder binder) {
+        //putting SimpleDateFormat here makes it thread-safe
+        binder.registerCustomEditor(Date.class,
+            new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.UK), true));
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -76,14 +90,10 @@ public class StoredDocumentController {
             BindingResult result) throws MethodArgumentNotValidException {
 
         if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParamter, result);
+            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
             List<StoredDocument> storedDocuments =
-                    auditedStoredDocumentOperationsService.createStoredDocuments(
-                            uploadDocumentsCommand.getFiles(),
-                            uploadDocumentsCommand.getClassification(),
-                            uploadDocumentsCommand.getRoles(),
-                            null);
+                    auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
             return ResponseEntity
                     .ok()
                     .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)

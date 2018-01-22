@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.endtoend;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,6 @@ import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
         classes = DmApp.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
-@Ignore
 public class AuditTest {
 
     public static final MockMultipartFile FILE =
@@ -82,7 +80,6 @@ public class AuditTest {
     }
 
     @Test
-    @Ignore("not sure what this does")
     public void should_audit_delete() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 

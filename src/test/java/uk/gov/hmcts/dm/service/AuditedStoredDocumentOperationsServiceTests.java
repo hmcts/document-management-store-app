@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -88,10 +89,15 @@ public class AuditedStoredDocumentOperationsServiceTests {
     @Test
     public void testCreateStoredDocuments() {
         List<MultipartFile> multipartFiles = Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList());
+        UploadDocumentsCommand documentsCommand = new UploadDocumentsCommand();
+        documentsCommand.setFiles(multipartFiles);
+        documentsCommand.setClassification(Classifications.PRIVATE);
+        documentsCommand.setRoles(Arrays.asList("role1"));
+
         List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
-        when(storedDocumentService.saveDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null)).thenReturn(storedDocuments);
-        auditedStoredDocumentOperationsService.createStoredDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null);
-        verify(storedDocumentService, times(1)).saveDocuments(multipartFiles, Classifications.PRIVATE, Arrays.asList("role1"), null);
+        when(storedDocumentService.saveItems(documentsCommand)).thenReturn(storedDocuments);
+        auditedStoredDocumentOperationsService.createStoredDocuments(documentsCommand);
+        verify(storedDocumentService, times(1)).saveItems(documentsCommand);
         verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT, AuditActions.CREATED);
         verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT.getDocumentContentVersions().get(0), AuditActions.CREATED);
     }

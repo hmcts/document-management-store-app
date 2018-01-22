@@ -10,7 +10,8 @@ import org.springframework.hateoas.core.Relation;
 import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.dm.controller.FolderController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
-import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.Date;
@@ -50,6 +51,8 @@ public class StoredDocumentHalResource extends HalResource {
     private List<String> roles;
 
     private Map<String, String> metadata;
+
+    private Date ttl;
 
     public StoredDocumentHalResource(StoredDocument storedDocument) {
         BeanUtils.copyProperties(storedDocument, this);

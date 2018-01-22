@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.hal.Jackson2HalModule;
@@ -19,10 +18,11 @@ import java.util.List;
 public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String s) throws BeansException {
+    public Object postProcessBeforeInitialization(Object bean, String s) {
         if (bean instanceof RequestMappingHandlerAdapter) {
-            for (Object converter : ((RequestMappingHandlerAdapter) bean).getMessageConverters()) {
-                if (converter instanceof MappingJackson2HttpMessageConverter) {
+            ((RequestMappingHandlerAdapter) bean).getMessageConverters().stream()
+                .filter(converter -> converter instanceof MappingJackson2HttpMessageConverter)
+                .forEach(converter -> {
                     MappingJackson2HttpMessageConverter halConverterCandidate = (MappingJackson2HttpMessageConverter) converter;
                     ObjectMapper objectMapper = halConverterCandidate.getObjectMapper();
                     if (Jackson2HalModule.isAlreadyRegisteredIn(objectMapper)) {
@@ -42,17 +42,14 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
                         vendorSpecificTypes.add(V1MediaType.V1_AUDIT_ENTRY_MEDIA_TYPE);
                         ((MappingJackson2HttpMessageConverter) converter).setSupportedMediaTypes(vendorSpecificTypes);
                     }
-                }
-
-            }
-
+                });
         }
         return bean;
 
     }
 
     @Override
-    public Object postProcessAfterInitialization(Object o, String s) throws BeansException {
+    public Object postProcessAfterInitialization(Object o, String s) {
         return o;
     }
 }
