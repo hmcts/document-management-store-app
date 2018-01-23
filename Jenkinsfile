@@ -19,20 +19,20 @@ import uk.gov.hmcts.Packager
 import uk.gov.hmcts.RPMTagger
 import uk.gov.hmcts.Versioner
 
-String channel = '#dm-pipeline'
+def channel = '#dm-pipeline'
 
-String product = "evidence"
-String app = "document-management-store"
-String artifactorySourceRepo = "evidence-local"
+def product = "evidence"
+def app = "document-management-store"
+def artifactorySourceRepo = "evidence-local"
 
-Ansible ansible = new Ansible(this, product)
-Artifactory artifactory = new Artifactory(this)
-Packager packager = new Packager(this, product)
-Versioner versioner = new Versioner(this)
+def ansible = new Ansible(this, product)
+def artifactory = new Artifactory(this)
+def packager = new Packager(this, product)
+def versioner = new Versioner(this)
 
-String rpmTagger
-String rpmVersion
-String version
+def rpmTagger
+def rpmVersion
+def version
 
 node {
     try {
