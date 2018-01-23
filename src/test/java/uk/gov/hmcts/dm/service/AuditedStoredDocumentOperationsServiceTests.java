@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.service;
 
-import org.h2.command.dml.Update;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

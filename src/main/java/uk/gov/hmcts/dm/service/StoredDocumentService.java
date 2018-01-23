@@ -11,7 +11,6 @@ import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
