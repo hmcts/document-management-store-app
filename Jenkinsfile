@@ -189,7 +189,7 @@ node {
             }
 
             stage ('Deploy on Dev') {
-                ansible.run("{}", "dev", "deploy_store_app.yml")
+                ansible.run("{}", "dev", "deploy.yml")
                 rpmTagger.tagDeploymentSuccessfulOn('dev')
             }
 
@@ -201,20 +201,15 @@ node {
             }
 
             stage ('Deploy on Test') {
-                ansible.run("{}", "test", "deploy_store_app.yml")
-//                rpmTagger.tagDeploymentSuccessfulOn('test')
+                ansible.run("{}", "test", "deploy.yml")
+                rpmTagger.tagDeploymentSuccessfulOn('test')
             }
 
             stage('IT on Test') {
                 build job: 'evidence/integration-tests-pipeline/master', parameters: [
                     [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: "test"]
                 ]
-//                rpmTagger.tagTestingPassedOn('test')
-            }
-
-            stage('Deploy on Demo') {
-                ansible.run("{}", "demo", "deploy_store_app.yml")
-//                rpmTagger.tagDeploymentSuccessfulOn('demo')
+                rpmTagger.tagTestingPassedOn('test')
             }
         }
         notifyBuildFixed channel: channel
