@@ -189,7 +189,7 @@ node {
             }
 
             stage ('Deploy on Dev') {
-                ansible.run("{}", "dev", "deploy.yml")
+                ansible.run("{}", "dev", "deploy_store_app.yml")
                 rpmTagger.tagDeploymentSuccessfulOn('dev')
             }
 
@@ -201,7 +201,7 @@ node {
             }
 
             stage ('Deploy on Test') {
-                ansible.run("{}", "test", "deploy.yml")
+                ansible.run("{}", "test", "deploy_store_app.yml")
 //                rpmTagger.tagDeploymentSuccessfulOn('test')
             }
 
@@ -213,7 +213,7 @@ node {
             }
 
             stage('Deploy on Demo') {
-                ansible.run("{}", "demo", "deploy.yml")
+                ansible.run("{}", "demo", "deploy_store_app.yml")
 //                rpmTagger.tagDeploymentSuccessfulOn('demo')
             }
         }
