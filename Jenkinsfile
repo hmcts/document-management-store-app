@@ -8,7 +8,8 @@ properties([
     ],
     pipelineTriggers([
         [$class: 'GitHubPushTrigger']
-    ])
+    ]),
+    disableConcurrentBuilds()
 ])
 
 @Library('Reform') _
@@ -35,7 +36,7 @@ String version
 
 node {
     try {
-        
+
         stage('Checkout') {
             deleteDir()
             checkout scm
@@ -218,8 +219,6 @@ node {
         }
         notifyBuildFixed channel: channel
     } catch(e) {
-        sh "echo I failed"
-        e.printStackTrace()
         notifyBuildFailure channel: channel
         throw e
     }
