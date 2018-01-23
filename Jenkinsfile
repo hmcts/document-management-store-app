@@ -25,7 +25,7 @@ def product = "evidence"
 def app = "document-management-store"
 def artifactorySourceRepo = "evidence-local"
 
-def ansible = new Ansible(this, product)
+def ansible = new Ansible(this, 'dm')
 def artifactory = new Artifactory(this)
 def packager = new Packager(this, product)
 def versioner = new Versioner(this)
