@@ -21,13 +21,12 @@ import uk.gov.hmcts.Versioner
 
 def channel = '#dm-pipeline'
 
-def product = "evidence"
 def app = "document-management-store"
 def artifactorySourceRepo = "evidence-local"
 
 def ansible = new Ansible(this, 'dm')
 def artifactory = new Artifactory(this)
-def packager = new Packager(this, product)
+def packager = new Packager(this, 'evidence')
 def versioner = new Versioner(this)
 
 def rpmTagger
@@ -210,6 +209,11 @@ node {
                     [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: "test"]
                 ]
                 rpmTagger.tagTestingPassedOn('test')
+            }
+
+            stage('Deploy on Demo') {
+                ansible.run("{}", "demo", "deploy_store_app.yml")
+//                rpmTagger.tagDeploymentSuccessfulOn('demo')
             }
         }
         notifyBuildFixed channel: channel
