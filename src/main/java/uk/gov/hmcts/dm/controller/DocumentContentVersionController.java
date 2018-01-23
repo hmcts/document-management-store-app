@@ -132,7 +132,7 @@ public class DocumentContentVersionController {
 
             if (storedDocument == null || storedDocument.isDeleted()) {
 
-                throw new StoredDocumentNotFoundException(String.format("ID: %s", documentId.toString()));
+                throw new StoredDocumentNotFoundException(documentId);
 
             } else {
 

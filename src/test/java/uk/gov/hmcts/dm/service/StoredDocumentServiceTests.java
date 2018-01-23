@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
@@ -233,5 +234,26 @@ public class StoredDocumentServiceTests {
         final DocumentContentVersion latestVersionInFolder = folder.getStoredDocuments().get(0).getDocumentContentVersions().get(0);
         assertThat(latestVersionInFolder.getMimeType(), equalTo(TestUtil.TEST_FILE.getContentType()));
         assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TestUtil.TEST_FILE.getOriginalFilename()));
+    }
+
+    @Test
+    public void testUpdateDocument() throws Exception {
+        StoredDocument storedDocument = new StoredDocument();
+        UpdateDocumentCommand command = new UpdateDocumentCommand();
+        Date newTtl = new Date();
+        command.setTtl(newTtl);
+        storedDocumentService.updateStoredDocument(storedDocument, command);
+        Assert.assertEquals(newTtl, storedDocument.getTtl());
+    }
+
+    @Test
+    public void testUpdateDeletedDocument() throws Exception {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setDeleted(true);
+        UpdateDocumentCommand command = new UpdateDocumentCommand();
+        Date newTtl = new Date();
+        command.setTtl(newTtl);
+        storedDocumentService.updateStoredDocument(storedDocument, command);
+        Assert.assertNull(storedDocument.getTtl());
     }
 }

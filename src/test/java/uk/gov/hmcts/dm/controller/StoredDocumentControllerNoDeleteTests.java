@@ -55,7 +55,6 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
     @Before
     public void setUp() {
         super.setUp();
-        controller.setDeleteEnabled(false);
     }
 
     @Test
@@ -64,7 +63,7 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
                 .withAuthorizedUser("userId")
                 .withAuthorizedService("divorce")
                 .delete("/documents/" + id)
-                .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+                .andExpect(status().is(HttpStatus.NO_CONTENT.value()));
     }
 
     @Test
@@ -73,7 +72,7 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
                 .withAuthorizedUser("userId")
                 .withAuthorizedService("divorce")
                 .delete("/documents/" + id + "?permanent=true")
-                .andExpect(status().is(HttpStatus.METHOD_NOT_ALLOWED.value()));
+                .andExpect(status().is(HttpStatus.NO_CONTENT.value()));
     }
 
 }

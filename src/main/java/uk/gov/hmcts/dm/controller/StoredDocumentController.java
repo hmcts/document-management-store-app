@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpStatus;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +28,13 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
+import javax.annotation.PostConstruct;
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import javax.annotation.PostConstruct;
-import javax.validation.Valid;
 
 /**
  * Created by pawel on 08/06/2017.
@@ -54,10 +53,6 @@ public class StoredDocumentController {
 
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
-
-    @Value("${toggle.deleteenabled:false}")
-    @Setter
-    private boolean deleteEnabled;
 
     @Autowired
     private DocumentThumbnailService documentThumbnailService;
@@ -120,21 +115,7 @@ public class StoredDocumentController {
                 .body(new StoredDocumentHalResource(storedDocument));
     }
 
-    @DeleteMapping(value = "{id}")
-    @ApiOperation("Deletes a Stored Document.")
-    public ResponseEntity<Object> removePermanently(@PathVariable
-                                                    UUID id,
-                                                    @RequestParam(
-                                                        value = "permanent",
-                                                        required = false,
-                                                        defaultValue = "false")
-                                                    boolean permanent) {
-        if (deleteEnabled) {
-            auditedStoredDocumentOperationsService.deleteStoredDocument(id, permanent);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
-    }
+
 
     @GetMapping(value = "{id}/binary")
     @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
@@ -175,6 +156,8 @@ public class StoredDocumentController {
             .body(documentThumbnailService.generateThumbnail(documentContentVersion));
 
     }
+
+
 
 }
 
