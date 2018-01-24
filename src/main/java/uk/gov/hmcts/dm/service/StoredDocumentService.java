@@ -99,6 +99,7 @@ public class StoredDocumentService {
     public void deleteDocument(StoredDocument storedDocument, boolean permanent) {
         storedDocument.setDeleted(true);
         if (permanent) {
+            storedDocument.setHardDeleted(true);
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
                 documentContentRepository.delete(documentContentVersion.getDocumentContent());
                 documentContentVersion.setDocumentContent(null);

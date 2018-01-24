@@ -112,3 +112,7 @@ toggle:
   includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
   deleteenabled: ${ENABLED_DELETE:false}
   ttl: ${ENABLE_TTL:true}
+
+
+batch:
+    ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}

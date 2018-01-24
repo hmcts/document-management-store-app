@@ -132,4 +132,30 @@ public class AuditedStoredDocumentOperationsServiceTests {
         verify(storedDocumentService, times(0)).deleteDocument(storedDocument, false);
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.DELETED);
     }
+
+    @Test
+    public void testHardDeleteOnNotHardDeleted() {
+        StoredDocument storedDocument = new StoredDocument();
+        auditedStoredDocumentOperationsService.deleteStoredDocument(storedDocument, true);
+        verify(storedDocumentService, times(1)).deleteDocument(storedDocument, true);
+        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.HARD_DELETED);
+    }
+
+    @Test
+    public void testHardDeleteOnHardDeleted() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setHardDeleted(true);
+        auditedStoredDocumentOperationsService.deleteStoredDocument(storedDocument, true);
+        verify(storedDocumentService, times(0)).deleteDocument(storedDocument, true);
+        verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.HARD_DELETED);
+    }
+
+    @Test
+    public void testHardDeleteOnSoftDeleted() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setDeleted(true);
+        auditedStoredDocumentOperationsService.deleteStoredDocument(storedDocument, true);
+        verify(storedDocumentService, times(1)).deleteDocument(storedDocument, true);
+        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.HARD_DELETED);
+    }
 }

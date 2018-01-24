@@ -6,14 +6,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,20 +29,16 @@ public class AuditEntryServiceTests {
     @Mock
     private DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository;
 
+    @Mock
+    private SecurityUtilService securityUtilService;
+
     @InjectMocks
     AuditEntryService auditEntryService;
 
     @Test
     public void testCreateAndSaveEntryForStoredDocument() {
-        SecurityContext securityContext = mock(SecurityContext.class);
-        Authentication authentication = mock(Authentication.class);
-        ServiceAndUserDetails serviceAndUserDetails = mock(ServiceAndUserDetails.class);
 
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn(serviceAndUserDetails);
-        when(serviceAndUserDetails.getUsername()).thenReturn("x");
-
-        SecurityContextHolder.setContext(securityContext);
+        when(securityUtilService.getCurrentlyAuthenticatedUsername()).thenReturn("x");
 
         StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(new StoredDocument(), AuditActions.READ);
 
@@ -58,6 +50,7 @@ public class AuditEntryServiceTests {
     @Test
     public void testCreateAndSaveEntryForDocumentContentVersion() {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        when(securityUtilService.getCurrentlyAuthenticatedUsername()).thenReturn("x");
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
         verify(documentContentVersionAuditEntryRepository, times(1)).save(any(DocumentContentVersionAuditEntry.class));
     }

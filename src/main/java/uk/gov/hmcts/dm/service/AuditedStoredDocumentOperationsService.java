@@ -86,9 +86,14 @@ public class AuditedStoredDocumentOperationsService {
 
     @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
     public void deleteStoredDocument(StoredDocument storedDocument, boolean permanent) {
-        if (storedDocument != null && !storedDocument.isDeleted()) {
-            storedDocumentService.deleteDocument(storedDocument, permanent);
-            auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
+        if (storedDocument != null) {
+            if (permanent && !storedDocument.isHardDeleted()) {
+                storedDocumentService.deleteDocument(storedDocument, permanent);
+                auditEntryService.createAndSaveEntry(storedDocument, AuditActions.HARD_DELETED);
+            } else if (!permanent && !storedDocument.isDeleted()) {
+                storedDocumentService.deleteDocument(storedDocument, permanent);
+                auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
+            }
         }
     }
 
