@@ -18,10 +18,9 @@ import uk.gov.hmcts.dm.security.Classifications;
 
 import java.nio.charset.StandardCharsets;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static uk.gov.hmcts.dm.endtoend.Helper.getBinaryUrlFromResponse;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
 @RunWith(SpringRunner.class)
