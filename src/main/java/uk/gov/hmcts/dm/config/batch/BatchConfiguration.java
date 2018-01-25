@@ -34,7 +34,6 @@ public class BatchConfiguration {
             throw new AppConfigurationException("Could not create 'jobRepository' bean", e);
         }
 
-        return null;
     }
 
     @Bean
