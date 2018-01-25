@@ -38,7 +38,7 @@ public class SearchDocumentTest {
 
     @Autowired
     private MockMvc mvc;
-    private HttpHeaders headers = Helper.getHeaders();
+    private final HttpHeaders headers = Helper.getHeaders();
 
     @Test
     public void deleted_doc_should_not_appear_in_search() throws Exception {
