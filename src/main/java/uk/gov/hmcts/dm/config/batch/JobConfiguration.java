@@ -70,7 +70,7 @@ public class JobConfiguration {
         JpaPagingItemReader<StoredDocument> reader = new JpaPagingItemReader<>();
         reader.setEntityManagerFactory(entityManagerFactory);
         reader.setQueryString(RETRIEVEEXPIREDDOCUMENTSQUERY);
-        reader.setParameterValues(ImmutableMap.of("now", new Date( )));
+        reader.setParameterValues(ImmutableMap.of("now", new Date()));
         reader.setPageSize(50);
         return reader;
     }

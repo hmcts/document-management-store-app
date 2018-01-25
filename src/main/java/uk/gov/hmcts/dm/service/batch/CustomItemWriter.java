@@ -7,9 +7,10 @@ import java.util.List;
 
 /**
  * Created by pawel on 24/01/2018.
- *
- * Workaround for problem of lack of transaction.
+ * <p>
+ * Workaround for a problem of lack of transaction.
  * Class will not be tested.
+ * </p>
  */
 public class CustomItemWriter<T> extends JpaItemWriter<T> {
     @Override

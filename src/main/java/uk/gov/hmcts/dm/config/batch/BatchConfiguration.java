@@ -10,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
+import uk.gov.hmcts.dm.exception.AppConfigurationException;
 
 import javax.sql.DataSource;
 
@@ -22,11 +23,18 @@ public class BatchConfiguration {
     public JobRepository jobRepository(
          DataSource dataSource,
          PlatformTransactionManager transactionManager) throws Exception {
-        JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
-        factory.setDataSource(dataSource);
-        factory.setTransactionManager(transactionManager);
-        factory.afterPropertiesSet();
-        return factory.getObject();
+
+        try {
+            JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
+            factory.setDataSource(dataSource);
+            factory.setTransactionManager(transactionManager);
+            factory.afterPropertiesSet();
+            return factory.getObject();
+        } catch (Exception e) {
+            throw new AppConfigurationException("Could not create 'jobRepository' bean", e);
+        }
+
+        return null;
     }
 
     @Bean
