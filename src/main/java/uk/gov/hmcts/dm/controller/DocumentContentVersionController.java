@@ -25,9 +25,9 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
+import javax.validation.Valid;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
 
 /**
  * Created by pawel on 08/06/2017.

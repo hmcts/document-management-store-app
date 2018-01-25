@@ -3,11 +3,11 @@ package uk.gov.hmcts.dm.service.thumbnail;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import javax.imageio.ImageIO;
 
 public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailCreator {
     @Override
@@ -16,7 +16,7 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
             InputStream inputStream = documentContentVersion.getDocumentContent().getData().getBinaryStream();
             BufferedImage bufferedImage = getImg(inputStream);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage,THUMBNAIL_FORMAT, os);
+            ImageIO.write(bufferedImage, ThumbnailFormats.JPG.toString().toLowerCase() , os);
             return new ByteArrayInputStream(os.toByteArray());
         } catch (Exception e) {
             throw new CantCreateThumbnailException(e);

@@ -13,6 +13,7 @@ import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.Arrays;
@@ -162,13 +163,20 @@ public class AuditedStoredDocumentOperationsServiceTests {
 
     @Test
     public void testUpdateDocument() {
-        StoredDocument storedDocument = new StoredDocument();;
+        StoredDocument storedDocument = new StoredDocument();
         UpdateDocumentCommand command = new UpdateDocumentCommand();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
         auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
         verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument, command);
         verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
+    }
+
+    @Test(expected = StoredDocumentNotFoundException.class)
+    public void testUpdateDocumentThatDoesNotExist() {
+        UpdateDocumentCommand command = new UpdateDocumentCommand();
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
+        auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
     }
 }
 

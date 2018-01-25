@@ -43,14 +43,6 @@ public class AuditedStoredDocumentOperationsService {
         return storedDocuments;
     }
 
-    public List<StoredDocument> createStoredDocuments(List<MultipartFile> files) {
-        UploadDocumentsCommand command = new UploadDocumentsCommand();
-        command.setFiles(files);
-        return createStoredDocuments(command);
-    }
-
-
-
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'READ')")
     public StoredDocument readStoredDocument(UUID id) {
         StoredDocument storedDocument = storedDocumentService.findOne(id);
