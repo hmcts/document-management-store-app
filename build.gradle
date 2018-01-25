@@ -9,6 +9,7 @@ plugins {
     id 'org.sonarqube' version '2.5'
     id 'jacoco'
     id 'idea'
+    id 'eclipse'
 }
 
 group = 'uk.gov.hmcts.reform.dm'
@@ -188,7 +189,8 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/hibernate/*',
     '**uk/gov/hmcts/dm/config/**/*',
     '**uk/gov/hmcts/dm/errorhandler/*',
-    '**uk/gov/hmcts/dm/repository/RepositoryFinder.java'
+    '**uk/gov/hmcts/dm/repository/RepositoryFinder.java',
+    '**uk/gov/hmcts/dm/service/batch/CustomItemWriter.java'
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)

@@ -8,7 +8,8 @@ import java.util.List;
 /**
  * Created by pawel on 24/01/2018.
  *
- * Workaround for problem of lack of transaction
+ * Workaround for problem of lack of transaction.
+ * Class will not be tested.
  */
 public class CustomItemWriter<T> extends JpaItemWriter<T> {
     @Override
