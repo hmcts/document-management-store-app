@@ -18,10 +18,11 @@ import java.util.UUID;
 @Repository
 public interface StoredDocumentRepository extends PagingAndSortingRepository<StoredDocument, UUID> {
 
-    @Query("select s from StoredDocument s join s.metadata m where KEY(m) = :#{#metadataSearchCommand.name} and m = :#{#metadataSearchCommand.value}")
+    @Query("select s from StoredDocument s join s.metadata m where s.deleted = false and KEY(m) = :#{#metadataSearchCommand.name} and m = :#{#metadataSearchCommand.value}")
     Page<StoredDocument> findAllByMetadata(@NonNull @Param("metadataSearchCommand") MetadataSearchCommand metadataSearchCommand, @NonNull Pageable pageable);
 
 
-    Page<StoredDocument> findByCreatedBy(String creator, @NonNull Pageable pageable);
+    @Query("select s from StoredDocument s where s.deleted = false and s.createdBy = :#{#creator}")
+    Page<StoredDocument> findByCreatedBy(@Param("creator") String creator, @NonNull Pageable pageable);
 
 }
