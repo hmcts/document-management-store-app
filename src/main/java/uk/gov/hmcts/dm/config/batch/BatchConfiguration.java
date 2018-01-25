@@ -22,7 +22,7 @@ public class BatchConfiguration {
     @Bean
     public JobRepository jobRepository(
          DataSource dataSource,
-         PlatformTransactionManager transactionManager) throws Exception {
+         PlatformTransactionManager transactionManager) {
 
         try {
             JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
