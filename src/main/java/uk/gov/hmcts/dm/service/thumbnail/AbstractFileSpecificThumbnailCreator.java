@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.Locale;
 
 public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailCreator {
     @Override
@@ -16,7 +17,7 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
             InputStream inputStream = documentContentVersion.getDocumentContent().getData().getBinaryStream();
             BufferedImage bufferedImage = getImg(inputStream);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, ThumbnailFormats.JPG.toString().toLowerCase(), os);
+            ImageIO.write(bufferedImage, ThumbnailFormats.JPG.toString().toLowerCase(Locale.UK), os);
             return new ByteArrayInputStream(os.toByteArray());
         } catch (Exception e) {
             throw new CantCreateThumbnailException(e);
