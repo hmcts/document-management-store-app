@@ -1,9 +1,11 @@
 package uk.gov.hmcts.dm.service;
 
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -106,5 +108,14 @@ public class StoredDocumentService {
             });
         }
         storedDocumentRepository.save(storedDocument);
+    }
+
+    public void updateStoredDocument(@NonNull StoredDocument storedDocument, @NonNull UpdateDocumentCommand command) {
+
+        if (!storedDocument.isDeleted()) {
+            storedDocument.setTtl(command.getTtl());
+            save(storedDocument);
+        }
+
     }
 }

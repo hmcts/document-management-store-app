@@ -5,10 +5,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 
 import java.util.List;
 import java.util.UUID;
@@ -67,6 +69,22 @@ public class AuditedStoredDocumentOperationsService {
         } else {
             return null;
         }
+    }
+
+    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'UPDATE')")
+    public StoredDocument updateDocument(UUID id, UpdateDocumentCommand updateDocumentCommand) {
+
+        StoredDocument storedDocument = storedDocumentService.findOne(id);
+
+        if (storedDocument == null || storedDocument.isDeleted()) {
+            throw new StoredDocumentNotFoundException(id);
+        }
+
+        storedDocumentService.updateStoredDocument(storedDocument, updateDocumentCommand);
+
+        auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
+
+        return storedDocument;
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'UPDATE')")

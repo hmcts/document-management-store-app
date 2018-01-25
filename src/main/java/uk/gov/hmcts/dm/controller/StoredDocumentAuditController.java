@@ -41,7 +41,7 @@ public class StoredDocumentAuditController {
         StoredDocument storedDocument = storedDocumentService.findOne(id);
 
         if (storedDocument == null) {
-            throw new StoredDocumentNotFoundException(String.format("ID: %s", id.toString()));
+            throw new StoredDocumentNotFoundException(id);
         }
 
         List<StoredDocumentAuditEntry> auditEntries = auditEntryService.findStoredDocumentAudits(storedDocument);
