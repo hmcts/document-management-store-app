@@ -17,13 +17,10 @@ export PACKAGES_VERSION=unkown
 export JAVA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
 
 ./fakeversion.sh
-mvn clean package -Dmaven.test.skip=true
+./gradlew installDist bootRepackage
 
-./bin/test_dependency.sh
+#./bin/test_dependency.sh
 
 #./bin/test_coverage.sh
 
-#xdg-open target/api-documentation/api-spec.html
-#open target/api-documentation/api-spec.html
-
-java ${JAVA_OPTS} -jar target/document-management-store-app-*.jar $@
+./build/install/document-management-store-app/bin/document-management-store-app
