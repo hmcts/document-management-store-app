@@ -3,7 +3,7 @@ version: '2.1'
 
 services:
 
-  document-management-viewer:
+  em-viewer-web:
     ports:
      - 8084:8080
 
@@ -18,7 +18,7 @@ services:
 
   document-management-store-database:
     ports:
-      - 5431:5432
+      - 5432:5432
 
   idam-registration-web:
     ports:

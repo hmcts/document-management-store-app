@@ -55,6 +55,10 @@ public class DocumentContentVersionServiceTests {
                 mockHttpServletResponse.getHeader(HttpHeaders.CONTENT_LENGTH),
                 TestUtil.DOCUMENT_CONTENT_VERSION.getSize().toString());
 
+        Assert.assertEquals(
+                mockHttpServletResponse.getHeader(HttpHeaders.CONTENT_DISPOSITION),
+            "fileName=\"" + TestUtil.DOCUMENT_CONTENT_VERSION.getOriginalDocumentName() + "\"");
+
         Assert.assertEquals(mockHttpServletResponse.getContentAsString(),
                 TestUtil.BLOB_DATA);
 

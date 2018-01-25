@@ -3,8 +3,8 @@ version: '2.1'
 
 services:
 
-  document-management-viewer:
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-viewer:latest
+  em-viewer-web:
+    image: docker.artifactory.reform.hmcts.net/evidence/em-viewer-web:latest
     environment:
     - NODE_ENV=development
     - PORT=8080
