@@ -20,7 +20,7 @@ public class AuditedStoredDocumentBatchOperationsService {
     @Autowired
     private AuditEntryService auditEntryService;
 
-    @Value("${batch.auditUserName}")
+    @Value("${spring.batch.job.auditUserName}")
     @Getter
     private String batchAuditUserName;
 

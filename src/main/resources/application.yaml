@@ -32,6 +32,12 @@ spring:
       max-idle: ${MAX_IDLE_DB_CONNECTIONS:25}
       max-wait: ${MAX_WAIT_DB_CONNECTIONS:10000} # Number of ms to wait before throwing an exception if no connection is available.
       test-on-borrow: ${TEST_ON_BORROW_DB_CONNECTION:true} # Validate the connection before borrowing it from the pool.
+  batch:
+    job:
+      enabled: ${ENABLE_TTL:true}
+      ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
+      auditUserName: "(admin)"
+
 
 dm:
   multipart:
@@ -116,6 +122,4 @@ toggle:
   ttl: ${ENABLE_TTL:true}
 
 
-batch:
-    ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
-    auditUserName: "(admin)"
+

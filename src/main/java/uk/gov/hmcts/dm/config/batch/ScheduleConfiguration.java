@@ -24,7 +24,7 @@ public class ScheduleConfiguration {
     @Autowired
     private Job job;
 
-    @Scheduled(cron = "${batch.ttlCronExpression}")
+    @Scheduled(cron = "${spring.batch.job.ttlCronExpression}")
     public void perform() throws JobExecutionAlreadyRunningException, JobRestartException,
         JobInstanceAlreadyCompleteException, JobParametersInvalidException {
 
