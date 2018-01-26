@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.service.batch;
 
-import com.sun.tools.javac.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -11,6 +10,9 @@ import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditEntryService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by pawel on 24/01/2018.
@@ -63,7 +65,7 @@ public class AuditedStoredDocumentBatchOperationsServiceTests {
         StoredDocument storedDocument2 = new StoredDocument();
         storedDocument2.setHardDeleted(false);
         Mockito.when(storedDocumentService.findAllExpiredStoredDocuments()).thenReturn(
-            List.of(storedDocument1, storedDocument2)
+            Stream.of(storedDocument1, storedDocument2).collect(Collectors.toList())
         );
         service.hardDeleteAllExpiredStoredDocuments();
         Mockito.verify(storedDocumentService, Mockito.times(1)).findAllExpiredStoredDocuments();
