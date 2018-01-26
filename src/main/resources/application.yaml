@@ -54,6 +54,8 @@ logging:
   level:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:INFO}
+    org.springframework.transaction: DEBUG
+    org.springframework.orm.jpa: DEBUG
 
 liquibase:
   enabled: true
@@ -116,3 +118,4 @@ toggle:
 
 batch:
     ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
+    auditUserName: "(admin)"

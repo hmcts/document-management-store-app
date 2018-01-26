@@ -9,7 +9,7 @@
             </column>
         </addColumn>
     </changeSet>
-    <changeSet author="pawel (generated)" id="1516808782301-3">
-        <addNotNullConstraint tableName="storeddocument" columnName="harddeleted" defaultNullValue="false"/>
+    <changeSet author="pawel (generated)" id="1516808782301-4">
+        <addNotNullConstraint tableName="storeddocument" columnName="harddeleted" columnDataType="BOOLEAN" defaultNullValue="false"/>
     </changeSet>
 </databaseChangeLog>

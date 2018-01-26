@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,5 +25,7 @@ public interface StoredDocumentRepository extends PagingAndSortingRepository<Sto
 
 
     Page<StoredDocument> findByCreatedBy(String creator, @NonNull Pageable pageable);
+
+    List<StoredDocument> findByTtlLessThanAndHardDeleted(Date date, Boolean hardDeleted);
 
 }

@@ -5,6 +5,7 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +23,7 @@ public class BatchConfiguration {
     @Bean
     public JobRepository jobRepository(
          DataSource dataSource,
-         PlatformTransactionManager transactionManager) {
+         @Qualifier("transactionManager") PlatformTransactionManager transactionManager) {
 
         try {
             JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
