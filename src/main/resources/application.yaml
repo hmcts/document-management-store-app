@@ -36,7 +36,7 @@ spring:
     job:
       enabled: ${ENABLE_TTL:true}
       ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
-      auditUserName: "(admin)"
+      auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
 
 
 dm:
