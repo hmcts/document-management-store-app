@@ -32,6 +32,12 @@ spring:
       max-idle: ${MAX_IDLE_DB_CONNECTIONS:25}
       max-wait: ${MAX_WAIT_DB_CONNECTIONS:10000} # Number of ms to wait before throwing an exception if no connection is available.
       test-on-borrow: ${TEST_ON_BORROW_DB_CONNECTION:true} # Validate the connection before borrowing it from the pool.
+  batch:
+    job:
+      enabled: ${ENABLE_TTL:true}
+      ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
+      auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
+
 
 dm:
   multipart:
@@ -54,6 +60,8 @@ logging:
   level:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:INFO}
+    org.springframework.transaction: DEBUG
+    org.springframework.orm.jpa: DEBUG
 
 liquibase:
   enabled: true
@@ -112,3 +120,6 @@ toggle:
   includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
   deleteenabled: ${ENABLE_DELETE:true}
   ttl: ${ENABLE_TTL:true}
+
+
+

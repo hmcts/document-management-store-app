@@ -256,4 +256,10 @@ public class StoredDocumentServiceTests {
         storedDocumentService.updateStoredDocument(storedDocument, command);
         Assert.assertNull(storedDocument.getTtl());
     }
+
+    @Test
+    public void testFindAllExpiredStoredDocuments() {
+        storedDocumentService.findAllExpiredStoredDocuments();
+        verify(storedDocumentRepository, times(1)).findByTtlLessThanAndHardDeleted(any(), any());
+    }
 }

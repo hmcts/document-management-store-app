@@ -4,6 +4,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContent;
@@ -12,12 +13,12 @@ import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.sql.rowset.serial.SerialBlob;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -242,7 +243,10 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         List<StoredDocument> storedDocuments = files.stream().map(f -> new StoredDocument()).collect(Collectors.toList());
 
-        when(this.auditedStoredDocumentOperationsService.createStoredDocuments(files)).thenReturn(storedDocuments);
+        UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
+        uploadDocumentsCommand.setFiles(files);
+
+        when(this.auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand)).thenReturn(storedDocuments);
 
         restActions
             .withAuthorizedUser("userId")
@@ -261,7 +265,9 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         List<StoredDocument> storedDocuments = files.stream().map(f -> new StoredDocument()).collect(Collectors.toList());
 
-        when(this.auditedStoredDocumentOperationsService.createStoredDocuments(files)).thenReturn(storedDocuments);
+        UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
+        uploadDocumentsCommand.setFiles(files);
+        when(this.auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand)).thenReturn(storedDocuments);
 
         restActions
             .withAuthorizedUser("userId")

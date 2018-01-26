@@ -6,7 +6,7 @@ import org.apache.pdfbox.rendering.PDFRenderer;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.InputStream;
 
 public class PdfThumbnailCreator extends AbstractFileSpecificThumbnailCreator {
     public BufferedImage getImg(InputStream pdf) {
@@ -14,7 +14,7 @@ public class PdfThumbnailCreator extends AbstractFileSpecificThumbnailCreator {
             PDDocument document = PDDocument.load(pdf);
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
-            return ImageThumbnailCreator.resizeImage(bufferedImage);
+            return new BufferedImageResizer().resizeImage(bufferedImage);
         } catch (Exception e) {
             throw new CantCreateThumbnailException(e);
         }

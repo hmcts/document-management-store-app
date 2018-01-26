@@ -16,6 +16,7 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -101,6 +102,7 @@ public class StoredDocumentService {
     public void deleteDocument(StoredDocument storedDocument, boolean permanent) {
         storedDocument.setDeleted(true);
         if (permanent) {
+            storedDocument.setHardDeleted(true);
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
                 documentContentRepository.delete(documentContentVersion.getDocumentContent());
                 documentContentVersion.setDocumentContent(null);
@@ -116,5 +118,9 @@ public class StoredDocumentService {
             save(storedDocument);
         }
 
+    }
+
+    public List<StoredDocument> findAllExpiredStoredDocuments() {
+        return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
     }
 }

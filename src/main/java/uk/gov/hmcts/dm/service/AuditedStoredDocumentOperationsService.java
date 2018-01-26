@@ -43,14 +43,6 @@ public class AuditedStoredDocumentOperationsService {
         return storedDocuments;
     }
 
-    public List<StoredDocument> createStoredDocuments(List<MultipartFile> files) {
-        UploadDocumentsCommand command = new UploadDocumentsCommand();
-        command.setFiles(files);
-        return createStoredDocuments(command);
-    }
-
-
-
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'READ')")
     public StoredDocument readStoredDocument(UUID id) {
         StoredDocument storedDocument = storedDocumentService.findOne(id);
@@ -104,9 +96,14 @@ public class AuditedStoredDocumentOperationsService {
 
     @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
     public void deleteStoredDocument(StoredDocument storedDocument, boolean permanent) {
-        if (storedDocument != null && !storedDocument.isDeleted()) {
-            storedDocumentService.deleteDocument(storedDocument, permanent);
-            auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
+        if (storedDocument != null) {
+            if (permanent && !storedDocument.isHardDeleted()) {
+                storedDocumentService.deleteDocument(storedDocument, permanent);
+                auditEntryService.createAndSaveEntry(storedDocument, AuditActions.HARD_DELETED);
+            } else if (!permanent && !storedDocument.isDeleted()) {
+                storedDocumentService.deleteDocument(storedDocument, permanent);
+                auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
+            }
         }
     }
 

@@ -60,4 +60,24 @@ public class SearchServiceTests {
         searchService.findStoredDocumentsByMetadata(null, null);
     }
 
+
+    @Test
+    public void testSearchByCreator() {
+
+        List<StoredDocument> documents = Arrays.asList(
+            new StoredDocument(),
+            new StoredDocument(),
+            new StoredDocument());
+
+        Pageable pageable = new PageRequest(0, 2);
+
+        Page<StoredDocument> mockedPage = new PageImpl<>(documents, pageable, 3);
+
+        when(this.storedDocumentRepository.findByCreatedBy("creatorX", pageable)).thenReturn(mockedPage);
+
+        Page<StoredDocument> page = searchService.findStoredDocumentsByCreator("creatorX", pageable);
+
+        Assert.assertEquals(mockedPage, page);
+    }
+
 }

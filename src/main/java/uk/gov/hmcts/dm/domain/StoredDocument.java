@@ -1,6 +1,8 @@
 package uk.gov.hmcts.dm.domain;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,8 +13,8 @@ import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 
-import java.util.*;
 import javax.persistence.*;
+import java.util.*;
 
 /**
  * Created by pawel on 22/05/2017.
@@ -50,6 +52,10 @@ public class StoredDocument implements RolesAware {
     @Getter
     @Setter
     private boolean deleted;
+
+    @Getter
+    @Setter
+    private boolean hardDeleted;
 
     @ManyToOne
     @Getter
@@ -95,7 +101,7 @@ public class StoredDocument implements RolesAware {
     }
 
     public StoredDocument(UUID id, String createdBy, String lastModifiedBy, Date modifiedOn, Date createdOn,
-                          boolean deleted, Folder folder, List<DocumentContentVersion> documentContentVersions,
+                          boolean deleted, boolean hardDeleted, Folder folder, List<DocumentContentVersion> documentContentVersions,
                           Set<StoredDocumentAuditEntry> auditEntries,
                           Classifications classification, Set<String> roles, Map<String, String> metadata, Date ttl) {
         setId(id);
@@ -104,6 +110,7 @@ public class StoredDocument implements RolesAware {
         setModifiedOn(modifiedOn);
         setCreatedOn(createdOn);
         setDeleted(deleted);
+        setHardDeleted(hardDeleted);
         setFolder(folder);
         setDocumentContentVersions(documentContentVersions);
         setAuditEntries(auditEntries);

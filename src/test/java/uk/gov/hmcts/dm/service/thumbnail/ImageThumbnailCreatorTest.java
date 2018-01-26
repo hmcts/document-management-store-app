@@ -33,7 +33,7 @@ public class ImageThumbnailCreatorTest {
 
         BufferedImage resizedImage = imageResizeService.getImg(file);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ThumbnailWidths.WIDTH_256.getWidth()));
         assertThat(resizedImage.getHeight(), equalTo(194));
     }
 
@@ -43,7 +43,7 @@ public class ImageThumbnailCreatorTest {
 
         BufferedImage resizedImage = imageResizeService.getImg(file);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ThumbnailWidths.WIDTH_256.getWidth()));
         assertThat(resizedImage.getHeight(), equalTo(194));
     }
 
@@ -53,7 +53,7 @@ public class ImageThumbnailCreatorTest {
 
         BufferedImage resizedImage = imageResizeService.getImg(file);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ThumbnailWidths.WIDTH_256.getWidth()));
         assertThat(resizedImage.getHeight(), equalTo(204));
     }
 
@@ -63,7 +63,7 @@ public class ImageThumbnailCreatorTest {
 
         BufferedImage resizedImage = imageResizeService.getImg(file);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ThumbnailWidths.WIDTH_256.getWidth()));
         assertThat(resizedImage.getHeight(), equalTo(256));
     }
 

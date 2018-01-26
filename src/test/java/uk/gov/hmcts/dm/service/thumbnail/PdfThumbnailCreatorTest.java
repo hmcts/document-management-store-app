@@ -29,7 +29,7 @@ public class PdfThumbnailCreatorTest {
 
         BufferedImage resizedImage = pdfThumbnailService.getImg(file);
 
-        assertThat(resizedImage.getWidth(), equalTo(ImageThumbnailCreator.DEFAULT_WIDTH));
+        assertThat(resizedImage.getWidth(), equalTo(ThumbnailWidths.WIDTH_256.getWidth()));
     }
 
     @Test

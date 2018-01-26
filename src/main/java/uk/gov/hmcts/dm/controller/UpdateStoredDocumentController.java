@@ -31,7 +31,8 @@ public class UpdateStoredDocumentController {
     @Autowired
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @PatchMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
+    @PatchMapping(value = "{id}",
+        consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Updates document instance (ex. ttl)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns representation of the new state")
