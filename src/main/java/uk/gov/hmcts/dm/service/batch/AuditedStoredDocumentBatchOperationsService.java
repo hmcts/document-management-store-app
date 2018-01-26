@@ -34,7 +34,7 @@ public class AuditedStoredDocumentBatchOperationsService {
     public void hardDeleteAllExpiredStoredDocuments() {
         storedDocumentService
             .findAllExpiredStoredDocuments()
-            .forEach( this::hardDeleteStoredDocument );
+            .forEach(this::hardDeleteStoredDocument);
 
     }
 
