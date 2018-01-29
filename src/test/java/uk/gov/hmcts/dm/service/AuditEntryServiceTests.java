@@ -6,13 +6,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
