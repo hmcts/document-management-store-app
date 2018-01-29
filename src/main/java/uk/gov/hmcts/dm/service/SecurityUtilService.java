@@ -43,8 +43,7 @@ public class SecurityUtilService {
     private HttpServletRequest getCurrentRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
-            HttpServletRequest servletRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
-            return servletRequest;
+            return ((ServletRequestAttributes) requestAttributes).getRequest();
         }
         return null;
     }
