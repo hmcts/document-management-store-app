@@ -40,9 +40,6 @@ public class AuditEntryServiceTests {
 
     @Test
     public void testCreateAndSaveEntryForStoredDocument() {
-        SecurityContext securityContext = mock(SecurityContext.class);
-        Authentication authentication = mock(Authentication.class);
-        ServiceDetails serviceAndUserDetails = mock(ServiceDetails.class);
 
         when(securityUtilService.getUserId()).thenReturn("x");
         when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("s");

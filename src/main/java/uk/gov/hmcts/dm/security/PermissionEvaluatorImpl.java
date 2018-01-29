@@ -43,8 +43,9 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
                     (CreatorAware)targetDomainObject,
                     Permissions.valueOf((String)permissionString),
                     securityUtilService.getUserId(),
-                    securityUtilService.getUserRoles() != null ?
-                        Arrays.stream(securityUtilService.getUserRoles()).collect(Collectors.toSet()) : Collections.EMPTY_SET,
+                    securityUtilService.getUserRoles() != null
+                        ? Arrays.stream(securityUtilService.getUserRoles()).collect(Collectors.toSet())
+                        : Collections.EMPTY_SET,
                     new HashSet<>(Arrays.asList(caseWorkerRoles)));
         }
         return result;

@@ -52,7 +52,7 @@ public class Helper {
 
     public static HttpHeaders getHeaders(String user) {
         final HttpHeaders headers = new HttpHeaders();
-        if (user.equals("userCaseWorker")) {
+        if ("userCaseWorker".equals(user)) {
             headers.putAll(
                 ImmutableMap.of(
                     "ServiceAuthorization", Collections.singletonList("sscs"),
