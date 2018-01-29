@@ -22,6 +22,7 @@ import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.SearchService;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
 
 import javax.validation.Valid;
 
@@ -37,6 +38,9 @@ public class StoredDocumentSearchController {
 
     @Autowired
     private SearchService searchService;
+
+    @Autowired
+    private SecurityUtilService securityUtilService;
 
     @PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Search stored documents using metadata.")
@@ -68,9 +72,7 @@ public class StoredDocumentSearchController {
             Pageable pageable,
             PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByCreator(authentication.getName(), pageable).map(StoredDocumentHalResource::new);
+        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByCreator(securityUtilService.getUserId(), pageable).map(StoredDocumentHalResource::new);
 
         return ResponseEntity
                 .ok()

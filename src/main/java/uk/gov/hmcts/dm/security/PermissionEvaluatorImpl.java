@@ -14,6 +14,7 @@ import uk.gov.hmcts.dm.service.SecurityUtilService;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,8 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
                     (CreatorAware)targetDomainObject,
                     Permissions.valueOf((String)permissionString),
                     securityUtilService.getUserId(),
-                    Arrays.stream(securityUtilService.getUserRoles()).collect(Collectors.toSet()),
+                    securityUtilService.getUserRoles() != null ?
+                        Arrays.stream(securityUtilService.getUserRoles()).collect(Collectors.toSet()) : Collections.EMPTY_SET,
                     new HashSet<>(Arrays.asList(caseWorkerRoles)));
         }
         return result;
