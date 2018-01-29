@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import java.util.Date;
 import java.util.List;
@@ -62,11 +63,15 @@ public class AuditEntryService {
         return documentContentVersionAuditEntry;
     }
 
-    private void populateCommonFields(@NonNull AuditEntry auditEntry,
-                                      @NonNull AuditActions action,
-                                      @NonNull String username) {
+    private void populateCommonFields(AuditEntry auditEntry, AuditActions action) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String serviceName = null;
+        if (authentication != null) {
+            ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
+            serviceName = userDetails.getUsername();
+        }
         auditEntry.setAction(action);
-        auditEntry.setUsername(username);
+        auditEntry.setServiceName(serviceName);
         auditEntry.setRecordedDateTime(new Date());
     }
 

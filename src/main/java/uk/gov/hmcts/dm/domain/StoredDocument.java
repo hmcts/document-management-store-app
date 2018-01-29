@@ -4,9 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.CollectionUtils;
@@ -33,13 +31,19 @@ public class StoredDocument implements RolesAware {
 
     @Getter
     @Setter
-    @CreatedBy
     private String createdBy;
 
     @Getter
     @Setter
-    @LastModifiedBy
+    private String createdByService;
+
+    @Getter
+    @Setter
     private String lastModifiedBy;
+
+    @Getter
+    @Setter
+    private String lastModifiedByService;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -100,13 +104,16 @@ public class StoredDocument implements RolesAware {
         documentContentVersions = new ArrayList<>();
     }
 
-    public StoredDocument(UUID id, String createdBy, String lastModifiedBy, Date modifiedOn, Date createdOn,
+    public StoredDocument(UUID id, String createdBy, String createdByService, String lastModifiedBy, String lastModifiedByService,
+                          Date modifiedOn, Date createdOn,
                           boolean deleted, boolean hardDeleted, Folder folder, List<DocumentContentVersion> documentContentVersions,
                           Set<StoredDocumentAuditEntry> auditEntries,
                           Classifications classification, Set<String> roles, Map<String, String> metadata, Date ttl) {
         setId(id);
         setCreatedBy(createdBy);
+        setCreatedByService(createdByService);
         this.lastModifiedBy = lastModifiedBy;
+        this.setLastModifiedByService(lastModifiedByService);
         setModifiedOn(modifiedOn);
         setCreatedOn(createdOn);
         setDeleted(deleted);

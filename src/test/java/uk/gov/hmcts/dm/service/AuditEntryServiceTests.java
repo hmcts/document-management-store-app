@@ -10,6 +10,7 @@ import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,12 +38,15 @@ public class AuditEntryServiceTests {
 
     @Test
     public void testCreateAndSaveEntryForStoredDocument() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        ServiceDetails serviceAndUserDetails = mock(ServiceDetails.class);
 
         when(securityUtilService.getCurrentlyAuthenticatedUsername()).thenReturn("x");
 
         StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(new StoredDocument(), AuditActions.READ);
 
-        Assert.assertEquals("x", entry.getUsername());
+        Assert.assertEquals("x", entry.getServiceName());
 
         verify(storedDocumentAuditEntryRepository, times(1)).save(any(StoredDocumentAuditEntry.class));
     }

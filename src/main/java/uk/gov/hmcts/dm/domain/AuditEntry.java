@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Date;
-import java.util.UUID;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.UUID;
 
 
 /**
@@ -34,8 +34,12 @@ public abstract class AuditEntry {
 
     @Getter
     @Setter
-    @NotNull
     private String username;
+
+    @Getter
+    @Setter
+    @NotNull
+    private String serviceName;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
