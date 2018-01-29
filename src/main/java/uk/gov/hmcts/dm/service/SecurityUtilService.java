@@ -18,15 +18,19 @@ import javax.transaction.Transactional;
 @Service
 public class SecurityUtilService {
 
+    public static final String USER_ID_HEADER = "user-id";
+    public static final String USER_ROLES_HEADER = "user-roles";
+
+
     public String getUserId() {
         HttpServletRequest request = getCurrentRequest();
-        return request != null ? request.getHeader("user-id") : null;
+        return request != null ? request.getHeader(USER_ID_HEADER) : null;
     }
 
     public String[] getUserRoles() {
         HttpServletRequest request = getCurrentRequest();
-        return request != null && request.getHeader("user-roles") != null
-            ? request.getHeader("user-roles").split(",") : null;
+        return request != null && request.getHeader(USER_ROLES_HEADER) != null
+            ? request.getHeader(USER_ROLES_HEADER).split(",") : null;
     }
 
     public String getCurrentlyAuthenticatedServiceName() {

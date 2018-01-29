@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
 
 public class RestActions {
     private final HttpHeaders httpHeaders = new HttpHeaders();
@@ -41,7 +42,7 @@ public class RestActions {
     }
 
     public RestActions withAuthorizedUser(String userId) {
-        httpHeaders.add("user-id", userId);
+        httpHeaders.add(USER_ID_HEADER, userId);
         return this;
     }
 
