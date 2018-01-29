@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
@@ -42,11 +44,13 @@ public class AuditEntryServiceTests {
         Authentication authentication = mock(Authentication.class);
         ServiceDetails serviceAndUserDetails = mock(ServiceDetails.class);
 
-        when(securityUtilService.getCurrentlyAuthenticatedUsername()).thenReturn("x");
+        when(securityUtilService.getUserId()).thenReturn("x");
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("s");
 
         StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(new StoredDocument(), AuditActions.READ);
 
-        Assert.assertEquals("x", entry.getServiceName());
+        Assert.assertEquals("x", entry.getUsername());
+        Assert.assertEquals("s", entry.getServiceName());
 
         verify(storedDocumentAuditEntryRepository, times(1)).save(any(StoredDocumentAuditEntry.class));
     }
@@ -54,7 +58,8 @@ public class AuditEntryServiceTests {
     @Test
     public void testCreateAndSaveEntryForDocumentContentVersion() {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        when(securityUtilService.getCurrentlyAuthenticatedUsername()).thenReturn("x");
+        when(securityUtilService.getUserId()).thenReturn("x");
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("s");
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
         verify(documentContentVersionAuditEntryRepository, times(1)).save(any(DocumentContentVersionAuditEntry.class));
     }

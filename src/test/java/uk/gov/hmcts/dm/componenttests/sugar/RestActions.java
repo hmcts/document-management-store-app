@@ -13,7 +13,6 @@ import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
-import uk.gov.hmcts.reform.auth.checker.core.user.UserRequestAuthorizer;
 
 import java.util.List;
 import java.util.UUID;
@@ -42,9 +41,7 @@ public class RestActions {
     }
 
     public RestActions withAuthorizedUser(String userId) {
-        String token = UUID.randomUUID().toString();
-        userRequestAuthorizer.registerToken(token, userId);
-        httpHeaders.add(UserRequestAuthorizer.AUTHORISATION, token);
+        httpHeaders.add("user-id", userId);
         return this;
     }
 

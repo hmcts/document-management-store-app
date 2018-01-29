@@ -5,16 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.gov.hmcts.dm.repository.RepositoryFinder;
 import uk.gov.hmcts.dm.security.domain.CreatorAware;
 import uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -23,6 +19,9 @@ import java.util.stream.Collectors;
 
 @Component
 public class PermissionEvaluatorImpl implements PermissionEvaluator {
+
+    @Autowired
+    private SecurityUtilService securityUtilService;
 
     @Autowired
     private DomainPermissionEvaluator domainPermissionEvaluator;
@@ -38,13 +37,12 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
                                  @NotNull Object targetDomainObject,
                                  @NotNull Object permissionString) {
         boolean result = false;
-        HttpServletRequest request = getCurrentRequest();
         if (targetDomainObject instanceof CreatorAware) {
             result = domainPermissionEvaluator.hasPermission(
                     (CreatorAware)targetDomainObject,
                     Permissions.valueOf((String)permissionString),
-                    request != null ? request.getHeader("user-id") : null,
-                    authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet()),
+                    securityUtilService.getUserId(),
+                    Arrays.stream(securityUtilService.getUserRoles()).collect(Collectors.toSet()),
                     new HashSet<>(Arrays.asList(caseWorkerRoles)));
         }
         return result;
@@ -69,14 +67,6 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
         return result;
     }
 
-    public HttpServletRequest getCurrentRequest() {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            HttpServletRequest servletRequest = ((ServletRequestAttributes) requestAttributes).getRequest();
-            return servletRequest;
-        }
-        return null;
-    }
 
 
 }

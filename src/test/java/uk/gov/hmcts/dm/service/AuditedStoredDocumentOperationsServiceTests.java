@@ -68,13 +68,13 @@ public class AuditedStoredDocumentOperationsServiceTests {
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.READ);
     }
 
-    @Test
-    public void testCreateStoredDocument() {
-        StoredDocument storedDocument = new StoredDocument();
-        auditedStoredDocumentOperationsService.createStoredDocument(storedDocument);
-        verify(storedDocumentService, times(1)).save(storedDocument);
-        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.CREATED);
-    }
+//    @Test
+//    public void testCreateStoredDocument() {
+//        StoredDocument storedDocument = new StoredDocument();
+//        auditedStoredDocumentOperationsService.createStoredDocument(storedDocument);
+//        verify(storedDocumentService, times(1)).save(storedDocument);
+//        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.CREATED);
+//    }
 
     @Test
     public void testAddDocumentVersion() {

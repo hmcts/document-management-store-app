@@ -37,6 +37,7 @@ spring:
       enabled: ${ENABLE_TTL:true}
       ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
+      auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
 
 
 dm:

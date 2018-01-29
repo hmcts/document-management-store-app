@@ -64,6 +64,9 @@ public class StoredDocumentServiceTests {
     @Mock
     ToggleConfiguration toggleConfiguration;
 
+    @Mock
+    SecurityUtilService securityUtilService;
+
     @InjectMocks
     StoredDocumentService storedDocumentService;
 

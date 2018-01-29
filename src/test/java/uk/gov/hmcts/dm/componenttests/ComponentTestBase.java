@@ -23,7 +23,7 @@ import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.service.*;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.AuthCheckerServiceAndUserFilter;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.AuthCheckerServiceOnlyFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -60,7 +60,7 @@ public abstract class ComponentTestBase {
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
     @Autowired
-    protected AuthCheckerServiceAndUserFilter filter;
+    protected AuthCheckerServiceOnlyFilter filter;
 
     @MockBean
     protected FolderService folderService;

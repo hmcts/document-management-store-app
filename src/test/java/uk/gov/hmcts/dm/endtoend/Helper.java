@@ -52,8 +52,24 @@ public class Helper {
 
     public static HttpHeaders getHeaders(String user) {
         final HttpHeaders headers = new HttpHeaders();
-        headers.putAll(ImmutableMap.of("Authorization", Collections.singletonList(user),
-                "ServiceAuthorization", Collections.singletonList("sscs")));
+        if (user.equals("userCaseWorker")) {
+            headers.putAll(
+                ImmutableMap.of(
+                    "ServiceAuthorization", Collections.singletonList("sscs"),
+                    "user-id", Collections.singletonList(user),
+                    "user-roles", Collections.singletonList("caseworker-probate")
+                )
+            );
+        } else {
+            headers.putAll(
+                ImmutableMap.of(
+                    "ServiceAuthorization", Collections.singletonList("sscs"),
+                    "user-id", Collections.singletonList(user),
+                    "user-roles", Collections.singletonList("citizen")
+                )
+            );
+        }
+
         return headers;
     }
 }

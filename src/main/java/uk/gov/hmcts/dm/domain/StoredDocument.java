@@ -4,7 +4,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.util.CollectionUtils;
@@ -35,6 +37,7 @@ public class StoredDocument implements RolesAware {
 
     @Getter
     @Setter
+    @CreatedBy
     private String createdByService;
 
     @Getter
@@ -43,6 +46,7 @@ public class StoredDocument implements RolesAware {
 
     @Getter
     @Setter
+    @LastModifiedBy
     private String lastModifiedByService;
 
     @LastModifiedDate

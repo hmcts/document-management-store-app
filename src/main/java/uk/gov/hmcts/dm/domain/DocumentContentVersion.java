@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,6 +49,7 @@ public class DocumentContentVersion implements RolesAware {
 
     @Getter
     @Setter
+    @CreatedBy
     private String createdByService;
 
     @CreatedDate
@@ -75,12 +77,13 @@ public class DocumentContentVersion implements RolesAware {
     @Setter
     private Long size;
 
-    public DocumentContentVersion(StoredDocument item, MultipartFile file, Blob data) {
+    public DocumentContentVersion(StoredDocument item, MultipartFile file, Blob data, String userId) {
         this.mimeType = file.getContentType();
         setOriginalDocumentName(file.getOriginalFilename());
         this.size = file.getSize();
         this.documentContent = new DocumentContent(this, data);
         this.storedDocument = item;
+        this.setCreatedBy(userId);
     }
 
     public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService,

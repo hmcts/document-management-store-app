@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import java.util.Date;
 import java.util.List;
@@ -34,14 +33,18 @@ public class AuditEntryService {
 
     public StoredDocumentAuditEntry createAndSaveEntry(StoredDocument storedDocument,
                                                        AuditActions action) {
-        return createAndSaveEntry(storedDocument, action, securityUtilService.getCurrentlyAuthenticatedUsername());
+        return createAndSaveEntry(
+            storedDocument,
+            action,
+            securityUtilService.getUserId(),
+            securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
 
     public StoredDocumentAuditEntry createAndSaveEntry(StoredDocument storedDocument,
                                                        AuditActions action,
-                                                       String username) {
+                                                       String username, String serviceName) {
         StoredDocumentAuditEntry storedDocumentAuditEntry = new StoredDocumentAuditEntry();
-        populateCommonFields(storedDocumentAuditEntry, action, username);
+        populateCommonFields(storedDocumentAuditEntry, action, username, serviceName);
         storedDocumentAuditEntry.setStoredDocument(storedDocument);
         storedDocumentAuditEntryRepository.save(storedDocumentAuditEntry);
         return storedDocumentAuditEntry;
@@ -49,28 +52,28 @@ public class AuditEntryService {
 
     public StoredDocumentAuditEntry createAndSaveEntry(DocumentContentVersion documentContentVersion,
                                                        AuditActions action) {
-        return createAndSaveEntry(documentContentVersion, action, securityUtilService.getCurrentlyAuthenticatedUsername());
+        return createAndSaveEntry(documentContentVersion, action,
+            securityUtilService.getUserId(), securityUtilService.getCurrentlyAuthenticatedServiceName()
+        );
     }
 
     public DocumentContentVersionAuditEntry createAndSaveEntry(DocumentContentVersion documentContentVersion,
                                                                AuditActions action,
-                                                               String username) {
+                                                               String username, String serviceName) {
         DocumentContentVersionAuditEntry documentContentVersionAuditEntry = new DocumentContentVersionAuditEntry();
-        populateCommonFields(documentContentVersionAuditEntry, action, username);
+        populateCommonFields(documentContentVersionAuditEntry, action, username, serviceName);
         documentContentVersionAuditEntry.setDocumentContentVersion(documentContentVersion);
         documentContentVersionAuditEntry.setStoredDocument(documentContentVersion.getStoredDocument());
         documentContentVersionAuditEntryRepository.save(documentContentVersionAuditEntry);
         return documentContentVersionAuditEntry;
     }
 
-    private void populateCommonFields(AuditEntry auditEntry, AuditActions action) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String serviceName = null;
-        if (authentication != null) {
-            ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
-            serviceName = userDetails.getUsername();
-        }
+    private void populateCommonFields(@NonNull AuditEntry auditEntry,
+                                      @NonNull AuditActions action,
+                                      String username,
+                                      @NonNull String serviceName) {
         auditEntry.setAction(action);
+        auditEntry.setUsername(username);
         auditEntry.setServiceName(serviceName);
         auditEntry.setRecordedDateTime(new Date());
     }
