@@ -60,6 +60,7 @@ public class StoredDocumentService {
             StoredDocument storedDocument = new StoredDocument();
             storedDocument.setFolder(folder);
             storedDocument.setCreatedBy(userId);
+            storedDocument.setLastModifiedBy(userId);
             storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, blobCreator.createBlob(aFile), userId));
             storedDocumentRepository.save(storedDocument);
             return storedDocument;
@@ -76,6 +77,7 @@ public class StoredDocumentService {
         return uploadDocumentsCommand.getFiles().stream().map(file -> {
             StoredDocument document = new StoredDocument();
             document.setCreatedBy(userId);
+            document.setLastModifiedBy(userId);
             document.setClassification(uploadDocumentsCommand.getClassification());
             document.setRoles(uploadDocumentsCommand.getRoles() != null
                 ? uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
