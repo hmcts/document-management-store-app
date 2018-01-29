@@ -33,13 +33,21 @@ public class StoredDocument implements RolesAware {
 
     @Getter
     @Setter
-    @CreatedBy
     private String createdBy;
 
     @Getter
     @Setter
-    @LastModifiedBy
+    @CreatedBy
+    private String createdByService;
+
+    @Getter
+    @Setter
     private String lastModifiedBy;
+
+    @Getter
+    @Setter
+    @LastModifiedBy
+    private String lastModifiedByService;
 
     @LastModifiedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -100,13 +108,16 @@ public class StoredDocument implements RolesAware {
         documentContentVersions = new ArrayList<>();
     }
 
-    public StoredDocument(UUID id, String createdBy, String lastModifiedBy, Date modifiedOn, Date createdOn,
+    public StoredDocument(UUID id, String createdBy, String createdByService, String lastModifiedBy, String lastModifiedByService,
+                          Date modifiedOn, Date createdOn,
                           boolean deleted, boolean hardDeleted, Folder folder, List<DocumentContentVersion> documentContentVersions,
                           Set<StoredDocumentAuditEntry> auditEntries,
                           Classifications classification, Set<String> roles, Map<String, String> metadata, Date ttl) {
         setId(id);
         setCreatedBy(createdBy);
+        setCreatedByService(createdByService);
         this.lastModifiedBy = lastModifiedBy;
+        this.setLastModifiedByService(lastModifiedByService);
         setModifiedOn(modifiedOn);
         setCreatedOn(createdOn);
         setDeleted(deleted);

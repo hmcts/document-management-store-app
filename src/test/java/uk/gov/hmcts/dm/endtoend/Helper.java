@@ -9,6 +9,9 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
+import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ROLES_HEADER;
+
 public class Helper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -52,8 +55,24 @@ public class Helper {
 
     public static HttpHeaders getHeaders(String user) {
         final HttpHeaders headers = new HttpHeaders();
-        headers.putAll(ImmutableMap.of("Authorization", Collections.singletonList(user),
-                "ServiceAuthorization", Collections.singletonList("sscs")));
+        if ("userCaseWorker".equals(user)) {
+            headers.putAll(
+                ImmutableMap.of(
+                    "ServiceAuthorization", Collections.singletonList("sscs"),
+                    USER_ID_HEADER, Collections.singletonList(user),
+                    USER_ROLES_HEADER, Collections.singletonList("caseworker-probate")
+                )
+            );
+        } else {
+            headers.putAll(
+                ImmutableMap.of(
+                    "ServiceAuthorization", Collections.singletonList("sscs"),
+                    USER_ID_HEADER, Collections.singletonList(user),
+                    USER_ROLES_HEADER, Collections.singletonList("citizen")
+                )
+            );
+        }
+
         return headers;
     }
 }

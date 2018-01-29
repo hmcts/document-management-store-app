@@ -28,12 +28,6 @@ public class AuditedStoredDocumentOperationsService {
     @Autowired
     private AuditEntryService auditEntryService;
 
-    public StoredDocument createStoredDocument(StoredDocument storedDocument) {
-        storedDocumentService.save(storedDocument);
-        auditEntryService.createAndSaveEntry(storedDocument, AuditActions.CREATED);
-        return storedDocument;
-    }
-
     public List<StoredDocument> createStoredDocuments(UploadDocumentsCommand uploadDocumentsCommand) {
         List<StoredDocument> storedDocuments = storedDocumentService.saveItems(uploadDocumentsCommand);
         storedDocuments.forEach(storedDocument -> {

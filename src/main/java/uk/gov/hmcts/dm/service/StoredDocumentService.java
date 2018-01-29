@@ -43,6 +43,9 @@ public class StoredDocumentService {
     @Autowired
     private ToggleConfiguration toggleConfiguration;
 
+    @Autowired
+    private SecurityUtilService securityUtilService;
+
     public StoredDocument findOne(UUID id) {
         return storedDocumentRepository.findOne(id);
     }
@@ -52,10 +55,13 @@ public class StoredDocumentService {
     }
 
     public void saveItemsToBucket(Folder folder, List<MultipartFile> files)  {
+        String userId = securityUtilService.getUserId();
         List<StoredDocument> items = files.stream().map(aFile -> {
             StoredDocument storedDocument = new StoredDocument();
             storedDocument.setFolder(folder);
-            storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, blobCreator.createBlob(aFile)));
+            storedDocument.setCreatedBy(userId);
+            storedDocument.setLastModifiedBy(userId);
+            storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, blobCreator.createBlob(aFile), userId));
             storedDocumentRepository.save(storedDocument);
             return storedDocument;
 
@@ -67,8 +73,11 @@ public class StoredDocumentService {
     }
 
     public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand)  {
+        String userId = securityUtilService.getUserId();
         return uploadDocumentsCommand.getFiles().stream().map(file -> {
             StoredDocument document = new StoredDocument();
+            document.setCreatedBy(userId);
+            document.setLastModifiedBy(userId);
             document.setClassification(uploadDocumentsCommand.getClassification());
             document.setRoles(uploadDocumentsCommand.getRoles() != null
                 ? uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
@@ -79,7 +88,7 @@ public class StoredDocumentService {
             if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
-            document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, blobCreator.createBlob(file)));
+            document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, blobCreator.createBlob(file), userId));
             save(document);
             return document;
         }).collect(Collectors.toList());
@@ -93,7 +102,8 @@ public class StoredDocumentService {
     }
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument, file, blobCreator.createBlob(file));
+        String userId = securityUtilService.getUserId();
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument, file, blobCreator.createBlob(file), userId);
         documentContentVersionRepository.save(documentContentVersion);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
@@ -115,6 +125,7 @@ public class StoredDocumentService {
 
         if (!storedDocument.isDeleted()) {
             storedDocument.setTtl(command.getTtl());
+            storedDocument.setLastModifiedBy(securityUtilService.getUserId());
             save(storedDocument);
         }
 

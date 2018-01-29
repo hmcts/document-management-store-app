@@ -38,11 +38,13 @@ public class AuditEntryServiceTests {
     @Test
     public void testCreateAndSaveEntryForStoredDocument() {
 
-        when(securityUtilService.getCurrentlyAuthenticatedUsername()).thenReturn("x");
+        when(securityUtilService.getUserId()).thenReturn("x");
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("s");
 
         StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(new StoredDocument(), AuditActions.READ);
 
         Assert.assertEquals("x", entry.getUsername());
+        Assert.assertEquals("s", entry.getServiceName());
 
         verify(storedDocumentAuditEntryRepository, times(1)).save(any(StoredDocumentAuditEntry.class));
     }
@@ -50,7 +52,8 @@ public class AuditEntryServiceTests {
     @Test
     public void testCreateAndSaveEntryForDocumentContentVersion() {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        when(securityUtilService.getCurrentlyAuthenticatedUsername()).thenReturn("x");
+        when(securityUtilService.getUserId()).thenReturn("x");
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("s");
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
         verify(documentContentVersionAuditEntryRepository, times(1)).save(any(DocumentContentVersionAuditEntry.class));
     }

@@ -1,6 +1,9 @@
 package uk.gov.hmcts.dm.domain;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -10,12 +13,12 @@ import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 import uk.gov.hmcts.dm.utils.StringUtils;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Blob;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 /**
  * Created by pawel on 08/06/2017.
@@ -42,8 +45,12 @@ public class DocumentContentVersion implements RolesAware {
 
     @Getter
     @Setter
-    @CreatedBy
     private String createdBy;
+
+    @Getter
+    @Setter
+    @CreatedBy
+    private String createdByService;
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
@@ -70,15 +77,16 @@ public class DocumentContentVersion implements RolesAware {
     @Setter
     private Long size;
 
-    public DocumentContentVersion(StoredDocument item, MultipartFile file, Blob data) {
+    public DocumentContentVersion(StoredDocument item, MultipartFile file, Blob data, String userId) {
         this.mimeType = file.getContentType();
         setOriginalDocumentName(file.getOriginalFilename());
         this.size = file.getSize();
         this.documentContent = new DocumentContent(this, data);
         this.storedDocument = item;
+        this.setCreatedBy(userId);
     }
 
-    public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy,
+    public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService,
                                   Date createdOn, DocumentContent documentContent,
                                   StoredDocument storedDocument, Set<DocumentContentVersionAuditEntry> auditEntries, Long size) {
         this.id = id;
@@ -86,6 +94,7 @@ public class DocumentContentVersion implements RolesAware {
         setOriginalDocumentName(originalDocumentName);
         this.createdBy = createdBy;
         setCreatedOn(createdOn);
+        setCreatedByService(createdByService);
         this.documentContent = documentContent;
         this.storedDocument = storedDocument;
         this.auditEntries = auditEntries;

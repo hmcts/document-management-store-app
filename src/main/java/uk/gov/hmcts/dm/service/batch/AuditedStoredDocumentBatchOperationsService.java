@@ -24,10 +24,18 @@ public class AuditedStoredDocumentBatchOperationsService {
     @Getter
     private String batchAuditUserName;
 
+    @Value("${spring.batch.job.auditServiceName}")
+    @Getter
+    private String batchAuditServiceName;
+
     public void hardDeleteStoredDocument(StoredDocument storedDocument) {
         if (storedDocument != null && !storedDocument.isHardDeleted()) {
             storedDocumentService.deleteDocument(storedDocument, true);
-            auditEntryService.createAndSaveEntry(storedDocument, AuditActions.HARD_DELETED, batchAuditUserName);
+            auditEntryService.createAndSaveEntry(
+                storedDocument,
+                AuditActions.HARD_DELETED,
+                batchAuditUserName,
+                batchAuditServiceName);
         }
     }
 

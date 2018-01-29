@@ -17,13 +17,13 @@ public class DomainPermissionEvaluator {
 
     public boolean hasPermission(@NonNull final CreatorAware creatorAware,
                                  @NonNull final Permissions permission,
-                                 @NonNull final String authenticatedUserId,
+                                 final String authenticatedUserId,
                                  @NonNull final Collection<String> authenticatedUserRoles,
                                  @NonNull final Collection<String> caseWorkerRoles) {
 
         boolean result = false;
 
-        if (authenticatedUserId.equals(creatorAware.getCreatedBy())) {
+        if (authenticatedUserId != null && authenticatedUserId.equals(creatorAware.getCreatedBy())) {
             result = true;
         }
 

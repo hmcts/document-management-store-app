@@ -13,12 +13,12 @@ import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
-import uk.gov.hmcts.reform.auth.checker.core.user.UserRequestAuthorizer;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
 
 public class RestActions {
     private final HttpHeaders httpHeaders = new HttpHeaders();
@@ -42,9 +42,7 @@ public class RestActions {
     }
 
     public RestActions withAuthorizedUser(String userId) {
-        String token = UUID.randomUUID().toString();
-        userRequestAuthorizer.registerToken(token, userId);
-        httpHeaders.add(UserRequestAuthorizer.AUTHORISATION, token);
+        httpHeaders.add(USER_ID_HEADER, userId);
         return this;
     }
 
