@@ -3,9 +3,9 @@ version: '2.1'
 
 services:
 
-  em-viewer-web:
-    ports:
-     - 8084:8080
+#  em-viewer-web:
+#    ports:
+#     - 8084:8080
 
   document-management-store-api-gateway-web:
     ports:
