@@ -15,6 +15,8 @@ public class TestConfiguration {
                                                                  AuthenticationManager authenticationManager) {
         AuthCheckerServiceOnlyFilter filter = new AuthCheckerServiceOnlyFilter(serviceRequestAuthorizer);
         filter.setAuthenticationManager(authenticationManager);
+        filter.setCheckForPrincipalChanges(true);
+        filter.setInvalidateSessionOnPrincipalChange(true);
         return filter;
     }
 
