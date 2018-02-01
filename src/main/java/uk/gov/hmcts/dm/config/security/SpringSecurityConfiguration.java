@@ -12,6 +12,8 @@ import uk.gov.hmcts.reform.auth.checker.core.RequestAuthorizer;
 import uk.gov.hmcts.reform.auth.checker.core.service.Service;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.AuthCheckerServiceOnlyFilter;
 
+import java.util.Optional;
+
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 /**
@@ -29,8 +31,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired(required = false)
-    AuthCheckerServiceOnlyFilter serviceOnlyFilter;
+    @Autowired
+    Optional<AuthCheckerServiceOnlyFilter> serviceOnlyFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -62,12 +64,11 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private AuthCheckerServiceOnlyFilter authCheckerServiceFilter() {
-        if (serviceOnlyFilter != null) {
-            return serviceOnlyFilter;
-        }
-        AuthCheckerServiceOnlyFilter filter = new AuthCheckerServiceOnlyFilter(serviceRequestAuthorizer);
-        filter.setAuthenticationManager(authenticationManager);
-        return filter;
+        return serviceOnlyFilter.orElseGet(() -> {
+            AuthCheckerServiceOnlyFilter filter = new AuthCheckerServiceOnlyFilter(serviceRequestAuthorizer);
+            filter.setAuthenticationManager(authenticationManager);
+            return filter;
+        });
     }
 
 
