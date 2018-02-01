@@ -29,6 +29,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired(required = false)
+    AuthCheckerServiceOnlyFilter serviceOnlyFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         AuthCheckerServiceOnlyFilter filter = authCheckerServiceFilter();
@@ -59,6 +62,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private AuthCheckerServiceOnlyFilter authCheckerServiceFilter() {
+        if (serviceOnlyFilter != null) {
+            return serviceOnlyFilter;
+        }
         AuthCheckerServiceOnlyFilter filter = new AuthCheckerServiceOnlyFilter(serviceRequestAuthorizer);
         filter.setAuthenticationManager(authenticationManager);
         return filter;
