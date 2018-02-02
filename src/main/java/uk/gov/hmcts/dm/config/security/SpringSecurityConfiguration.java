@@ -31,18 +31,16 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    Optional<AuthCheckerServiceOnlyFilter> serviceOnlyFilter;
+    private AuthCheckerServiceOnlyFilter serviceOnlyFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        AuthCheckerServiceOnlyFilter filter = authCheckerServiceFilter();
-        filter.setAuthenticationManager(authenticationManager());
+        serviceOnlyFilter.setAuthenticationManager(authenticationManager());
 
         http.headers().cacheControl().disable();
 
         http
-            .addFilter(filter)
+            .addFilter(serviceOnlyFilter)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
             .csrf().disable()
             .formLogin().disable()
@@ -63,13 +61,12 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/info");
     }
 
-    private AuthCheckerServiceOnlyFilter authCheckerServiceFilter() {
-        return serviceOnlyFilter.orElseGet(() -> {
+    @Autowired
+    public void setServiceOnlyFilter(Optional<AuthCheckerServiceOnlyFilter> serviceOnlyFilter) {
+        this.serviceOnlyFilter = serviceOnlyFilter.orElseGet(() -> {
             AuthCheckerServiceOnlyFilter filter = new AuthCheckerServiceOnlyFilter(serviceRequestAuthorizer);
             filter.setAuthenticationManager(authenticationManager);
             return filter;
         });
     }
-
-
 }
