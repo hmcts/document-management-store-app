@@ -15,16 +15,21 @@ spring:
   profiles:
     active: dev
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    database-platform: uk.gov.hmcts.dm.dialect.CustomPostgresSqlDialect
     database: postgresql
     show-sql: ${SHOW_SQL:true}
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hiberante:
+        dialect: uk.gov.hmcts.dm.dialect.CustomPostgresSqlDialect
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
+
     platform: postgresql
     time-between-eviction-runs-millis: ${STALE_CONN_EVICTION_FREQUENCY:60000}
     tomcat:
@@ -34,7 +39,7 @@ spring:
       test-on-borrow: ${TEST_ON_BORROW_DB_CONNECTION:true} # Validate the connection before borrowing it from the pool.
   batch:
     job:
-      enabled: ${ENABLE_TTL:true}
+      enabled: ${ENABLE_TTL:false}
       ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}

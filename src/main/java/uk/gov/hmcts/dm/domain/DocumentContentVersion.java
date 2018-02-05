@@ -9,13 +9,14 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.dialect.PassThroughBlob;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 import uk.gov.hmcts.dm.utils.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.sql.Blob;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
@@ -77,11 +78,15 @@ public class DocumentContentVersion implements RolesAware {
     @Setter
     private Long size;
 
-    public DocumentContentVersion(StoredDocument item, MultipartFile file, Blob data, String userId) {
+    public DocumentContentVersion(StoredDocument item, MultipartFile file, String userId) {
         this.mimeType = file.getContentType();
         setOriginalDocumentName(file.getOriginalFilename());
         this.size = file.getSize();
-        this.documentContent = new DocumentContent(this, data);
+        try {
+            this.documentContent = new DocumentContent(this, new PassThroughBlob(file));
+        } catch(IOException e) {
+            throw new RuntimeException(e);
+        }
         this.storedDocument = item;
         this.setCreatedBy(userId);
     }
