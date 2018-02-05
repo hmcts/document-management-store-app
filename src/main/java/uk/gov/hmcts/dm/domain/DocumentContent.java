@@ -4,13 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import uk.gov.hmcts.dm.dialect.ByteWrappingBlobType;
 
+import javax.persistence.*;
 import java.sql.Blob;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  * Created by pawel on 08/06/2017.
@@ -18,6 +21,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@TypeDef(name = "BlobDataUserType", typeClass = ByteWrappingBlobType.class)
 public class DocumentContent {
 
     @Id
@@ -29,8 +33,10 @@ public class DocumentContent {
     @JsonIgnore
     @Getter
     @Setter
-    @Lob
+    //@Lob
     @Basic(fetch = FetchType.LAZY)
+    @Type(type = "BlobDataUserType")
+    @Column(name="data")
     private Blob data;
 
     @OneToOne
@@ -53,8 +59,8 @@ public class DocumentContent {
         this.data = blob;
     }
 
-    public DocumentContent(DocumentContentVersion documentContentVersion, Blob data) {
-        this(data);
+    public DocumentContent(DocumentContentVersion documentContentVersion, Blob blob) {
+        this(blob);
         this.documentContentVersion = documentContentVersion;
     }
 

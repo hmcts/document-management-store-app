@@ -13,9 +13,9 @@ import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
-import java.util.UUID;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 /**
  * Created by pawel on 26/05/2017.
@@ -50,7 +50,7 @@ public class DocumentContentVersionService {
             response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
             response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
             response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-            
+
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("fileName=\"%s\"",documentContentVersion.getOriginalDocumentName()));
             IOUtils.copy(documentContentVersion.getDocumentContent().getData().getBinaryStream(), response.getOutputStream(), streamBufferSize);

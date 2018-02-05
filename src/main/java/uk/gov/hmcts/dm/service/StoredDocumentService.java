@@ -61,7 +61,7 @@ public class StoredDocumentService {
             storedDocument.setFolder(folder);
             storedDocument.setCreatedBy(userId);
             storedDocument.setLastModifiedBy(userId);
-            storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, blobCreator.createBlob(aFile), userId));
+            storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, userId));
             storedDocumentRepository.save(storedDocument);
             return storedDocument;
 
@@ -88,7 +88,7 @@ public class StoredDocumentService {
             if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
-            document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, blobCreator.createBlob(file), userId));
+            document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, userId));
             save(document);
             return document;
         }).collect(Collectors.toList());
@@ -103,7 +103,7 @@ public class StoredDocumentService {
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
         String userId = securityUtilService.getUserId();
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument, file, blobCreator.createBlob(file), userId);
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument, file, userId);
         documentContentVersionRepository.save(documentContentVersion);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
