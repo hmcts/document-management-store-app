@@ -5,7 +5,7 @@
 
     <changeSet id="drop_lo_unlink_trigger" author="pawel" dbms="postgresql">
         <sql>
-            drop trigger if exists lo_manage on documentcontent;
+            drop trigger if exists t_unlink_document_content on documentcontent;
         </sql>
     </changeSet>
 
