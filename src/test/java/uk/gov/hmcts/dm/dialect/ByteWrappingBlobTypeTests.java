@@ -59,4 +59,10 @@ public class ByteWrappingBlobTypeTests {
         type.deepCopy(blob);
     }
 
+    @Test
+    public void testDeepCopyNull() throws Exception {
+        Assert.assertEquals(null, type.deepCopy(null));
+    }
+
+
 }

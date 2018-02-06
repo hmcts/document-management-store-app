@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.dialect;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -73,5 +74,21 @@ public class PassThroughBlobTests {
         InputStream in = Mockito.mock(InputStream.class);
         PassThroughBlob blob = new PassThroughBlob(in);
         blob.free();
+    }
+
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void test_hashCode() throws Exception {
+        InputStream in = Mockito.mock(InputStream.class);
+        PassThroughBlob blob = new PassThroughBlob(in, 1l);
+        Assert.assertEquals(new Long(1l).hashCode(), blob.hashCode());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void test_Equals() throws Exception {
+        InputStream in = Mockito.mock(InputStream.class);
+        PassThroughBlob blob = new PassThroughBlob(in, 1l);
+        PassThroughBlob blob2 = new PassThroughBlob(in, 1l);
+        Assert.assertTrue(blob.equals(blob2));
     }
 }
