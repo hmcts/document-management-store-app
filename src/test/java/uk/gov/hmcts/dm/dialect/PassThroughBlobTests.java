@@ -77,14 +77,15 @@ public class PassThroughBlobTests {
     }
 
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void test_hashCode() throws Exception {
         InputStream in = Mockito.mock(InputStream.class);
         PassThroughBlob blob = new PassThroughBlob(in, 1l);
-        Assert.assertEquals(new Long(1l).hashCode(), blob.hashCode());
+        PassThroughBlob blob2 = new PassThroughBlob(in, 1l);
+        Assert.assertEquals(blob2.hashCode(), blob.hashCode());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void test_Equals() throws Exception {
         InputStream in = Mockito.mock(InputStream.class);
         PassThroughBlob blob = new PassThroughBlob(in, 1l);
