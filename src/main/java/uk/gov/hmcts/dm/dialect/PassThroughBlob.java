@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.dialect;
 
+import lombok.EqualsAndHashCode;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -8,21 +9,25 @@ import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 
+@EqualsAndHashCode(of={"contentLength"})
 public class PassThroughBlob implements Blob {
 
     private InputStream binaryStream;
 
-    private long contentLength;
+    private Long contentLength;
 
     public PassThroughBlob(MultipartFile file) throws IOException {
         this(file.getInputStream(), file.getSize());
     }
 
-    public PassThroughBlob(InputStream binaryStream, long contentLength) {
+    public PassThroughBlob(InputStream binaryStream) {
         this.binaryStream = binaryStream;
-        this.contentLength = contentLength;
     }
 
+    public PassThroughBlob(InputStream binaryStream, Long contentLength) {
+        this(binaryStream);
+        this.contentLength = contentLength;
+    }
 
     @Override
     public long length() throws SQLException {
@@ -33,7 +38,6 @@ public class PassThroughBlob implements Blob {
     public InputStream getBinaryStream() throws SQLException {
         return binaryStream;
     }
-
 
     @Override
     public InputStream getBinaryStream(long pos, long length) throws SQLException {
@@ -61,7 +65,7 @@ public class PassThroughBlob implements Blob {
     }
 
     @Override
-    public long position(byte pattern[], long start) throws SQLException {
+    public long position(byte[] pattern, long start) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
@@ -77,6 +81,8 @@ public class PassThroughBlob implements Blob {
 
     @Override
     public void free() throws SQLException {
-        // no-op
+        throw new UnsupportedOperationException();
     }
+
+
 }
