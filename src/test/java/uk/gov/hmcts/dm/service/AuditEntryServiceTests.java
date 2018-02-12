@@ -67,4 +67,5 @@ public class AuditEntryServiceTests {
         Assert.assertEquals(1, entries.size());
     }
 
+
 }

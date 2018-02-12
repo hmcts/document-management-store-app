@@ -60,7 +60,7 @@ public class DocumentContentVersionController {
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            throw new DocumentContentVersionNotFoundException(String.format("ID: %s", versionId.toString()));
+            throw new DocumentContentVersionNotFoundException(versionId);
         } else {
             auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
         }

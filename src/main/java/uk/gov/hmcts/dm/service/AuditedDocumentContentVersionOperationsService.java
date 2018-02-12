@@ -10,8 +10,8 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
-import java.util.UUID;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 /**
  * Created by pawel on 28/07/2017.
@@ -46,7 +46,7 @@ public class AuditedDocumentContentVersionOperationsService {
     public DocumentContentVersion readDocumentContentVersion(@NotNull UUID versionId) {
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            throw new DocumentContentVersionNotFoundException(String.format("ID: %s", versionId.toString()));
+            throw new DocumentContentVersionNotFoundException(versionId);
         }
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
         return documentContentVersion;

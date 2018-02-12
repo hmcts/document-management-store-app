@@ -80,4 +80,14 @@ public class SearchServiceTests {
         Assert.assertEquals(mockedPage, page);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testFindStoredDocumentsByMetadataNullPageable() {
+        searchService.findStoredDocumentsByCreator("creatorX", null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void findStoredDocumentsByCreator() {
+        searchService.findStoredDocumentsByCreator("x", null);
+    }
+
 }
