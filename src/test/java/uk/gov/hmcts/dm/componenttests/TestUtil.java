@@ -5,15 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.domain.DocumentContent;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.Folder;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.sql.rowset.serial.SerialBlob;
 
 
 public class TestUtil {
@@ -35,6 +38,16 @@ public class TestUtil {
     static {
         try {
             TEST_FILE = new MockMultipartFile("file", "filename.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static final MockMultipartFile TEST_FILE_EXE;
+
+    static {
+        try {
+            TEST_FILE_EXE = new MockMultipartFile("file", "filename.exe", "application/octet-stream", "some xml".getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

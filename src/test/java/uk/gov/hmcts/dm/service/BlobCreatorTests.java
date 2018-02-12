@@ -1,7 +1,9 @@
 package uk.gov.hmcts.dm.service;
 
+import org.hibernate.Session;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,7 +27,7 @@ import static org.mockito.Mockito.when;
 @Transactional
 public class BlobCreatorTests {
 
-    @Autowired
+    @Mock
     EntityManager entityManager;
 
     @Autowired
@@ -33,18 +35,19 @@ public class BlobCreatorTests {
 
     @Test(expected = RuntimeException.class)
     public void testRuntimeException() {
-        EntityManager riggedEntityManager = mock(EntityManager.class);
-        when(riggedEntityManager.unwrap(any())).thenThrow(new Exception("x"));
-        blobCreator.setEntityManager(riggedEntityManager);
-        blobCreator.createBlob(TestUtil.TEST_FILE);
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testCreateBlob() {
-        EntityManager entityManager = mock(EntityManager.class);
         when(entityManager.unwrap(any())).thenThrow(new Exception("x"));
-        blobCreator.setEntityManager(entityManager);
         blobCreator.createBlob(TestUtil.TEST_FILE);
     }
 
+    @Test
+    public void testCreateBlob() {
+        Session s = mock(Session.class);
+        when(entityManager.unwrap(any())).thenReturn(s);
+        blobCreator.createBlob(TestUtil.TEST_FILE);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCreateBlobNullFile() {
+        blobCreator.createBlob(null);
+    }
 }

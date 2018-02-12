@@ -265,4 +265,14 @@ public class StoredDocumentServiceTests {
         storedDocumentService.findAllExpiredStoredDocuments();
         verify(storedDocumentRepository, times(1)).findByTtlLessThanAndHardDeleted(any(), any());
     }
+
+    @Test(expected = NullPointerException.class)
+    public void testUpdateStoredDocumentNullStoredDocument() {
+        storedDocumentService.updateStoredDocument(null, new UpdateDocumentCommand());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testUpdateStoredDocumentNullCommand() {
+        storedDocumentService.updateStoredDocument(new StoredDocument(), null);
+    }
 }

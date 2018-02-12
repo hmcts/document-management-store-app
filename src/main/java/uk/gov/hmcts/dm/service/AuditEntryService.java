@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.service;
 
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,10 +67,10 @@ public class AuditEntryService {
         return documentContentVersionAuditEntry;
     }
 
-    private void populateCommonFields(@NonNull AuditEntry auditEntry,
-                                      @NonNull AuditActions action,
+    private void populateCommonFields(AuditEntry auditEntry,
+                                      AuditActions action,
                                       String username,
-                                      @NonNull String serviceName) {
+                                      String serviceName) {
         auditEntry.setAction(action);
         auditEntry.setUsername(username);
         auditEntry.setServiceName(serviceName);

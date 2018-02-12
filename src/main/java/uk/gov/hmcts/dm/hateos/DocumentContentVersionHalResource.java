@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.core.Relation;
 import uk.gov.hmcts.dm.controller.DocumentContentVersionController;
+import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
@@ -45,7 +46,7 @@ public class DocumentContentVersionHalResource extends HalResource {
                 documentContentVersion.getStoredDocument().getId(),
                 documentContentVersion.getId())).withRel("binary"));
 
-        add(linkTo(methodOn(DocumentContentVersionController.class).getDocumentContentVersionDocumentPreviewThumbnail(
+        add(linkTo(methodOn(DocumentThumbnailController.class).getDocumentContentVersionDocumentPreviewThumbnail(
                 documentContentVersion.getStoredDocument().getId(),
             documentContentVersion.getId())).withRel("thumbnail"));
     }
