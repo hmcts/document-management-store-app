@@ -70,16 +70,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .get("/documents/" + id + "/binary");
     }
 
-    @Test
-    public void testGetDocumentThumbnail() {
-        when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
-            .thenReturn(documentContentVersion);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/thumbnail");
-    }
 
     @Test
     public void testGetDocumentVersion() {
@@ -103,16 +93,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .get("/documents/" + id + "/versions/" + id + "/binary");
     }
 
-    @Test
-    public void testGetDocumentVersionThumbnail() {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id + "/thumbnail");
-    }
 
     @Test
     public void testGetDocumentVersionThatStoredDocumentWasDeleted() throws Exception {
@@ -146,21 +126,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .andExpect(status().isNotFound());
     }
 
-    @Test
-    public void testGetDocumentVersionThumbnailThatStoredDocumentWasDeleted() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        documentContentVersion.setStoredDocument(new StoredDocument());
-        documentContentVersion.getStoredDocument().setDeleted(true);
-
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id + "/thumbnail")
-            .andExpect(status().isNotFound());
-    }
 
     @Test
     public void testGetDocumentVersionThatDoesntExist() throws Exception {
@@ -187,18 +152,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentVersionThumbnailThatDoesntExist() throws Exception {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(null);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id + "/thumbnail")
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
     public void testGetDocument404() throws Exception {
         restActions
             .withAuthorizedUser("userId")
@@ -208,7 +161,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-        public void updateDocument() throws Exception {
+    public void updateDocument() throws Exception {
         when(this.storedDocumentService.findOne(id))
             .thenReturn(storedDocument);
 
@@ -293,24 +246,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .andExpect(status().isOk());
     }
 
-
-    @Test
-    public void testGetThumbnail() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(), new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)), "user");
-
-        documentContentVersion.setCreatedBy("userId");
-
-        when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
-            documentContentVersion
-        );
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/thumbnail")
-            .andExpect(status().isOk());
-    }
-
     @Test
     public void testGetThatDoesNotExist() throws Exception {
         restActions
@@ -326,15 +261,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testGetThumbnailThatDoesNotExist() throws Exception {
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/thumbnail")
             .andExpect(status().isNotFound());
     }
 
