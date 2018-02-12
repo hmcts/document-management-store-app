@@ -7,10 +7,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.MethodParameter;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
@@ -24,7 +22,6 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
-import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
@@ -51,9 +48,6 @@ public class StoredDocumentController {
 
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
-
-    @Autowired
-    private DocumentThumbnailService documentThumbnailService;
 
     private MethodParameter uploadDocumentsCommandMethodParameter;
 
@@ -134,26 +128,7 @@ public class StoredDocumentController {
 
     }
 
-    @GetMapping(value = "{id}/thumbnail")
-    @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns thumbnail of a file")
-    })
-    @Transactional(readOnly = true)
-    public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID id) {
 
-        DocumentContentVersion documentContentVersion =
-            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id);
-
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok()
-            .contentType(MediaType.IMAGE_JPEG)
-            .body(documentThumbnailService.generateThumbnail(documentContentVersion));
-
-    }
 
 
 

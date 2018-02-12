@@ -125,6 +125,7 @@ toggle:
   includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
   deleteenabled: ${ENABLE_DELETE:true}
   ttl: ${ENABLE_TTL:true}
+  thumbnail: ${ENABLE_THUMBNAIL:true}
 
 
 

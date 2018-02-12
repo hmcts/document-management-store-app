@@ -6,10 +6,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentVersionCommand;
@@ -70,31 +68,6 @@ public class DocumentContentVersionController {
         return null;
 
     }
-
-    @GetMapping(value = "/versions/{versionId}/thumbnail")
-    @ApiOperation("Streams a specific version of the content of a Stored Document.")
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns contents of a document version")
-    })
-    @Transactional(readOnly = true)
-    public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(
-        @PathVariable UUID documentId,
-        @PathVariable UUID versionId) {
-
-        DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
-
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return
-                ResponseEntity
-                    .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(auditedDocumentContentVersionOperationsService
-                        .readDocumentContentVersionThumbnail(documentContentVersion));
-        }
-    }
-
 
     @GetMapping(value = "/versions/{versionId}")
     @ApiOperation("Returns a specific version of the content of a Stored Document.")
