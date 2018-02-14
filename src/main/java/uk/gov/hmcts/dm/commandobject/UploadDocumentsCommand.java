@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.commandobject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ public class UploadDocumentsCommand {
     @NotNull(message = "Provide collection of files to be uploaded")
     @Size(min = 1, message = "Collection of files must be bigger than 1")
     @MultipartFileListWhiteList(message = "One of the mime-types is not white-listed")
+    @JsonIgnore
     private List<MultipartFile> files;
 
     @NotNull(message = "Please provide classification")
