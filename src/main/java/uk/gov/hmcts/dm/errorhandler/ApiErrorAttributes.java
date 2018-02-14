@@ -36,6 +36,8 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
 
         Map<String, Object> errorAttributes = super.getErrorAttributes(requestAttributes, true);
 
+        errorAttributes.remove("errors");
+
         Throwable throwable = getError(requestAttributes);
 
         ErrorStatusCodeAndMessage errorStatusCodeAndMessage = exceptionStatusCodeAndMessageResolver
