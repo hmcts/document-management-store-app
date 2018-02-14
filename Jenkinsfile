@@ -213,7 +213,7 @@ node {
 
             stage('Deploy on Demo') {
                 ansible.run("{}", "demo", "deploy_store_app.yml")
-//                rpmTagger.tagDeploymentSuccessfulOn('demo')
+                rpmTagger.tagDeploymentSuccessfulOn('demo')
             }
         }
         notifyBuildFixed channel: channel
