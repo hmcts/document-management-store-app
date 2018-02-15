@@ -14,7 +14,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class UpdateDocumentControllerTests extends ComponentTestBase {
+public class StoredDocumentControllerUpdateTests extends ComponentTestBase {
 
     private final UUID id = UUID.randomUUID();
 
