@@ -22,11 +22,10 @@ def channel = '#dm-pipeline'
 withPipeline(type , product, component) {
 
     after('checkout') {
-        echo 'document-management-store-app out'
+        echo '${component} out'
     }
     enableSlackNotifications(channel)
 }
-
 
 
 

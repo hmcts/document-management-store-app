@@ -83,8 +83,6 @@ services:
      - document-management-store-database
     depends_on:
      - document-management-store-database
-    ports:
-    - $SERVER_PORT:8080
 
   document-management-store-database:
     build:
