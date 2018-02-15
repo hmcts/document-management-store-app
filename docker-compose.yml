@@ -40,12 +40,8 @@ services:
       - JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
     links:
      - document-management-store-database
-     - idam-api
-     - service-auth-provider-api
     depends_on:
      - document-management-store-database
-     - idam-api
-     - service-auth-provider-api
     ports:
     - $SERVER_PORT:8080
 
