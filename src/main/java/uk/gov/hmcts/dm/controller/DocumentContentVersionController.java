@@ -75,7 +75,7 @@ public class DocumentContentVersionController {
                     );
 
                 return ResponseEntity
-                    .created(resource.getURI())
+                    .created(resource.getUri())
                     .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
                     .body(resource);
             }
