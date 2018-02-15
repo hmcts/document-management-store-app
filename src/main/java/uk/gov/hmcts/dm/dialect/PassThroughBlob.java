@@ -9,7 +9,7 @@ import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
 
-@EqualsAndHashCode(of={"contentLength"})
+@EqualsAndHashCode(of = {"contentLength"})
 public class PassThroughBlob implements Blob {
 
     private InputStream binaryStream;

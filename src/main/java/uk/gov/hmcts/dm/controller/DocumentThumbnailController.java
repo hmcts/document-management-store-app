@@ -36,16 +36,16 @@ public class DocumentThumbnailController {
     @Autowired
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    @GetMapping(value = "{id}/thumbnail")
+    @GetMapping(value = "{documentId}/thumbnail")
     @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns thumbnail of a file")
     })
     @Transactional(readOnly = true)
-    public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID id) {
+    public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID documentId) {
 
         DocumentContentVersion documentContentVersion =
-            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id);
+            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             return ResponseEntity.notFound().build();

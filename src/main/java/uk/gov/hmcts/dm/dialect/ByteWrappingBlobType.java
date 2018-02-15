@@ -46,7 +46,7 @@ public class ByteWrappingBlobType implements UserType {
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws SQLException {
         InputStream inputStream = rs.getBinaryStream(names[0]);
-        return new PassThroughBlob(inputStream, 0l);
+        return new PassThroughBlob(inputStream, 0L);
     }
 
     @Override

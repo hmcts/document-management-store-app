@@ -5,4 +5,4 @@ clear;
 ./gradlew installDist bootRepackage
 docker-compose down
 docker-compose pull
-docker-compose -f docker-compose.yml -f docker-compose-dev.yml up --build
+docker-compose -f docker-compose.yml -f docker-compose-all.yml -f docker-compose-dev.yml up --build

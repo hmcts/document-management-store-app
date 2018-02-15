@@ -88,14 +88,14 @@ public class StoredDocumentController {
         }
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "{documentId}")
     @ApiOperation("Retrieves JSON representation of a Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success", response = StoredDocumentHalResource.class)
     })
-    public ResponseEntity<Object> getMetaData(@PathVariable UUID id) {
+    public ResponseEntity<Object> getMetaData(@PathVariable UUID documentId) {
 
-        StoredDocument storedDocument = auditedStoredDocumentOperationsService.readStoredDocument(id);
+        StoredDocument storedDocument = auditedStoredDocumentOperationsService.readStoredDocument(documentId);
 
         if (storedDocument == null) {
             return ResponseEntity.notFound().build();
@@ -109,15 +109,15 @@ public class StoredDocumentController {
 
 
 
-    @GetMapping(value = "{id}/binary")
+    @GetMapping(value = "{documentId}/binary")
     @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<Object> getBinary(@PathVariable UUID id) {
+    public ResponseEntity<Object> getBinary(@PathVariable UUID documentId) {
 
         DocumentContentVersion documentContentVersion =
-                documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id);
+                documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             return ResponseEntity.notFound().build();
