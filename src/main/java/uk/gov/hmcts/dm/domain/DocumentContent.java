@@ -36,7 +36,7 @@ public class DocumentContent {
     //@Lob
     @Basic(fetch = FetchType.LAZY)
     @Type(type = "BlobDataUserType")
-    @Column(name="data")
+    @Column(name = "data")
     private Blob data;
 
     @OneToOne

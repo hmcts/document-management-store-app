@@ -29,7 +29,7 @@ public abstract class HalResource extends ResourceSupport {
     }
 
     @JsonIgnore
-    public final URI getURI() {
+    public final URI getUri() {
         try {
             return getLink("self") != null ? new URI(getLink("self").getHref()) : null;
         } catch (Exception e) {

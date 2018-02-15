@@ -87,7 +87,7 @@ public class DocumentContentVersion implements RolesAware {
         this.size = file.getSize();
         try {
             this.documentContent = new DocumentContent(this, new PassThroughBlob(file));
-        } catch(IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         this.storedDocument = item;
