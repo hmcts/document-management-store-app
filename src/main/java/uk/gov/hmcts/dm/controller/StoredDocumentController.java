@@ -88,7 +88,7 @@ public class StoredDocumentController {
         }
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = "{documentId}")
     @ApiOperation("Retrieves JSON representation of a Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success", response = StoredDocumentHalResource.class)
@@ -109,7 +109,7 @@ public class StoredDocumentController {
 
 
 
-    @GetMapping(value = "{id}/binary")
+    @GetMapping(value = "{documentId}/binary")
     @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")

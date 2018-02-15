@@ -31,18 +31,18 @@ public class StoredDocumentUpdateController {
     @Autowired
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @PatchMapping(value = "{id}",
+    @PatchMapping(value = "{documentId}",
         consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Updates document instance (ex. ttl)")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns representation of the new state",  response = StoredDocumentHalResource.class)
     })
     @Transactional
-    public ResponseEntity<Object> updateDocument(@PathVariable UUID id,
+    public ResponseEntity<Object> updateDocument(@PathVariable UUID documentId,
                                          @RequestBody UpdateDocumentCommand updateDocumentCommand) {
 
         StoredDocument storedDocument =
-            auditedStoredDocumentOperationsService.updateDocument(id, updateDocumentCommand);
+            auditedStoredDocumentOperationsService.updateDocument(documentId, updateDocumentCommand);
 
         return ResponseEntity
             .ok()

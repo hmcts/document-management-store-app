@@ -38,7 +38,7 @@ public class StoredDocumentAuditController {
     @Autowired
     private StoredDocumentService storedDocumentService;
 
-    @GetMapping("{id}/auditEntries")
+    @GetMapping("{documentId}/auditEntries")
     @ApiOperation("Retrieves audits related to a Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success", response = StoredDocumentAuditEntryHalResource.class)

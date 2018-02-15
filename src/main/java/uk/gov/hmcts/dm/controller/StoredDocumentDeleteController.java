@@ -27,20 +27,20 @@ public class StoredDocumentDeleteController {
     @Autowired
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @DeleteMapping(value = "{id}")
+    @DeleteMapping(value = "{documentId}")
     @ApiOperation("Deletes a Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "No Content returned"),
     })
     public ResponseEntity<Object> deleteDocument(@PathVariable
-                                                        UUID id,
+                                                        UUID documentId,
                                                     @RequestParam(
                                                         value = "permanent",
                                                         required = false,
                                                         defaultValue = "false")
                                                         boolean permanent) {
 
-        auditedStoredDocumentOperationsService.deleteStoredDocument(id, permanent);
+        auditedStoredDocumentOperationsService.deleteStoredDocument(documentId, permanent);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
