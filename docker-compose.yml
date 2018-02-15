@@ -48,5 +48,5 @@ services:
   document-management-store-database:
     build:
       context: ./docker/database
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-store-database:latest
+#    image: docker.artifactory.reform.hmcts.net/evidence/document-management-store-database:latest
 

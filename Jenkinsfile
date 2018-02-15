@@ -154,12 +154,12 @@ node {
 
         try {
             stage('Start App with Docker') {
-                sh "docker-compose -f docker-compose.yml -f docker-compose-all.yml -f docker-compose-test.yml pull"
+                sh "docker-compose -f docker-compose-all.yml -f docker-compose-test.yml pull"
                 sh "docker-compose up --build -d"
             }
 
             stage('Run Integration tests in docker') {
-                sh "docker-compose -f docker-compose.yml -f docker-compose-all.yml -f docker-compose-test.yml run -e GRADLE_OPTS document-management-store-integration-tests"
+                sh "docker-compose -f docker-compose-all.yml -f docker-compose-test.yml run -e GRADLE_OPTS document-management-store-integration-tests"
             }
         }
         finally {
