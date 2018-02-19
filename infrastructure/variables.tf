@@ -105,7 +105,7 @@ variable "endpoints_info_sensitive" {
 // Toggle Features
 ////////////////////////////////////////////////
 variable "enable_idam_healthcheck" {
-    default = "true"
+    default = "false"
 }
 
 variable "enable_metadata_search" {

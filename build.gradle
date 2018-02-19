@@ -111,7 +111,12 @@ def versions = [
     xmlMavenPlugin     : '1.0',
 ]
 
-
+configurations {
+    testSmokeCompile.extendsFrom(testCompile)
+    testSmokeRuntime.extendsFrom(testRuntime)
+    testIntegrationCompile.extendsFrom(testCompile)
+    testIntegrationRuntime.extendsFrom(testRuntime)
+}
 
 dependencies {
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.8'
@@ -183,6 +188,54 @@ dependencies {
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '1.1.0'
 
 
+}
+
+
+sourceSets {
+    testIntegration {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir('src/testIntegration/java')
+        }
+        resources {
+            srcDir('src/testIntegration/resources')
+        }
+    }
+
+    testSmoke {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir('src/testSmoke/java')
+        }
+        resources {
+            srcDir('src/testSmoke/resources')
+        }
+    }
+}
+
+
+dependencies {
+    testIntegrationCompile(sourceSets.test.output)
+    testSmokeCompile(sourceSets.test.output)
+}
+
+
+task functional(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Executes functional/intergation tests against'
+    setTestClassesDirs(sourceSets.testIntegration.output.classesDirs)
+    setClasspath(sourceSets.testIntegration.runtimeClasspath)
+    include "uk/gov/hmcts/dm/intergration/**"
+}
+
+task smoke(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Executes non-destructive smoke tests'
+    setTestClassesDirs(sourceSets.testSmoke.output.classesDirs)
+    setClasspath(sourceSets.testSmoke.runtimeClasspath)
+    include "uk/gov/hmcts/dm/smoke/**"
 }
 
 def coverageExclusionList = [
