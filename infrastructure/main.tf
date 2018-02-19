@@ -11,6 +11,22 @@ module "document-management-store-app" {
         POSTGRES_DATABASE = "${module.document-management-store-postgres-db.postgresql_database}"
         POSTGRES_USER     = "${module.document-management-store-postgres-db.user_name}"
         POSTGRES_PASSWORD = "${module.document-management-store-postgres-db.postgresql_password}"
+
+        //    logging vars
+        REFORM_TEAM = "${var.product}"
+        REFORM_SERVICE_NAME = "document-management-store-app"
+        REFORM_ENVIRONMENT = "${var.env}"
+
+        SERVER_PORT = "8080"
+
+        //
+        SPRING_DATASOURCE_URL = "jdbc:postgresql://${module.document-management-store-postgres-db.host_name}:${module.document-management-store-postgres-db.postgresql_listen_port}/${module.document-management-store-postgres-db.postgresql_database}"
+        SPRING_DATASOURCE_USERNAME = "${module.document-management-store-postgres-db.user_name}"
+        SPRING_DATASOURCE_PASSWORD = "${module.document-management-store-postgres-db.postgresql_password}"
+
+        // idam
+        IDAM_CLIENT_URL = "${var.idam-api-url}"
+        PROVIDER_SERVICE_CLIENT_URL = "${var.s2s-url}"
     }
 }
 
