@@ -1,6 +1,13 @@
+locals {
+  app_full_name = "${var.product}-${var.app_name}-${var.app_type}"
+  ase_name = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+}
+# "${local.ase_name}"
+# "${local.app_full_name}"
+
 module "app" {
   source = "git@github.com:contino/moj-module-webapp?ref=master"
-  product = "${var.product}-${var.app_name}-${var.app_type}"
+  product = "${local.app_full_name}"
   location = "${var.location}"
   env = "${var.env}"
   ilbIp = "${var.ilbIp}"
@@ -23,22 +30,24 @@ module "app" {
     MAX_FILE_SIZE = "${var.max_file_size_in_mb}MB"
 
     # idam
-    IDAM_CLIENT_URL = "${var.idam-api-url}"
-    PROVIDER_SERVICE_CLIENT_URL = "${var.s2s-url}"
+    IDAM_CLIENT_URL = "${var.idam_api_url}"
+    PROVIDER_SERVICE_CLIENT_URL = "${var.s2s_url}"
 
     # logging vars & healthcheck
-    REFORM_SERVICE_NAME = "${var.product}-${var.app_name}-${var.app_type}"
+    REFORM_SERVICE_NAME = "${local.app_full_name}"
     REFORM_TEAM = "${var.team_name}"
     REFORM_SERVICE_TYPE = "${var.app_language}"
     REFORM_ENVIRONMENT = "${var.env}"
 
-    PACKAGES_NAME = "${var.product}-${var.app_name}-${var.app_type}"
+    PACKAGES_NAME = "${local.app_full_name}"
     PACKAGES_PROJECT = "${var.team_name}"
     PACKAGES_ENVIRONMENT = "${var.env}"
 
     ROOT_APPENDER = "${var.root_appender}"
     JSON_CONSOLE_PRETTY_PRINT = "${var.json_console_pretty_print}"
     LOG_OUTPUT = "${var.log_output}"
+
+    # addtional log
     ROOT_LOGGING_LEVEL = "${var.root_logging_level}"
     LOG_LEVEL_SPRING_WEB = "${var.log_level_spring_web}"
     LOG_LEVEL_DM = "${var.log_level_dm}"
@@ -64,15 +73,15 @@ module "app" {
 
 module "db" {
   source = "git@github.com:contino/moj-module-postgres?ref=master"
-  product = "${var.product}-${var.app_name}-postgres-db"
+  product = "${local.app_full_name}-postgres-db"
   location = "West Europe"
   env = "${var.env}"
   postgresql_user = "rhubarbadmin"
 }
 
-module "key-vault" {
+module "key_vault" {
   source = "git@github.com:contino/moj-module-key-vault?ref=master"
-  product = "${var.product}-${var.app_name}-${var.app_type}"
+  product = "${local.app_full_name}"
   env = "${var.env}"
   tenant_id = "${var.tenant_id}"
   object_id = "${var.jenkins_AAD_objectId}"
@@ -81,31 +90,31 @@ module "key-vault" {
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name = "${var.product}-${var.app_name}-POSTGRES-USER"
+  name = "${local.app_full_name}-POSTGRES-USER"
   value = "${module.db.user_name}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  vault_uri = "${module.key_vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name = "${var.product}-${var.app_name}-POSTGRES-PASS"
+  name = "${local.app_full_name}-POSTGRES-PASS"
   value = "${module.db.postgresql_password}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  vault_uri = "${module.key_vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name = "${var.product}-${var.app_name}-POSTGRES-HOST"
+  name = "${local.app_full_name}-POSTGRES-HOST"
   value = "${module.db.host_name}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  vault_uri = "${module.key_vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name = "${var.product}-${var.app_name}-POSTGRES-PORT"
+  name = "${local.app_full_name}-POSTGRES-PORT"
   value = "${module.db.postgresql_listen_port}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  vault_uri = "${module.key_vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name = "${var.product}-${var.app_name}-POSTGRES-DATABASE"
+  name = "${local.app_full_name}-POSTGRES-DATABASE"
   value = "${module.db.postgresql_database}"
-  vault_uri = "${module.key-vault.key_vault_uri}"
+  vault_uri = "${module.key_vault.key_vault_uri}"
 }
