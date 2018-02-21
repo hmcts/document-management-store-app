@@ -3,19 +3,35 @@ package uk.gov.hmcts.dm.errorhandler;
 import org.apache.tomcat.util.http.fileupload.FileUploadBase;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.context.MessageSource;
 import org.springframework.core.MethodParameter;
+import org.springframework.validation.FieldError;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartException;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ExceptionStatusCodeAndMessageResolverTest {
 
-    private ExceptionStatusCodeAndMessageResolver resolver = new ExceptionStatusCodeAndMessageResolver();
+    @Mock
+    MessageSource messageSource;
+
+    @InjectMocks
+    private ExceptionStatusCodeAndMessageResolver resolver;
 
     @Before
     public void setUp() {
@@ -29,7 +45,7 @@ public class ExceptionStatusCodeAndMessageResolverTest {
                         "test", new MethodParameter(Object.class.getMethod("toString"), 1), null);
 
         final ErrorStatusCodeAndMessage errorStatusCodeAndMessage =
-                resolver.resolveStatusCodeAndMessage(exception, "It broke", 500);
+                resolver.resolveStatusCodeAndMessage(exception, "It broke", 500, null);
 
         assertThat(errorStatusCodeAndMessage.getStatusCode(), equalTo(404));
     }
@@ -42,7 +58,7 @@ public class ExceptionStatusCodeAndMessageResolverTest {
                 new MultipartException("Limit exceeded", fileSizeLimitExceededException);
 
         final ErrorStatusCodeAndMessage statusCodeAndMessage =
-                resolver.resolveStatusCodeAndMessage(multipartException, "It broke", 500);
+                resolver.resolveStatusCodeAndMessage(multipartException, "It broke", 500, null);
 
         assertThat(statusCodeAndMessage.getStatusCode(), equalTo(413));
     }
@@ -52,8 +68,26 @@ public class ExceptionStatusCodeAndMessageResolverTest {
         final int defaultStatusCode = 500;
         final String message = "It broke";
         final ErrorStatusCodeAndMessage errorStatusCodeAndMessage =
-                resolver.resolveStatusCodeAndMessage(new RuntimeException("Test"), message, defaultStatusCode);
+                resolver.resolveStatusCodeAndMessage(new RuntimeException("Test"), message, defaultStatusCode, null);
 
         assertThat(errorStatusCodeAndMessage.getStatusCode(), equalTo(defaultStatusCode));
+    }
+
+    @Test
+    public void should_return_validation_message_instead_of_override_if_present() {
+        FieldError fieldError1 = Mockito.mock(FieldError.class);
+        FieldError fieldError2 = Mockito.mock(FieldError.class);
+
+        Mockito.when(messageSource.getMessage(fieldError1, Locale.UK)).thenReturn("The validation message");
+        Mockito.when(messageSource.getMessage(fieldError2, Locale.UK)).thenReturn("The validation message 2");
+
+        final ErrorStatusCodeAndMessage errorStatusCodeAndMessage =
+            resolver.resolveStatusCodeAndMessage(new RuntimeException("Test"),
+                "x",
+                100,
+                Stream.of(fieldError1, fieldError2).collect(Collectors.toList()));
+
+
+        assertEquals(errorStatusCodeAndMessage.getMessage(), "The validation message AND The validation message 2");
     }
 }
