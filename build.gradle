@@ -102,7 +102,7 @@ def versions = [
     liquibase          : '3.5.3',
     mavenFailsafePlugin: '2.19.1',
     owasp              : '3.0.2',
-    postgresql         : '42.1.4',
+    postgresql         : '42.2.1',
     powermock          : '1.6.5',
     sonar              : '3.2',
     springBoot         : springBootVersion,
@@ -111,12 +111,21 @@ def versions = [
     xmlMavenPlugin     : '1.0',
 ]
 
-
+configurations {
+    testSmokeCompile.extendsFrom(testCompile)
+    testSmokeRuntime.extendsFrom(testRuntime)
+    testIntegrationCompile.extendsFrom(testCompile)
+    testIntegrationRuntime.extendsFrom(testRuntime)
+}
 
 dependencies {
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.8'
+    compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '8.5.28'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.8.11'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.8.11'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.11.1'
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
@@ -144,9 +153,10 @@ dependencies {
 
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.2.1'
+//    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '1.6.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: '1.2.1'
+//    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: '1.6.1'
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '1.1.0'
-    compile (group: 'org.liquibase', name: 'liquibase-core', version: "3.5.3")
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
@@ -178,6 +188,54 @@ dependencies {
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '1.1.0'
 
 
+}
+
+
+sourceSets {
+    testIntegration {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir('src/testIntegration/java')
+        }
+        resources {
+            srcDir('src/testIntegration/resources')
+        }
+    }
+
+    testSmoke {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir('src/testSmoke/java')
+        }
+        resources {
+            srcDir('src/testSmoke/resources')
+        }
+    }
+}
+
+
+dependencies {
+    testIntegrationCompile(sourceSets.test.output)
+    testSmokeCompile(sourceSets.test.output)
+}
+
+
+task functional(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Executes functional/intergation tests against'
+    setTestClassesDirs(sourceSets.testIntegration.output.classesDirs)
+    setClasspath(sourceSets.testIntegration.runtimeClasspath)
+    include "uk/gov/hmcts/dm/intergration/**"
+}
+
+task smoke(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Executes non-destructive smoke tests'
+    setTestClassesDirs(sourceSets.testSmoke.output.classesDirs)
+    setClasspath(sourceSets.testSmoke.runtimeClasspath)
+    include "uk/gov/hmcts/dm/smoke/**"
 }
 
 def coverageExclusionList = [
