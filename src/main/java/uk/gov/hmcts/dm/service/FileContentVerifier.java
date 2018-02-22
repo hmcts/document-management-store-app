@@ -56,11 +56,13 @@ public class FileContentVerifier {
             boolean fileTypeMatch = multipartFile.getContentType().equals(detected);
             if (!fileTypeMatch) {
                 log.info(
-                    String.format("Warning. Uploaded file type does not match the detected content type. " +
-                        "Expected: %s, Detected: %s", multipartFile.getContentType(), detected));
+                    String.format(
+                        "Warning. Uploaded file type does not match the detected content type. Expected: %s, Detected: %s",
+                        multipartFile.getContentType(), detected));
             }
             return fileTypeMatch;
         } catch (IOException e) {
+            log.error("Could not verify the file content type", e);
             return false;
         }
     }
@@ -69,7 +71,7 @@ public class FileContentVerifier {
         String originalFileName = multipartFile.getOriginalFilename();
         int lastDotIndex = originalFileName.lastIndexOf('.');
         if (lastDotIndex >= 0) {
-            return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length());
+            return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length()).toLowerCase();
         } else {
             return EMPTY_STRING;
         }

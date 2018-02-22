@@ -1,4 +1,5 @@
 #!groovy
+import uk.gov.hmcts.*
 
 properties([
     [
@@ -13,11 +14,6 @@ properties([
 ])
 
 @Library('Reform') _
-import uk.gov.hmcts.Ansible
-import uk.gov.hmcts.Artifactory
-import uk.gov.hmcts.Packager
-import uk.gov.hmcts.RPMTagger
-import uk.gov.hmcts.Versioner
 
 def channel = '#dm-pipeline'
 
@@ -154,19 +150,19 @@ node {
 
         try {
             stage('Start App with Docker') {
-                sh "docker-compose -f docker-compose.yml -f docker-compose-test.yml pull"
-                sh "docker-compose up --build -d"
+                sh "docker-compose -f docker-compose-all.yml -f docker-compose-test.yml pull"
+                sh "docker-compose -f docker-compose-all.yml up --build -d"
             }
 
             stage('Run Integration tests in docker') {
-                sh "docker-compose -f docker-compose.yml -f docker-compose-test.yml run -e GRADLE_OPTS document-management-store-integration-tests"
+                sh "docker-compose -f docker-compose-all.yml -f docker-compose-test.yml run -e GRADLE_OPTS document-management-store-integration-tests"
             }
         }
         finally {
             stage('Shutdown docker') {
                 sh "docker-compose logs --no-color > logs.txt"
                 archiveArtifacts 'logs.txt'
-                sh "docker-compose down"
+                sh "docker-compose -f docker-compose-all.yml  down"
             }
         }
 
@@ -213,7 +209,7 @@ node {
 
             stage('Deploy on Demo') {
                 ansible.run("{}", "demo", "deploy_store_app.yml")
-//                rpmTagger.tagDeploymentSuccessfulOn('demo')
+                rpmTagger.tagDeploymentSuccessfulOn('demo')
             }
         }
         notifyBuildFixed channel: channel

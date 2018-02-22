@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.commandobject;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,21 +7,20 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteList;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 
 
 @Data
 public class UploadDocumentsCommand {
 
-    @NotNull(message = "Provide collection of files to be uploaded")
-    @Size(min = 1, message = "Collection of files must be bigger than 1")
-    @MultipartFileListWhiteList(message = "One of the mime-types is not white-listed")
-    @JsonIgnore
+    @NotNull(message = "Provide some files to be uploaded.")
+    @Size(min = 1, message = "Please provide at least one file to be uploaded.")
+    @MultipartFileListWhiteList(message = "Your upload contains a disallowed file type.")
     private List<MultipartFile> files;
 
     @NotNull(message = "Please provide classification")

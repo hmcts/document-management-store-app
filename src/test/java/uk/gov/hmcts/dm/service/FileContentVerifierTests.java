@@ -25,6 +25,16 @@ public class FileContentVerifierTests {
             "image/png",
             "image/webp",
             "application/pdf"
+        ),
+        Arrays.asList(
+            ".txt",
+            ".csv",
+            ".gif",
+            ".tiff",
+            ".jpeg",
+            ".png",
+            ".webp",
+            ".pdf"
         )
     );
 

@@ -2,6 +2,8 @@ package uk.gov.hmcts.dm.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +37,16 @@ public class StoredDocumentAuditController {
     @Autowired
     private StoredDocumentService storedDocumentService;
 
-    @GetMapping("{id}/auditEntries")
+    @GetMapping("{documentId}/auditEntries")
     @ApiOperation("Retrieves audits related to a Stored Document.")
-    public ResponseEntity<Object> findAudits(@PathVariable UUID id) {
-        StoredDocument storedDocument = storedDocumentService.findOne(id);
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Success", response = StoredDocumentAuditEntryHalResource.class)
+    })
+    public ResponseEntity<Object> findAudits(@PathVariable UUID documentId) {
+        StoredDocument storedDocument = storedDocumentService.findOne(documentId);
 
         if (storedDocument == null) {
-            throw new StoredDocumentNotFoundException(id);
+            throw new StoredDocumentNotFoundException(documentId);
         }
 
         List<StoredDocumentAuditEntry> auditEntries = auditEntryService.findStoredDocumentAudits(storedDocument);
