@@ -24,8 +24,8 @@ public class MultipartFileListWhiteListValidator
 
     @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
-        return CollectionUtils.isEmpty(multipartFiles) ||
-                    multipartFiles.stream().allMatch(ft -> fileContentVerifier.verifyContentType(ft));
+        return CollectionUtils.isEmpty(multipartFiles) || multipartFiles.stream().allMatch(ft ->
+            fileContentVerifier.verifyContentType(ft));
     }
 
 }

@@ -12,15 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class FileContentVerifier {
 
-    private List<String> mimeTypeList;
+    private final List<String> mimeTypeList;
 
-    private List<String> extensionsList;
+    private final List<String> extensionsList;
 
-    private Tika tika = new Tika();
+    private final Tika tika = new Tika();
 
     private static final String EMPTY_STRING = "";
 
@@ -71,7 +72,8 @@ public class FileContentVerifier {
         String originalFileName = multipartFile.getOriginalFilename();
         int lastDotIndex = originalFileName.lastIndexOf('.');
         if (lastDotIndex >= 0) {
-            return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length()).toLowerCase();
+            return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length())
+                        .toLowerCase(Locale.UK);
         } else {
             return EMPTY_STRING;
         }

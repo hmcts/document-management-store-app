@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidatorContext;
 
 public class MultipartFileWhiteListValidator implements ConstraintValidator<MultipartFileWhiteList,MultipartFile> {
 
-    private FileContentVerifier fileContentVerifier;
+    private final FileContentVerifier fileContentVerifier;
 
     @Autowired
     public MultipartFileWhiteListValidator(FileContentVerifier fileContentVerifier) {
