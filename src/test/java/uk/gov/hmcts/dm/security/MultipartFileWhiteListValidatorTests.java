@@ -26,14 +26,14 @@ public class MultipartFileWhiteListValidatorTests {
     public void testSuccess() {
         MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(fileContentVerifier.verifyContentType(file)).thenReturn(true);
-        Assert.assertTrue(multipartFileWhiteListValidator.isValid(file, null));;
+        Assert.assertTrue(multipartFileWhiteListValidator.isValid(file, null));
     }
 
     @Test
     public void testFailure() {
         MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(fileContentVerifier.verifyContentType(file)).thenReturn(false);
-        Assert.assertFalse(multipartFileWhiteListValidator.isValid(file, null));;
+        Assert.assertFalse(multipartFileWhiteListValidator.isValid(file, null));
     }
 
 

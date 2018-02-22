@@ -12,7 +12,7 @@ import java.util.List;
 public class MultipartFileListWhiteListValidator
     implements ConstraintValidator<MultipartFileListWhiteList,List<MultipartFile>> {
 
-    private FileContentVerifier fileContentVerifier;
+    private final FileContentVerifier fileContentVerifier;
 
     @Autowired
     public MultipartFileListWhiteListValidator(FileContentVerifier fileContentVerifier) {

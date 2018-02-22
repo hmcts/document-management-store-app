@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.service;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockMultipartFile;
@@ -61,39 +60,39 @@ public class FileContentVerifierTests {
     }
 
     @Test
-    public void testIOException() throws Exception {
+    public void testInputException() throws Exception {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         Mockito.when(file.getInputStream()).thenThrow(new IOException("x"));
-        Assert.assertFalse(fileContentVerifier.verifyContentType(file));
+        assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testNull() throws Exception {
-        Assert.assertFalse(fileContentVerifier.verifyContentType(null));
+        assertFalse(fileContentVerifier.verifyContentType(null));
     }
 
     @Test
     public void testUploadMimeTypeNotAllowed() {
         MultipartFile file =  new MockMultipartFile("file", "filename.xml", "application/xml", "hello".getBytes(StandardCharsets.UTF_8));
-        assertFalse( fileContentVerifier.verifyContentType(file) );
+        assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testUploadMimeTypeAllowedButDoesNotMatchActualType() throws Exception {
         MultipartFile file = new MockMultipartFile("files", "filename.txt", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        assertFalse( fileContentVerifier.verifyContentType(file) );
+        assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testFailureForDisallowedExt() throws Exception {
         MultipartFile file = new MockMultipartFile("files", "filename.dat", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        assertFalse( fileContentVerifier.verifyContentType(file) );
+        assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testFailureForNoExt() throws Exception {
         MultipartFile file = new MockMultipartFile("files", "filename", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        assertFalse( fileContentVerifier.verifyContentType(file) );
+        assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
 }
