@@ -1,4 +1,6 @@
 #!groovy
+import uk.gov.hmcts.*
+
 properties([
     [
         $class: 'GithubProjectProperty',

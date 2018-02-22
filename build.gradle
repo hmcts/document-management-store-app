@@ -120,6 +120,7 @@ configurations {
 
 dependencies {
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.8'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '1.17'
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '8.5.28'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
