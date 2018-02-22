@@ -24,3 +24,9 @@ thumbnail:
 
 toggle:
     deleteenabled: true
+
+
+dm:
+  multipart:
+    whitelist: "image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,image/gif"
+    whitelist-ext: ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.gif"

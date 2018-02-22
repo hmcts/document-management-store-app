@@ -1,4 +1,5 @@
 #!groovy
+import uk.gov.hmcts.*
 
 properties([
     [
@@ -13,11 +14,6 @@ properties([
 ])
 
 @Library('Reform') _
-import uk.gov.hmcts.Ansible
-import uk.gov.hmcts.Artifactory
-import uk.gov.hmcts.Packager
-import uk.gov.hmcts.RPMTagger
-import uk.gov.hmcts.Versioner
 
 def channel = '#dm-pipeline'
 
