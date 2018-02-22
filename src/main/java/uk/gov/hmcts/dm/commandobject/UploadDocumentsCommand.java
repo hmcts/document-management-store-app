@@ -18,9 +18,9 @@ import javax.validation.constraints.Size;
 @Data
 public class UploadDocumentsCommand {
 
-    @NotNull(message = "Provide collection of files to be uploaded")
-    @Size(min = 1, message = "Collection of files must be bigger than 1")
-    @MultipartFileListWhiteList(message = "One of the mime-types is not white-listed")
+    @NotNull(message = "Provide some files to be uploaded.")
+    @Size(min = 1, message = "Please provide at least one file to be uploaded.")
+    @MultipartFileListWhiteList(message = "Your upload contains a disallowed file type.")
     private List<MultipartFile> files;
 
     @NotNull(message = "Please provide classification")

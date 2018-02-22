@@ -1,13 +1,19 @@
 package uk.gov.hmcts.dm.errorhandler;
 
 import org.apache.tomcat.util.http.fileupload.FileUploadBase;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.util.HashMap;
-import java.util.Map;
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by pawel on 23/10/2017.
@@ -19,6 +25,9 @@ public class ExceptionStatusCodeAndMessageResolver {
 
     private Map<Class<? extends Throwable>, String> exceptionToMessageMap = new HashMap<>();
 
+    @Autowired
+    private MessageSource messageSource;
+
     @PostConstruct
     public void init() {
         exceptionToStatusCodeMap.put(FileUploadBase.FileSizeLimitExceededException.class, 413);
@@ -29,11 +38,11 @@ public class ExceptionStatusCodeAndMessageResolver {
         exceptionToMessageMap.put(MethodArgumentNotValidException.class, "Request validation failed");
     }
 
-    ErrorStatusCodeAndMessage resolveStatusCodeAndMessage(
+    public ErrorStatusCodeAndMessage resolveStatusCodeAndMessage(
             Throwable throwable,
             String defaultMessage,
-          Integer defaultStatusCode) {
-
+            Integer defaultStatusCode,
+            List<FieldError> fieldErrorList) {
 
         ErrorStatusCodeAndMessage errorStatusCodeAndMessage =
                 new ErrorStatusCodeAndMessage(defaultMessage, defaultStatusCode);
@@ -48,6 +57,13 @@ public class ExceptionStatusCodeAndMessageResolver {
             } else {
                 errorStatusCodeAndMessage.setMessage(ultimateCause.getLocalizedMessage());
             }
+        }
+
+        if (fieldErrorList != null) {
+            errorStatusCodeAndMessage.setMessage(
+                fieldErrorList.stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, Locale.UK))
+                    .collect(Collectors.joining(" AND ")));;
         }
 
         return errorStatusCodeAndMessage;
