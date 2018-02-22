@@ -63,7 +63,7 @@ public class ExceptionStatusCodeAndMessageResolver {
             errorStatusCodeAndMessage.setMessage(
                 fieldErrorList.stream()
                     .map(fieldError -> messageSource.getMessage(fieldError, Locale.UK))
-                    .collect(Collectors.joining(" AND ")));;
+                    .collect(Collectors.joining(" AND ")));
         }
 
         return errorStatusCodeAndMessage;
