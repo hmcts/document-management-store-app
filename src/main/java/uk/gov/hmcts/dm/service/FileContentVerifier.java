@@ -46,12 +46,12 @@ public class FileContentVerifier {
         }
         try (InputStream inputStream = multipartFile.getInputStream();
              TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
-            Metadata m = new Metadata();
+            Metadata metadata = new Metadata();
             if (multipartFile.getOriginalFilename() != null) {
-                m.add(Metadata.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
-                m.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
+                metadata.add(Metadata.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
+                metadata.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
             }
-            String detected = tika.detect(tikaInputStream, m);
+            String detected = tika.detect(tikaInputStream, metadata);
             boolean fileTypeMatch = multipartFile.getContentType().equals(detected);
             if (!fileTypeMatch) {
                 log.info(
