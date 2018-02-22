@@ -51,8 +51,6 @@ public class FileContentVerifier {
                 m.add(Metadata.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
                 m.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
             }
-
-
             String detected = tika.detect(tikaInputStream, m);
             boolean fileTypeMatch = multipartFile.getContentType().equals(detected);
             if (!fileTypeMatch) {

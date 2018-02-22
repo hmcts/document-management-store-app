@@ -55,6 +55,12 @@ public class FileContentVerifierTests {
     }
 
     @Test
+    public void testUploadTikaDetectionFailure() throws Exception {
+        MultipartFile file = new MockMultipartFile("files", "filename.txt", "text/plain", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        assertFalse(fileContentVerifier.verifyContentType(file));
+    }
+
+    @Test
     public void testIOException() throws Exception {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         Mockito.when(file.getInputStream()).thenThrow(new IOException("x"));
@@ -75,6 +81,18 @@ public class FileContentVerifierTests {
     @Test
     public void testUploadMimeTypeAllowedButDoesNotMatchActualType() throws Exception {
         MultipartFile file = new MockMultipartFile("files", "filename.txt", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        assertFalse( fileContentVerifier.verifyContentType(file) );
+    }
+
+    @Test
+    public void testFailureForDisallowedExt() throws Exception {
+        MultipartFile file = new MockMultipartFile("files", "filename.dat", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        assertFalse( fileContentVerifier.verifyContentType(file) );
+    }
+
+    @Test
+    public void testFailureForNoExt() throws Exception {
+        MultipartFile file = new MockMultipartFile("files", "filename", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
         assertFalse( fileContentVerifier.verifyContentType(file) );
     }
 
