@@ -118,3 +118,30 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   value = "${module.db.postgresql_database}"
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
+
+# Blob store test
+resource "azurerm_storage_account" "storage" {
+  name = "dmblobstore"
+  resource_group_name = "${module.app.resource_group_name}"
+  location = "${var.location}"
+  account_tier = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "storage" {
+  name = "storage"
+  resource_group_name = "${module.app.resource_group_name}"
+  storage_account_name = "${azurerm_storage_account.storage.name}"
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_blob" "storage" {
+  name = "storage.vhd"
+
+  resource_group_name = "${module.app.resource_group_name}"
+  storage_account_name = "${azurerm_storage_account.storage.name}"
+  storage_container_name = "${azurerm_storage_container.storage.name}"
+
+  type = "page"
+  size = 10240
+}
