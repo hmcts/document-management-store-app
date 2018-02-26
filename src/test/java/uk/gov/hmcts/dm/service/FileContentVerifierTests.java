@@ -62,6 +62,8 @@ public class FileContentVerifierTests {
     @Test
     public void testInputException() throws Exception {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
+        Mockito.when(file.getContentType()).thenReturn("application/pdf");
+        Mockito.when(file.getOriginalFilename()).thenReturn("test.pdf");
         Mockito.when(file.getInputStream()).thenThrow(new IOException("x"));
         assertFalse(fileContentVerifier.verifyContentType(file));
     }
@@ -85,13 +87,13 @@ public class FileContentVerifierTests {
 
     @Test
     public void testFailureForDisallowedExt() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename.dat", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        MultipartFile file = new MockMultipartFile("files", "filename.dat", "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
         assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testFailureForNoExt() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        MultipartFile file = new MockMultipartFile("files", "filename", "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
         assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
