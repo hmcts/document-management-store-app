@@ -11,6 +11,8 @@ module "app" {
   location = "${var.location}"
   env = "${var.env}"
   ilbIp = "${var.ilbIp}"
+  subscription = "${var.subscription}"
+  is_frontend = false
 
   app_settings = {
     POSTGRES_HOST = "${module.db.host_name}"
