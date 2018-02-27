@@ -17,11 +17,6 @@ import uk.gov.hmcts.dm.it.utilities.V1MediaTypes
 @RunWith(SpringRunner.class)
 class SearchDocumentIT extends BaseIT {
 
-    @Before
-    public void setup() throws Exception {
-        createUser CITIZEN
-    }
-
     @Test
     void "S1 As authenticated user I can search for document using specific metadata property"() {
 
@@ -58,11 +53,11 @@ class SearchDocumentIT extends BaseIT {
 
     @Test
     void "S3 As unauthenticated user I am forbidden to invoke search"() {
-        givenRequest()
+        givenUnauthenticatedRequest()
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case', value:'123']))
         .expect()
-            .statusCode(401)
+            .statusCode(403)
             .when()
         .post('/documents/filter')
     }

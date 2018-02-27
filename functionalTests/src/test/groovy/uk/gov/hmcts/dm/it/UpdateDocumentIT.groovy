@@ -14,13 +14,6 @@ import static org.hamcrest.Matchers.equalTo
 @RunWith(SpringRunner.class)
 class UpdateDocumentIT  extends BaseIT {
 
-    @Before
-    void setup() {
-        createUser CITIZEN
-        createUser CITIZEN_2
-        createCaseWorker CASE_WORKER
-    }
-
     @Test
     void "UD1 update TTL for a Document"() {
 

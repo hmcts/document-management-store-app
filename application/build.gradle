@@ -223,21 +223,7 @@ dependencies {
 }
 
 
-task functional(type: Test) {
-    group = 'Delivery pipeline'
-    description = 'Executes functional/intergation tests against'
-    setTestClassesDirs(sourceSets.testIntegration.output.classesDirs)
-    setClasspath(sourceSets.testIntegration.runtimeClasspath)
-    include "uk/gov/hmcts/dm/intergration/**"
-}
 
-task smoke(type: Test) {
-    group = 'Delivery pipeline'
-    description = 'Executes non-destructive smoke tests'
-    setTestClassesDirs(sourceSets.testSmoke.output.classesDirs)
-    setClasspath(sourceSets.testSmoke.runtimeClasspath)
-    include "uk/gov/hmcts/dm/smoke/**"
-}
 
 def coverageExclusionList = [
     '**uk/gov/hmcts/dm/domain/',

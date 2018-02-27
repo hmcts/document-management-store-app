@@ -24,19 +24,15 @@ class DeleteDocumentIT extends BaseIT {
 
     @Before
     void setup() throws Exception {
-        createUser CITIZEN
-        createUser CITIZEN_2
-        createUser CASE_WORKER
-
         this.citizenDocumentUrl = createDocumentAndGetUrlAs CITIZEN
         this.caseWorkerDocumentUrl = createDocumentAndGetUrlAs CASE_WORKER
     }
 
     @Test
     void "D1 Unauthenticated user cannot delete"() {
-        givenRequest()
+        givenUnauthenticatedRequest()
             .expect()
-            .statusCode(401)
+            .statusCode(403)
             .when()
             .delete(citizenDocumentUrl)
     }

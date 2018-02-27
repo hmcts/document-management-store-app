@@ -2,3 +2,4 @@ rootProject.name = 'document-management-store-app'
 
 include 'application'
 include 'functionalTests'
+include 'smokeTests'

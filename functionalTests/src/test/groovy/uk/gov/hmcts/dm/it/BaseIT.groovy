@@ -34,8 +34,8 @@ class BaseIT {
 
     FileUtils fileUtils = new FileUtils()
 
-    @Value('${base-urls.dm-api-gw-web}')
-    String dmApiGwBaseUri
+//    @Value('${base-urls.dm-api-gw-web}')
+//    String dmApiGwBaseUri
 
     @Value('${base_urls.dm-store-app}')
     String dmStoreAppBaseUri
@@ -50,6 +50,11 @@ class BaseIT {
     String CITIZEN_2 = 'test2@test.com'
 
     String CASE_WORKER = 'test3@test.com'
+
+    String CASE_WORKER_ROLE_PROBATE = 'caseworker-probate'
+    String CASE_WORKER_ROLE_CMC = 'caseworker-cmc'
+    String CASE_WORKER_ROLE_SSCS = 'caseworker-sscs'
+    String CASE_WORKER_ROLE_DIVORCE = 'caseworker-divorce'
 
     final String NOBODY = null
 
@@ -97,29 +102,26 @@ class BaseIT {
 
     @PostConstruct
     void init() {
-        RestAssured.baseURI = dmApiGwBaseUri
+        RestAssured.baseURI = dmStoreAppBaseUri
     }
 
-
-    @Before
-    void masterBefore() {
-        CITIZEN = "${RandomStringUtils.randomAlphabetic(10)}@test.com"
-        CITIZEN_2 = "${RandomStringUtils.randomAlphabetic(10)}@test.com"
-        CASE_WORKER = "${RandomStringUtils.randomAlphabetic(10)}@test.com"
-        deleteAllUsers()
+    def givenUnauthenticatedRequest() {
+        def request = given().log().all()
+        request
     }
 
-    @After
-    void masterAfterTest() {
-        deleteAllUsers()
-    }
-
-    def givenRequest(username = null) {
+    def givenRequest(username = null, userRoles = null) {
 
         def request = given().log().all()
 
         if (username) {
-            request = request.header("Authorization", authToken(username))
+            request = request.header("serviceauthorization", serviceToken())
+            if (username) {
+                request = request.header("user-id", username)
+            }
+            if (userRoles) {
+                request = request.header("user-roles", userRoles.join(','))
+            }
         }
 
         request
@@ -175,31 +177,6 @@ class BaseIT {
                 .post("/documents")
     }
 
-    def createDocumentUsingS2STokenAndUserId(userId = 'user1') {
-        createDocumentUsingS2SToken userId
-    }
-
-    def createDocumentUsingS2SToken(filename = null, classification = null, userId) {
-
-        def request = givenS2SRequest()
-            .multiPart("files", file( filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("classification", classification ?: "PRIVATE")
-
-        def documentUrl = request.given().baseUri(dmStoreAppBaseUri)
-            .header("user-id", userId)
-            .expect()
-            .statusCode(200)
-            .when()
-            .post("/documents")
-            .path("_embedded.documents[0]._links.self.href").toString()
-
-        if (documentUrl.startsWith(dmStoreAppBaseUri)) {
-            documentUrl = documentUrl.replace(dmStoreAppBaseUri, dmApiGwBaseUri)
-        }
-
-        documentUrl
-    }
-
     def createDocumentAndGetUrlAs(username, filename = null, classification = null, roles = null, metadata = null) {
         createDocument(username, filename, classification, roles, metadata)
             .path("_embedded.documents[0]._links.self.href")
@@ -225,36 +202,6 @@ class BaseIT {
 
     def createDocumentContentVersionAndGetBinaryUrlAs(documentUrl, username, filename = null) {
         createDocumentContentVersion(documentUrl, username, filename).path('_links.binary.href')
-    }
-
-    def createUser(username, role = null) {
-        authTokenProvider.createIdamUser(username, PASSWORD, role ? Optional.of(role) : Optional.empty())
-    }
-
-    def createCaseWorker(username, role = 'caseworker-probate') {
-        createUser(username, role)
-    }
-
-    def createCaseWorkerCMC(username, role = 'caseworker-cmc') {
-        createUser(username, role)
-    }
-
-    def createCaseWorkerSSCS(username, role = 'caseworker-sscs') {
-        createUser(username, role)
-    }
-
-    def createCaseWorkerDivorce(username, role = 'caseworker-sscs') {
-        createUser(username, role)
-    }
-
-    def deleteUser(username) {
-        authTokenProvider.deleteUser username
-    }
-
-    def deleteAllUsers() {
-        [CITIZEN, CITIZEN_2, CASE_WORKER].each { u ->
-            deleteUser u
-        }
     }
 
     def CreateAUserforTTL(username) {

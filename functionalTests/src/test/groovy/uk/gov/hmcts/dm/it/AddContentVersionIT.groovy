@@ -16,12 +16,6 @@ import static org.hamcrest.Matchers.equalTo
 @RunWith(SpringRunner.class)
 class AddContentVersionIT extends BaseIT {
 
-    @Before
-    public void setup() throws Exception {
-        createUser CITIZEN
-        createUser CASE_WORKER
-    }
-
     @Test
     void "ACV1 As authenticated user who is an owner POST a new version of the content to an existing document then expect 201"() {
 
@@ -64,10 +58,10 @@ class AddContentVersionIT extends BaseIT {
     @Test
     void "ACV3 As unauthenticated user POST a new version of the content to a not existing document"() {
 
-        givenRequest()
+        givenUnauthenticatedRequest()
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(401)
+                .statusCode(403)
             .when()
                 .post('/documents' + UUID.randomUUID())
 
@@ -78,10 +72,10 @@ class AddContentVersionIT extends BaseIT {
 
         def url = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest()
+        givenUnauthenticatedRequest()
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(401)
+                .statusCode(403)
             .when()
                 .post(url)
 
@@ -91,8 +85,6 @@ class AddContentVersionIT extends BaseIT {
     void "ACV5 As authenticated user who is an not an owner POST a new version of the content to an existing document"() {
 
         def url = createDocumentAndGetUrlAs CITIZEN
-
-        createUser CITIZEN_2
 
         givenRequest(CITIZEN_2)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
@@ -108,8 +100,6 @@ class AddContentVersionIT extends BaseIT {
 
         def url = createDocumentAndGetUrlAs CITIZEN
 
-        createCaseWorker CASE_WORKER
-
         givenRequest(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
@@ -121,8 +111,6 @@ class AddContentVersionIT extends BaseIT {
 
     @Test
     void "ACV7 As authenticated user who is a case worker POST a new version of the content to a not existing document and expect 404"() {
-
-        createCaseWorker CASE_WORKER
 
         givenRequest(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)

@@ -23,13 +23,6 @@ import static org.hamcrest.Matchers.equalTo
 @RunWith(SpringRunner.class)
 class CreateDocumentIT extends BaseIT {
 
-    @Before
-    public void setup() throws Exception {
-        createUser CITIZEN
-
-    }
-
-
     @Test
     void "CD1 (R1) As authenticated user upload 2 files with correct classification and some roles set"() {
         Response response = givenRequest(CITIZEN)
@@ -110,15 +103,15 @@ class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    void "CD2 As unauthenticated user I fail (401) to upload files"() {
-        givenRequest()
+    void "CD2 As unauthenticated user I fail (403) to upload files"() {
+        givenUnauthenticatedRequest()
             .multiPart("files", file(ATTACHMENT_7_PNG), MediaType.TEXT_PLAIN_VALUE)
             .multiPart("files", file(ATTACHMENT_7_PNG), MediaType.TEXT_PLAIN_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
         .expect()
-            .statusCode(401)
+            .statusCode(403)
         .when()
             .post("/documents")
     }

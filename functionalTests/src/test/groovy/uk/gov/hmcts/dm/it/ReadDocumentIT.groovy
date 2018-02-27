@@ -14,11 +14,6 @@ import static org.hamcrest.Matchers.equalTo
 @RunWith(SpringRunner.class)
 class ReadDocumentIT extends BaseIT {
 
-    @Before
-    void setup() {
-        createUser CITIZEN
-    }
-
     @Test
     void "R1 As authenticated user who is an owner, can read owned documents"() {
 
@@ -47,13 +42,13 @@ class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    void "R3 As unauthenticated user I try getting an existing document and get 401"() {
+    void "R3 As unauthenticated user I try getting an existing document and get 403"() {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest()
+        givenUnauthenticatedRequest()
             .expect()
-                .statusCode(401)
+                .statusCode(403)
             .when()
                 .get(documentUrl)
 
@@ -61,11 +56,11 @@ class ReadDocumentIT extends BaseIT {
 
 
     @Test
-    void "R4 As unauthenticated user GET existing document and receive 401"() {
+    void "R4 As unauthenticated user GET existing document and receive 403"() {
 
-        givenRequest()
+        givenUnauthenticatedRequest()
             .expect()
-                .statusCode(401)
+                .statusCode(403)
             .when()
                 .get('/documents/XXX')
 
@@ -73,8 +68,6 @@ class ReadDocumentIT extends BaseIT {
 
     @Test
     void "R5 As authenticated user who is not an owner and not a case worker I can't access a document"() {
-
-        createUser CITIZEN_2
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
@@ -89,8 +82,6 @@ class ReadDocumentIT extends BaseIT {
 
     @Test
     void "R6 As authenticated user who is not an owner and not a case worker GET existing document binary and see 403"() {
-
-        createUser CITIZEN_2
 
         def binaryUrl = createDocumentAndGetBinaryUrlAs CITIZEN
 
@@ -107,9 +98,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        createCaseWorker CASE_WORKER
-
-        givenRequest(CASE_WORKER)
+        givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .expect()
                 .statusCode(200)
             .when()
@@ -158,67 +147,67 @@ class ReadDocumentIT extends BaseIT {
 
     }
 
-    @Test
-    void "R12 As unauthenticated user GET document that exists with jwt parameter appended to the document URL"() {
+//    @Test
+//    void "R12 As unauthenticated user GET document that exists with jwt parameter appended to the document URL"() {
+//
+//        def documentUrl = createDocumentAndGetUrlAs CITIZEN
+//
+//        def jwt = authToken CITIZEN
+//
+//        def response = givenRequest()
+//            .param("jwt", jwt)
+//            .redirects().follow(false)
+//            .expect()
+//                .statusCode(302)
+//            .when()
+//                .get(documentUrl).andReturn()
+//
+//        def authToken = response.cookie('__auth-token')
+//        def newLocation = response.header('Location')
+//
+//        givenRequest()
+//            .header('Authorization', authToken)
+//            .expect()
+//                .statusCode(200)
+//            .when()
+//                .get(newLocation)
+//
+//    }
 
-        def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        def jwt = authToken CITIZEN
-
-        def response = givenRequest()
-            .param("jwt", jwt)
-            .redirects().follow(false)
-            .expect()
-                .statusCode(302)
-            .when()
-                .get(documentUrl).andReturn()
-
-        def authToken = response.cookie('__auth-token')
-        def newLocation = response.header('Location')
-
-        givenRequest()
-            .header('Authorization', authToken)
-            .expect()
-                .statusCode(200)
-            .when()
-                .get(newLocation)
-
-    }
-
-
-    @Test
-    void "R13 As unauthenticated user GET document that does not exists with jwt parameter appended to the document URL"() {
-
-        def jwt = authToken CITIZEN
-
-        def response = givenRequest()
-                .param("jwt", jwt)
-                .redirects().follow(false)
-                .expect()
-                .statusCode(302)
-                .when()
-                .get('/documents/xxx').andReturn()
-
-        def authToken = response.cookie('__auth-token')
-        def newLocation = response.header('Location')
-
-        givenRequest()
-                .header('Authorization', authToken)
-                .expect()
-                .statusCode(404)
-                .when()
-                .get(newLocation)
-
-    }
+//    @Test
+//    void "R13 As unauthenticated user GET document that does not exists with jwt parameter appended to the document URL"() {
+//
+//        def jwt = authToken CITIZEN
+//
+//        def response = givenRequest()
+//                .param("jwt", jwt)
+//                .redirects().follow(false)
+//                .expect()
+//                .statusCode(302)
+//                .when()
+//                .get('/documents/xxx').andReturn()
+//
+//        def authToken = response.cookie('__auth-token')
+//        def newLocation = response.header('Location')
+//
+//        givenRequest()
+//                .header('Authorization', authToken)
+//                .expect()
+//                .statusCode(404)
+//                .when()
+//                .get(newLocation)
+//
+//    }
 
     @Test
     void "R14 As authenticated user with a specific role I can access a document if its CLASSIFICATION is restricted and roles match"() {
 
-        createUser(CITIZEN_2, 'caseworker')
+        //createUser(CITIZEN_2, 'caseworker')
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'RESTRICTED', ['caseworker']
 
-        givenRequest(CITIZEN_2)
+        givenRequest(CITIZEN_2, ['caseworker'])
                 .expect()
                 .statusCode(200)
                 .when()
@@ -229,11 +218,11 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R15 As authenticated user with a specific role I can't access a document if its CLASSIFICATION is PRIVATE and roles match"() {
 
-        createUser(CITIZEN_2, 'caseworker')
+        def roles = ['caseworker']
 
-        def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PRIVATE', ['caseworker']
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PRIVATE', roles
 
-        givenRequest(CITIZEN_2)
+        givenRequest(CITIZEN_2, roles)
                 .expect()
                 .statusCode(403)
                 .when()
@@ -244,11 +233,9 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R16 As authenticated user with a specific role I can access a document if its CLASSIFICATION is public and roles match"() {
 
-        createUser(CITIZEN_2, 'caseworker')
-
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', ['caseworker']
 
-        givenRequest(CITIZEN_2)
+        givenRequest(CITIZEN_2, ['caseworker'])
             .expect()
             .statusCode(200)
             .when()
@@ -259,11 +246,9 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R17 As authenticated user with a specific role I can access a document if its CLASSIFICATION is public and matches role"() {
 
-        createUser(CITIZEN_2, 'caseworker')
-
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', ['citizen', 'caseworker']
 
-        givenRequest(CITIZEN_2)
+        givenRequest(CITIZEN_2, ['caseworker'])
             .expect()
             .statusCode(200)
             .when()
@@ -272,8 +257,6 @@ class ReadDocumentIT extends BaseIT {
 
     @Test
     void "R18 As authenticated user with no role I cannot access a document if its CLASSIFICATION is public with no role"() {
-
-        createUser(CITIZEN_2, null)
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', [null]
 
@@ -286,8 +269,6 @@ class ReadDocumentIT extends BaseIT {
 
     @Test
     void "R19 As authenticated user with some role I can access a document if its CLASSIFICATION is public and roles does not match"() {
-
-        createUser(CITIZEN_2, 'caseworker')
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', [null]
 
@@ -302,11 +283,9 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R20 As authenticated user with no role (Tests by default sets role as citizen) I can access a document if its CLASSIFICATION is public and roles is citizen"() {
 
-        createUser(CITIZEN_2, null)
-
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', ['citizen']
 
-        givenRequest(CITIZEN_2)
+        givenRequest(CITIZEN_2, ['citizen'])
             .expect()
             .statusCode(200)
             .when()
@@ -315,8 +294,6 @@ class ReadDocumentIT extends BaseIT {
 
     @Test
     void "R21 As an owner I can access a document even if its CLASSIFICATION is private with no roles"() {
-
-        createUser(CITIZEN_2, null)
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN_2, ATTACHMENT_9_JPG, 'PRIVATE', [null]
 
@@ -330,8 +307,6 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R22 As authenticated user with a specific role I can't access a document if its CLASSIFICATION is restricted and roles don't match"() {
 
-        createUser(CITIZEN_2, 'citizen')
-
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'RESTRICTED', ['caseworker']
 
         givenRequest(CITIZEN_2)
@@ -343,8 +318,6 @@ class ReadDocumentIT extends BaseIT {
 
     @Test
     void "R23 As an Owner with no role I can access a document even if its CLASSIFICATION is private and role as caseworker"() {
-
-        createUser(CITIZEN_2, null)
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN_2, ATTACHMENT_9_JPG, 'PRIVATE', ['caseworker']
 
@@ -358,29 +331,25 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R24 I created a document using S2S token and only caseworkers should be able to read that using api gateway"() {
 
-        def userId = "user2"
-        def documentUrl = createDocumentUsingS2STokenAndUserId userId
-        createCaseWorker CASE_WORKER
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CASE_WORKER)
+        givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .expect()
-            .body("createdBy", equalTo(userId))
+            .body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
             .when()
             .get(documentUrl)
 
-        createCaseWorkerCMC CASE_WORKER
-        givenRequest(CASE_WORKER)
+        givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_SSCS])
             .expect()
-            .body("createdBy", equalTo(userId))
+            .body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
             .when()
             .get(documentUrl)
 
-        createCaseWorkerSSCS CASE_WORKER
-        givenRequest(CASE_WORKER)
+        givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_CMC])
             .expect()
-            .body("createdBy", equalTo(userId))
+            .body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
             .when()
             .get(documentUrl)
@@ -389,17 +358,13 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R25 I created a document using S2S token, but I must not access it as a citizen using api gateway"() {
 
-        createUser CITIZEN
-
-        def documentUrl = createDocumentUsingS2STokenAndUserId("user1")
+        def documentUrl = createDocumentAndGetBinaryUrlAs "user1"
 
         givenRequest(CITIZEN)
             .expect()
             .statusCode(403)
             .when()
             .get(documentUrl)
-
-        createUser CITIZEN_2
 
         givenRequest(CITIZEN_2)
             .expect()
@@ -411,43 +376,37 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R26 userId provided during data creation can be obtained as username in the audit trail"() {
 
-        createUser(CASE_WORKER)
-
-        def token = authToken CASE_WORKER
-        def userid = userId token
-        def documentUrl = createDocumentUsingS2STokenAndUserId userid
+        def documentUrl = createDocumentAndGetUrlAs CASE_WORKER
 
         givenRequest(CASE_WORKER)
             .expect()
-            .body("createdBy", equalTo(userid))
+            .body("createdBy", equalTo(CASE_WORKER))
             .statusCode(200)
             .when()
             .get(documentUrl)
 
-        Map<String, String> map = givenRequest(CASE_WORKER)
+        Map<String, String> map = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
             .path("_embedded.auditEntries[0]")
 
-        Assert.assertEquals(map.get("username"), userid)
+        Assert.assertEquals(map.get("username"), CASE_WORKER)
     }
 
     @Test
     void "R27 As a citizen if I upload a document to API Store then I should be able to access it using API Gateway"() {
 
-        createUser CITIZEN
-        def token = authToken CITIZEN
-        def userid = userId token
+//        createUser CITIZEN
+//        def token = authToken CITIZEN
+//        def userid = userId token
 
-        def documentUrl = createDocumentUsingS2STokenAndUserId userid
+        def documentUrl = createDocumentAndGetBinaryUrlAs CITIZEN
 
         givenRequest(CITIZEN)
             .expect()
             .statusCode(200)
             .when()
             .get(documentUrl)
-
-        createUser CITIZEN_2
 
         givenRequest(CITIZEN_2)
             .expect()

@@ -51,3 +51,10 @@ idea {
 task {
     systemProperties System.getProperties()
 }
+
+task functional(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Executes functional/intergation tests against'
+}
+
+
