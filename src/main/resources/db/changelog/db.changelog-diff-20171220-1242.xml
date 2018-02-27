@@ -1,9 +1,0 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS" xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet id="create_lo_unlink_trigger" author="pawel" dbms="postgresql">
-        <sql>
-            CREATE TRIGGER t_unlink_document_content BEFORE UPDATE OR DELETE ON documentcontent
-            FOR EACH ROW EXECUTE PROCEDURE lo_manage(data);
-        </sql>
-    </changeSet>
-</databaseChangeLog>
