@@ -123,7 +123,7 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
 
 # Blob store test
 resource "azurerm_storage_account" "storage" {
-  name = "dmblobstore"
+  name = "dmstoreblob${var.env}"
   resource_group_name = "${module.app.resource_group_name}"
   location = "${var.location}"
   account_tier = "Standard"
