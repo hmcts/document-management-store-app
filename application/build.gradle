@@ -192,35 +192,35 @@ dependencies {
 }
 
 
-sourceSets {
-    testIntegration {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir('src/testIntegration/java')
-        }
-        resources {
-            srcDir('src/testIntegration/resources')
-        }
-    }
+//sourceSets {
+//    testIntegration {
+//        java {
+//            compileClasspath += main.output + test.output
+//            runtimeClasspath += main.output + test.output
+//            srcDir('src/testIntegration/java')
+//        }
+//        resources {
+//            srcDir('src/testIntegration/resources')
+//        }
+//    }
+//
+//    testSmoke {
+//        java {
+//            compileClasspath += main.output + test.output
+//            runtimeClasspath += main.output + test.output
+//            srcDir('src/testSmoke/java')
+//        }
+//        resources {
+//            srcDir('src/testSmoke/resources')
+//        }
+//    }
+//}
 
-    testSmoke {
-        java {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir('src/testSmoke/java')
-        }
-        resources {
-            srcDir('src/testSmoke/resources')
-        }
-    }
-}
 
-
-dependencies {
-    testIntegrationCompile(sourceSets.test.output)
-    testSmokeCompile(sourceSets.test.output)
-}
+//dependencies {
+//    testIntegrationCompile(sourceSets.test.output)
+//    testSmokeCompile(sourceSets.test.output)
+//}
 
 
 
@@ -298,4 +298,9 @@ run {
     if (debug == 'true') {
         jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
     }
+}
+
+task unit(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Executes unit tests'
 }

@@ -55,6 +55,7 @@ task {
 task functional(type: Test) {
     group = 'Delivery pipeline'
     description = 'Executes functional/intergation tests against'
+    include '**/*IT.*'
 }
 
 
