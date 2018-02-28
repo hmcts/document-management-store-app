@@ -6,6 +6,6 @@ import org.springframework.context.annotation.PropertySource
 
 @Configuration
 @PropertySource("classpath:application.yaml")
-@ComponentScan("uk.gov.hmcts.dm.functional")
+@ComponentScan("uk.gov.hmcts.dm.smoke")
 class TestContextConfiguration {
 }
