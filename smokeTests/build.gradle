@@ -73,10 +73,13 @@ sourceSets {
             srcDir('src/smokeTest/resources')
         }
     }
-
 }
 
-task some(type: Test) {
+dependencies {
+    smokeTestCompile(sourceSets.test.output)
+}
+
+task smoke(type: Test) {
     group = 'Delivery pipeline'
     description = 'Executes smoke tests against a DM API instance'
     setTestClassesDirs(sourceSets.smokeTest.output.classesDirs)
