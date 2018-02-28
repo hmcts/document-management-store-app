@@ -80,7 +80,7 @@ node {
                         allowMissing         : false,
                         alwaysLinkToLastBuild: false,
                         keepAll              : true,
-                        reportDir            : 'build/reports',
+                        reportDir            : 'application/build/reports',
                         reportFiles          : 'dependency-check-report.html',
                         reportName           : 'OWasp Dependency Report'
                     ])
@@ -94,35 +94,35 @@ node {
             } finally {
                 junit 'application/build/test-results/test/**/*.xml'
                 publishHTML([
-                    allowMissing         : false,
-                    alwaysLinkToLastBuild: false,
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
                     keepAll              : true,
-                    reportDir            : "build/reports/tests/test/",
+                    reportDir            : "application/build/reports/tests/test/",
                     reportFiles          : 'index.html',
                     reportName           : 'Unit Test Report'
                 ])
 
                 publishHTML([
-                    allowMissing         : false,
-                    alwaysLinkToLastBuild: false,
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
                     keepAll              : true,
-                    reportDir            : "build/reports/checkstyle/",
+                    reportDir            : "application/build/reports/checkstyle/",
                     reportFiles          : 'main.html',
                     reportName           : 'Checkstyle Main Report'
                 ])
                 publishHTML([
-                    allowMissing         : false,
-                    alwaysLinkToLastBuild: false,
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
                     keepAll              : true,
-                    reportDir            : "build/reports/checkstyle/",
+                    reportDir            : "application/build/reports/checkstyle/",
                     reportFiles          : 'test.html',
                     reportName           : 'Checkstyle Test Report'
                 ])
                 publishHTML([
-                    allowMissing         : false,
-                    alwaysLinkToLastBuild: false,
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
                     keepAll              : true,
-                    reportDir            : "build/reports/pmd/",
+                    reportDir            : "application/build/reports/pmd/",
                     reportFiles          : 'main.html',
                     reportName           : 'PMD Main Report'
                 ])
@@ -130,7 +130,7 @@ node {
                     allowMissing         : false,
                     alwaysLinkToLastBuild: false,
                     keepAll              : true,
-                    reportDir            : "build/reports/pmd/",
+                    reportDir            : "application/build/reports/pmd/",
                     reportFiles          : 'test.html',
                     reportName           : 'PMD Test Report'
                 ])
@@ -153,7 +153,7 @@ node {
                         allowMissing         : false,
                         alwaysLinkToLastBuild: false,
                         keepAll              : true,
-                        reportDir            : "build/reports/jacoco/test/html/",
+                        reportDir            : "application/build/reports/jacoco/test/html/",
                         reportFiles          : 'index.html',
                         reportName           : 'Jacoco Coverage Report'
                     ])
@@ -200,7 +200,7 @@ node {
             }
 
             stage('Package (RPM)') {
-                rpmVersion = packager.javaRPM(app, 'build/libs/document-management-store-app-$(./gradlew -q printVersion)-all.jar', 'springboot', 'src/main/resources/application.yaml')
+                rpmVersion = packager.javaRPM(app, 'application/build/libs/document-management-store-app-$(./gradlew -q printVersion)-all.jar', 'springboot', 'src/main/resources/application.yaml')
                 version = "{ app: ${app}, rpmversion: ${rpmVersion}}"
             }
 
