@@ -44,10 +44,10 @@ public class AuthTokenProvider {
 
         @Override
         public String toString() {
-            return "AuthTokens{" +
-                    "userToken='" + userToken + '\'' +
-                    ", serviceToken='" + serviceToken + '\'' +
-                    '}';
+            return "AuthTokens{"
+                + "userToken='" + userToken + '\''
+                + ", serviceToken='" + serviceToken + '\''
+                + '}';
         }
     }
 

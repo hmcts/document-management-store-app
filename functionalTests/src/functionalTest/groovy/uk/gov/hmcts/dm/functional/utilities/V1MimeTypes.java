@@ -10,77 +10,76 @@ import java.io.Serializable;
 public class V1MimeTypes extends MediaType implements Serializable {
 
 
-    public final static MediaType APPLICATION_DOCX;
-    public final static String APPLICATION_DOCX_VALUE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    public static final MediaType APPLICATION_DOCX;
+    public static final String APPLICATION_DOCX_VALUE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-    public final static MediaType APPLICATION_RTF;
-    public final static String APPLICATION_RTF_VALUE = "application/rtf";
+    public static final MediaType APPLICATION_RTF;
+    public static final String APPLICATION_RTF_VALUE = "application/rtf";
 
-    public final static MediaType IMAGE_TIF;
-    public final static String IMAGE_TIF_VALUE = "image/tiff";
+    public static final MediaType IMAGE_TIF;
+    public static final String IMAGE_TIF_VALUE = "image/tiff";
 
-    public final static MediaType IMAGE_BMP;
-    public final static String IMAGE_BMP_VALUE = "image/bmp";
+    public static final MediaType IMAGE_BMP;
+    public static final String IMAGE_BMP_VALUE = "image/bmp";
 
-    public final static MediaType IMAGE_SVG;
-    public final static String IMAGE_SVG_VALUE = "image/svg+xml";
+    public static final MediaType IMAGE_SVG;
+    public static final String IMAGE_SVG_VALUE = "image/svg+xml";
 
-    public final static MediaType APPLICATION_PPT;
-    public final static String APPLICATION_PPT_VALUE = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    public static final MediaType APPLICATION_PPT;
+    public static final String APPLICATION_PPT_VALUE = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
 
-    public final static MediaType APPLICATION_XLS;
-    public final static String APPLICATION_XLS_VALUE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public static final MediaType APPLICATION_XLS;
+    public static final String APPLICATION_XLS_VALUE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-    public final static MediaType APPLICATION_ODT;
-    public final static String APPLICATION_ODT_VALUE = "application/vnd.oasis.opendocument.text";
+    public static final MediaType APPLICATION_ODT;
+    public static final String APPLICATION_ODT_VALUE = "application/vnd.oasis.opendocument.text";
 
-    public final static MediaType APPLICATION_ODS;
-    public final static String APPLICATION_ODS_VALUE = "application/vnd.oasis.opendocument.spreadsheet";
+    public static final MediaType APPLICATION_ODS;
+    public static final String APPLICATION_ODS_VALUE = "application/vnd.oasis.opendocument.spreadsheet";
 
-    public final static MediaType APPLICATION_ODP;
-    public final static String APPLICATION_ODP_VALUE = "application/vnd.oasis.opendocument.presentation";
+    public static final MediaType APPLICATION_ODP;
+    public static final String APPLICATION_ODP_VALUE = "application/vnd.oasis.opendocument.presentation";
 
-    public final static MediaType AUDIO_WAV;
-    public final static String AUDIO_WAV_VALUE = "audio/vnd.wave";
+    public static final MediaType AUDIO_WAV;
+    public static final String AUDIO_WAV_VALUE = "audio/vnd.wave";
 
-    public final static MediaType AUDIO_MIDI;
-    public final static String AUDIO_MIDI_VALUE = "audio/midi";
+    public static final MediaType AUDIO_MIDI;
+    public static final String AUDIO_MIDI_VALUE = "audio/midi";
 
-    public final static MediaType AUDIO_MPEG;
-    public final static String AUDIO_MPEG_VALUE = "audio/mpeg";
+    public static final MediaType AUDIO_MPEG;
+    public static final String AUDIO_MPEG_VALUE = "audio/mpeg";
 
-    public final static MediaType AUDIO_WEBM;
-    public final static String AUDIO_WEBM_VALUE = "audio/webm";
+    public static final MediaType AUDIO_WEBM;
+    public static final String AUDIO_WEBM_VALUE = "audio/webm";
 
-    public final static MediaType AUDIO_OGG;
-    public final static String AUDIO_OGG_VALUE = "audio/ogg";
+    public static final MediaType AUDIO_OGG;
+    public static final String AUDIO_OGG_VALUE = "audio/ogg";
 
-    public final static MediaType AUDIO_3GPP;
-    public final static String AUDIO_3GPP_VALUE = "audio/3gpp";
+    public static final MediaType AUDIO_3GPP;
+    public static final String AUDIO_3GPP_VALUE = "audio/3gpp";
 
-    public final static MediaType AUDIO_3GPP2;
-    public final static String AUDIO_3GPP2_VALUE = "audio/3gpp2";
+    public static final MediaType AUDIO_3GPP2;
+    public static final String AUDIO_3GPP2_VALUE = "audio/3gpp2";
 
-    public final static MediaType AUDIO_XWAV;
-    public final static String AUDIO_XWAV_VALUE = "audio/x-wav";
+    public static final MediaType AUDIO_XWAV;
+    public static final String AUDIO_XWAV_VALUE = "audio/x-wav";
 
-    public final static MediaType VIDEO_OGG;
-    public final static String VIDEO_OGG_VALUE = "video/ogg";
+    public static final MediaType VIDEO_OGG;
+    public static final String VIDEO_OGG_VALUE = "video/ogg";
 
-    public final static MediaType VIDEO_3GPP;
-    public final static String VIDEO_3GPP_VALUE = "video/3gpp";
+    public static final MediaType VIDEO_3GPP;
+    public static final String VIDEO_3GPP_VALUE = "video/3gpp";
 
-    public final static MediaType VIDEO_3GPP2;
-    public final static String VIDEO_3GPP2_VALUE = "video/3gpp2";
+    public static final MediaType VIDEO_3GPP2;
+    public static final String VIDEO_3GPP2_VALUE = "video/3gpp2";
 
-    public final static MediaType VIDEO_WEBM;
-    public final static String VIDEO_WEBM_VALUE = "video/webm";
+    public static final MediaType VIDEO_WEBM;
+    public static final String VIDEO_WEBM_VALUE = "video/webm";
 
-    public final static MediaType VIDEO_MPEG;
-    public final static String VIDEO_MPEG_VALUE = "video/mp4";
+    public static final MediaType VIDEO_MPEG;
+    public static final String VIDEO_MPEG_VALUE = "video/mp4";
 
-    static
-    {
+    static {
         //    whitelist: ${DM_MULTIPART_WHITELIST:text/plain,text/csv,image/gif,image/tiff,image/jpeg,image/png,image/webp,image/svg+xml,application/pdf,application/rtf,application/msword,application/vnd.ms-powerpoint,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.oasis.opendocument.text,application/vnd.oasis.opendocument.spreadsheet,application/vnd.oasis.opendocument.presentation,application/xml,audio/wav,audio/midi,audio/mpeg,audio/webm,audio/ogg,video/ogg,audio/3gpp,video/3gpp,audio/3gpp2,video/3gpp2,audio/x-wav,audio/wav,video/webm,video/mpeg}
         APPLICATION_DOCX = valueOf(APPLICATION_DOCX_VALUE);
         APPLICATION_RTF = valueOf(APPLICATION_RTF_VALUE);

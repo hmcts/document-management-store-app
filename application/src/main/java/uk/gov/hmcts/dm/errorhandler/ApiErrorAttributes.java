@@ -43,7 +43,7 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
                 throwable,
                 (String) errorAttributes.get("message"),
                 (Integer) requestAttributes.getAttribute("javax.servlet.error.status_code", 0),
-                errors );
+                errors);
 
         errorAttributes.put("error", errorStatusCodeAndMessage.getMessage());
         requestAttributes.setAttribute("javax.servlet.error.status_code", errorStatusCodeAndMessage.getStatusCode(), 0);
