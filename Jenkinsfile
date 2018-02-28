@@ -218,7 +218,8 @@ node {
 
             stage('IT on Dev') {
                 build job: 'hmcts/dm-it-pipeline/master', parameters: [
-                    [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: "dev"]
+                    [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: "dev"],
+                    [$class: 'StringParameterValue', name: 'APP_TYPE', value: "app"]
                 ]
                 if (params.IS_RC == "true") {
                     rpmTagger.tagTestingPassedOn('dev')
@@ -234,7 +235,8 @@ node {
 
             stage('IT on Test') {
                 build job: 'hmcts/dm-it-pipeline/master', parameters: [
-                    [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: "test"]
+                    [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: "test"],
+                    [$class: 'StringParameterValue', name: 'APP_TYPE', value: "app"]
                 ]
                 if (params.IS_RC) {
                     rpmTagger.tagTestingPassedOn('test')
