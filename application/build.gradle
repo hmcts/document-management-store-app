@@ -111,13 +111,6 @@ def versions = [
     xmlMavenPlugin     : '1.0',
 ]
 
-configurations {
-    testSmokeCompile.extendsFrom(testCompile)
-    testSmokeRuntime.extendsFrom(testRuntime)
-    testIntegrationCompile.extendsFrom(testCompile)
-    testIntegrationRuntime.extendsFrom(testRuntime)
-}
-
 dependencies {
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.8'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.17'
@@ -190,40 +183,6 @@ dependencies {
 
 
 }
-
-
-//sourceSets {
-//    testIntegration {
-//        java {
-//            compileClasspath += main.output + test.output
-//            runtimeClasspath += main.output + test.output
-//            srcDir('src/testIntegration/java')
-//        }
-//        resources {
-//            srcDir('src/testIntegration/resources')
-//        }
-//    }
-//
-//    testSmoke {
-//        java {
-//            compileClasspath += main.output + test.output
-//            runtimeClasspath += main.output + test.output
-//            srcDir('src/testSmoke/java')
-//        }
-//        resources {
-//            srcDir('src/testSmoke/resources')
-//        }
-//    }
-//}
-
-
-//dependencies {
-//    testIntegrationCompile(sourceSets.test.output)
-//    testSmokeCompile(sourceSets.test.output)
-//}
-
-
-
 
 def coverageExclusionList = [
     '**uk/gov/hmcts/dm/domain/',
@@ -300,7 +259,3 @@ run {
     }
 }
 
-task unit(type: Test) {
-    group = 'Delivery pipeline'
-    description = 'Executes unit tests'
-}
