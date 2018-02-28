@@ -217,7 +217,7 @@ node {
             }
 
             stage('IT on Dev') {
-                build job: 'evidence/integration-tests-pipeline/master', parameters: [
+                build job: 'hmcts/dm-it-pipeline/master', parameters: [
                     [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: "dev"]
                 ]
                 if (params.IS_RC == "true") {
@@ -233,7 +233,7 @@ node {
             }
 
             stage('IT on Test') {
-                build job: 'evidence/integration-tests-pipeline/master', parameters: [
+                build job: 'hmcts/dm-it-pipeline/master', parameters: [
                     [$class: 'StringParameterValue', name: 'ENVIRONMENT', value: "test"]
                 ]
                 if (params.IS_RC) {
