@@ -92,7 +92,7 @@ node {
             try {
                 sh "./gradlew check --info"
             } finally {
-                junit 'build/test-results/test/**/*.xml'
+                junit 'application/build/test-results/test/**/*.xml'
                 publishHTML([
                     allowMissing         : false,
                     alwaysLinkToLastBuild: false,
@@ -138,7 +138,7 @@ node {
                 try {
                     sh './gradlew jacocoTestReport --info'
                 }finally {
-                    jacoco(execPattern: 'build/jacoco/test.exec', buildOverBuild: false,
+                    jacoco(execPattern: 'application/build/jacoco/test.exec', buildOverBuild: false,
                         exclusionPattern: '**/test/*, ' +
                             '**/uk/gov/hmcts/dm/DmApp.java,'+
                             '**/uk/gov/hmcts/dm/hateos/*,'+
