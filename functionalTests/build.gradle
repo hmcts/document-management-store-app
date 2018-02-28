@@ -20,6 +20,11 @@ def versions = [
     springBoot         : springBootVersion,
 ]
 
+configurations {
+    functionalTestCompile.extendsFrom(testCompile)
+    functionalTestRuntime.extendsFrom(testRuntime)
+}
+
 dependencies {
     compile group: 'com.google.guava', name :'guava', version:'21.0'
 
@@ -52,10 +57,34 @@ task {
     systemProperties System.getProperties()
 }
 
-task functional(type: Test) {
-    group = 'Delivery pipeline'
-    description = 'Executes functional/intergation tests against'
-    include '**/*IT.*'
+sourceSets {
+    functionalTest {
+        groovy {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir('src/functionalTest/groovy')
+        }
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir('src/functionalTest/java')
+        }
+        resources {
+            srcDir('src/functionalTest/resources')
+        }
+    }
+
 }
 
+dependencies {
+    functionalTestCompile(sourceSets.test.output)
+}
+
+task functional(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Executes functional tests against DM API instance'
+    setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
+    setClasspath(sourceSets.functionalTest.runtimeClasspath)
+    include "uk/gov/hmcts/dm/functional/*IT.*"
+}
 

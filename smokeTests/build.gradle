@@ -20,6 +20,11 @@ def versions = [
     springBoot         : springBootVersion,
 ]
 
+configurations {
+    smokeTestCompile.extendsFrom(testCompile)
+    smokeTestRuntime.extendsFrom(testRuntime)
+}
+
 dependencies {
     compile group: 'com.google.guava', name :'guava', version:'21.0'
 
@@ -52,7 +57,29 @@ task {
     systemProperties System.getProperties()
 }
 
-task smoke(type: Test) {
+sourceSets {
+    smokeTest {
+        groovy {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir('src/smokeTest/groovy')
+        }
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir('src/smokeTest/java')
+        }
+        resources {
+            srcDir('src/smokeTest/resources')
+        }
+    }
+
+}
+
+task some(type: Test) {
     group = 'Delivery pipeline'
-    description = 'Executes non-destructive smoke tests'
+    description = 'Executes smoke tests against a DM API instance'
+    setTestClassesDirs(sourceSets.smokeTest.output.classesDirs)
+    setClasspath(sourceSets.smokeTest.runtimeClasspath)
+    include "uk/gov/hmcts/dm/smoke/*IT.*"
 }
