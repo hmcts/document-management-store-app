@@ -73,7 +73,6 @@ sourceSets {
             srcDir('src/functionalTest/resources')
         }
     }
-
 }
 
 dependencies {
@@ -87,4 +86,3 @@ task functional(type: Test) {
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
     include "uk/gov/hmcts/dm/functional/*IT.*"
 }
-
