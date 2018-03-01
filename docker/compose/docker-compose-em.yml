@@ -1,0 +1,81 @@
+version: '2.1'
+
+services:
+
+  em-viewer-web:
+    image: docker.artifactory.reform.hmcts.net/evidence/em-viewer-web:latest
+    environment:
+    - NODE_ENV=development
+    - PORT=8080
+
+  em-api-gateway-web:
+    image: docker.artifactory.reform.hmcts.net/evidence/em-api-gateway-web:latest
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+      - ANNOTATION_URL=http://em-annotation-app:8080
+      - IDAM_BASE_URL=http://idam-api:8080
+      - IDAM_S2S_URL=http://service-auth-provider-api:8080
+      - IDAM_SERVICE_KEY=AAAAAAAAAAAAAAAA
+      - IDAM_SERVICE_NAME=em_gw
+      - CORS_ORIGIN_METHODS=GET,POST,PUT,DELETE,OPTIONS
+      - CORS_ORIGIN_WHITELIST=*
+      #      logging env vars
+      - ROOT_APPENDER=JSON_CONSOLE
+      - LOG_OUTPUT=single
+      - JSON_CONSOLE_PRETTY_PRINT=false
+      - REFORM_SERVICE_TYPE=node
+      - REFORM_SERVICE_NAME=em-api-gateway-web
+      - REFORM_TEAM=evidence
+      - REFORM_ENVIRONMENT=docker
+#      healthcheck env vars
+      - PACKAGES_ENVIRONMENT=docker
+      - PACKAGES_PROJECT=evidence
+      - PACKAGES_NAME=em-api-gateway-web
+      - PACKAGES_VERSION=unkown
+      - XFWD=true
+    links:
+     - idam-api
+     - service-auth-provider-api
+    depends_on:
+     - idam-api
+     - service-auth-provider-api
+
+  em-annotation-app:
+    image: docker.artifactory.reform.hmcts.net/evidence/em-annotation-app:latest
+    environment:
+      - NODE_ENV=development
+      - SERVER_PORT=8080
+      - IDAM_CLIENT_URL=http://idam-api:8080
+      - PROVIDER_SERVICE_CLIENT_URL=http://service-auth-provider-api:8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-annotation-database:5432/annotation
+      - SPRING_DATASOURCE_USERNAME=annotation
+      - SPRING_DATASOURCE_PASSWORD=annotation
+      - http_proxy=
+      - https_proxy=
+      - no_proxy=
+#      logging env vars
+      - ROOT_APPENDER=JSON_CONSOLE
+      - JSON_CONSOLE_PRETTY_PRINT=true
+      - REFORM_SERVICE_TYPE=java
+      - REFORM_SERVICE_NAME=em-annotation-app
+      - REFORM_TEAM=evidence
+      - REFORM_ENVIRONMENT=docker
+#      healthcheck env vars
+      - PACKAGES_ENVIRONMENT=docker
+      - PACKAGES_PROJECT=evidence
+      - PACKAGES_NAME=em-annotation-app
+      - PACKAGES_VERSION=unkown
+#      debug mode
+      - JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+    links:
+     - em-annotation-database
+     - idam-api
+     - service-auth-provider-api
+    depends_on:
+     - em-annotation-database
+     - idam-api
+     - service-auth-provider-api
+
+  em-annotation-database:
+    image: docker.artifactory.reform.hmcts.net/evidence/em-annotation-app-database:latest
