@@ -10,14 +10,11 @@ import uk.gov.hmcts.dm.smoke.utilities.FileUtils
 import uk.gov.hmcts.dm.smoke.utilities.V1MediaTypes
 
 import javax.annotation.PostConstruct
-import uk.gov.hmcts.dm.smoke.config.TestContextConfiguration
+import uk.gov.hmcts.dm.smoke.config.SmokeTestContextConfiguration
 
 import static io.restassured.RestAssured.given
 
-/**
- * Created by pawel on 16/10/2017.
- */
-@ContextConfiguration(classes = TestContextConfiguration)
+@ContextConfiguration(classes = SmokeTestContextConfiguration)
 @NotThreadSafe
 class BaseIT {
 
@@ -26,8 +23,8 @@ class BaseIT {
 
     FileUtils fileUtils = new FileUtils()
 
-    @Value('${base-urls.dm-api}')
-    String dmGwBaseUri
+    @Value('${base-urls.dm-store-app}')
+    String dmStoreAppBaseUri
 
     final String FILES_FOLDER = 'files/'
     final String ATTACHMENT_1 = 'Attachment1.txt'
@@ -68,7 +65,12 @@ class BaseIT {
 
     @PostConstruct
     void init() {
-        RestAssured.baseURI = dmGwBaseUri
+        RestAssured.baseURI = dmStoreAppBaseUri
+    }
+
+    def givenUnauthenticatedRequest() {
+        def request = given().log().all()
+        request
     }
 
     def givenRequest() {
@@ -135,8 +137,4 @@ class BaseIT {
         createDocumentContentVersion(documentUrl, filename).path('_links.binary.href')
     }
 
-    def givenUnauthenticatedRequest() {
-        def request = given().log().all()
-        request
-    }
 }

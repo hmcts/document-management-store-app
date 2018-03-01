@@ -13,16 +13,13 @@ import uk.gov.hmcts.dm.functional.utilities.FileUtils
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import javax.annotation.PostConstruct
-import uk.gov.hmcts.dm.functional.config.TestContextConfiguration
+import uk.gov.hmcts.dm.functional.config.FunctionalTestContextConfiguration
 
 import static io.restassured.RestAssured.given
 import static io.restassured.RestAssured.expect
 import static org.hamcrest.Matchers.equalTo
 
-/**
- * Created by pawel on 16/10/2017.
- */
-@ContextConfiguration(classes = TestContextConfiguration)
+@ContextConfiguration(classes = FunctionalTestContextConfiguration)
 @NotThreadSafe
 class BaseIT {
 
@@ -34,7 +31,7 @@ class BaseIT {
 //    @Value('${base-urls.dm-api-gw-web}')
 //    String dmApiGwBaseUri
 
-    @Value('${base_urls.dm-store-app}')
+    @Value('${base-urls.dm-store-app}')
     String dmStoreAppBaseUri
 
     @Value('${base-urls.idam-user}')

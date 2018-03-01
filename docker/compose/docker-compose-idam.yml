@@ -1,0 +1,85 @@
+---
+version: '2.1'
+
+services:
+
+  idam-authentication-web:
+    image: docker.artifactory.reform.hmcts.net/auth/authentication-web:latest
+    environment:
+    - IDAM_CONTINUE_URL_VALIDATOR_ENFORCE_TLS=false
+    - IDAM_ENABLE_PROXY=true
+    - IDAM_API_URL=http://idam-api:8080
+    links:
+    - idam-api
+    - service-auth-provider-api
+
+  idam-registration-web:
+    image: docker.artifactory.reform.hmcts.net/auth/registration-web:latest
+    environment:
+    - IDAM_API_URL=http://idam-api:8080
+    - IDAM_LOGIN_URL=http://idam-api:8080/login
+    - IDAM_REGISTRATION_URL=http://idam-api:8080/register
+    - IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_REGISTRATION_WEB=AAAAAAAAAAAAAAAA
+    links:
+    - idam-api
+    - service-auth-provider-api
+
+  idam-api:
+    image: docker.artifactory.reform.hmcts.net/auth/idam-api:1620c9973d85ca622904ecbf01c47a4abb91f7c9
+    command: --wait-for-database 60
+    environment:
+      - IDAM_SUPERUSER_EMAIL
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://idam-database:5432/idam
+      - SPRING_PROFILES_ACTIVE=test
+      - IDAM_TESTING_SUPPORT_ENABLED=true
+      - LOGGING_LEVEL_UK_GOV_HMCTS_IDAM=DEBUG
+      - IDAM_AUTHENTICATION_WEB_HOST=https://idam-authentication-web:8000
+      - IDAM_REGISTRATION_WEB_HOST=https://idam-registration-web:8000
+      - IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_REGISTRATION_WEB=QM5RQQ53LZFOSIXJ
+      - http_proxy
+      - https_proxy
+      - no_proxy
+#      logging env vars
+      - ROOT_APPENDER=JSON_CONSOLE
+      - JSON_CONSOLE_PRETTY_PRINT=false
+      - REFORM_SERVICE_TYPE=java
+      - REFORM_SERVICE_NAME=idam-api
+      - REFORM_TEAM=cc
+      - REFORM_ENVIRONMENT=docker
+#      healthcheck env vars
+      - PACKAGES_ENVIRONMENT=docker
+      - PACKAGES_PROJECT=idam
+      - PACKAGES_NAME=idam
+      - PACKAGES_VERSION=unkown
+    links:
+      - smtp-server
+      - idam-database
+    depends_on:
+      - idam-database
+      - smtp-server
+
+  idam-database:
+    image: docker.artifactory.reform.hmcts.net/auth/idam-database:latest
+
+  smtp-server:
+    image: mailhog/mailhog
+
+  service-auth-provider-api:
+    image: docker.artifactory.reform.hmcts.net/auth/service-auth-provider-api:47e18b53aad48ae8124744041988565e07dfed50
+#    image: docker.artifactory.reform.hmcts.net/auth/service-auth-provider-api:latest
+    environment:
+      - auth.provider.service.server.jwtKey=wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
+      - auth.provider.service.server.microserviceKeys.em_gw=AAAAAAAAAAAAAAAA
+      - auth.provider.service.testing-support.enabled=true
+#      logging env vars
+      - ROOT_APPENDER=JSON_CONSOLE
+      - JSON_CONSOLE_PRETTY_PRINT=false
+      - REFORM_SERVICE_TYPE=java
+      - REFORM_SERVICE_NAME=service-auth-provider-api
+      - REFORM_TEAM=cc
+      - REFORM_ENVIRONMENT=docker
+#      healthcheck env vars
+      - PACKAGES_ENVIRONMENT=docker
+      - PACKAGES_PROJECT=idam
+      - PACKAGES_NAME=idam-service
+      - PACKAGES_VERSION=unkown

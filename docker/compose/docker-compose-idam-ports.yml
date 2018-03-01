@@ -1,0 +1,24 @@
+---
+version: '2.1'
+
+services:
+
+  idam-authentication-web:
+    ports:
+    - 3501:8000
+
+  idam-registration-web:
+    ports:
+    - 3502:8000
+
+  idam-api:
+    ports:
+      - 4501:8080
+
+  idam-database:
+    ports:
+      - 5501:5432
+
+  service-auth-provider-api:
+    ports:
+      - 4502:8080
