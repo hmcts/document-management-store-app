@@ -351,25 +351,25 @@ class CreateDocumentIT extends BaseIT {
         Assert.assertTrue(Arrays.equals(downloadedFileByteArray, file))
     }
 
-    @Test
-    void "CD15 (R1) As authenticated user when I upload a pdf, I can get the thumbnail of that pdf"() {
-        def url = givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "citizen")
-            .expect().log().all()
-            .statusCode(200)
-            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_4_PDF))
-            .body("_embedded.documents[0].mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
-            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
-            .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
-            .when()
-            .post("/documents")
-            .path("_embedded.documents[0]._links.thumbnail.href")
-
-        assertByteArrayEquality THUMBNAIL_PDF, givenRequest(CITIZEN).get(url).asByteArray()
-    }
+//    @Test
+//    void "CD15 (R1) As authenticated user when I upload a pdf, I can get the thumbnail of that pdf"() {
+//        def url = givenRequest(CITIZEN)
+//            .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
+//            .multiPart("classification", Classifications.PUBLIC as String)
+//            .multiPart("roles", "citizen")
+//            .expect().log().all()
+//            .statusCode(200)
+//            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+//            .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_4_PDF))
+//            .body("_embedded.documents[0].mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
+//            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
+//            .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
+//            .when()
+//            .post("/documents")
+//            .path("_embedded.documents[0]._links.thumbnail.href")
+//
+//        assertByteArrayEquality THUMBNAIL_PDF, givenRequest(CITIZEN).get(url).asByteArray()
+//    }
 
     @Test
     void "CD16 (R1) As authenticated user when I upload a bmp, I can get the thumbnail of that bmp"() {
