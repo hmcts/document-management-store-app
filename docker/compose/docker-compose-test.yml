@@ -1,0 +1,57 @@
+---
+version: '2.1'
+
+services:
+  document-management-store-integration-tests:
+    image: docker.artifactory.reform.hmcts.net/evidence/integration-tests
+    environment:
+      - DM_GW_BASE_URI=http://document-management-store-api-gateway-web:8080
+      - DM_STORE_BASE_URI=http://document-management-store:8080
+      - IDAM_USER_BASE_URI=http://idam-api:8080
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
+    links:
+      - document-management-store-api-gateway-web
+      - document-management-store
+      - idam-api
+      - service-auth-provider-api
+    depends_on:
+      - document-management-store-api-gateway-web
+      - document-management-store
+      - idam-api
+      - service-auth-provider-api
+
+  document-management-store-perfomance-tests:
+    image: docker.artifactory.reform.hmcts.net/evidence/perfomance-tests
+    environment:
+      - DM_GW_BASE_URI=http://document-management-store-api-gateway-web:8080
+      - DM_STORE_BASE_URI=http://document-management-store:8080
+      - IDAM_USER_BASE_URI=http://idam-api:8080
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
+    links:
+      - document-management-store-api-gateway-web
+      - document-management-store
+      - idam-api
+      - service-auth-provider-api
+    depends_on:
+      - document-management-store-api-gateway-web
+      - document-management-store
+      - idam-api
+      - service-auth-provider-api
+
+  document-management-store-smoke-tests:
+    image: docker.artifactory.reform.hmcts.net/evidence/smoke-tests
+    environment:
+      - DM_GW_BASE_URI=http://document-management-store-api-gateway-web:8080
+      - DM_STORE_BASE_URI=http://document-management-store:8080
+      - IDAM_USER_BASE_URI=http://idam-api:8080
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
+    links:
+      - document-management-store-api-gateway-web
+      - document-management-store
+      - idam-api
+      - service-auth-provider-api
+    depends_on:
+      - document-management-store-api-gateway-web
+      - document-management-store
+      - idam-api
+      - service-auth-provider-api

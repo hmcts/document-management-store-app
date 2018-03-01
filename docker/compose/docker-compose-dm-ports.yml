@@ -1,0 +1,21 @@
+---
+version: '2.1'
+
+services:
+
+  document-management-node-demo:
+    ports:
+     - 3608:8080
+
+  document-management-store-api-gateway-web:
+    ports:
+     - 3603:8080
+
+  document-management-store:
+    ports:
+     - 4603:8080
+#     - 5005:5005
+
+#  document-management-store-database:
+#    ports:
+#     - 5432:5432

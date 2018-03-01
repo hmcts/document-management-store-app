@@ -53,11 +53,11 @@ dm:
 auth:
   idam:
     client:
-      baseUrl: ${IDAM_CLIENT_URL:http://localhost:8081}
+      baseUrl: ${IDAM_CLIENT_URL:http://localhost:4501}
   provider:
     service:
       client:
-        baseUrl: ${PROVIDER_SERVICE_CLIENT_URL:http://localhost:8082}
+        baseUrl: ${PROVIDER_SERVICE_CLIENT_URL:http://localhost:4502}
 
 security:
   headers:
@@ -73,7 +73,7 @@ liquibase:
   change-log: classpath:/db/changelog/db.changelog-master.xml
 
 server:
-  port: ${SERVER_PORT:8083}
+  port: ${SERVER_PORT:4603}
 
 authorization:
   case-worker-roles: ${CASE_WORKER_ROLES:caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce}
@@ -84,9 +84,9 @@ errors:
 
 info:
   app:
-    environment: ${PACKAGES_ENVIRONMENT:unknown}
-    project: ${PACKAGES_PROJECT:unknown}
-    name: ${PACKAGES_NAME:unknown}
+    environment: ${PACKAGES_ENVIRONMENT:local}
+    project: ${PACKAGES_PROJECT:evidence}
+    name: ${PACKAGES_NAME:document-management-store-app}
 #    version: ${PACKAGES_VERSION:unknown}
 
 health:
