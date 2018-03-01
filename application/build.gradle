@@ -234,6 +234,7 @@ sonarqube {
 //(./gradlew installDist bootRepackage) build/install/document-management-store-app/bin/document-management-store-app
 jar {
     baseName 'document-management-store-app'
+    destinationDir = file("$rootDir/build/libs")
     manifest {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
     }
@@ -258,4 +259,5 @@ run {
         jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
     }
 }
+
 
