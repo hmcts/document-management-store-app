@@ -1,4 +1,2 @@
-base-urls.dm-api-gw-web=${DM_GW_BASE_URI:http://localhost:3603}
-base-urls.idam-user=${IDAM_USER_BASE_URI:http://localhost:4501}
 base-urls.idam-s2s=${IDAM_S2S_BASE_URI:http://localhost:4502}
 base-urls.dm-store-app=${TEST_URL:http://localhost:4603}
