@@ -79,8 +79,8 @@ services:
       - SPRING_PROFILES_ACTIVE=dev
       - IDAM_TESTING_SUPPORT_ENABLED=true
       - LOGGING_LEVEL_UK_GOV_HMCTS_IDAM=DEBUG
-      - IDAM_CLIENT_URL=http://idam-api:8080
-      - PROVIDER_SERVICE_CLIENT_URL=http://service-auth-provider-api:8080
+      - IDAM_USER_BASE_URI=http://idam-api:8080
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
       - http_proxy=
       - https_proxy=
       - no_proxy=

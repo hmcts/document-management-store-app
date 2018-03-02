@@ -45,8 +45,8 @@ services:
     image: docker.artifactory.reform.hmcts.net/evidence/em-annotation-app:latest
     environment:
       - SERVER_PORT=8080
-      - IDAM_CLIENT_URL=http://idam-api:8080
-      - PROVIDER_SERVICE_CLIENT_URL=http://service-auth-provider-api:8080
+      - IDAM_USER_BASE_URI=http://idam-api:8080
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://em-annotation-app-database:5432/annotation
 #      logging env vars
       - ROOT_APPENDER=JSON_CONSOLE
@@ -71,8 +71,8 @@ services:
     image: docker.artifactory.reform.hmcts.net/evidence/em-redaction-app:latest
     environment:
       - SERVER_PORT=8080
-      - IDAM_CLIENT_URL=http://idam-api:8080
-      - PROVIDER_SERVICE_CLIENT_URL=http://service-auth-provider-api:8080
+      - IDAM_USER_BASE_URI=http://idam-api:8080
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://em-redaction-app-database:5432/redaction
 #      logging env vars
       - ROOT_APPENDER=JSON_CONSOLE
