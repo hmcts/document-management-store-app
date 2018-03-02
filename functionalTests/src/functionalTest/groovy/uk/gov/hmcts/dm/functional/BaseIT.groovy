@@ -97,6 +97,7 @@ class BaseIT {
     @PostConstruct
     void init() {
         RestAssured.baseURI = dmStoreAppBaseUri
+        RestAssured.useRelaxedHTTPSValidation()
     }
 
     def givenUnauthenticatedRequest() {
