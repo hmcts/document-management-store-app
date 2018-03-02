@@ -58,11 +58,11 @@ authorization:
 auth:
   idam:
     client:
-      baseUrl: ${IDAM_CLIENT_URL:http://localhost:4501}
+      baseUrl: ${IDAM_USER_BASE_URI:http://localhost:4501}
   provider:
     service:
       client:
-        baseUrl: ${PROVIDER_SERVICE_CLIENT_URL:http://localhost:4502}
+        baseUrl: ${IDAM_S2S_BASE_URI:http://localhost:4502}
 
 security:
   headers:

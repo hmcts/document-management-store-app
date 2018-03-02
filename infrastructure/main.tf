@@ -32,8 +32,8 @@ module "app" {
     MAX_FILE_SIZE = "${var.max_file_size_in_mb}MB"
 
     # idam
-    IDAM_CLIENT_URL = "${var.idam_api_url}"
-    PROVIDER_SERVICE_CLIENT_URL = "${var.s2s_url}"
+    IDAM_USER_BASE_URI = "${var.idam_api_url}"
+    IDAM_S2S_BASE_URI = "${var.s2s_url}"
 
     # logging vars & healthcheck
     REFORM_SERVICE_NAME = "${local.app_full_name}"
@@ -61,7 +61,7 @@ module "app" {
     # DM_MULTIPART_WHITELIST = "${var.dm_multipart_whitelist}"
     # S2S_NAMES_WHITELIST = "${var.s2s_names_whitelist}"
     # CASE_WORKER_ROLES = "${var.case_worker_roles}"
-    
+
     # Toggles
     ENABLE_IDAM_HEALTH_CHECK = "${var.enable_idam_healthcheck}"
     ENABLE_METADATA_SEARCH = "${var.enable_metadata_search}"

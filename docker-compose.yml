@@ -8,8 +8,8 @@ services:
     environment:
       - SERVER_PORT=8080
       - SPRING_DATASOURCE_URL=jdbc:postgresql://document-management-store-database:5432/evidence
-      - IDAM_CLIENT_URL=http://idam-api:8080
-      - PROVIDER_SERVICE_CLIENT_URL=http://service-auth-provider-api:8080
+      - IDAM_USER_BASE_URI=http://idam-api:8080
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
       # these environment variables are used by java-logging library
       - ROOT_APPENDER=JSON_CONSOLE
       - JSON_CONSOLE_PRETTY_PRINT=true
