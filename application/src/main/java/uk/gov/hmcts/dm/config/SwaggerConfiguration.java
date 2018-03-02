@@ -17,10 +17,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Created by MatejNavara on 20/06/2017.
- */
-
 @Configuration
 @EnableSwagger2
 @ComponentScan("uk.gov.hmcts.dm.controller")

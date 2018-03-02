@@ -44,11 +44,16 @@ spring:
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
 
+liquibase:
+ enabled: true
+ change-log: classpath:/db/changelog/db.changelog-master.xml
 
-dm:
-  multipart:
-    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp}
-    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf}
+server:
+  port: ${SERVER_PORT:4603}
+
+authorization:
+  case-worker-roles: ${CASE_WORKER_ROLES:caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce}
+  s2s-names-whitelist: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw}
 
 auth:
   idam:
@@ -67,17 +72,6 @@ logging:
   level:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:INFO}
-
-liquibase:
-  enabled: true
-  change-log: classpath:/db/changelog/db.changelog-master.xml
-
-server:
-  port: ${SERVER_PORT:4603}
-
-authorization:
-  case-worker-roles: ${CASE_WORKER_ROLES:caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce}
-  s2s-names-whitelist: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw}
 
 errors:
   globalIncludeStackTrace: ${SHOW_STACK_TRACE:true}
@@ -105,14 +99,18 @@ endpoints:
   info:
     sensitive: ${ENDPOINTS_INFO_SENSITIVE:false}
 
-
 management:
   security:
-    enabled: false
+    enabled: ${MANAGEMENT_SECURITY_ENABLED:false}
   diskspace:
     enabled: true
   db:
     enabled: true
+
+dm:
+  multipart:
+    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp}
+    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf}
 
 thumbnail:
     imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
@@ -120,10 +118,10 @@ thumbnail:
 
 
 toggle:
+  includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
   metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:true}
   documentandmetadatauploadendpoint: ${ENABLE_DOCUMENT_AND_METADATA_UPLOAD:true}
   folderendpoint: ${ENABLE_FOLDER_API:true}
-  includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
   deleteenabled: ${ENABLE_DELETE:true}
   ttl: ${ENABLE_TTL:true}
   thumbnail: ${ENABLE_THUMBNAIL:true}
