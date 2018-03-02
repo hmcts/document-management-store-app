@@ -44,16 +44,10 @@ services:
   em-annotation-app:
     image: docker.artifactory.reform.hmcts.net/evidence/em-annotation-app:latest
     environment:
-      - NODE_ENV=development
       - SERVER_PORT=8080
       - IDAM_CLIENT_URL=http://idam-api:8080
       - PROVIDER_SERVICE_CLIENT_URL=http://service-auth-provider-api:8080
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-annotation-database:5432/annotation
-      - SPRING_DATASOURCE_USERNAME=annotation
-      - SPRING_DATASOURCE_PASSWORD=annotation
-      - http_proxy=
-      - https_proxy=
-      - no_proxy=
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-annotation-app-database:5432/annotation
 #      logging env vars
       - ROOT_APPENDER=JSON_CONSOLE
       - JSON_CONSOLE_PRETTY_PRINT=true
@@ -61,21 +55,40 @@ services:
       - REFORM_SERVICE_NAME=em-annotation-app
       - REFORM_TEAM=evidence
       - REFORM_ENVIRONMENT=docker
-#      healthcheck env vars
-      - PACKAGES_ENVIRONMENT=docker
-      - PACKAGES_PROJECT=evidence
-      - PACKAGES_NAME=em-annotation-app
-      - PACKAGES_VERSION=unkown
-#      debug mode
-      - JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
     links:
-     - em-annotation-database
+     - em-annotation-app-database
      - idam-api
      - service-auth-provider-api
     depends_on:
-     - em-annotation-database
+     - em-annotation-app-database
      - idam-api
      - service-auth-provider-api
 
-  em-annotation-database:
+  em-annotation-app-database:
     image: docker.artifactory.reform.hmcts.net/evidence/em-annotation-app-database:latest
+
+  em-redaction-app:
+    image: docker.artifactory.reform.hmcts.net/evidence/em-redaction-app:latest
+    environment:
+      - SERVER_PORT=8080
+      - IDAM_CLIENT_URL=http://idam-api:8080
+      - PROVIDER_SERVICE_CLIENT_URL=http://service-auth-provider-api:8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-redaction-app-database:5432/redaction
+#      logging env vars
+      - ROOT_APPENDER=JSON_CONSOLE
+      - JSON_CONSOLE_PRETTY_PRINT=false
+      - REFORM_SERVICE_TYPE=java
+      - REFORM_SERVICE_NAME=em-redaction-app
+      - REFORM_TEAM=evidence
+      - REFORM_ENVIRONMENT=docker
+    links:
+     - em-redaction-app-database
+     - idam-api
+     - service-auth-provider-api
+    depends_on:
+     - em-redaction-app-database
+     - idam-api
+     - service-auth-provider-api
+
+  em-redaction-app-database:
+    image: docker.artifactory.reform.hmcts.net/evidence/em-redaction-app-database:latest

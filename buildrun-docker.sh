@@ -1,5 +1,5 @@
 #!/bin/sh
-#sudo apt-get install -y maven docker docker-compose
+
 clear;
 ./bin/fakeversion.sh
 ./gradlew installDist bootRepackage

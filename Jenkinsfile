@@ -127,8 +127,8 @@ node {
                     reportName           : 'PMD Main Report'
                 ])
                 publishHTML([
-                    allowMissing         : false,
-                    alwaysLinkToLastBuild: false,
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
                     keepAll              : true,
                     reportDir            : "application/build/reports/pmd/",
                     reportFiles          : 'test.html',
@@ -150,8 +150,8 @@ node {
                             '**/uk/gov/hmcts/dm/errorhandler/*,'+
                             '**/uk/gov/hmcts/dm/repository/RepositoryFinder.java')
                     publishHTML([
-                        allowMissing         : false,
-                        alwaysLinkToLastBuild: false,
+                        allowMissing         : true,
+                        alwaysLinkToLastBuild: true,
                         keepAll              : true,
                         reportDir            : "application/build/reports/jacoco/test/html/",
                         reportFiles          : 'index.html',

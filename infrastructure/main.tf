@@ -61,7 +61,7 @@ module "app" {
     # DM_MULTIPART_WHITELIST = "${var.dm_multipart_whitelist}"
     # S2S_NAMES_WHITELIST = "${var.s2s_names_whitelist}"
     # CASE_WORKER_ROLES = "${var.case_worker_roles}"
-
+    
     # Toggles
     ENABLE_IDAM_HEALTH_CHECK = "${var.enable_idam_healthcheck}"
     ENABLE_METADATA_SEARCH = "${var.enable_metadata_search}"

@@ -6,7 +6,7 @@ LABEL maintainer = "HMCTS Evidence Team <https://github.com/hmcts>"
 WORKDIR /opt/app
 COPY application/build/install/application .
 
-HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" wget -q http://localhost:8080/health || exit 1
+HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" curl --silent --fail http://localhost:8080/health
 
 EXPOSE 8080 5005
 

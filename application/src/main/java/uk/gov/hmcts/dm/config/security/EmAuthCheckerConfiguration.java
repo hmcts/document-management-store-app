@@ -9,9 +9,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * Created by pawel on 26/06/2017.
- */
 @Configuration
 public class EmAuthCheckerConfiguration {
 

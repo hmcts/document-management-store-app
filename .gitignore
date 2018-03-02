@@ -41,6 +41,7 @@ hs_err_pid*
 .idea/uiDesigner.xml
 .idea/
 *.iml
+*.ipr
 
 # Gradle:
 .idea/gradle.xml

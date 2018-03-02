@@ -14,7 +14,6 @@ services:
   document-management-store:
     ports:
      - 4603:8080
-#     - 5005:5005
 
 #  document-management-store-database:
 #    ports:
