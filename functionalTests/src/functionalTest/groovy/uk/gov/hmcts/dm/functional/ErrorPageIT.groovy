@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.containsString
 class ErrorPageIT extends BaseIT {
 
     @Test
-    void "EP1 As an unauthenticated web user trying to access a document, receive HTML error page with 403"() {
+    void "EP1 As an unauthenticated web user trying to access a document, receive JSON error page with 403"() {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
@@ -32,7 +32,7 @@ class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    void "EP2 As an authenticated user trying to access an unknown document, receive HTML error page with 404"() {
+    void "EP2 As an authenticated user trying to access an unknown document, receive JSON error page with 404"() {
 
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
@@ -45,7 +45,7 @@ class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    void "EP3 As an authenticated user trying to access document/, receive HTML error page with 405"() {
+    void "EP3 As an authenticated user trying to access document/, receive JSON error page with 405"() {
 
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
@@ -57,7 +57,7 @@ class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    void "EP4 As an authenticated user trying to post no document, receive HTML error page with 415"() {
+    void "EP4 As an authenticated user trying to post no document, receive JSON error page with 415"() {
 
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
@@ -69,7 +69,7 @@ class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    void "EP5 As an authenticated user trying to post bad attachment, receive HTML error page with 415"() {
+    void "EP5 As an authenticated user trying to post bad attachment, receive JSON error page with 415"() {
 
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
@@ -155,7 +155,7 @@ class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    void "EP11 As an authenticated web user trying to post no document, receive HTML error page with 415"() {
+    void "EP11 As an authenticated web user trying to post no document, receive JSON error page with 415"() {
 
         givenRequest(CITIZEN)
             .accept(ContentType.XML)
