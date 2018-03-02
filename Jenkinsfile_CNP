@@ -21,7 +21,6 @@ def channel = '#dm-pipeline'
 
 withPipeline(type , product, component) {
     env.IDAM_S2S_BASE_URI="http://betaDevBccidamS2SLB.reform.hmcts.net"
-    env.DM_STORE_APP_BASE_URI='http://dm-store-app-aat-staging.service.core-compute-aat.internal'
 
     after('checkout') {
         echo '${product}-${component} out'
