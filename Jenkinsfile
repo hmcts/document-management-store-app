@@ -175,19 +175,40 @@ node {
         if (params.IS_RC || params.RUN_DOCKER_IT) {
             try {
                 stage('Start App with Docker') {
-                    sh "docker-compose -f docker-compose-all.yml -f docker-compose-test.yml pull"
-                    sh "docker-compose -f docker-compose-all.yml up --build -d"
+                    sh '''docker-compose -f ./docker/compose/docker-compose-dm.yml \\
+-f ./docker/compose/docker-compose-dm-ports.yml \\
+-f ./docker/compose/docker-compose-idam.yml \\
+-f ./docker/compose/docker-compose-idam-ports.yml \\
+down
+
+docker-compose -f ./docker/compose/docker-compose-dm.yml \\
+-f ./docker/compose/docker-compose-dm-ports.yml \\
+-f ./docker/compose/docker-compose-idam.yml \\
+-f ./docker/compose/docker-compose-idam-ports.yml \\
+pull
+
+docker-compose -f ./docker/compose/docker-compose-dm.yml \\
+-f ./docker/compose/docker-compose-dm-ports.yml \\
+-f ./docker/compose/docker-compose-idam.yml \\
+-f ./docker/compose/docker-compose-idam-ports.yml \\
+up -d --build
+'''
                 }
 
                 stage('Run Integration tests in docker') {
-                    sh "docker-compose -f docker-compose-all.yml -f docker-compose-test.yml run -e GRADLE_OPTS document-management-store-integration-tests"
+                    sh "./gradlew function --info"
                 }
             }
             finally {
                 stage('Shutdown docker') {
                     sh "docker-compose logs --no-color > logs.txt"
                     archiveArtifacts 'logs.txt'
-                    sh "docker-compose -f docker-compose-all.yml  down"
+                    sh '''docker-compose -f ./docker/compose/docker-compose-dm.yml \\
+-f ./docker/compose/docker-compose-dm-ports.yml \\
+-f ./docker/compose/docker-compose-idam.yml \\
+-f ./docker/compose/docker-compose-idam-ports.yml \\
+                        down
+                        '''
                 }
             }
         }
