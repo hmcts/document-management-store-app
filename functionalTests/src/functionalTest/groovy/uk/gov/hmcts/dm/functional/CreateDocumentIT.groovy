@@ -516,6 +516,104 @@ class CreateDocumentIT extends BaseIT {
             .when()
             .post("/documents")
     }
+// GIFS NOT ALLOWED ANYMORE
+//    @Test
+//    void "CD17 (R1) As authenticated user when I upload a gif, I can get the thumbnail of that gif"() {
+//
+//        def url = givenRequest(CITIZEN)
+//            .multiPart("files", file(ATTACHMENT_6_GIF), V1MimeTypes.IMAGE_GIF_VALUE)
+//            .multiPart("classification", Classifications.PUBLIC as String)
+//            .multiPart("roles", "citizen")
+//            .expect().log().all()
+//            .statusCode(200)
+//            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+//            .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_6_GIF))
+//            .body("_embedded.documents[0].mimeType", equalTo(V1MimeTypes.IMAGE_GIF_VALUE))
+//            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
+//            .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
+//            .when()
+//            .post("/documents")
+//            .path("_embedded.documents[0]._links.thumbnail.href")
+//
+//        def downloadedFileByteArray =  givenRequest(CITIZEN)
+//            .get(url).asByteArray()
+//
+//        def file = file(THUMBNAIL_GIF).getBytes()
+//        Assert.assertTrue(Arrays.equals(downloadedFileByteArray, file))
+//    }
+
+    @Test
+    void "CD18 As a user I should not be able to upload an exe if its renamed to pdf"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(EXE_AS_PDF), MediaType.APPLICATION_PDF_VALUE)
+            .multiPart("classification", Classifications.PRIVATE as String)
+            .expect()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+    @Test
+    void "CD19 As a user I should not be able to upload an svg if its renamed to pdf"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(SVG_AS_PDF), MediaType.APPLICATION_PDF_VALUE)
+            .multiPart("classification", Classifications.PRIVATE as String)
+            .expect()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+    @Test
+    void "CD20 As a user I should not be able to upload an xml if its renamed to pdf"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(XML_AS_PDF), MediaType.APPLICATION_PDF_VALUE)
+            .multiPart("classification", Classifications.PRIVATE as String)
+            .expect()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+
+    @Test
+    void "CD21 As a user I should not be able to upload an exe if its renamed to png"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(EXE_AS_PNG), MediaType.IMAGE_PNG_VALUE)
+            .multiPart("classification", Classifications.PRIVATE as String)
+            .expect()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+    @Test
+    void "CD22 As a user I should not be able to upload an svg if its renamed to png"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(SVG_AS_PNG), MediaType.IMAGE_PNG_VALUE)
+            .multiPart("classification", Classifications.PRIVATE as String)
+            .expect()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+    @Test
+    void "CD23 As a user I should not be able to upload an xml if its renamed to png"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(XML_AS_PNG), MediaType.IMAGE_PNG_VALUE)
+            .multiPart("classification", Classifications.PRIVATE as String)
+            .expect()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
 
     @Test
     void "CD24 (R1) As authenticated user I should not be able to upload gif"() {
