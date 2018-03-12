@@ -94,6 +94,14 @@ class BaseIT {
     final String ILLEGAL_NAME_FILE2 = 'uploadFile9 @_-.jpg'
     final String VALID_CHAR_FILE1= 'uploadFile 9.txt'
 
+    final String EXE_AS_PDF= 'exe_as_pdf.pdf'
+    final String SVG_AS_PDF = 'svg_as_pdf.pdf'
+    final String XML_AS_PDF = 'xml_as_pdf.pdf'
+
+    final String EXE_AS_PNG= 'exe_as_png.png'
+    final String SVG_AS_PNG = 'svg_as_png.png'
+    final String XML_AS_PNG = 'xml_as_png.png'
+
     @PostConstruct
     void init() {
         RestAssured.baseURI = dmStoreAppBaseUri
