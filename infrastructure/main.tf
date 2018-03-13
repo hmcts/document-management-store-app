@@ -43,13 +43,13 @@ module "app" {
     IDAM_S2S_BASE_URI = "http://${var.s2s_url}-${local.local_env}.service.core-compute-${local.local_env}.internal"
 
     # logging vars & healthcheck
-    REFORM_SERVICE_NAME = "${local.app_full_name}"
+    REFORM_SERVICE_NAME = "${local.app_full_name}-pawel"
     REFORM_TEAM = "${var.team_name}"
-    REFORM_SERVICE_TYPE = "${var.app_language}"
+    REFORM_SERVICE_TYPE = "${var.app_language}-pawel"
     REFORM_ENVIRONMENT = "${var.env}"
 
-    PACKAGES_NAME = "${local.app_full_name}"
-    PACKAGES_PROJECT = "${var.team_name}"
+    PACKAGES_NAME = "${local.app_full_name}-pawel"
+    PACKAGES_PROJECT = "${var.team_name}-pawel"
     PACKAGES_ENVIRONMENT = "${var.env}"
 
     ROOT_APPENDER = "${var.root_appender}"
