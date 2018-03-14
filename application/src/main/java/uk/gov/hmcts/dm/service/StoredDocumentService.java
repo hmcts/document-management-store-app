@@ -35,9 +35,6 @@ public class StoredDocumentService {
     private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
-    private DocumentContentRepository documentContentRepository;
-
-    @Autowired
     private BlobCreator blobCreator;
 
     @Autowired

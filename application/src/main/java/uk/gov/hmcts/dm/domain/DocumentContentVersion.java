@@ -18,6 +18,7 @@ import uk.gov.hmcts.dm.utils.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
@@ -59,12 +60,8 @@ public class DocumentContentVersion implements RolesAware {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
-    @Getter
-    @Setter
-    @JoinColumn(name = "document_content_version_id")
-    @LazyToOne(LazyToOneOption.NO_PROXY)
-    private DocumentContent documentContent;
+    @Column(length = 1000)
+    private String blobLocation;
 
     @ManyToOne
     @Getter
@@ -85,17 +82,13 @@ public class DocumentContentVersion implements RolesAware {
         this.mimeType = file.getContentType();
         setOriginalDocumentName(file.getOriginalFilename());
         this.size = file.getSize();
-        try {
-            this.documentContent = new DocumentContent(this, new PassThroughBlob(file));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         this.storedDocument = item;
         this.setCreatedBy(userId);
     }
 
     public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService,
-                                  Date createdOn, DocumentContent documentContent,
+                                  Date createdOn,
                                   StoredDocument storedDocument, Set<DocumentContentVersionAuditEntry> auditEntries, Long size) {
         this.id = id;
         this.mimeType = mimeType;
@@ -103,7 +96,6 @@ public class DocumentContentVersion implements RolesAware {
         this.createdBy = createdBy;
         setCreatedOn(createdOn);
         setCreatedByService(createdByService);
-        this.documentContent = documentContent;
         this.storedDocument = storedDocument;
         this.auditEntries = auditEntries;
         this.size = size;

@@ -21,6 +21,7 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.AzureBlobService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import javax.annotation.PostConstruct;
@@ -51,6 +52,9 @@ public class StoredDocumentController {
 
     private MethodParameter uploadDocumentsCommandMethodParameter;
 
+    @Autowired
+    private AzureBlobService azureBlobService;
+
     @PostConstruct
     void init() throws NoSuchMethodException {
         uploadDocumentsCommandMethodParameter = new MethodParameter(
@@ -72,12 +76,19 @@ public class StoredDocumentController {
         if (result.hasErrors()) {
             throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
+
+            azureBlobService.uploadFile(uploadDocumentsCommand.getFiles().get(0));
+
+            return ResponseEntity.ok().build();
+
+            /*
             List<StoredDocument> storedDocuments =
                     auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
             return ResponseEntity
                     .ok()
                     .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
                     .body(new StoredDocumentHalResourceCollection(storedDocuments));
+                    */
         }
     }
 

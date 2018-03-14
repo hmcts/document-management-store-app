@@ -53,9 +53,6 @@ public class StoredDocumentServiceTests {
     DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    DocumentContentRepository documentContentRepository;
-
-    @Mock
     BlobCreator blobCreator;
 
     @Mock
