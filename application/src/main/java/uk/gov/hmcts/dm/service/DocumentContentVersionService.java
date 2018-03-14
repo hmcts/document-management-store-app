@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -38,14 +39,14 @@ public class DocumentContentVersionService {
     @Getter
     private int streamBufferSize = 5000000;
 
+    @Autowired
+    private AzureBlobService azureBlobService;
+
     public DocumentContentVersion findOne(UUID id) {
         return documentContentVersionRepository.findOne(id);
     }
 
     public void streamDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion) {
-        if (documentContentVersion.getDocumentContent() == null || documentContentVersion.getDocumentContent().getData() == null) {
-            throw new CantReadDocumentContentVersionBinaryException("File content is null", documentContentVersion);
-        }
         try {
             response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
             response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
@@ -53,7 +54,7 @@ public class DocumentContentVersionService {
 
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("fileName=\"%s\"",documentContentVersion.getOriginalDocumentName()));
-            IOUtils.copy(documentContentVersion.getDocumentContent().getData().getBinaryStream(), response.getOutputStream(), streamBufferSize);
+            azureBlobService.streamBinary(documentContentVersion, response.getOutputStream());
         } catch (Exception e) {
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
         }

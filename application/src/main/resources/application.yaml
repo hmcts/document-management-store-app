@@ -141,6 +141,7 @@ toggle:
 azure:
   blob:
     connection-string: ${AZURE_BLOB_CONNECTION_STRING:}
+    share-name: ${AZURE_BLOB_SHARE_NAME:dem-test}
 
 
 

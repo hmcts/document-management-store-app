@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.exception.CantCreateBlobException;
+import uk.gov.hmcts.dm.exception.AzureBlobServiceException;
 
 import javax.persistence.EntityManager;
 import java.sql.Blob;
@@ -25,7 +25,7 @@ public class BlobCreator {
             Session session = entityManager.unwrap(Session.class);
             return Hibernate.getLobCreator(session).createBlob(file.getInputStream(), file.getSize());
         } catch (Exception e) {
-            throw new CantCreateBlobException(e);
+            throw new AzureBlobServiceException(e);
         }
     }
 
