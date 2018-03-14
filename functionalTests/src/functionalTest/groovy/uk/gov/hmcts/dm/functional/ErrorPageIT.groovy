@@ -10,6 +10,7 @@ import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
 
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.containsString
+import static org.hamcrest.Matchers.equalTo
 
 /**
  * Created by matej on 27/10/2017.
@@ -193,6 +194,7 @@ class ErrorPageIT extends BaseIT {
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
             .contentType(ContentType.JSON)
             .when()
             .post("/documents")
@@ -207,6 +209,22 @@ class ErrorPageIT extends BaseIT {
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .contentType(ContentType.JSON)
+            .when()
+            .post("/documents")
+    }
+
+    @Test
+    void "EP14 As an authenticated user, when I post a EXE document I should get JSON response"() {
+
+        givenRequest(CITIZEN)
+            .multiPart("files", file(BAD_ATTACHMENT_1), V1MimeTypes.ALL_VALUE)
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "citizen")
+            .expect().log().all()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
             .contentType(ContentType.JSON)
             .when()
             .post("/documents")
