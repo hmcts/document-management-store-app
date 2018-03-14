@@ -267,7 +267,7 @@ class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    void "R19 As authenticated user with some role I can access a document if its CLASSIFICATION is public and roles does not match"() {
+    void "R19 As authenticated user with some role I cannot access a document if its CLASSIFICATION is public and roles does not match"() {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', [null]
 

@@ -81,7 +81,7 @@ class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    void "ACV5 As authenticated user who is an not an owner POST a new version of the content to an existing document"() {
+    void "ACV5 As authenticated user who is an not an owner, POST a new version of the content to an existing document"() {
 
         def url = createDocumentAndGetUrlAs CITIZEN
 
@@ -144,7 +144,6 @@ class AddContentVersionIT extends BaseIT {
                 .statusCode(200)
                 .when()
                 .get(newVersionUrl)
-
     }
 
     @Test
