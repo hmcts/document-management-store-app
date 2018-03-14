@@ -8,6 +8,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+import static org.hamcrest.Matchers.equalTo
 
 
 /**
@@ -44,8 +45,9 @@ class SearchDocumentIT extends BaseIT {
         givenRequest(CITIZEN)
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case']))
-        .expect()
+        .expect().log().all()
             .statusCode(422)
+            .body("error", equalTo("may not be null"))
             .when()
         .post('/documents/filter')
     }
@@ -55,9 +57,32 @@ class SearchDocumentIT extends BaseIT {
         givenUnauthenticatedRequest()
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case', value:'123']))
-        .expect()
+        .expect().log().all()
             .statusCode(403)
             .when()
         .post('/documents/filter')
+    }
+
+    @Test
+    void "S4 As authenticated user I receive no records when searched item could not be found"() {
+        givenRequest(CITIZEN)
+            .contentType(ContentType.JSON)
+            .body(JsonOutput.toJson([name:'case', value:'123']))
+            .expect().log().all()
+            .statusCode(200)
+            .body("page.totalElements", equalTo(0))
+            .when()
+            .post('/documents/filter')
+    }
+
+    @Test
+    void "S4 As a authenticated user I can search using special characters"() {
+        givenRequest(CITIZEN)
+            .contentType(ContentType.JSON)
+            .body(JsonOutput.toJson([name:'case', value:'!"£$%%^&*()<>:@~[];\'#,./ÄÖÜẞ▒¶§■¾±≡µÞÌ█ð╬¤╠┼▓®¿ØÆ']))
+            .expect().log().all()
+            .statusCode(200)
+            .when()
+            .post('/documents/filter')
     }
 }
