@@ -80,6 +80,9 @@ module "app" {
     ENABLE_DELETE = "${var.enable_delete}"
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
+
+
+    AZURE_BLOB_CONNECTION_STRING = "${azurerm_storage_account.storage.primary_connection_string}"
   }
 }
 
@@ -149,4 +152,37 @@ resource "azurerm_key_vault_secret" "S2S_TOKEN" {
   value = "${data.vault_generic_secret.s2s_secret.data["value"]}"
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
+resource "azurerm_key_vault_secret" "BLOB_CONNECTION_STRING" {
+  name = "${local.app_full_name}-BLOB-CONNECTION-STRING"
+  value = "${azurerm_storage_account.storage.primary_connection_string}"
+  vault_uri = "${module.key_vault.key_vault_uri}"
+}
+
+# Blob store test
+resource "azurerm_storage_account" "storage" {
+  name = "dmstoreblob${var.env}"
+  resource_group_name = "${module.app.resource_group_name}"
+  location = "${var.location}"
+  account_tier = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "storage" {
+  name = "storage"
+  resource_group_name = "${module.app.resource_group_name}"
+  storage_account_name = "${azurerm_storage_account.storage.name}"
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_blob" "storage" {
+  name = "storage.vhd"
+
+  resource_group_name = "${module.app.resource_group_name}"
+  storage_account_name = "${azurerm_storage_account.storage.name}"
+  storage_container_name = "${azurerm_storage_container.storage.name}"
+
+  type = "page"
+  size = 10240
+}
+
 
