@@ -7,11 +7,13 @@ import com.microsoft.azure.storage.file.CloudFileShare;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 
 @Configuration
+@Profile("azureStorage")
 public class AzureStorageConfiguration {
 
     @Value("${azure.blob.connection-string}")

@@ -38,10 +38,6 @@ public class SecurityUtilServiceTests {
 
     @Test
     public void testFailureOfUsernameFromSecurityContextWhenItsNotThere() {
-        SecurityContext securityContext = mock(SecurityContext.class);
-
-        when(securityContext.getAuthentication()).thenReturn(null);
-
         Assert.assertNull(securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
 

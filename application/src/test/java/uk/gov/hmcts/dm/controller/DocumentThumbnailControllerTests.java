@@ -3,12 +3,10 @@ package uk.gov.hmcts.dm.controller;
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -20,8 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
-    private final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));
-
     private final UUID id = UUID.randomUUID();
 
     private final DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
@@ -29,7 +25,7 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
-        .documentContent(documentContent).build();
+        .build();
 
     public DocumentThumbnailControllerTests() throws Exception {}
 
@@ -88,7 +84,7 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetThumbnail() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(), new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)), "user");
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)), "user");
 
         documentContentVersion.setCreatedBy("userId");
 

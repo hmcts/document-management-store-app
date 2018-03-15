@@ -7,13 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
@@ -26,8 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class StoredDocumentControllerTests extends ComponentTestBase {
 
-    private final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));
-
     private final UUID id = UUID.randomUUID();
 
     private final DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
@@ -35,7 +31,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
-        .documentContent(documentContent).build();
+        .build();
 
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .folder(Folder.builder().id(id).build()).documentContentVersions(
@@ -278,7 +274,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetBinary() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(), new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)), "user");
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)), "user");
 
         documentContentVersion.setCreatedBy("userId");
 

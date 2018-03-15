@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.util.UUID;
 
 @Service
-public class AzureFileClient {
+public class AzureFileStorageClient {
 
     @Autowired
     private CloudFileShare cloudFileShare;

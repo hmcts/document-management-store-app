@@ -16,17 +16,17 @@ import java.net.URISyntaxException;
 import java.util.UUID;
 
 @Service
-public class AzureBlobService {
+public class AzureFileStorageService {
 
     @Autowired
-    private AzureFileClient azureFileClient;
+    private AzureFileStorageClient azureFileStorageClient;
 
     public DocumentContentVersion uploadFile(StoredDocument storedDocument, MultipartFile file, String creatorId) {
 
         try {
 
             UUID uuid = UUID.randomUUID();
-            CloudFile cloudFile = azureFileClient.getCloudFile(uuid);
+            CloudFile cloudFile = azureFileStorageClient.getCloudFile(uuid);
             cloudFile.upload(file.getInputStream(), file.getSize());
 
             return new DocumentContentVersion(
@@ -42,7 +42,7 @@ public class AzureBlobService {
 
     public void delete(DocumentContentVersion documentContentVersion) {
         try {
-            CloudFile cloudFile = azureFileClient.getCloudFile(documentContentVersion.getId());
+            CloudFile cloudFile = azureFileStorageClient.getCloudFile(documentContentVersion.getId());
             cloudFile.delete();
         } catch (URISyntaxException | StorageException e) {
             throw new AzureBlobServiceException(e);
@@ -51,7 +51,7 @@ public class AzureBlobService {
 
     public void streamBinary(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
         try {
-            CloudFile cloudFile = azureFileClient.getCloudFile(documentContentVersion.getId());
+            CloudFile cloudFile = azureFileStorageClient.getCloudFile(documentContentVersion.getId());
             cloudFile.download(outputStream);
         } catch (URISyntaxException | StorageException e) {
             throw new AzureBlobServiceException(e);

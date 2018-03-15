@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +23,7 @@ import java.util.UUID;
  */
 @Entity
 @NoArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class DocumentContentVersion implements RolesAware {
 
@@ -75,18 +76,16 @@ public class DocumentContentVersion implements RolesAware {
         this.setStoredDocument(storedDocument);
     }
 
-    public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService,
-                                  Date createdOn,
-                                  StoredDocument storedDocument, Set<DocumentContentVersionAuditEntry> auditEntries, Long size) {
+    public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService, Date createdOn, Set<DocumentContentVersionAuditEntry> auditEntries, Long size, StoredDocument storedDocument) {
         this.id = id;
         this.mimeType = mimeType;
         setOriginalDocumentName(originalDocumentName);
         this.createdBy = createdBy;
-        setCreatedOn(createdOn);
-        setCreatedByService(createdByService);
+        this.createdByService = createdByService;
+        this.createdOn = createdOn;
         this.auditEntries = auditEntries;
-        this.setStoredDocument(storedDocument);
         this.size = size;
+        this.storedDocument = storedDocument;
     }
 
     public Date getCreatedOn() {
@@ -107,6 +106,14 @@ public class DocumentContentVersion implements RolesAware {
 
     public Classifications getClassification() {
         return getStoredDocument() != null ? getStoredDocument().getClassification() : null;
+    }
+
+    public static class DocumentContentVersionBuilder {
+        public DocumentContentVersionBuilder createdOn(Date createdOn) {
+            this.createdOn = (createdOn == null) ? null : new Date(createdOn.getTime());
+            return this;
+        }
+
     }
 
 }

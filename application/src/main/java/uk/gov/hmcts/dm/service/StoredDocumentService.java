@@ -40,7 +40,7 @@ public class StoredDocumentService {
     private SecurityUtilService securityUtilService;
 
     @Autowired
-    private AzureBlobService azureBlobService;
+    private AzureFileStorageService azureFileStorageService;
 
     public StoredDocument findOne(UUID id) {
         return storedDocumentRepository.findOne(id);
@@ -57,7 +57,7 @@ public class StoredDocumentService {
             storedDocument.setFolder(folder);
             storedDocument.setCreatedBy(userId);
             storedDocument.setLastModifiedBy(userId);
-            storedDocument.getDocumentContentVersions().add(azureBlobService.uploadFile(
+            storedDocument.getDocumentContentVersions().add(azureFileStorageService.uploadFile(
                 storedDocument, aFile, userId
             ));
             storedDocumentRepository.save(storedDocument);
@@ -86,7 +86,7 @@ public class StoredDocumentService {
             if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
-            document.getDocumentContentVersions().add(azureBlobService.uploadFile(
+            document.getDocumentContentVersions().add(azureFileStorageService.uploadFile(
                 document, file, userId
             ));
             save(document);
@@ -103,7 +103,7 @@ public class StoredDocumentService {
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
         String userId = securityUtilService.getUserId();
-        DocumentContentVersion documentContentVersion = azureBlobService.uploadFile(
+        DocumentContentVersion documentContentVersion = azureFileStorageService.uploadFile(
             storedDocument, file, userId
         );
         documentContentVersionRepository.save(documentContentVersion);
@@ -116,7 +116,7 @@ public class StoredDocumentService {
         if (permanent) {
             storedDocument.setHardDeleted(true);
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
-                azureBlobService.delete(documentContentVersion);
+                azureFileStorageService.delete(documentContentVersion);
             });
         }
         storedDocumentRepository.save(storedDocument);

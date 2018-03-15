@@ -1,11 +1,10 @@
 package uk.gov.hmcts.dm.service;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -15,7 +14,6 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
@@ -40,13 +38,13 @@ public class DocumentContentVersionService {
     private int streamBufferSize = 5000000;
 
     @Autowired
-    private AzureBlobService azureBlobService;
+    private AzureFileStorageService azureFileStorageService;
 
     public DocumentContentVersion findOne(UUID id) {
         return documentContentVersionRepository.findOne(id);
     }
 
-    public void streamDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion) {
+    public void streamDocumentContentVersion(@NonNull DocumentContentVersion documentContentVersion) {
         try {
             response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
             response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
@@ -54,7 +52,7 @@ public class DocumentContentVersionService {
 
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("fileName=\"%s\"",documentContentVersion.getOriginalDocumentName()));
-            azureBlobService.streamBinary(documentContentVersion, response.getOutputStream());
+            azureFileStorageService.streamBinary(documentContentVersion, response.getOutputStream());
         } catch (Exception e) {
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
         }

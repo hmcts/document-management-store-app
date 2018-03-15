@@ -21,7 +21,6 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
-import uk.gov.hmcts.dm.service.AzureBlobService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import javax.annotation.PostConstruct;

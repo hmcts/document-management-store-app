@@ -1,20 +1,14 @@
 package uk.gov.hmcts.dm.endtoend;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.io.IOException;
@@ -25,14 +19,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static uk.gov.hmcts.dm.endtoend.Helper.getThumbnailUrlFromResponse;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = DmApp.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("local")
-@TestPropertySource(locations = "classpath:application-local.yaml")
-public class ThumbnailTest {
+@Ignore
+public class ThumbnailTest extends FileStorageMockTest {
 
     @Autowired
     private MockMvc mvc;
