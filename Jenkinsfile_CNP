@@ -25,5 +25,9 @@ withPipeline(type , product, component) {
     after('checkout') {
         echo '${product}-${component} out'
     }
+
+    after('build'){
+        sh "mv src/main/resources/META-INF/build-info.properties application/src/main/resources/META-INF/build-info.properties"
+    }
     enableSlackNotifications(channel)
 }

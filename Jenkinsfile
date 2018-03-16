@@ -169,6 +169,7 @@ node {
 
         stage('Package (JAR)') {
             versioner.addJavaVersionInfo()
+            sh "mv src/main/resources/META-INF/build-info.properties application/src/main/resources/META-INF/build-info.properties"
             sh "./gradlew installDist bootRepackage"
         }
 
