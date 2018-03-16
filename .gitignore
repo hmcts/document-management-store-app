@@ -70,9 +70,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-# elastic search data store
-data/
-
 src/main/resources/META-INF/build-info.properties
 
 # Created by https://www.gitignore.io/api/gradle
