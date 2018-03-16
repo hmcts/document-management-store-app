@@ -20,6 +20,7 @@ def component = "store-app"
 def channel = '#dm-pipeline'
 
 withPipeline(type , product, component) {
+    enableSlackNotifications(channel)
     env.IDAM_S2S_BASE_URI="http://betaDevBccidamS2SLB.reform.hmcts.net"
 
     after('checkout') {
@@ -29,5 +30,115 @@ withPipeline(type , product, component) {
     after('build'){
         sh "cp -r src/main/resources/ application/src/main/resources/"
     }
-    enableSlackNotifications(channel)
+
+    after('test'){
+//            junit 'application/build/test-results/test/**/*.xml'
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/tests/test/",
+            reportFiles          : 'index.html',
+            reportName           : 'Unit Test Report'
+        ])
+
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/checkstyle/",
+            reportFiles          : 'main.html',
+            reportName           : 'Checkstyle Main Report'
+        ])
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/checkstyle/",
+            reportFiles          : 'test.html',
+            reportName           : 'Checkstyle Test Report'
+        ])
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/pmd/",
+            reportFiles          : 'main.html',
+            reportName           : 'PMD Main Report'
+        ])
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/pmd/",
+            reportFiles          : 'test.html',
+            reportName           : 'PMD Test Report'
+        ])
+
+        try {
+            sh './gradlew jacocoTestReport --info'
+        }finally {
+//            need to add this.
+//            jacoco(execPattern: 'application/build/jacoco/test.exec', buildOverBuild: false,
+//                exclusionPattern: '**/test/*, ' +
+//                    '**/uk/gov/hmcts/reform/em/annotation/EmAnnotationApp.java,'+
+//                    '**/uk/gov/hmcts/reform/em/annotation/hateos/*,'+
+//                    '**/uk/gov/hmcts/reform/em/annotation/exception/*,'+
+//                    '**/uk/gov/hmcts/reform/em/annotation/domain/*,'+
+//                    '**/uk/gov/hmcts/reform/em/annotation/commandobject/*,'+
+//                    '**/uk/gov/hmcts/reform/em/annotation/hibernate/*,'+
+//                    '**/uk/gov/hmcts/reform/em/annotation/config/**/*,'+
+//                    '**/uk/gov/hmcts/reform/em/annotation/errorhandler/*,'+
+//                    '**/uk/gov/hmcts/reform/em/annotation/repository/RepositoryFinder.java')
+            publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "application/build/reports/jacoco/test/html/",
+                reportFiles          : 'index.html',
+                reportName           : 'Jacoco Coverage Report'
+            ])
+        }
+    }
+
+    after('smoketest:aat') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "smokeTests/build/reports/tests/smoke/",
+            reportFiles          : 'index.html',
+            reportName           : 'Dev Smoke Test'
+        ])
+    }
+
+//    before("functionalTest:aat"){
+//        env.DM_STORE_APP_URL = tfOutput?.dm_store_url?.value
+//    }
+
+    after('functionalTest:aat') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "functionalTests/build/reports/tests/functional/",
+            reportFiles          : 'index.html',
+            reportName           : 'Dev Functional Test'
+        ])
+
+//      Performance Test
+        sh './gradlew gatlingRun'
+        gatlingArchive()
+    }
+
+    after('smoketest:prod'){
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "smokeTests/build/reports/tests/smoke/",
+            reportFiles          : 'index.html',
+            reportName           : 'Prod Smoke Test'
+        ])
+    }
 }

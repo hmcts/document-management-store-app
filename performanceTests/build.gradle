@@ -12,12 +12,12 @@ repositories {
 
 dependencies {
     compile group: 'org.scala-lang', name: 'scala-library', version: '2.12.4'
+    gatling group: 'io.rest-assured', name: 'rest-assured', version:'3.0.6'
 //    gatling group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version:'2.3.0'
 //    gatling group: 'io.gatling', name: 'gatling-core', version:'2.3.0'
 //    gatling group: 'io.gatling', name: 'gatling-http', version:'2.3.0'
 //    gatling group: 'io.gatling', name: 'gatling-maven-plugin', version:'2.2.4'
 //    gatling group: 'io.rest-assured', name: 'scala-support', version:'3.0.6'
-    gatling group: 'io.rest-assured', name: 'rest-assured', version:'3.0.6'
 //    gatling group: 'io.rest-assured', name: 'json-path', version:'3.0.6'
 }
 
