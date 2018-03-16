@@ -1,3 +1,5 @@
+
+
 api:
   version: 1.2.0
 
@@ -16,7 +18,7 @@ spring:
       max-file-size: ${MAX_FILE_SIZE:90MB}
       max-request-size: ${MAX_FILE_SIZE:90MB}
   profiles:
-    active: dev
+    active: production, azureStorage
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     database: postgresql
