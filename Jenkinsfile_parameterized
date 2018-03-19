@@ -11,6 +11,4 @@ properties([
     ])
 ])
 
-withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
-    env.IDAM_S2S_BASE_URI="http://betaDevBccidamS2SLB.reform.hmcts.net"
-}
+withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {}
