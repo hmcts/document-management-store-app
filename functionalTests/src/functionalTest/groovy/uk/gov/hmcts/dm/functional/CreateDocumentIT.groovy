@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.http.MediaType
