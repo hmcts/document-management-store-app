@@ -127,8 +127,8 @@ withPipeline(type , product, component) {
         ])
 
 //      Performance Test
-        sh './gradlew gatlingRun'
-        gatlingArchive()
+//        sh './gradlew gatlingRun'
+//        gatlingArchive()
     }
 
     after('smoketest:prod'){
