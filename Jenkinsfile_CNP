@@ -84,18 +84,17 @@ withPipeline(type , product, component) {
         try {
             sh './gradlew jacocoTestReport --info'
         }finally {
-//            need to add this.
-//            jacoco(execPattern: 'application/build/jacoco/test.exec', buildOverBuild: false,
-//                exclusionPattern: '**/test/*, ' +
-//                    '**/uk/gov/hmcts/reform/em/annotation/EmAnnotationApp.java,'+
-//                    '**/uk/gov/hmcts/reform/em/annotation/hateos/*,'+
-//                    '**/uk/gov/hmcts/reform/em/annotation/exception/*,'+
-//                    '**/uk/gov/hmcts/reform/em/annotation/domain/*,'+
-//                    '**/uk/gov/hmcts/reform/em/annotation/commandobject/*,'+
-//                    '**/uk/gov/hmcts/reform/em/annotation/hibernate/*,'+
-//                    '**/uk/gov/hmcts/reform/em/annotation/config/**/*,'+
-//                    '**/uk/gov/hmcts/reform/em/annotation/errorhandler/*,'+
-//                    '**/uk/gov/hmcts/reform/em/annotation/repository/RepositoryFinder.java')
+            jacoco(execPattern: 'application/build/jacoco/test.exec', buildOverBuild: false,
+                exclusionPattern: '**/test/*, ' +
+                    '**/uk/gov/hmcts/dm/DmApp.java,'+
+                    '**/uk/gov/hmcts/dm/hateos/*,'+
+                    '**/uk/gov/hmcts/dm/exception/*,'+
+                    '**/uk/gov/hmcts/dm/domain/*,'+
+                    '**/uk/gov/hmcts/dm/commandobject/*,'+
+                    '**/uk/gov/hmcts/dm/hibernate/*,'+
+                    '**/uk/gov/hmcts/dm/config/**/*,'+
+                    '**/uk/gov/hmcts/dm/errorhandler/*,'+
+                    '**/uk/gov/hmcts/dm/repository/RepositoryFinder.java')
             publishHTML([
                 allowMissing         : true,
                 alwaysLinkToLastBuild: true,
