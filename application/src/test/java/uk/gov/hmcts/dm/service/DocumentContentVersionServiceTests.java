@@ -32,7 +32,7 @@ public class DocumentContentVersionServiceTests {
     StoredDocumentRepository storedDocumentRepository;
 
     @Mock
-    AzureFileStorageService azureFileStorageService;
+    FileStorageService fileStorageService;
 
     @InjectMocks
     DocumentContentVersionService documentContentVersionService;
@@ -62,7 +62,7 @@ public class DocumentContentVersionServiceTests {
                 "fileName=\"%s\"",
                 TestUtil.DOCUMENT_CONTENT_VERSION.getOriginalDocumentName()));
 
-        verify(azureFileStorageService, times(1))
+        verify(fileStorageService, times(1))
             .streamBinary(TestUtil.DOCUMENT_CONTENT_VERSION, mockHttpServletResponse.getOutputStream());
 
 

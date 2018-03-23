@@ -1,12 +1,12 @@
 package uk.gov.hmcts.dm.componenttests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.file.CloudFileShare;
 import lombok.SneakyThrows;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,13 +80,16 @@ public abstract class ComponentTestBase {
     protected SearchService searchService;
 
     @MockBean
-    protected AzureFileStorageService azureFileStorageService;
+    protected FileStorageService fileStorageService;
 
     @MockBean
     protected AuditEntryService auditEntryService;
 
     @MockBean
     protected CloudFileShare cloudFileShare;
+
+    @MockBean
+    protected CloudBlobContainer cloudBlobContainer;
 
     protected RestActions restActions;
 

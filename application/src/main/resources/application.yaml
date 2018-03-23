@@ -15,8 +15,8 @@ spring:
       indent_output: true
   http:
     multipart:
-      max-file-size: ${MAX_FILE_SIZE:90MB}
-      max-request-size: ${MAX_FILE_SIZE:90MB}
+      max-file-size: ${MAX_FILE_SIZE:200MB}
+      max-request-size: ${MAX_FILE_SIZE:200MB}
   profiles:
     active: production, azureStorage
   jpa:
@@ -141,9 +141,13 @@ toggle:
 
 
 azure:
-  blob:
-    connection-string: ${AZURE_BLOB_CONNECTION_STRING:}
-    share-name: ${AZURE_BLOB_SHARE_NAME:dem-test}
+  storage:
+    connection-string: ${AZURE_STORAGE_CONNECTION_STRING:}
+    file-share-name: ${AZURE_FILE_SHARE_NAME:dem-test}
+    blob-container-reference: ${AZURE_BLOB_CONTAINER_REFERENCE:dem-test}
+
+file-storage-client: ${FILE_STORAGE_CLIENT:azureBlobStorageClient}
+
 
 
 

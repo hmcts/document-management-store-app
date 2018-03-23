@@ -40,7 +40,7 @@ public class StoredDocumentService {
     private SecurityUtilService securityUtilService;
 
     @Autowired
-    private AzureFileStorageService azureFileStorageService;
+    private FileStorageService fileStorageService;
 
     public StoredDocument findOne(UUID id) {
         return storedDocumentRepository.findOne(id);
@@ -57,7 +57,7 @@ public class StoredDocumentService {
             storedDocument.setFolder(folder);
             storedDocument.setCreatedBy(userId);
             storedDocument.setLastModifiedBy(userId);
-            storedDocument.getDocumentContentVersions().add(azureFileStorageService.uploadFile(
+            storedDocument.getDocumentContentVersions().add(fileStorageService.uploadFile(
                 storedDocument, aFile, userId
             ));
             storedDocumentRepository.save(storedDocument);
@@ -86,7 +86,7 @@ public class StoredDocumentService {
             if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
-            document.getDocumentContentVersions().add(azureFileStorageService.uploadFile(
+            document.getDocumentContentVersions().add(fileStorageService.uploadFile(
                 document, file, userId
             ));
             save(document);
@@ -103,7 +103,7 @@ public class StoredDocumentService {
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
         String userId = securityUtilService.getUserId();
-        DocumentContentVersion documentContentVersion = azureFileStorageService.uploadFile(
+        DocumentContentVersion documentContentVersion = fileStorageService.uploadFile(
             storedDocument, file, userId
         );
         documentContentVersionRepository.save(documentContentVersion);
@@ -116,7 +116,7 @@ public class StoredDocumentService {
         if (permanent) {
             storedDocument.setHardDeleted(true);
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
-                azureFileStorageService.delete(documentContentVersion);
+                fileStorageService.delete(documentContentVersion);
             });
         }
         storedDocumentRepository.save(storedDocument);

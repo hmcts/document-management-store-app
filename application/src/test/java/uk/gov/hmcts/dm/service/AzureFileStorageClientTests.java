@@ -9,7 +9,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.mock.web.MockMultipartFile;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
@@ -24,7 +27,7 @@ public class AzureFileStorageClientTests {
     AzureFileStorageClient azureFileStorageClient;
 
     @Test
-    public void testFileReferenceRetrieval() throws Exception {
+    public void testFileUpload() throws Exception {
 
         CloudFileDirectory rootDirectory = mock(CloudFileDirectory.class);
 
@@ -34,8 +37,42 @@ public class AzureFileStorageClientTests {
 
         when(rootDirectory.getFileReference(any(String.class))).thenReturn(cloudFile);
 
-        CloudFile returnedCloudFile = azureFileStorageClient.getCloudFile(UUID.randomUUID());
+        azureFileStorageClient.uploadFile(UUID.randomUUID(),
+            new MockMultipartFile("x", "x".getBytes("UTF-8")));
 
-        Assert.assertSame(cloudFile, returnedCloudFile);
+        verify(cloudFile, times(1)).upload(any(InputStream.class), anyLong());
+    }
+
+    @Test
+    public void testFileDelete() throws Exception {
+
+        CloudFileDirectory rootDirectory = mock(CloudFileDirectory.class);
+
+        when(cloudFileShare.getRootDirectoryReference()).thenReturn(rootDirectory);
+
+        CloudFile cloudFile = mock(CloudFile.class);
+
+        when(rootDirectory.getFileReference(any(String.class))).thenReturn(cloudFile);
+
+        azureFileStorageClient.deleteFile(UUID.randomUUID());
+
+        verify(cloudFile, times(1)).delete();
+    }
+
+
+    @Test
+    public void testStreamOfFile() throws Exception {
+
+        CloudFileDirectory rootDirectory = mock(CloudFileDirectory.class);
+
+        when(cloudFileShare.getRootDirectoryReference()).thenReturn(rootDirectory);
+
+        CloudFile cloudFile = mock(CloudFile.class);
+
+        when(rootDirectory.getFileReference(any(String.class))).thenReturn(cloudFile);
+
+        azureFileStorageClient.streamFileContent(UUID.randomUUID(), mock(OutputStream.class));
+
+        verify(cloudFile, times(1)).download(any(OutputStream.class));
     }
 }

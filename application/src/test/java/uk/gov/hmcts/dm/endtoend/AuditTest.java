@@ -2,33 +2,17 @@ package uk.gov.hmcts.dm.endtoend;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.azure.storage.file.CloudFile;
-import com.microsoft.azure.storage.file.CloudFileShare;
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import uk.gov.hmcts.dm.DmApp;
-import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.security.Classifications;
-import uk.gov.hmcts.dm.service.AzureFileStorageClient;
-import uk.gov.hmcts.dm.service.AzureFileStorageService;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;

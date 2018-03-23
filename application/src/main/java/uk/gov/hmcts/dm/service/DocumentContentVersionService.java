@@ -38,7 +38,7 @@ public class DocumentContentVersionService {
     private int streamBufferSize = 5000000;
 
     @Autowired
-    private AzureFileStorageService azureFileStorageService;
+    private FileStorageService fileStorageService;
 
     public DocumentContentVersion findOne(UUID id) {
         return documentContentVersionRepository.findOne(id);
@@ -52,7 +52,7 @@ public class DocumentContentVersionService {
 
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("fileName=\"%s\"",documentContentVersion.getOriginalDocumentName()));
-            azureFileStorageService.streamBinary(documentContentVersion, response.getOutputStream());
+            fileStorageService.streamBinary(documentContentVersion, response.getOutputStream());
         } catch (Exception e) {
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
         }

@@ -23,7 +23,6 @@ import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import java.sql.Blob;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,7 +56,7 @@ public class StoredDocumentServiceTests {
     SecurityUtilService securityUtilService;
 
     @Mock
-    AzureFileStorageService azureFileStorageService;
+    FileStorageService fileStorageService;
 
     @InjectMocks
     StoredDocumentService storedDocumentService;
@@ -100,13 +99,13 @@ public class StoredDocumentServiceTests {
         DocumentContentVersion documentContentVersion =
             new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
 
-        when(azureFileStorageService
+        when(fileStorageService
             .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
             .thenReturn(documentContentVersion);
 
         List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand);
 
-        verify(azureFileStorageService, times(1))
+        verify(fileStorageService, times(1))
             .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull());
 
         final StoredDocument storedDocument = documents.get(0);
@@ -138,7 +137,7 @@ public class StoredDocumentServiceTests {
         DocumentContentVersion documentContentVersion =
             new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
 
-        when(azureFileStorageService
+        when(fileStorageService
             .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
             .thenReturn(documentContentVersion);
 
@@ -163,7 +162,7 @@ public class StoredDocumentServiceTests {
         DocumentContentVersion documentContentVersion =
             new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
 
-        when(azureFileStorageService
+        when(fileStorageService
             .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
             .thenReturn(documentContentVersion);
 
@@ -185,7 +184,7 @@ public class StoredDocumentServiceTests {
         DocumentContentVersion mockedDocumentContentVersion =
             new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
 
-        when(azureFileStorageService
+        when(fileStorageService
             .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
             .thenReturn(mockedDocumentContentVersion);
 
@@ -221,7 +220,7 @@ public class StoredDocumentServiceTests {
         storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
-        verify(azureFileStorageService, atLeastOnce()).delete(storedDocumentWithContent.getMostRecentDocumentContentVersion());
+        verify(fileStorageService, atLeastOnce()).delete(storedDocumentWithContent.getMostRecentDocumentContentVersion());
     }
 
     @Test
@@ -239,7 +238,7 @@ public class StoredDocumentServiceTests {
         storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
-        verify(azureFileStorageService, times(2)).delete(Mockito.any(DocumentContentVersion.class));
+        verify(fileStorageService, times(2)).delete(Mockito.any(DocumentContentVersion.class));
     }
 
     @Test
@@ -249,7 +248,7 @@ public class StoredDocumentServiceTests {
         DocumentContentVersion documentContentVersion =
             new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
 
-        when(azureFileStorageService
+        when(fileStorageService
             .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
             .thenReturn(documentContentVersion);
 

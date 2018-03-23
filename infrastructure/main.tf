@@ -82,7 +82,7 @@ module "app" {
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
 
 
-    AZURE_BLOB_CONNECTION_STRING = "${azurerm_storage_account.storage.primary_connection_string}"
+    AZURE_STORAGE_CONNECTION_STRING = "${azurerm_storage_account.storage.primary_connection_string}"
   }
 }
 
@@ -152,8 +152,9 @@ resource "azurerm_key_vault_secret" "S2S_TOKEN" {
   value = "${data.vault_generic_secret.s2s_secret.data["value"]}"
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
-resource "azurerm_key_vault_secret" "BLOB_CONNECTION_STRING" {
-  name = "${local.app_full_name}-BLOB-CONNECTION-STRING"
+
+resource "azurerm_key_vault_secret" "AZURE_STORAGE_CONNECTION_STRING" {
+  name = "${local.app_full_name}-AZURE_STORAGE_CONNECTION_STRING"
   value = "${azurerm_storage_account.storage.primary_connection_string}"
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
