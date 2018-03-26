@@ -154,7 +154,7 @@ resource "azurerm_key_vault_secret" "S2S_TOKEN" {
 }
 
 resource "azurerm_key_vault_secret" "AZURE_STORAGE_CONNECTION_STRING" {
-  name = "${local.app_full_name}-AZURE_STORAGE_CONNECTION_STRING"
+  name = "${local.app_full_name}-AZURE-STORAGE-CONNECTION-STRING"
   value = "${azurerm_storage_account.storage.primary_connection_string}"
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
