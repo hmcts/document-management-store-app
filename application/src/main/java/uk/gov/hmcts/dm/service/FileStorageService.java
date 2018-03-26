@@ -1,8 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -14,8 +13,9 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
 
-    @Value("#{ '${file-storage-client}' == 'azureFileStorageClient' ? azureFileStorageClient : azureBlobStorageClient}")
-    private FileStorageClient fileStorageClient;
+    //@Value("#{ '${file-storage-client}' == 'azureFileStorageClient' ? azureFileStorageClient : azureBlobStorageClient}")
+    @Autowired
+    private AzureBlobStorageClient fileStorageClient;
 
     public DocumentContentVersion uploadFile(StoredDocument storedDocument, MultipartFile file, String creatorId) {
         UUID uuid = UUID.randomUUID();

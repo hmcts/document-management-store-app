@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.service.AzureBlobStorageClient;
 import uk.gov.hmcts.dm.service.AzureFileStorageClient;
+import uk.gov.hmcts.dm.service.FileStorageClient;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
@@ -28,6 +29,9 @@ abstract public class FileStorageMockTest {
 
     @MockBean
     CloudFileShare cloudFileShare;
+
+    @MockBean
+    FileStorageClient fileStorageClient;
 
     @MockBean
     AzureFileStorageClient azureFileStorageClient;
