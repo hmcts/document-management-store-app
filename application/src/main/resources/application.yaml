@@ -33,7 +33,7 @@ spring:
     platform: postgresql
     time-between-eviction-runs-millis: ${STALE_CONN_EVICTION_FREQUENCY:60000}
     tomcat:
-      max-active: ${MAX_ACTIVE_DB_CONNECTIONS:195} # Maximum number of active connections that can be allocated from this pool at the same time.
+      max-active: ${MAX_ACTIVE_DB_CONNECTIONS:50} # Maximum number of active connections that can be allocated from this pool at the same time.
       max-idle: ${MAX_IDLE_DB_CONNECTIONS:25}
       max-wait: ${MAX_WAIT_DB_CONNECTIONS:10000} # Number of ms to wait before throwing an exception if no connection is available.
       test-on-borrow: ${TEST_ON_BORROW_DB_CONNECTION:true} # Validate the connection before borrowing it from the pool.
