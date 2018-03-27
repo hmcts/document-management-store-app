@@ -153,11 +153,11 @@ resource "azurerm_key_vault_secret" "S2S_TOKEN" {
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
 
-resource "azurerm_key_vault_secret" "AZURE_STORAGE_CONNECTION_STRING" {
-  name = "${local.app_full_name}-AZURE-STORAGE-CONNECTION-STRING"
-  value = "${azurerm_storage_account.storage.primary_connection_string}"
-  vault_uri = "${module.key_vault.key_vault_uri}"
-}
+//resource "azurerm_key_vault_secret" "AZURE_STORAGE_CONNECTION_STRING" {
+//  name = "${local.app_full_name}-AZURE-STORAGE-CONNECTION-STRING"
+//  value = "${azurerm_storage_account.storage.primary_connection_string}"
+//  vault_uri = "${module.key_vault.key_vault_uri}"
+//}
 
 # Blob store test
 resource "azurerm_storage_account" "storage" {
