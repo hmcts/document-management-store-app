@@ -106,7 +106,7 @@ public class StoredDocumentService {
         DocumentContentVersion documentContentVersion = fileStorageService.uploadFile(
             storedDocument, file, userId
         );
-        documentContentVersionRepository.save(documentContentVersion);
+        //documentContentVersionRepository.save(documentContentVersion);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
     }
