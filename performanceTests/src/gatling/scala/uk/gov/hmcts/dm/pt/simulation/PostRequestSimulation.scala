@@ -12,23 +12,23 @@ class PostRequestSimulation extends Simulation {
 
   val httpConf = http.disableWarmUp.baseURL(Environments.dmStoreApp).headers(Headers.commonHeader)
 
-  val testScenarioFinal = scenario("Post").exec(PostRequest.storeScn, PostRequest.fetchScn)
+//  val testScenarioFinal = scenario("Post").exec(PostRequest.storeScn, PostRequest.fetchScn)
 
-  val randomPostRequest = scenario("Random Post").exec(PostRequest.storeScn)
+//  val randomPostRequest = scenario("Random Post").exec(PostRequest.storeScn)
 
-  val randomGetRequest = scenario("Random GetRequest").exec(PostRequest.fetchScn)
+//  val randomGetRequest = scenario("Random GetRequest").exec(PostRequest.fetchScn)
 
   val postAndGetInSeq = scenario("Post and Get in sequence").exec(PostRequest.storeInSeq, PostRequest.fetchInSeq)
 
-  val testScenarios = List(postAndGetInSeq.inject(rampUsers(18) over (50 minutes)))
+  val testScenarios = List(postAndGetInSeq.inject(rampUsers(5) over (1 minutes)))
 
-  val testScenarioForPostRecords = List(PostRequest.postRequestScenario.inject(atOnceUsers(1),rampUsers(38) over (2 minute)))
+//  val testScenarioForPostRecords = List(PostRequest.postRequestScenario.inject(atOnceUsers(1),rampUsers(38) over (2 minute)))
 
-  val postRequests2000 = List(PostRequest.postRequestScenario.inject(atOnceUsers(1), rampUsersPerSec(1) to 200 during (1 minute)))
+//  val postRequests2000 = List(PostRequest.postRequestScenario.inject(atOnceUsers(1), rampUsersPerSec(1) to 200 during (1 minute)))
 
   setUp(testScenarios)
     .protocols(httpConf)
-    .maxDuration(50 minutes)
+    .maxDuration(5 minutes)
     .assertions(
       global.responseTime.max.lte(Environments.maxResponseTime.toInt),
       global.successfulRequests.percent.gte(99))
