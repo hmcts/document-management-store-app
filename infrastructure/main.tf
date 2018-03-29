@@ -25,7 +25,7 @@ module "app" {
     # SERVER_PORT = "8080"
 
     # db
-    SPRING_DATASOURCE_URL = "jdbc:postgresql://${module.db.host_name}:${module.db.postgresql_listen_port}/${module.db.postgresql_database}"
+    SPRING_DATASOURCE_URL = "jdbc:postgresql://${module.db.host_name}:${module.db.postgresql_listen_port}/${module.db.postgresql_database}?ssl=true"
     SPRING_DATASOURCE_USERNAME = "${module.db.user_name}"
     SPRING_DATASOURCE_PASSWORD = "${module.db.postgresql_password}"
 
