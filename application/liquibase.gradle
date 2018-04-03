@@ -27,6 +27,25 @@ task liquibaseDiffChangelog(type: JavaExec) {
     args "diffChangeLog"
 }
 
+task migratePostgresDatabase(type: JavaExec) {
+    group = "liquibase"
+
+    classpath sourceSets.main.runtimeClasspath
+    classpath configurations.liquibase
+    main = "liquibase.integration.commandline.Main"
+
+    def urlString = project.hasProperty("dburl") ? dburl : liquibaseProps.getProperty('url')
+    def user = project.hasProperty("flyway.user") ? "${flyway.user}" : liquibaseProps.getProperty('username')
+    def password = project.hasProperty("flyway.password") ? "${flyway.password}" : liquibaseProps.getProperty('password')
+
+    args "--changeLogFile=" + "$projectDir/src/main/resources/db/changelog/db.changelog-master.xml"
+    args "--username=$user"
+    args "--password=$password"
+    args "--url=$urlString"
+    args "--driver=" + liquibaseProps.getProperty('driver')
+    args "update"
+}
+
 def buildTimestamp() {
     def date = new Date()
     def formattedDate = date.format('yyyyMMdd-HHmm')
