@@ -1,6 +1,6 @@
 spring:
   application:
-    name: document-management-store-app
+    name: dm-store-app
   database:
     driverClassName: org.h2.Driver
   datasource:
