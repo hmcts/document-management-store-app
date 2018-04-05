@@ -22,13 +22,13 @@ endpoints_info_sensitive = "true"
 ////////////////////////////////////////////////
 // Toggle Features
 ////////////////////////////////////////////////
-enable_idam_healthcheck = "false"
-enable_metadata_search = "false"
-enable_document_and_metadata_upload = "false"
-enable_folder_api = "false"
-enable_delete = "false"
-enable_ttl  = "false"
-enable_thumbnail = "false"
+//enable_idam_healthcheck = "false"
+//enable_metadata_search = "false"
+//enable_document_and_metadata_upload = "false"
+//enable_folder_api = "false"
+//enable_delete = "false"
+//enable_ttl  = "false"
+//enable_thumbnail = "false"
 
 //// Whitelists
 dm_multipart_whitelist = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
