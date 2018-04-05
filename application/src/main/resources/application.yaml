@@ -2,6 +2,8 @@ api:
   version: 1.1.0
 
 spring:
+  application:
+    name: dm-store-app
   data:
     rest:
       detection-strategy: annotated
