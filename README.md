@@ -15,7 +15,7 @@ It uses:
 * Java8
 * Spring boot
 * Junit, Mockito and SpringBootTest and Powermockito
-* Maven
+* Gradle
 * [lombok project](https://projectlombok.org/) - Lombok project
 
 ### Plugins
