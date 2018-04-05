@@ -12,7 +12,7 @@ import uk.gov.hmcts.reform.logging.appinsights.AbstractAppInsights;
 @ConditionalOnProperty("azure.app_insights_key")
 public class AppInsights extends AbstractAppInsights {
 
-    private final Logger LOG = LoggerFactory.getLogger(AppInsights.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AppInsights.class);
 
     @Autowired
     public AppInsights(TelemetryClient client) {
