@@ -52,6 +52,7 @@ liquibase:
 
 server:
   port: ${SERVER_PORT:4603}
+  use-forward-headers: false
 
 authorization:
   case-worker-roles: ${CASE_WORKER_ROLES:caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce}
@@ -74,6 +75,9 @@ logging:
   level:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:INFO}
+
+azure:
+  app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
 
 errors:
   globalIncludeStackTrace: ${SHOW_STACK_TRACE:true}
