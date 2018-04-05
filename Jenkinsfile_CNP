@@ -39,7 +39,7 @@ withPipeline(type , product, component) {
     }
 
     after('test'){
-//            junit 'application/build/test-results/test/**/*.xml'
+        junit 'application/build/test-results/test/**/*.xml'
         publishHTML([
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
