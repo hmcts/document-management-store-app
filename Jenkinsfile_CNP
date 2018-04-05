@@ -28,7 +28,7 @@ def channel = '#dm-pipeline'
 
 withPipeline(type , product, component) {
     enableSlackNotifications(channel)
-    //enableDbMigration()
+    enableDbMigration()
 
     after('checkout') {
         echo '${product}-${component} out'
