@@ -129,17 +129,21 @@ variable "enable_thumbnail" {
 }
 
 //// Whitelists
-//variable "dm_multipart_whitelist" {
-//
-//}
-//
-//variable "s2s_names_whitelist" {
-//
-//}
-//
-//variable "case_worker_roles" {
-//
-//}
+variable "dm_multipart_whitelist" {
+  default = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
+}
+
+variable "dm_multipart_whitelist_ext" {
+  default = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf"
+}
+
+variable "s2s_names_whitelist" {
+  default = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator"
+}
+
+variable "case_worker_roles" {
+  default = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
+}
 
 // Addtional
 variable "max_file_size_in_mb" {

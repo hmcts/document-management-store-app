@@ -13,6 +13,7 @@ module "app" {
   ilbIp = "${var.ilbIp}"
   subscription = "${var.subscription}"
   is_frontend = false
+  https_only="true"
 
   app_settings = {
     POSTGRES_HOST = "${module.db.host_name}"
@@ -58,9 +59,10 @@ module "app" {
     ENDPOINTS_HEALTH_SENSITIVE = "${var.endpoints_health_sensitive}"
     ENDPOINTS_INFO_SENSITIVE = "${var.endpoints_info_sensitive}"
 
-    # DM_MULTIPART_WHITELIST = "${var.dm_multipart_whitelist}"
-    # S2S_NAMES_WHITELIST = "${var.s2s_names_whitelist}"
-    # CASE_WORKER_ROLES = "${var.case_worker_roles}"
+    DM_MULTIPART_WHITELIST = "${var.dm_multipart_whitelist}"
+    DM_MULTIPART_WHITELIST_EXT = "${var.dm_multipart_whitelist_ext}"
+    S2S_NAMES_WHITELIST = "${var.s2s_names_whitelist}"
+    CASE_WORKER_ROLES = "${var.case_worker_roles}"
 
     # Toggles
     ENABLE_IDAM_HEALTH_CHECK = "${var.enable_idam_healthcheck}"
