@@ -7,10 +7,6 @@ services:
     ports:
      - 3608:8080
 
-  document-management-store-api-gateway-web:
-    ports:
-     - 3603:8080
-
 #  document-management-store:
 #    ports:
 #     - 4603:8080
