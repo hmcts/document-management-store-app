@@ -59,6 +59,8 @@ module "app" {
     ENDPOINTS_HEALTH_SENSITIVE = "${var.endpoints_health_sensitive}"
     ENDPOINTS_INFO_SENSITIVE = "${var.endpoints_info_sensitive}"
 
+    ENABLE_DB_MIGRATE="false"
+
     DM_MULTIPART_WHITELIST = "${var.dm_multipart_whitelist}"
     DM_MULTIPART_WHITELIST_EXT = "${var.dm_multipart_whitelist_ext}"
     S2S_NAMES_WHITELIST = "${var.s2s_names_whitelist}"
