@@ -1,3 +1,7 @@
+output "microserviceName" {
+  value = "${var.product}-${var.app_name}-${var.app_type}"
+}
+
 output "vaultName" {
   value = "${module.key_vault.key_vault_name}"
 }
@@ -14,9 +18,6 @@ output "s2s_url" {
   value = "${var.s2s_url}"
 }
 
-output "microserviceName" {
-  value = "${var.product}-${var.app_name}-${var.app_type}"
-}
 
 //output "dm_store_app_url" {
 //  value = "http://${var.dm_store_app_url}-${var.env}.service.${local.ase_name}.internal"
