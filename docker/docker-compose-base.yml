@@ -36,39 +36,6 @@ services:
      - idam-api
      - service-auth-provider-api
 
-  document-management-store-api-gateway-web:
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-store-api-gateway-web:latest
-    environment:
-      - NODE_ENV=development
-      - PORT=8080
-      - EM_API_URL=http://document-management-store:8080
-      - IDAM_BASE_URL=http://idam-api:8080
-      - IDAM_S2S_URL=http://service-auth-provider-api:8080
-      - IDAM_SERVICE_KEY=AAAAAAAAAAAAAAAA
-      - IDAM_SERVICE_NAME=em_gw
-      - CORS_ORIGIN_METHODS=GET,POST,PUT,DELETE,OPTIONS
-      - CORS_ORIGIN_WHITELIST=*
-      #      logging env vars
-      - ROOT_APPENDER=JSON_CONSOLE
-      - LOG_OUTPUT=single
-      - JSON_CONSOLE_PRETTY_PRINT=false
-      - REFORM_SERVICE_TYPE=node
-      - REFORM_SERVICE_NAME=document-management-api-gateway-web
-      - REFORM_TEAM=evidence
-      - REFORM_ENVIRONMENT=docker
-#      healthcheck env vars
-      - PACKAGES_ENVIRONMENT=docker
-      - PACKAGES_PROJECT=evidence
-      - PACKAGES_NAME=document-management-api-gateway-web
-      - PACKAGES_VERSION=unkown
-      - XFWD=true
-    links:
-     - idam-api
-     - service-auth-provider-api
-    depends_on:
-     - idam-api
-     - service-auth-provider-api
-
 #  document-management-store:
 #    build:
 #      context: ..

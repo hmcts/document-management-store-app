@@ -12,3 +12,4 @@ TEST_URL=http://localhost:4603
 
 xdg-open build/reports/gatling/*/index.html
 open build/reports/gatling/*/index.html
+start "" build/reports/gatling/*/index.html

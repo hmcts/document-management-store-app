@@ -18,7 +18,6 @@ output "s2s_url" {
   value = "${var.s2s_url}"
 }
 
-
 //output "dm_store_app_url" {
 //  value = "http://${var.dm_store_app_url}-${var.env}.service.${local.ase_name}.internal"
 //}

@@ -22,7 +22,7 @@ endpoints_info_sensitive = "true"
 ////////////////////////////////////////////////
 // Toggle Features
 ////////////////////////////////////////////////
-//enable_idam_healthcheck = "false"
+enable_idam_healthcheck = "false"
 //enable_metadata_search = "false"
 //enable_document_and_metadata_upload = "false"
 //enable_folder_api = "false"

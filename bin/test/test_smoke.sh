@@ -11,3 +11,4 @@ TEST_URL=http://localhost:4603
 
 xdg-open smokeTests/build/reports/tests/smoke/index.html
 open smokeTests/build/reports/tests/smoke/index.html
+start "" smokeTests/build/reports/tests/smoke/index.html

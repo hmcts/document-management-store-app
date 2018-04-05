@@ -11,3 +11,4 @@ TEST_URL=http://localhost:4603
 
 xdg-open functionalTests/build/reports/tests/functional/index.html
 open functionalTests/build/reports/tests/functional/index.html
+start "" functionalTests/build/reports/tests/functional/index.html
