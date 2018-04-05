@@ -78,6 +78,11 @@ logging:
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
 
+app-insights:
+  dev-mode: off
+  request-component: on
+  telemetry-component: on
+
 errors:
   globalIncludeStackTrace: ${SHOW_STACK_TRACE:true}
 

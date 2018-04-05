@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: dm-store-app
   database:
     driverClassName: org.h2.Driver
   datasource:
@@ -18,11 +16,6 @@ logging:
     org.springframework.web: INFO
     org.springframework.security: DEBUG
     uk.gov.hmcts: DEBUG
-
-app-insights:
-  dev-mode: off
-  request-component: on
-  telemetry-component: on
 
 thumbnail:
     imageThumbnailCreator: image/jpeg,image/png,image/gif,image/webp,image/bmp

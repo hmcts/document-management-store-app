@@ -11,6 +11,8 @@ properties([
     ])
 ])
 
+def channel = '#dm-pipeline'
+
 withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
     enableSlackNotifications(channel)
     enableDbMigration()
