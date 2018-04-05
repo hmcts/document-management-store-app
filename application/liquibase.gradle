@@ -35,8 +35,8 @@ task migratePostgresDatabase(type: JavaExec) {
     main = "liquibase.integration.commandline.Main"
 
     def urlString = project.hasProperty("dburl") ? dburl : liquibaseProps.getProperty('url')
-    def user = project.hasProperty("flyway.user") ? "${flyway.user}" : liquibaseProps.getProperty('username')
-    def password = project.hasProperty("flyway.password") ? "${flyway.password}" : liquibaseProps.getProperty('password')
+    def user = project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : liquibaseProps.getProperty('username')
+    def password = project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : liquibaseProps.getProperty('password')
 
     args "--changeLogFile=" + "$projectDir/src/main/resources/db/changelog/db.changelog-master.xml"
     args "--username=$user"
