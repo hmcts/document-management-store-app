@@ -52,6 +52,7 @@ liquibase:
 
 server:
   port: ${SERVER_PORT:4603}
+  use-forward-headers: false
 
 authorization:
   case-worker-roles: ${CASE_WORKER_ROLES:caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce}
