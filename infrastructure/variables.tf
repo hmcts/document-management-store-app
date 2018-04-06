@@ -138,7 +138,7 @@ variable "dm_multipart_whitelist_ext" {
 }
 
 variable "s2s_names_whitelist" {
-  default = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator"
+  default = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator,probate_backend"
 }
 
 variable "case_worker_roles" {
