@@ -11,15 +11,26 @@ import uk.gov.hmcts.dm.security.Permissions;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @Component
 public class DomainPermissionEvaluator {
 
+    public static final String CASE_WORKER_PREFIX = "caseworker";
+
+    @Deprecated
     public boolean hasPermission(@NonNull final CreatorAware creatorAware,
                                  @NonNull final Permissions permission,
                                  final String authenticatedUserId,
                                  @NonNull final Collection<String> authenticatedUserRoles,
                                  @NonNull final Collection<String> caseWorkerRoles) {
+        return hasPermission(creatorAware, permission, authenticatedUserId, authenticatedUserRoles);
+    }
+
+    public boolean hasPermission(@NonNull final CreatorAware creatorAware,
+                                 @NonNull final Permissions permission,
+                                 final String authenticatedUserId,
+                                 @NonNull final Collection<String> authenticatedUserRoles) {
 
         boolean result = false;
 
@@ -45,14 +56,12 @@ public class DomainPermissionEvaluator {
         }
 
         if (!result && permission == Permissions.READ) {
+            boolean hasCaseworkerRole = !new HashSet<>(authenticatedUserRoles).stream()
+                .filter(role -> role.startsWith(CASE_WORKER_PREFIX))
+                .collect(Collectors.toList())
+                .isEmpty();
 
-            HashSet<String> authenticatedUserRolesSet = new HashSet<>(authenticatedUserRoles);
-
-            authenticatedUserRolesSet.retainAll(caseWorkerRoles);
-
-            if (authenticatedUserRolesSet.size() > 0) {
-                result = true;
-            }
+            result = hasCaseworkerRole;
         }
 
         return result;

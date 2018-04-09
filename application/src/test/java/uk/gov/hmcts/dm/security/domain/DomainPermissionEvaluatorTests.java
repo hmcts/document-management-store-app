@@ -35,32 +35,28 @@ public class DomainPermissionEvaluatorTests {
                 storedFile,
                 Permissions.READ,
                 credentials,
-                Arrays.asList("granted", "x"),
-                Arrays.asList("granted", "y")
+                Arrays.asList("granted", "x")
             ));
         Assert.assertTrue(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.UPDATE,
                 credentials,
-                Arrays.asList("granted", "x"),
-                Arrays.asList("granted", "y")
+                Arrays.asList("granted", "x")
             ));
         Assert.assertTrue(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.CREATE,
                 credentials,
-                Arrays.asList("granted", "x"),
-                Arrays.asList("granted", "y")
+                Arrays.asList("granted", "x")
             ));
         Assert.assertTrue(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.DELETE,
                 credentials,
-                Arrays.asList("granted", "x"),
-                Arrays.asList("granted", "y")
+                Arrays.asList("granted", "x")
             ));
     }
 
@@ -77,32 +73,66 @@ public class DomainPermissionEvaluatorTests {
                 storedFile,
                 Permissions.READ,
                 caseWorkerCredentials,
-                Arrays.asList("case-worker", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("caseworker", "x")
             ));
         Assert.assertFalse(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.UPDATE,
                 caseWorkerCredentials,
-                Arrays.asList("case-worker", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("caseworker", "x")
             ));
         Assert.assertFalse(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.CREATE,
                 caseWorkerCredentials,
-                Arrays.asList("case-worker", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("caseworker", "x")
             ));
         Assert.assertFalse(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.DELETE,
                 caseWorkerCredentials,
-                Arrays.asList("case-worker", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("caseworker", "x")
+            ));
+    }
+
+    @Test
+    public void testAsADynamicCaseWorkerIHaveOnlyReadPermission() {
+        String caseWorkerCredentials = MRS_CASE_WORKER;
+
+        StoredDocument storedFile = new StoredDocument();
+        storedFile.setCreatedBy(MR_A);
+
+
+        Assert.assertTrue(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                caseWorkerCredentials,
+                Arrays.asList("caseworker_123", "x")
+            ));
+        Assert.assertFalse(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.UPDATE,
+                caseWorkerCredentials,
+                Arrays.asList("caseworker_123", "x")
+            ));
+        Assert.assertFalse(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.CREATE,
+                caseWorkerCredentials,
+                Arrays.asList("caseworker_123", "x")
+            ));
+        Assert.assertFalse(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.DELETE,
+                caseWorkerCredentials,
+                Arrays.asList("caseworker_123", "x")
             ));
     }
 
@@ -119,32 +149,28 @@ public class DomainPermissionEvaluatorTests {
                 storedFile,
                 Permissions.READ,
                 notCaseWorkerCredentials,
-                Arrays.asList("a", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("a", "x")
             ));
         Assert.assertFalse(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.UPDATE,
                 notCaseWorkerCredentials,
-                Arrays.asList("a", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("a", "x")
             ));
         Assert.assertFalse(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.CREATE,
                 notCaseWorkerCredentials,
-                Arrays.asList("a", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("a", "x")
             ));
         Assert.assertFalse(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.DELETE,
                 notCaseWorkerCredentials,
-                Arrays.asList("a", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("a", "x")
             ));
     }
 
@@ -160,8 +186,7 @@ public class DomainPermissionEvaluatorTests {
                 storedFile,
                 Permissions.READ,
                 MRS_CASE_WORKER,
-                Arrays.asList("allowingrole", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("allowingrole", "x")
             ));
     }
 
@@ -178,8 +203,7 @@ public class DomainPermissionEvaluatorTests {
                 storedFile,
                 Permissions.READ,
                 MRS_CASE_WORKER,
-                Arrays.asList("allowingrole", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("allowingrole", "x")
             ));
     }
 
@@ -197,8 +221,7 @@ public class DomainPermissionEvaluatorTests {
                 storedFile,
                 Permissions.READ,
                 MRS_CASE_WORKER,
-                Arrays.asList("allowingrole", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("allowingrole", "x")
             ));
     }
 
@@ -215,8 +238,7 @@ public class DomainPermissionEvaluatorTests {
                 storedFile,
                 Permissions.READ,
                 MRS_CASE_WORKER,
-                Arrays.asList("allowingrole", "x"),
-                Arrays.asList("case-worker", "y")
+                Arrays.asList("allowingrole", "x")
             ));
     }
 

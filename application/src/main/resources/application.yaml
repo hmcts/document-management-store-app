@@ -55,7 +55,6 @@ server:
   use-forward-headers: false
 
 authorization:
-  case-worker-roles: ${CASE_WORKER_ROLES:caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce}
   s2s-names-whitelist: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw}
 
 auth:
