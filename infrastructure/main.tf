@@ -13,7 +13,7 @@ module "app" {
   ilbIp = "${var.ilbIp}"
   subscription = "${var.subscription}"
   is_frontend = false
-  https_only="true"
+  https_only="false"
 
   app_settings = {
     POSTGRES_HOST = "${module.db.host_name}"
