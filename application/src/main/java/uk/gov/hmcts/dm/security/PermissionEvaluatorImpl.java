@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
@@ -14,8 +13,8 @@ import uk.gov.hmcts.dm.service.SecurityUtilService;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 @Component
@@ -27,9 +26,6 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
     @Autowired
     private DomainPermissionEvaluator domainPermissionEvaluator;
 
-    @Value("${authorization.case-worker-roles}")
-    private String [] caseWorkerRoles;
-
     @Autowired
     private RepositoryFinder repositoryFinder;
 
@@ -37,18 +33,18 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
     public boolean hasPermission(@NotNull Authentication authentication,
                                  @NotNull Object targetDomainObject,
                                  @NotNull Object permissionString) {
-        boolean result = false;
         if (targetDomainObject instanceof CreatorAware) {
-            result = domainPermissionEvaluator.hasPermission(
+            Collection<String> userRoles = securityUtilService.getUserRoles() != null
+                ? Arrays.stream(securityUtilService.getUserRoles()).collect(Collectors.toSet())
+                : Collections.EMPTY_SET;
+
+            return domainPermissionEvaluator.hasPermission(
                     (CreatorAware)targetDomainObject,
                     Permissions.valueOf((String)permissionString),
                     securityUtilService.getUserId(),
-                    securityUtilService.getUserRoles() != null
-                        ? Arrays.stream(securityUtilService.getUserRoles()).collect(Collectors.toSet())
-                        : Collections.EMPTY_SET,
-                    new HashSet<>(Arrays.asList(caseWorkerRoles)));
+                    userRoles);
         }
-        return result;
+        return false;
     }
 
 
