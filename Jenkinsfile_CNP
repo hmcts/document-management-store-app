@@ -32,6 +32,18 @@ withPipeline(type , product, component) {
 
     after('checkout') {
         echo '${product}-${component} out'
+        sh '''
+mkdir -p application/src/main/resources/META-INF
+echo "allprojects { task printVersionInit { doLast { println project.version } } }" > init.gradle
+
+tee application/src/main/resources/META-INF/build-info.properties <<EOF 2>/dev/null
+build.version=$(./gradlew -q printVersion)
+build.number=${BUILD_NUMBER}
+build.commit=$(git rev-parse HEAD)
+build.date=$(date)
+EOF
+
+'''
     }
 
     after('build'){
