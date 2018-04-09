@@ -56,7 +56,7 @@ public class DomainPermissionEvaluator {
         }
 
         if (!result && permission == Permissions.READ) {
-            boolean hasCaseworkerRole = !authenticatedUserRoles.stream()
+            boolean hasCaseworkerRole = !new HashSet<>(authenticatedUserRoles).stream()
                 .filter(role -> role.startsWith(CASE_WORKER_PREFIX))
                 .collect(Collectors.toList())
                 .isEmpty();
