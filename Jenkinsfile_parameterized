@@ -1,19 +1,32 @@
 #!groovy
-@Library("Infrastructure") _
 
 properties([
+    [
+        $class: 'GithubProjectProperty',
+        displayName: 'Document Management Store App',
+        projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
+    ],
     parameters([
-        string(name: 'PRODUCT_NAME', defaultValue: 'dm', description: ''),
-        string(name: 'APP', defaultValue: 'store', description: ''),
-        string(name: 'TYPE', defaultValue: 'java', description: ''),
-        string(name: 'ENVIRONMENT', defaultValue: 'sandbox', description: 'Environment where code should be build and deployed'),
-        choice(name: 'SUBSCRIPTION', choices: 'sandbox\nnonprod\nprod', description: 'Azure subscriptions available to build in')
+        booleanParam(
+            defaultValue: false,
+            description: 'Run Performance',
+            name: 'RUN_PT'
+        )
+    ]),
+    pipelineTriggers([
+        [$class: 'GitHubPushTrigger']
     ])
 ])
 
+@Library("Infrastructure")
+
+def type = "java"
+def product = "dm"
+def component = "store"
+
 def channel = '#dm-pipeline'
 
-withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
+withPipeline(type , product, component) {
     enableSlackNotifications(channel)
     enableDbMigration()
 
@@ -31,5 +44,117 @@ build.date=$(date)
 EOF
 
 '''
+    }
+
+    after('test'){
+        junit 'application/build/test-results/test/**/*.xml'
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/tests/test/",
+            reportFiles          : 'index.html',
+            reportName           : 'Unit Test Report'
+        ])
+
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/checkstyle/",
+            reportFiles          : 'main.html',
+            reportName           : 'Checkstyle Main Report'
+        ])
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/checkstyle/",
+            reportFiles          : 'test.html',
+            reportName           : 'Checkstyle Test Report'
+        ])
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/pmd/",
+            reportFiles          : 'main.html',
+            reportName           : 'PMD Main Report'
+        ])
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "application/build/reports/pmd/",
+            reportFiles          : 'test.html',
+            reportName           : 'PMD Test Report'
+        ])
+
+        try {
+            sh './gradlew jacocoTestReport --info'
+        }finally {
+            jacoco(execPattern: 'application/build/jacoco/test.exec', buildOverBuild: false,
+                exclusionPattern: '**/test/*, ' +
+                    '**/uk/gov/hmcts/dm/DmApp.java,'+
+                    '**/uk/gov/hmcts/dm/hateos/*,'+
+                    '**/uk/gov/hmcts/dm/exception/*,'+
+                    '**/uk/gov/hmcts/dm/domain/*,'+
+                    '**/uk/gov/hmcts/dm/commandobject/*,'+
+                    '**/uk/gov/hmcts/dm/hibernate/*,'+
+                    '**/uk/gov/hmcts/dm/config/**/*,'+
+                    '**/uk/gov/hmcts/dm/errorhandler/*,'+
+                    '**/uk/gov/hmcts/dm/repository/RepositoryFinder.java')
+            publishHTML([
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "application/build/reports/jacoco/test/html/",
+                reportFiles          : 'index.html',
+                reportName           : 'Jacoco Coverage Report'
+            ])
+        }
+    }
+
+    after('smoketest:saat') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "smokeTests/build/reports/tests/smoke/",
+            reportFiles          : 'index.html',
+            reportName           : 'Dev Smoke Test'
+        ])
+    }
+
+//    before("functionalTest:aat"){
+//        env.DM_STORE_APP_URL = tfOutput?.dm_store_url?.value
+//    }
+
+    after('functionalTest:saat') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "functionalTests/build/reports/tests/functional/",
+            reportFiles          : 'index.html',
+            reportName           : 'Dev Functional Test'
+        ])
+
+        if (params.RUN_PT) {
+//      Performance Test
+            sh './gradlew gatlingRun'
+            gatlingArchive()
+        }
+    }
+
+    after('smoketest:sprod'){
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "smokeTests/build/reports/tests/smoke/",
+            reportFiles          : 'index.html',
+            reportName           : 'Prod Smoke Test'
+        ])
     }
 }
