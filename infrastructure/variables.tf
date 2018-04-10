@@ -55,6 +55,14 @@ variable "idam_api_url" {
 variable "s2s_url" {
   default = "http://betaDevBccidamS2SLB.reform.hmcts.net:80"
 }
+
+variable "dm_store_app_url" {
+  default = "dm-store"
+}
+
+variable "em_anno_app_url" {
+  default = "em-anno"
+}
 ////////////////////////////////////////////////
 // Logging
 ////////////////////////////////////////////////
