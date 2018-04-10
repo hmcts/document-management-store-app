@@ -1,4 +1,4 @@
-rootProject.name = 'document-management-store-app'
+rootProject.name = 'dm-store'
 
 include 'application'
 include 'functionalTests'

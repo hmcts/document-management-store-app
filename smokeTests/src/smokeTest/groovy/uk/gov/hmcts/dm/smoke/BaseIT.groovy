@@ -23,8 +23,8 @@ class BaseIT {
 
     FileUtils fileUtils = new FileUtils()
 
-    @Value('${base-urls.dm-store-app}')
-    String dmStoreAppBaseUri
+    @Value('${base-urls.dm-store}')
+    String dmStoreBaseUri
 
     final String FILES_FOLDER = 'files/'
     final String ATTACHMENT_1 = 'Attachment1.txt'
@@ -65,19 +65,16 @@ class BaseIT {
 
     @PostConstruct
     void init() {
-        RestAssured.baseURI = dmStoreAppBaseUri
+        RestAssured.baseURI = dmStoreBaseUri
         RestAssured.useRelaxedHTTPSValidation()
     }
 
     def givenUnauthenticatedRequest() {
-        def request = given().log().all()
-        request
+        given().log().all()
     }
 
     def givenRequest() {
-        def request = given().log().all()
-        request = request.header("ServiceAuthorization", serviceToken())
-        request
+        given().log().all().header("ServiceAuthorization", serviceToken())
     }
 
     def serviceToken() {

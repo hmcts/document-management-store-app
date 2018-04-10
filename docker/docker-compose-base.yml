@@ -61,13 +61,13 @@ services:
 #      - ROOT_APPENDER=JSON_CONSOLE
 #      - JSON_CONSOLE_PRETTY_PRINT=false
 #      - REFORM_SERVICE_TYPE=java
-#      - REFORM_SERVICE_NAME=document-management-store-app
+#      - REFORM_SERVICE_NAME=dm-store
 #      - REFORM_TEAM=evidence
 #      - REFORM_ENVIRONMENT=docker
 ##      healthcheck env vars
 #      - PACKAGES_ENVIRONMENT=docker
 #      - PACKAGES_PROJECT=evidence
-#      - PACKAGES_NAME=document-management-store-app
+#      - PACKAGES_NAME=dm-store
 #      - PACKAGES_VERSION=unkown
 ##      debug mode
 #      - JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
