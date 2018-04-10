@@ -1,5 +1,5 @@
 output "microserviceName" {
-  value = "${var.product}-${var.app_name}-${var.app_type}"
+  value = "${var.product}-${var.app_name}"
 }
 
 output "vaultName" {

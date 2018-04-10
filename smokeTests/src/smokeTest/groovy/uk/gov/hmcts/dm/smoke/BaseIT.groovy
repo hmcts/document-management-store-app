@@ -23,8 +23,8 @@ class BaseIT {
 
     FileUtils fileUtils = new FileUtils()
 
-    @Value('${base-urls.dm-store-app}')
-    String dmStoreAppBaseUri
+    @Value('${base-urls.dm-store}')
+    String dmStoreBaseUri
 
     final String FILES_FOLDER = 'files/'
     final String ATTACHMENT_1 = 'Attachment1.txt'
