@@ -1,31 +1,10 @@
-
-def versions = [
-    ehcache            : '3.3.1',
-    jacocoMavenPlugin  : '0.7.9',
-    jackson            : dependencyManagement.importedProperties['jackson.version'],
-    javaxWsRsApi       : '2.0.1',
-    jsonassert         : '1.4.0',
-    jsonUnitFluent     : '1.21.0',
-    JUnitParams        : '1.1.0',
-    lombok             : '1.16.18',
-    liquibase          : '3.5.3',
-    mavenFailsafePlugin: '2.19.1',
-    owasp              : '3.1.2',
-    postgresql         : '42.2.1',
-    powermock          : '1.6.5',
-    sonar              : '3.2',
-    springBoot         : springBootVersion,
-    springCloud        : 'Camden.SR5',
-    springfoxSwagger   : '2.7.0',
-    xmlMavenPlugin     : '1.0',
-]
 plugins {
     id 'application'
     id 'checkstyle'
     id 'pmd'
     id 'io.spring.dependency-management' version '1.0.4.RELEASE'
     id 'org.springframework.boot' version '1.5.10.RELEASE'
-    id 'org.owasp.dependencycheck' version version.owasp
+    id 'org.owasp.dependencycheck' version '3.1.2'
     id 'com.github.ben-manes.versions' version '0.17.0'
     id 'org.sonarqube' version '2.5'
     id 'jacoco'
@@ -38,6 +17,26 @@ version = '1.1.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+def versions = [
+    ehcache            : '3.3.1',
+    jacocoMavenPlugin  : '0.7.9',
+    jackson            : dependencyManagement.importedProperties['jackson.version'],
+    javaxWsRsApi       : '2.0.1',
+    jsonassert         : '1.4.0',
+    jsonUnitFluent     : '1.21.0',
+    JUnitParams        : '1.1.0',
+    lombok             : '1.16.18',
+    liquibase          : '3.5.3',
+    mavenFailsafePlugin: '2.19.1',
+    postgresql         : '42.2.1',
+    powermock          : '1.6.5',
+    sonar              : '3.2',
+    springBoot         : springBootVersion,
+    springCloud        : 'Camden.SR5',
+    springfoxSwagger   : '2.7.0',
+    xmlMavenPlugin     : '1.0',
+]
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
