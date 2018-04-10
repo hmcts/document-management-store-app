@@ -65,7 +65,7 @@ class BaseIT {
 
     @PostConstruct
     void init() {
-        RestAssured.baseURI = dmStoreAppBaseUri
+        RestAssured.baseURI = dmStoreBaseUri
         RestAssured.useRelaxedHTTPSValidation()
     }
 
