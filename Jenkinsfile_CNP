@@ -46,10 +46,6 @@ EOF
 '''
     }
 
-    after('build'){
-        sh "cp -r src/main/resources/ application/src/main/resources/"
-    }
-
     after('test'){
         junit 'application/build/test-results/test/**/*.xml'
         publishHTML([
