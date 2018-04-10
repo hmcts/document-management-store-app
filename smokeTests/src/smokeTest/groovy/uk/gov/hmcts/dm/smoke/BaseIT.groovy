@@ -70,14 +70,11 @@ class BaseIT {
     }
 
     def givenUnauthenticatedRequest() {
-        def request = given().log().all()
-        request
+        given().log().all()
     }
 
     def givenRequest() {
-        def request = given().log().all()
-        request = request.header("ServiceAuthorization", serviceToken())
-        request
+        given().log().all().header("ServiceAuthorization", serviceToken())
     }
 
     def serviceToken() {
