@@ -7,10 +7,6 @@ variable "app_name" {
     default = "store"
 }
 
-variable "app_type" {
-  default = "app"
-}
-
 variable "team_name" {
   default = "evidence"
 }

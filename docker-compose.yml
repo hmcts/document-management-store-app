@@ -15,7 +15,7 @@ services:
       - JSON_CONSOLE_PRETTY_PRINT=true
       - ROOT_LOGGING_LEVEL
       - REFORM_SERVICE_TYPE=java
-      - REFORM_SERVICE_NAME=document-management-store-app
+      - REFORM_SERVICE_NAME=dm-store
       - REFORM_TEAM=evidence
       - REFORM_ENVIRONMENT=docker
     links:

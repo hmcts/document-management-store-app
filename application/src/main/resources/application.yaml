@@ -3,7 +3,7 @@ api:
 
 spring:
   application:
-    name: dm-store-app
+    name: dm-store
   data:
     rest:
       detection-strategy: annotated
@@ -90,7 +90,7 @@ info:
   app:
     environment: ${PACKAGES_ENVIRONMENT:local}
     project: ${PACKAGES_PROJECT:evidence}
-    name: ${PACKAGES_NAME:document-management-store-app}
+    name: ${PACKAGES_NAME:dm-store}
 #    version: ${PACKAGES_VERSION:unknown}
 
 health:

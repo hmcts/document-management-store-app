@@ -1,5 +1,5 @@
 locals {
-  app_full_name = "${var.product}-${var.app_name}-${var.app_type}"
+  app_full_name = "${var.product}-${var.app_name}"
   ase_name = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
 }
 # "${local.ase_name}"

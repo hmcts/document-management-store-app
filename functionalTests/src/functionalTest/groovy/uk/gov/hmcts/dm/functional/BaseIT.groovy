@@ -31,7 +31,7 @@ class BaseIT {
 //    @Value('${base-urls.dm-api-gw-web}')
 //    String dmApiGwBaseUri
 
-    @Value('${base-urls.dm-store-app}')
+    @Value('${base-urls.dm-store}')
     String dmStoreAppBaseUri
 
     @Value('${base-urls.idam-user}')

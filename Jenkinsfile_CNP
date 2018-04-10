@@ -22,7 +22,7 @@ properties([
 
 def type = "java"
 def product = "dm"
-def component = "store-app"
+def component = "store"
 
 def channel = '#dm-pipeline'
 
