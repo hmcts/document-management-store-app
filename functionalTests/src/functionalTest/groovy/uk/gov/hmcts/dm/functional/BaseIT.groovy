@@ -28,12 +28,8 @@ class BaseIT {
 
     FileUtils fileUtils = new FileUtils()
 
-
     @Value('${base-urls.dm-store}')
-    String dmStoreAppBaseUri
-
-    @Value('${base-urls.idam-user}')
-    String idamUserBaseUri
+    String dmStoreBaseUri
 
     final String PASSWORD = '123'
 
@@ -102,7 +98,7 @@ class BaseIT {
 
     @PostConstruct
     void init() {
-        RestAssured.baseURI = dmStoreAppBaseUri
+        RestAssured.baseURI = dmStoreBaseUri
         RestAssured.useRelaxedHTTPSValidation()
     }
 
