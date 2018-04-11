@@ -44,6 +44,7 @@ dependencies {
     testCompile group: 'org.springframework.boot', name :'spring-boot-starter-test', version: versions.springBoot
     testCompile group: 'org.spockframework', name :'spock-core', version:'1.1-groovy-2.4'
     testCompile group: 'org.spockframework', name :'spock-spring', version:'1.1-groovy-2.4'
+    testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
 }
 
 idea {
