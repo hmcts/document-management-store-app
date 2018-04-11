@@ -36,7 +36,7 @@ module "app" {
 
     # idam
     IDAM_USER_BASE_URI = "${var.idam_api_url}"
-    IDAM_S2S_BASE_URI = "${var.s2s_url}"
+    IDAM_S2S_BASE_URI = "http://${var.s2s_url}-${local.local_env}.service.core-compute-${local.local_env}.internal"
 
     # logging vars & healthcheck
     REFORM_SERVICE_NAME = "${local.app_full_name}"
@@ -87,6 +87,14 @@ module "db" {
   postgresql_user = "rhubarbadmin"
 }
 
+provider "vault" {
+  address = "https://vault.reform.hmcts.net:6200"
+}
+
+data "vault_generic_secret" "s2s_secret" {
+  path = "secret/${var.vault_section}/ccidam/service-auth-provider/api/microservice-keys/em-gw"
+}
+
 module "key_vault" {
   source = "git@github.com:contino/moj-module-key-vault?ref=master"
   product = "${local.app_full_name}"
@@ -124,6 +132,12 @@ resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name = "${local.app_full_name}-POSTGRES-DATABASE"
   value = "${module.db.postgresql_database}"
+  vault_uri = "${module.key_vault.key_vault_uri}"
+}
+
+resource "azurerm_key_vault_secret" "S2S_TOKEN" {
+  name = "s2s-token"
+  value = "${data.vault_generic_secret.s2s_secret.data["value"]}"
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
 
