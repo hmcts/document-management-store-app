@@ -1,10 +1,9 @@
 variable "product" {
-    type    = "string"
-//    default = "dm"
+  type = "string"
 }
 
 variable "component" {
-//    default = "store"
+  type = "string"
 }
 
 variable "team_name" {
@@ -135,8 +134,9 @@ variable "enable_ttl" {
 variable "enable_thumbnail" {
     default = "true"
 }
-
-//// Whitelists
+////////////////////////////////////////////////
+// Whitelists
+////////////////////////////////////////////////
 variable "dm_multipart_whitelist" {
   default = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
 }
@@ -152,8 +152,9 @@ variable "s2s_names_whitelist" {
 variable "case_worker_roles" {
   default = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
 }
-
+////////////////////////////////////////////////
 // Addtional
+////////////////////////////////////////////////
 variable "max_file_size_in_mb" {
     default = "500"
 }

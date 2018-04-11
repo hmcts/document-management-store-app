@@ -5,7 +5,7 @@ java_opts = ""
 ////////////////////////////////////////////////
 vault_section  = "test"
 idam_api_url = "http://betaDevBccidamAppLB.reform.hmcts.net:80"
-s2s_url = "http://betaDevBccidamS2SLB.reform.hmcts.net:80"
+//s2s_url = "http://betaDevBccidamS2SLB.reform.hmcts.net:80"
 
 ////////////////////////////////////////////////
 // Logging
@@ -31,11 +31,15 @@ enable_delete = "true"
 enable_ttl  = "true"
 enable_thumbnail = "true"
 
+////////////////////////////////////////////////
 //// Whitelists
+////////////////////////////////////////////////
 dm_multipart_whitelist = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
 dm_multipart_whitelist_ext = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf"
 s2s_names_whitelist = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator,probate_backend"
 case_worker_roles = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
 
+////////////////////////////////////////////////
 // Addtional
+////////////////////////////////////////////////
 max_file_size_in_mb = "500"
