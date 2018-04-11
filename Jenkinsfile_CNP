@@ -6,6 +6,13 @@ properties([
         displayName: 'Document Management Store App',
         projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
     ],
+//    parameters([
+//        booleanParam(
+//            defaultValue: false,
+//            description: 'Run Performance',
+//            name: 'RUN_PT'
+//        )
+//    ]),
     pipelineTriggers([
         [$class: 'GitHubPushTrigger']
     ])
@@ -142,6 +149,11 @@ EOF
             reportFiles          : 'index.html',
             reportName           : 'Dev Functional Test'
         ])
+//        if (params.RUN_PT) {
+//      Performance Test
+//            sh './gradlew gatlingRun'
+//            gatlingArchive()
+//        }
     }
 
     after('smoketest:prod'){

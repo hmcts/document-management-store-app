@@ -14,7 +14,7 @@ object GetRequest {
 
   val serviceToken: String = idamTokenGenerator.generateS2SToken()
 
-  val getRequest: HttpRequestBuilder = http(Environments.dmStoreApp)
+  val getRequest: HttpRequestBuilder = http(Environments.dmStore)
     .get("/documents/${id}")
     .check(status is 200)
 
@@ -32,7 +32,7 @@ object GetRequest {
     .repeat(1){
       feed(feeder.random)
         .exec(http("Test ${id}")
-          .get(Environments.dmStoreApp+"/api/files/86d4efab-fa41-4681-913f-d7931d94e2a2")
+          .get(Environments.dmStore+"/api/files/86d4efab-fa41-4681-913f-d7931d94e2a2")
           .header("Authorization", serviceToken).header("user-id", "gatling")
           .check(status is 200, header("$").saveAs("jwtToken")))  }
     .exec{
