@@ -35,9 +35,6 @@ class BaseIT {
     @Value('${base-urls.idam-user}')
     String idamUserBaseUri
 
-    @Value('${base-urls.s2s-token}')
-    String s2sToken
-
     final String PASSWORD = '123'
 
     String CITIZEN = 'test12@test.com'
@@ -155,8 +152,7 @@ class BaseIT {
     }
 
     def serviceToken() {
-//        authTokenProvider.findServiceToken()
-        s2sToken
+        authTokenProvider.findServiceToken()
     }
 
     def createDocument(username,  filename = null, classification = null, roles = null, metadata = null) {
