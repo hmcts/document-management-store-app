@@ -53,7 +53,8 @@ variable "idam_api_url" {
 }
 
 variable "s2s_url" {
-  default = "http://betaDevBccidamS2SLB.reform.hmcts.net:80"
+//  default = "http://betaDevBccidamS2SLB.reform.hmcts.net:80"
+  default = "rpe-service-auth-provider"
 }
 
 variable "dm_store_app_url" {
