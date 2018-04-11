@@ -1,10 +1,10 @@
 variable "product" {
     type    = "string"
-    default = "dm"
+//    default = "dm"
 }
 
-variable "app_name" {
-    default = "store"
+variable "component" {
+//    default = "store"
 }
 
 variable "team_name" {

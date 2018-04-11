@@ -1,7 +1,7 @@
 locals {
-  app_full_name = "${var.product}-${var.app_name}"
+  app_full_name = "${var.product}-${var.component}"
   ase_name = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
-  local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : local.ase_name}"
+  local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
 }
 # "${local.ase_name}"
 # "${local.app_full_name}"
