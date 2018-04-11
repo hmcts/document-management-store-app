@@ -28,11 +28,9 @@ services:
     - PACKAGES_NAME=document-management-node-demo
     - PACKAGES_VERSION=unkown
     links:
-     - document-management-store-api-gateway-web
      - idam-api
      - service-auth-provider-api
     depends_on:
-     - document-management-store-api-gateway-web
      - idam-api
      - service-auth-provider-api
 

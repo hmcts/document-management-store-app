@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.hamcrest.CoreMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,17 +16,26 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
 
+import static org.junit.Assert.assertThat;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @Service
 public class AuthTokenProvider {
 
     private final String idamS2SBaseUri;
     private final String idamUserBaseUrl;
+    private final String s2sSecret;
+
+
 
     @Autowired
     public AuthTokenProvider(@Value("${base-urls.idam-s2s}") String idamS2SBaseUri,
-                             @Value("${base-urls.idam-user}") String idamUserBaseUri) {
+                             @Value("${base-urls.idam-user}") String idamUserBaseUri,
+                             @Value("${base-urls.s2s-token}") String s2sSecret) {
         this.idamS2SBaseUri = idamS2SBaseUri;
         this.idamUserBaseUrl = idamUserBaseUri;
+        this.s2sSecret = s2sSecret;
         System.out.println("IDAM User URL - " + idamUserBaseUri);
         System.out.println("IDAM S2S URL - " + idamS2SBaseUri);
     }
@@ -52,11 +63,25 @@ public class AuthTokenProvider {
     }
 
     public String findServiceToken() {
-        return RestAssured
-                .given().baseUri(idamS2SBaseUri)
-                .param("microservice", "em_gw")
-                .post("testing-support/lease")
-                .andReturn().asString();
+        Map<String, Object> params = ImmutableMap.of(
+            "microservice", "em_gw",
+            "oneTimePassword", new GoogleAuthenticator().getTotpPassword(this.s2sSecret)
+        );
+
+        Response response = RestAssured
+            .given()
+            .relaxedHTTPSValidation()
+            .baseUri(this.idamS2SBaseUri)
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .body(params)
+            .post("/lease")
+            .andReturn();
+
+        assertThat(response.getStatusCode(), CoreMatchers.equalTo(200));
+
+        return "Bearer " + response
+            .getBody()
+            .print();
     }
 
     private String findUserToken(String email, String password) {
