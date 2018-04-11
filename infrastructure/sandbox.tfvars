@@ -3,6 +3,7 @@ java_opts = ""
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
+vault_section  = "test"
 idam_api_url = "http://betaDevBccidamAppLB.reform.hmcts.net:80"
 s2s_url = "http://betaDevBccidamS2SLB.reform.hmcts.net:80"
 

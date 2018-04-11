@@ -28,14 +28,15 @@ class BaseIT {
 
     FileUtils fileUtils = new FileUtils()
 
-//    @Value('${base-urls.dm-api-gw-web}')
-//    String dmApiGwBaseUri
 
     @Value('${base-urls.dm-store}')
     String dmStoreAppBaseUri
 
     @Value('${base-urls.idam-user}')
     String idamUserBaseUri
+
+    @Value('${base-urls.s2s-token}')
+    String s2sToken
 
     final String PASSWORD = '123'
 
@@ -154,7 +155,8 @@ class BaseIT {
     }
 
     def serviceToken() {
-        authTokenProvider.findServiceToken()
+//        authTokenProvider.findServiceToken()
+        s2sToken
     }
 
     def createDocument(username,  filename = null, classification = null, roles = null, metadata = null) {
