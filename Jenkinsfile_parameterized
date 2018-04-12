@@ -6,13 +6,13 @@ properties([
         displayName: 'Document Management Store App',
         projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
     ],
-//    parameters([
-//        booleanParam(
-//            defaultValue: false,
-//            description: 'Run Performance',
-//            name: 'RUN_PT'
-//        )
-//    ]),
+    parameters([
+        booleanParam(
+            defaultValue: false,
+            description: 'Run Performance',
+            name: 'RUN_PT'
+        )
+    ]),
     pipelineTriggers([
         [$class: 'GitHubPushTrigger']
     ])
@@ -129,6 +129,33 @@ EOF
         }
     }
 
+    after('smoketest:spreview') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "smokeTests/build/reports/tests/smoke/",
+            reportFiles          : 'index.html',
+            reportName           : 'SPREVIEW Smoke Test'
+        ])
+    }
+
+    after('functionalTest:spreview') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "functionalTests/build/reports/tests/functional/",
+            reportFiles          : 'index.html',
+            reportName           : 'SPREVIEW Functional Test'
+        ])
+        if (params.RUN_PT) {
+//            Performance Test
+            sh './gradlew gatlingRun'
+            gatlingArchive()
+        }
+    }
+
     after('smoketest:saat') {
         publishHTML([
             allowMissing         : true,
@@ -136,7 +163,7 @@ EOF
             keepAll              : true,
             reportDir            : "smokeTests/build/reports/tests/smoke/",
             reportFiles          : 'index.html',
-            reportName           : 'Dev Smoke Test'
+            reportName           : 'SAAT Smoke Test'
         ])
     }
 
@@ -147,13 +174,13 @@ EOF
             keepAll              : true,
             reportDir            : "functionalTests/build/reports/tests/functional/",
             reportFiles          : 'index.html',
-            reportName           : 'Dev Functional Test'
+            reportName           : 'SAAT Functional Test'
         ])
-//        if (params.RUN_PT) {
-//      Performance Test
-//            sh './gradlew gatlingRun'
-//            gatlingArchive()
-//        }
+        if (params.RUN_PT) {
+//            Performance Test
+            sh './gradlew gatlingRun'
+            gatlingArchive()
+        }
     }
 
     after('smoketest:sprod'){
@@ -163,7 +190,7 @@ EOF
             keepAll              : true,
             reportDir            : "smokeTests/build/reports/tests/smoke/",
             reportFiles          : 'index.html',
-            reportName           : 'Prod Smoke Test'
+            reportName           : 'SPROD Smoke Test'
         ])
     }
 }
