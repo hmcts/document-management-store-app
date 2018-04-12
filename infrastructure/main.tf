@@ -15,6 +15,7 @@ module "app" {
   ilbIp = "${var.ilbIp}"
   subscription = "${var.subscription}"
   is_frontend = false
+  additional_host_name = "${local.app_full_name}.${var.env}.platform.hmcts.net"
   https_only="false"
 
   app_settings = {
