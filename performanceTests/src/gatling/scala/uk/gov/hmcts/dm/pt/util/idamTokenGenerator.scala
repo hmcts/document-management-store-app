@@ -6,8 +6,8 @@ import io.restassured.RestAssured
 object idamTokenGenerator {
 
     val params = Map(
-        "microservice", "em_gw",
-        "oneTimePassword", new GoogleAuthenticator().getTotpPassword(Environments.s2sSecret)
+        ("microservice", "em_gw"),
+        ("oneTimePassword", new GoogleAuthenticator().getTotpPassword(Environments.s2sSecret))
     )
 
     def generateS2SToken(): String = {
