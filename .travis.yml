@@ -14,7 +14,8 @@ cache:
 
 before_install:
   - sudo apt-get install jq
-  - curl https://raw.githubusercontent.com/hmcts/reform-api-docs/master/bin/publish-swagger-docs.sh > publish-swagger-docs.sh
+  - curl https://raw.githubusercontent.com/hmcts/reform-api-docs/feature/wait-with-curl/bin/publish-swagger-docs.sh > publish-swagger-docs.sh
+#  - curl https://raw.githubusercontent.com/hmcts/reform-api-docs/master/bin/publish-swagger-docs.sh > publish-swagger-docs.sh
 
 script:
   - ./gradlew check
