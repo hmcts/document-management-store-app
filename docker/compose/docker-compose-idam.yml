@@ -65,21 +65,7 @@ services:
     image: mailhog/mailhog
 
   service-auth-provider-api:
-    image: docker.artifactory.reform.hmcts.net/auth/service-auth-provider-api:47e18b53aad48ae8124744041988565e07dfed50
-#    image: docker.artifactory.reform.hmcts.net/auth/service-auth-provider-api:latest
+    image: docker.artifactory.reform.hmcts.net/auth/service-auth-provider-api:latest
     environment:
-      - auth.provider.service.server.jwtKey=wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
-      - auth.provider.service.server.microserviceKeys.em_gw=AAAAAAAAAAAAAAAA
+      - AUTH_PROVIDER_SERVICE_SERVER_MICROSERVICE_KEYS_EM_GW=AAAAAAAAAAAAAAAA
       - auth.provider.service.testing-support.enabled=true
-#      logging env vars
-      - ROOT_APPENDER=JSON_CONSOLE
-      - JSON_CONSOLE_PRETTY_PRINT=false
-      - REFORM_SERVICE_TYPE=java
-      - REFORM_SERVICE_NAME=service-auth-provider-api
-      - REFORM_TEAM=cc
-      - REFORM_ENVIRONMENT=docker
-#      healthcheck env vars
-      - PACKAGES_ENVIRONMENT=docker
-      - PACKAGES_PROJECT=idam
-      - PACKAGES_NAME=idam-service
-      - PACKAGES_VERSION=unkown
