@@ -2,8 +2,8 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'pmd'
-    id 'io.spring.dependency-management' version '1.0.4.RELEASE'
-    id 'org.springframework.boot' version '1.5.10.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.5.RELEASE'
+    id 'org.springframework.boot' version '2.0.1.RELEASE'
     id 'org.owasp.dependencycheck' version '3.1.2'
     id 'com.github.ben-manes.versions' version '0.17.0'
     id 'org.sonarqube' version '2.5'
@@ -78,6 +78,7 @@ dependencyCheck {
 
 repositories {
     maven { url "https://dl.bintray.com/hmcts/hmcts-maven" }
+//    maven { url 'https://repo.spring.io/libs-milestone' }
     jcenter()
     mavenLocal()
 }
@@ -110,6 +111,7 @@ def versions = [
     springCloud        : 'Camden.SR5',
     springfoxSwagger   : '2.7.0',
     xmlMavenPlugin     : '1.0',
+    reformJavaLogging  : '3.0.0',
 ]
 
 dependencies {
@@ -147,9 +149,9 @@ dependencies {
     compile group: 'org.projectlombok', name: 'lombok', version: versions.lombokVersion
 
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '2.1.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: '2.1.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '2.1.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version:  versions.reformJavaLogging
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version:  versions.reformJavaLogging
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version:  versions.reformJavaLogging
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '1.1.0'
 
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.0.RELEASE'
