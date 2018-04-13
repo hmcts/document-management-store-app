@@ -237,6 +237,7 @@ sonarqube {
 //(./gradlew installDist bootRepackage) build/install/dm-store/bin/dm-store
 jar {
     baseName 'dm-store'
+    archiveName = "$baseName"+".jar"
     destinationDir = file("$rootDir/build/libs")
     manifest {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
@@ -244,7 +245,7 @@ jar {
 }
 
 bootRepackage {
-    classifier 'all'
+    mainClass = 'uk.gov.hmcts.dm.DmApp'
 }
 
 //This is used in get the version for fakeversion and buildInfo  (./gradlew -q printVersion)

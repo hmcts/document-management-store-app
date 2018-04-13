@@ -201,7 +201,7 @@ node {
             }
 
             stage('Package (RPM)') {
-                rpmVersion = packager.javaRPM(app, 'build/libs/dm-store-$(./gradlew -q printVersion)-all.jar', 'springboot', 'application/src/main/resources/application.yaml')
+                rpmVersion = packager.javaRPM(app, 'build/libs/dm-store.jar', 'springboot', 'application/src/main/resources/application.yaml')
                 version = "{ app: ${app}, rpmversion: ${rpmVersion}}"
             }
 
