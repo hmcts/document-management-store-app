@@ -264,7 +264,6 @@ class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    @Ignore
     void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
         DateTimeFormatter dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME
         def ttlDate = OffsetDateTime.now().minusMinutes(2).format(dtf).toString().substring(0, 19) + "+0000"
