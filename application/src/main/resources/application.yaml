@@ -1,5 +1,3 @@
-
-
 api:
   version: 1.2.0
 
@@ -78,8 +76,7 @@ logging:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:INFO}
 
-azure:
-  app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
+
 
 app-insights:
   dev-mode: off
@@ -139,15 +136,11 @@ toggle:
   ttl: ${ENABLE_TTL:true}
   thumbnail: ${ENABLE_THUMBNAIL:true}
 
-
 azure:
+  app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
   storage:
     connection-string: ${AZURE_STORAGE_CONNECTION_STRING:}
     file-share-name: ${AZURE_FILE_SHARE_NAME:dem-test}
     blob-container-reference: ${AZURE_BLOB_CONTAINER_REFERENCE:dem-test}
 
 file-storage-client: ${FILE_STORAGE_CLIENT:azureBlobStorageClient}
-
-
-
-
