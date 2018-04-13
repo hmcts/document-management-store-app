@@ -48,12 +48,9 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
         errorAttributes.put("error", errorStatusCodeAndMessage.getMessage());
         requestAttributes.setAttribute("javax.servlet.error.status_code", errorStatusCodeAndMessage.getStatusCode(), 0);
         errorAttributes.put("status", errorStatusCodeAndMessage.getStatusCode());
-
-        log.error(
-            errorStatusCodeAndMessage.getMessage(),
-            StructuredArguments.keyValue("errorCode", errorStatusCodeAndMessage.getMessage()),
-            StructuredArguments.keyValue("stackTrace", errorAttributes.get("trace"))
-        );
+        if (throwable != null) {
+            log.error(throwable.getMessage(), throwable);
+        }
 
         if (!globalIncludeStackTrace) {
             errorAttributes.remove("exception");
