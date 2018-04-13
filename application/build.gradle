@@ -245,7 +245,7 @@ jar {
 }
 
 bootRepackage {
-    classifier 'all'
+    mainClass = 'uk.gov.hmcts.dm.DmApp'
 }
 
 //This is used in get the version for fakeversion and buildInfo  (./gradlew -q printVersion)
