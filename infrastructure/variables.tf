@@ -70,6 +70,10 @@ variable "em_anno_app_url" {
 variable "postgresql_user" {
   default = "evidence"
 }
+
+variable "database_name" {
+  default = "evidence"
+}
 ////////////////////////////////////////////////
 // Logging
 ////////////////////////////////////////////////
