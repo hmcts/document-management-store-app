@@ -6,6 +6,13 @@ properties([
         displayName: 'Document Management Store App',
         projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
     ],
+    parameters([
+        booleanParam(
+            defaultValue: false,
+            description: 'Run Performance',
+            name: 'RUN_PT'
+        )
+    ]),
     pipelineTriggers([
         [$class: 'GitHubPushTrigger']
     ])
@@ -122,6 +129,55 @@ EOF
         }
     }
 
+    after('smoketest:demo') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "smokeTests/build/reports/tests/smoke/",
+            reportFiles          : 'index.html',
+            reportName           : 'DEMO Smoke Test'
+        ])
+    }
+
+    after('functionalTest:demo') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "functionalTests/build/reports/tests/functional/",
+            reportFiles          : 'index.html',
+            reportName           : 'DEMO Functional Test'
+        ])
+    }
+
+    after('smoketest:preview') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "smokeTests/build/reports/tests/smoke/",
+            reportFiles          : 'index.html',
+            reportName           : 'PREVIEW Smoke Test'
+        ])
+    }
+
+    after('functionalTest:preview') {
+        publishHTML([
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "functionalTests/build/reports/tests/functional/",
+            reportFiles          : 'index.html',
+            reportName           : 'PREVIEW Functional Test'
+        ])
+        if (params.RUN_PT) {
+//            Performance Test
+            sh './gradlew gatlingRun'
+//            gatlingArchive()
+        }
+    }
+
     after('smoketest:aat') {
         publishHTML([
             allowMissing         : true,
@@ -129,7 +185,7 @@ EOF
             keepAll              : true,
             reportDir            : "smokeTests/build/reports/tests/smoke/",
             reportFiles          : 'index.html',
-            reportName           : 'Dev Smoke Test'
+            reportName           : 'AAT Smoke Test'
         ])
     }
 
@@ -140,8 +196,13 @@ EOF
             keepAll              : true,
             reportDir            : "functionalTests/build/reports/tests/functional/",
             reportFiles          : 'index.html',
-            reportName           : 'Dev Functional Test'
+            reportName           : 'AAT Functional Test'
         ])
+        if (params.RUN_PT) {
+//            Performance Test
+            sh './gradlew gatlingRun'
+//            gatlingArchive()
+        }
     }
 
     after('smoketest:prod'){
@@ -151,7 +212,7 @@ EOF
             keepAll              : true,
             reportDir            : "smokeTests/build/reports/tests/smoke/",
             reportFiles          : 'index.html',
-            reportName           : 'Prod Smoke Test'
+            reportName           : 'PROD Smoke Test'
         ])
     }
 }
