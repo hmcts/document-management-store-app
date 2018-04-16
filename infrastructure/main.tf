@@ -88,6 +88,7 @@ module "db" {
   location = "${var.location}"
   env = "${var.env}"
   postgresql_user = "${var.postgresql_user}"
+  database_name = "${var.database_name}"
   sku_name = "GP_Gen5_2"
   sku_tier = "GeneralPurpose"
   storage_mb = "51200"
