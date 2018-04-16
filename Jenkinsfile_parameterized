@@ -8,7 +8,7 @@ properties([
     ],
     parameters([
         booleanParam(
-            defaultValue: true,
+            defaultValue: false,
             description: 'Run Performance',
             name: 'RUN_PT'
         )
