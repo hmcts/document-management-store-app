@@ -26,7 +26,7 @@ object PostRequest {
 
   val postRequest: HttpRequestBuilder = http("Post Request Scenario ${filename}").post("/documents")
     //    .header("ServiceAuthorization", serviceToken).header("user-id", "gatling")
-    .header("Authorization", serviceToken).header("user-id", "gatling")
+    .header("ServiceAuthorization", serviceToken).header("user-id", "gatling")
     .bodyPart(RawFileBodyPart("files", "${filename}")
       .contentType("application/pdf")
       .fileName("${filename}")
@@ -115,7 +115,7 @@ object PostRequest {
       feed(fileProviderRand)
         .exec(http("Post Files")
           .post("/documents")
-          .header("ServiceAuthorization", serviceToken).header("user-id", "gatling")
+          .header("ServiceAuthorization", idamTokenGenerator.generateS2SToken()).header("user-id", "gatling")
           .bodyPart(
             RawFileBodyPart("files", "${filename}")
               .contentType("application/pdf")
@@ -181,7 +181,7 @@ object PostRequest {
   val storeInSeq: ChainBuilder = feed(fileProviderSeq)
       .exec(http("Post Files ${filename}")
         .post("/documents")
-        .header("ServiceAuthorization", serviceToken).header("user-id", "gatling")
+        .header("ServiceAuthorization", idamTokenGenerator.generateS2SToken()).header("user-id", "gatling")
         .bodyPart(
           RawFileBodyPart("files", "${filename}")
             .contentType("application/pdf")

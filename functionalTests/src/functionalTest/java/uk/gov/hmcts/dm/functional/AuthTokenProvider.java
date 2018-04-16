@@ -27,8 +27,6 @@ public class AuthTokenProvider {
     private final String idamUserBaseUrl;
     private final String s2sSecret;
 
-
-
     @Autowired
     public AuthTokenProvider(@Value("${base-urls.idam-s2s}") String idamS2SBaseUri,
                              @Value("${base-urls.idam-user}") String idamUserBaseUri,
