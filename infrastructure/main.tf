@@ -16,6 +16,7 @@ module "app" {
   env = "${var.env}"
   ilbIp = "${var.ilbIp}"
   subscription = "${var.subscription}"
+  capacity     = "${var.capacity}"
   is_frontend = false
   additional_host_name = "${var.env == "prod" ? local.prod_hostname : local.non_prod_hostname}"
   https_only="false"

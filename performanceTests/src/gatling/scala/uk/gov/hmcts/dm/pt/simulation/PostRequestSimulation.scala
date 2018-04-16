@@ -10,7 +10,7 @@ import scala.language.postfixOps
 
 class PostRequestSimulation extends Simulation {
 
-  val httpConf = http.disableWarmUp.baseURL(Environments.dmStoreApp).headers(Headers.commonHeader)
+  val httpConf = http.disableWarmUp.baseURL(Environments.dmStore).headers(Headers.commonHeader)
 
 //  val testScenarioFinal = scenario("Post").exec(PostRequest.storeScn, PostRequest.fetchScn)
 
