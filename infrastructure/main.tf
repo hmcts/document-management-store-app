@@ -10,7 +10,7 @@ locals {
 # "${local.local_env}"
 
 module "app" {
-  source = "git@github.com:contino/moj-module-webapp?ref=master"
+  source = "git@github.com:hmcts/moj-module-webapp?ref=master"
   product = "${local.app_full_name}"
   location = "${var.location}"
   env = "${var.env}"
@@ -83,11 +83,14 @@ module "app" {
 }
 
 module "db" {
-  source = "git@github.com:contino/moj-module-postgres?ref=master"
+  source = "git@github.com:hmcts/moj-module-postgres?ref=cnp-449-tactical"
   product = "${local.app_full_name}-postgres-db"
-  location = "West Europe"
+  location = "${var.location}"
   env = "${var.env}"
-  postgresql_user = "rhubarbadmin"
+  postgresql_user = "${var.postgresql_user}"
+  sku_name = "GP_Gen5_2"
+  sku_tier = "GeneralPurpose"
+  storage_mb = "51200"
 }
 
 provider "vault" {
@@ -99,7 +102,7 @@ data "vault_generic_secret" "s2s_secret" {
 }
 
 module "key_vault" {
-  source = "git@github.com:contino/moj-module-key-vault?ref=master"
+  source = "git@github.com:hmcts/moj-module-key-vault?ref=master"
   product = "${local.app_full_name}"
   env = "${var.env}"
   tenant_id = "${var.tenant_id}"

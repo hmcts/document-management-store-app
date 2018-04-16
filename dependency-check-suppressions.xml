@@ -1,3 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2016-5425</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2016-6325</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2017-14798</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2016-3674</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2016-9878</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2017-6056</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2017-7957</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2018-1199</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2018-1304</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+        This suppresses a specific cve for any test.jar in any directory.
+        ]]></notes>
+        <cve>CVE-2018-1305</cve>
+    </suppress>
 </suppressions>
