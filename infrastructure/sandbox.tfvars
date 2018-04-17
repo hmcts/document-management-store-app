@@ -34,10 +34,10 @@ enable_thumbnail = "true"
 ////////////////////////////////////////////////
 //// Whitelists
 ////////////////////////////////////////////////
-dm_multipart_whitelist = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
-dm_multipart_whitelist_ext = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf"
-s2s_names_whitelist = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator,probate_backend"
-case_worker_roles = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
+//dm_multipart_whitelist = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
+//dm_multipart_whitelist_ext = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf"
+//s2s_names_whitelist = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator,probate_backend"
+//case_worker_roles = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
 
 ////////////////////////////////////////////////
 // Addtional
