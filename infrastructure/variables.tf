@@ -50,7 +50,7 @@ variable "java_opts" {
 // Endpoints
 ////////////////////////////////////////////////
 variable "vault_section" {
-  default = "preprod"
+  default = "test"
 }
 
 variable "idam_api_url" {
