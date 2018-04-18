@@ -25,6 +25,9 @@ public class SwaggerConfiguration {
     @Value("${api.version}")
     private String apiVersion;
 
+    private static final String MODEL_REF_TYPE = "string";
+    private static final String PARAMETER_TYPE = "header";
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -33,22 +36,30 @@ public class SwaggerConfiguration {
                 .paths(PathSelectors.regex("/documents(.*)"))
                 .build()
                 .globalOperationParameters(
-                        Stream.of(new ParameterBuilder()
-                                .name("Authorization")
-                                .description("User Auth")
-                                .modelRef(new ModelRef("string"))
-                                .parameterType("header")
-                                .required(true)
-                                .build()).collect(Collectors.toList()))
+                    Stream.of(new ParameterBuilder()
+                            .name("ServiceAuthorization")
+                            .description("Service Auth (S2S). Use it when accessing the API on App Tier level.")
+                            .modelRef(new ModelRef(MODEL_REF_TYPE))
+                            .parameterType(PARAMETER_TYPE)
+                            .required(true)
+                            .build()).collect(Collectors.toList()))
                 .globalOperationParameters(
-                        Stream.of(new ParameterBuilder()
-                                .name("ServiceAuthorization")
-                                .description("Service Auth. Use it when accessing the API on App Tier level.")
-                                .modelRef(new ModelRef("string"))
-                                .parameterType("header")
-                                .required(true)
-                                .build()).collect(Collectors.toList()))
-                .apiInfo(apiInfo());
+                    Stream.of(new ParameterBuilder()
+                        .name("user-id")
+                        .description("User-id of the currently authenticated user. If provided will be used to populate the creator field of a document and will be used for authorisation.")
+                        .modelRef(new ModelRef(MODEL_REF_TYPE))
+                        .parameterType(PARAMETER_TYPE)
+                        .required(false)
+                        .build()).collect(Collectors.toList()))
+                .globalOperationParameters(
+                    Stream.of(new ParameterBuilder()
+                        .name("user-roles")
+                        .description("Comma-separated list of roles of the currently authenticated user. If provided will be used for authorisation.")
+                        .modelRef(new ModelRef(MODEL_REF_TYPE))
+                        .parameterType(PARAMETER_TYPE)
+                        .required(false)
+                        .build()).collect(Collectors.toList()))
+            .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
