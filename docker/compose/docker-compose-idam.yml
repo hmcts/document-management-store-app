@@ -23,7 +23,7 @@ services:
     links:
     - idam-api
     - service-auth-provider-app
-#
+
   idam-api:
     image: docker.artifactory.reform.hmcts.net/auth/idam-api:1620c9973d85ca622904ecbf01c47a4abb91f7c9
     command: --wait-for-database 60
