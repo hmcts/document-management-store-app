@@ -1,2 +1,8 @@
 *
+!.git
+!settings.gradle
+!config
 !application
+!functionalTests
+!performanceTests
+!smokeTests

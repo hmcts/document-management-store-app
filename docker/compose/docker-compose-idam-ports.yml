@@ -19,6 +19,6 @@ services:
     ports:
       - 5501:5432
 
-  service-auth-provider-api:
+  service-auth-provider-app:
     ports:
-      - 4502:8080
+      - 4502:8489

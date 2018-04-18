@@ -3,27 +3,19 @@ version: '2.1'
 
 services:
 
-  em-viewer-web:
-    ports:
-     - 3621:8080
-
-  em-api-gateway-web:
-    ports:
-     - 3623:8080
-
-  em-annotation-app:
+  em-anno:
     ports:
       - 4621:8080
 
-#  em-annotation-app-database:
+#  em-anno-db:
 #    ports:
 #      - 5432:5432
 
-  em-redaction-app:
-    ports:
-      - 4623:8080
+#  em-redact:
+#    ports:
+#      - 4623:8080
 
-#  em-redaction-app-database:
+#  em-redact-db:
 #    ports:
 #      - 5432:5432
 

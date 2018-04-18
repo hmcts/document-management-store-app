@@ -16,11 +16,6 @@ properties([
             defaultValue: false,
             description: 'Run oWasp Test',
             name: 'RUN_OWASP'
-        ),
-        booleanParam(
-            defaultValue: false,
-            description: 'Run oWasp Test',
-            name: 'RUN_DOCKER_IT'
         )
     ]),
     pipelineTriggers([
@@ -171,26 +166,6 @@ node {
             versioner.addJavaVersionInfo()
             sh "cp -r src/main/resources/ application/src/main/resources/"
             sh "./gradlew installDist bootRepackage"
-        }
-
-        if (params.IS_RC || params.RUN_DOCKER_IT) {
-            try {
-                stage('Start App with Docker') {
-                    sh "docker-compose -f docker-compose-all.yml -f docker-compose-test.yml pull"
-                    sh "docker-compose -f docker-compose-all.yml up --build -d"
-                }
-
-                stage('Run Integration tests in docker') {
-                    sh "docker-compose -f docker-compose-all.yml -f docker-compose-test.yml run -e GRADLE_OPTS document-management-store-integration-tests"
-                }
-            }
-            finally {
-                stage('Shutdown docker') {
-                    sh "docker-compose logs --no-color > logs.txt"
-                    archiveArtifacts 'logs.txt'
-                    sh "docker-compose -f docker-compose-all.yml  down"
-                }
-            }
         }
 
         if ("master" == "${env.BRANCH_NAME}") {
