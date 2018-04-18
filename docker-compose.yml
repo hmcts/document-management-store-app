@@ -1,13 +1,13 @@
 version: '2.1'
 
 services:
-  document-management-store:
+  dm-store:
     build:
       context: .
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-store:latest
+    image: hmcts/dm-store:latest
     environment:
       - SERVER_PORT=8080
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://document-management-store-database:5432/evidence
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dm-store-db:5432/evidence
       - IDAM_USER_BASE_URI=http://idam-api:8080
       - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
       # these environment variables are used by java-logging library
@@ -19,13 +19,13 @@ services:
       - REFORM_TEAM=evidence
       - REFORM_ENVIRONMENT=docker
     links:
-     - document-management-store-database
+     - dm-store-db
     depends_on:
-     - document-management-store-database
+     - dm-store-db
     ports:
     - $SERVER_PORT:8080
 
-  document-management-store-database:
+  dm-store-db:
     build:
       context: ./docker/database
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-store-database:latest
+    image: hmcts/dm-store-db:latest
