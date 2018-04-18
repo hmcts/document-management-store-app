@@ -2,93 +2,54 @@ version: '2.1'
 
 services:
 
-  em-viewer-web:
-    image: docker.artifactory.reform.hmcts.net/evidence/em-viewer-web:latest
-    environment:
-    - NODE_ENV=development
-    - PORT=8080
-
-  em-api-gateway-web:
-    image: docker.artifactory.reform.hmcts.net/evidence/em-api-gateway-web:latest
-    environment:
-      - NODE_ENV=development
-      - PORT=8080
-      - ANNOTATION_URL=http://em-annotation-app:8080
-      - IDAM_BASE_URL=http://idam-api:8080
-      - IDAM_S2S_URL=http://service-auth-provider-api:8080
-      - IDAM_SERVICE_KEY=AAAAAAAAAAAAAAAA
-      - IDAM_SERVICE_NAME=em_gw
-      - CORS_ORIGIN_METHODS=GET,POST,PUT,DELETE,OPTIONS
-      - CORS_ORIGIN_WHITELIST=*
-      #      logging env vars
-      - ROOT_APPENDER=JSON_CONSOLE
-      - LOG_OUTPUT=single
-      - JSON_CONSOLE_PRETTY_PRINT=false
-      - REFORM_SERVICE_TYPE=node
-      - REFORM_SERVICE_NAME=em-api-gateway-web
-      - REFORM_TEAM=evidence
-      - REFORM_ENVIRONMENT=docker
-#      healthcheck env vars
-      - PACKAGES_ENVIRONMENT=docker
-      - PACKAGES_PROJECT=evidence
-      - PACKAGES_NAME=em-api-gateway-web
-      - PACKAGES_VERSION=unkown
-      - XFWD=true
-    links:
-     - idam-api
-     - service-auth-provider-api
-    depends_on:
-     - idam-api
-     - service-auth-provider-api
-
-  em-annotation-app:
-    image: docker.artifactory.reform.hmcts.net/evidence/em-annotation-app:latest
+  em-anno:
+    image: hmcts/em-anno:latest
     environment:
       - SERVER_PORT=8080
       - IDAM_USER_BASE_URI=http://idam-api:8080
-      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-annotation-app-database:5432/annotation
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-app:8489
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-anno-db:5432/annotation
 #      logging env vars
       - ROOT_APPENDER=JSON_CONSOLE
       - JSON_CONSOLE_PRETTY_PRINT=true
       - REFORM_SERVICE_TYPE=java
-      - REFORM_SERVICE_NAME=em-annotation-app
+      - REFORM_SERVICE_NAME=em-anno
       - REFORM_TEAM=evidence
       - REFORM_ENVIRONMENT=docker
     links:
-     - em-annotation-app-database
+     - em-anno-db
      - idam-api
-     - service-auth-provider-api
+     - service-auth-provider-app
     depends_on:
-     - em-annotation-app-database
+     - em-anno-db
      - idam-api
-     - service-auth-provider-api
+     - service-auth-provider-app
 
-  em-annotation-app-database:
-    image: docker.artifactory.reform.hmcts.net/evidence/em-annotation-app-database:latest
+  em-anno-db:
+    image: hmcts/em-anno-db:latest
 
-  em-redaction-app:
-    image: docker.artifactory.reform.hmcts.net/evidence/em-redaction-app:latest
-    environment:
-      - SERVER_PORT=8080
-      - IDAM_USER_BASE_URI=http://idam-api:8080
-      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-redaction-app-database:5432/redaction
-#      logging env vars
-      - ROOT_APPENDER=JSON_CONSOLE
-      - JSON_CONSOLE_PRETTY_PRINT=false
-      - REFORM_SERVICE_TYPE=java
-      - REFORM_SERVICE_NAME=em-redaction-app
-      - REFORM_TEAM=evidence
-      - REFORM_ENVIRONMENT=docker
-    links:
-     - em-redaction-app-database
-     - idam-api
-     - service-auth-provider-api
-    depends_on:
-     - em-redaction-app-database
-     - idam-api
-     - service-auth-provider-api
+#  em-redact:
+#    image: hmcts/em-redact:latest
+#    environment:
+#      - SERVER_PORT=8080
+#      - IDAM_USER_BASE_URI=http://idam-api:8080
+#      - IDAM_S2S_BASE_URI=http://service-auth-provider-app:8489
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-redact-db:5432/redaction
+##      logging env vars
+#      - ROOT_APPENDER=JSON_CONSOLE
+#      - JSON_CONSOLE_PRETTY_PRINT=false
+#      - REFORM_SERVICE_TYPE=java
+#      - REFORM_SERVICE_NAME=em-redact
+#      - REFORM_TEAM=evidence
+#      - REFORM_ENVIRONMENT=docker
+#    links:
+#     - em-redact-db
+#     - idam-api
+#     - service-auth-provider-app
+#    depends_on:
+#     - em-redact-db
+#     - idam-api
+#     - service-auth-provider-app
 
-  em-redaction-app-database:
-    image: docker.artifactory.reform.hmcts.net/evidence/em-redaction-app-database:latest
+#  em-redact-db:
+#    image: hmcts/em-redact-db:latest
