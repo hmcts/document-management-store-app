@@ -2,6 +2,15 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
     <suppress>
         <notes><![CDATA[
+   file name: tomcat-annotations-api-8.5.23.jar
+   ]]></notes>
+        <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
+        <cpe>cpe:/a:apache:tomcat</cpe>
+        <cpe>cpe:/a:apache_tomcat:apache_tomcat</cpe>
+        <cpe>cpe:/a:apache_software_foundation:tomcat</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
 			only relates to cookies, which we don't do at the java level
 			]]></notes>
         <gav regex="true">.*</gav>
