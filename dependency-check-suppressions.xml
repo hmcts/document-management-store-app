@@ -107,4 +107,32 @@
         <gav regex="true">^org\.springframework:spring-context-support:.*$</gav>
         <cve>CVE-2018-1199</cve>
     </suppress>
+    <suppress>
+   <notes><![CDATA[
+   file name: spring-batch-core-3.0.9.RELEASE.jar
+   ]]></notes>
+   <gav regex="true">^org\.springframework\.batch:spring-batch-core:.*$</gav>
+   <cve>CVE-2016-9878</cve>
+</suppress>
+    <suppress>
+   <notes><![CDATA[
+   file name: spring-batch-infrastructure-3.0.9.RELEASE.jar
+   ]]></notes>
+   <gav regex="true">^org\.springframework\.batch:spring-batch-infrastructure:.*$</gav>
+   <cve>CVE-2016-9878</cve>
+</suppress>
+    <suppress>
+   <notes><![CDATA[
+   file name: xstream-1.4.7.jar
+   ]]></notes>
+   <gav regex="true">^com\.thoughtworks\.xstream:xstream:.*$</gav>
+   <cpe>cpe:/a:xstream_project:xstream</cpe>
+</suppress>
+    <suppress>
+   <notes><![CDATA[
+   file name: xstream-1.4.7.jar
+   ]]></notes>
+   <gav regex="true">^com\.thoughtworks\.xstream:xstream:.*$</gav>
+   <cve>CVE-2017-7957</cve>
+</suppress>
 </suppressions>
