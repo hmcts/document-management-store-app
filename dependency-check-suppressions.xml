@@ -1,64 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
-
     <suppress>
         <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
-        <cve>CVE-2016-5425</cve>
+			only relates to cookies, which we don't do at the java level
+			]]></notes>
+        <gav regex="true">.*</gav>
+        <cve>CVE-2015-2156</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
+			waiting for spring to upgrade to it, file name: jackson-databind-2.8.10.jar
+			]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2017-17485</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+			waiting for spring to upgrade to it, file name: jackson-databind-2.8.10.jar
+			]]></notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-5968</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+			only relates to ssl which we don't do at the java app level
+			]]></notes>
+        <gav regex="true">.*</gav>
+        <cve>CVE-2014-3488</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+			something to do with oracle, doesn't look like it applies file name: jersey-apache-client4-1.19.1.jar
+			]]></notes>
+        <gav regex="true">^com\.sun\.jersey\.contribs:jersey-apache-client4:.*$</gav>
+        <cve>CVE-2006-0550</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+			only applies when tomcat is run as a service, file name: tomcat-annotations-api-8.5.27.jar
+			]]></notes>
+        <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
         <cve>CVE-2016-6325</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
-        <cve>CVE-2017-14798</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
-        <cve>CVE-2016-3674</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
-        <cve>CVE-2016-9878</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
+			only relates to ssl, file name: tomcat-annotations-api-8.5.27.jar
+			]]></notes>
+        <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
         <cve>CVE-2017-6056</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
-        <cve>CVE-2017-7957</cve>
+			only relates to ssl
+			]]></notes>
+        <gav regex="true">.*$</gav>
+        <cve>CVE-2016-4970</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
-        <cve>CVE-2018-1199</cve>
+   only applies when it is run as a service, file name: tomcat-annotations-api-8.5.27.jar
+   ]]></notes>
+        <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
+        <cve>CVE-2016-5425</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
+   temp disable for prod release, spring boot 2 upgrade coming very soon
+   ]]></notes>
+        <gav regex="true">.*</gav>
+        <cve>CVE-2018-7489</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   temp disable for prod release, spring boot 2 upgrade coming very soon
+   ]]></notes>
+        <gav regex="true">.*</gav>
+        <cve>CVE-2017-14798</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   temp disable for prod release, spring boot 2 upgrade coming very soon
+   ]]></notes>
+        <gav regex="true">.*</gav>
         <cve>CVE-2018-1304</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-        This suppresses a specific cve for any test.jar in any directory.
-        ]]></notes>
+   temp disable for prod release, spring boot 2 upgrade coming very soon
+   ]]></notes>
+        <gav regex="true">.*</gav>
         <cve>CVE-2018-1305</cve>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
+   temp disable for prod release, spring boot 2 upgrade coming very soon
+   ]]></notes>
+        <gav regex="true">^org\.springframework:spring-context-support:.*$</gav>
+        <cve>CVE-2018-1199</cve>
     </suppress>
 </suppressions>
