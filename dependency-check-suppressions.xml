@@ -37,14 +37,14 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-			only applies when tomcat is run as a service, file name: tomcat-annotations-api-8.5.27.jar
+			only applies when tomcat is run as a service, file name: tomcat-annotations-api-8.5.28.jar
 			]]></notes>
         <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
         <cve>CVE-2016-6325</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-			only relates to ssl, file name: tomcat-annotations-api-8.5.27.jar
+			only relates to ssl, file name: tomcat-annotations-api-8.5.28.jar
 			]]></notes>
         <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
         <cve>CVE-2017-6056</cve>
@@ -58,7 +58,7 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-   only applies when it is run as a service, file name: tomcat-annotations-api-8.5.27.jar
+   only applies when it is run as a service, file name: tomcat-annotations-api-8.5.28.jar
    ]]></notes>
         <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
         <cve>CVE-2016-5425</cve>
