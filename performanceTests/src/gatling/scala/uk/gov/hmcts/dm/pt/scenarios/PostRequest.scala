@@ -137,7 +137,8 @@ object PostRequest {
       session.set("fileId", ids(index))
     }
       .exec(
-        http("Use id ${fileId}")
+//        http("Use id ${fileId}")
+        http("Get Request")
           .get("${fileId}")
           .header("ServiceAuthorization", serviceToken).header("user-id", "gatling")
           .check(status is 200)
