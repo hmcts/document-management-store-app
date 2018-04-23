@@ -1,4 +1,4 @@
-capacity = "3"
+capacity = "2"
 java_opts = ""
 
 ////////////////////////////////////////////////
@@ -6,7 +6,6 @@ java_opts = ""
 ////////////////////////////////////////////////
 vault_section  = "prod"
 idam_api_url = "https://prod-idamapi.reform.hmcts.net:3511"
-//s2s_url = "https://prod-s2s-api.reform.hmcts.net:3511"
 
 ////////////////////////////////////////////////
 // Logging
@@ -35,10 +34,10 @@ enable_thumbnail = "true"
 ////////////////////////////////////////////////
 //// Whitelists
 ////////////////////////////////////////////////
-dm_multipart_whitelist = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
-dm_multipart_whitelist_ext = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf"
-s2s_names_whitelist = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator,probate_backend"
-case_worker_roles = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
+//dm_multipart_whitelist = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
+//dm_multipart_whitelist_ext = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf"
+//s2s_names_whitelist = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator,probate_backend"
+//case_worker_roles = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
 
 ////////////////////////////////////////////////
 // Addtional

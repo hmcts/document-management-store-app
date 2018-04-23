@@ -3,15 +3,15 @@ version: '2.1'
 
 services:
 
-  document-management-node-demo:
+  dm-show:
     ports:
      - 3608:8080
 
-#  document-management-store:
+#  dm-store:
 #    ports:
 #     - 4603:8080
 #     - 5005:5005
 
-  document-management-store-database:
+  dm-store-db:
     ports:
      - 5432:5432

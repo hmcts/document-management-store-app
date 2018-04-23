@@ -1,8 +1,8 @@
 version: '2.1'
 
 services:
-  document-management-node-demo:
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-node-demo:latest
+  dm-show:
+    image: hmcts/dm-show:latest
     environment:
     - NODE_ENV=development
     - PORT=8080
@@ -19,68 +19,33 @@ services:
     - LOG_OUTPUT=single
     - JSON_CONSOLE_PRETTY_PRINT=false
     - REFORM_SERVICE_TYPE=node
-    - REFORM_SERVICE_NAME=document-management-node-demo
+    - REFORM_SERVICE_NAME=dm-show
     - REFORM_TEAM=evidence
     - REFORM_ENVIRONMENT=docker
 #      healthcheck env vars
     - PACKAGES_ENVIRONMENT=docker
     - PACKAGES_PROJECT=evidence
-    - PACKAGES_NAME=document-management-node-demo
+    - PACKAGES_NAME=dm-show
     - PACKAGES_VERSION=unkown
 
-  document-management-store-api-gateway-web:
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-store-api-gateway-web:latest
-    environment:
-      - NODE_ENV=development
-      - PORT=8080
-      - EM_API_URL=http://document-management-store:8080
-      - IDAM_BASE_URL=http://idam-api:8080
-      - IDAM_S2S_URL=http://service-auth-provider-api:8080
-      - IDAM_SERVICE_KEY=AAAAAAAAAAAAAAAA
-      - IDAM_SERVICE_NAME=em_gw
-      - CORS_ORIGIN_METHODS=GET,POST,PUT,DELETE,OPTIONS
-      - CORS_ORIGIN_WHITELIST=*
-      #      logging env vars
-      - ROOT_APPENDER=JSON_CONSOLE
-      - LOG_OUTPUT=single
-      - JSON_CONSOLE_PRETTY_PRINT=false
-      - REFORM_SERVICE_TYPE=node
-      - REFORM_SERVICE_NAME=document-management-api-gateway-web
-      - REFORM_TEAM=evidence
-      - REFORM_ENVIRONMENT=docker
-#      healthcheck env vars
-      - PACKAGES_ENVIRONMENT=docker
-      - PACKAGES_PROJECT=evidence
-      - PACKAGES_NAME=document-management-api-gateway-web
-      - PACKAGES_VERSION=unkown
-      - XFWD=true
-    links:
-     - document-management-store
-     - idam-api
-     - service-auth-provider-api
-    depends_on:
-     - document-management-store
-     - idam-api
-     - service-auth-provider-api
-
-  document-management-store:
+  dm-store:
     build:
         context: ../..
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-store:latest
+    image: hmcts/dm-store:latest
     command: --wait-for-database 30
     environment:
       - SERVER_PORT=8080
       - IDAM_SUPERUSER_EMAIL
       - IDAM_SECRET_KEY=AAAAAAAAAAAAAAAA
       - GOV_NOTIFY_API_KEY
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://document-management-store-database:5432/evidence
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://dm-store-db:5432/evidence
       - SPRING_DATASOURCE_USERNAME=evidence
       - SPRING_DATASOURCE_PASSWORD=evidence
       - SPRING_PROFILES_ACTIVE=dev
       - IDAM_TESTING_SUPPORT_ENABLED=true
       - LOGGING_LEVEL_UK_GOV_HMCTS_IDAM=DEBUG
       - IDAM_USER_BASE_URI=http://idam-api:8080
-      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
+      - IDAM_S2S_BASE_URI=http://service-auth-provider-app:8489
       - http_proxy=
       - https_proxy=
       - no_proxy=
@@ -99,15 +64,15 @@ services:
 #      debug mode
       - JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
     links:
-     - document-management-store-database
+     - dm-store-db
      - idam-api
-     - service-auth-provider-api
+     - service-auth-provider-app
     depends_on:
-     - document-management-store-database
+     - dm-store-db
      - idam-api
-     - service-auth-provider-api
+     - service-auth-provider-app
 
-  document-management-store-database:
+  dm-store-db:
     build:
         context: ../database
-    image: docker.artifactory.reform.hmcts.net/evidence/document-management-store-database:latest
+    image: hmcts/dm-store-db:latest

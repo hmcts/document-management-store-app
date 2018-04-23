@@ -2,8 +2,6 @@ locals {
   app_full_name = "${var.product}-${var.component}"
   ase_name = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
-  prod_hostname = "${local.app_full_name}.platform.hmcts.net"
-  non_prod_hostname = "${local.app_full_name}.${var.env}.platform.hmcts.net"
 }
 # "${local.ase_name}"
 # "${local.app_full_name}"
@@ -17,8 +15,8 @@ module "app" {
   ilbIp = "${var.ilbIp}"
   subscription = "${var.subscription}"
   capacity     = "${var.capacity}"
-  is_frontend = false
-  additional_host_name = "${var.env == "prod" ? local.prod_hostname : local.non_prod_hostname}"
+  is_frontend = true #It's not front end but we need it so we can have a custom URL at the moment.
+  additional_host_name = "${local.app_full_name}-${var.env}.service.${var.env}.platform.hmcts.net"
   https_only="false"
 
   app_settings = {
@@ -27,6 +25,7 @@ module "app" {
     POSTGRES_DATABASE = "${module.db.postgresql_database}"
     POSTGRES_USER = "${module.db.user_name}"
     POSTGRES_PASSWORD = "${module.db.postgresql_password}"
+    MAX_ACTIVE_DB_CONNECTIONS = 70
 
     # JAVA_OPTS = "${var.java_opts}"
     # SERVER_PORT = "8080"
