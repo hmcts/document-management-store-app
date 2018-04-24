@@ -25,9 +25,11 @@ class PostRequestSimulation extends Simulation {
     val randomTestScenarios = List(randomPostRequest.inject(splitUsers(400) into (rampUsers(50) over (30 seconds)) separatedBy atOnceUsers(7)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
         randomGetRequest.inject( nothingFor(20 seconds), splitUsers(400) into (rampUsers(50) over (30 seconds)) separatedBy atOnceUsers(7)))//nothingFor(5 seconds), atOnceUsers(40)))//rampUsers(4) over (2 minutes))   )
 
+    val prodLikeScenarios = List(randomPostRequest.inject(splitUsers(10) into (rampUsers(1) over (3 seconds)) separatedBy atOnceUsers(1)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
+        randomGetRequest.inject( nothingFor(20 seconds), splitUsers(10) into (rampUsers(1) over (3 seconds)) separatedBy atOnceUsers(1)))
 
-    val prodLikeScenarios = List(randomPostRequest.inject(splitUsers(200) into (rampUsers(4) over (3 seconds)) separatedBy atOnceUsers(1)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
-        randomGetRequest.inject( nothingFor(20 seconds), splitUsers(200) into (rampUsers(4) over (2 seconds)) separatedBy atOnceUsers(1)))
+//    val prodLikeScenarios = List(randomPostRequest.inject(splitUsers(200) into (rampUsers(4) over (3 seconds)) separatedBy atOnceUsers(1)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
+//        randomGetRequest.inject( nothingFor(20 seconds), splitUsers(200) into (rampUsers(4) over (2 seconds)) separatedBy atOnceUsers(1)))
 //        randomPostRequest.inject(rampUsers(20) over (30 seconds)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
 //        randomGetRequest.inject( nothingFor(10 seconds), rampUsers(20) over (30 seconds)))
 
@@ -41,7 +43,7 @@ class PostRequestSimulation extends Simulation {
 //    setUp(randomTestScenarios)
     setUp(prodLikeScenarios)
     .protocols(httpConf)
-    .maxDuration(5 minutes)
+    .maxDuration(1 minutes)
     .assertions(
       global.responseTime.max.lte(Environments.maxResponseTime.toInt),
       global.successfulRequests.percent.gte(99))
