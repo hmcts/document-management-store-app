@@ -27,7 +27,7 @@ class PostRequestSimulation extends Simulation {
 
 
     val prodLikeScenarios = List(randomPostRequest.inject(splitUsers(200) into (rampUsers(4) over (3 seconds)) separatedBy atOnceUsers(1)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
-        randomGetRequest.inject( nothingFor(10 seconds), splitUsers(200) into (rampUsers(4) over (2 seconds)) separatedBy atOnceUsers(1)))
+        randomGetRequest.inject( nothingFor(10 seconds), splitUsers(200) into (rampUsers(4) over (1 seconds)) separatedBy atOnceUsers(1)))
 //        randomPostRequest.inject(rampUsers(20) over (30 seconds)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
 //        randomGetRequest.inject( nothingFor(10 seconds), rampUsers(20) over (30 seconds)))
 
