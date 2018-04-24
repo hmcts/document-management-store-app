@@ -15,7 +15,7 @@ object PostRequest {
   val ids: mutable.MutableList[String] = mutable.MutableList[String]()
   val randomNum: Random.type = scala.util.Random
   val tempVal: String = ""
-  private val times: Int = 1
+  private val times: Int = 10
 
   val fileProviderRand: RecordSeqFeederBuilder[String] = csv("listoffiles.csv").random
   val fileProviderSeq: RecordSeqFeederBuilder[String] = csv("listoffiles.csv").queue
