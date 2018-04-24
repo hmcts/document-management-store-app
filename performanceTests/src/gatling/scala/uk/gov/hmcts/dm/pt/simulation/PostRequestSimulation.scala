@@ -25,6 +25,12 @@ class PostRequestSimulation extends Simulation {
     val randomTestScenarios = List(randomPostRequest.inject(splitUsers(400) into (rampUsers(50) over (30 seconds)) separatedBy atOnceUsers(7)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
         randomGetRequest.inject( nothingFor(20 seconds), splitUsers(400) into (rampUsers(50) over (30 seconds)) separatedBy atOnceUsers(7)))//nothingFor(5 seconds), atOnceUsers(40)))//rampUsers(4) over (2 minutes))   )
 
+
+    val loadScenarios = List(randomPostRequest.inject(rampUsers(10) over (30 seconds)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
+        randomGetRequest.inject( nothingFor(10 seconds), rampUsers(10) over (30 seconds)),
+        randomPostRequest.inject(rampUsers(20) over (30 seconds)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
+        randomGetRequest.inject( nothingFor(10 seconds), rampUsers(20) over (30 seconds)))
+
     //    val randomTestScenarios = List(randomPostRequest.inject(splitUsers(300) into (rampUsers(32) over (10 seconds)) separatedBy atOnceUsers(7)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
 //        randomGetRequest.inject( nothingFor(2 seconds), splitUsers(300) into (rampUsers(32) over (9 seconds)) separatedBy atOnceUsers(7)))//nothingFor(5 seconds), atOnceUsers(40)))//rampUsers(4) over (2 minutes))   )
     //  val testScenarioForPostRecords = List(PostRequest.postRequestScenario.inject(atOnceUsers(1),rampUsers(38) over (2 minute)))
@@ -32,7 +38,8 @@ class PostRequestSimulation extends Simulation {
 //  val postRequests2000 = List(PostRequest.postRequestScenario.inject(atOnceUsers(1), rampUsersPerSec(1) to 200 during (1 minute)))
 
 //  setUp(testScenarios)
-    setUp(randomTestScenarios)
+//    setUp(randomTestScenarios)
+    setUp(loadScenarios)
     .protocols(httpConf)
     .maxDuration(5 minutes)
     .assertions(
