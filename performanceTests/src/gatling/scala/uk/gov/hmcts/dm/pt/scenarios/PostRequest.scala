@@ -132,7 +132,8 @@ object PostRequest {
   val fetchScn: ChainBuilder = repeat(times, "i") {
     exec { session =>
       println("First Session ------>" + session)
-      session.remove("fileId")
+      if (session.contains("fileId")){
+      session.remove("fileId")}
       val index = randomNum.nextInt(ids.length)
       println("Length ------>" + ids.length + " Random Index ----> " + index)
       session.set("fileId", ids(index))
