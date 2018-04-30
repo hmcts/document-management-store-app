@@ -123,8 +123,9 @@ object PostRequest {
           .formParam("classification", "PUBLIC")
           .check(status is 200, jsonPath("$._embedded.documents[0]._links.binary.href").saveAs("fileId")))
         .exec { session =>
+            if(session.contains("fileId")){
           println("fileId --------> " + session.get("fileId"))
-          ids += session.get("fileId").as[String]
+          ids += session.get("fileId").as[String]}
           session.remove("fileId")
         }
     }
