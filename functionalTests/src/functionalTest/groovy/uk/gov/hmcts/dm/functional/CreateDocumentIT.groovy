@@ -288,36 +288,36 @@ class CreateDocumentIT extends BaseIT {
         .post("/documents")
     }
 
-//    @Test
-//    void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
-//        DateTimeFormatter dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME
-//        def ttlDate = OffsetDateTime.now().minusMinutes(2).format(dtf).toString().substring(0, 19) + "+0000"
-//        def url = givenRequest(CITIZEN)
-//            .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-//            .multiPart("classification", Classifications.PUBLIC as String)
-//            .multiPart("roles", "citizen")
-//            .multiPart("roles", "caseworker")
-//            .multiPart("ttl", ttlDate)
-//            .expect().log().all()
-//            .statusCode(200)
-//            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-//            .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
-//            .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
-//            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
-//            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-//            .body("_embedded.documents[0].ttl", equalTo(ttlDate.replace("+", ".000+")))
-//            .when()
-//            .post("/documents")
-//            .path("_embedded.documents[0]._links.self.href")
-//
-//            sleep(80000)
-//
-//        givenRequest(CITIZEN)
-//            .expect()
-//            .statusCode(404)
-//            .when()
-//            .get(url)
-//    }
+    @Test
+    void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
+        DateTimeFormatter dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME
+        def ttlDate = OffsetDateTime.now().minusMinutes(2).format(dtf).toString().substring(0, 19) + "+0000"
+        def url = givenRequest(CITIZEN)
+            .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .multiPart("ttl", ttlDate)
+            .expect().log().all()
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+            .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
+            .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
+            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
+            .body("_embedded.documents[0].ttl", equalTo(ttlDate.replace("+", ".000+")))
+            .when()
+            .post("/documents")
+            .path("_embedded.documents[0]._links.self.href")
+
+            sleep(80000)
+
+        givenRequest(CITIZEN)
+            .expect()
+            .statusCode(404)
+            .when()
+            .get(url)
+    }
 
     @Test
     void "CD13 (R1) As authenticated when i upload a Tiff I get an icon in return"() {
