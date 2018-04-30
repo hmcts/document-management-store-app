@@ -37,11 +37,11 @@ public class FileContentVerifier {
         if (multipartFile == null) {
             return false;
         }
-        if (!mimeTypeList.contains(multipartFile.getContentType())) {
+        if (!mimeTypeList.stream().anyMatch(m -> m.equalsIgnoreCase(multipartFile.getContentType()))) {
             return false;
         }
 
-        if (!extensionsList.contains(getOriginalFileNameExtension(multipartFile))) {
+        if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(getOriginalFileNameExtension(multipartFile)))) {
             return false;
         }
         try (InputStream inputStream = multipartFile.getInputStream();

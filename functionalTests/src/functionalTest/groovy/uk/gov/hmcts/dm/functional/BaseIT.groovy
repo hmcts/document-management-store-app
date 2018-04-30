@@ -47,7 +47,7 @@ class BaseIT {
     final String NOBODY = null
 
     final String FILES_FOLDER = 'files/'
-    final String ATTACHMENT_1 = 'Attachment1.txt'
+    final String TEXT_ATTACHMENT_1 = 'Attachment1.txt'
     final String ATTACHMENT_2 = 'Attachment2.txt'
     final String ATTACHMENT_3 = 'Attachment3.txt'
     final String ATTACHMENT_4_PDF = '1MB.PDF'
@@ -58,9 +58,7 @@ class BaseIT {
     final String ATTACHMENT_9_JPG = 'jpg.jpg'
     final String ATTACHMENT_10 = 'svg.svg'
     final String ATTACHMENT_11 = 'rtf.rtf'
-    final String ATTACHMENT_12 = 'docx.docx'
-    final String ATTACHMENT_13 = 'pptx.pptx'
-    final String ATTACHMENT_14 = 'xlsx.xlsx'
+
     final String ATTACHMENT_15 = 'odt.odt'
     final String ATTACHMENT_16 = 'ods.ods'
     final String ATTACHMENT_17 = 'odp.odp'
@@ -74,6 +72,29 @@ class BaseIT {
     final String ATTACHMENT_25_TIFF = 'tiff.tiff'
     final String ATTACHMENT_26_BMP = 'bmp.bmp'
     final String ATTACHMENT_27_JPEG = 'jpeg.jpeg'
+
+    final String WORD = 'docx.docx'
+    final String POWER_POINT = 'pptx.pptx'
+    final String EXCEL = 'xlsx.xlsx'
+
+    final String WORD_OLD = 'doc.doc'
+    final String EXCEL_OLD = 'xls.xls'
+    final String POWER_POINT_OLD = 'ppt.ppt'
+
+    final String WORD_TEMPLATE = 'dotx.dotx'
+    final String WORD_MACRO_ENABLED = 'docm.docm'
+    final String WORD_TEMPLATE_MACRO_ENABLED = 'dotm.dotm'
+
+    final String EXCEL_TEMPLATE = 'xltx.xltx'
+    final String EXCEL_MACRO_ENABLED = 'xlsm.xlsm'
+    final String EXCEL_TEMPLATE_MACRO_ENABLED = 'xltm.xltm'
+
+    final String POWER_POINT_MACRO_ENABLED = 'pptm.pptm'
+    final String POWER_POINT_TEMPLATE = 'potx.potx'
+    final String POWER_POINT_TEMPLATE_MACRO_ENABLED = 'potm.potm'
+    final String POWER_POINT_SLIDE_SHOW = 'ppsx.ppsx'
+    final String POWER_POINT_SLIDE_SHOW_MACRO_ENABLED = 'ppsm.ppsm'
+
     final String THUMBNAIL_PDF = 'thumbnailPDF.jpg'
     final String THUMBNAIL_BMP = 'thumbnailBMP.jpg'
     final String THUMBNAIL_GIF = 'thumbnailGIF.jpg'
@@ -135,7 +156,12 @@ class BaseIT {
     }
 
     def file(fileName) {
-        fileUtils.getResourceFile(FILES_FOLDER+fileName)
+        try {
+            fileUtils.getResourceFile(FILES_FOLDER + fileName)
+        } catch (e) {
+            e.printStackTrace()
+            throw e
+        }
     }
 
     def authToken(username) {
