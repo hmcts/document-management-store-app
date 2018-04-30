@@ -134,6 +134,7 @@ object PostRequest {
       println("First Session ------>" + session)
       session.remove("fileId")
       val index = randomNum.nextInt(ids.length)
+      println("Length ------>" + ids.length + " Random Index ----> " + index)
       session.set("fileId", ids(index))
     }
       .exec(
