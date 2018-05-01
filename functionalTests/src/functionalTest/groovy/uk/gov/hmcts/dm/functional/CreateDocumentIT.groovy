@@ -29,6 +29,8 @@ import static org.hamcrest.Matchers.isOneOf
 @RunWith(SpringRunner.class)
 class CreateDocumentIT extends BaseIT {
 
+
+    //as per https://blogs.msdn.microsoft.com/vsofficedeveloper/2008/05/08/office-2007-file-format-mime-types-for-http-content-streaming-2/
     @Test
     void "CD1 (R1) As authenticated user upload 7 files with correct classification and some roles set"() {
         Response response = givenRequest(CITIZEN)
@@ -39,6 +41,29 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("files", file(ATTACHMENT_25_TIFF), V1MimeTypes.IMAGE_TIF_VALUE)
             .multiPart("files", file(ATTACHMENT_26_BMP), V1MimeTypes.IMAGE_BMP_VALUE)
             .multiPart("files", file(ATTACHMENT_27_JPEG), V1MimeTypes.IMAGE_JPEG_VALUE)
+
+            .multiPart("files", file(WORD), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            .multiPart("files", file(WORD_TEMPLATE), "application/vnd.openxmlformats-officedocument.wordprocessingml.template")
+            .multiPart("files", file(WORD_MACRO_ENABLED), "application/vnd.ms-word.document.macroEnabled.12")
+            .multiPart("files", file(WORD_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-word.template.macroEnabled.12")
+
+            .multiPart("files", file(EXCEL), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            .multiPart("files", file(EXCEL_MACRO_ENABLED), "application/vnd.ms-excel.sheet.macroEnabled.12")
+            .multiPart("files", file(EXCEL_TEMPLATE), "application/vnd.openxmlformats-officedocument.spreadsheetml.template")
+            .multiPart("files", file(EXCEL_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-excel.template.macroEnabled.12")
+
+            .multiPart("files", file(POWER_POINT), "application/vnd.openxmlformats-officedocument.presentationml.presentation")
+            .multiPart("files", file(POWER_POINT_MACRO_ENABLED), "application/vnd.ms-powerpoint.presentation.macroEnabled.12")
+            .multiPart("files", file(POWER_POINT_TEMPLATE), "application/vnd.openxmlformats-officedocument.presentationml.template")
+            .multiPart("files", file(POWER_POINT_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-powerpoint.template.macroenabled.12")
+            .multiPart("files", file(POWER_POINT_SLIDE_SHOW), "application/vnd.openxmlformats-officedocument.presentationml.slideshow")
+            .multiPart("files", file(POWER_POINT_SLIDE_SHOW_MACRO_ENABLED), "application/vnd.ms-powerpoint.slideshow.macroEnabled.12")
+
+            .multiPart("files", file(WORD_OLD), "application/msword")
+            .multiPart("files", file(EXCEL_OLD), "application/vnd.ms-excel")
+            .multiPart("files", file(POWER_POINT_OLD), "application/vnd.ms-powerpoint")
+
+            .multiPart("files", file(TEXT_ATTACHMENT_1), "text/plain")
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -417,21 +442,6 @@ class CreateDocumentIT extends BaseIT {
 
         def file = file(THUMBNAIL_BMP).getBytes()
         Assert.assertTrue(Arrays.equals(downloadedFileByteArray, file))
-    }
-
-
-
-    @Test
-    void "CD17 As authenticated user I cannot upload text file"() {
-        givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_1), V1MimeTypes.TEXT_PLAIN_VALUE)
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "caseworker")
-            .multiPart("roles", "citizen")
-            .expect()
-            .statusCode(422)
-            .when()
-            .post("/documents")
     }
 
     @Test

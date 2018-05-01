@@ -37,11 +37,16 @@ public class FileContentVerifier {
         if (multipartFile == null) {
             return false;
         }
-        if (!mimeTypeList.contains(multipartFile.getContentType())) {
+        if (!mimeTypeList.stream().anyMatch(m -> m.equalsIgnoreCase(multipartFile.getContentType()))) {
+            log.info(
+                String.format("Warning. The mime-type of uploaded file is not white-listed: %s", multipartFile.getContentType()));
             return false;
         }
 
-        if (!extensionsList.contains(getOriginalFileNameExtension(multipartFile))) {
+        String fileNameExtension = getOriginalFileNameExtension(multipartFile);
+        if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
+            log.info(
+                String.format("Warning. The extension of uploaded file is not white-listed: %s", fileNameExtension));
             return false;
         }
         try (InputStream inputStream = multipartFile.getInputStream();
