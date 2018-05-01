@@ -215,7 +215,7 @@ class BaseIT {
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
             .when()
             .post("/documents")
 

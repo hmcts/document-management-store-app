@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.functional
 
+import groovy.time.TimeCategory
 import io.restassured.response.Response
 import org.junit.Assert
 import org.junit.Ignore
@@ -11,11 +12,16 @@ import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
 
+import java.sql.Time
+import java.time.Duration
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.isOneOf
 
 /**
  * Created by pawel on 13/10/2017.
@@ -46,14 +52,14 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
-            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
 
             .body("_embedded.documents[1].originalDocumentName", equalTo(ATTACHMENT_8_TIF))
             .body("_embedded.documents[1].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
             .body("_embedded.documents[1].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[1].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[1].roles[1]", equalTo("citizen"))
-            .body("_embedded.documents[1].ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("_embedded.documents[1].ttl", equalTo("2018-10-31T10:10:10+0000"))
 
             .body("_embedded.documents[2].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
             .body("_embedded.documents[2].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
@@ -258,21 +264,22 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
         .when()
         .post("/documents")
     }
 
     @Test
     void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
-        DateTimeFormatter dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME
-        def ttlDate = OffsetDateTime.now().minusMinutes(2).format(dtf).toString().substring(0, 19) + "+0000"
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
+        def ttlDate = OffsetDateTime.now().minusMinutes(2)
+        def ttlFormatted = ttlDate.format(dtf).toString()
         def url = givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
-            .multiPart("ttl", ttlDate)
+            .multiPart("ttl", ttlFormatted)
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
@@ -280,18 +287,35 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].ttl", equalTo(ttlDate.replace("+", ".000+")))
+            .body("_embedded.documents[0].ttl",
+            equalTo(
+                ttlDate.atZoneSameInstant(ZoneId.of("GMT+0"))
+                .format(dtf))
+            )
             .when()
             .post("/documents")
             .path("_embedded.documents[0]._links.self.href")
 
-            sleep(80000)
+        def statusCode = null
+        def start = LocalDateTime.now()
+
+        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 80)) {
+
+            statusCode = givenRequest(CITIZEN)
+                .expect()
+                .statusCode(isOneOf(404, 200))
+                .when()
+                .get(url)
+                .statusCode()
+
+            sleep(1000)
+        }
 
         givenRequest(CITIZEN)
             .expect()
-            .statusCode(404)
+                .statusCode(404)
             .when()
-            .get(url)
+                .get(url)
     }
 
     @Test

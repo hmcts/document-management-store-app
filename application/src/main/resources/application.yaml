@@ -8,6 +8,7 @@ spring:
     rest:
       detection-strategy: annotated
   jackson:
+    date-format: "yyyy-MM-dd'T'HH:mm:ssZ"
     serialization:
       indent_output: true
   http:
