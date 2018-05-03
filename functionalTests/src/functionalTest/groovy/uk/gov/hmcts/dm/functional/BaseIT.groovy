@@ -98,7 +98,7 @@ class BaseIT {
     final String THUMBNAIL_PDF = 'thumbnailPDF.jpg'
     final String THUMBNAIL_BMP = 'thumbnailBMP.jpg'
     final String THUMBNAIL_GIF = 'thumbnailGIF.jpg'
-
+ 
 
     final String BAD_ATTACHMENT_1 = '1MB.exe'
     final String BAD_ATTACHMENT_2 = 'Attachment3.zip'
