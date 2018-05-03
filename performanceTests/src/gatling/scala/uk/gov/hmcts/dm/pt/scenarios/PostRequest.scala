@@ -15,7 +15,7 @@ object PostRequest {
   val ids: mutable.MutableList[String] = mutable.MutableList[String]()
   val randomNum: Random.type = scala.util.Random
   val tempVal: String = ""
-  private val times: Int = 1
+  private val times: Int = 6
 
   val fileProviderRand: RecordSeqFeederBuilder[String] = csv("listoffiles.csv").random
   val fileProviderSeq: RecordSeqFeederBuilder[String] = csv("listoffiles.csv").queue
@@ -137,7 +137,8 @@ object PostRequest {
       session.set("fileId", ids(index))
     }
       .exec(
-        http("Use id ${fileId}")
+//        http("Use id ${fileId}")
+        http("Get Request")
           .get("${fileId}")
           .header("ServiceAuthorization", serviceToken).header("user-id", "gatling")
           .check(status is 200)
