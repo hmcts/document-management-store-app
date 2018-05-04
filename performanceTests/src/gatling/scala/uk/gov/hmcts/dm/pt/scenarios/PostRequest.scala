@@ -159,13 +159,10 @@ object PostRequest {
           session.set("fileId", ids(index))
       }
       .exec (
-      scenario("Delete Request Scenario")
-        .pause(1)
-        .exec(
           http("Delete the record")
             .delete("${fileId}")
-            .check(status is 204))
-        )
+            .check(status is 204)
+      )
           .exec(
               //        http("Use id ${fileId}")
               http("Get Request")
