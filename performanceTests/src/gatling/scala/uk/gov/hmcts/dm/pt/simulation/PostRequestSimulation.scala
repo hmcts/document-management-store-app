@@ -18,6 +18,8 @@ class PostRequestSimulation extends Simulation {
 
   val randomGetRequest = scenario("Random GetRequest").exec(PostRequest.fetchScn)
 
+  val randomDeleteRequest = scenario("Complete Delete").exec(PostRequest.deleteScn)
+
   val postAndGetInSeq = scenario("Post and Get in sequence").exec(PostRequest.storeInSeq, PostRequest.fetchInSeq)
 
   val testScenarios = List(postAndGetInSeq.inject(rampUsers(5) over (1 minutes)))
@@ -27,6 +29,10 @@ class PostRequestSimulation extends Simulation {
 
     val prodLikeScenarios = List(randomPostRequest.inject(splitUsers(200) into (rampUsers(2) over (3 seconds)) separatedBy (3 seconds)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
         randomGetRequest.inject( nothingFor(40 seconds), splitUsers(200) into (rampUsers(3) over (3 seconds)) separatedBy (3 seconds)))
+
+    val deleteScenarios = List(randomPostRequest.inject(splitUsers(1) into (rampUsers(1) over (3 seconds)) separatedBy (3 seconds)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
+        randomGetRequest.inject( nothingFor(10 seconds), splitUsers(1) into (rampUsers(1) over (3 seconds)) separatedBy (3 seconds)),
+        randomDeleteRequest.inject(nothingFor(8), splitUsers(1) into (rampUsers(1) over (3 seconds)) separatedBy (3 seconds)))
 
 //    val prodLikeScenarios = List(randomPostRequest.inject(splitUsers(200) into (rampUsers(4) over (3 seconds)) separatedBy atOnceUsers(1)), //atOnceUser(40)//rampUsers(4) over (2 minutes)),splitUsers(40) into (rampUsers(5) over (10 seconds)) separatedBy (10 seconds)
 //        randomGetRequest.inject( nothingFor(20 seconds), splitUsers(200) into (rampUsers(4) over (2 seconds)) separatedBy atOnceUsers(1)))
@@ -41,7 +47,7 @@ class PostRequestSimulation extends Simulation {
 
 //  setUp(testScenarios)
 //    setUp(randomTestScenarios)
-    setUp(prodLikeScenarios)
+    setUp(deleteScenarios)
     .protocols(httpConf)
     .maxDuration(10 minutes)
     .assertions(

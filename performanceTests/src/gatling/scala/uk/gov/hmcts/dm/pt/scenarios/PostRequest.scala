@@ -14,6 +14,7 @@ object PostRequest {
 
   val ids: mutable.MutableList[String] = mutable.MutableList[String]()
   val randomNum: Random.type = scala.util.Random
+  val seqNum: Seq
   val tempVal: String = ""
   private val times: Int = 6
 
@@ -146,6 +147,26 @@ object PostRequest {
           .header("ServiceAuthorization", serviceToken).header("user-id", "gatling")
           .check(status is 200)
       )
+  }
+
+  val deleteScn: ChainBuilder = repeat(ids.length, "i") {
+      exec { session =>
+          println("First Session ------>" + session)
+          if (session.contains("fileId")){
+              session.remove("fileId")}
+          val index: Int = session("i").as[Int]
+          //val index = randomNum.nextInt(ids.length)
+          println("Length ------>" + ids.length + " Random Index ----> " + index)
+          session.set("fileId", ids(index))
+      }
+      .exec (
+      scenario("Delete Request Scenario")
+        .pause(1)
+        .exec(
+          http("Delete the record")
+            .delete("${fileId}")
+            .check(status is 204))
+        )
   }
 
   val scnRefactored1: ScenarioBuilder = scenario("Test Post response")
