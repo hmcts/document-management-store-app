@@ -166,6 +166,13 @@ object PostRequest {
             .delete("${fileId}")
             .check(status is 204))
         )
+          .exec(
+              //        http("Use id ${fileId}")
+              http("Get Request")
+                  .get("${fileId}")
+                  .header("ServiceAuthorization", serviceToken).header("user-id", "gatling")
+                  .check(status is 404)
+          )
   }
 
   val scnRefactored1: ScenarioBuilder = scenario("Test Post response")
