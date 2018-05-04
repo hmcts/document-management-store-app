@@ -148,11 +148,11 @@ variable "enable_thumbnail" {
 // Whitelists
 ////////////////////////////////////////////////
 variable "dm_multipart_whitelist" {
-  default = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,text/html,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-word.document.macroEnabled.12,application/vnd.ms-word.template.macroEnabled.12,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-excel.sheet.macroEnabled.12,application/vnd.ms-excel.template.macroEnabled.12,application/vnd.ms-excel.addin.macroEnabled.12,application/vnd.ms-excel.sheet.binary.macroEnabled.12,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/vnd.ms-powerpoint.addin.macroEnabled.12,application/vnd.ms-powerpoint.presentation.macroEnabled.12,application/vnd.ms-powerpoint.template.macroenabled.12,application/vnd.ms-powerpoint.slideshow.macroEnabled.12"
+  default = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow"
 }
 
 variable "dm_multipart_whitelist_ext" {
-  default = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.html,.htm,.doc,.dot,.docx,.dotx,.docm,.dotm,.xls,.xlt,.xla,.xlsx,.xltx,.xlsm,.xltm,.xlam,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.ppam,.pptm,.potm,.ppsm"
+  default = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx"
 }
 
 variable "s2s_names_whitelist" {
