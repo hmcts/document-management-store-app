@@ -74,8 +74,11 @@ class BaseIT {
     final String ATTACHMENT_27_JPEG = 'jpeg.jpeg'
 
     final String WORD = 'docx.docx'
+    final String WORD_MACRO_ENABLED_AS_REGULAR = 'docmHidden.docx'
     final String POWER_POINT = 'pptx.pptx'
     final String EXCEL = 'xlsx.xlsx'
+
+
 
     final String WORD_OLD = 'doc.doc'
     final String EXCEL_OLD = 'xls.xls'
@@ -98,7 +101,7 @@ class BaseIT {
     final String THUMBNAIL_PDF = 'thumbnailPDF.jpg'
     final String THUMBNAIL_BMP = 'thumbnailBMP.jpg'
     final String THUMBNAIL_GIF = 'thumbnailGIF.jpg'
- 
+
 
     final String BAD_ATTACHMENT_1 = '1MB.exe'
     final String BAD_ATTACHMENT_2 = 'Attachment3.zip'
