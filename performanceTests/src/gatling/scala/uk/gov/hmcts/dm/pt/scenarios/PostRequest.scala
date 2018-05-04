@@ -14,7 +14,6 @@ object PostRequest {
 
   val ids: mutable.MutableList[String] = mutable.MutableList[String]()
   val randomNum: Random.type = scala.util.Random
-  val seqNum: Seq
   val tempVal: String = ""
   private val times: Int = 6
 
