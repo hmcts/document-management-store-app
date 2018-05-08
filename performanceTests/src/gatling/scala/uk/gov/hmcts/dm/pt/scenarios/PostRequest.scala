@@ -15,7 +15,8 @@ object PostRequest {
   val ids: mutable.MutableList[String] = mutable.MutableList[String]()
   val randomNum: Random.type = scala.util.Random
   val tempVal: String = ""
-  private val times: Int = 6
+    val fname: String = ""
+    private val times: Int = 6
 
   val fileProviderRand: RecordSeqFeederBuilder[String] = csv("listoffiles.csv").random
   val fileProviderSeq: RecordSeqFeederBuilder[String] = csv("listoffiles.csv").queue
@@ -111,13 +112,20 @@ object PostRequest {
     }
 
   val storeScn: ChainBuilder =  // A scenario is a chain of requests and pauses
-    repeat(times) {
-      feed(fileProviderRand)
-        .exec(http("Post Files ${filename}")
+        repeat(times) {
+              exec { session =>
+                //if(session.contains("fileId")){
+                    val fname: String = session.get("filename").as[String].substring(0, fname.indexOf("MB") + 2)
+//                    println("File name --------->" + fname.)
+                    session.set("fileSize", fname)
+                }
+        feed(fileProviderRand)
+
+         .exec(http("Post Files" )
           .post("/documents")
           .header("ServiceAuthorization", idamTokenGenerator.generateS2SToken()).header("user-id", "gatling")
           .bodyPart(
-            RawFileBodyPart("files", "${filename}")
+            RawFileBodyPart("files", "${fileSize}")
               .contentType("application/pdf")
               .fileName("${filename}")).asMultipartForm
           .formParam("classification", "PUBLIC")
