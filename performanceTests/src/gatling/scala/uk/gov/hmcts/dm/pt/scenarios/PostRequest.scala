@@ -113,7 +113,7 @@ object PostRequest {
   val storeScn: ChainBuilder =  // A scenario is a chain of requests and pauses
     repeat(times) {
       feed(fileProviderRand)
-        .exec(http("Post Files")
+        .exec(http("Post Files ${filename}".substring(0, "Post Files ${filename}".indexOf("MB")))
           .post("/documents")
           .header("ServiceAuthorization", idamTokenGenerator.generateS2SToken()).header("user-id", "gatling")
           .bodyPart(
