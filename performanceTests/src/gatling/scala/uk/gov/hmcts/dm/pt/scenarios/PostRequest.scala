@@ -125,7 +125,7 @@ object PostRequest {
         .exec { session =>
             if(session.contains("fileId")){
           val fname: String = session.get("filename").as[String]
-          println("File name --------->" + fname.substring(0, fname.indexOf("MB")))
+          println("File name --------->" + fname.substring(0, fname.indexOf("MB") + 2))
           println("fileId --------> " + session.get("fileId"))
           ids += session.get("fileId").as[String]}
           session.remove("fileId")
