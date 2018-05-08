@@ -115,9 +115,10 @@ object PostRequest {
         repeat(times) {
               exec { session =>
                 //if(session.contains("fileId")){
-                    val fname: String = session.get("filename").as[String].substring(0, fname.indexOf("MB") + 2)
+                    val fname: String = session.get("filename").as[String]
+                    val fname1: String = fname.substring(0, fname.indexOf("MB") + 2)
 //                    println("File name --------->" + fname.)
-                    session.set("fileSize", fname)
+                    session.set("fileSize", fname1)
                 }
         feed(fileProviderRand)
 
