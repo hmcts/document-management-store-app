@@ -113,16 +113,16 @@ object PostRequest {
 
   val storeScn: ChainBuilder =  // A scenario is a chain of requests and pauses
         repeat(times) {
-              exec { session =>
-                //if(session.contains("fileId")){
-                    val fname: String = session.get("filename").as[String]
-                    val fname1: String = fname.substring(0, fname.indexOf("MB") + 2)
-                    println("File name --------->" + fname1)
-                    session.set("fileSize", fname)
-                }
+//              exec { session =>
+//                //if(session.contains("fileId")){
+//                    val fname: String = session.get("filename").as[String]
+//                    val fname1: String = fname.substring(0, fname.indexOf("MB") + 2)
+//                    println("File name --------->" + fname1)
+//                    session.set("fileSize", fname)
+//                }
         feed(fileProviderRand)
 
-         .exec(http("Post Files ${fileSize}" )
+         .exec(http("Post Files" )
           .post("/documents")
           .header("ServiceAuthorization", idamTokenGenerator.generateS2SToken()).header("user-id", "gatling")
           .bodyPart(
