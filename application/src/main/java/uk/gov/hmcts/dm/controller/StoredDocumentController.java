@@ -60,13 +60,6 @@ public class StoredDocumentController {
                         BindingResult.class), 0);
     }
 
-    @InitBinder
-    public void bindingPreparation(WebDataBinder binder) {
-        //putting SimpleDateFormat here makes it thread-safe
-        binder.registerCustomEditor(Date.class,
-            new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX", Locale.UK), true));
-    }
-
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation("Creates a list of Stored Documents by uploading a list of binary/text files.")
     @ApiResponses(value = {
