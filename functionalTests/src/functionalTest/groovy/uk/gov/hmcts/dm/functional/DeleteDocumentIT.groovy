@@ -135,7 +135,7 @@ class DeleteDocumentIT extends BaseIT {
         givenRequest(CASE_WORKER)
             .expect().log().all()
             .statusCode(200)
-            .body("ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
             .when()
             .get(documentUrl1)
 
@@ -175,7 +175,7 @@ class DeleteDocumentIT extends BaseIT {
         givenRequest(CASE_WORKER)
             .expect().log().all()
             .statusCode(200)
-            .body("ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
             .when()
             .get(documentUrl1)
 

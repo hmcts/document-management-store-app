@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.functional
 
+import groovy.time.TimeCategory
 import io.restassured.response.Response
 import org.junit.Assert
 import org.junit.Ignore
@@ -11,11 +12,16 @@ import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
 
+import java.sql.Time
+import java.time.Duration
+import java.time.LocalDateTime
 import java.time.OffsetDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.isOneOf
 
 /**
  * Created by pawel on 13/10/2017.
@@ -23,6 +29,8 @@ import static org.hamcrest.Matchers.equalTo
 @RunWith(SpringRunner.class)
 class CreateDocumentIT extends BaseIT {
 
+
+    //as per https://blogs.msdn.microsoft.com/vsofficedeveloper/2008/05/08/office-2007-file-format-mime-types-for-http-content-streaming-2/
     @Test
     void "CD1 (R1) As authenticated user upload 7 files with correct classification and some roles set"() {
         Response response = givenRequest(CITIZEN)
@@ -33,6 +41,29 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("files", file(ATTACHMENT_25_TIFF), V1MimeTypes.IMAGE_TIF_VALUE)
             .multiPart("files", file(ATTACHMENT_26_BMP), V1MimeTypes.IMAGE_BMP_VALUE)
             .multiPart("files", file(ATTACHMENT_27_JPEG), V1MimeTypes.IMAGE_JPEG_VALUE)
+
+            .multiPart("files", file(WORD), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            .multiPart("files", file(WORD_TEMPLATE), "application/vnd.openxmlformats-officedocument.wordprocessingml.template")
+            //.multiPart("files", file(WORD_MACRO_ENABLED), "application/vnd.ms-word.document.macroEnabled.12")
+//            .multiPart("files", file(WORD_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-word.template.macroEnabled.12")
+
+            .multiPart("files", file(EXCEL), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+//            .multiPart("files", file(EXCEL_MACRO_ENABLED), "application/vnd.ms-excel.sheet.macroEnabled.12")
+            .multiPart("files", file(EXCEL_TEMPLATE), "application/vnd.openxmlformats-officedocument.spreadsheetml.template")
+//            .multiPart("files", file(EXCEL_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-excel.template.macroEnabled.12")
+
+            .multiPart("files", file(POWER_POINT), "application/vnd.openxmlformats-officedocument.presentationml.presentation")
+            //.multiPart("files", file(POWER_POINT_MACRO_ENABLED), "application/vnd.ms-powerpoint.presentation.macroEnabled.12")
+            .multiPart("files", file(POWER_POINT_TEMPLATE), "application/vnd.openxmlformats-officedocument.presentationml.template")
+//            .multiPart("files", file(POWER_POINT_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-powerpoint.template.macroenabled.12")
+            .multiPart("files", file(POWER_POINT_SLIDE_SHOW), "application/vnd.openxmlformats-officedocument.presentationml.slideshow")
+//            .multiPart("files", file(POWER_POINT_SLIDE_SHOW_MACRO_ENABLED), "application/vnd.ms-powerpoint.slideshow.macroEnabled.12")
+
+            .multiPart("files", file(WORD_OLD), "application/msword")
+            .multiPart("files", file(EXCEL_OLD), "application/vnd.ms-excel")
+            .multiPart("files", file(POWER_POINT_OLD), "application/vnd.ms-powerpoint")
+
+            .multiPart("files", file(TEXT_ATTACHMENT_1), "text/plain")
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -46,14 +77,14 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
-            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
 
             .body("_embedded.documents[1].originalDocumentName", equalTo(ATTACHMENT_8_TIF))
             .body("_embedded.documents[1].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
             .body("_embedded.documents[1].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[1].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[1].roles[1]", equalTo("citizen"))
-            .body("_embedded.documents[1].ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("_embedded.documents[1].ttl", equalTo("2018-10-31T10:10:10+0000"))
 
             .body("_embedded.documents[2].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
             .body("_embedded.documents[2].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
@@ -258,21 +289,22 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10.000+0000"))
+            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
         .when()
         .post("/documents")
     }
 
     @Test
     void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
-        DateTimeFormatter dtf = DateTimeFormatter.ISO_ZONED_DATE_TIME
-        def ttlDate = OffsetDateTime.now().minusMinutes(2).format(dtf).toString().substring(0, 19) + "+0000"
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
+        def ttlDate = OffsetDateTime.now().minusMinutes(2)
+        def ttlFormatted = ttlDate.format(dtf).toString()
         def url = givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
-            .multiPart("ttl", ttlDate)
+            .multiPart("ttl", ttlFormatted)
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
@@ -280,18 +312,35 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].ttl", equalTo(ttlDate.replace("+", ".000+")))
+            .body("_embedded.documents[0].ttl",
+            equalTo(
+                ttlDate.atZoneSameInstant(ZoneId.of("GMT+0"))
+                .format(dtf))
+            )
             .when()
             .post("/documents")
             .path("_embedded.documents[0]._links.self.href")
 
-            sleep(80000)
+        def statusCode = null
+        def start = LocalDateTime.now()
+
+        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 80)) {
+
+            statusCode = givenRequest(CITIZEN)
+                .expect()
+                .statusCode(isOneOf(404, 200))
+                .when()
+                .get(url)
+                .statusCode()
+
+            sleep(1000)
+        }
 
         givenRequest(CITIZEN)
             .expect()
-            .statusCode(404)
+                .statusCode(404)
             .when()
-            .get(url)
+                .get(url)
     }
 
     @Test
@@ -395,21 +444,6 @@ class CreateDocumentIT extends BaseIT {
         Assert.assertTrue(Arrays.equals(downloadedFileByteArray, file))
     }
 
-
-
-    @Test
-    void "CD17 As authenticated user I cannot upload text file"() {
-        givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_1), V1MimeTypes.TEXT_PLAIN_VALUE)
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "caseworker")
-            .multiPart("roles", "citizen")
-            .expect()
-            .statusCode(422)
-            .when()
-            .post("/documents")
-    }
-
     @Test
     void "CD18 As a user I should not be able to upload an exe if its renamed to pdf"() {
         givenRequest(CITIZEN)
@@ -491,6 +525,49 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+    @Test
+    void "CD25 As authenticated user I cannot upload macro-enabled word"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(WORD_MACRO_ENABLED), "application/vnd.ms-word.document.macroEnabled.12")
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "caseworker")
+            .multiPart("roles", "citizen")
+            .expect()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+    @Test
+    void "CD26 As authenticated user I cannot upload macro-enabled excel"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(EXCEL_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-excel.template.macroEnabled.12")
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "caseworker")
+            .multiPart("roles", "citizen")
+            .expect()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+
+    @Test
+    void "CD27 As authenticated user I cannot upload macro-enabled power point"() {
+        givenRequest(CITIZEN)
+            .multiPart("files", file(POWER_POINT_SLIDE_SHOW_MACRO_ENABLED), "application/vnd.ms-powerpoint.presentation.macroEnabled.12")
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "caseworker")
+            .multiPart("roles", "citizen")
+            .expect()
             .statusCode(422)
             .body("error", equalTo("Your upload contains a disallowed file type"))
             .when()

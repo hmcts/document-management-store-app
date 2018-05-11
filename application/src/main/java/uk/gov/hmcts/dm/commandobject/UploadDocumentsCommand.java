@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.commandobject;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteList;
@@ -36,6 +37,7 @@ public class UploadDocumentsCommand {
 
     @Getter
     @Setter
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     private Date ttl;
 
 }
