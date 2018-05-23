@@ -135,4 +135,24 @@
    <gav regex="true">^com\.thoughtworks\.xstream:xstream:.*$</gav>
    <cve>CVE-2017-7957</cve>
 </suppress>
+    <suppress>
+        <notes>h2database not used in production</notes>
+        <cve>CVE-2018-10054</cve>
+    </suppress>
+    <suppress>
+        <notes>spring-batch-core-3.0.9.RELEASE.jar related issues</notes>
+        <cve>CVE-2018-1270</cve>
+    </suppress>
+    <suppress>
+        <notes>spring-batch-core-3.0.9.RELEASE.jar related issues</notes>
+        <cve>CVE-2018-1271</cve>
+    </suppress>
+    <suppress>
+        <notes>spring-batch-core-3.0.9.RELEASE.jar related issues</notes>
+        <cve>CVE-2018-1272</cve>
+    </suppress>
+    <suppress>
+        <notes>spring-infrastructure-3.0.9.RELEASE.jar related issues</notes>
+        <cve>CVE-2018-1278</cve>
+    </suppress>
 </suppressions>
