@@ -7,8 +7,6 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.web.client.RestTemplate;
 import uk.gov.hmcts.dm.actuate.health.model.HealthCheckResponse;
 
-import static net.logstash.logback.argument.StructuredArguments.keyValue;
-
 public class WebChecker {
 
     private final String name;
@@ -34,7 +32,7 @@ public class WebChecker {
             final HealthCheckResponse healthCheckResponse = restTemplate.getForObject(url + "/health", HealthCheckResponse.class);
             return "UP".equalsIgnoreCase(healthCheckResponse.getStatus());
         } catch (Exception ex) {
-            log.error(name + " " + url + " Failed",keyValue("stackTrace",ex));
+            log.error(name + " " + url + "/health Failed", ex);
             return false;
         }
     }
