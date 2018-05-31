@@ -159,4 +159,12 @@
         <notes>spring-infrastructure-3.0.9.RELEASE.jar related issues</notes>
         <cve>CVE-2018-1278</cve>
     </suppress>
+    <suppress>
+        <notes>tika-core-1.17.jar (cpe:/a:apache:tika:1.17, org.apache.tika:tika-core:1.17) </notes>
+        <cve>CVE-2018-1338</cve>
+    </suppress>
+    <suppress>
+        <notes>tika-core-1.17.jar (cpe:/a:apache:tika:1.17, org.apache.tika:tika-core:1.17) </notes>
+        <cve>CVE-2018-1339</cve>
+    </suppress>
 </suppressions>
