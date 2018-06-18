@@ -140,6 +140,12 @@
         <cve>CVE-2018-10054</cve>
     </suppress>
     <suppress>
+        <notes>
+            postgresql-9.4.1212.jre7.jar (cpe:/a:postgresql:postgresql:9.4.1212.jre7, org.postgresql:postgresql:9.4.1212.jre7, cpe:/a:postgresql:postgresql_jdbc_driver:9.4.1212.jre7) : CVE-2018-1115
+        </notes>
+        <cve>CVE-2018-1115</cve>
+    </suppress>
+    <suppress>
         <notes>spring-batch-core-3.0.9.RELEASE.jar related issues</notes>
         <cve>CVE-2018-1270</cve>
     </suppress>
