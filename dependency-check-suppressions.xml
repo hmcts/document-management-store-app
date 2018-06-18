@@ -2,103 +2,37 @@
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
     <suppress>
         <notes><![CDATA[
-   file name: tomcat-annotations-api-8.5.23.jar
+   file name: xstream-1.4.7.jar
    ]]></notes>
-        <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
-        <cpe>cpe:/a:apache:tomcat</cpe>
-        <cpe>cpe:/a:apache_tomcat:apache_tomcat</cpe>
-        <cpe>cpe:/a:apache_software_foundation:tomcat</cpe>
+        <gav regex="true">^com\.thoughtworks\.xstream:xstream:.*$</gav>
+        <cpe>cpe:/a:xstream_project:xstream</cpe>
     </suppress>
     <suppress>
         <notes><![CDATA[
-			only relates to cookies, which we don't do at the java level
-			]]></notes>
-        <gav regex="true">.*</gav>
-        <cve>CVE-2015-2156</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-			waiting for spring to upgrade to it, file name: jackson-databind-2.8.10.jar
-			]]></notes>
-        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
-        <cve>CVE-2017-17485</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-			waiting for spring to upgrade to it, file name: jackson-databind-2.8.10.jar
-			]]></notes>
-        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
-        <cve>CVE-2018-5968</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-			only relates to ssl which we don't do at the java app level
-			]]></notes>
-        <gav regex="true">.*</gav>
-        <cve>CVE-2014-3488</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-			something to do with oracle, doesn't look like it applies file name: jersey-apache-client4-1.19.1.jar
-			]]></notes>
-        <gav regex="true">^com\.sun\.jersey\.contribs:jersey-apache-client4:.*$</gav>
-        <cve>CVE-2006-0550</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-			only applies when tomcat is run as a service, file name: tomcat-annotations-api-8.5.28.jar
-			]]></notes>
-        <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
-        <cve>CVE-2016-6325</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-			only relates to ssl, file name: tomcat-annotations-api-8.5.28.jar
-			]]></notes>
-        <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
-        <cve>CVE-2017-6056</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-			only relates to ssl
-			]]></notes>
-        <gav regex="true">.*$</gav>
-        <cve>CVE-2016-4970</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   only applies when it is run as a service, file name: tomcat-annotations-api-8.5.28.jar
+   file name: spring-batch-core-3.0.9.RELEASE.jar
    ]]></notes>
-        <gav regex="true">^org\.apache\.tomcat:tomcat-annotations-api:.*$</gav>
-        <cve>CVE-2016-5425</cve>
+        <gav regex="true">^org\.springframework\.batch:spring-batch-core:.*$</gav>
+        <cve>CVE-2016-9878</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-   temp disable for prod release, spring boot 2 upgrade coming very soon
+   file name: spring-batch-infrastructure-3.0.9.RELEASE.jar
    ]]></notes>
-        <gav regex="true">.*</gav>
-        <cve>CVE-2018-7489</cve>
+        <gav regex="true">^org\.springframework\.batch:spring-batch-infrastructure:.*$</gav>
+        <cve>CVE-2016-9878</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
-   temp disable for prod release, spring boot 2 upgrade coming very soon
+   file name: xstream-1.4.7.jar
    ]]></notes>
-        <gav regex="true">.*</gav>
-        <cve>CVE-2017-14798</cve>
+        <gav regex="true">^com\.thoughtworks\.xstream:xstream:.*$</gav>
+        <cve>CVE-2017-7957</cve>
     </suppress>
     <suppress>
-        <notes><![CDATA[
-   temp disable for prod release, spring boot 2 upgrade coming very soon
-   ]]></notes>
-        <gav regex="true">.*</gav>
-        <cve>CVE-2018-1304</cve>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
-   temp disable for prod release, spring boot 2 upgrade coming very soon
-   ]]></notes>
-        <gav regex="true">.*</gav>
-        <cve>CVE-2018-1305</cve>
+        <notes>
+            postgresql-9.4.1212.jre7.jar (cpe:/a:postgresql:postgresql:9.4.1212.jre7, org.postgresql:postgresql:9.4.1212.jre7, cpe:/a:postgresql:postgresql_jdbc_driver:9.4.1212.jre7) : CVE-2018-1115
+        </notes>
+        <cve>CVE-2018-1115</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
@@ -106,44 +40,6 @@
    ]]></notes>
         <gav regex="true">^org\.springframework:spring-context-support:.*$</gav>
         <cve>CVE-2018-1199</cve>
-    </suppress>
-    <suppress>
-   <notes><![CDATA[
-   file name: spring-batch-core-3.0.9.RELEASE.jar
-   ]]></notes>
-   <gav regex="true">^org\.springframework\.batch:spring-batch-core:.*$</gav>
-   <cve>CVE-2016-9878</cve>
-</suppress>
-    <suppress>
-   <notes><![CDATA[
-   file name: spring-batch-infrastructure-3.0.9.RELEASE.jar
-   ]]></notes>
-   <gav regex="true">^org\.springframework\.batch:spring-batch-infrastructure:.*$</gav>
-   <cve>CVE-2016-9878</cve>
-</suppress>
-    <suppress>
-   <notes><![CDATA[
-   file name: xstream-1.4.7.jar
-   ]]></notes>
-   <gav regex="true">^com\.thoughtworks\.xstream:xstream:.*$</gav>
-   <cpe>cpe:/a:xstream_project:xstream</cpe>
-</suppress>
-    <suppress>
-   <notes><![CDATA[
-   file name: xstream-1.4.7.jar
-   ]]></notes>
-   <gav regex="true">^com\.thoughtworks\.xstream:xstream:.*$</gav>
-   <cve>CVE-2017-7957</cve>
-</suppress>
-    <suppress>
-        <notes>h2database not used in production</notes>
-        <cve>CVE-2018-10054</cve>
-    </suppress>
-    <suppress>
-        <notes>
-            postgresql-9.4.1212.jre7.jar (cpe:/a:postgresql:postgresql:9.4.1212.jre7, org.postgresql:postgresql:9.4.1212.jre7, cpe:/a:postgresql:postgresql_jdbc_driver:9.4.1212.jre7) : CVE-2018-1115
-        </notes>
-        <cve>CVE-2018-1115</cve>
     </suppress>
     <suppress>
         <notes>spring-batch-core-3.0.9.RELEASE.jar related issues</notes>
@@ -162,19 +58,7 @@
         <cve>CVE-2018-1273</cve>
     </suppress>
     <suppress>
-        <notes>spring-infrastructure-3.0.9.RELEASE.jar related issues</notes>
-        <cve>CVE-2018-1278</cve>
-    </suppress>
-    <suppress>
-        <notes>tika-core-1.17.jar (cpe:/a:apache:tika:1.17, org.apache.tika:tika-core:1.17) </notes>
-        <cve>CVE-2018-1335</cve>
-    </suppress>
-    <suppress>
-        <notes>tika-core-1.17.jar (cpe:/a:apache:tika:1.17, org.apache.tika:tika-core:1.17) </notes>
-        <cve>CVE-2018-1338</cve>
-    </suppress>
-    <suppress>
-        <notes>tika-core-1.17.jar (cpe:/a:apache:tika:1.17, org.apache.tika:tika-core:1.17) </notes>
-        <cve>CVE-2018-1339</cve>
+        <notes>h2database not used in production</notes>
+        <cve>CVE-2018-10054</cve>
     </suppress>
 </suppressions>
