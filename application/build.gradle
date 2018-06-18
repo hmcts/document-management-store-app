@@ -101,6 +101,7 @@ def versions = [
     jacocoMavenPlugin  : '0.7.9',
     jackson            : '2.9.6',
     jetty              : '9.4.11.v20180605',
+    jsonUnit           : '1.31.1',
     JUnitParams        : '1.1.1',
     lombok             : '1.18.0',
     liquibase          : '3.6.1',
@@ -170,8 +171,8 @@ dependencies {
         exclude(module: 'jetty-servlets')
         exclude(module: 'jetty-webapp')
     }
-    testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit', version: '1.31.1'
-    testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: '1.31.1'
+    testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit', version: versions.jsonUnit
+    testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: versions.jsonUnit
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.2.3.RELEASE'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
@@ -181,7 +182,7 @@ dependencies {
     testCompile group: 'org.eclipse.jetty', name: 'jetty-server', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlets', version: versions.jetty
-    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '1.1.1'
+    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
 }
 
 def coverageExclusionList = [
