@@ -58,6 +58,14 @@
         <cve>CVE-2018-1273</cve>
     </suppress>
     <suppress>
+        <notes><![CDATA[
+tomcat-embed-websocket-8.5.29.jar (cpe:/a:apache:tomcat:8.5.29, cpe:/a:apache_tomcat:apache_tomcat:8.5.29, org.apache.tomcat.embed:tomcat-embed-websocket:8.5.29, cpe:/a:apache_software_foundation:tomcat:8.5.29) : CVE-2018-8014
+tomcat-embed-core-8.5.29.jar (cpe:/a:apache:tomcat:8.5.29, cpe:/a:apache_tomcat:apache_tomcat:8.5.29, org.apache.tomcat.embed:tomcat-embed-core:8.5.29, cpe:/a:apache_software_foundation:tomcat:8.5.29) : CVE-2018-8014
+Another long cpe again
+        ]]></notes>
+        <cve>CVE-2018-8014</cve>
+    </suppress>
+    <suppress>
         <notes>h2database not used in production</notes>
         <cve>CVE-2018-10054</cve>
     </suppress>
