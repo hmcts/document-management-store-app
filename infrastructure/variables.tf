@@ -156,7 +156,7 @@ variable "dm_multipart_whitelist_ext" {
 }
 
 variable "s2s_names_whitelist" {
-  default = "em_api,em_gw,ccd_gw,ccd_data,sscs,divorce_document_upload,divorce_document_generator,probate_backend,finrem_backend,jui_webapp,pui_webapp,cmc_claim_store"
+  default = "em_api,em_gw,ccd_gw,ccd_data,sscs,divorce_document_upload,divorce_document_generator,probate_backend,finrem_backend,jui_webapp,pui_webapp,cmc_claim_store,bulk_scan_upload"
 }
 
 variable "case_worker_roles" {
