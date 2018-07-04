@@ -9,6 +9,13 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
+    d3js-3.4.11.jar (org.webjars:d3js:3.4.11, cpe:/a:d3.js_project:d3.js:3.4.11) : CVE-2017-16044
+   ]]></notes>
+        <gav regex="true">^org\.webjars:d3js:.*$</gav>
+        <cpe>cpe:/a:d3.js_project:d3.js</cpe>
+    </suppress>
+    <suppress>
+        <notes><![CDATA[
    file name: spring-batch-core-3.0.9.RELEASE.jar
    ]]></notes>
         <gav regex="true">^org\.springframework\.batch:spring-batch-core:.*$</gav>
