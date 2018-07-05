@@ -168,3 +168,7 @@ variable "case_worker_roles" {
 variable "max_file_size_in_mb" {
     default = "500"
 }
+
+variable "common_tags" {
+  type = "map"
+}

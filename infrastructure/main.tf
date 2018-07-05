@@ -18,6 +18,7 @@ module "app" {
   is_frontend = true #It's not front end but we need it so we can have a custom URL at the moment.
   additional_host_name = "${local.app_full_name}-${var.env}.service.${var.env}.platform.hmcts.net"
   https_only="false"
+  common_tags  = "${var.common_tags}"
 
   app_settings = {
     POSTGRES_HOST = "${module.db.host_name}"
@@ -92,6 +93,7 @@ module "db" {
   sku_name = "GP_Gen5_2"
   sku_tier = "GeneralPurpose"
   storage_mb = "51200"
+  common_tags  = "${var.common_tags}"
 }
 
 provider "vault" {
