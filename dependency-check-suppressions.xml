@@ -81,4 +81,8 @@ Another long cpe again
         <notes>spring_framework:4.3.16 vulnerability, will be fixed as part of RDM-2506 (Upgrade to Spring Boot 2)</notes>
         <cve>CVE-2018-1257</cve>
     </suppress>
+    <suppress>
+        <notes>spring_framework:4.3.8 vulnerability, will be fixed as part of RDM-2506 (Upgrade to Spring Boot 2)</notes>
+        <cve>CVE-2018-1275</cve>
+    </suppress>
 </suppressions>
