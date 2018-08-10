@@ -1,0 +1,48 @@
+#!groovy
+
+properties([
+    // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
+    pipelineTriggers([cron('H 05 * * *')])
+])
+
+@Library("Infrastructure")
+
+def type = "java"
+def product = "dm"
+def component = "store"
+
+List<LinkedHashMap<String, Object>> secrets = [
+    secret('s2s-token', 'S2S_TOKEN')
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+    [ $class: 'AzureKeyVaultSecret',
+      secretType: 'Secret',
+      name: secretName,
+      version: '',
+      envVariable: envVar
+    ]
+}
+
+withNightlyPipeline(type, product, component) {
+    enableSlackNotifications('#ccd-nightly-builds')
+    enableDbMigration()
+    loadVaultSecrets(secrets)
+
+    after('checkout') {
+        echo '${product}-${component} out'
+        sh '''
+mkdir -p application/src/main/resources/META-INF
+echo "allprojects { task printVersionInit { doLast { println project.version } } }" > init.gradle
+
+tee application/src/main/resources/META-INF/build-info.properties <<EOF 2>/dev/null
+build.version=$(./gradlew -q printVersion)
+build.number=${BUILD_NUMBER}
+build.commit=$(git rev-parse HEAD)
+build.date=$(date)
+EOF
+
+'''
+    }
+
+}
