@@ -99,6 +99,7 @@ module "app" {
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_primary_connection_string.value}"
     STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_secondary_connection_string.value}"
+    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME = "${azurerm_storage_container.document_container.name}"
   }
 }
 
@@ -113,6 +114,13 @@ module "db" {
   sku_tier = "GeneralPurpose"
   storage_mb = "51200"
   common_tags  = "${var.common_tags}"
+}
+
+resource "azurerm_storage_container" "document_container" {
+  name = "${local.app_full_name}-docstore-${var.env}"
+  resource_group_name = "${local.sharedResourceGroup}"
+  storage_account_name = "${local.storageAccountName}"
+  container_access_type = "private"
 }
 
 provider "vault" {
