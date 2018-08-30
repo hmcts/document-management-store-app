@@ -95,6 +95,10 @@ module "app" {
     ENABLE_DELETE = "${var.enable_delete}"
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
+
+    # Document Storage
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_primary_connection_string.value}"
+    STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_secondary_connection_string.value}"
   }
 }
 
@@ -170,3 +174,12 @@ resource "azurerm_key_vault_secret" "S2S_TOKEN" {
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "storageaccount_primary_connection_string" {
+  name = "storage-account-primary-connection-string"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "storageaccount_secondary_connection_string" {
+  name = "storage-account-secondary-connection-string"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+}
