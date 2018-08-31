@@ -12,6 +12,11 @@ locals {
   previewStorageAccountName = "${var.raw_product}sharedaat"
   nonPreviewStorageAccountName = "${var.raw_product}shared${var.env}"
   storageAccountName = "${(var.env == "preview" || var.env == "spreview") ? local.previewStorageAccountName : local.nonPreviewStorageAccountName}"
+
+  // Shared Vault
+  previewVaultName = "${var.raw_product}-aat"
+  nonPreviewVaultName = "${var.raw_product}-${var.env}"
+  vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 }
 # "${local.ase_name}"
 # "${local.app_full_name}"
@@ -122,6 +127,11 @@ module "key_vault" {
   object_id = "${var.jenkins_AAD_objectId}"
   resource_group_name = "${module.app.resource_group_name}"
   product_group_object_id = "5d9cd025-a293-4b97-a0e5-6f43efce02c0"
+}
+
+data "azurerm_key_vault" "dm_shared_vault" {
+  name = "${local.vaultName}"
+  resource_group_name = "${local.sharedResourceGroup}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
