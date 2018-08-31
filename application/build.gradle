@@ -3,7 +3,7 @@ plugins {
     id 'checkstyle'
     id 'pmd'
     id 'io.spring.dependency-management' version '1.0.5.RELEASE'
-    id 'org.springframework.boot' version '1.5.12.RELEASE'
+    id 'org.springframework.boot' version '1.5.15.RELEASE'
     id 'org.owasp.dependencycheck' version '3.2.1'
     id 'se.patrikerdes.use-latest-versions' version '0.2.3'
     id 'com.github.ben-manes.versions' version '0.19.0'
@@ -127,7 +127,7 @@ dependencies {
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.8.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.18.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
