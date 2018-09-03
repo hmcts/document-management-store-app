@@ -29,7 +29,7 @@ spring:
         dialect: uk.gov.hmcts.dm.dialect.CustomPostgresSqlDialect
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5000/evidence}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
 
@@ -78,6 +78,9 @@ logging:
 
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
+  storage:
+      connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=https;AccountName=dmsharedsandbox;AccountKey=uu8QnFIZQEHk1DYtm8a3t+MTVzWfU6Bz3TyMc6IYV6rxi+Rky9TmDOCtFOsN0d+ymuUbKFWMaJlT1PxJw+MXXA==;EndpointSuffix=core.windows.net}
+      blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:dm-docstore-sandbox}
 
 app-insights:
   dev-mode: off
