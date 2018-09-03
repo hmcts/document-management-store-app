@@ -81,6 +81,10 @@ public class DocumentContentVersion implements RolesAware {
     @Setter
     private Long size;
 
+    @Getter
+    @Setter
+    private String content_uri;
+
     public DocumentContentVersion(StoredDocument item, MultipartFile file, String userId) {
         this.mimeType = file.getContentType();
         setOriginalDocumentName(file.getOriginalFilename());
@@ -96,7 +100,8 @@ public class DocumentContentVersion implements RolesAware {
 
     public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService,
                                   Date createdOn, DocumentContent documentContent,
-                                  StoredDocument storedDocument, Set<DocumentContentVersionAuditEntry> auditEntries, Long size) {
+                                  StoredDocument storedDocument, Set<DocumentContentVersionAuditEntry> auditEntries,
+                                  Long size, String content_uri) {
         this.id = id;
         this.mimeType = mimeType;
         setOriginalDocumentName(originalDocumentName);
@@ -107,6 +112,7 @@ public class DocumentContentVersion implements RolesAware {
         this.storedDocument = storedDocument;
         this.auditEntries = auditEntries;
         this.size = size;
+        this.content_uri = content_uri;
     }
 
     public Date getCreatedOn() {
