@@ -11,7 +11,11 @@ properties([
             defaultValue: false,
             description: 'Run Performance',
             name: 'RUN_PT'
-        )
+        ),
+        choice(
+            name: 'ENVIRONMENT',
+            choices: 'saat\nsprod\nsandbox',
+            description: 'Environment where code should be build and deployed')
     ]),
     pipelineTriggers([
         [$class: 'GitHubPushTrigger']
@@ -39,7 +43,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
-withPipeline(type , product, component) {
+withParameterizedPipeline(type, product, component, params.ENVIRONMENT, 'sandbox') {
     enableSlackNotifications(channel)
     enableDbMigration()
     loadVaultSecrets(secrets)
