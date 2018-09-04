@@ -62,7 +62,7 @@
         <cve>CVE-2018-1272</cve>
     </suppress>
     <suppress>
-        <notes>spring-boot-starter-data-rest-1.5.12.RELEASE.jar related issues</notes>
+        <notes>spring-boot-starter-data-rest-1.5.*.RELEASE.jar related issues</notes>
         <cve>CVE-2018-1273</cve>
     </suppress>
     <suppress>
