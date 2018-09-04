@@ -18,9 +18,6 @@ locals {
   nonPreviewVaultName = "${var.raw_product}-${var.env}"
   vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 }
-# "${local.ase_name}"
-# "${local.app_full_name}"
-# "${local.local_env}"
 
 module "app" {
   source = "git@github.com:hmcts/moj-module-webapp?ref=master"
