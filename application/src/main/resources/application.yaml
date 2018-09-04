@@ -56,7 +56,7 @@ server:
   use-forward-headers: false
 
 authorization:
-  s2s-names-whitelist: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw}
+  s2s-names-whitelist: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw,ccd_gw}
 
 auth:
   idam:
