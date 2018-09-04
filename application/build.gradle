@@ -82,9 +82,9 @@ dependencyCheck {
 }
 
 repositories {
-    maven { url "https://dl.bintray.com/hmcts/hmcts-maven" }
-    jcenter()
     mavenLocal()
+    jcenter()
+    maven { url "https://dl.bintray.com/hmcts/hmcts-maven" }
 }
 
 apply from: 'liquibase.gradle'
