@@ -3,11 +3,11 @@ output "microserviceName" {
 }
 
 output "vaultName" {
-  value = "${module.key_vault.key_vault_name}"
+  value = "${local.vaultName}"
 }
 
 output "vaultUri" {
-  value = "${module.key_vault.key_vault_uri}"
+  value = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
 }
 
 output "idam_api_url" {
