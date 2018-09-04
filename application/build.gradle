@@ -113,7 +113,7 @@ def versions = [
     liquibase          : '3.6.1',
     postgresql         : '42.2.5',
     powermock          : '1.7.4',
-    reformLogging      : '3.0.2',
+    reformLogging      : '2.1.1',
     sonar              : '3.2',
     springBoot         : springBootVersion,
     springfoxSwagger   : '2.9.2',
@@ -134,7 +134,7 @@ dependencies {
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '5.0.8.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.8.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
@@ -143,7 +143,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
-    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.0.RELEASE'
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.24.0.RELEASE'
 
     compile group: 'org.liquibase', name: 'liquibase-core', version: versions.liquibaseVersion
 
@@ -160,8 +160,8 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '2.0.0'
 
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: versions.springCloudStarterHystrix
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: versions.springCloudStarterHystrix
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.0.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.0.RELEASE'
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
 
@@ -183,7 +183,7 @@ dependencies {
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: versions.jsonUnit
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.2.3.RELEASE'
 
-    testCompile group: 'com.h2database', name: 'h2', version: '1.4.197'
+    testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: versions.powermock
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: versions.powermock
 
