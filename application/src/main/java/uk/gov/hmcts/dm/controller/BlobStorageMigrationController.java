@@ -27,7 +27,7 @@ public class BlobStorageMigrationController {
         this.blobStorageMigrationService = blobStorageMigrationService;
     }
 
-    @PostMapping(value = "/versions/{versionId}")
+    @PostMapping(value = "/versions/{versionId}/migrate")
     @ApiOperation("Starts migration for a specific version of the content of a Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 204, message = "JSON representation of a document version", response = DocumentContentVersionHalResource.class)

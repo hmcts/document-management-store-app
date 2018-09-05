@@ -75,6 +75,9 @@ public abstract class ComponentTestBase {
     protected AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
     @MockBean
+    protected BlobStorageMigrationService blobStorageMigrationService;
+
+    @MockBean
     protected SearchService searchService;
 
     @MockBean
