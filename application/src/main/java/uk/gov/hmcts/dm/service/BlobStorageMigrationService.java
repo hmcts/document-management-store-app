@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
+import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
@@ -26,21 +28,29 @@ public class BlobStorageMigrationService {
     private final CloudBlobContainer cloudBlobContainer;
     private final AuditEntryService auditEntryService;
     private final DocumentContentVersionService documentContentVersionService;
+    private final StoredDocumentService storedDocumentService;
     private final DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
     public BlobStorageMigrationService(CloudBlobContainer cloudBlobContainer, AuditEntryService auditEntryService,
                                        DocumentContentVersionRepository documentContentVersionRepository,
-                                       DocumentContentVersionService documentContentVersionService) {
+                                       DocumentContentVersionService documentContentVersionService,
+                                       StoredDocumentService storedDocumentService) {
         this.cloudBlobContainer = cloudBlobContainer;
         this.auditEntryService = auditEntryService;
         this.documentContentVersionRepository = documentContentVersionRepository;
         this.documentContentVersionService = documentContentVersionService;
+        this.storedDocumentService = storedDocumentService;
     }
 
     // TODO check READ/UPDATE access here
     //    @PreAuthorize("hasPermission(#versionId, 'uk.gov.hmcts.dm.domain.DocumentContentVersion', 'READ')")
-    public void migrateDocumentContentVersion(@NotNull UUID versionId) {
+    public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
+        StoredDocument storedDocument = storedDocumentService.findOne(documentId)
+            .orElseThrow(() -> new DocumentNotFoundException(documentId));
+        storedDocument.getDocumentContentVersions().stream().filter(v -> v.getId().equals(versionId)).findFirst()
+            .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
+
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             throw new DocumentContentVersionNotFoundException(versionId);

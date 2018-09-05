@@ -18,6 +18,7 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -38,16 +39,17 @@ public class StoredDocumentService {
     private DocumentContentRepository documentContentRepository;
 
     @Autowired
-    private BlobCreator blobCreator;
-
-    @Autowired
     private ToggleConfiguration toggleConfiguration;
 
     @Autowired
     private SecurityUtilService securityUtilService;
 
-    public StoredDocument findOne(UUID id) {
-        return storedDocumentRepository.findOne(id);
+    public Optional<StoredDocument> findOne(UUID id) {
+        Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
+        if (storedDocument.isPresent() && storedDocument.get().isDeleted()) {
+            return Optional.empty();
+        }
+        return storedDocument;
     }
 
     public void save(StoredDocument storedDocument) {

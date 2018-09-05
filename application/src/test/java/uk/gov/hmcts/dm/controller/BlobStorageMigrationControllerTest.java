@@ -24,19 +24,43 @@ public class BlobStorageMigrationControllerTest extends ComponentTestBase {
             .post("/documents/" + documentId + "/versions/" + versionId + "/migrate")
             .andExpect(status().isNoContent());
 
-        verify(blobStorageMigrationService).migrateDocumentContentVersion(versionId);
+        verify(blobStorageMigrationService).migrateDocumentContentVersion(documentId, versionId);
     }
 
     @Test
     public void migrateNonExistingDocumentWillReturn404() throws Exception {
 
         doThrow(new DocumentContentVersionNotFoundException(versionId))
-            .when(this.blobStorageMigrationService).migrateDocumentContentVersion(versionId);
+            .when(this.blobStorageMigrationService).migrateDocumentContentVersion(documentId, versionId);
 
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
             .post("/documents/" + documentId + "/versions/" + versionId + "/migrate")
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void migrateFailsOnBadlyFormattedDocumentId() throws Exception {
+
+        String invalidUUID = "invalidUUID";
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .post("/documents/" + invalidUUID + "/versions/" + versionId + "/migrate")
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void migrateFailsOnBadlyFormattedVersionId() throws Exception {
+
+        String invalidUUID = "invalidUUID";
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .post("/documents/" + documentId + "/versions/" + invalidUUID + "/migrate")
+            .andExpect(status().isBadRequest());
     }
 }
