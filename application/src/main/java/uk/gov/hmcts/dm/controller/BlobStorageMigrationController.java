@@ -37,7 +37,7 @@ public class BlobStorageMigrationController {
         @PathVariable UUID versionId) {
 
         //TODO the API returns the whole trace, not sure this is good
-        blobStorageMigrationService.migrateDocumentContentVersion(versionId);
+        blobStorageMigrationService.migrateDocumentContentVersion(documentId, versionId);
 
         return ResponseEntity.status(NO_CONTENT).build();
     }

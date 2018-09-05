@@ -16,6 +16,7 @@ import uk.gov.hmcts.dm.security.Classifications;
 import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -179,7 +180,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     @Test
     public void testAddDocumentVersion() throws Exception {
         when(this.storedDocumentService.findOne(id))
-            .thenReturn(storedDocument);
+            .thenReturn(Optional.of(storedDocument));
 
         when(this.auditedStoredDocumentOperationsService.addDocumentVersion(any(StoredDocument.class), any(MultipartFile.class)))
             .thenReturn(documentContentVersion);
@@ -194,23 +195,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     @Test
     public void testAddDocumentToVersionToNotExistingOne() throws Exception {
         when(this.storedDocumentService.findOne(id))
-            .thenReturn(null);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE)
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testAddDocumentToVersionToNotDeletedOne() throws Exception {
-
-        StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setDeleted(true);
-
-        when(this.storedDocumentService.findOne(id))
-            .thenReturn(storedDocument);
+            .thenReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")
@@ -222,7 +207,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     @Test
     public void testAddDocumentVersionWithNotAllowedFileType() throws Exception {
         when(this.storedDocumentService.findOne(id))
-            .thenReturn(storedDocument);
+            .thenReturn(Optional.of(storedDocument));
 
         when(this.auditedStoredDocumentOperationsService.addDocumentVersion(any(StoredDocument.class), any(MultipartFile.class)))
             .thenReturn(documentContentVersion);

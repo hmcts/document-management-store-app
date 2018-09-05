@@ -24,6 +24,7 @@ import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -61,24 +62,19 @@ public class DocumentContentVersionController {
                 .map(fe -> String.format("%s - %s", fe.getField(), fe.getCode()))
                 .collect(Collectors.joining(",")));
         } else {
-            StoredDocument storedDocument = storedDocumentService.findOne(documentId);
+            StoredDocument storedDocument = storedDocumentService.findOne(documentId)
+                .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
 
-            if (storedDocument == null || storedDocument.isDeleted()) {
+            DocumentContentVersionHalResource resource =
+                new DocumentContentVersionHalResource(
+                    auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
+                );
 
-                throw new StoredDocumentNotFoundException(documentId);
+            return ResponseEntity
+                .created(resource.getUri())
+                .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
+                .body(resource);
 
-            } else {
-
-                DocumentContentVersionHalResource resource =
-                    new DocumentContentVersionHalResource(
-                        auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
-                    );
-
-                return ResponseEntity
-                    .created(resource.getUri())
-                    .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
-                    .body(resource);
-            }
         }
     }
 

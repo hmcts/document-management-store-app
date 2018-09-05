@@ -22,6 +22,7 @@ import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
+import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.*;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.AuthCheckerServiceOnlyFilter;
 
@@ -67,6 +68,9 @@ public abstract class ComponentTestBase {
 
     @MockBean
     protected StoredDocumentService storedDocumentService;
+
+    @MockBean
+    protected StoredDocumentRepository storedDocumentRepository;
 
     @MockBean
     protected DocumentContentVersionService documentContentVersionService;
