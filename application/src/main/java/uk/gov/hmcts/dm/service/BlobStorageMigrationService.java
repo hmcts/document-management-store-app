@@ -21,6 +21,8 @@ import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import static org.apache.commons.lang.StringUtils.isBlank;
+
 @Service
 @Transactional
 public class BlobStorageMigrationService {
@@ -55,19 +57,22 @@ public class BlobStorageMigrationService {
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             throw new DocumentContentVersionNotFoundException(versionId);
         }
-        uploadBinaryStream(documentContentVersion);
-        documentContentVersionRepository.save(documentContentVersion);
-        auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.UPDATED);
+
+        if (isBlank(documentContentVersion.getContentUri())) {
+            uploadBinaryStream(documentId, documentContentVersion);
+            documentContentVersionRepository.save(documentContentVersion);
+            auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.UPDATED);
+        }
     }
 
-    private void uploadBinaryStream(DocumentContentVersion doc) {
+    private void uploadBinaryStream(UUID documentId, DocumentContentVersion doc) {
         try {
             // TODO check if multiple uploads with the same Id causes an issue
             CloudBlockBlob blob = getCloudFile(doc.getId());
             blob.upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
-            doc.setContent_uri(blob.getUri().toString());
+            doc.setContentUri(blob.getUri().toString());
         } catch (URISyntaxException | StorageException | IOException e) {
-            throw new FileStorageException(e);
+            throw new FileStorageException(e, documentId, doc.getId());
         } catch (SQLException e) {
             throw new CantReadDocumentContentVersionBinaryException(e, doc);
         }

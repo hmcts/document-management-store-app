@@ -59,11 +59,16 @@ public class DocumentContentVersion implements RolesAware {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 
+    /**
+     * @deprecated To be removed when we will migrate to AzureBlobStore.
+     * We will use {@link DocumentContentVersion#contentUri} instead.
+     */
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
     @Getter
     @Setter
     @JoinColumn(name = "document_content_version_id")
     @LazyToOne(LazyToOneOption.NO_PROXY)
+    @Deprecated
     private DocumentContent documentContent;
 
     @ManyToOne
@@ -83,7 +88,7 @@ public class DocumentContentVersion implements RolesAware {
 
     @Getter
     @Setter
-    private String content_uri;
+    private String contentUri;
 
     public DocumentContentVersion(StoredDocument item, MultipartFile file, String userId) {
         this.mimeType = file.getContentType();
@@ -101,7 +106,7 @@ public class DocumentContentVersion implements RolesAware {
     public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService,
                                   Date createdOn, DocumentContent documentContent,
                                   StoredDocument storedDocument, Set<DocumentContentVersionAuditEntry> auditEntries,
-                                  Long size, String content_uri) {
+                                  Long size, String contentUri) {
         this.id = id;
         this.mimeType = mimeType;
         setOriginalDocumentName(originalDocumentName);
@@ -112,7 +117,7 @@ public class DocumentContentVersion implements RolesAware {
         this.storedDocument = storedDocument;
         this.auditEntries = auditEntries;
         this.size = size;
-        this.content_uri = content_uri;
+        this.contentUri = contentUri;
     }
 
     public Date getCreatedOn() {
