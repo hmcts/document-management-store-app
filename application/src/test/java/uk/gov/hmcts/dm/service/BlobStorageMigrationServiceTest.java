@@ -28,6 +28,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Collections.singletonList;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
@@ -83,11 +85,37 @@ public class BlobStorageMigrationServiceTest {
         when(blob.getUri()).thenReturn(new URI("someuri"));
         when(cloudBlobContainer.getBlockBlobReference(doc.getId().toString())).thenReturn(blob);
 
+        DocumentContent origContent = doc.getDocumentContent();
         underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
 
         verify(documentContentVersionRepository).save(doc);
         verify(auditEntryService).createAndSaveEntry(doc, AuditActions.UPDATED);
+        verify(blob).upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
+        assertThat(doc.getContentUri(), is("someuri"));
+        assertThat(doc.getDocumentContent(), is(origContent));
+    }
 
+    @Test
+    public void migrateDocumentAlreadyMigrated() throws Exception {
+        DocumentContentVersion doc = buildDocument();
+        doc.setContentUri("Migrated");
+
+        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
+        when(documentContentVersionService.findOne(documentContentVersionUUID)).thenReturn(doc);
+        when(data.getBinaryStream()).thenReturn(is);
+
+        blob = PowerMockito.mock(CloudBlockBlob.class);
+        when(blob.getUri()).thenReturn(new URI("someuri"));
+        when(cloudBlobContainer.getBlockBlobReference(doc.getId().toString())).thenReturn(blob);
+
+        DocumentContent origContent = doc.getDocumentContent();
+        underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+
+        verify(documentContentVersionRepository, never()).save(doc);
+        verify(auditEntryService, never()).createAndSaveEntry(doc, AuditActions.UPDATED);
+        verify(blob, never()).upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
+        assertThat(doc.getContentUri(), is("Migrated"));
+        assertThat(doc.getDocumentContent(), is(origContent));
     }
 
     @Test(expected = DocumentNotFoundException.class)
@@ -98,7 +126,7 @@ public class BlobStorageMigrationServiceTest {
     }
 
     @Test(expected = DocumentContentVersionNotFoundException.class)
-    public void migrateDocumentWithWrongVersionId() {
+    public void migrateDocumentWithNonExistentDocumentContentVersion() {
         when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
 
         UUID invalidDocumentContentVersionId = UUID.randomUUID();
@@ -136,7 +164,8 @@ public class BlobStorageMigrationServiceTest {
             underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
         } finally {
             verify(documentContentVersionRepository, never()).save(any(DocumentContentVersion.class));
-            verify(auditEntryService, never()).createAndSaveEntry(any(DocumentContentVersion.class), eq(AuditActions.UPDATED));
+            verify(auditEntryService, never()).createAndSaveEntry(any(DocumentContentVersion.class),
+                eq(AuditActions.UPDATED));
         }
     }
 
