@@ -64,6 +64,6 @@ public class VersionTest {
                 .with(VersionTest::setMethodToPost)
                 .headers(headers))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$._links.length()", is(4)));
+                .andExpect(jsonPath("$._links.length()", is(5)));
     }
 }

@@ -88,6 +88,7 @@ public class DocumentContentVersion implements RolesAware {
 
     @Getter
     @Setter
+    @Column(name = "content_uri")
     private String contentUri;
 
     public DocumentContentVersion(StoredDocument item, MultipartFile file, String userId) {
