@@ -20,6 +20,7 @@ import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.sql.Blob;
@@ -111,9 +112,7 @@ public class BlobStorageMigrationServiceTest {
         DocumentContent origContent = doc.getDocumentContent();
         underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
 
-        verify(documentContentVersionRepository, never()).save(doc);
-        verify(auditEntryService, never()).createAndSaveEntry(doc, AuditActions.UPDATED);
-        verify(blob, never()).upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
+        verifyNoInteractionWithPostgresAndAzureAfterMigrate();
         assertThat(doc.getContentUri(), is("Migrated"));
         assertThat(doc.getDocumentContent(), is(origContent));
     }
@@ -144,8 +143,7 @@ public class BlobStorageMigrationServiceTest {
 
         underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
 
-        verify(documentContentVersionRepository, never()).save(any(DocumentContentVersion.class));
-        verify(auditEntryService, never()).createAndSaveEntry(any(DocumentContentVersion.class), AuditActions.UPDATED);
+        verifyNoInteractionWithPostgresAndAzureAfterMigrate();
     }
 
     @Test(expected = DocumentContentVersionNotFoundException.class)
@@ -163,9 +161,7 @@ public class BlobStorageMigrationServiceTest {
         try {
             underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
         } finally {
-            verify(documentContentVersionRepository, never()).save(any(DocumentContentVersion.class));
-            verify(auditEntryService, never()).createAndSaveEntry(any(DocumentContentVersion.class),
-                eq(AuditActions.UPDATED));
+            verifyNoInteractionWithPostgresAndAzureAfterMigrate();
         }
     }
 
@@ -195,6 +191,14 @@ public class BlobStorageMigrationServiceTest {
         when(data.getBinaryStream()).thenThrow(new SQLException());
 
         underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+    }
+
+    private void verifyNoInteractionWithPostgresAndAzureAfterMigrate()
+        throws StorageException, IOException, SQLException {
+        verify(documentContentVersionRepository, never()).save(any(DocumentContentVersion.class));
+        verify(auditEntryService, never()).createAndSaveEntry(any(DocumentContentVersion.class),
+            eq(AuditActions.UPDATED));
+        verify(blob, never()).upload(any(InputStream.class), anyLong());
     }
 
     private StoredDocument createStoredDocument() {
