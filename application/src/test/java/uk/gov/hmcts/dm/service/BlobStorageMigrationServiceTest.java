@@ -107,12 +107,11 @@ public class BlobStorageMigrationServiceTest {
         when(blob.getUri()).thenReturn(new URI("someuri"));
         when(cloudBlobContainer.getBlockBlobReference(doc.getId().toString())).thenReturn(blob);
 
-        DocumentContent origContent = doc.getDocumentContent();
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
         verifyNoInteractionWithPostgresAndAzureAfterMigrate();
         assertThat(doc.getContentUri(), is("Migrated"));
-        assertThat(doc.getDocumentContent(), is(origContent));
+        assertThat(doc.getDocumentContent(), is(doc.getDocumentContent()));
     }
 
     @Test(expected = DocumentNotFoundException.class)
