@@ -61,24 +61,24 @@ public class BlobStorageMigrationControllerTest extends ComponentTestBase {
     @Test
     public void migrateFailsWith404OnBadlyFormattedDocumentId() throws Exception {
 
-        String invalidUUID = "invalidUUID";
+        String invalidUuid = "invalidUUID";
 
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .post("/documents/" + invalidUUID + "/versions/" + versionId + "/migrate")
+            .post("/documents/" + invalidUuid + "/versions/" + versionId + "/migrate")
             .andExpect(status().isBadRequest());
     }
 
     @Test
     public void migrateFailsWith404OnBadlyFormattedVersionId() throws Exception {
 
-        String invalidUUID = "invalidUUID";
+        String invalidUuid = "invalidUUID";
 
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .post("/documents/" + documentId + "/versions/" + invalidUUID + "/migrate")
+            .post("/documents/" + documentId + "/versions/" + invalidUuid + "/migrate")
             .andExpect(status().isBadRequest());
     }
 }

@@ -45,8 +45,6 @@ public class BlobStorageMigrationService {
         this.storedDocumentService = storedDocumentService;
     }
 
-    // TODO check READ/UPDATE access here
-    //    @PreAuthorize("hasPermission(#versionId, 'uk.gov.hmcts.dm.domain.DocumentContentVersion', 'READ')")
     public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
         StoredDocument storedDocument = storedDocumentService.findOne(documentId)
             .orElseThrow(() -> new DocumentNotFoundException(documentId));
@@ -70,7 +68,6 @@ public class BlobStorageMigrationService {
 
     private void uploadBinaryStream(UUID documentId, DocumentContentVersion doc) {
         try {
-            // TODO check if multiple uploads with the same Id causes an issue
             CloudBlockBlob blob = getCloudFile(doc.getId());
             blob.upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
             doc.setContentUri(blob.getUri().toString());

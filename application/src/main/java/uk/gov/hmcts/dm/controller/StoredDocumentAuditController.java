@@ -18,7 +18,6 @@ import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.hateos.StoredDocumentAuditEntryHalResource;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.AuditEntryService;
-import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,16 +44,16 @@ public class StoredDocumentAuditController {
         @ApiResponse(code = 200, message = "Success", response = StoredDocumentAuditEntryHalResource.class)
     })
     public ResponseEntity<Object> findAudits(@PathVariable UUID documentId) {
-        StoredDocument storedDocument = storedDocumentRepository.findOne(documentId);
-        if (storedDocument == null) {
-            throw new StoredDocumentNotFoundException(documentId);
-        }
+        StoredDocument storedDocument =
+            Optional.ofNullable(storedDocumentRepository.findOne(documentId))
+                .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
 
         List<StoredDocumentAuditEntry> auditEntries = auditEntryService.findStoredDocumentAudits(storedDocument);
 
         Resources<StoredDocumentAuditEntryHalResource> resources = new Resources<>(auditEntries
-                .stream()
-                .map(StoredDocumentAuditEntryHalResource::new).collect(Collectors.toList()));
+            .stream()
+            .map(StoredDocumentAuditEntryHalResource::new)
+            .collect(Collectors.toList()));
 
         return ResponseEntity.ok().contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE).body(resources);
     }
