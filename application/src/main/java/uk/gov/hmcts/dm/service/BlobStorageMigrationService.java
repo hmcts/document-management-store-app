@@ -60,7 +60,10 @@ public class BlobStorageMigrationService {
 
         if (isBlank(documentContentVersion.getContentUri())) {
             uploadBinaryStream(documentId, documentContentVersion);
-            documentContentVersionRepository.save(documentContentVersion);
+            // we cannot use documentContentVersionRepository.save
+            // because { @link ByteWrappingBlobType#replace} is not implemented
+            documentContentVersionRepository.update(documentContentVersion.getId(),
+                documentContentVersion.getContentUri());
             auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.UPDATED);
         }
     }
