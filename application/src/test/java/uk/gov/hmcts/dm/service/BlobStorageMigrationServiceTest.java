@@ -38,7 +38,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest( {CloudBlobContainer.class, CloudBlockBlob.class})
+@PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
 public class BlobStorageMigrationServiceTest {
 
     private BlobStorageMigrationService underTest;
@@ -58,8 +58,8 @@ public class BlobStorageMigrationServiceTest {
 
     private CloudBlobContainer cloudBlobContainer;
     private CloudBlockBlob blob;
-    private UUID documentContentVersionUUID;
-    private UUID documentUUID;
+    private UUID documentContentVersionUuid;
+    private UUID documentUuid;
 
     @Before
     public void setUp() {
@@ -69,15 +69,15 @@ public class BlobStorageMigrationServiceTest {
             documentContentVersionRepository,
             documentContentVersionService,
             storedDocumentService);
-        documentContentVersionUUID = UUID.randomUUID();
-        documentUUID = UUID.randomUUID();
+        documentContentVersionUuid = UUID.randomUUID();
+        documentUuid = UUID.randomUUID();
     }
 
     @Test
     public void migrateDocumentContentVersion() throws Exception {
         DocumentContentVersion doc = buildDocument();
-        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionService.findOne(documentContentVersionUUID)).thenReturn(doc);
+        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenReturn(is);
 
         blob = PowerMockito.mock(CloudBlockBlob.class);
@@ -85,14 +85,13 @@ public class BlobStorageMigrationServiceTest {
         when(blob.getUri()).thenReturn(new URI(azureProvidedUri));
         when(cloudBlobContainer.getBlockBlobReference(doc.getId().toString())).thenReturn(blob);
 
-        DocumentContent origContent = doc.getDocumentContent();
-        underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+        underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
         verify(documentContentVersionRepository).update(doc.getId(), azureProvidedUri);
         verify(auditEntryService).createAndSaveEntry(doc, AuditActions.UPDATED);
         verify(blob).upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
         assertThat(doc.getContentUri(), is(azureProvidedUri));
-        assertThat(doc.getDocumentContent(), is(origContent));
+        assertThat(doc.getDocumentContent(), is(doc.getDocumentContent()));
     }
 
     @Test
@@ -100,8 +99,8 @@ public class BlobStorageMigrationServiceTest {
         DocumentContentVersion doc = buildDocument();
         doc.setContentUri("Migrated");
 
-        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionService.findOne(documentContentVersionUUID)).thenReturn(doc);
+        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenReturn(is);
 
         blob = PowerMockito.mock(CloudBlockBlob.class);
@@ -109,7 +108,7 @@ public class BlobStorageMigrationServiceTest {
         when(cloudBlobContainer.getBlockBlobReference(doc.getId().toString())).thenReturn(blob);
 
         DocumentContent origContent = doc.getDocumentContent();
-        underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+        underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
         verifyNoInteractionWithPostgresAndAzureAfterMigrate();
         assertThat(doc.getContentUri(), is("Migrated"));
@@ -118,29 +117,29 @@ public class BlobStorageMigrationServiceTest {
 
     @Test(expected = DocumentNotFoundException.class)
     public void migrateNonExistentDocument() {
-        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.empty());
+        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.empty());
 
-        underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+        underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
     }
 
     @Test(expected = DocumentContentVersionNotFoundException.class)
     public void migrateDocumentWithNonExistentDocumentContentVersion() {
-        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
 
         UUID invalidDocumentContentVersionId = UUID.randomUUID();
-        underTest.migrateDocumentContentVersion(documentUUID, invalidDocumentContentVersionId);
+        underTest.migrateDocumentContentVersion(documentUuid, invalidDocumentContentVersionId);
     }
 
     @Test(expected = DocumentContentVersionNotFoundException.class)
     public void migrateNonExistentDocumentContentVersion() throws Exception {
-        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionService.findOne(documentContentVersionUUID)).thenReturn(null);
+        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(null);
         when(data.getBinaryStream()).thenReturn(is);
 
         blob = PowerMockito.mock(CloudBlockBlob.class);
         when(blob.getUri()).thenReturn(new URI("someuri"));
 
-        underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+        underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
         verifyNoInteractionWithPostgresAndAzureAfterMigrate();
     }
@@ -148,9 +147,9 @@ public class BlobStorageMigrationServiceTest {
     @Test(expected = DocumentContentVersionNotFoundException.class)
     public void migrateDeletedContentVersion() throws Exception {
 
-        DocumentContentVersion doc = buildDocument(true, documentContentVersionUUID);
-        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionService.findOne(documentContentVersionUUID)).thenReturn(doc);
+        DocumentContentVersion doc = buildDocument(true, documentContentVersionUuid);
+        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenReturn(is);
 
         blob = PowerMockito.mock(CloudBlockBlob.class);
@@ -158,7 +157,7 @@ public class BlobStorageMigrationServiceTest {
         when(cloudBlobContainer.getBlockBlobReference(doc.getId().toString())).thenReturn(blob);
 
         try {
-            underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+            underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
         } finally {
             verifyNoInteractionWithPostgresAndAzureAfterMigrate();
         }
@@ -168,8 +167,8 @@ public class BlobStorageMigrationServiceTest {
     public void migrateThrowsExceptionOnUploadingTheBlob() throws Exception {
 
         DocumentContentVersion doc = buildDocument();
-        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionService.findOne(documentContentVersionUUID)).thenReturn(doc);
+        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenReturn(is);
 
         blob = PowerMockito.mock(CloudBlockBlob.class);
@@ -178,18 +177,18 @@ public class BlobStorageMigrationServiceTest {
 
         when(cloudBlobContainer.getBlockBlobReference(doc.getId().toString())).thenReturn(blob);
 
-        underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+        underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
     }
 
     @Test(expected = CantReadDocumentContentVersionBinaryException.class)
     public void migrateThrowsCantReadDocumentContentVersionBinaryException() throws Exception {
 
         DocumentContentVersion doc = buildDocument();
-        when(storedDocumentService.findOne(documentUUID)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionService.findOne(documentContentVersionUUID)).thenReturn(doc);
+        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenThrow(new SQLException());
 
-        underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
+        underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
     }
 
     private void verifyNoInteractionWithPostgresAndAzureAfterMigrate() {
@@ -199,33 +198,33 @@ public class BlobStorageMigrationServiceTest {
     }
 
     private StoredDocument createStoredDocument() {
-        return createStoredDocument(documentContentVersionUUID);
+        return createStoredDocument(documentContentVersionUuid);
     }
 
-    private StoredDocument createStoredDocument(UUID documentContentVersionUUID) {
+    private StoredDocument createStoredDocument(UUID documentContentVersionUuid) {
         StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setId(documentUUID);
-        storedDocument.setDocumentContentVersions(singletonList(buildDocument(false, documentContentVersionUUID)));
+        storedDocument.setId(documentUuid);
+        storedDocument.setDocumentContentVersions(singletonList(buildDocument(false, documentContentVersionUuid)));
         return storedDocument;
-    }
-
-    private DocumentContentVersion buildDocument() {
-        return buildDocument(false, UUID.randomUUID());
-    }
-
-    private DocumentContentVersion buildDocument(boolean deleted, UUID documentContentVersionUUID) {
-        DocumentContentVersion doc = new DocumentContentVersion();
-        doc.setId(documentContentVersionUUID);
-        doc.setStoredDocument(createStoredDocument(deleted));
-        doc.setDocumentContent(createDocumentContent());
-        doc.setSize(1L);
-        return doc;
     }
 
     private StoredDocument createStoredDocument(boolean deleted) {
         StoredDocument storedDoc = new StoredDocument();
         storedDoc.setDeleted(deleted);
         return storedDoc;
+    }
+
+    private DocumentContentVersion buildDocument() {
+        return buildDocument(false, UUID.randomUUID());
+    }
+
+    private DocumentContentVersion buildDocument(boolean deleted, UUID documentContentVersionUuid) {
+        DocumentContentVersion doc = new DocumentContentVersion();
+        doc.setId(documentContentVersionUuid);
+        doc.setStoredDocument(createStoredDocument(deleted));
+        doc.setDocumentContent(createDocumentContent());
+        doc.setSize(1L);
+        return doc;
     }
 
     private DocumentContent createDocumentContent() {

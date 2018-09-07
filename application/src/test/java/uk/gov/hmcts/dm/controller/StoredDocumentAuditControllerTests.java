@@ -1,13 +1,10 @@
 package uk.gov.hmcts.dm.controller;
 
 import org.junit.Test;
-import org.powermock.api.mockito.PowerMockito;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
 
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

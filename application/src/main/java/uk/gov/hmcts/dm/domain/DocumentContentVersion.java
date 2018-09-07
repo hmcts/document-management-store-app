@@ -16,7 +16,19 @@ import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 import uk.gov.hmcts.dm.utils.StringUtils;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Date;
@@ -60,8 +72,8 @@ public class DocumentContentVersion implements RolesAware {
     private Date createdOn;
 
     /**
-     * @deprecated To be removed when we will migrate to AzureBlobStore.
      * We will use {@link DocumentContentVersion#contentUri} instead.
+     * @deprecated To be removed when we will migrate to AzureBlobStore.
      */
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
     @Getter
