@@ -20,7 +20,6 @@ import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.sql.Blob;
@@ -33,10 +32,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
@@ -83,16 +81,17 @@ public class BlobStorageMigrationServiceTest {
         when(data.getBinaryStream()).thenReturn(is);
 
         blob = PowerMockito.mock(CloudBlockBlob.class);
-        when(blob.getUri()).thenReturn(new URI("someuri"));
+        String azureProvidedUri = "someuri";
+        when(blob.getUri()).thenReturn(new URI(azureProvidedUri));
         when(cloudBlobContainer.getBlockBlobReference(doc.getId().toString())).thenReturn(blob);
 
         DocumentContent origContent = doc.getDocumentContent();
         underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
 
-        verify(documentContentVersionRepository).save(doc);
+        verify(documentContentVersionRepository).update(doc.getId(), azureProvidedUri);
         verify(auditEntryService).createAndSaveEntry(doc, AuditActions.UPDATED);
         verify(blob).upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
-        assertThat(doc.getContentUri(), is("someuri"));
+        assertThat(doc.getContentUri(), is(azureProvidedUri));
         assertThat(doc.getDocumentContent(), is(origContent));
     }
 
@@ -193,12 +192,10 @@ public class BlobStorageMigrationServiceTest {
         underTest.migrateDocumentContentVersion(documentUUID, documentContentVersionUUID);
     }
 
-    private void verifyNoInteractionWithPostgresAndAzureAfterMigrate()
-        throws StorageException, IOException, SQLException {
-        verify(documentContentVersionRepository, never()).save(any(DocumentContentVersion.class));
-        verify(auditEntryService, never()).createAndSaveEntry(any(DocumentContentVersion.class),
-            eq(AuditActions.UPDATED));
-        verify(blob, never()).upload(any(InputStream.class), anyLong());
+    private void verifyNoInteractionWithPostgresAndAzureAfterMigrate() {
+        verifyNoMoreInteractions(documentContentVersionRepository);
+        verifyNoMoreInteractions(auditEntryService);
+        verifyNoMoreInteractions(blob);
     }
 
     private StoredDocument createStoredDocument() {
