@@ -13,12 +13,12 @@ spring:
       indent_output: true
   http:
     multipart:
-      max-file-size: ${MAX_FILE_SIZE:90MB}
-      max-request-size: ${MAX_FILE_SIZE:90MB}
+      max-file-size: ${MAX_FILE_SIZE:200MB}
+      max-request-size: ${MAX_FILE_SIZE:200MB}
   profiles:
-    active: dev
+    active: production, azureStorage
   jpa:
-    database-platform: uk.gov.hmcts.dm.dialect.CustomPostgresSqlDialect
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     database: postgresql
     show-sql: ${SHOW_SQL:true}
     hibernate:
@@ -26,7 +26,7 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hiberante:
-        dialect: uk.gov.hmcts.dm.dialect.CustomPostgresSqlDialect
+        dialect: org.hibernate.dialect.PostgreSQL94Dialect
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
@@ -76,8 +76,7 @@ logging:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:INFO}
 
-azure:
-  app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
+
 
 app-insights:
   dev-mode: off
@@ -137,5 +136,11 @@ toggle:
   ttl: ${ENABLE_TTL:true}
   thumbnail: ${ENABLE_THUMBNAIL:true}
 
+azure:
+  app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
+  storage:
+    connection-string: ${AZURE_STORAGE_CONNECTION_STRING:}
+    file-share-name: ${AZURE_FILE_SHARE_NAME:dem-test}
+    blob-container-reference: ${AZURE_BLOB_CONTAINER_REFERENCE:dem-test}
 
-
+file-storage-client: ${FILE_STORAGE_CLIENT:azureBlobStorageClient}

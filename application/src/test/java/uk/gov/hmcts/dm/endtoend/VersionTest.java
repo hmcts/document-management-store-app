@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.endtoend;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = DmApp.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("local")
-@TestPropertySource(
-        locations = "classpath:application-local.yaml")
-public class VersionTest {
+@Ignore
+public class VersionTest extends FileStorageMockTest {
 
     public static final MockMultipartFile FILE_V1 =
             new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));

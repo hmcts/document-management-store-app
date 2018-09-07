@@ -1,6 +1,8 @@
 package uk.gov.hmcts.dm.componenttests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.file.CloudFileShare;
 import lombok.SneakyThrows;
 import org.junit.After;
 import org.junit.Before;
@@ -78,7 +80,16 @@ public abstract class ComponentTestBase {
     protected SearchService searchService;
 
     @MockBean
+    protected FileStorageService fileStorageService;
+
+    @MockBean
     protected AuditEntryService auditEntryService;
+
+    @MockBean
+    protected CloudFileShare cloudFileShare;
+
+    @MockBean
+    protected CloudBlobContainer cloudBlobContainer;
 
     protected RestActions restActions;
 

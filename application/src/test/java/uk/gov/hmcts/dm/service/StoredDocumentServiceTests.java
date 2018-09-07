@@ -9,27 +9,21 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import java.sql.Blob;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,12 +47,6 @@ public class StoredDocumentServiceTests {
     DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    DocumentContentRepository documentContentRepository;
-
-    @Mock
-    BlobCreator blobCreator;
-
-    @Mock
     FolderRepository folderRepository;
 
     @Mock
@@ -67,12 +55,14 @@ public class StoredDocumentServiceTests {
     @Mock
     SecurityUtilService securityUtilService;
 
+    @Mock
+    FileStorageService fileStorageService;
+
     @InjectMocks
     StoredDocumentService storedDocumentService;
 
     @Before
     public void setUp() {
-        when(blobCreator.createBlob(any(MultipartFile.class))).thenReturn(mock(Blob.class));
     }
 
     @Test
@@ -106,7 +96,17 @@ public class StoredDocumentServiceTests {
         uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
+        DocumentContentVersion documentContentVersion =
+            new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
+
+        when(fileStorageService
+            .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
+            .thenReturn(documentContentVersion);
+
         List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand);
+
+        verify(fileStorageService, times(1))
+            .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull());
 
         final StoredDocument storedDocument = documents.get(0);
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
@@ -134,6 +134,14 @@ public class StoredDocumentServiceTests {
         uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
+        DocumentContentVersion documentContentVersion =
+            new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
+
+        when(fileStorageService
+            .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
+            .thenReturn(documentContentVersion);
+
+
         List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand);
 
         final StoredDocument storedDocument = documents.get(0);
@@ -150,6 +158,14 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testSaveItems() throws Exception {
+
+        DocumentContentVersion documentContentVersion =
+            new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
+
+        when(fileStorageService
+            .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
+            .thenReturn(documentContentVersion);
+
         List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TestUtil.TEST_FILE));
 
         final DocumentContentVersion latestVersion = documents.get(0).getDocumentContentVersions().get(0);
@@ -164,6 +180,13 @@ public class StoredDocumentServiceTests {
     @Test
     public void testAddStoredDocumentVersion() {
         StoredDocument storedDocument = new StoredDocument();
+
+        DocumentContentVersion mockedDocumentContentVersion =
+            new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
+
+        when(fileStorageService
+            .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
+            .thenReturn(mockedDocumentContentVersion);
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
             storedDocument, TestUtil.TEST_FILE
@@ -189,28 +212,23 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testHardDelete() {
-        DocumentContent documentContent = new DocumentContent(mock(Blob.class));
         StoredDocument storedDocumentWithContent = StoredDocument.builder()
             .documentContentVersions(ImmutableList.of(DocumentContentVersion.builder()
-                .documentContent(documentContent)
                 .build()))
             .build();
 
         storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
-        assertThat(storedDocumentWithContent.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
-        verify(documentContentRepository).delete(documentContent);
+        verify(fileStorageService, atLeastOnce()).delete(storedDocumentWithContent.getMostRecentDocumentContentVersion());
     }
 
     @Test
     public void testHardDeleteWithManyVersions() {
         DocumentContentVersion contentVersion = DocumentContentVersion.builder()
-            .documentContent(new DocumentContent(mock(Blob.class)))
             .build();
 
         DocumentContentVersion secondContentVersion = DocumentContentVersion.builder()
-            .documentContent(new DocumentContent(mock(Blob.class)))
             .build();
 
         StoredDocument storedDocumentWithContent = StoredDocument.builder()
@@ -219,16 +237,20 @@ public class StoredDocumentServiceTests {
 
         storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
-        storedDocumentWithContent.getDocumentContentVersions().forEach(documentContentVersion -> {
-            assertThat(documentContentVersion.getDocumentContent(), nullValue());
-        });
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
-        verify(documentContentRepository, times(2)).delete(Mockito.any(DocumentContent.class));
+        verify(fileStorageService, times(2)).delete(Mockito.any(DocumentContentVersion.class));
     }
 
     @Test
     public void testSaveItemsToBucket() throws Exception {
         Folder folder = new Folder();
+
+        DocumentContentVersion documentContentVersion =
+            new DocumentContentVersion(UUID.randomUUID(), new StoredDocument(), TestUtil.TEST_FILE, "x");
+
+        when(fileStorageService
+            .uploadFile(any(StoredDocument.class), any(MultipartFile.class), isNull()))
+            .thenReturn(documentContentVersion);
 
         storedDocumentService.saveItemsToBucket(folder, Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()));
 

@@ -14,11 +14,12 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
     @Override
     public InputStream getThumbnail(DocumentContentVersion documentContentVersion) {
         try {
-            InputStream inputStream = documentContentVersion.getDocumentContent().getData().getBinaryStream();
-            BufferedImage bufferedImage = getImg(inputStream);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, ThumbnailFormats.JPG.toString().toLowerCase(Locale.UK), os);
-            return new ByteArrayInputStream(os.toByteArray());
+//            InputStream inputStream = documentContentVersion.getDocumentContent().getData().getBinaryStream();
+//            BufferedImage bufferedImage = getImg(inputStream);
+//            ByteArrayOutputStream os = new ByteArrayOutputStream();
+//            ImageIO.write(bufferedImage, ThumbnailFormats.JPG.toString().toLowerCase(Locale.UK), os);
+//            return new ByteArrayInputStream(os.toByteArray());
+            return null;
         } catch (Exception e) {
             throw new CantCreateThumbnailException(e);
         }

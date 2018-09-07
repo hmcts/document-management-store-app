@@ -72,12 +72,14 @@ public class StoredDocumentController {
         if (result.hasErrors()) {
             throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
+
             List<StoredDocument> storedDocuments =
                     auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
             return ResponseEntity
                     .ok()
                     .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
                     .body(new StoredDocumentHalResourceCollection(storedDocuments));
+
         }
     }
 

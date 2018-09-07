@@ -43,13 +43,13 @@ module "app" {
     IDAM_S2S_BASE_URI = "http://${var.s2s_url}-${local.local_env}.service.core-compute-${local.local_env}.internal"
 
     # logging vars & healthcheck
-    REFORM_SERVICE_NAME = "${local.app_full_name}"
+    REFORM_SERVICE_NAME = "${local.app_full_name}-pawel"
     REFORM_TEAM = "${var.team_name}"
-    REFORM_SERVICE_TYPE = "${var.app_language}"
+    REFORM_SERVICE_TYPE = "${var.app_language}-pawel"
     REFORM_ENVIRONMENT = "${var.env}"
 
-    PACKAGES_NAME = "${local.app_full_name}"
-    PACKAGES_PROJECT = "${var.team_name}"
+    PACKAGES_NAME = "${local.app_full_name}-pawel"
+    PACKAGES_PROJECT = "${var.team_name}-pawel"
     PACKAGES_ENVIRONMENT = "${var.env}"
 
     ROOT_APPENDER = "${var.root_appender}"
@@ -80,6 +80,9 @@ module "app" {
     ENABLE_DELETE = "${var.enable_delete}"
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
+
+
+    AZURE_STORAGE_CONNECTION_STRING = "${azurerm_storage_account.storage.primary_connection_string}"
   }
 }
 
@@ -149,4 +152,38 @@ resource "azurerm_key_vault_secret" "S2S_TOKEN" {
   value = "${data.vault_generic_secret.s2s_secret.data["value"]}"
   vault_uri = "${module.key_vault.key_vault_uri}"
 }
+
+//resource "azurerm_key_vault_secret" "AZURE_STORAGE_CONNECTION_STRING" {
+//  name = "${local.app_full_name}-AZURE-STORAGE-CONNECTION-STRING"
+//  value = "${azurerm_storage_account.storage.primary_connection_string}"
+//  vault_uri = "${module.key_vault.key_vault_uri}"
+//}
+
+# Blob store test
+resource "azurerm_storage_account" "storage" {
+  name = "dmstoreblob${var.env}"
+  resource_group_name = "${module.app.resource_group_name}"
+  location = "${var.location}"
+  account_tier = "Standard"
+  account_replication_type = "LRS"
+}
+
+resource "azurerm_storage_container" "storage" {
+  name = "storage"
+  resource_group_name = "${module.app.resource_group_name}"
+  storage_account_name = "${azurerm_storage_account.storage.name}"
+  container_access_type = "private"
+}
+
+resource "azurerm_storage_blob" "storage" {
+  name = "storage.vhd"
+
+  resource_group_name = "${module.app.resource_group_name}"
+  storage_account_name = "${azurerm_storage_account.storage.name}"
+  storage_container_name = "${azurerm_storage_container.storage.name}"
+
+  type = "page"
+  size = 10240
+}
+
 

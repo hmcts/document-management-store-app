@@ -9,17 +9,15 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by pawel on 11/07/2017.
@@ -32,6 +30,9 @@ public class DocumentContentVersionServiceTests {
 
     @Mock
     StoredDocumentRepository storedDocumentRepository;
+
+    @Mock
+    FileStorageService fileStorageService;
 
     @InjectMocks
     DocumentContentVersionService documentContentVersionService;
@@ -61,10 +62,10 @@ public class DocumentContentVersionServiceTests {
                 "fileName=\"%s\"",
                 TestUtil.DOCUMENT_CONTENT_VERSION.getOriginalDocumentName()));
 
-        Assert.assertEquals(mockHttpServletResponse.getContentAsString(),
-                TestUtil.BLOB_DATA);
+        verify(fileStorageService, times(1))
+            .streamBinary(TestUtil.DOCUMENT_CONTENT_VERSION, mockHttpServletResponse.getOutputStream());
 
-        Assert.assertTrue(documentContentVersionService.getStreamBufferSize() > 0);
+
 
     }
 
@@ -76,7 +77,6 @@ public class DocumentContentVersionServiceTests {
     @Test(expected = CantReadDocumentContentVersionBinaryException.class)
     public void testStreamingOfFileContentVersionContentDataNull() {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        documentContentVersion.setDocumentContent(new DocumentContent());
         documentContentVersionService.streamDocumentContentVersion(documentContentVersion);
     }
 

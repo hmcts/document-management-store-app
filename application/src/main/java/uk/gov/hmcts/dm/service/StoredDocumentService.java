@@ -11,7 +11,6 @@ import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -35,16 +34,13 @@ public class StoredDocumentService {
     private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
-    private DocumentContentRepository documentContentRepository;
-
-    @Autowired
-    private BlobCreator blobCreator;
-
-    @Autowired
     private ToggleConfiguration toggleConfiguration;
 
     @Autowired
     private SecurityUtilService securityUtilService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     public StoredDocument findOne(UUID id) {
         return storedDocumentRepository.findOne(id);
@@ -61,7 +57,9 @@ public class StoredDocumentService {
             storedDocument.setFolder(folder);
             storedDocument.setCreatedBy(userId);
             storedDocument.setLastModifiedBy(userId);
-            storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, userId));
+            storedDocument.getDocumentContentVersions().add(fileStorageService.uploadFile(
+                storedDocument, aFile, userId
+            ));
             storedDocumentRepository.save(storedDocument);
             return storedDocument;
 
@@ -88,7 +86,9 @@ public class StoredDocumentService {
             if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
-            document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, userId));
+            document.getDocumentContentVersions().add(fileStorageService.uploadFile(
+                document, file, userId
+            ));
             save(document);
             return document;
         }).collect(Collectors.toList());
@@ -103,8 +103,10 @@ public class StoredDocumentService {
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
         String userId = securityUtilService.getUserId();
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument, file, userId);
-        documentContentVersionRepository.save(documentContentVersion);
+        DocumentContentVersion documentContentVersion = fileStorageService.uploadFile(
+            storedDocument, file, userId
+        );
+        //documentContentVersionRepository.save(documentContentVersion);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
     }
@@ -114,8 +116,7 @@ public class StoredDocumentService {
         if (permanent) {
             storedDocument.setHardDeleted(true);
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
-                documentContentRepository.delete(documentContentVersion.getDocumentContent());
-                documentContentVersion.setDocumentContent(null);
+                fileStorageService.delete(documentContentVersion);
             });
         }
         storedDocumentRepository.save(storedDocument);
