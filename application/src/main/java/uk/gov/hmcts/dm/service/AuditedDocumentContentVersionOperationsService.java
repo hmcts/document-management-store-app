@@ -11,6 +11,7 @@ import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
 import javax.validation.constraints.NotNull;
+import java.io.OutputStream;
 import java.util.UUID;
 
 /**
@@ -27,6 +28,9 @@ public class AuditedDocumentContentVersionOperationsService {
     private DocumentThumbnailService documentThumbnailService;
 
     @Autowired
+    private BlobStorageReadService blobStorageReadService;
+
+    @Autowired
     private AuditEntryService auditEntryService;
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
@@ -36,11 +40,17 @@ public class AuditedDocumentContentVersionOperationsService {
     }
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
+    public void readDocumentContentVersionBinaryFromBlobStore(DocumentContentVersion documentContentVersion,
+                                                  OutputStream outputStream) {
+        blobStorageReadService.loadBlob(documentContentVersion, outputStream);
+        auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
+    }
+
+    @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
     public Resource readDocumentContentVersionThumbnail(@NotNull DocumentContentVersion documentContentVersion) {
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
         return documentThumbnailService.generateThumbnail(documentContentVersion);
     }
-
 
     @PreAuthorize("hasPermission(#versionId, 'uk.gov.hmcts.dm.domain.DocumentContentVersion', 'READ')")
     public DocumentContentVersion readDocumentContentVersion(@NotNull UUID versionId) {

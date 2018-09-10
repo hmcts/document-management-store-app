@@ -23,7 +23,14 @@ import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.service.AuditEntryService;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.BlobStorageMigrationService;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.FolderService;
+import uk.gov.hmcts.dm.service.SearchService;
+import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.AuthCheckerServiceOnlyFilter;
 
 import java.nio.charset.StandardCharsets;
@@ -77,6 +84,9 @@ public abstract class ComponentTestBase {
 
     @MockBean
     protected AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
+
+    @MockBean
+    protected AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @MockBean
     protected BlobStorageMigrationService blobStorageMigrationService;

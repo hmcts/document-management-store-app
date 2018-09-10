@@ -54,6 +54,7 @@ public class DocumentContentVersionService {
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("fileName=\"%s\"",documentContentVersion.getOriginalDocumentName()));
             IOUtils.copy(documentContentVersion.getDocumentContent().getData().getBinaryStream(), response.getOutputStream(), streamBufferSize);
+            response.flushBuffer();
         } catch (Exception e) {
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
         }
