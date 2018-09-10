@@ -4,8 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,7 +29,9 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -107,20 +111,36 @@ public class DocumentContentVersionController {
     })
     public ResponseEntity<InputStreamResource> getDocumentContentVersionDocumentBinary(
         @PathVariable UUID documentId,
-        @PathVariable UUID versionId) {
+        @PathVariable UUID versionId,
+        HttpServletResponse response) {
 
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             throw new DocumentContentVersionNotFoundException(versionId);
         } else {
-            auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
+            if (StringUtils.isBlank(documentContentVersion.getContentUri())) {
+                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
+            } else {
+                response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+                response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+                response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    String.format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+
+                try {
+                    auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                        documentContentVersion,
+                        response.getOutputStream());
+                    response.flushBuffer();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return null;
-
     }
-
 }
 
 

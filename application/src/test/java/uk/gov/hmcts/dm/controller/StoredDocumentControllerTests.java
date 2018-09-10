@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.controller;
 
-import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
@@ -22,7 +22,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StoredDocumentControllerTests extends ComponentTestBase {
@@ -70,102 +72,22 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .get("/documents/" + id + "/binary");
     }
 
-
     @Test
-    public void testGetDocumentVersion() {
-        when(this.documentContentVersionService.findOne(id))
+    public void testGetDocumentBinaryFromBlobStore() throws Exception {
+        documentContentVersion.setContentUri("someURI");
+        documentContentVersion.setSize(1L);
+        when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
             .thenReturn(documentContentVersion);
 
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id);
-    }
-
-    @Test
-    public void testGetDocumentVersionBinary() {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id + "/binary");
-    }
-
-
-    @Test
-    public void testGetDocumentVersionThatStoredDocumentWasDeleted() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        documentContentVersion.setStoredDocument(new StoredDocument());
-        documentContentVersion.getStoredDocument().setDeleted(true);
-
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id)
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testGetDocumentVersionBinaryThatStoredDocumentWasDeleted() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        documentContentVersion.setStoredDocument(new StoredDocument());
-        documentContentVersion.getStoredDocument().setDeleted(true);
-
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id + "/binary")
-            .andExpect(status().isNotFound());
-    }
-
-
-    @Test
-    public void testGetDocumentVersionThatDoesntExist() throws Exception {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(null);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id)
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testGetDocumentVersionBinaryThatDoesntExist() throws Exception {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(null);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id + "/binary")
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testGetDocumentVersionBinaryThatIsDeleted() throws Exception {
-        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
-        StoredDocument storedDocument = mock(StoredDocument.class);
-        when(documentContentVersion.getStoredDocument()).thenReturn(storedDocument);
-        when(storedDocument.isDeleted()).thenReturn(true);
-
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id + "/binary")
-            .andExpect(status().isNotFound());
+            .get("/documents/" + id + "/binary")
+            .andExpect(status().isOk())
+            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/plain"))
+            .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, "1"))
+            .andExpect(header().string("OriginalFileName", "filename.txt"))
+            .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "fileName=\"filename.txt\""));
     }
 
     @Test
@@ -329,13 +251,12 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    @Ignore("for some reason does not work when moved to ErrorAttributes")
-    public void testReturn404WhenUuidInvalid() throws Exception {
+    public void testReturn400WhenUuidInvalid() throws Exception {
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
             .get("/documents/123456")
-            .andExpect(status().isNotFound());
+            .andExpect(status().isBadRequest());
     }
 
 }
