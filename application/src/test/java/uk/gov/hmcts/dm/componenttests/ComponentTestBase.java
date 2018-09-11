@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
-import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -54,9 +53,6 @@ public abstract class ComponentTestBase {
 
     @Autowired
     protected ServiceResolverBackdoor serviceRequestAuthorizer;
-
-    @Autowired
-    protected UserResolverBackdoor userRequestAuthorizer;
 
     @Autowired
     protected ObjectMapper objectMapper;
@@ -102,7 +98,7 @@ public abstract class ComponentTestBase {
     @Before
     public void setUp() {
         MockMvc mvc = webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
-        this.restActions = new RestActions(mvc, serviceRequestAuthorizer, userRequestAuthorizer, objectMapper);
+        this.restActions = new RestActions(mvc, serviceRequestAuthorizer, objectMapper);
         filter.setCheckForPrincipalChanges(true);
         filter.setInvalidateSessionOnPrincipalChange(true);
     }

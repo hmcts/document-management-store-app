@@ -10,13 +10,12 @@ import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 
 import java.io.OutputStream;
 import java.net.URISyntaxException;
-import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -30,7 +29,6 @@ public class BlobStorageReadServiceTest {
 
     private CloudBlockBlob blob;
     private CloudBlobContainer cloudBlobContainer;
-    private UUID uuid = UUID.randomUUID();
     private DocumentContentVersion documentContentVersion;
     private OutputStream outputStream;
 
@@ -39,13 +37,13 @@ public class BlobStorageReadServiceTest {
         cloudBlobContainer = PowerMockito.mock(CloudBlobContainer.class);
         blob = PowerMockito.mock(CloudBlockBlob.class);
         outputStream = Mockito.mock(OutputStream.class);
-        documentContentVersion = buildDocument(false, uuid);
+        documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
         blobStorageReadService = new BlobStorageReadService(cloudBlobContainer);
     }
 
     @Test
     public void loadsBlob() throws URISyntaxException, StorageException {
-        given(cloudBlobContainer.getBlockBlobReference(uuid.toString())).willReturn(blob);
+        given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
 
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);
 
@@ -54,23 +52,10 @@ public class BlobStorageReadServiceTest {
 
     @Test(expected = CantReadDocumentContentVersionBinaryException.class)
     public void throwsCantReadDocumentContentVersionBinaryException() throws URISyntaxException, StorageException {
-        given(cloudBlobContainer.getBlockBlobReference(uuid.toString())).willThrow(new StorageException("404",
+        given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId()
+            .toString())).willThrow(new StorageException("404",
             "Message", mock(Exception.class)));
 
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);
-    }
-
-    private DocumentContentVersion buildDocument(boolean deleted, UUID documentContentVersionUuid) {
-        DocumentContentVersion doc = new DocumentContentVersion();
-        doc.setId(documentContentVersionUuid);
-        doc.setStoredDocument(createStoredDocument(deleted));
-        doc.setSize(1L);
-        return doc;
-    }
-
-    private StoredDocument createStoredDocument(boolean deleted) {
-        StoredDocument storedDoc = new StoredDocument();
-        storedDoc.setDeleted(deleted);
-        return storedDoc;
     }
 }
