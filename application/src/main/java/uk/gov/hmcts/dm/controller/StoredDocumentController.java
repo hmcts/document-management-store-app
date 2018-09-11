@@ -4,10 +4,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -33,6 +33,9 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+
+import static java.lang.String.format;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 /**
  * Created by pawel on 08/06/2017.
@@ -116,26 +119,33 @@ public class StoredDocumentController {
             return ResponseEntity.notFound().build();
         }
 
-        if (StringUtils.isBlank(documentContentVersion.getContentUri())) {
-            auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
-        } else {
-            response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-            response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-            response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                String.format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+        response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+        response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+            format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
-            try {
+        try {
+            if (isBlank(documentContentVersion.getContentUri())) {
+                response.setHeader("data-source", "Postgres");
+                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
+                    documentContentVersion,
+                    response.getOutputStream());
+            } else {
+                response.setHeader("data-source", "contentURI");
                 auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                     documentContentVersion,
                     response.getOutputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+            response.flushBuffer();
+
+        } catch (IOException e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e);
         }
 
         return null;
-
     }
 }
 

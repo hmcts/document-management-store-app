@@ -34,8 +34,9 @@ public class AuditedDocumentContentVersionOperationsService {
     private AuditEntryService auditEntryService;
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
-    public void readDocumentContentVersionBinary(@NotNull DocumentContentVersion documentContentVersion) {
-        documentContentVersionService.streamDocumentContentVersion(documentContentVersion);
+    public void readDocumentContentVersionBinary(@NotNull DocumentContentVersion documentContentVersion,
+                                                 @NotNull OutputStream outputStream) {
+        documentContentVersionService.streamDocumentContentVersion(documentContentVersion, outputStream);
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
     }
 

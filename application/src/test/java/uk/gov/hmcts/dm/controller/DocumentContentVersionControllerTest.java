@@ -2,7 +2,9 @@ package uk.gov.hmcts.dm.controller;
 
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
+import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
@@ -11,8 +13,12 @@ import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -27,12 +33,79 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     private final DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
         .id(id)
+        .size(1L)
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
         .documentContent(documentContent).build();
 
+    private final StoredDocument storedDocument = StoredDocument.builder().id(id)
+        .folder(Folder.builder().id(id).build()).documentContentVersions(
+            Stream.of(documentContentVersion)
+                .collect(Collectors.toList())
+        ).build();
+
     public DocumentContentVersionControllerTest() throws Exception {
+    }
+
+    @Test
+    public void testAddDocumentVersionForExisting() throws Exception {
+        when(this.storedDocumentService.findOne(id))
+            .thenReturn(Optional.of(storedDocument));
+
+        when(this.auditedStoredDocumentOperationsService.addDocumentVersion(any(StoredDocument.class),
+            any(MultipartFile.class)))
+            .thenReturn(documentContentVersion);
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE)
+            .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testAddDocumentVersion() throws Exception {
+        when(this.storedDocumentService.findOne(id))
+            .thenReturn(Optional.of(storedDocument));
+
+        when(this.auditedStoredDocumentOperationsService.addDocumentVersion(any(StoredDocument.class),
+            any(MultipartFile.class)))
+            .thenReturn(documentContentVersion);
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE)
+            .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void testAddDocumentToVersionToNotExistingOne() throws Exception {
+        when(this.storedDocumentService.findOne(id))
+            .thenReturn(Optional.empty());
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE)
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testAddDocumentVersionWithNotAllowedFileType() throws Exception {
+        when(this.storedDocumentService.findOne(id))
+            .thenReturn(Optional.of(storedDocument));
+
+        when(this.auditedStoredDocumentOperationsService.addDocumentVersion(any(StoredDocument.class),
+            any(MultipartFile.class)))
+            .thenReturn(documentContentVersion);
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE_EXE)
+            .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -56,13 +129,17 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/binary")
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/plain"))
+            .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, "1"))
+            .andExpect(header().string("OriginalFileName", "filename.txt"))
+            .andExpect(header().string("data-source", "Postgres"))
+            .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "fileName=\"filename.txt\""));
     }
 
     @Test
     public void testGetDocumentVersionBinaryFromBlobStore() throws Exception {
         documentContentVersion.setContentUri("someURI");
-        documentContentVersion.setSize(1L);
         when(this.documentContentVersionService.findOne(id))
             .thenReturn(documentContentVersion);
 
@@ -74,6 +151,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
             .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/plain"))
             .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, "1"))
             .andExpect(header().string("OriginalFileName", "filename.txt"))
+            .andExpect(header().string("data-source", "contentURI"))
             .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "fileName=\"filename.txt\""));
     }
 
