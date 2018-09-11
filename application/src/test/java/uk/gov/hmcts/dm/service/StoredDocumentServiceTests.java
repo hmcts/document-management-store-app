@@ -223,7 +223,7 @@ public class StoredDocumentServiceTests {
 
         assertThat(storedDocument.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocument);
-        verify(blobStorageDeleteService).delete(storedDocument.getId(), documentContentVersion);;
+        verify(blobStorageDeleteService).deleteIfExists(storedDocument.getId(), documentContentVersion);;
         verifyNoMoreInteractions(documentContentRepository);
     }
 

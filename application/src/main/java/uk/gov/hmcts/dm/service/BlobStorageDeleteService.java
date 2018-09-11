@@ -24,12 +24,12 @@ public class BlobStorageDeleteService {
         this.documentContentVersionRepository = documentContentVersionRepository;
     }
 
-    public void delete(final UUID storedDocumentId, final DocumentContentVersion documentContentVersion) {
+    public void deleteIfExists(final UUID storedDocumentId, final DocumentContentVersion documentContentVersion) {
         try {
-          cloudBlobContainer.getBlobReferenceFromServer(documentContentVersion.getId().toString()).deleteIfExists();
-          documentContentVersion.setContentUri(null);
+            cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString()).deleteIfExists();
+            documentContentVersion.setContentUri(null);
         } catch (URISyntaxException | StorageException e) {
-            throw new FileStorageException( e, storedDocumentId, documentContentVersion.getId());
+            throw new FileStorageException(e, storedDocumentId, documentContentVersion.getId());
         }
     }
 }

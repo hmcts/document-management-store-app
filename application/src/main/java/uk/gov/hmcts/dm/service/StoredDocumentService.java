@@ -1,7 +1,10 @@
 package uk.gov.hmcts.dm.service;
 
+import com.google.common.annotations.VisibleForTesting;
 import lombok.NonNull;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,6 +53,11 @@ public class StoredDocumentService {
     @Autowired
     private BlobStorageDeleteService blobStorageDeleteService;
 
+    @Setter
+    @VisibleForTesting
+    @Value("${azure.storage.enabled}")
+    private Boolean azureBlobStorageEnabled;
+
     public Optional<StoredDocument> findOne(UUID id) {
         Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
         if (storedDocument.isPresent() && storedDocument.get().isDeleted()) {
@@ -69,13 +77,18 @@ public class StoredDocumentService {
             storedDocument.setFolder(folder);
             storedDocument.setCreatedBy(userId);
             storedDocument.setLastModifiedBy(userId);
-            storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, userId));
+            final DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
+                                                                                             aFile,
+                                                                                             userId,
+                                                                                             isAzureBlobStoreEnabled());
+            storedDocument.getDocumentContentVersions().add(documentContentVersion);
 
+            if (isAzureBlobStoreEnabled()) {
+                blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+                                                                     documentContentVersion,
+                                                                     aFile);
+            }
             save(storedDocument);
-            storedDocument.getDocumentContentVersions()
-                    .stream()
-                    .forEach(dcv -> blobStorageWriteService.uploadDocumentContentVersion( storedDocument, dcv, aFile))
-                    ;
             return storedDocument;
 
         }).collect(Collectors.toList());
@@ -101,12 +114,17 @@ public class StoredDocumentService {
             if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
-            document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, userId));
+            final DocumentContentVersion documentContentVersion = new DocumentContentVersion(document,
+                                                                                             file,
+                                                                                             userId,
+                                                                                             isAzureBlobStoreEnabled());
+            document.getDocumentContentVersions().add(documentContentVersion);
+            if (isAzureBlobStoreEnabled()) {
+                blobStorageWriteService.uploadDocumentContentVersion(document,
+                                                                     documentContentVersion,
+                                                                     file);
+            }
             save(document);
-            document.getDocumentContentVersions()
-                    .stream()
-                    .forEach(dcv -> blobStorageWriteService.uploadDocumentContentVersion( document, dcv, file))
-            ;
             return document;
         }).collect(Collectors.toList());
 
@@ -120,7 +138,10 @@ public class StoredDocumentService {
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
         String userId = securityUtilService.getUserId();
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument, file, userId);
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
+                                                                                   file,
+                                                                                   userId,
+                                                                                   isAzureBlobStoreEnabled());
         documentContentVersionRepository.save(documentContentVersion);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
@@ -136,10 +157,10 @@ public class StoredDocumentService {
                             documentContentRepository.delete(dc);
                             documentContentVersion.setDocumentContent(null);
                         });
-                blobStorageDeleteService.delete(storedDocument.getId(), documentContentVersion);
+                blobStorageDeleteService.deleteIfExists(storedDocument.getId(), documentContentVersion);
             });
         }
-        storedDocumentRepository.save(storedDocument);
+        save(storedDocument);
     }
 
     public void updateStoredDocument(@NonNull StoredDocument storedDocument, @NonNull UpdateDocumentCommand command) {
@@ -155,4 +176,9 @@ public class StoredDocumentService {
     public List<StoredDocument> findAllExpiredStoredDocuments() {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
     }
+
+    private Boolean isAzureBlobStoreEnabled() {
+        return Optional.ofNullable(azureBlobStorageEnabled).orElse(false);
+    }
+
 }

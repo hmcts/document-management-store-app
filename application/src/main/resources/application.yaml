@@ -30,8 +30,8 @@ spring:
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5000/evidence}
-    username: ${SPRING_DATASOURCE_USERNAME:evidence}
-    password: ${SPRING_DATASOURCE_PASSWORD:evidence}
+    username: ${SPRING_DATASOURCE_USERNAME:ccd}
+    password: ${SPRING_DATASOURCE_PASSWORD:ccd}
 
     platform: postgresql
     time-between-eviction-runs-millis: ${STALE_CONN_EVICTION_FREQUENCY:60000}
@@ -81,6 +81,7 @@ azure:
   storage:
       connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=https;AccountName=dmsharedsandbox;AccountKey=uu8QnFIZQEHk1DYtm8a3t+MTVzWfU6Bz3TyMc6IYV6rxi+Rky9TmDOCtFOsN0d+ymuUbKFWMaJlT1PxJw+MXXA==;EndpointSuffix=core.windows.net}
       blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:dm-docstore-sandbox}
+      enabled: ${STORAGE_CONTAINER_ENABLED:false}
 
 app-insights:
   dev-mode: off
