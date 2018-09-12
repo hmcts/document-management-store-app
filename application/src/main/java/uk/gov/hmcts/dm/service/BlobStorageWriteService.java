@@ -36,23 +36,22 @@ public class BlobStorageWriteService {
     public void uploadDocumentContentVersion(@NotNull StoredDocument storedDocument,
                                              @NotNull DocumentContentVersion documentContentVersion,
                                              @NotNull MultipartFile multiPartFile) {
-        writeBinaryStream( storedDocument.getId(), documentContentVersion, multiPartFile );
-        documentContentVersionRepository.update(documentContentVersion.getId(),
-                                                documentContentVersion.getContentUri());
+        writeBinaryStream(storedDocument.getId(), documentContentVersion, multiPartFile);
+        documentContentVersionRepository.update(documentContentVersion.getId(), documentContentVersion.getContentUri());
     }
 
     private void writeBinaryStream(UUID documentId,
                                    DocumentContentVersion documentContentVersion,
                                    MultipartFile multiPartFile) {
         try {
-            CloudBlockBlob blob = getCloudFile( documentContentVersion.getId() );
-            blob.upload( multiPartFile.getInputStream(), documentContentVersion.getSize() );
-            documentContentVersion.setContentUri( blob.getUri().toString() );
+            CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
+            blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
+            documentContentVersion.setContentUri(blob.getUri().toString());
             LOG.debug("Uploaded content for document id: {} documentContentVersion id {}",
                       documentId,
                       documentContentVersion.getId());
         } catch (URISyntaxException | StorageException | IOException e) {
-            throw new FileStorageException( e, documentId, documentContentVersion.getId());
+            throw new FileStorageException(e, documentId, documentContentVersion.getId());
         }
     }
 

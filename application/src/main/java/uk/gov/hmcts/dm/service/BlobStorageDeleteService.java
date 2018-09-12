@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.FileStorageException;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import java.net.URISyntaxException;
 import java.util.UUID;
@@ -15,13 +14,10 @@ import java.util.UUID;
 public class BlobStorageDeleteService {
 
     private final CloudBlobContainer cloudBlobContainer;
-    private final DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
-    public BlobStorageDeleteService(final CloudBlobContainer cloudBlobContainer,
-                                    final DocumentContentVersionRepository documentContentVersionRepository) {
+    public BlobStorageDeleteService(final CloudBlobContainer cloudBlobContainer) {
         this.cloudBlobContainer = cloudBlobContainer;
-        this.documentContentVersionRepository = documentContentVersionRepository;
     }
 
     public void deleteIfExists(final UUID storedDocumentId, final DocumentContentVersion documentContentVersion) {

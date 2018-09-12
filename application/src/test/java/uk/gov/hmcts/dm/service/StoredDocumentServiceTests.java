@@ -18,35 +18,20 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentRepository;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
-import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.sql.Blob;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by pawel on 11/07/2017.
@@ -59,19 +44,10 @@ public class StoredDocumentServiceTests {
     private StoredDocumentRepository storedDocumentRepository;
 
     @Mock
-    private DocumentContentVersionRepository documentContentVersionRepository;
-
-    @Mock
     private DocumentContentRepository documentContentRepository;
 
     @Mock
-    private FolderRepository folderRepository;
-
-    @Mock
     private ToggleConfiguration toggleConfiguration;
-
-    @Mock
-    private SecurityUtilService securityUtilService;
 
     @Mock
     private BlobStorageWriteService blobStorageWriteService;
@@ -223,7 +199,7 @@ public class StoredDocumentServiceTests {
 
         assertThat(storedDocument.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocument);
-        verify(blobStorageDeleteService).deleteIfExists(storedDocument.getId(), documentContentVersion);;
+        verify(blobStorageDeleteService).deleteIfExists(storedDocument.getId(), documentContentVersion);
         verifyNoMoreInteractions(documentContentRepository);
     }
 
