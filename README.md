@@ -23,6 +23,14 @@ It uses:
 
 ## Quickstart
 ```bash
+# Get the connection string for Azure Blob Store and put it in place of getOneFromPortalAzure in application.yaml
+# Do not commit it!!!
+azure:
+  storage:
+      connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:getOneFromPortalAzure}
+```
+
+```bash
 #Cloning repo and running though docker
 git clone https://github.com/hmcts/document-management-store-app.git
 cd document-management-store-app/
