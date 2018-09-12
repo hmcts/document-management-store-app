@@ -45,6 +45,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
 
 /**
  * Created by pawel on 11/07/2017.
@@ -84,6 +85,13 @@ public class StoredDocumentServiceTests {
     @Test
     public void testFindOneThatDoesNotExist() {
         when(this.storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
+        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
+        assertFalse(storedDocument.isPresent());
+    }
+
+    @Test
+    public void testFindOneThatIsMarkedDeleted() {
+        when(this.storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(DELETED_DOCUMENT);
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
