@@ -48,8 +48,6 @@ public class BlobStorageMigrationService {
     public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
         StoredDocument storedDocument = storedDocumentService.findOne(documentId)
             .orElseThrow(() -> new DocumentNotFoundException(documentId));
-        storedDocument.getDocumentContentVersions().stream().filter(v -> v.getId().equals(versionId)).findFirst()
-            .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
 
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
