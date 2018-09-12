@@ -48,7 +48,7 @@ public class BlobStorageMigrationService {
 
     public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(documentId);
-        if(!storedDocument.isPresent()) {
+        if (!storedDocument.isPresent()) {
             throw new DocumentNotFoundException(documentId);
         }
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
