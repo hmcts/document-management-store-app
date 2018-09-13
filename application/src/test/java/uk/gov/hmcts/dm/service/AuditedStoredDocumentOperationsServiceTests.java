@@ -18,10 +18,13 @@ import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by pawel on 09/08/2017.
@@ -42,27 +45,15 @@ public class AuditedStoredDocumentOperationsServiceTests {
     @Test
     public void testReadStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();
-        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(storedDocument));
         auditedStoredDocumentOperationsService.readStoredDocument(TestUtil.RANDOM_UUID);
         verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.READ);
     }
 
-
-    @Test
-    public void testReadDeletedStoredDocument() {
-        StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setDeleted(true);
-        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
-        StoredDocument readStoredDocument = auditedStoredDocumentOperationsService.readStoredDocument(TestUtil.RANDOM_UUID);
-        Assert.assertNull(readStoredDocument);
-        verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.READ);
-    }
-
-
     @Test
     public void testReadNullStoredDocument() {
         StoredDocument storedDocument = null;
-        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         StoredDocument readStoredDocument = auditedStoredDocumentOperationsService.readStoredDocument(TestUtil.RANDOM_UUID);
         Assert.assertNull(readStoredDocument);
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.READ);
@@ -99,7 +90,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     @Test
     public void testDeleteStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();
-        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(storedDocument));
         auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
         verify(storedDocumentService, times(1)).deleteDocument(storedDocument, false);
@@ -110,7 +101,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     public void testDeleteDeletedStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
-        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(storedDocument));
         auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
         verify(storedDocumentService, times(0)).deleteDocument(storedDocument, false);
@@ -120,7 +111,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     @Test
     public void testDeleteNullStoredDocument() {
         StoredDocument storedDocument = null;
-        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
         verify(storedDocumentService, times(0)).deleteDocument(storedDocument, false);
@@ -157,7 +148,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     public void testUpdateDocument() {
         StoredDocument storedDocument = new StoredDocument();
         UpdateDocumentCommand command = new UpdateDocumentCommand();
-        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(storedDocument);
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(storedDocument));
         auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
         verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument, command);
@@ -167,7 +158,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     @Test(expected = StoredDocumentNotFoundException.class)
     public void testUpdateDocumentThatDoesNotExist() {
         UpdateDocumentCommand command = new UpdateDocumentCommand();
-        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
+        when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
     }
 }

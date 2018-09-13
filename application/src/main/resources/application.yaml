@@ -78,6 +78,9 @@ logging:
 
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
+  storage:
+      connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=https;AccountName=yourAccountName;AccountKey=DmfyEajwVWcioSbjJWaR+EHYfP88CI2OScLlJGIQkmHTikiFwn1o2MHHysnyHgh586wKaP5fH9WrzWWjUZmv9uOa;EndpointSuffix=core.windows.net}
+      blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:dm-docstore-sandbox}
 
 app-insights:
   dev-mode: off
