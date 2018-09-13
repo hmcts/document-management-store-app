@@ -12,7 +12,7 @@ def product = "dm"
 def component = "store"
 
 List<LinkedHashMap<String, Object>> secrets = [
-    secret('s2s-token', 'S2S_TOKEN')
+    secret('em-gateway-s2s-token', 'S2S_TOKEN')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {

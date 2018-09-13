@@ -2,6 +2,10 @@ variable "product" {
   type = "string"
 }
 
+variable "raw_product" {
+  default = "dm" // jenkins-library overrides product for PRs and adds e.g. pr-118-dm
+}
+
 variable "component" {
   type = "string"
 }
@@ -49,10 +53,6 @@ variable "java_opts" {
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
-variable "vault_section" {
-  default = "test"
-}
-
 variable "idam_api_url" {
   default = "http://betaDevBccidamAppLB.reform.hmcts.net:80"
 }
