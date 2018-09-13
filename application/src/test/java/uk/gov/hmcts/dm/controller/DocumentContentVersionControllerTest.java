@@ -13,6 +13,7 @@ import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,9 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
-    private final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(
-        StandardCharsets.UTF_8)));
-
     private final UUID id = UUID.randomUUID();
 
     private final DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
@@ -37,7 +35,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
-        .documentContent(documentContent).build();
+        .documentContent(new DocumentContent(aSerialBlob())).build();
 
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .folder(Folder.builder().id(id).build()).documentContentVersions(
@@ -45,7 +43,13 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
                 .collect(Collectors.toList())
         ).build();
 
-    public DocumentContentVersionControllerTest() throws Exception {
+    private static SerialBlob aSerialBlob() {
+        try {
+            return new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Test
