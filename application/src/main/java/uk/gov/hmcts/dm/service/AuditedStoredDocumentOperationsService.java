@@ -13,6 +13,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -39,32 +40,21 @@ public class AuditedStoredDocumentOperationsService {
 
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'READ')")
     public StoredDocument readStoredDocument(UUID id) {
-        StoredDocument storedDocument = storedDocumentService.findOne(id);
-
-        storedDocument = createReadAuditEntry(storedDocument);
-
-        return storedDocument;
-
+        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(id);
+        return storedDocument.map(this::createReadAuditEntry).orElse(null);
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'READ')")
     private StoredDocument createReadAuditEntry(StoredDocument storedDocument) {
-        if (storedDocument != null && !storedDocument.isDeleted()) {
-            auditEntryService.createAndSaveEntry(storedDocument, AuditActions.READ);
-            return storedDocument;
-        } else {
-            return null;
-        }
+        auditEntryService.createAndSaveEntry(storedDocument, AuditActions.READ);
+        return storedDocument;
     }
 
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'UPDATE')")
     public StoredDocument updateDocument(UUID id, UpdateDocumentCommand updateDocumentCommand) {
 
-        StoredDocument storedDocument = storedDocumentService.findOne(id);
-
-        if (storedDocument == null || storedDocument.isDeleted()) {
-            throw new StoredDocumentNotFoundException(id);
-        }
+        StoredDocument storedDocument = storedDocumentService.findOne(id)
+            .orElseThrow(() -> new StoredDocumentNotFoundException(id));
 
         storedDocumentService.updateStoredDocument(storedDocument, updateDocumentCommand);
 
@@ -85,20 +75,18 @@ public class AuditedStoredDocumentOperationsService {
 
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'DELETE')")
     public void deleteStoredDocument(UUID id, boolean permanent) {
-        deleteStoredDocument(storedDocumentService.findOne(id), permanent);
+        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(id);
+        storedDocument.ifPresent(storedDoc -> deleteStoredDocument(storedDoc, permanent));
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'DELETE')")
     public void deleteStoredDocument(StoredDocument storedDocument, boolean permanent) {
-        if (storedDocument != null) {
-            if (permanent && !storedDocument.isHardDeleted()) {
-                storedDocumentService.deleteDocument(storedDocument, permanent);
-                auditEntryService.createAndSaveEntry(storedDocument, AuditActions.HARD_DELETED);
-            } else if (!permanent && !storedDocument.isDeleted()) {
-                storedDocumentService.deleteDocument(storedDocument, permanent);
-                auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
-            }
+        if (permanent && !storedDocument.isHardDeleted()) {
+            storedDocumentService.deleteDocument(storedDocument, permanent);
+            auditEntryService.createAndSaveEntry(storedDocument, AuditActions.HARD_DELETED);
+        } else if (!permanent && !storedDocument.isDeleted()) {
+            storedDocumentService.deleteDocument(storedDocument, permanent);
+            auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
         }
     }
-
 }

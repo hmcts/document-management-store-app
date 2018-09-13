@@ -9,7 +9,11 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentVersionCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -61,24 +65,19 @@ public class DocumentContentVersionController {
                 .map(fe -> String.format("%s - %s", fe.getField(), fe.getCode()))
                 .collect(Collectors.joining(",")));
         } else {
-            StoredDocument storedDocument = storedDocumentService.findOne(documentId);
+            StoredDocument storedDocument = storedDocumentService.findOne(documentId)
+                .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
 
-            if (storedDocument == null || storedDocument.isDeleted()) {
+            DocumentContentVersionHalResource resource =
+                new DocumentContentVersionHalResource(
+                    auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
+                );
 
-                throw new StoredDocumentNotFoundException(documentId);
+            return ResponseEntity
+                .created(resource.getUri())
+                .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
+                .body(resource);
 
-            } else {
-
-                DocumentContentVersionHalResource resource =
-                    new DocumentContentVersionHalResource(
-                        auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
-                    );
-
-                return ResponseEntity
-                    .created(resource.getUri())
-                    .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
-                    .body(resource);
-            }
         }
     }
 

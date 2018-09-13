@@ -95,6 +95,13 @@ public class TestUtil {
                 .collect(Collectors.toList())
         ).build();
 
+    public static final StoredDocument DELETED_DOCUMENT = StoredDocument.builder()
+        .id(RANDOM_UUID)
+        .deleted(true)
+        .folder(Folder.builder().id(RANDOM_UUID).build())
+        .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList()))
+        .build();
+
     private TestUtil() {}
 
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException {

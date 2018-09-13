@@ -3,14 +3,12 @@ package uk.gov.hmcts.dm.service;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -30,14 +28,24 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
 
 /**
  * Created by pawel on 11/07/2017.
@@ -56,9 +64,6 @@ public class StoredDocumentServiceTests {
     DocumentContentRepository documentContentRepository;
 
     @Mock
-    BlobCreator blobCreator;
-
-    @Mock
     FolderRepository folderRepository;
 
     @Mock
@@ -70,23 +75,25 @@ public class StoredDocumentServiceTests {
     @InjectMocks
     StoredDocumentService storedDocumentService;
 
-    @Before
-    public void setUp() {
-        when(blobCreator.createBlob(any(MultipartFile.class))).thenReturn(mock(Blob.class));
-    }
-
     @Test
     public void testFindOne() {
         when(this.storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.STORED_DOCUMENT);
-        StoredDocument storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
-        assertThat(storedDocument, equalTo(TestUtil.STORED_DOCUMENT));
+        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
+        assertThat(storedDocument.get(), equalTo(TestUtil.STORED_DOCUMENT));
     }
 
     @Test
     public void testFindOneThatDoesNotExist() {
         when(this.storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
-        StoredDocument storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
-        assertThat(storedDocument, equalTo(null));
+        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
+        assertFalse(storedDocument.isPresent());
+    }
+
+    @Test
+    public void testFindOneThatIsMarkedDeleted() {
+        when(this.storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(DELETED_DOCUMENT);
+        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
+        assertFalse(storedDocument.isPresent());
     }
 
     @Test
