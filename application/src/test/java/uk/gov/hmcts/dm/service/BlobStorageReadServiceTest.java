@@ -6,7 +6,6 @@ import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest( {CloudBlobContainer.class, CloudBlockBlob.class})
+@PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
 public class BlobStorageReadServiceTest {
 
     private BlobStorageReadService blobStorageReadService;
@@ -36,7 +35,7 @@ public class BlobStorageReadServiceTest {
     public void setUp() {
         cloudBlobContainer = PowerMockito.mock(CloudBlobContainer.class);
         blob = PowerMockito.mock(CloudBlockBlob.class);
-        outputStream = Mockito.mock(OutputStream.class);
+        outputStream = mock(OutputStream.class);
         documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
         blobStorageReadService = new BlobStorageReadService(cloudBlobContainer);
     }
