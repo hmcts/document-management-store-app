@@ -13,6 +13,7 @@ import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
+import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -29,20 +30,17 @@ public class BlobStorageMigrationService {
 
     private final CloudBlobContainer cloudBlobContainer;
     private final AuditEntryService auditEntryService;
-    private final DocumentContentVersionService documentContentVersionService;
-    private final StoredDocumentService storedDocumentService;
+    private final StoredDocumentRepository storedDocumentRepository;
     private final DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
     public BlobStorageMigrationService(CloudBlobContainer cloudBlobContainer, AuditEntryService auditEntryService,
                                        DocumentContentVersionRepository documentContentVersionRepository,
-                                       DocumentContentVersionService documentContentVersionService,
-                                       StoredDocumentService storedDocumentService) {
+                                       StoredDocumentRepository storedDocumentRepository) {
         this.cloudBlobContainer = cloudBlobContainer;
         this.auditEntryService = auditEntryService;
         this.documentContentVersionRepository = documentContentVersionRepository;
-        this.documentContentVersionService = documentContentVersionService;
-        this.storedDocumentService = storedDocumentService;
+        this.storedDocumentRepository = storedDocumentRepository;
     }
 
     public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
@@ -61,13 +59,13 @@ public class BlobStorageMigrationService {
 
     private DocumentContentVersion getDocumentContentVersion(final @NotNull UUID documentId,
                                                              final @NotNull UUID versionId) {
-        // Sonar fails us if we use orElseThrow
-        if (!storedDocumentService.findOne(documentId).isPresent()) {
+
+        if (null == storedDocumentRepository.findOne(documentId)) {
             throw new DocumentNotFoundException(documentId);
         }
 
         return Optional
-            .ofNullable(documentContentVersionService.findOne(versionId))
+            .ofNullable(documentContentVersionRepository.findOne(versionId))
             .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
     }
 

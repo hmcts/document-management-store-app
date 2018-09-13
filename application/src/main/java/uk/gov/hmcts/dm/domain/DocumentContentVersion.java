@@ -103,6 +103,11 @@ public class DocumentContentVersion implements RolesAware {
     @Column(name = "content_uri")
     private String contentUri;
 
+    @Getter
+    @Setter
+    @Column(name = "content_checksum")
+    private String contentChecksum;
+
     public DocumentContentVersion(StoredDocument item, MultipartFile file, String userId) {
         this.mimeType = file.getContentType();
         setOriginalDocumentName(file.getOriginalFilename());
@@ -116,10 +121,18 @@ public class DocumentContentVersion implements RolesAware {
         this.setCreatedBy(userId);
     }
 
-    public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService,
-                                  Date createdOn, DocumentContent documentContent,
-                                  StoredDocument storedDocument, Set<DocumentContentVersionAuditEntry> auditEntries,
-                                  Long size, String contentUri) {
+    public DocumentContentVersion(UUID id,
+                                  String mimeType,
+                                  String originalDocumentName,
+                                  String createdBy,
+                                  String createdByService,
+                                  Date createdOn,
+                                  DocumentContent documentContent,
+                                  StoredDocument storedDocument,
+                                  Set<DocumentContentVersionAuditEntry> auditEntries,
+                                  Long size,
+                                  String contentUri,
+                                  String contentChecksum) {
         this.id = id;
         this.mimeType = mimeType;
         setOriginalDocumentName(originalDocumentName);
@@ -131,6 +144,7 @@ public class DocumentContentVersion implements RolesAware {
         this.auditEntries = auditEntries;
         this.size = size;
         this.contentUri = contentUri;
+        this.contentChecksum = contentChecksum;
     }
 
     public Date getCreatedOn() {
