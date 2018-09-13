@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Created by pawel on 08/06/2017.
