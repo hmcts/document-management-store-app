@@ -62,7 +62,7 @@ public class BlobStorageMigrationService {
     private DocumentContentVersion getDocumentContentVersion(final @NotNull UUID documentId,
                                                              final @NotNull UUID versionId) {
         // Sonar fails us if we use orElseThrow
-        if (!storedDocumentService.findOne(documentId).isPresent()) {
+        if (!storedDocumentService.findOneWithBinaryData(documentId).isPresent()) {
             throw new DocumentNotFoundException(documentId);
         }
 
