@@ -12,10 +12,4 @@ public class ComponentTestConfiguration {
     public SubjectResolver<Service> serviceResolver() {
         return new ServiceResolverBackdoor();
     }
-
-//    @Bean
-//    public SubjectResolver<User> userResolver() {
-//        return new UserResolverBackdoor();
-//    }
-
 }

@@ -27,7 +27,7 @@ public class DocumentContentVersionService {
     @Autowired
     private StoredDocumentRepository storedDocumentRepository;
 
-    private static int STREAM_BUFFER_SIZE = 5000000;
+    private static final int STREAM_BUFFER_SIZE = 5000000;
 
     public DocumentContentVersion findOne(UUID id) {
         return documentContentVersionRepository.findOne(id);
