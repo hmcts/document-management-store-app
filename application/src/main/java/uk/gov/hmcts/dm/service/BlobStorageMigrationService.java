@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
@@ -47,14 +46,8 @@ public class BlobStorageMigrationService {
     }
 
     public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
-        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(documentId);
-        if (!storedDocument.isPresent()) {
-            throw new DocumentNotFoundException(documentId);
-        }
-        DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            throw new DocumentContentVersionNotFoundException(versionId);
-        }
+
+        final DocumentContentVersion documentContentVersion = getDocumentContentVersion(documentId, versionId);
 
         if (isBlank(documentContentVersion.getContentUri())) {
             uploadBinaryStream(documentId, documentContentVersion);
@@ -64,6 +57,18 @@ public class BlobStorageMigrationService {
                 documentContentVersion.getContentUri());
             auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.UPDATED);
         }
+    }
+
+    private DocumentContentVersion getDocumentContentVersion(final @NotNull UUID documentId,
+                                                             final @NotNull UUID versionId) {
+        // Sonar fails us if we use orElseThrow
+        if (!storedDocumentService.findOne(documentId).isPresent()) {
+            throw new DocumentNotFoundException(documentId);
+        }
+
+        return Optional
+            .ofNullable(documentContentVersionService.findOne(versionId))
+            .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
     }
 
     private void uploadBinaryStream(UUID documentId, DocumentContentVersion dcv) {
