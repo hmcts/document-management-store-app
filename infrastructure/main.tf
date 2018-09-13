@@ -120,10 +120,6 @@ resource "azurerm_storage_container" "document_container" {
   container_access_type = "private"
 }
 
-provider "vault" {
-  address = "https://vault.reform.hmcts.net:6200"
-}
-
 module "key_vault" {
   source = "git@github.com:hmcts/moj-module-key-vault?ref=master"
   product = "${local.app_full_name}"
