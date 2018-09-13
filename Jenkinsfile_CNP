@@ -27,7 +27,7 @@ def component = "store"
 def channel = '#dm-pipeline'
 
 List<LinkedHashMap<String, Object>> secrets = [
-    secret('s2s-token', 'S2S_TOKEN')
+    secret('em-gateway-s2s-token', 'S2S_TOKEN')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
