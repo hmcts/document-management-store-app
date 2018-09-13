@@ -2,10 +2,22 @@ locals {
   app_full_name = "${var.product}-${var.component}"
   ase_name = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
+
+  // Shared Resource Group
+  previewResourceGroup = "${var.raw_product}-shared-aat"
+  nonPreviewResourceGroup = "${var.raw_product}-shared-${var.env}"
+  sharedResourceGroup = "${(var.env == "preview" || var.env == "spreview") ? local.previewResourceGroup : local.nonPreviewResourceGroup}"
+
+  // Storage Account
+  previewStorageAccountName = "${var.raw_product}sharedaat"
+  nonPreviewStorageAccountName = "${var.raw_product}shared${var.env}"
+  storageAccountName = "${(var.env == "preview" || var.env == "spreview") ? local.previewStorageAccountName : local.nonPreviewStorageAccountName}"
+
+  // Shared Vault
+  previewVaultName = "${var.raw_product}-aat"
+  nonPreviewVaultName = "${var.raw_product}-${var.env}"
+  vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 }
-# "${local.ase_name}"
-# "${local.app_full_name}"
-# "${local.local_env}"
 
 module "app" {
   source = "git@github.com:hmcts/moj-module-webapp?ref=master"
@@ -80,6 +92,11 @@ module "app" {
     ENABLE_DELETE = "${var.enable_delete}"
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
+
+    # Document Storage
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_primary_connection_string.value}"
+    STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_secondary_connection_string.value}"
+    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME = "${azurerm_storage_container.document_container.name}"
   }
 }
 
@@ -96,12 +113,15 @@ module "db" {
   common_tags  = "${var.common_tags}"
 }
 
-provider "vault" {
-  address = "https://vault.reform.hmcts.net:6200"
+resource "azurerm_storage_container" "document_container" {
+  name = "${local.app_full_name}-docstore-${var.env}"
+  resource_group_name = "${local.sharedResourceGroup}"
+  storage_account_name = "${local.storageAccountName}"
+  container_access_type = "private"
 }
 
-data "vault_generic_secret" "s2s_secret" {
-  path = "secret/${var.vault_section}/ccidam/service-auth-provider/api/microservice-keys/em-gw"
+provider "vault" {
+  address = "https://vault.reform.hmcts.net:6200"
 }
 
 module "key_vault" {
@@ -114,39 +134,47 @@ module "key_vault" {
   product_group_object_id = "5d9cd025-a293-4b97-a0e5-6f43efce02c0"
 }
 
+data "azurerm_key_vault" "dm_shared_vault" {
+  name = "${local.vaultName}"
+  resource_group_name = "${local.sharedResourceGroup}"
+}
+
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name = "${local.app_full_name}-POSTGRES-USER"
   value = "${module.db.user_name}"
-  vault_uri = "${module.key_vault.key_vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name = "${local.app_full_name}-POSTGRES-PASS"
   value = "${module.db.postgresql_password}"
-  vault_uri = "${module.key_vault.key_vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   name = "${local.app_full_name}-POSTGRES-HOST"
   value = "${module.db.host_name}"
-  vault_uri = "${module.key_vault.key_vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
   name = "${local.app_full_name}-POSTGRES-PORT"
   value = "${module.db.postgresql_listen_port}"
-  vault_uri = "${module.key_vault.key_vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name = "${local.app_full_name}-POSTGRES-DATABASE"
   value = "${module.db.postgresql_database}"
-  vault_uri = "${module.key_vault.key_vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
 }
 
-resource "azurerm_key_vault_secret" "S2S_TOKEN" {
-  name = "s2s-token"
-  value = "${data.vault_generic_secret.s2s_secret.data["value"]}"
-  vault_uri = "${module.key_vault.key_vault_uri}"
+data "azurerm_key_vault_secret" "storageaccount_primary_connection_string" {
+  name = "storage-account-primary-connection-string"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "storageaccount_secondary_connection_string" {
+  name = "storage-account-secondary-connection-string"
+  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+}
