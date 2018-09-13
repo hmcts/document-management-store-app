@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.apache.commons.lang.StringUtils.isBlank;
@@ -46,11 +47,10 @@ public class BlobStorageMigrationService {
     }
 
     public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
-        StoredDocument storedDocument = storedDocumentService.findOne(documentId)
-            .orElseThrow(() -> new DocumentNotFoundException(documentId));
-        storedDocument.getDocumentContentVersions().stream().filter(v -> v.getId().equals(versionId)).findFirst()
-            .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
-
+        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(documentId);
+        if (!storedDocument.isPresent()) {
+            throw new DocumentNotFoundException(documentId);
+        }
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             throw new DocumentContentVersionNotFoundException(versionId);
