@@ -66,15 +66,15 @@ public class BlobStorageMigrationService {
         }
     }
 
-    private void uploadBinaryStream(UUID documentId, DocumentContentVersion doc) {
+    private void uploadBinaryStream(UUID documentId, DocumentContentVersion dcv) {
         try {
-            CloudBlockBlob blob = getCloudFile(doc.getId());
-            blob.upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
-            doc.setContentUri(blob.getUri().toString());
+            CloudBlockBlob blob = getCloudFile(dcv.getId());
+            blob.upload(dcv.getDocumentContent().getData().getBinaryStream(), dcv.getSize());
+            dcv.setContentUri(blob.getUri().toString());
         } catch (URISyntaxException | StorageException | IOException e) {
-            throw new FileStorageException(e, documentId, doc.getId());
+            throw new FileStorageException(e, documentId, dcv.getId());
         } catch (SQLException e) {
-            throw new CantReadDocumentContentVersionBinaryException(e, doc);
+            throw new CantReadDocumentContentVersionBinaryException(e, dcv);
         }
     }
 
