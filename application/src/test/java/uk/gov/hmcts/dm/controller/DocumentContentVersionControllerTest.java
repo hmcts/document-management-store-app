@@ -35,7 +35,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
-        .documentContent(new DocumentContent(aSerialBlob())).build();
+        .documentContent(new DocumentContent(serialBlob())).build();
 
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .folder(Folder.builder().id(id).build()).documentContentVersions(
@@ -43,7 +43,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
                 .collect(Collectors.toList())
         ).build();
 
-    private static SerialBlob aSerialBlob() {
+    private static SerialBlob serialBlob() {
         try {
             return new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8));
         } catch (SQLException e) {
