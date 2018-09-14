@@ -1,5 +1,7 @@
-capacity = "1"
 java_opts = ""
+
+// Webapp
+capacity = "1"
 
 ////////////////////////////////////////////////
 // Endpoints
