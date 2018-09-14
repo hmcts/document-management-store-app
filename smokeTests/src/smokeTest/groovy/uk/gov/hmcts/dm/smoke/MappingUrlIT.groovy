@@ -6,8 +6,6 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.test.context.junit4.SpringRunner
 
-import javax.annotation.PostConstruct
-
 import static org.junit.Assert.assertTrue
 
 @RunWith(SpringRunner.class)
@@ -43,6 +41,8 @@ class MappingUrlIT extends BaseIT {
         assertTrue((null != request["{[/documents/{documentId}/binary],methods=[GET]}"]))
 
         assertTrue((null != request["{[/documents/{documentId}],methods=[POST],consumes=[multipart/form-data]}"]))
+        assertTrue((null != request["{[/documents/{documentId}/versions],methods=[POST],consumes=[multipart/form-data]}"]))
+
         assertTrue((null != request["{[/documents/{documentId}/versions/{versionId}],methods=[GET]}"]))
         assertTrue((null != request["{[/documents/{documentId}/versions/{versionId}/binary],methods=[GET]}"]))
 
