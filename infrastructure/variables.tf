@@ -172,3 +172,11 @@ variable "max_file_size_in_mb" {
 variable "common_tags" {
   type = "map"
 }
+
+variable "asp_name" {
+  type = "string"
+}
+
+variable "asp_rg" {
+  type = "string"
+}
