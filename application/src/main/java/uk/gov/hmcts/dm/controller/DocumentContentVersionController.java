@@ -58,7 +58,18 @@ public class DocumentContentVersionController {
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
     // Please do not remove "" mapping. API is already consumed and might break backwards compatibility.
-    @PostMapping(value = {"", "/versions"}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "Adds a Document Content Version and associates it with a given Stored Document.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "JSON representation of a document version", response = DocumentContentVersionHalResource.class)
+    })
+    public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
+                                                            @Valid UploadDocumentVersionCommand command,
+                                                            BindingResult result) {
+        return addDocumentContentVersion(documentId, command, result);
+    }
+
+    @PostMapping(value = "/versions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation(value = "Adds a Document Content Version and associates it with a given Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "JSON representation of a document version", response = DocumentContentVersionHalResource.class)

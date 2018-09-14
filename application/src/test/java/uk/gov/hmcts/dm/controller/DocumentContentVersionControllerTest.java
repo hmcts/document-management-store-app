@@ -53,7 +53,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testAddDocumentVersionForExisting() throws Exception {
+    public void testAddDocumentVersion() throws Exception {
         when(this.storedDocumentService.findOne(id))
             .thenReturn(Optional.of(storedDocument));
 
@@ -64,12 +64,12 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE)
+            .postDocumentVersion("/documents/" + id + "/versions", TestUtil.TEST_FILE)
             .andExpect(status().isCreated());
     }
 
     @Test
-    public void testAddDocumentVersion() throws Exception {
+    public void testAddDocumentVersionForVersionsMappingNotPresent() throws Exception {
         when(this.storedDocumentService.findOne(id))
             .thenReturn(Optional.of(storedDocument));
 
