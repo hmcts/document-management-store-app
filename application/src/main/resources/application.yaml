@@ -29,9 +29,9 @@ spring:
         dialect: uk.gov.hmcts.dm.dialect.CustomPostgresSqlDialect
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5000/evidence}
-    username: ${SPRING_DATASOURCE_USERNAME:ccd}
-    password: ${SPRING_DATASOURCE_PASSWORD:ccd}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
+    username: ${SPRING_DATASOURCE_USERNAME:evidence}
+    password: ${SPRING_DATASOURCE_PASSWORD:evidence}
 
     platform: postgresql
     time-between-eviction-runs-millis: ${STALE_CONN_EVICTION_FREQUENCY:60000}
@@ -82,6 +82,10 @@ azure:
       connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=https;AccountName=yourAccountName;AccountKey=DmfyEajwVWcioSbjJWaR+EHYfP88CI2OScLlJGIQkmHTikiFwn1o2MHHysnyHgh586wKaP5fH9WrzWWjUZmv9uOa;EndpointSuffix=core.windows.net}
       blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:dm-docstore-sandbox}
       enabled: ${STORAGE_CONTAINER_ENABLED:false}
+
+postgres:
+  storage:
+    enabled: ${POSTGRES_BLOB_STORAGE_ENABLED:true}
 
 app-insights:
   dev-mode: off

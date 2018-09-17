@@ -106,11 +106,11 @@ public class DocumentContentVersion implements RolesAware {
     public DocumentContentVersion(StoredDocument item,
                                   MultipartFile file,
                                   String userId,
-                                  final boolean isAzureBlobStoreEnabled) {
+                                  final boolean isPostgresBlobStoreEnabled) {
         this.mimeType = file.getContentType();
         setOriginalDocumentName(file.getOriginalFilename());
         this.size = file.getSize();
-        if (!isAzureBlobStoreEnabled) {  // use either Azure Blob Store or postgres to store a blob
+        if (isPostgresBlobStoreEnabled) {
             try {
                 this.documentContent = new DocumentContent(this, new PassThroughBlob(file));
             } catch (IOException e) {

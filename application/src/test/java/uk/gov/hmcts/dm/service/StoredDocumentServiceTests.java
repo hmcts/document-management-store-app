@@ -6,12 +6,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
+import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
@@ -23,19 +27,32 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.sql.Blob;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
 
 /**
  * Created by pawel on 11/07/2017.
@@ -66,7 +83,10 @@ public class StoredDocumentServiceTests {
     private BlobStorageDeleteService blobStorageDeleteService;
 
     @Mock
-    SecurityUtilService securityUtilService;
+    private SecurityUtilService securityUtilService;
+
+    @Mock
+    private AzureStorageConfiguration azureStorageConfiguration;
 
     @InjectMocks
     private StoredDocumentService storedDocumentService;
@@ -81,8 +101,6 @@ public class StoredDocumentServiceTests {
         when(this.storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.STORED_DOCUMENT);
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertThat(storedDocument.get(), equalTo(TestUtil.STORED_DOCUMENT));
-        // ensure backward compatibility
-        storedDocumentService.setAzureBlobStorageEnabled(null);
     }
 
     @Test
@@ -105,7 +123,6 @@ public class StoredDocumentServiceTests {
         storedDocumentService.save(storedDocument);
         verify(storedDocumentRepository).save(storedDocument);
     }
-
 
     @Test
     public void testSaveItemsWithCommand() throws Exception {
@@ -130,7 +147,6 @@ public class StoredDocumentServiceTests {
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
         assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
     }
-
 
     @Test
     public void testSaveItemsWithCommandAndToggleConfiguration() throws Exception {
@@ -173,7 +189,7 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testSaveItemsToAzure() {
-        storedDocumentService.setAzureBlobStorageEnabled(true);
+        setupStorageOptions(true, false);
 
         List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TEST_FILE));
 
@@ -293,7 +309,7 @@ public class StoredDocumentServiceTests {
     public void testSaveItemsToBucketToBlobStore() throws Exception {
         Folder folder = new Folder();
 
-        storedDocumentService.setAzureBlobStorageEnabled(true);
+        setupStorageOptions(true, false);
         storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
 
         assertThat(folder.getStoredDocuments().size(), equalTo(1));
@@ -342,5 +358,10 @@ public class StoredDocumentServiceTests {
     @Test(expected = NullPointerException.class)
     public void testUpdateStoredDocumentNullCommand() {
         storedDocumentService.updateStoredDocument(new StoredDocument(), null);
+    }
+
+    private void setupStorageOptions(Boolean azureEnabled, Boolean postgresEnabled) {
+        when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(azureEnabled);
+        when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(postgresEnabled);
     }
 }

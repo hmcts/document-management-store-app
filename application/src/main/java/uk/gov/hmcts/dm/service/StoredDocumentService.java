@@ -1,16 +1,14 @@
 package uk.gov.hmcts.dm.service;
 
-import com.google.common.annotations.VisibleForTesting;
 import lombok.NonNull;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
+import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -45,6 +43,9 @@ public class StoredDocumentService {
     private ToggleConfiguration toggleConfiguration;
 
     @Autowired
+    private AzureStorageConfiguration azureStorageConfiguration;
+
+    @Autowired
     private SecurityUtilService securityUtilService;
 
     @Autowired
@@ -52,11 +53,6 @@ public class StoredDocumentService {
 
     @Autowired
     private BlobStorageDeleteService blobStorageDeleteService;
-
-    @Setter
-    @VisibleForTesting
-    @Value("${azure.storage.enabled}")
-    private Boolean azureBlobStorageEnabled;
 
     public Optional<StoredDocument> findOne(UUID id) {
         Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
@@ -80,10 +76,11 @@ public class StoredDocumentService {
             final DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
                                                                                              aFile,
                                                                                              userId,
-                                                                                             isAzureBlobStoreEnabled());
+                                                                                             azureStorageConfiguration
+                                                                                                 .isPostgresBlobStorageEnabled());
             storedDocument.getDocumentContentVersions().add(documentContentVersion);
 
-            if (isAzureBlobStoreEnabled()) {
+            if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
                 blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
                                                                      documentContentVersion,
                                                                      aFile);
@@ -114,12 +111,14 @@ public class StoredDocumentService {
             if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
-            final DocumentContentVersion documentContentVersion = new DocumentContentVersion(document,
-                                                                                             file,
-                                                                                             userId,
-                                                                                             isAzureBlobStoreEnabled());
+
+            DocumentContentVersion documentContentVersion = new DocumentContentVersion(document,
+                                                                                       file,
+                                                                                       userId,
+                                                                                       azureStorageConfiguration
+                                                                                           .isPostgresBlobStorageEnabled());
             document.getDocumentContentVersions().add(documentContentVersion);
-            if (isAzureBlobStoreEnabled()) {
+            if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
                 blobStorageWriteService.uploadDocumentContentVersion(document,
                                                                      documentContentVersion,
                                                                      file);
@@ -137,11 +136,11 @@ public class StoredDocumentService {
     }
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
-        String userId = securityUtilService.getUserId();
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
                                                                                    file,
-                                                                                   userId,
-                                                                                   isAzureBlobStoreEnabled());
+                                                                                   securityUtilService.getUserId(),
+                                                                                   azureStorageConfiguration
+                                                                                       .isPostgresBlobStorageEnabled());
         documentContentVersionRepository.save(documentContentVersion);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
@@ -176,9 +175,4 @@ public class StoredDocumentService {
     public List<StoredDocument> findAllExpiredStoredDocuments() {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
     }
-
-    private Boolean isAzureBlobStoreEnabled() {
-        return Optional.ofNullable(azureBlobStorageEnabled).orElse(false);
-    }
-
 }

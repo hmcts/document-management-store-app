@@ -30,7 +30,7 @@ public class DocumentContentVersionTest {
 
     @Test
     public void deprecatedDocumentContentIsUsed() {
-        final DocumentContentVersion documentContentVersion = new DocumentContentVersion(item, FILE, USER_ID, false);
+        final DocumentContentVersion documentContentVersion = new DocumentContentVersion(item, FILE, USER_ID, true);
 
         assertDocumentContentVersionCommon(documentContentVersion);
         assertThat(documentContentVersion.getDocumentContent(), not(nullValue()));
@@ -38,7 +38,7 @@ public class DocumentContentVersionTest {
 
     @Test
     public void deprecatedDocumentContentIsNotUsed() {
-        final DocumentContentVersion documentContentVersion = new DocumentContentVersion(item, FILE, USER_ID, true);
+        final DocumentContentVersion documentContentVersion = new DocumentContentVersion(item, FILE, USER_ID, false);
 
         assertDocumentContentVersionCommon(documentContentVersion);
         assertThat(documentContentVersion.getDocumentContent(), is(nullValue()));
