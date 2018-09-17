@@ -77,7 +77,7 @@ public class BlobStorageMigrationService {
             Blob data = dcv.getDocumentContent().getData();
             cloudBlockBlob.upload(data.getBinaryStream(), dcv.getSize());
             dcv.setContentUri(cloudBlockBlob.getUri().toString());
-            dcv.setContentChecksum(Sha512DigestUtils.shaHex(data.getBytes(1, Long.valueOf(data.length()).intValue())));
+            dcv.setContentChecksum(Sha512DigestUtils.shaHex(data.getBytes(1, (int)data.length())));
         } catch (URISyntaxException | StorageException | IOException e) {
             throw new FileStorageException(e, documentId, dcv.getId());
         } catch (SQLException e) {
