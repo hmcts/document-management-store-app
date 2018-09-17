@@ -37,18 +37,18 @@ public class DocumentContentVersionHalResource extends HalResource {
         BeanUtils.copyProperties(documentContentVersion, this);
 
         add(linkTo(methodOn(StoredDocumentController.class)
-                .getMetaData(documentContentVersion.getStoredDocument().getId())).withRel("document"));
+            .getMetaData(documentContentVersion.getStoredDocument().getId())).withRel("document"));
 
         add(linkTo(methodOn(DocumentContentVersionController.class).getDocumentContentVersionDocument(
-                documentContentVersion.getStoredDocument().getId(),
-                documentContentVersion.getId())).withRel("self"));
+            documentContentVersion.getStoredDocument().getId(),
+            documentContentVersion.getId())).withRel("self"));
 
         add(linkTo(methodOn(DocumentContentVersionController.class).getDocumentContentVersionDocumentBinary(
-                documentContentVersion.getStoredDocument().getId(),
-                documentContentVersion.getId())).withRel("binary"));
+            documentContentVersion.getStoredDocument().getId(),
+            documentContentVersion.getId(), null)).withRel("binary"));
 
         add(linkTo(methodOn(DocumentThumbnailController.class).getDocumentContentVersionDocumentPreviewThumbnail(
-                documentContentVersion.getStoredDocument().getId(),
+            documentContentVersion.getStoredDocument().getId(),
             documentContentVersion.getId())).withRel("thumbnail"));
 
         add(linkTo(methodOn(BlobStorageMigrationController.class).migrateDocument(
