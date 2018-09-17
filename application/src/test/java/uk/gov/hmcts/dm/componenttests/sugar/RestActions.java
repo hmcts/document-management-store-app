@@ -10,7 +10,6 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
-import uk.gov.hmcts.dm.componenttests.backdoors.UserResolverBackdoor;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
 
@@ -24,13 +23,11 @@ public class RestActions {
     private final HttpHeaders httpHeaders = new HttpHeaders();
     private final MockMvc mvc;
     private final ServiceResolverBackdoor serviceRequestAuthorizer;
-    private final UserResolverBackdoor userRequestAuthorizer;
     private final ObjectMapper objectMapper;
 
-    public RestActions(MockMvc mvc, ServiceResolverBackdoor serviceRequestAuthorizer, UserResolverBackdoor userRequestAuthorizer, ObjectMapper objectMapper) {
+    public RestActions(MockMvc mvc, ServiceResolverBackdoor serviceRequestAuthorizer, ObjectMapper objectMapper) {
         this.mvc = mvc;
         this.serviceRequestAuthorizer = serviceRequestAuthorizer;
-        this.userRequestAuthorizer = userRequestAuthorizer;
         this.objectMapper = objectMapper;
     }
 

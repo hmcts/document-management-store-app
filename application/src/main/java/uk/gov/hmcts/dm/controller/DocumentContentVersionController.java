@@ -5,7 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,9 +28,13 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Created by pawel on 08/06/2017.
@@ -52,8 +57,20 @@ public class DocumentContentVersionController {
     @Autowired
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
+    // Please do not remove "" mapping. API is already consumed and might break backwards compatibility.
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation("Adds a Document Content Version and associates it with a given Stored Document.")
+    @ApiOperation(value = "Adds a Document Content Version and associates it with a given Stored Document.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 201, message = "JSON representation of a document version", response = DocumentContentVersionHalResource.class)
+    })
+    public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
+                                                            @Valid UploadDocumentVersionCommand command,
+                                                            BindingResult result) {
+        return addDocumentContentVersion(documentId, command, result);
+    }
+
+    @PostMapping(value = "/versions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiOperation(value = "Adds a Document Content Version and associates it with a given Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 201, message = "JSON representation of a document version", response = DocumentContentVersionHalResource.class)
     })
@@ -105,22 +122,43 @@ public class DocumentContentVersionController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a document version")
     })
-    public ResponseEntity<InputStreamResource> getDocumentContentVersionDocumentBinary(
+    public ResponseEntity<Object> getDocumentContentVersionDocumentBinary(
         @PathVariable UUID documentId,
-        @PathVariable UUID versionId) {
+        @PathVariable UUID versionId,
+        HttpServletResponse response) {
 
         DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             throw new DocumentContentVersionNotFoundException(versionId);
-        } else {
-            auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
+        }
+
+        response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+        response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+            String.format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+
+        try {
+            if (isBlank(documentContentVersion.getContentUri())) {
+                response.setHeader("data-source", "Postgres");
+                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion, response.getOutputStream());
+            } else {
+                response.setHeader("data-source", "contentURI");
+                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                    documentContentVersion,
+                    response.getOutputStream());
+            }
+            response.flushBuffer();
+
+        } catch (IOException e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e);
         }
 
         return null;
-
     }
-
 }
 
 

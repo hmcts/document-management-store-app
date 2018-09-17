@@ -6,6 +6,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,16 +28,20 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * Created by pawel on 08/06/2017.
  */
 @RestController
-@RequestMapping(
-        path = "/documents")
+@RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")
 public class StoredDocumentController {
 
@@ -99,30 +105,47 @@ public class StoredDocumentController {
                 .body(new StoredDocumentHalResource(storedDocument));
     }
 
-
-
     @GetMapping(value = "{documentId}/binary")
     @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<Object> getBinary(@PathVariable UUID documentId) {
+    public ResponseEntity<Object> getBinary(@PathVariable UUID documentId, HttpServletResponse response) {
 
         DocumentContentVersion documentContentVersion =
-                documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId);
+            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId);
 
         if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
             return ResponseEntity.notFound().build();
         }
 
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
+        response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+        response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+            format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+
+        try {
+            if (isBlank(documentContentVersion.getContentUri())) {
+                response.setHeader("data-source", "Postgres");
+                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
+                    documentContentVersion,
+                    response.getOutputStream());
+            } else {
+                response.setHeader("data-source", "contentURI");
+                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                    documentContentVersion,
+                    response.getOutputStream());
+            }
+            response.flushBuffer();
+
+        } catch (IOException e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(e);
+        }
+
         return null;
-
     }
-
-
-
-
-
 }
 

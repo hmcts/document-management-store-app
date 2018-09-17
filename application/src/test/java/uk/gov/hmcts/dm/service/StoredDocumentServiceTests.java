@@ -24,18 +24,17 @@ import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-import uk.gov.hmcts.dm.security.Classifications;
 
 import java.sql.Blob;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -53,6 +52,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
+import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
 /**
  * Created by pawel on 11/07/2017.
@@ -125,11 +125,11 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testSaveItemsWithCommand() throws Exception {
+    public void testSaveItemsWithCommand() {
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
         uploadDocumentsCommand.setRoles(ImmutableList.of("a", "b"));
-        uploadDocumentsCommand.setClassification(Classifications.PRIVATE);
+        uploadDocumentsCommand.setClassification(PRIVATE);
         uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
@@ -140,8 +140,8 @@ public class StoredDocumentServiceTests {
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
 
         assertEquals(1, documents.size());
-        assertEquals(storedDocument.getRoles(), new HashSet(ImmutableList.of("a", "b")));
-        assertEquals(storedDocument.getClassification(), Classifications.PRIVATE);
+        assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
+        assertEquals(storedDocument.getClassification(), PRIVATE);
         Assert.assertNull(storedDocument.getMetadata());
         Assert.assertNull(storedDocument.getTtl());
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
@@ -149,7 +149,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testSaveItemsWithCommandAndToggleConfiguration() throws Exception {
+    public void testSaveItemsWithCommandAndToggleConfiguration() {
 
         when(toggleConfiguration.isMetadatasearchendpoint()).thenReturn(true);
         when(toggleConfiguration.isTtl()).thenReturn(true);
@@ -157,7 +157,7 @@ public class StoredDocumentServiceTests {
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
         uploadDocumentsCommand.setRoles(ImmutableList.of("a", "b"));
-        uploadDocumentsCommand.setClassification(Classifications.PRIVATE);
+        uploadDocumentsCommand.setClassification(PRIVATE);
         uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
@@ -167,8 +167,8 @@ public class StoredDocumentServiceTests {
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
 
         assertEquals(1, documents.size());
-        assertEquals(storedDocument.getRoles(), new HashSet(ImmutableList.of("a", "b")));
-        assertEquals(storedDocument.getClassification(), Classifications.PRIVATE);
+        assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
+        assertEquals(storedDocument.getClassification(), PRIVATE);
         assertEquals(storedDocument.getMetadata(), ImmutableMap.of("prop1", "value1"));
         Assert.assertNotNull(storedDocument.getTtl());
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
@@ -289,7 +289,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testSaveItemsToBucket() throws Exception {
+    public void testSaveItemsToBucket() {
         Folder folder = new Folder();
 
         storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
@@ -324,7 +324,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testUpdateDocument() throws Exception {
+    public void testUpdateDocument() {
         StoredDocument storedDocument = new StoredDocument();
         UpdateDocumentCommand command = new UpdateDocumentCommand();
         Date newTtl = new Date();
@@ -334,7 +334,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testUpdateDeletedDocument() throws Exception {
+    public void testUpdateDeletedDocument() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
         UpdateDocumentCommand command = new UpdateDocumentCommand();
