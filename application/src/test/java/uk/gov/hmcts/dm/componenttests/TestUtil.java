@@ -76,6 +76,7 @@ public class TestUtil {
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .size(4L)
+        .contentUri("someUri")
         .storedDocument(StoredDocument.builder().id(RANDOM_UUID).folder(Folder.builder().id(RANDOM_UUID).build()).build())
         .documentContent(DOCUMENT_CONTENT).build();
 
