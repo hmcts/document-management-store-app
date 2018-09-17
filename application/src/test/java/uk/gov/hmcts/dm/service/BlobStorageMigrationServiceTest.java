@@ -125,7 +125,7 @@ public class BlobStorageMigrationServiceTest {
 
     @Test(expected = DocumentNotFoundException.class)
     public void migrateNonExistentDocument() {
-        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.empty());
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
     }
@@ -195,12 +195,6 @@ public class BlobStorageMigrationServiceTest {
                                                                                             storedDocument,
                                                                                             data)));
         return storedDocument;
-    }
-
-    private StoredDocument createStoredDocument(boolean deleted) {
-        StoredDocument storedDoc = new StoredDocument();
-        storedDoc.setDeleted(deleted);
-        return storedDoc;
     }
 
     private DocumentContentVersion buildDocumentContentVersion() {
