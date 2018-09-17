@@ -13,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.dm.DmApp;
 
 import java.io.IOException;
@@ -99,11 +98,10 @@ public class ThumbnailTest {
             .andReturn().getResponse();
 
         final String url = getThumbnailUrlFromResponse(response);
-System.out.println(url);
-        final ResultActions perform = mvc.perform(get(url).headers(headers));
 
-//            .andExpect(content().contentType(MediaType.IMAGE_JPEG_VALUE));
-        System.out.println(perform);
+        mvc.perform(get(url)
+            .headers(headers))
+            .andExpect(content().contentType(IMAGE_JPEG_VALUE));
     }
 
     @Test
