@@ -219,27 +219,30 @@ public class BlobStorageMigrationServiceTest {
     private DocumentContent createDocumentContent(DocumentContentVersion dcv, Blob blob) {
         return new DocumentContent(dcv, blob);
     }
+
+    class InputStreamMatcher extends ArgumentMatcher<InputStream> {
+
+        private final String expectedResult;
+
+        InputStreamMatcher(final String expectedResult) {
+            this.expectedResult = expectedResult;
+        }
+
+        @SneakyThrows(IOException.class)
+        @Override
+        public boolean matches(Object item) {
+            InputStream inputStream = (InputStream) item;
+
+            String actual = IOUtils.toString(inputStream, defaultCharset());
+            inputStream.reset();
+
+            return actual.equals(expectedResult);
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("InputStream containing ").appendValue(expectedResult);
+        }
+    }
 }
 
-class InputStreamMatcher extends ArgumentMatcher<InputStream> {
-
-    private final String expectedResult;
-
-    InputStreamMatcher(final String expectedResult) {
-        this.expectedResult = expectedResult;
-    }
-
-    @SneakyThrows(IOException.class)
-    @Override public boolean matches(Object item) {
-        InputStream inputStream = (InputStream) item;
-
-        String actual = IOUtils.toString(inputStream, defaultCharset());
-        inputStream.reset();
-
-        return actual.equals(expectedResult);
-    }
-
-    @Override public void describeTo(Description description) {
-        description.appendText("InputStream containing ").appendValue(expectedResult);
-    }
-}
