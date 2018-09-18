@@ -4,12 +4,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
+import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
+import java.io.OutputStream;
 import java.util.UUID;
 
 import static org.mockito.Mockito.times;
@@ -23,21 +27,51 @@ import static org.mockito.Mockito.when;
 public class AuditedDocumentContentVersionOperationsServiceTests {
 
     @Mock
-    DocumentContentVersionService documentContentVersionService;
+    private DocumentContentVersionService documentContentVersionService;
 
     @Mock
-    AuditEntryService auditEntryService;
+    private AuditEntryService auditEntryService;
+
+    @Mock
+    private BlobStorageReadService blobStorageReadService;
+
+    @Mock
+    private DocumentThumbnailService documentThumbnailService;
+
+    @Mock
+    private OutputStream outputStream;
 
     @InjectMocks
-    AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+    private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @Test
     public void testReadFileContentVersionBinary() {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion);
 
-        verify(documentContentVersionService, times(1)).streamDocumentContentVersion(documentContentVersion);
+        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion, outputStream);
+
+        verify(documentContentVersionService, times(1)).streamDocumentContentVersion(documentContentVersion, outputStream);
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
+    }
+
+    @Test
+    public void testReadFileContentVersionBinaryFromBlobStore() {
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        OutputStream outputStream = Mockito.mock(OutputStream.class);
+        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(documentContentVersion, outputStream);
+
+        verify(blobStorageReadService, times(1)).loadBlob(documentContentVersion, outputStream);
+        verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
+    }
+
+    @Test
+    public void testReadDocumentContentVersionThumbnail() {
+        DocumentContentVersion documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
+
+        auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion);
+
+        verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
+        verify(documentThumbnailService, times(1)).generateThumbnail(documentContentVersion);
     }
 
     @Test
