@@ -55,7 +55,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/favicon.ico",
                 "/health",
                 "/mappings",
-                "/info");
+                "/info",
+                "/");
     }
 
     @Autowired
