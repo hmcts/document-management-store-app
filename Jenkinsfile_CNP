@@ -24,7 +24,7 @@ def type = "java"
 def product = "dm"
 def component = "store"
 
-def channel = '#dm-pipeline'
+def channel = '#ccd-notifications'
 
 List<LinkedHashMap<String, Object>> secrets = [
     secret('em-gateway-s2s-token', 'S2S_TOKEN')
