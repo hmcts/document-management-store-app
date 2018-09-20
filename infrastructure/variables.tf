@@ -172,3 +172,15 @@ variable "max_file_size_in_mb" {
 variable "common_tags" {
   type = "map"
 }
+
+variable "asp_name" {
+  type = "string"
+  description = "App Service Plan (ASP) to use for the webapp, 'use_shared' to make use of the shared ASP"
+  default = "use_shared"
+}
+
+variable "asp_rg" {
+  type = "string"
+  description = "App Service Plan (ASP) resource group for 'asp_name', 'use_shared' to make use of the shared resource group"
+  default = "use_shared"
+}
