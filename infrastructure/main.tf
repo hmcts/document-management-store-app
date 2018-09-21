@@ -17,10 +17,12 @@ locals {
   previewVaultName = "${var.raw_product}-aat"
   nonPreviewVaultName = "${var.raw_product}-${var.env}"
   vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
+
+  sharedAppServicePlan = "${var.raw_product}-${var.env}"
 }
 
 module "app" {
-  source = "git@github.com:hmcts/moj-module-webapp?ref=master"
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product = "${local.app_full_name}"
   location = "${var.location}"
   env = "${var.env}"
@@ -31,6 +33,8 @@ module "app" {
   additional_host_name = "${local.app_full_name}-${var.env}.service.${var.env}.platform.hmcts.net"
   https_only="false"
   common_tags  = "${var.common_tags}"
+  asp_name = "${(var.asp_name == "use_shared") ? local.sharedAppServicePlan : var.asp_name}"
+  asp_rg = "${(var.asp_rg == "use_shared") ? local.sharedResourceGroup : var.asp_rg}"
 
   app_settings = {
     POSTGRES_HOST = "${module.db.host_name}"
@@ -101,7 +105,7 @@ module "app" {
 }
 
 module "db" {
-  source = "git@github.com:hmcts/moj-module-postgres?ref=master"
+  source = "git@github.com:hmcts/cnp-module-postgres?ref=master"
   product = "${local.app_full_name}-postgres-db"
   location = "${var.location}"
   env = "${var.env}"
