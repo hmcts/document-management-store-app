@@ -157,6 +157,7 @@
         </module>
         <module name="NoFinalizer"/>
         <module name="GenericWhitespace">
+            <property name="severity" value="error"/>
             <message key="ws.followed"
                      value="GenericWhitespace ''{0}'' is followed by whitespace."/>
             <message key="ws.preceded"
