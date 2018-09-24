@@ -78,6 +78,10 @@ Another long cpe again
         <cve>CVE-2018-10054</cve>
     </suppress>
     <suppress>
+        <notes>h2database is used in testing.  It is not used in production</notes>
+        <cve>CVE-2018-14335</cve>
+    </suppress>
+    <suppress>
         <notes>spring_framework:4.3.16 vulnerability, will be fixed as part of RDM-2506 (Upgrade to Spring Boot 2)</notes>
         <cve>CVE-2018-1257</cve>
     </suppress>

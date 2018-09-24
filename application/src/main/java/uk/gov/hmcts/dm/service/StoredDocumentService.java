@@ -62,6 +62,14 @@ public class StoredDocumentService {
         return storedDocument;
     }
 
+    public Optional<StoredDocument> findOneWithBinaryData(UUID id) {
+        Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
+        if (storedDocument.isPresent() && storedDocument.get().isHardDeleted()) {
+            return Optional.empty();
+        }
+        return storedDocument;
+    }
+
     public StoredDocument save(StoredDocument storedDocument) {
         return storedDocumentRepository.save(storedDocument);
     }

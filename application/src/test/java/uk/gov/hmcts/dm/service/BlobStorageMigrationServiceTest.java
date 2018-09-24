@@ -32,7 +32,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
@@ -73,7 +76,7 @@ public class BlobStorageMigrationServiceTest {
     @Test
     public void migrateDocumentContentVersion() throws Exception {
         DocumentContentVersion doc = buildDocumentContentVersion();
-        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
         when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenReturn(is);
 
@@ -96,7 +99,7 @@ public class BlobStorageMigrationServiceTest {
         DocumentContentVersion doc = buildDocumentContentVersion();
         doc.setContentUri("Migrated");
 
-        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
         when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenReturn(is);
 
@@ -113,14 +116,14 @@ public class BlobStorageMigrationServiceTest {
 
     @Test(expected = DocumentNotFoundException.class)
     public void migrateNonExistentDocument() {
-        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.empty());
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.empty());
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
     }
 
     @Test(expected = DocumentContentVersionNotFoundException.class)
     public void migrateDocumentWithNonExistentDocumentContentVersion() {
-        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
 
         UUID invalidDocumentContentVersionId = UUID.randomUUID();
         underTest.migrateDocumentContentVersion(documentUuid, invalidDocumentContentVersionId);
@@ -128,7 +131,7 @@ public class BlobStorageMigrationServiceTest {
 
     @Test(expected = DocumentContentVersionNotFoundException.class)
     public void migrateNonExistentDocumentContentVersion() throws Exception {
-        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
         when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(null);
         when(data.getBinaryStream()).thenReturn(is);
 
@@ -144,7 +147,7 @@ public class BlobStorageMigrationServiceTest {
     public void migrateThrowsExceptionOnUploadingTheBlob() throws Exception {
 
         DocumentContentVersion doc = buildDocumentContentVersion();
-        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
         when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenReturn(is);
 
@@ -161,7 +164,7 @@ public class BlobStorageMigrationServiceTest {
     public void migrateThrowsCantReadDocumentContentVersionBinaryException() throws Exception {
 
         DocumentContentVersion doc = buildDocumentContentVersion();
-        when(storedDocumentService.findOne(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
         when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(doc);
         when(data.getBinaryStream()).thenThrow(new SQLException());
 
@@ -184,12 +187,6 @@ public class BlobStorageMigrationServiceTest {
         storedDocument.setDocumentContentVersions(singletonList(buildDocumentContentVersion(documentContentVersionUuid,
                                                                                             storedDocument)));
         return storedDocument;
-    }
-
-    private StoredDocument createStoredDocument(boolean deleted) {
-        StoredDocument storedDoc = new StoredDocument();
-        storedDoc.setDeleted(deleted);
-        return storedDoc;
     }
 
     private DocumentContentVersion buildDocumentContentVersion() {
