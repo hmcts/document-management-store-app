@@ -4,6 +4,7 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,8 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.UUID;
+
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 @Slf4j
 @Service
@@ -42,7 +45,7 @@ public class BlobStorageWriteService {
                                    DocumentContentVersion documentContentVersion,
                                    MultipartFile multiPartFile) {
         try {
-            CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
+            CloudBlockBlob blob = getCloudFile(defaultIfNull(documentContentVersion.getId(), UUID.randomUUID());
             blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
             documentContentVersion.setContentUri(blob.getUri().toString());
             log.debug("Uploaded content for document id: {} documentContentVersion id {}",
