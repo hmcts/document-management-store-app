@@ -4,7 +4,6 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +17,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
+import static java.lang.String.format;
+import static java.util.UUID.randomUUID;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 @Slf4j
@@ -45,7 +46,7 @@ public class BlobStorageWriteService {
                                    DocumentContentVersion documentContentVersion,
                                    MultipartFile multiPartFile) {
         try {
-            CloudBlockBlob blob = getCloudFile(defaultIfNull(documentContentVersion.getId(), UUID.randomUUID());
+            CloudBlockBlob blob = getCloudFile(getUniqueBlobId(documentContentVersion));
             blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
             documentContentVersion.setContentUri(blob.getUri().toString());
             log.debug("Uploaded content for document id: {} documentContentVersion id {}",
@@ -57,7 +58,14 @@ public class BlobStorageWriteService {
         }
     }
 
-    private CloudBlockBlob getCloudFile(UUID uuid) throws StorageException, URISyntaxException {
-        return cloudBlobContainer.getBlockBlobReference(uuid.toString());
+    private String getUniqueBlobId(final DocumentContentVersion documentContentVersion) {
+        return format("%s-%s-%s",
+                      randomUUID(),
+                      defaultIfNull(documentContentVersion.getStoredDocument().getId(), randomUUID()),
+                      defaultIfNull(documentContentVersion.getId(), randomUUID()));
+    }
+
+    private CloudBlockBlob getCloudFile(String id) throws StorageException, URISyntaxException {
+        return cloudBlobContainer.getBlockBlobReference(id);
     }
 }

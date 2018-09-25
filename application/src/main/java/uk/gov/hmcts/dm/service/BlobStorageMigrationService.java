@@ -23,6 +23,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.lang.String.format;
+import static java.util.UUID.randomUUID;
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
@@ -73,7 +76,7 @@ public class BlobStorageMigrationService {
 
     private void uploadBinaryStream(UUID documentId, DocumentContentVersion dcv) {
         try {
-            CloudBlockBlob cloudBlockBlob = getCloudFile(dcv.getId());
+            CloudBlockBlob cloudBlockBlob = getCloudFile(getUniqueBlobId(dcv));
             Blob data = dcv.getDocumentContent().getData();
             cloudBlockBlob.upload(data.getBinaryStream(), dcv.getSize());
             dcv.setContentUri(cloudBlockBlob.getUri().toString());
@@ -85,7 +88,14 @@ public class BlobStorageMigrationService {
         }
     }
 
-    private CloudBlockBlob getCloudFile(UUID uuid) throws StorageException, URISyntaxException {
-        return cloudBlobContainer.getBlockBlobReference(uuid.toString());
+    private String getUniqueBlobId(final DocumentContentVersion documentContentVersion) {
+        return format("%s-%s-%s",
+                      randomUUID(),
+                      defaultIfNull(documentContentVersion.getStoredDocument().getId(), randomUUID()),
+                      defaultIfNull(documentContentVersion.getId(), randomUUID()));
+    }
+
+    private CloudBlockBlob getCloudFile(String id) throws StorageException, URISyntaxException {
+        return cloudBlobContainer.getBlockBlobReference(id);
     }
 }

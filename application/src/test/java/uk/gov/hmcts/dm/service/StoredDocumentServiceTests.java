@@ -42,6 +42,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -193,7 +194,7 @@ public class StoredDocumentServiceTests {
         assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
         assertEquals(storedDocument.getClassification(), PRIVATE);
         assertEquals(storedDocument.getMetadata(), ImmutableMap.of("prop1", "value1"));
-        Assert.assertNotNull(storedDocument.getTtl());
+        assertNotNull(storedDocument.getTtl());
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
         assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
     }
