@@ -1,8 +1,5 @@
 package uk.gov.hmcts.dm.componenttests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContent;
@@ -11,7 +8,6 @@ import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -33,35 +29,11 @@ public class TestUtil {
         }
     }
 
-    public static final MockMultipartFile TEST_FILE;
+    public static final MockMultipartFile TEST_FILE = new MockMultipartFile("file", "filename.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
 
-    static {
-        try {
-            TEST_FILE = new MockMultipartFile("file", "filename.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final MockMultipartFile TEST_FILE_EXE = new MockMultipartFile("file", "filename.exe", "application/octet-stream", "some xml".getBytes(StandardCharsets.UTF_8));
 
-    public static final MockMultipartFile TEST_FILE_EXE;
-
-    static {
-        try {
-            TEST_FILE_EXE = new MockMultipartFile("file", "filename.exe", "application/octet-stream", "some xml".getBytes(StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static final MockMultipartFile TEST_FILE_WITH_FUNNY_NAME;
-
-    static {
-        try {
-            TEST_FILE_WITH_FUNNY_NAME = new MockMultipartFile("file", "filename!@£$%^&*()<>.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static final MockMultipartFile TEST_FILE_WITH_FUNNY_NAME = new MockMultipartFile("file", "filename!@£$%^&*()<>.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
 
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
     public static final MediaType MULTIPART_FORM_DATA = new MediaType(MediaType.MULTIPART_FORM_DATA.getType(), MediaType.MULTIPART_FORM_DATA.getSubtype());
@@ -112,15 +84,5 @@ public class TestUtil {
         .build();
 
     private TestUtil() {}
-
-    public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
-        ObjectMapper om = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return om.writeValueAsBytes(object);
-    }
-
-    public static String convertObjectToJsonString(Object object) throws IOException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        return ow.writeValueAsString(object);
-    }
 
 }
