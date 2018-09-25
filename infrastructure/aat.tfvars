@@ -1,5 +1,9 @@
-capacity = "2"
 java_opts = ""
+
+// Webapp
+capacity = "2"
+asp_name = "dm-store-aat"
+asp_rg = "dm-store-aat"
 
 ////////////////////////////////////////////////
 // Endpoints
