@@ -36,10 +36,8 @@ public class DocumentContent {
     @JsonIgnore
     @Getter
     @Setter
-    //@Lob
     @Basic(fetch = FetchType.LAZY)
     @Type(type = "BlobDataUserType")
-    @Column(name = "data")
     private Blob data;
 
     @OneToOne

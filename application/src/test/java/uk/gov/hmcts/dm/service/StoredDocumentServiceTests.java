@@ -2,10 +2,11 @@ package uk.gov.hmcts.dm.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Sets;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -14,6 +15,7 @@ import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
+import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
@@ -22,7 +24,6 @@ import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-import uk.gov.hmcts.dm.security.Classifications;
 
 import java.sql.Blob;
 import java.util.Arrays;
@@ -33,11 +34,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -46,8 +49,11 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
+import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
 
 /**
@@ -58,25 +64,39 @@ import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
 public class StoredDocumentServiceTests {
 
     @Mock
-    StoredDocumentRepository storedDocumentRepository;
+    private StoredDocumentRepository storedDocumentRepository;
 
     @Mock
-    DocumentContentVersionRepository documentContentVersionRepository;
+    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    DocumentContentRepository documentContentRepository;
+    private DocumentContentRepository documentContentRepository;
 
     @Mock
-    FolderRepository folderRepository;
+    private ToggleConfiguration toggleConfiguration;
 
     @Mock
-    ToggleConfiguration toggleConfiguration;
+    private FolderRepository folderRepository;
 
     @Mock
-    SecurityUtilService securityUtilService;
+    private BlobStorageWriteService blobStorageWriteService;
+
+    @Mock
+    private BlobStorageDeleteService blobStorageDeleteService;
+
+    @Mock
+    private SecurityUtilService securityUtilService;
+
+    @Mock
+    private AzureStorageConfiguration azureStorageConfiguration;
 
     @InjectMocks
-    StoredDocumentService storedDocumentService;
+    private StoredDocumentService storedDocumentService;
+
+    @Before
+    public void setUp() {
+        when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
+    }
 
     @Test
     public void testFindOne() {
@@ -127,30 +147,29 @@ public class StoredDocumentServiceTests {
         verify(storedDocumentRepository).save(storedDocument);
     }
 
-
     @Test
     public void testSaveItemsWithCommand() {
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
-        uploadDocumentsCommand.setFiles(singletonList(TestUtil.TEST_FILE));
+        uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
         uploadDocumentsCommand.setRoles(ImmutableList.of("a", "b"));
-        uploadDocumentsCommand.setClassification(Classifications.PRIVATE);
+        uploadDocumentsCommand.setClassification(PRIVATE);
         uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
+        when(storedDocumentRepository.save(any(StoredDocument.class))).thenReturn(new StoredDocument());
         List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand);
 
         final StoredDocument storedDocument = documents.get(0);
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
 
-        Assert.assertEquals(1, documents.size());
-        Assert.assertEquals(storedDocument.getRoles(), Sets.newHashSet("a", "b"));
-        Assert.assertEquals(storedDocument.getClassification(), Classifications.PRIVATE);
+        assertEquals(1, documents.size());
+        assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
+        assertEquals(storedDocument.getClassification(), PRIVATE);
         Assert.assertNull(storedDocument.getMetadata());
         Assert.assertNull(storedDocument.getTtl());
-        Assert.assertEquals(TestUtil.TEST_FILE.getContentType(), latestVersion.getMimeType());
-        Assert.assertEquals(TestUtil.TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+        assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
+        assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
     }
-
 
     @Test
     public void testSaveItemsWithCommandAndToggleConfiguration() {
@@ -159,9 +178,9 @@ public class StoredDocumentServiceTests {
         when(toggleConfiguration.isTtl()).thenReturn(true);
 
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
-        uploadDocumentsCommand.setFiles(singletonList(TestUtil.TEST_FILE));
+        uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
         uploadDocumentsCommand.setRoles(ImmutableList.of("a", "b"));
-        uploadDocumentsCommand.setClassification(Classifications.PRIVATE);
+        uploadDocumentsCommand.setClassification(PRIVATE);
         uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
@@ -170,24 +189,41 @@ public class StoredDocumentServiceTests {
         final StoredDocument storedDocument = documents.get(0);
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
 
-        Assert.assertEquals(1, documents.size());
-        Assert.assertEquals(storedDocument.getRoles(), Sets.newHashSet("a","b"));
-        Assert.assertEquals(storedDocument.getClassification(), Classifications.PRIVATE);
-        Assert.assertEquals(storedDocument.getMetadata(), ImmutableMap.of("prop1", "value1"));
+        assertEquals(1, documents.size());
+        assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
+        assertEquals(storedDocument.getClassification(), PRIVATE);
+        assertEquals(storedDocument.getMetadata(), ImmutableMap.of("prop1", "value1"));
         Assert.assertNotNull(storedDocument.getTtl());
-        Assert.assertEquals(TestUtil.TEST_FILE.getContentType(), latestVersion.getMimeType());
-        Assert.assertEquals(TestUtil.TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+        assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
+        assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
     }
 
     @Test
     public void testSaveItems() {
-        List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TestUtil.TEST_FILE));
+        List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TEST_FILE));
 
         final DocumentContentVersion latestVersion = documents.get(0).getDocumentContentVersions().get(0);
 
-        Assert.assertEquals(1, documents.size());
-        Assert.assertEquals(TestUtil.TEST_FILE.getContentType(), latestVersion.getMimeType());
-        Assert.assertEquals(TestUtil.TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+        assertEquals(1, documents.size());
+        assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
+        assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+        verifyNoMoreInteractions(blobStorageWriteService);
+    }
+
+    @Test
+    public void testSaveItemsToAzure() {
+        setupStorageOptions(true, false);
+
+        List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TEST_FILE));
+
+        assertEquals(1, documents.size());
+
+        final DocumentContentVersion latestVersion = documents.get(0).getDocumentContentVersions().get(0);
+
+        assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
+        assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+
+        verify(blobStorageWriteService).uploadDocumentContentVersion(documents.get(0), latestVersion, TEST_FILE);
     }
 
     @Test
@@ -195,7 +231,7 @@ public class StoredDocumentServiceTests {
         StoredDocument storedDocument = new StoredDocument();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
-            storedDocument, TestUtil.TEST_FILE
+            storedDocument, TEST_FILE
         );
 
         assertThat(storedDocument.getDocumentContentVersions().size(), equalTo(1));
@@ -203,8 +239,12 @@ public class StoredDocumentServiceTests {
         assertThat(documentContentVersion, notNullValue());
 
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
-        assertThat(latestVersion.getMimeType(), equalTo(TestUtil.TEST_FILE.getContentType()));
-        assertThat(latestVersion.getOriginalDocumentName(), equalTo(TestUtil.TEST_FILE.getOriginalFilename()));
+        assertThat(latestVersion.getMimeType(), equalTo(TEST_FILE.getContentType()));
+        assertThat(latestVersion.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
+
+        ArgumentCaptor<DocumentContentVersion> captor = ArgumentCaptor.forClass(DocumentContentVersion.class);
+        verify(documentContentVersionRepository).save(captor.capture());
+        assertThat(captor.getValue(), is(documentContentVersion));
     }
 
     @Test
@@ -230,6 +270,22 @@ public class StoredDocumentServiceTests {
         assertThat(storedDocumentWithContent.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
         verify(documentContentRepository).delete(documentContent);
+    }
+
+    @Test
+    public void testHardDeleteOnAzureBlobStore() {
+        DocumentContentVersion documentContentVersion =
+            DocumentContentVersion.builder().id(UUID.randomUUID()).contentUri("someUri").build();
+        StoredDocument
+            storedDocument =
+            StoredDocument.builder().documentContentVersions(ImmutableList.of(documentContentVersion)).build();
+
+        storedDocumentService.deleteDocument(storedDocument, true);
+
+        assertThat(storedDocument.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
+        verify(storedDocumentRepository, atLeastOnce()).save(storedDocument);
+        verify(blobStorageDeleteService).deleteIfExists(storedDocument.getId(), documentContentVersion);
+        verifyNoMoreInteractions(documentContentRepository);
     }
 
     @Test
@@ -259,13 +315,35 @@ public class StoredDocumentServiceTests {
     public void testSaveItemsToBucket() {
         Folder folder = new Folder();
 
-        storedDocumentService.saveItemsToBucket(folder, Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()));
+        storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
 
         assertThat(folder.getStoredDocuments().size(), equalTo(1));
 
         final DocumentContentVersion latestVersionInFolder = folder.getStoredDocuments().get(0).getDocumentContentVersions().get(0);
-        assertThat(latestVersionInFolder.getMimeType(), equalTo(TestUtil.TEST_FILE.getContentType()));
-        assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TestUtil.TEST_FILE.getOriginalFilename()));
+
+        assertThat(latestVersionInFolder.getMimeType(), equalTo(TEST_FILE.getContentType()));
+        assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
+        verify(securityUtilService).getUserId();
+        verify(folderRepository).save(folder);
+        verifyNoMoreInteractions(blobStorageWriteService);
+    }
+
+    @Test
+    public void testSaveItemsToBucketToBlobStore() throws Exception {
+        Folder folder = new Folder();
+
+        setupStorageOptions(true, false);
+        storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
+
+        assertThat(folder.getStoredDocuments().size(), equalTo(1));
+
+        final DocumentContentVersion latestVersionInFolder = folder.getStoredDocuments().get(0).getDocumentContentVersions().get(0);
+
+        assertThat(latestVersionInFolder.getMimeType(), equalTo(TEST_FILE.getContentType()));
+        assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
+        verify(securityUtilService).getUserId();
+        verify(folderRepository).save(folder);
+        verify(blobStorageWriteService).uploadDocumentContentVersion(folder.getStoredDocuments().get(0), latestVersionInFolder, TEST_FILE);
     }
 
     @Test
@@ -275,7 +353,7 @@ public class StoredDocumentServiceTests {
         Date newTtl = new Date();
         command.setTtl(newTtl);
         storedDocumentService.updateStoredDocument(storedDocument, command);
-        Assert.assertEquals(newTtl, storedDocument.getTtl());
+        assertEquals(newTtl, storedDocument.getTtl());
     }
 
     @Test
@@ -303,5 +381,10 @@ public class StoredDocumentServiceTests {
     @Test(expected = NullPointerException.class)
     public void testUpdateStoredDocumentNullCommand() {
         storedDocumentService.updateStoredDocument(new StoredDocument(), null);
+    }
+
+    private void setupStorageOptions(Boolean azureEnabled, Boolean postgresEnabled) {
+        when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(azureEnabled);
+        when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(postgresEnabled);
     }
 }
