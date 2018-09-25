@@ -3,8 +3,7 @@ package uk.gov.hmcts.dm.service;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,10 +17,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class BlobStorageWriteService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(BlobStorageWriteService.class);
 
     private final CloudBlobContainer cloudBlobContainer;
     private final DocumentContentVersionRepository documentContentVersionRepository;
@@ -47,10 +45,11 @@ public class BlobStorageWriteService {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
             documentContentVersion.setContentUri(blob.getUri().toString());
-            LOG.debug("Uploaded content for document id: {} documentContentVersion id {}",
+            log.debug("Uploaded content for document id: {} documentContentVersion id {}",
                       documentId,
                       documentContentVersion.getId());
         } catch (URISyntaxException | StorageException | IOException e) {
+            log.error("Exception caught with docuemntContentVersion", documentContentVersion.getId(), e);
             throw new FileStorageException(e, documentId, documentContentVersion.getId());
         }
     }
