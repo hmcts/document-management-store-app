@@ -44,7 +44,7 @@ variable "jenkins_AAD_objectId" {
 //Addtional Vars ///////////////////////////////
 ////////////////////////////////////////////////
 variable "capacity" {
-  default = "2"
+  default = "1"
 }
 
 variable "java_opts" {
