@@ -2,6 +2,8 @@ java_opts = ""
 
 // Webapp
 capacity = "1"
+asp_name = "dm-store-sandbox"
+asp_rg = "dm-store-sandbox"
 
 ////////////////////////////////////////////////
 // Endpoints
