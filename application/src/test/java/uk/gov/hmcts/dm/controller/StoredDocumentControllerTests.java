@@ -158,8 +158,13 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     @Test
     public void testGetBinary() throws Exception {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
-            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
-            "user");
+                                                                                   new MockMultipartFile("files",
+                                                                                                         "filename.txt",
+                                                                                                         "text/plain",
+                                                                                                         "hello".getBytes(
+                                                                                                             StandardCharsets.UTF_8)),
+                                                                                   "user",
+                                                                                   false);
 
         documentContentVersion.setCreatedBy("userId");
 

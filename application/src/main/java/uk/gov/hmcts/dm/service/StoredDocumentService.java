@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
+import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -42,7 +43,16 @@ public class StoredDocumentService {
     private ToggleConfiguration toggleConfiguration;
 
     @Autowired
+    private AzureStorageConfiguration azureStorageConfiguration;
+
+    @Autowired
     private SecurityUtilService securityUtilService;
+
+    @Autowired
+    private BlobStorageWriteService blobStorageWriteService;
+
+    @Autowired
+    private BlobStorageDeleteService blobStorageDeleteService;
 
     public Optional<StoredDocument> findOne(UUID id) {
         Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
@@ -60,8 +70,8 @@ public class StoredDocumentService {
         return storedDocument;
     }
 
-    public void save(StoredDocument storedDocument) {
-        storedDocumentRepository.save(storedDocument);
+    public StoredDocument save(StoredDocument storedDocument) {
+        return storedDocumentRepository.save(storedDocument);
     }
 
     public void saveItemsToBucket(Folder folder, List<MultipartFile> files)  {
@@ -71,8 +81,19 @@ public class StoredDocumentService {
             storedDocument.setFolder(folder);
             storedDocument.setCreatedBy(userId);
             storedDocument.setLastModifiedBy(userId);
-            storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, userId));
-            storedDocumentRepository.save(storedDocument);
+            final DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
+                                                                                             aFile,
+                                                                                             userId,
+                                                                                             azureStorageConfiguration
+                                                                                                 .isPostgresBlobStorageEnabled());
+            storedDocument.getDocumentContentVersions().add(documentContentVersion);
+
+            if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
+                blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+                                                                     documentContentVersion,
+                                                                     aFile);
+            }
+            save(storedDocument);
             return storedDocument;
 
         }).collect(Collectors.toList());
@@ -98,7 +119,18 @@ public class StoredDocumentService {
             if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
-            document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, userId));
+
+            DocumentContentVersion documentContentVersion = new DocumentContentVersion(document,
+                                                                                       file,
+                                                                                       userId,
+                                                                                       azureStorageConfiguration
+                                                                                           .isPostgresBlobStorageEnabled());
+            document.getDocumentContentVersions().add(documentContentVersion);
+            if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
+                blobStorageWriteService.uploadDocumentContentVersion(document,
+                                                                     documentContentVersion,
+                                                                     file);
+            }
             save(document);
             return document;
         }).collect(Collectors.toList());
@@ -112,8 +144,11 @@ public class StoredDocumentService {
     }
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
-        String userId = securityUtilService.getUserId();
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument, file, userId);
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
+                                                                                   file,
+                                                                                   securityUtilService.getUserId(),
+                                                                                   azureStorageConfiguration
+                                                                                       .isPostgresBlobStorageEnabled());
         documentContentVersionRepository.save(documentContentVersion);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
@@ -124,11 +159,15 @@ public class StoredDocumentService {
         if (permanent) {
             storedDocument.setHardDeleted(true);
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
-                documentContentRepository.delete(documentContentVersion.getDocumentContent());
-                documentContentVersion.setDocumentContent(null);
+                Optional.ofNullable(documentContentVersion.getDocumentContent())
+                        .ifPresent(dc -> {
+                            documentContentRepository.delete(dc);
+                            documentContentVersion.setDocumentContent(null);
+                        });
+                blobStorageDeleteService.deleteIfExists(storedDocument.getId(), documentContentVersion);
             });
         }
-        storedDocumentRepository.save(storedDocument);
+        save(storedDocument);
     }
 
     public void updateStoredDocument(@NonNull StoredDocument storedDocument, @NonNull UpdateDocumentCommand command) {
