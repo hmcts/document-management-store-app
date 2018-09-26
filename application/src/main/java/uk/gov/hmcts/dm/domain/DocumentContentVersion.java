@@ -103,23 +103,41 @@ public class DocumentContentVersion implements RolesAware {
     @Column(name = "content_uri")
     private String contentUri;
 
-    public DocumentContentVersion(StoredDocument item, MultipartFile file, String userId) {
+    @Getter
+    @Setter
+    @Column(name = "content_checksum")
+    private String contentChecksum;
+
+    public DocumentContentVersion(StoredDocument item,
+                                  MultipartFile file,
+                                  String userId,
+                                  final boolean isPostgresBlobStoreEnabled) {
         this.mimeType = file.getContentType();
         setOriginalDocumentName(file.getOriginalFilename());
         this.size = file.getSize();
-        try {
-            this.documentContent = new DocumentContent(this, new PassThroughBlob(file));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (isPostgresBlobStoreEnabled) {
+            try {
+                this.documentContent = new DocumentContent(this, new PassThroughBlob(file));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         this.storedDocument = item;
         this.setCreatedBy(userId);
     }
 
-    public DocumentContentVersion(UUID id, String mimeType, String originalDocumentName, String createdBy, String createdByService,
-                                  Date createdOn, DocumentContent documentContent,
-                                  StoredDocument storedDocument, Set<DocumentContentVersionAuditEntry> auditEntries,
-                                  Long size, String contentUri) {
+    public DocumentContentVersion(UUID id,
+                                  String mimeType,
+                                  String originalDocumentName,
+                                  String createdBy,
+                                  String createdByService,
+                                  Date createdOn,
+                                  DocumentContent documentContent,
+                                  StoredDocument storedDocument,
+                                  Set<DocumentContentVersionAuditEntry> auditEntries,
+                                  Long size,
+                                  String contentUri,
+                                  String contentChecksum) {
         this.id = id;
         this.mimeType = mimeType;
         setOriginalDocumentName(originalDocumentName);
@@ -131,6 +149,7 @@ public class DocumentContentVersion implements RolesAware {
         this.auditEntries = auditEntries;
         this.size = size;
         this.contentUri = contentUri;
+        this.contentChecksum = contentChecksum;
     }
 
     public Date getCreatedOn() {

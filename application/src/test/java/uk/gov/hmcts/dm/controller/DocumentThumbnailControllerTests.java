@@ -85,10 +85,9 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
             .andExpect(status().isNotFound());
     }
 
-
     @Test
     public void testGetThumbnail() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(), new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)), "user");
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(), new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)), "user", false);
 
         documentContentVersion.setCreatedBy("userId");
 
@@ -102,7 +101,6 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
             .get("/documents/" + id + "/thumbnail")
             .andExpect(status().isOk());
     }
-
 
     @Test
     public void testGetThumbnailThatDoesNotExist() throws Exception {
