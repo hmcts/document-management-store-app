@@ -24,8 +24,6 @@ def type = "java"
 def product = "dm"
 def component = "store"
 
-def channel = '#ccd-notifications'
-
 List<LinkedHashMap<String, Object>> secrets = [
     secret('em-gateway-s2s-token', 'S2S_TOKEN')
 ]
@@ -40,8 +38,18 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 withPipeline(type , product, component) {
-    enableSlackNotifications(channel)
+    onMaster {
+        enableSlackNotifications('#ccd-master-builds')
+    }
+    onDemo {
+        enableSlackNotifications('#ccd-demo-builds')
+    }
+    onPR {
+        enableSlackNotifications('#ccd-pr-builds')
+    }
+
     enableDbMigration()
+
     loadVaultSecrets(secrets)
 
     after('checkout') {
