@@ -46,6 +46,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
@@ -58,25 +59,31 @@ import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
 public class StoredDocumentServiceTests {
 
     @Mock
-    StoredDocumentRepository storedDocumentRepository;
+    private StoredDocumentRepository storedDocumentRepository;
 
     @Mock
-    DocumentContentVersionRepository documentContentVersionRepository;
+    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    DocumentContentRepository documentContentRepository;
+    private DocumentContentRepository documentContentRepository;
 
     @Mock
-    FolderRepository folderRepository;
+    private FolderRepository folderRepository;
 
     @Mock
-    ToggleConfiguration toggleConfiguration;
+    private ToggleConfiguration toggleConfiguration;
 
     @Mock
-    SecurityUtilService securityUtilService;
+    private SecurityUtilService securityUtilService;
+
+    @Mock
+    private BlobStorageWriteService blobStorageWriteService;
+
+    @Mock
+    private BlobStorageDeleteService blobStorageDeleteService;
 
     @InjectMocks
-    StoredDocumentService storedDocumentService;
+    private StoredDocumentService storedDocumentService;
 
     @Test
     public void testFindOne() {
@@ -137,6 +144,7 @@ public class StoredDocumentServiceTests {
         uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
+        when(storedDocumentRepository.save(any(StoredDocument.class))).thenReturn(new StoredDocument());
         List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand);
 
         final StoredDocument storedDocument = documents.get(0);
@@ -230,6 +238,22 @@ public class StoredDocumentServiceTests {
         assertThat(storedDocumentWithContent.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
         verify(documentContentRepository).delete(documentContent);
+    }
+
+    @Test
+    public void testHardDeleteOnAzureBlobStore() {
+        DocumentContentVersion documentContentVersion =
+            DocumentContentVersion.builder().id(UUID.randomUUID()).contentUri("someUri").build();
+        StoredDocument
+            storedDocument =
+            StoredDocument.builder().documentContentVersions(ImmutableList.of(documentContentVersion)).build();
+
+        storedDocumentService.deleteDocument(storedDocument, true);
+
+        assertThat(storedDocument.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
+        verify(storedDocumentRepository, atLeastOnce()).save(storedDocument);
+        verify(blobStorageDeleteService).delete(storedDocument.getId(), documentContentVersion);;
+        verifyNoMoreInteractions(documentContentRepository);
     }
 
     @Test

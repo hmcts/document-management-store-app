@@ -44,6 +44,12 @@ public class StoredDocumentService {
     @Autowired
     private SecurityUtilService securityUtilService;
 
+    @Autowired
+    private BlobStorageWriteService blobStorageWriteService;
+
+    @Autowired
+    private BlobStorageDeleteService blobStorageDeleteService;
+
     public Optional<StoredDocument> findOne(UUID id) {
         Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
         if (storedDocument.isPresent() && storedDocument.get().isDeleted()) {
@@ -60,8 +66,8 @@ public class StoredDocumentService {
         return storedDocument;
     }
 
-    public void save(StoredDocument storedDocument) {
-        storedDocumentRepository.save(storedDocument);
+    public StoredDocument save(StoredDocument storedDocument) {
+        return storedDocumentRepository.save(storedDocument);
     }
 
     public void saveItemsToBucket(Folder folder, List<MultipartFile> files)  {
@@ -72,7 +78,12 @@ public class StoredDocumentService {
             storedDocument.setCreatedBy(userId);
             storedDocument.setLastModifiedBy(userId);
             storedDocument.getDocumentContentVersions().add(new DocumentContentVersion(storedDocument, aFile, userId));
-            storedDocumentRepository.save(storedDocument);
+
+            save(storedDocument);
+            storedDocument.getDocumentContentVersions()
+                    .stream()
+                    .forEach(dcv -> blobStorageWriteService.uploadDocumentContentVersion( storedDocument, dcv, aFile))
+                    ;
             return storedDocument;
 
         }).collect(Collectors.toList());
@@ -100,6 +111,10 @@ public class StoredDocumentService {
             }
             document.getDocumentContentVersions().add(new DocumentContentVersion(document, file, userId));
             save(document);
+            document.getDocumentContentVersions()
+                    .stream()
+                    .forEach(dcv -> blobStorageWriteService.uploadDocumentContentVersion( document, dcv, file))
+            ;
             return document;
         }).collect(Collectors.toList());
 
@@ -124,8 +139,12 @@ public class StoredDocumentService {
         if (permanent) {
             storedDocument.setHardDeleted(true);
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
-                documentContentRepository.delete(documentContentVersion.getDocumentContent());
-                documentContentVersion.setDocumentContent(null);
+                Optional.ofNullable(documentContentVersion.getDocumentContent())
+                        .ifPresent(dc -> {
+                            documentContentRepository.delete(dc);
+                            documentContentVersion.setDocumentContent(null);
+                        });
+                blobStorageDeleteService.delete(storedDocument.getId(), documentContentVersion);
             });
         }
         storedDocumentRepository.save(storedDocument);
