@@ -22,9 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by pawel on 09/08/2017.
@@ -110,12 +108,11 @@ public class AuditedStoredDocumentOperationsServiceTests {
 
     @Test
     public void testDeleteNullStoredDocument() {
-        StoredDocument storedDocument = null;
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
-        verify(storedDocumentService, times(0)).deleteDocument(storedDocument, false);
-        verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.DELETED);
+        verifyNoMoreInteractions(storedDocumentService);
+        verifyNoMoreInteractions(auditEntryService);
     }
 
     @Test
