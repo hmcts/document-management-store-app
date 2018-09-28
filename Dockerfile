@@ -7,7 +7,7 @@ ENV APPLICATION_SIZE_ON_DISK_IN_MB 86
 
 ENV JAVA_OPTS ""
 
-COPY application/build/install/application/lib/$APP /opt/app/
+COPY build/libs/$APP /opt/app/
 
 HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" curl --silent --fail http://localhost:8080/health
 
