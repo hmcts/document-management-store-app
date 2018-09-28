@@ -6,3 +6,4 @@
 !functionalTests
 !performanceTests
 !smokeTests
+!build/libs/**
