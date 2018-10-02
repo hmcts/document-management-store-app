@@ -1,2 +1,0 @@
-// Webapp
-capacity = "1"
