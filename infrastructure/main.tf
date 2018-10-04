@@ -99,6 +99,9 @@ module "app" {
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
 
+    ENABLE_AZURE_STORAGE_CONTAINER = "${var.enable_azure_storage_container}"
+    ENABLE_POSTGRES_BLOB_STORAGE = "${var.enable_postgres_blob_storage}"
+
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_primary_connection_string.value}"
     STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_secondary_connection_string.value}"
