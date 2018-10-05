@@ -151,7 +151,6 @@ public class StoredDocumentService {
                 documentContentVersion,
                 file);
         }
-
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
     }
