@@ -146,6 +146,11 @@ public class StoredDocumentService {
                                                                                    azureStorageConfiguration
                                                                                        .isPostgresBlobStorageEnabled());
         documentContentVersionRepository.save(documentContentVersion);
+        if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
+            blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+                documentContentVersion,
+                file);
+        }
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
     }
