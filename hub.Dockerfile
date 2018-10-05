@@ -18,9 +18,7 @@ RUN gradle installDist
 
 #### Actual DockerFile
 FROM openjdk:8-jre
-
-MAINTAINER "HMCTS Evidence Team <https://github.com/hmcts>"
-LABEL maintainer = "HMCTS Evidence Team <https://github.com/hmcts>"
+LABEL maintainer="https://github.com/hmcts/document-management-store-api"
 
 WORKDIR /opt/app
 COPY --from=builder /home/gradle/app/application/build/install/application .
