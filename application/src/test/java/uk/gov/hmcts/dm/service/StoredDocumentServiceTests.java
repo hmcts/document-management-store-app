@@ -52,9 +52,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
 
 /**
  * Created by pawel on 11/07/2017.
@@ -225,11 +225,12 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testAddStoredDocumentVersion() {
+
+        setupStorageOptions(false, true);
         StoredDocument storedDocument = new StoredDocument();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
-            storedDocument, TEST_FILE
-                                                                                                      );
+            storedDocument, TEST_FILE);
 
         assertThat(storedDocument.getDocumentContentVersions().size(), equalTo(1));
 
@@ -241,6 +242,28 @@ public class StoredDocumentServiceTests {
 
         ArgumentCaptor<DocumentContentVersion> captor = ArgumentCaptor.forClass(DocumentContentVersion.class);
         verify(documentContentVersionRepository).save(captor.capture());
+        assertThat(captor.getValue(), is(documentContentVersion));
+    }
+
+    @Test
+    public void testAddStoredDocumentVersionWhenAzureBlobStoreEnabled() {
+
+        setupStorageOptions(true, false);
+        StoredDocument storedDocument = new StoredDocument();
+
+        DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
+            storedDocument, TEST_FILE);
+
+        assertThat(storedDocument.getDocumentContentVersions().size(), equalTo(1));
+        assertThat(documentContentVersion, notNullValue());
+
+        final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
+        assertThat(latestVersion.getMimeType(), equalTo(TEST_FILE.getContentType()));
+        assertThat(latestVersion.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
+
+        ArgumentCaptor<DocumentContentVersion> captor = ArgumentCaptor.forClass(DocumentContentVersion.class);
+        verify(documentContentVersionRepository).save(captor.capture());
+        verify(blobStorageWriteService).uploadDocumentContentVersion(storedDocument, documentContentVersion, TEST_FILE);
         assertThat(captor.getValue(), is(documentContentVersion));
     }
 
