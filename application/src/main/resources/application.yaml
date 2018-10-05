@@ -81,11 +81,11 @@ azure:
   storage:
       connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=https;AccountName=yourAccountName;AccountKey=DmfyEajwVWcioSbjJWaR+EHYfP88CI2OScLlJGIQkmHTikiFwn1o2MHHysnyHgh586wKaP5fH9WrzWWjUZmv9uOa;EndpointSuffix=core.windows.net}
       blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:dm-docstore-sandbox}
-      enabled: ${STORAGE_CONTAINER_ENABLED:false}
+      enabled: ${STORAGE_CONTAINER_ENABLED:true}
 
 postgres:
   storage:
-    enabled: ${POSTGRES_BLOB_STORAGE_ENABLED:true}
+    enabled: ${POSTGRES_BLOB_STORAGE_ENABLED:false}
 
 app-insights:
   dev-mode: off
