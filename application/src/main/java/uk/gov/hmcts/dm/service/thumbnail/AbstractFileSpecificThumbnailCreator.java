@@ -8,9 +8,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.sql.SQLException;
 import java.util.Locale;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -26,21 +28,13 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
     @Override
     public InputStream getThumbnail(DocumentContentVersion documentContentVersion) {
         try {
-            InputStream inputStream;
+            BufferedImage bufferedImage;
             if (isBlank(documentContentVersion.getContentUri())) {
-                inputStream = documentContentVersion.getDocumentContent().getData().getBinaryStream();
+                bufferedImage = getImgFromPostgres(documentContentVersion);
             } else {
-                // Pipe blob store output into thumbnail creator input
-                final PipedInputStream in = new PipedInputStream();
-                final PipedOutputStream out = new PipedOutputStream(in);
-
-                Thread loadThread = new Thread(() -> blobStorageReadService.loadBlob(documentContentVersion, out));
-                loadThread.start();
-
-                inputStream = in;
+                bufferedImage = getImgFromAzureBlobStore(documentContentVersion);
             }
 
-            BufferedImage bufferedImage = getImg(inputStream);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, ThumbnailFormats.JPG.toString().toLowerCase(Locale.UK), os);
             return new ByteArrayInputStream(os.toByteArray());
@@ -50,5 +44,22 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
     }
 
     abstract BufferedImage getImg(InputStream inputStream);
+
+    private BufferedImage getImgFromPostgres(DocumentContentVersion documentContentVersion) throws SQLException {
+        InputStream inputStream = documentContentVersion.getDocumentContent().getData().getBinaryStream();
+        return getImg(inputStream);
+    }
+
+    private BufferedImage getImgFromAzureBlobStore(DocumentContentVersion documentContentVersion) throws IOException {
+        // Pipe blob store output into thumbnail creator input
+        try (
+            final PipedInputStream in = new PipedInputStream();
+            final PipedOutputStream out = new PipedOutputStream(in)) {
+            Thread loadThread = new Thread(() -> blobStorageReadService.loadBlob(documentContentVersion, out));
+            loadThread.start();
+
+            return getImg(in);
+        }
+    }
 
 }
