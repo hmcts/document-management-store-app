@@ -189,7 +189,9 @@
             <property name="tokens" value="COMMA, SEMI, POST_INC, POST_DEC, DOT, ELLIPSIS, METHOD_REF"/>
             <property name="allowLineBreaks" value="true"/>
         </module>
-        <module name="ParenPad"/>
+        <module name="ParenPad">
+            <property name="severity" value="error"/>
+        </module>
         <module name="OperatorWrap">
             <property name="option" value="NL"/>
             <property name="tokens" value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR, METHOD_REF "/>
