@@ -14,10 +14,14 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.sql.SQLException;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailCreator {
+
+    private static final Logger LOGGER = Logger.getLogger(AbstractFileSpecificThumbnailCreator.class.getName());
 
     private final BlobStorageReadService blobStorageReadService;
 
@@ -60,7 +64,7 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
                     blobStorageReadService.loadBlob(documentContentVersion, out);
                     out.flush();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.log(Level.WARNING, "Error while loading blob", e);
                 }
             });
             loadThread.start();
