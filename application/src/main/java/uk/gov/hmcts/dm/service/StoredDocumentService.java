@@ -73,24 +73,20 @@ public class StoredDocumentService {
 
     public void saveItemsToBucket(Folder folder, List<MultipartFile> files)  {
         String userId = securityUtilService.getUserId();
-        List<StoredDocument> items = files.stream().map(aFile -> {
+        List<StoredDocument> items = files.stream().map(file -> {
             StoredDocument storedDocument = new StoredDocument();
             storedDocument.setFolder(folder);
             storedDocument.setCreatedBy(userId);
             storedDocument.setLastModifiedBy(userId);
             final DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
-                                                                                             aFile,
+                                                                                             file,
                                                                                              userId,
                                                                                              azureStorageConfiguration
                                                                                                  .isPostgresBlobStorageEnabled());
             storedDocument.getDocumentContentVersions().add(documentContentVersion);
 
             save(storedDocument);
-            if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
-                blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
-                                                                     documentContentVersion,
-                                                                     aFile);
-            }
+            storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
             return storedDocument;
 
         }).collect(Collectors.toList());
@@ -123,11 +119,7 @@ public class StoredDocumentService {
                                                                                            .isPostgresBlobStorageEnabled());
             document.getDocumentContentVersions().add(documentContentVersion);
             save(document);
-            if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
-                blobStorageWriteService.uploadDocumentContentVersion(document,
-                                                                     documentContentVersion,
-                                                                     file);
-            }
+            storeInAzureBlobStorage(document, documentContentVersion, file);
             return document;
         }).collect(Collectors.toList());
 
@@ -146,11 +138,7 @@ public class StoredDocumentService {
                                                                                    azureStorageConfiguration
                                                                                        .isPostgresBlobStorageEnabled());
         documentContentVersionRepository.save(documentContentVersion);
-        if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
-            blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
-                documentContentVersion,
-                file);
-        }
+        storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
     }
@@ -182,5 +170,16 @@ public class StoredDocumentService {
 
     public List<StoredDocument> findAllExpiredStoredDocuments() {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
+    }
+
+    private void storeInAzureBlobStorage(StoredDocument storedDocument,
+                                         DocumentContentVersion documentContentVersion, MultipartFile file) {
+        if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
+            String contentUri = blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+                documentContentVersion,
+                file);
+            documentContentVersion.setContentUri(contentUri);
+            documentContentVersionRepository.update(documentContentVersion.getId(), contentUri);
+        }
     }
 }
