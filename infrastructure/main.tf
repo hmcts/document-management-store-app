@@ -3,19 +3,19 @@ locals {
   ase_name = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
 
-  // Shared Resource Group
-  previewResourceGroup = "${var.raw_product}-shared-aat"
-  nonPreviewResourceGroup = "${var.raw_product}-shared-${var.env}"
+  // Shared Resource Group - CCD
+  previewResourceGroup = "${var.shared_product}-shared-aat"
+  nonPreviewResourceGroup = "${var.shared_product}-shared-${var.env}"
   sharedResourceGroup = "${(var.env == "preview" || var.env == "spreview") ? local.previewResourceGroup : local.nonPreviewResourceGroup}"
 
   // Storage Account
-  previewStorageAccountName = "${var.raw_product}sharedaat"
-  nonPreviewStorageAccountName = "${var.raw_product}shared${var.env}"
+  previewStorageAccountName = "${var.shared_product}sharedaat"
+  nonPreviewStorageAccountName = "${var.shared_product}shared${var.env}"
   storageAccountName = "${(var.env == "preview" || var.env == "spreview") ? local.previewStorageAccountName : local.nonPreviewStorageAccountName}"
 
-  // Shared Vault
-  previewVaultName = "${var.raw_product}-aat"
-  nonPreviewVaultName = "${var.raw_product}-${var.env}"
+  // Shared Vault - CCD
+  previewVaultName = "${var.shared_product}-aat"
+  nonPreviewVaultName = "${var.shared_product}-${var.env}"
   vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 
   sharedAppServicePlan = "${var.shared_product}-${var.env}"
@@ -126,7 +126,7 @@ resource "azurerm_storage_container" "document_container" {
   container_access_type = "private"
 }
 
-data "azurerm_key_vault" "dm_shared_vault" {
+data "azurerm_key_vault" "ccd_shared_vault" {
   name = "${local.vaultName}"
   resource_group_name = "${local.sharedResourceGroup}"
 }
@@ -134,39 +134,39 @@ data "azurerm_key_vault" "dm_shared_vault" {
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name = "${local.app_full_name}-POSTGRES-USER"
   value = "${module.db.user_name}"
-  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name = "${local.app_full_name}-POSTGRES-PASS"
   value = "${module.db.postgresql_password}"
-  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   name = "${local.app_full_name}-POSTGRES-HOST"
   value = "${module.db.host_name}"
-  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
   name = "${local.app_full_name}-POSTGRES-PORT"
   value = "${module.db.postgresql_listen_port}"
-  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name = "${local.app_full_name}-POSTGRES-DATABASE"
   value = "${module.db.postgresql_database}"
-  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
 data "azurerm_key_vault_secret" "storageaccount_primary_connection_string" {
   name = "storage-account-primary-connection-string"
-  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
 data "azurerm_key_vault_secret" "storageaccount_secondary_connection_string" {
   name = "storage-account-secondary-connection-string"
-  vault_uri = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+  vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
