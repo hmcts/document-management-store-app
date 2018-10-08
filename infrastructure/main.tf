@@ -8,10 +8,15 @@ locals {
   nonPreviewResourceGroup = "${var.shared_product}-shared-${var.env}"
   sharedResourceGroup = "${(var.env == "preview" || var.env == "spreview") ? local.previewResourceGroup : local.nonPreviewResourceGroup}"
 
-  // Storage Account
+  // Storage Account - shared
   previewStorageAccountName = "${var.shared_product}sharedaat"
   nonPreviewStorageAccountName = "${var.shared_product}shared${var.env}"
   storageAccountName = "${(var.env == "preview" || var.env == "spreview") ? local.previewStorageAccountName : local.nonPreviewStorageAccountName}"
+
+  // Storage Account - dm-store
+  previewStorageAccountNameDM = "${var.raw_product}storedocaat"
+  nonPreviewStorageAccountNameDM = "${var.raw_product}storedoc${var.env}"
+  storageAccountNameDM = "${(var.env == "preview" || var.env == "spreview") ? local.previewStorageAccountNameDM : local.nonPreviewStorageAccountNameDM}"
 
   // Shared Vault - CCD
   previewVaultName = "${var.shared_product}-aat"
@@ -100,8 +105,8 @@ module "app" {
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
 
     # Document Storage
-    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_primary_connection_string.value}"
-    STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_secondary_connection_string.value}"
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.dm_store_storageaccount_primary_connection_string.value}"
+    STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}"
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME = "${azurerm_storage_container.document_container.name}"
   }
 }
@@ -122,7 +127,7 @@ module "db" {
 resource "azurerm_storage_container" "document_container" {
   name = "${local.app_full_name}-docstore-${var.env}"
   resource_group_name = "${local.sharedResourceGroup}"
-  storage_account_name = "${local.storageAccountName}"
+  storage_account_name = "${local.storageAccountNameDM}"
   container_access_type = "private"
 }
 
@@ -161,12 +166,12 @@ resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "storageaccount_primary_connection_string" {
-  name = "storage-account-primary-connection-string"
+data "azurerm_key_vault_secret" "dm_store_storageaccount_primary_connection_string" {
+  name = "dm-store-storage-account-primary-connection-string"
   vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "storageaccount_secondary_connection_string" {
-  name = "storage-account-secondary-connection-string"
+data "azurerm_key_vault_secret" "dm_store_storageaccount_secondary_connection_string" {
+  name = "dm-store-storage-account-secondary-connection-string"
   vault_uri = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
