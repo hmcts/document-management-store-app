@@ -14,6 +14,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.sql.SQLException;
 import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -59,17 +60,27 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
         try (
             final PipedInputStream in = new PipedInputStream();
             final PipedOutputStream out = new PipedOutputStream(in)) {
+            final CountDownLatch latch = new CountDownLatch(1);
+
             Thread loadThread = new Thread(() -> {
                 try {
                     blobStorageReadService.loadBlob(documentContentVersion, out);
                     out.flush();
-                } catch (IOException e) {
+                    // Await end of image buffering to terminate thread.
+                    latch.await();
+                } catch (IOException | InterruptedException e) {
                     LOGGER.log(Level.WARNING, "Error while loading blob", e);
+                    Thread.currentThread().interrupt();
                 }
             });
             loadThread.start();
 
-            return getImg(in);
+            final BufferedImage bufferedImage = getImg(in);
+
+            // Notify thread of image buffering completion
+            latch.countDown();
+
+            return bufferedImage;
         }
     }
 
