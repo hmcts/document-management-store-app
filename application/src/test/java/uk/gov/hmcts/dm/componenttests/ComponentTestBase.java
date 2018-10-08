@@ -26,6 +26,8 @@ import uk.gov.hmcts.dm.service.AuditEntryService;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.BlobStorageMigrationService;
+import uk.gov.hmcts.dm.service.BlobStorageReadService;
+import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.FolderService;
 import uk.gov.hmcts.dm.service.SearchService;
@@ -86,6 +88,12 @@ public abstract class ComponentTestBase {
 
     @MockBean
     protected BlobStorageMigrationService blobStorageMigrationService;
+
+    @MockBean
+    protected BlobStorageWriteService blobStorageWriteService;
+
+    @MockBean
+    protected BlobStorageReadService blobStorageReadService;
 
     @MockBean
     protected SearchService searchService;
