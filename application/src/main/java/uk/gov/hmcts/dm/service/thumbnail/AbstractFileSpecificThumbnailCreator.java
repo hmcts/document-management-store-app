@@ -55,7 +55,14 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
         try (
             final PipedInputStream in = new PipedInputStream();
             final PipedOutputStream out = new PipedOutputStream(in)) {
-            Thread loadThread = new Thread(() -> blobStorageReadService.loadBlob(documentContentVersion, out));
+            Thread loadThread = new Thread(() -> {
+                try {
+                    blobStorageReadService.loadBlob(documentContentVersion, out);
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
             loadThread.start();
 
             return getImg(in);
