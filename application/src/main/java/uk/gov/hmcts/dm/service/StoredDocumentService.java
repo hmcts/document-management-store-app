@@ -139,6 +139,7 @@ public class StoredDocumentService {
                                                                                        .isPostgresBlobStorageEnabled());
         documentContentVersionRepository.save(documentContentVersion);
         storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+        storedDocument.getDocumentContentVersions().add(documentContentVersion);
         return documentContentVersion;
     }
 
