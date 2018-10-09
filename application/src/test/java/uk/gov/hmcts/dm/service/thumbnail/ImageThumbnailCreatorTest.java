@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -21,12 +20,15 @@ import java.sql.Blob;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.any;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.notNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 public class ImageThumbnailCreatorTest {
 
@@ -152,7 +154,7 @@ public class ImageThumbnailCreatorTest {
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
         when(contentVersion.getDocumentContent()).thenReturn(null);
-        Mockito.doAnswer(invocation -> {
+        doAnswer(invocation -> {
             final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
             IOUtils.copy(file, out);
             out.close();

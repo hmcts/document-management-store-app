@@ -39,6 +39,18 @@ public abstract class End2EndTestBase {
     protected static final MockMultipartFile FILE =
         new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
+    @Autowired
+    protected MockMvc mvc;
+
+    @MockBean
+    protected AzureStorageConfiguration azureStorageConfiguration;
+
+    @MockBean
+    protected BlobStorageWriteService blobStorageWriteService;
+
+    @MockBean
+    protected BlobStorageReadService blobStorageReadService;
+
     @Before
     public void setUp() {
         when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
@@ -56,16 +68,4 @@ public abstract class End2EndTestBase {
             .when(blobStorageReadService)
             .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
     }
-
-    @Autowired
-    protected MockMvc mvc;
-
-    @MockBean
-    protected AzureStorageConfiguration azureStorageConfiguration;
-
-    @MockBean
-    protected BlobStorageWriteService blobStorageWriteService;
-
-    @MockBean
-    protected BlobStorageReadService blobStorageReadService;
 }
