@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
 @TestPropertySource(locations = "classpath:application-local.yaml")
-class End2EndTestBase {
+public abstract class End2EndTestBase {
 
     protected static final MockMultipartFile FILE =
         new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
