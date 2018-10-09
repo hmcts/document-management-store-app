@@ -137,9 +137,17 @@ public class StoredDocumentService {
                                                                                    securityUtilService.getUserId(),
                                                                                    azureStorageConfiguration
                                                                                        .isPostgresBlobStorageEnabled());
-        documentContentVersionRepository.save(documentContentVersion);
-        storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
+
+        if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
+            String contentUri = blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+                documentContentVersion,
+                file);
+            documentContentVersion.setContentUri(contentUri);
+        }
+        documentContentVersionRepository.save(documentContentVersion);
+
         return documentContentVersion;
     }
 
