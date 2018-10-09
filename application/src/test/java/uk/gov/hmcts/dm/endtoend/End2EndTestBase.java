@@ -25,6 +25,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -34,7 +35,7 @@ import static org.mockito.Mockito.when;
 @AutoConfigureMockMvc
 @ActiveProfiles("local")
 @TestPropertySource(locations = "classpath:application-local.yaml")
-public abstract class End2EndTestBase {
+class End2EndTestBase {
 
     protected static final MockMultipartFile FILE =
         new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
@@ -59,7 +60,7 @@ public abstract class End2EndTestBase {
         when(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
             any(DocumentContentVersion.class), any(MultipartFile.class))).thenReturn("someContentUri");
 
-        Mockito.doAnswer(invocation -> {
+        doAnswer(invocation -> {
             final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
             IOUtils.copy(FILE.getInputStream(), out);
             out.close();

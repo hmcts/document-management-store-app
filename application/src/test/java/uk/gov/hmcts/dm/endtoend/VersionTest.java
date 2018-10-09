@@ -1,27 +1,15 @@
 package uk.gov.hmcts.dm.endtoend;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import uk.gov.hmcts.dm.DmApp;
-import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.security.Classifications;
-import uk.gov.hmcts.dm.service.BlobStorageReadService;
-import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -33,32 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = DmApp.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("local")
-@TestPropertySource(locations = "classpath:application-local.yaml")
-public class VersionTest {
+public class VersionTest extends End2EndTestBase{
 
     public static final MockMultipartFile FILE_V1 =
         new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
     public static final MockMultipartFile FILE_V2 =
         new MockMultipartFile("file", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
-
-    @Autowired
-    protected MockMvc mvc;
-
-    @MockBean
-    protected AzureStorageConfiguration azureStorageConfiguration;
-
-    @MockBean
-    protected BlobStorageWriteService blobStorageWriteService;
-
-    @MockBean
-    protected BlobStorageReadService blobStorageReadService;
 
     private HttpHeaders headers = Helper.getHeaders();
 
@@ -67,9 +36,26 @@ public class VersionTest {
         return request;
     }
 
+    @Override
+    @Before
+    public void setUp() {
+        doAnswer(invocation -> {
+            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
+            IOUtils.copy(FILE_V1.getInputStream(), out);
+            out.close();
+            return null;
+        }).doAnswer(invocation -> {
+            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
+            IOUtils.copy(FILE_V2.getInputStream(), out);
+            out.close();
+            return null;
+        })
+            .when(blobStorageReadService)
+            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
+    }
+
     @Test
     public void should_upload_a_second_version_of_a_document() throws Exception {
-        mockReadFromAzureBlobStorage();
 
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
                 .file(FILE_V1)
@@ -85,21 +71,5 @@ public class VersionTest {
                 .headers(headers))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$._links.length()", is(5)));
-    }
-
-    private void mockReadFromAzureBlobStorage() {
-        doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
-            IOUtils.copy(FILE_V1.getInputStream(), out);
-            out.close();
-            return null;
-        }).doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
-            IOUtils.copy(FILE_V2.getInputStream(), out);
-            out.close();
-            return null;
-        })
-            .when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
     }
 }
