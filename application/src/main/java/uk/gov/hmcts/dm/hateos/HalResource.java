@@ -10,9 +10,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by pawel on 09/06/2017.
- */
 @EqualsAndHashCode(callSuper = true)
 public abstract class HalResource extends ResourceSupport {
 

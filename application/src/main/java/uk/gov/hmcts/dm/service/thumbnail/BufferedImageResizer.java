@@ -5,9 +5,6 @@ import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-/**
- * Created by pawel on 25/01/2018.
- */
 public class BufferedImageResizer {
 
     public BufferedImage resizeImage(BufferedImage bufferedImage) {

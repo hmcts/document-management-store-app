@@ -16,9 +16,6 @@ import java.util.Date;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-/**
- * Created by pawel on 28/07/2017.
- */
 @EqualsAndHashCode(callSuper = true)
 @Relation(collectionRelation = "auditEntries")
 public class StoredDocumentAuditEntryHalResource extends HalResource {

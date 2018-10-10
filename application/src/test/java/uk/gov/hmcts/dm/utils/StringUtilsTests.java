@@ -3,9 +3,6 @@ package uk.gov.hmcts.dm.utils;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created by pawel on 04/10/2017.
- */
 public class StringUtilsTests {
 
     @Test

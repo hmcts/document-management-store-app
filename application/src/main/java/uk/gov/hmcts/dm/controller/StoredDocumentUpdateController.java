@@ -18,9 +18,6 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 
 import java.util.UUID;
 
-/**
- * Created by pawel on 08/06/2017.
- */
 @RestController
 @RequestMapping(
     path = "/documents/")

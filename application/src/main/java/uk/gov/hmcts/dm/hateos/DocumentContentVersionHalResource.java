@@ -15,9 +15,6 @@ import java.util.Date;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-/**
- * Created by pawel on 13/06/2017.
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Relation(collectionRelation = "documentVersions")

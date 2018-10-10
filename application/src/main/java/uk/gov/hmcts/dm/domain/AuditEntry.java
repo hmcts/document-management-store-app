@@ -10,9 +10,6 @@ import java.util.Date;
 import java.util.UUID;
 
 
-/**
- * Created by pawel on 24/07/2017.
- */
 
 @Entity
 @DiscriminatorColumn(name = "type")

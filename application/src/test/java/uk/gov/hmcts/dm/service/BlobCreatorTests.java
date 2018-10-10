@@ -17,10 +17,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by pawel on 11/07/2017.
- */
-
 @RunWith(SpringRunner.class)
 @ActiveProfiles({"embedded", "local", "componenttest"})
 @SpringBootTest

@@ -14,9 +14,6 @@ import javax.validation.constraints.NotNull;
 import java.io.OutputStream;
 import java.util.UUID;
 
-/**
- * Created by pawel on 28/07/2017.
- */
 @Service
 @Transactional
 public class AuditedDocumentContentVersionOperationsService {

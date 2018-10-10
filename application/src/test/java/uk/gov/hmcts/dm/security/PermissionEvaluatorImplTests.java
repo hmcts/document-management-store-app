@@ -13,9 +13,6 @@ import uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by pawel on 03/10/2017.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class PermissionEvaluatorImplTests {
 

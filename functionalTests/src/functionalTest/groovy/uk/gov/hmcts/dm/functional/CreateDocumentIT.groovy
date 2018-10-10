@@ -23,9 +23,6 @@ import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.isOneOf
 
-/**
- * Created by pawel on 13/10/2017.
- */
 @RunWith(SpringRunner.class)
 class CreateDocumentIT extends BaseIT {
 

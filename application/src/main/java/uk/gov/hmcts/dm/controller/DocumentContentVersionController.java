@@ -36,9 +36,6 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-/**
- * Created by pawel on 08/06/2017.
- */
 @RestController
 @RequestMapping(
     path = "/documents/{documentId}")

@@ -11,9 +11,6 @@ import uk.gov.hmcts.dm.security.Permissions;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-/**
- * Created by pawel on 03/10/2017.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class DomainPermissionEvaluatorTests {
 

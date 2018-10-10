@@ -11,9 +11,6 @@ import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import static org.hamcrest.Matchers.equalTo
 
 
-/**
- * Created by pawel on 05/11/2017.
- */
 @RunWith(SpringRunner.class)
 class SearchDocumentIT extends BaseIT {
 
