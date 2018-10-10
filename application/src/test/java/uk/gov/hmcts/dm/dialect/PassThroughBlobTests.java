@@ -6,9 +6,6 @@ import org.mockito.Mockito;
 
 import java.io.InputStream;
 
-/**
- * Created by pawel on 06/02/2018.
- */
 public class PassThroughBlobTests {
 
     @Test(expected = UnsupportedOperationException.class)

@@ -14,9 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by pawel on 23/05/2017.
- */
 @Repository
 public interface StoredDocumentRepository extends PagingAndSortingRepository<StoredDocument, UUID> {
 

@@ -12,9 +12,6 @@ import static org.hamcrest.CoreMatchers.containsString
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.equalTo
 
-/**
- * Created by pawel on 13/10/2017.
- */
 @RunWith(SpringRunner.class)
 class DeleteDocumentIT extends BaseIT {
     private citizenDocumentUrl

@@ -11,9 +11,6 @@ import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
-/**
- * Created by pawel on 23/01/2018.
- */
 @Transactional
 @Service
 public class SecurityUtilService {

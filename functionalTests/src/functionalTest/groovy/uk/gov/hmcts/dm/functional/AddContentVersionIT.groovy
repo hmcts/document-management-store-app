@@ -9,9 +9,6 @@ import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.Matchers.equalTo
 
-/**
- * Created by pawel on 13/10/2017.
- */
 @RunWith(SpringRunner.class)
 class AddContentVersionIT extends BaseIT {
 

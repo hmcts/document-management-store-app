@@ -20,9 +20,6 @@ import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import java.util.UUID;
 
-/**
- * Created by pawel on 12/02/2018.
- */
 @RestController
 @RequestMapping(
     path = "/documents")

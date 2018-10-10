@@ -12,9 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-/**
- * Created by pawel on 24/01/2018.
- */
 @Configuration
 public class JobConfiguration {
 

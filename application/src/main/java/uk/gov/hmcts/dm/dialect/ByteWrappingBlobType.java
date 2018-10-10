@@ -8,9 +8,6 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.*;
 
-/**
- * Created by pawel on 05/02/2018.
- */
 public class ByteWrappingBlobType implements UserType {
 
     public static final String MAP_BLOBS_TO_BINARY_TYPE = "mapBlobsToBinaryType";

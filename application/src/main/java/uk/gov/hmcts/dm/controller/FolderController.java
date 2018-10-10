@@ -16,9 +16,6 @@ import uk.gov.hmcts.dm.service.*;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by pawel on 23/05/2017.
- */
 @RestController
 @RequestMapping(
     path = "/folders",

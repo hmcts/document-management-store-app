@@ -1,9 +1,5 @@
 package uk.gov.hmcts.dm.security.domain;
 
-/**
- * Created by pawel on 02/10/2017.
- */
-
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.dm.security.Classifications;
