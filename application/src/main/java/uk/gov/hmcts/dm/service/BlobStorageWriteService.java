@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.FileStorageException;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -22,35 +21,25 @@ import java.util.UUID;
 public class BlobStorageWriteService {
 
     private final CloudBlobContainer cloudBlobContainer;
-    private final DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
-    public BlobStorageWriteService(CloudBlobContainer cloudBlobContainer,
-                                   DocumentContentVersionRepository documentContentVersionRepository) {
+    public BlobStorageWriteService(CloudBlobContainer cloudBlobContainer) {
         this.cloudBlobContainer = cloudBlobContainer;
-        this.documentContentVersionRepository = documentContentVersionRepository;
     }
 
-    public void uploadDocumentContentVersion(@NotNull StoredDocument storedDocument,
+    public String uploadDocumentContentVersion(@NotNull StoredDocument storedDocument,
                                              @NotNull DocumentContentVersion documentContentVersion,
                                              @NotNull MultipartFile multiPartFile) {
-        writeBinaryStream(storedDocument.getId(), documentContentVersion, multiPartFile);
-        documentContentVersionRepository.update(documentContentVersion.getId(), documentContentVersion.getContentUri());
-    }
-
-    private void writeBinaryStream(UUID documentId,
-                                   DocumentContentVersion documentContentVersion,
-                                   MultipartFile multiPartFile) {
         try {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
-            documentContentVersion.setContentUri(blob.getUri().toString());
             log.debug("Uploaded content for document id: {} documentContentVersion id {}",
-                      documentId,
-                      documentContentVersion.getId());
+                storedDocument.getId(),
+                documentContentVersion.getId());
+            return blob.getUri().toString();
         } catch (URISyntaxException | StorageException | IOException e) {
             log.error("Exception caught", e);
-            throw new FileStorageException(e, documentId, documentContentVersion.getId());
+            throw new FileStorageException(e, storedDocument.getId(), documentContentVersion.getId());
         }
     }
 
