@@ -18,8 +18,8 @@ locals {
   nonPreviewVaultName = "${var.raw_product}-${var.env}"
   vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 
-  sharedAppServicePlan = "${var.raw_product}-${var.env}"
-  sharedASPResourceGroup = "${var.raw_product}-shared-${var.env}"
+  sharedAppServicePlan = "${var.shared_product}-${var.env}"
+  sharedASPResourceGroup = "${var.shared_product}-shared-${var.env}"
 }
 
 module "app" {
