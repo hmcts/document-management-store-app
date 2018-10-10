@@ -1,9 +1,9 @@
-FROM hmcts/cnp-java-base:openjdk-jre-8-alpine-1.2
+FROM hmcts/cnp-java-base:openjdk-jre-8-alpine-1.4
 LABEL maintainer="https://github.com/hmcts/document-management-store-api"
 
 ENV APP dm-store.jar
-ENV APPLICATION_TOTAL_MEMORY 768M
-ENV APPLICATION_SIZE_ON_DISK_IN_MB 86
+ENV APPLICATION_TOTAL_MEMORY 940M
+ENV APPLICATION_SIZE_ON_DISK_IN_MB 80
 
 ENV JAVA_OPTS ""
 
