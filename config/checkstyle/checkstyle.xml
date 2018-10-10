@@ -65,6 +65,7 @@
             <property name="tokens" value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT, INSTANCE_INIT"/>
         </module>
         <module name="WhitespaceAround">
+            <property name="severity" value="error"/>
             <property name="allowEmptyConstructors" value="true"/>
             <property name="allowEmptyMethods" value="true"/>
             <property name="allowEmptyTypes" value="true"/>
