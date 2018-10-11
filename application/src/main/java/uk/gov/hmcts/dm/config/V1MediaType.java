@@ -2,9 +2,6 @@ package uk.gov.hmcts.dm.config;
 
 import org.springframework.http.MediaType;
 
-/**
- * Created by pawel on 22/09/2017.
- */
 public class V1MediaType extends MediaType {
 
     public static final String V1_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE = "application/vnd.uk.gov.hmcts.dm.document-and-metadata-collection.v1+hal+json;charset=UTF-8";

@@ -15,9 +15,6 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-/**
- * Created by pawel on 09/06/2017.
- */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)

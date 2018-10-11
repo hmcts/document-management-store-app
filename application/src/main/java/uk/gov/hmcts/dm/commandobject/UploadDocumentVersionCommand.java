@@ -6,9 +6,6 @@ import uk.gov.hmcts.dm.security.MultipartFileWhiteList;
 
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by pawel on 04/10/2017.
- */
 @Data
 public class UploadDocumentVersionCommand {
 

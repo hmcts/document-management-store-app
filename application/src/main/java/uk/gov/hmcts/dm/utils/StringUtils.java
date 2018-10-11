@@ -1,8 +1,5 @@
 package uk.gov.hmcts.dm.utils;
 
-/**
- * Created by pawel on 04/10/2017.
- */
 public class StringUtils {
 
     private StringUtils(){}

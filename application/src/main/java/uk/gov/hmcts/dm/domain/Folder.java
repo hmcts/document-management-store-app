@@ -13,9 +13,6 @@ import java.util.*;
 import javax.persistence.*;
 
 
-/**
- * Created by pawel on 22/05/2017.
- */
 @Entity
 @Builder
 @EntityListeners(AuditingEntityListener.class)

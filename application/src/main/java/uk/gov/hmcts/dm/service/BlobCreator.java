@@ -11,9 +11,6 @@ import uk.gov.hmcts.dm.exception.CantCreateBlobException;
 import javax.persistence.EntityManager;
 import java.sql.Blob;
 
-/**
- * Created by pawel on 09/08/2017.
- */
 @Service
 public class BlobCreator {
 

@@ -7,9 +7,6 @@ import org.mockito.Mockito;
 
 import java.sql.SQLException;
 
-/**
- * Created by pawel on 06/02/2018.
- */
 public class ByteWrappingBlobTypeTests {
 
     ByteWrappingBlobType type = new ByteWrappingBlobType();

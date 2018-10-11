@@ -20,9 +20,6 @@ import java.util.stream.Stream;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-/**
- * Created by pawel on 26/05/2017.
- */
 public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
 
     @Autowired

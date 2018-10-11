@@ -37,9 +37,6 @@ import java.util.UUID;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-/**
- * Created by pawel on 08/06/2017.
- */
 @RestController
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")

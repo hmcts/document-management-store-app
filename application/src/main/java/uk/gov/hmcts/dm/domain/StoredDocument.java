@@ -16,9 +16,6 @@ import uk.gov.hmcts.dm.security.domain.RolesAware;
 import javax.persistence.*;
 import java.util.*;
 
-/**
- * Created by pawel on 22/05/2017.
- */
 @Entity
 @Builder
 @EntityListeners(AuditingEntityListener.class)
