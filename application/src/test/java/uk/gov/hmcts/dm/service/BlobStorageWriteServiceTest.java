@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.FileStorageException;
+import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,12 +46,14 @@ public class BlobStorageWriteServiceTest {
     private CloudBlockBlob blob;
     @Mock
     private InputStream mockInputStream;
+    @Mock
+    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Before
     public void setUp() throws Exception {
         cloudBlobContainer = PowerMockito.mock(CloudBlobContainer.class);
         blob = PowerMockito.mock(CloudBlockBlob.class);
-        blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer);
+        blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer, documentContentVersionRepository);
         given(file.getInputStream()).willReturn(mockInputStream);
     }
 
@@ -63,11 +66,11 @@ public class BlobStorageWriteServiceTest {
         given(blob.getUri()).willReturn(new URI(azureProvidedUri));
 
         // upload
-        String contentUri = blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+        blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
             documentContentVersion,
             file);
 
-        assertThat(contentUri, is(azureProvidedUri));
+        assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
         verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
     }
 

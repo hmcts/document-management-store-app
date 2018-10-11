@@ -87,7 +87,7 @@ public class BlobStorageMigrationServiceTest {
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
-        verify(documentContentVersionRepository).update(doc.getId(), azureProvidedUri);
+        verify(documentContentVersionRepository).updateContentUriAndContentCheckSum(doc.getId(), azureProvidedUri, "");
         verify(auditEntryService).createAndSaveEntry(doc, AuditActions.UPDATED);
         verify(blob).upload(doc.getDocumentContent().getData().getBinaryStream(), doc.getSize());
         assertThat(doc.getContentUri(), is(azureProvidedUri));

@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -45,7 +44,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -212,10 +210,6 @@ public class StoredDocumentServiceTests {
     @Test
     public void testSaveItemsToAzure() {
         setupStorageOptions(true, false);
-        given(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
-            any(DocumentContentVersion.class), any(MultipartFile.class))).willReturn(
-            "someContentUri");
-
         List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TEST_FILE));
 
         assertEquals(1, documents.size());
@@ -254,9 +248,6 @@ public class StoredDocumentServiceTests {
     public void testAddStoredDocumentVersionWhenAzureBlobStoreEnabled() {
 
         setupStorageOptions(true, false);
-        given(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
-            any(DocumentContentVersion.class), any(MultipartFile.class))).willReturn(
-            "someContentUri");
         StoredDocument storedDocument = new StoredDocument();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
@@ -344,9 +335,6 @@ public class StoredDocumentServiceTests {
     @Test
     public void testSaveItemsToBucketToBlobStore() throws Exception {
         Folder folder = new Folder();
-        given(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
-            any(DocumentContentVersion.class), any(MultipartFile.class))).willReturn(
-            "someContentUri");
         setupStorageOptions(true, false);
         storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
 
