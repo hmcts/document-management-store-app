@@ -23,6 +23,10 @@
     <module name="FileTabCharacter">
         <property name="eachLine" value="true"/>
     </module>
+    <module name="NewlineAtEndOfFile">
+        <property name="severity" value="error"/>
+        <property name="lineSeparator" value="lf"/>
+    </module>
 
     <module name="SuppressWarningsFilter" />
     <module name="TreeWalker">
@@ -81,7 +85,9 @@
         <module name="MissingSwitchDefault"/>
         <module name="FallThrough"/>
         <module name="UpperEll"/>
-        <module name="ModifierOrder"/>
+        <module name="ModifierOrder">
+            <property name="severity" value="error"/>
+        </module>
         <module name="EmptyLineSeparator">
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
         </module>
