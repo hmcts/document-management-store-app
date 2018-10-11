@@ -13,18 +13,15 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -56,9 +53,6 @@ public abstract class End2EndTestBase {
     public void setUp() {
         when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
         when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(false);
-
-        when(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
-            any(DocumentContentVersion.class), any(MultipartFile.class))).thenReturn("someContentUri");
 
         doAnswer(invocation -> {
             final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);

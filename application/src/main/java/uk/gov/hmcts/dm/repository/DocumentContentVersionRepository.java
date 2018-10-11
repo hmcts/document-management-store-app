@@ -16,6 +16,9 @@ import java.util.UUID;
 public interface DocumentContentVersionRepository extends PagingAndSortingRepository<DocumentContentVersion, UUID> {
 
     @Modifying(clearAutomatically = true)
-    @Query("update DocumentContentVersion dcv set dcv.contentUri = :contentUri where dcv.id = :id")
-    void update(@Param("id") UUID id, @Param("contentUri") String contentUri);
+    @Query("update DocumentContentVersion dcv set dcv.contentUri = :contentUri, dcv.contentChecksum = " +
+        ":contentChecksum where dcv.id = :id")
+    void updateContentUriAndContentCheckSum(@Param("id") UUID id,
+                                            @Param("contentUri") String contentUri,
+                                            @Param("contentChecksum") String contentCheckSum);
 }
