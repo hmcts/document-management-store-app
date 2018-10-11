@@ -20,9 +20,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by pawel on 09/08/2017.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class AuditedDocumentContentVersionOperationsServiceTests {
 

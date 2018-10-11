@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-/**
- * Created by pawel on 25/01/2018.
- */
 @Service
 @Transactional
 public class DeleteAllExpiredStoredDocumentTasklet implements Tasklet {

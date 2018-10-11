@@ -4,9 +4,6 @@ import org.hibernate.dialect.PostgreSQL94Dialect;
 
 import java.sql.Types;
 
-/**
- * Created by pawel on 05/02/2018.
- */
 public class CustomPostgresSqlDialect extends PostgreSQL94Dialect {
     public CustomPostgresSqlDialect() {
         super();
