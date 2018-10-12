@@ -15,9 +15,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Created by pawel on 23/10/2017.
- */
 @Component
 public class ExceptionStatusCodeAndMessageResolver {
 

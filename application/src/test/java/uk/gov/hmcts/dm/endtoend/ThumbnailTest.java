@@ -1,23 +1,18 @@
 package uk.gov.hmcts.dm.endtoend;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import uk.gov.hmcts.dm.DmApp;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
@@ -25,17 +20,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static uk.gov.hmcts.dm.endtoend.Helper.getThumbnailUrlFromResponse;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = DmApp.class)
-@AutoConfigureMockMvc
-@ActiveProfiles("local")
-@TestPropertySource(locations = "classpath:application-local.yaml")
-public class ThumbnailTest {
-
-    @Autowired
-    private MockMvc mvc;
+@Slf4j
+public class ThumbnailTest extends End2EndTestBase {
 
     private final HttpHeaders headers = Helper.getHeaders();
 
@@ -57,6 +43,7 @@ public class ThumbnailTest {
 
     @Test
     public void should_upload_a_txt_and_retrieve_a_unsupported_thumbnail() throws Exception {
+
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(txtFile)
             .param("classification", Classifications.PRIVATE.toString())
@@ -72,6 +59,8 @@ public class ThumbnailTest {
 
     @Test
     public void should_upload_a_pdf_and_retrieve_a_supported_pdf_thumbnail() throws Exception {
+        readFromAzureBlobStorageWillReturn(pdfFile);
+
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(pdfFile)
             .param("classification", Classifications.PRIVATE.toString())
@@ -87,6 +76,8 @@ public class ThumbnailTest {
 
     @Test
     public void should_upload_a_jpg_and_retrieve_a_supported_image_thumbnail() throws Exception {
+        readFromAzureBlobStorageWillReturn(jpgFile);
+
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(jpgFile)
             .param("classification", Classifications.PRIVATE.toString())
@@ -102,6 +93,8 @@ public class ThumbnailTest {
 
     @Test
     public void should_upload_a_png_and_retrieve_a_supported_image_thumbnail() throws Exception {
+        readFromAzureBlobStorageWillReturn(pngFile);
+
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(pngFile)
             .param("classification", Classifications.PRIVATE.toString())
@@ -117,6 +110,8 @@ public class ThumbnailTest {
 
     @Test
     public void should_upload_a_gif_and_retrieve_a_supported_image_thumbnail() throws Exception {
+        readFromAzureBlobStorageWillReturn(gifFile);
+
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(gifFile)
             .param("classification", Classifications.PRIVATE.toString())
@@ -132,6 +127,8 @@ public class ThumbnailTest {
 
     @Test
     public void should_upload_a_gif_ani_and_retrieve_a_supported_image_thumbnail() throws Exception {
+        readFromAzureBlobStorageWillReturn(gifAniFile);
+
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(gifAniFile)
             .param("classification", Classifications.PRIVATE.toString())
@@ -157,5 +154,16 @@ public class ThumbnailTest {
 
     private MockMultipartFile createMockMultipartFile(String file, byte[] f, String mimeType) {
         return new MockMultipartFile("files", file,mimeType, f);
+    }
+
+    private void readFromAzureBlobStorageWillReturn(MockMultipartFile file) {
+        Mockito.doAnswer(invocation -> {
+            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
+            IOUtils.copy(file.getInputStream(), out);
+            out.close();
+            return null;
+        })
+            .when(blobStorageReadService)
+            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
     }
 }

@@ -23,9 +23,6 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by pawel on 11/07/2017.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class DocumentContentVersionServiceTests {
 

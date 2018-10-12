@@ -7,9 +7,6 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
-/**
- * Created by pawel on 24/07/2017.
- */
 @Entity
 @DiscriminatorValue(value = "stored_document")
 public class StoredDocumentAuditEntry extends AuditEntry {

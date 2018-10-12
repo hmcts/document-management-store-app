@@ -11,9 +11,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by pawel on 22/09/2017.
- */
 @Configuration
 public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
 

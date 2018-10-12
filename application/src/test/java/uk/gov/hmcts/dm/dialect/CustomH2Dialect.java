@@ -4,9 +4,6 @@ import org.hibernate.dialect.H2Dialect;
 
 import java.sql.Types;
 
-/**
- * Created by pawel on 05/02/2018.
- */
 public class CustomH2Dialect extends H2Dialect {
 
     public CustomH2Dialect() {

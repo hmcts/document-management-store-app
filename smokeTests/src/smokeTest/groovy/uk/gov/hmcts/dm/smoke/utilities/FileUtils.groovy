@@ -1,8 +1,5 @@
 package uk.gov.hmcts.dm.smoke.utilities
 
-/**
- * Created by pawel on 17/10/2017.
- */
 class FileUtils {
 
     File getResourceFile(String fileName){

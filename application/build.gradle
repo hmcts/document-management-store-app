@@ -49,9 +49,8 @@ tasks.withType(Test) {
 // Xlint type thingy????
 checkstyle {
     showViolations = true
-    ignoreFailures = true
-    maxWarnings = 0
-    toolVersion = '8.7'
+    maxWarnings = 2
+    toolVersion = '8.12'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     configDir = new File(rootDir, 'config/checkstyle')
 }

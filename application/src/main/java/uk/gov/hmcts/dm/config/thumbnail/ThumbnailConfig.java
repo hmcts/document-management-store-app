@@ -1,8 +1,10 @@
 package uk.gov.hmcts.dm.config.thumbnail;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.thumbnail.ImageThumbnailCreator;
 import uk.gov.hmcts.dm.service.thumbnail.PdfThumbnailCreator;
 import uk.gov.hmcts.dm.service.thumbnail.ThumbnailCreator;
@@ -13,6 +15,13 @@ import java.util.Map;
 
 @Configuration
 public class ThumbnailConfig {
+
+    private final BlobStorageReadService blobStorageReadService;
+
+    @Autowired
+    public ThumbnailConfig(BlobStorageReadService blobStorageReadService) {
+        this.blobStorageReadService = blobStorageReadService;
+    }
 
     @Bean("thumbnailCreatorsMimeMap")
     public Map<String,ThumbnailCreator> thumbnailCreatorsMimeMap(
@@ -29,11 +38,11 @@ public class ThumbnailConfig {
 
     @Bean
     ImageThumbnailCreator imageThumbnailCreator() {
-        return new ImageThumbnailCreator();
+        return new ImageThumbnailCreator(blobStorageReadService);
     }
 
     @Bean
     PdfThumbnailCreator pdfThumbnailCreator() {
-        return new PdfThumbnailCreator();
+        return new PdfThumbnailCreator(blobStorageReadService);
     }
 }

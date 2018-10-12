@@ -9,9 +9,6 @@ import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
-/**
- * Created by pawel on 08/11/2017.
- */
 @Service
 public class SearchService {
 
