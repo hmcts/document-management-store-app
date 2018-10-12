@@ -149,6 +149,15 @@ variable "enable_ttl" {
 variable "enable_thumbnail" {
     default = "true"
 }
+
+variable "enable_azure_storage_container" {
+  default = "false"
+}
+
+variable "enable_postgres_blob_storage" {
+  default = "true"
+}
+
 ////////////////////////////////////////////////
 // Whitelists
 ////////////////////////////////////////////////

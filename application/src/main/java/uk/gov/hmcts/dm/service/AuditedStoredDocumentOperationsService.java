@@ -16,9 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * Created by pawel on 28/07/2017.
- */
 @Transactional
 @Service
 public class AuditedStoredDocumentOperationsService {

@@ -10,9 +10,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
 
-/**
- * Created by pawel on 16/02/2018.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class MultipartFileWhiteListValidatorTests {
 

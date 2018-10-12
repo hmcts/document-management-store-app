@@ -9,9 +9,6 @@ import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 
 import java.util.Locale;
 
-/**
- * Created by pawel on 22/08/2017.
- */
 @Configuration
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @EnableScheduling

@@ -7,9 +7,6 @@ import org.springframework.test.context.junit4.SpringRunner
 
 import static org.hamcrest.Matchers.equalTo
 
-/**
- * Created by pawel on 25/01/2018.
- */
 @RunWith(SpringRunner.class)
 class UpdateDocumentIT  extends BaseIT {
 

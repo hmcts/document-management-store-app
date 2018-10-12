@@ -24,9 +24,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-/**
- * Created by pawel on 28/07/2017.
- */
 @RestController
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Audit entities.")

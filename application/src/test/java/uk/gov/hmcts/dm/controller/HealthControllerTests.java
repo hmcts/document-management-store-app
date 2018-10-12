@@ -7,9 +7,6 @@ import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Created by pawel on 25/01/2018.
- */
 public class HealthControllerTests extends ComponentTestBase {
 
     @Test

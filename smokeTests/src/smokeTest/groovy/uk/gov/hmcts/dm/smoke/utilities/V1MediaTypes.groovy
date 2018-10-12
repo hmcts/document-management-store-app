@@ -1,8 +1,5 @@
 package uk.gov.hmcts.dm.smoke.utilities
 
-/**
- * Created by pawel on 13/10/2017.
- */
 class V1MediaTypes {
 
     public static final String V1_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE ="application/vnd.uk.gov.hmcts.dm.document-and-metadata-collection.v1+hal+json;charset=UTF-8"
