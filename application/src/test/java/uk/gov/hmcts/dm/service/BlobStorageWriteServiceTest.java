@@ -17,17 +17,21 @@ import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.sql.Blob;
 import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
+import static org.apache.commons.io.IOUtils.copy;
+import static org.apache.tika.io.IOUtils.toInputStream;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
@@ -45,16 +49,15 @@ public class BlobStorageWriteServiceTest {
     @Mock
     private CloudBlockBlob blob;
     @Mock
-    private InputStream mockInputStream;
-    @Mock
     private DocumentContentVersionRepository documentContentVersionRepository;
+    private static final String MOCK_DATA = "mock data";
 
     @Before
     public void setUp() throws Exception {
         cloudBlobContainer = PowerMockito.mock(CloudBlobContainer.class);
         blob = PowerMockito.mock(CloudBlockBlob.class);
         blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer, documentContentVersionRepository);
-        given(file.getInputStream()).willReturn(mockInputStream);
+        given(file.getInputStream()).willReturn(toInputStream(MOCK_DATA));
     }
 
     @Test
@@ -64,11 +67,30 @@ public class BlobStorageWriteServiceTest {
         given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
         String azureProvidedUri = "someuri";
         given(blob.getUri()).willReturn(new URI(azureProvidedUri));
+        doAnswer(invocation -> copy(toInputStream((MOCK_DATA)), invocation.getArgumentAt(0, OutputStream.class))).when(
+            blob).download(any(OutputStream.class));
 
         // upload
         blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
             documentContentVersion,
             file);
+
+        assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
+        verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
+    }
+
+    @Test(expected = FileStorageException.class)
+    public void uploadDocumentContentVersionChecksumFailed() throws Exception {
+        final StoredDocument storedDocument = createStoredDocument();
+        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
+        given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
+        String azureProvidedUri = "someuri";
+        given(blob.getUri()).willReturn(new URI(azureProvidedUri));
+
+        // upload
+        blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+                                                             documentContentVersion,
+                                                             file);
 
         assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
         verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
