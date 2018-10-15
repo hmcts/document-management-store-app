@@ -15,9 +15,6 @@ import java.util.UUID;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * Created by pawel on 12/02/2018.
- */
 public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
     private final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));

@@ -4,9 +4,6 @@ import org.springframework.http.MediaType;
 
 import java.io.Serializable;
 
-/**
- * Created by MSH on 06/11/2017.
- */
 public class V1MimeTypes extends MediaType implements Serializable {
 
 

@@ -24,9 +24,6 @@ import uk.gov.hmcts.dm.service.SecurityUtilService;
 
 import javax.validation.Valid;
 
-/**
- * Created by pawel on 08/11/2017.
- */
 @RestController
 @RequestMapping(
         path = "/documents")

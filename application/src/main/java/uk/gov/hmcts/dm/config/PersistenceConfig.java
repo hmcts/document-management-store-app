@@ -8,9 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
-/**
- * Created by pawel on 25/07/2017.
- */
 @Configuration
 @EnableJpaAuditing
 public class PersistenceConfig {

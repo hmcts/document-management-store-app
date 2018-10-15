@@ -10,9 +10,6 @@ import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by pawel on 24/07/2017.
- */
 @Service
 @Transactional
 public class AuditEntryService {

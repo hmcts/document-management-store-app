@@ -9,9 +9,6 @@ import uk.gov.hmcts.dm.repository.FolderRepository;
 
 import java.util.UUID;
 
-/**
- * Created by pawel on 26/05/2017.
- */
 @Transactional
 @Service
 public class FolderService {

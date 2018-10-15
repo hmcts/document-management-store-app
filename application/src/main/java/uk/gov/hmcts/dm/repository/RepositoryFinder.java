@@ -11,9 +11,6 @@ import java.io.Serializable;
 import java.util.Iterator;
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by pawel on 02/10/2017.
- */
 @Component
 public class RepositoryFinder {
 
