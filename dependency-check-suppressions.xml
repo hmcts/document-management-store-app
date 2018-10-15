@@ -43,6 +43,10 @@
         <cve>CVE-2018-1115</cve>
     </suppress>
     <suppress>
+        <notes>CVE-2016-7048: only for Postgres lt 9.6 and we use 9.6 on Azure.  Also only impacts the installer.</notes>
+        <cve>CVE-2016-7048</cve>
+    </suppress>
+    <suppress>
         <notes><![CDATA[
    temp disable for prod release, spring boot 2 upgrade coming very soon
    ]]></notes>
