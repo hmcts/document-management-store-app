@@ -14,9 +14,6 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Created by pawel on 24/01/2018.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class AuditedStoredDocumentBatchOperationsServiceTests {
 

@@ -17,9 +17,6 @@ import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
 
-/**
- * Created by pawel on 09/08/2017.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class AuditEntryServiceTests {
 

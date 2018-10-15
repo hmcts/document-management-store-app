@@ -35,9 +35,6 @@ import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * Created by pawel on 08/06/2017.
- */
 @Entity
 @NoArgsConstructor
 @Builder

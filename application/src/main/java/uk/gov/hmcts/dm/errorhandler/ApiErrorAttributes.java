@@ -12,9 +12,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by pawel on 23/10/2017.
- */
 @Component
 public class ApiErrorAttributes extends DefaultErrorAttributes {
 

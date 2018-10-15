@@ -35,7 +35,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest( {CloudBlobContainer.class, CloudBlockBlob.class})
+@PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
 public class BlobStorageWriteServiceTest {
 
     private BlobStorageWriteService blobStorageWriteService;

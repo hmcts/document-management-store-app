@@ -4,7 +4,7 @@ plugins {
     id 'pmd'
     id 'io.spring.dependency-management' version '1.0.5.RELEASE'
     id 'org.springframework.boot' version '1.5.15.RELEASE'
-    id 'org.owasp.dependencycheck' version '3.2.1'
+    id 'org.owasp.dependencycheck' version '3.3.2'
     id 'se.patrikerdes.use-latest-versions' version '0.2.3'
     id 'com.github.ben-manes.versions' version '0.19.0'
     id 'org.sonarqube' version '2.6.2'
@@ -49,9 +49,8 @@ tasks.withType(Test) {
 // Xlint type thingy????
 checkstyle {
     showViolations = true
-    ignoreFailures = true
-    maxWarnings = 0
-    toolVersion = '8.7'
+    maxWarnings = 2
+    toolVersion = '8.12'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     configDir = new File(rootDir, 'config/checkstyle')
 }
@@ -144,7 +143,7 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
 
-    compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresqlVersion
+    compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 

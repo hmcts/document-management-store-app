@@ -13,10 +13,6 @@ import uk.gov.hmcts.dm.repository.FolderRepository;
 
 import static org.mockito.Mockito.*;
 
-/**
- * Created by pawel on 11/07/2017.
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class FolderServiceTests {
 

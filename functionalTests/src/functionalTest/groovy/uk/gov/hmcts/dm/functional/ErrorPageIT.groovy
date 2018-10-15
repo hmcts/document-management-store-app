@@ -12,9 +12,6 @@ import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
-/**
- * Created by matej on 27/10/2017.
- */
 @RunWith(SpringRunner.class)
 class ErrorPageIT extends BaseIT {
 

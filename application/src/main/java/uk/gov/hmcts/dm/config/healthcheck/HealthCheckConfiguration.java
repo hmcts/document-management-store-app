@@ -7,9 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 
-/**
- * Created by pawel on 10/07/2017.
- */
 @Configuration
 public class HealthCheckConfiguration {
 

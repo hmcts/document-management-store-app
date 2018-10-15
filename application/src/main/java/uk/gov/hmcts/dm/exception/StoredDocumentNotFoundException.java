@@ -6,9 +6,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.UUID;
 
-/**
- * Created by pawel on 13/10/2017.
- */
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class StoredDocumentNotFoundException extends ResourceNotFoundException {
 

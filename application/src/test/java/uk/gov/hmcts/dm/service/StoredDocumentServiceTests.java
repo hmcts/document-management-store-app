@@ -56,10 +56,6 @@ import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
-/**
- * Created by pawel on 11/07/2017.
- */
-
 @RunWith(MockitoJUnitRunner.class)
 public class StoredDocumentServiceTests {
 
