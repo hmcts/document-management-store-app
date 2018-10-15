@@ -4,7 +4,6 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
+import static org.apache.commons.io.IOUtils.toByteArray;
 import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
 
 @Slf4j
@@ -50,7 +50,7 @@ public class BlobStorageWriteService {
         try {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
-            final byte[] bytes = IOUtils.toByteArray(multiPartFile.getInputStream());
+            final byte[] bytes = toByteArray(multiPartFile.getInputStream());
             documentContentVersion.setContentUri(blob.getUri().toString());
             final String checksum = shaHex(bytes);
             documentContentVersion.setContentChecksum(checksum);

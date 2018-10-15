@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
+import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
 
 @Service
 @Transactional
@@ -66,6 +67,7 @@ public class BlobStorageMigrationService {
             documentContentVersionRepository.updateContentUriAndContentCheckSum(documentContentVersion.getId(),
                                                                                 documentContentVersion.getContentUri(),
                                                                                 documentContentVersion.getContentChecksum());
+            auditEntryService.createAndSaveEntry(documentContentVersion, MIGRATED);
         }
     }
 
@@ -92,9 +94,9 @@ public class BlobStorageMigrationService {
             dcv.setContentChecksum(checksum);
             log.debug("Uploaded data to {} Size = {} checksum = {}", cloudBlockBlob.getUri(), dcv.getSize(), checksum);
 
-            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            cloudBlockBlob.download(byteArrayOutputStream);
-            if (! checksum.equals(shaHex(byteArrayOutputStream.toByteArray()))) {
+            final ByteArrayOutputStream checksumStream = new ByteArrayOutputStream();
+            cloudBlockBlob.download(checksumStream);
+            if (! checksum.equals(shaHex(checksumStream.toByteArray()))) {
                 throw new FileStorageException(dcv.getStoredDocument().getId(), dcv.getId());
             }
         } catch (URISyntaxException | StorageException | IOException e) {
