@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.dm.hateos.DocumentContentVersionHalResource;
 import uk.gov.hmcts.dm.service.BlobStorageMigrationService;
 
-import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.NO_CONTENT;

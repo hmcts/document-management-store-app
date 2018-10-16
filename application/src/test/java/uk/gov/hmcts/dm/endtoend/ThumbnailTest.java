@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.io.IOException;
@@ -37,11 +36,11 @@ public class ThumbnailTest extends End2EndTestBase {
 
     public ThumbnailTest() throws IOException {
         txtFile = createMockMultipartFile("test.txt","test".getBytes(StandardCharsets.UTF_8), TEXT_PLAIN_VALUE);
-        jpgFile = createMockMultipartFile("document-jpg-example.jpg",IMAGE_JPEG_VALUE);
-        pngFile = createMockMultipartFile("document-png-example.png",IMAGE_PNG_VALUE);
-        gifFile = createMockMultipartFile("document-gif-example.gif",IMAGE_GIF_VALUE);
-        gifAniFile = createMockMultipartFile("document-gif-animated-example.gif",IMAGE_GIF_VALUE);
-        pdfFile = createMockMultipartFile("1MB.pdf",APPLICATION_PDF_VALUE);
+        jpgFile = createMockMultipartFile("document-jpg-example.jpg", IMAGE_JPEG_VALUE);
+        pngFile = createMockMultipartFile("document-png-example.png",  IMAGE_PNG_VALUE);
+        gifFile = createMockMultipartFile("document-gif-example.gif", IMAGE_GIF_VALUE);
+        gifAniFile = createMockMultipartFile("document-gif-animated-example.gif", IMAGE_GIF_VALUE);
+        pdfFile = createMockMultipartFile("1MB.pdf", APPLICATION_PDF_VALUE);
     }
 
     @Test
@@ -89,9 +88,6 @@ public class ThumbnailTest extends End2EndTestBase {
             .getResponse();
 
         final String url = getThumbnailUrlFromResponse(response);
-
-        final ResultActions actions = mvc.perform(get(url).headers(headers));
-
 
         mvc.perform(get(url)
             .headers(headers))
