@@ -75,6 +75,7 @@ public class BlobStorageMigrationServiceTest {
 
     private static final String DOC_CONTENT = "!Where # is $ my % Herman ^ Miller Aeron?";
     private static final String DOC_CONTENT_CHECKSUM = shaHex(DOC_CONTENT.getBytes());
+
     @Before
     public void setUp() throws Exception {
         cloudBlobContainer = PowerMockito.mock(CloudBlobContainer.class);
@@ -244,7 +245,7 @@ public class BlobStorageMigrationServiceTest {
     }
 
     private void prepareDownloadStream() throws StorageException {
-        doAnswer(invocation -> copy(toInputStream((DOC_CONTENT)),
+        doAnswer(invocation -> copy(toInputStream(DOC_CONTENT),
                                     invocation.getArgumentAt(0, OutputStream.class))).when(cloudBlockBlob)
             .download(any(OutputStream.class));
     }

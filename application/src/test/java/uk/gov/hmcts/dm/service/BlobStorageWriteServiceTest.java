@@ -67,7 +67,7 @@ public class BlobStorageWriteServiceTest {
         given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
         String azureProvidedUri = "someuri";
         given(blob.getUri()).willReturn(new URI(azureProvidedUri));
-        doAnswer(invocation -> copy(toInputStream((MOCK_DATA)), invocation.getArgumentAt(0, OutputStream.class))).when(
+        doAnswer(invocation -> copy(toInputStream(MOCK_DATA), invocation.getArgumentAt(0, OutputStream.class))).when(
             blob).download(any(OutputStream.class));
 
         // upload
