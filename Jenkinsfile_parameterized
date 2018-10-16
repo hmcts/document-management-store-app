@@ -53,6 +53,7 @@ withParameterizedPipeline(type, product, component, params.ENVIRONMENT, 'sandbox
     enableDbMigration()
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
+    setVaultName('ccd')
 
     after('checkout') {
         echo '${product}-${component} out'

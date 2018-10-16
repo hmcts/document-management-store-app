@@ -60,6 +60,7 @@ withPipeline(type , product, component) {
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
+    setVaultName('ccd')
 
     after('checkout') {
         echo '${product}-${component} out'
