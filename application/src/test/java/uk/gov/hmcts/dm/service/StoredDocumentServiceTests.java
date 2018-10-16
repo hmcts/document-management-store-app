@@ -214,7 +214,6 @@ public class StoredDocumentServiceTests {
 
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
         assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
-        assertThat(latestVersion.getContentUri(), equalTo("someContentUri"));
         verify(blobStorageWriteService).uploadDocumentContentVersion(documents.get(0), latestVersion, TEST_FILE);
     }
 
@@ -258,7 +257,6 @@ public class StoredDocumentServiceTests {
 
         ArgumentCaptor<DocumentContentVersion> captor = ArgumentCaptor.forClass(DocumentContentVersion.class);
         verify(blobStorageWriteService).uploadDocumentContentVersion(storedDocument, documentContentVersion, TEST_FILE);
-        assertThat(latestVersion.getContentUri(), equalTo("someContentUri"));
         verify(documentContentVersionRepository).save(captor.capture());
         assertThat(captor.getValue(), is(documentContentVersion));
     }
@@ -340,7 +338,6 @@ public class StoredDocumentServiceTests {
 
         assertThat(latestVersionInFolder.getMimeType(), equalTo(TEST_FILE.getContentType()));
         assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
-        assertThat(latestVersionInFolder.getContentUri(), equalTo("someContentUri"));
         verify(securityUtilService).getUserId();
         verify(folderRepository).save(folder);
         verify(blobStorageWriteService).uploadDocumentContentVersion(folder.getStoredDocuments().get(0), latestVersionInFolder, TEST_FILE);

@@ -3,7 +3,7 @@ package uk.gov.hmcts.dm.endtoend;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,15 +13,19 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 
@@ -61,6 +65,21 @@ public abstract class End2EndTestBase {
             return null;
         })
             .when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
+            .loadBlob(any(DocumentContentVersion.class), any(OutputStream.class));
+        doAnswer(invocation -> {
+            uploadDocument(invocation);
+            return null;
+        }).when(blobStorageWriteService)
+            .uploadDocumentContentVersion(any(StoredDocument.class),
+                                          any(DocumentContentVersion.class),
+                                          any(MultipartFile.class));
+    }
+
+    private void uploadDocument(final InvocationOnMock invocation) throws IOException {
+        final DocumentContentVersion dcv = invocation.getArgumentAt(1, DocumentContentVersion.class);
+//        final MultipartFile file = invocation.getArgumentAt(2, MultipartFile.class);
+        dcv.setContentUri("uri");
+        dcv.setContentChecksum("checksum");
+//        dcv.setDocumentContent(new DocumentContent(dcv, new PassThroughBlob(file)));
     }
 }

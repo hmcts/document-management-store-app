@@ -24,8 +24,6 @@ public class DocumentContentVersionService {
     @Autowired
     private StoredDocumentRepository storedDocumentRepository;
 
-    private static final int STREAM_BUFFER_SIZE = 5000000;
-
     public DocumentContentVersion findOne(UUID id) {
         return documentContentVersionRepository.findOne(id);
     }
@@ -35,8 +33,7 @@ public class DocumentContentVersionService {
             throw new CantReadDocumentContentVersionBinaryException("File content is null", documentContentVersion);
         }
         try {
-            IOUtils.copy(documentContentVersion.getDocumentContent().getData().getBinaryStream(), outputStream,
-                STREAM_BUFFER_SIZE);
+            IOUtils.copy(documentContentVersion.getDocumentContent().getData().getBinaryStream(), outputStream);
         } catch (Exception e) {
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
         }
