@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.ResultActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.io.IOException;
@@ -88,6 +89,9 @@ public class ThumbnailTest extends End2EndTestBase {
             .getResponse();
 
         final String url = getThumbnailUrlFromResponse(response);
+
+        final ResultActions actions = mvc.perform(get(url).headers(headers));
+
 
         mvc.perform(get(url)
             .headers(headers))

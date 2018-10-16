@@ -48,6 +48,13 @@ public class DocumentThumbnailController {
             return ResponseEntity.notFound().build();
         }
 
+        final Resource resource = auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(
+            documentContentVersion);
+        final ResponseEntity<Resource> entity = ResponseEntity.ok()
+            .contentType(MediaType.IMAGE_JPEG)
+            .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(
+                documentContentVersion));
+
         return ResponseEntity.ok()
             .contentType(MediaType.IMAGE_JPEG)
             .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion));
