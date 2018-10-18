@@ -109,6 +109,7 @@ public class BlobStorageMigrationServiceTest {
         verify(auditEntryService).createAndSaveEntry(dcv, MIGRATED);
         verify(cloudBlockBlob).upload(argThat(new InputStreamMatcher(DOC_CONTENT)), eq(dcv.getSize()));
         assertThat(dcv.getContentUri(), is(azureProvidedUri));
+        assertThat(dcv.getContentChecksum(), is(DOC_CONTENT_CHECKSUM));
         assertThat(dcv.getDocumentContent(), is(dcv.getDocumentContent()));
     }
 
