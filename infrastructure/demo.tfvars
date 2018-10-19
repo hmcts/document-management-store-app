@@ -2,8 +2,6 @@ java_opts = ""
 
 // Webapp
 capacity = "2"
-asp_name = "dm-store-demo"
-asp_rg = "dm-store-demo"
 
 ////////////////////////////////////////////////
 // Endpoints
