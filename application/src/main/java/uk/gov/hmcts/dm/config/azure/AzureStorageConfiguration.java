@@ -28,10 +28,8 @@ public class AzureStorageConfiguration {
     @Value("${postgres.storage.enabled}")
     private Boolean postgresStorageEnabled;
 
-    @Bean
-    public CloudStorageAccount storageAccount() throws URISyntaxException, InvalidKeyException {
-        return CloudStorageAccount.parse(connectionString);
-    }
+    @Value("${blobstore.migrate.ccd.publicKey}")
+    private String migrationPublicKeyStringValue;
 
     @Bean
     public CloudBlobClient cloudBlobClient() throws URISyntaxException, InvalidKeyException {
@@ -39,12 +37,17 @@ public class AzureStorageConfiguration {
     }
 
     @Bean
-    public CloudBlobContainer cloudBlobContainer() throws URISyntaxException, InvalidKeyException, StorageException {
-        return cloudBlobClient().getContainerReference(containerReference);
+    CloudBlobContainer cloudBlobContainer() throws URISyntaxException, InvalidKeyException, StorageException {
+        final CloudBlobContainer container = cloudBlobClient().getContainerReference(this.containerReference);
+        if (isAzureBlobStoreEnabled() && !container.exists()) {
+            // Current behaviour is that system will hang for a very long time
+            throw new AppConfigurationException("Cloub Blob Container does not exist");
+        }
+        return container;
     }
 
     @Bean
-    public Boolean blobEnabled() {
+    Boolean blobEnabled() {
         if (!isAzureBlobStoreEnabled() && !isPostgresBlobStorageEnabled()) {
             throw new AppConfigurationException(
                 "At least one of Azure and postgres blob storage needs to be enabled"
@@ -59,6 +62,10 @@ public class AzureStorageConfiguration {
 
     public Boolean isPostgresBlobStorageEnabled() {
         return Optional.ofNullable(postgresStorageEnabled).orElse(true);
+    }
+
+    private CloudStorageAccount storageAccount() throws URISyntaxException, InvalidKeyException {
+        return CloudStorageAccount.parse(connectionString);
     }
 
 }
