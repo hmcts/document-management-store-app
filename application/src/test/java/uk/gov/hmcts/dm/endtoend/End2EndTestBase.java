@@ -3,7 +3,7 @@ package uk.gov.hmcts.dm.endtoend;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +21,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -57,9 +58,6 @@ public abstract class End2EndTestBase {
         when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
         when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(false);
 
-        when(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
-            any(DocumentContentVersion.class), any(MultipartFile.class))).thenReturn("someContentUri");
-
         doAnswer(invocation -> {
             final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
             IOUtils.copy(FILE.getInputStream(), out);
@@ -67,6 +65,19 @@ public abstract class End2EndTestBase {
             return null;
         })
             .when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
+            .loadBlob(any(DocumentContentVersion.class), any(OutputStream.class));
+        doAnswer(invocation -> {
+            uploadDocument(invocation);
+            return null;
+        }).when(blobStorageWriteService)
+            .uploadDocumentContentVersion(any(StoredDocument.class),
+                                          any(DocumentContentVersion.class),
+                                          any(MultipartFile.class));
+    }
+
+    private void uploadDocument(final InvocationOnMock invocation) throws IOException {
+        final DocumentContentVersion dcv = invocation.getArgumentAt(1, DocumentContentVersion.class);
+        dcv.setContentUri("uri");
+        dcv.setContentChecksum("checksum");
     }
 }
