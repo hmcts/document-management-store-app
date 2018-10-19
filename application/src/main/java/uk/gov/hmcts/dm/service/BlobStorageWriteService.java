@@ -10,36 +10,66 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.FileStorageException;
+import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import javax.validation.constraints.NotNull;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.UUID;
+
+import static org.apache.commons.io.IOUtils.toByteArray;
+import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
 
 @Slf4j
 @Service
 public class BlobStorageWriteService {
 
     private final CloudBlobContainer cloudBlobContainer;
+    private final DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
-    public BlobStorageWriteService(CloudBlobContainer cloudBlobContainer) {
+    public BlobStorageWriteService(CloudBlobContainer cloudBlobContainer,
+                                   DocumentContentVersionRepository documentContentVersionRepository) {
         this.cloudBlobContainer = cloudBlobContainer;
+        this.documentContentVersionRepository = documentContentVersionRepository;
     }
 
-    public String uploadDocumentContentVersion(@NotNull StoredDocument storedDocument,
+    public void uploadDocumentContentVersion(@NotNull StoredDocument storedDocument,
                                              @NotNull DocumentContentVersion documentContentVersion,
                                              @NotNull MultipartFile multiPartFile) {
+        writeBinaryStream(storedDocument.getId(), documentContentVersion, multiPartFile);
+        documentContentVersionRepository.updateContentUriAndContentCheckSum(documentContentVersion.getId(),
+                                                                            documentContentVersion.getContentUri(),
+                                                                            documentContentVersion.getContentChecksum());
+    }
+
+    private void writeBinaryStream(UUID documentId,
+                                   DocumentContentVersion documentContentVersion,
+                                   MultipartFile multiPartFile) {
         try {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
-            log.debug("Uploaded content for document id: {} documentContentVersion id {}",
-                storedDocument.getId(),
-                documentContentVersion.getId());
-            return blob.getUri().toString();
+            final byte[] bytes = toByteArray(multiPartFile.getInputStream());
+            documentContentVersion.setContentUri(blob.getUri().toString());
+            final String checksum = shaHex(bytes);
+            documentContentVersion.setContentChecksum(checksum);
+            log.debug("Uploaded content for document id: {} documentContentVersion id {} to {}; Size = {} checksum = {}",
+                      documentId,
+                      documentContentVersion.getId(),
+                      blob.getUri(),
+                      documentContentVersion.getSize(),
+                      checksum);
+
+            // checks that we uploaded correctly
+            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            blob.download(byteArrayOutputStream);
+            if (! checksum.equals(shaHex(byteArrayOutputStream.toByteArray()))) {
+                throw new FileStorageException(documentId, documentContentVersion.getId());
+            }
         } catch (URISyntaxException | StorageException | IOException e) {
-            log.error("Exception caught", e);
-            throw new FileStorageException(e, storedDocument.getId(), documentContentVersion.getId());
+            log.error("Exception caught with docuemntContentVersion, id = {}", documentContentVersion.getId(), e);
+            throw new FileStorageException(e, documentId, documentContentVersion.getId());
         }
     }
 

@@ -174,13 +174,12 @@ public class StoredDocumentService {
     }
 
     private void storeInAzureBlobStorage(StoredDocument storedDocument,
-                                         DocumentContentVersion documentContentVersion, MultipartFile file) {
+                                         DocumentContentVersion documentContentVersion,
+                                         MultipartFile file) {
         if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
-            String contentUri = blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+            blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
                 documentContentVersion,
                 file);
-            documentContentVersion.setContentUri(contentUri);
-            documentContentVersionRepository.update(documentContentVersion.getId(), contentUri);
         }
     }
 }

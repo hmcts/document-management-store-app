@@ -22,6 +22,12 @@ public class FileStorageException extends RuntimeException {
         this.versionId = versionId;
     }
 
+    public FileStorageException(@NonNull UUID documentId, @NonNull UUID versionId) {
+        super();
+        this.documentId = documentId;
+        this.versionId = versionId;
+    }
+
     @Override
     public String getMessage() {
         return String.format("Could not store the blob in Azure Blob Store for documentId=[%s] and versionId=[%s]",
