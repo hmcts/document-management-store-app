@@ -54,6 +54,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/health",
                 "/mappings",
                 "/info",
+                "/migrate",
                 "/");
     }
 
