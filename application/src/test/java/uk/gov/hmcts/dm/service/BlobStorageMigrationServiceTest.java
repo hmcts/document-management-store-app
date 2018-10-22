@@ -245,7 +245,7 @@ public class BlobStorageMigrationServiceTest {
 
         for (DocumentContentVersion dcv: dcvList) {
             verifyMigrateInteractions(dcv, uriMap.get(dcv.getId()));
-        };
+        }
         verifyBatchMigrateDocumentContentVersionRepositoryQueiries(5);
     }
 
