@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,7 +21,7 @@ import java.util.UUID;
  * A simpler mapping to auditentry table.
  */
 @Entity
-@Table(name="auditentry")
+@Table(name = "auditentry")
 @NoArgsConstructor
 public class MigrateEntry {
 
@@ -43,10 +44,12 @@ public class MigrateEntry {
     private Date recordedDateTime;
 
     @Getter
-    private UUID storeddocument_id;
+    @Column(name = "storeddocument_id")
+    private UUID storeddocumentId;
 
     @Getter
-    private UUID documentcontentversion_id;
+    @Column(name = "documentcontentversion_id")
+    private UUID documentcontentversionId;
 
     @Getter
     private String servicename;
@@ -57,8 +60,8 @@ public class MigrateEntry {
                         String serviceName) {
         this.type = type;
         this.action = action;
-        this.storeddocument_id = documentcontentversion.getStoredDocument().getId();
-        this.documentcontentversion_id = documentcontentversion.getId();
+        this.storeddocumentId = documentcontentversion.getStoredDocument().getId();
+        this.documentcontentversionId = documentcontentversion.getId();
         this.servicename = serviceName;
         this.recordedDateTime = new Date();
     }

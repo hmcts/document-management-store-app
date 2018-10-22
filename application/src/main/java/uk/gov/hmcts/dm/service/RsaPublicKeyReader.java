@@ -31,12 +31,10 @@ class RsaPublicKeyReader {
         }
     }
 
-    private RSAPublicKeySpec parsePublicKey(ByteSource supplier)
-        throws IOException {
+    private RSAPublicKeySpec parsePublicKey(ByteSource supplier) throws IOException {
         InputStream stream = supplier.openStream();
         Iterable<String> parts = Splitter.on(' ').split(toStringAndClose(stream).trim());
-        checkArgument(size(parts) >= 2 && "ssh-rsa".equals(get(parts, 0)),
-                      "bad format, should be: ssh-rsa AAAAB3...");
+        checkArgument(size(parts) >= 2 && "ssh-rsa".equals(get(parts, 0)), "bad format, should be: ssh-rsa AAAAB3...");
         stream = new ByteArrayInputStream(base64().decode(get(parts, 1)));
         String marker = new String(readLengthFirst(stream));
         checkArgument("ssh-rsa".equals(marker), "looking for marker ssh-rsa but got %s", marker);
@@ -45,12 +43,7 @@ class RsaPublicKeyReader {
         return new RSAPublicKeySpec(modulus, publicExponent);
     }
 
-    /**
-     * @See http://www.ietf.org/rfc/rfc4253.txt
-     * @param in
-     * @return byte[]
-     * @throws IOException
-     */
+    // @See http://www.ietf.org/rfc/rfc4253.txt
     private static byte[] readLengthFirst(InputStream in) throws IOException {
         int byte1 = in.read();
         int byte2 = in.read();

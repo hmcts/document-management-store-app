@@ -77,11 +77,6 @@ public class BlobStorageMigrationService {
         return batchMigrate(defaultIfNull(limit, defaultBatchSize), defaultIfNull(mockRun, false));
     }
 
-    public MigrateProgressReport getMigrateProgressReport() {
-        return new MigrateProgressReport(documentContentVersionRepository.countByContentChecksumIsNull(),
-                                         documentContentVersionRepository.countByContentChecksumIsNotNull());
-    }
-
     private BatchMigrateProgressReport batchMigrate(int limit, boolean mockRun) {
         final long start = currentTimeMillis();
 
@@ -89,7 +84,7 @@ public class BlobStorageMigrationService {
 
         final List<DocumentContentVersion> dcvList = documentContentVersionRepository
             .findByContentChecksumIsNullAndDocumentContentIsNotNull(
-                new PageRequest(0, limit, DESC, "createdOn"));
+            new PageRequest(0, limit, DESC, "createdOn"));
 
         if (!mockRun) {
             dcvList.forEach(dcv -> migrateDocumentContentVersion(dcv));
@@ -99,6 +94,11 @@ public class BlobStorageMigrationService {
 
         final long finish = currentTimeMillis();
         return new BatchMigrateProgressReport(before, dcvList, after, Duration.ofMillis(finish - start));
+    }
+
+    public MigrateProgressReport getMigrateProgressReport() {
+        return new MigrateProgressReport(documentContentVersionRepository.countByContentChecksumIsNull(),
+                                         documentContentVersionRepository.countByContentChecksumIsNotNull());
     }
 
     private void migrateDocumentContentVersion(DocumentContentVersion documentContentVersion) {

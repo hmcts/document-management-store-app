@@ -381,11 +381,11 @@ public class BlobStorageMigrationServiceTest {
         @Override
         public boolean matches(final Object argument) {
             final MigrateEntry item = (MigrateEntry) argument;
-            return documentContentVersion.getId().equals(item.getDocumentcontentversion_id())
+            return item.getDocumentcontentversionId().equals(documentContentVersion.getId())
                 && item.getServicename().equals("Batch Migration Service")
                 && item.getType().equals("Migrate content")
                 && item.getAction().equals(MIGRATED)
-                && item.getStoreddocument_id().equals(documentContentVersion.getStoredDocument().getId());
+                && item.getStoreddocumentId().equals(documentContentVersion.getStoredDocument().getId());
 
         }
     }
