@@ -28,9 +28,6 @@ public class AzureStorageConfiguration {
     @Value("${postgres.storage.enabled}")
     private Boolean postgresStorageEnabled;
 
-    @Value("${blobstore.migrate.ccd.publicKey}")
-    private String migrationPublicKeyStringValue;
-
     @Bean
     public CloudBlobClient cloudBlobClient() throws URISyntaxException, InvalidKeyException {
         return storageAccount().createCloudBlobClient();
