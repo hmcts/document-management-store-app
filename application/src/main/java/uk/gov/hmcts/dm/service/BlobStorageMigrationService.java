@@ -70,11 +70,11 @@ public class BlobStorageMigrationService {
         migrateDocumentContentVersion(documentContentVersion);
     }
 
-    public synchronized BatchMigrateProgressReport batchMigrate(String authToken,
-                                                                final Integer limit,
-                                                                final Boolean mockRun) {
-        batchMigrationTokenService.checkAuthToken(authToken);
-        return batchMigrate(defaultIfNull(limit, defaultBatchSize), defaultIfNull(mockRun, false));
+    public BatchMigrateProgressReport batchMigrate(String authToken, final Integer limit, final Boolean mockRun) {
+        synchronized (this) {
+            batchMigrationTokenService.checkAuthToken(authToken);
+            return batchMigrate(defaultIfNull(limit, defaultBatchSize), defaultIfNull(mockRun, false));
+        }
     }
 
     private BatchMigrateProgressReport batchMigrate(int limit, boolean mockRun) {
@@ -113,7 +113,7 @@ public class BlobStorageMigrationService {
             // For some reason,
             // auditEntryService.createAndSaveEntry
             // only creates one database entry; hence use auditEntryRepository.saveAndFlush directly
-            auditEntryRepository.saveAndFlush(newAuditEntry(documentContentVersion, "Batch Migration Service"));
+            auditEntryRepository.saveAndFlush(newAuditEntry(documentContentVersion));
         }
     }
 
@@ -157,12 +157,7 @@ public class BlobStorageMigrationService {
         return cloudBlobContainer.getBlockBlobReference(uuid.toString());
     }
 
-    private MigrateEntry newAuditEntry(DocumentContentVersion documentContentVersion,
-                                       String username) {
-        MigrateEntry auditEntry = new MigrateEntry("Migrate content",
-                                                   MIGRATED,
-                                                   documentContentVersion,
-                                                   "Batch Migration Service");
-        return auditEntry;
+    private MigrateEntry newAuditEntry(DocumentContentVersion documentContentVersion) {
+        return new MigrateEntry("Migrate content", MIGRATED, documentContentVersion, "Batch Migration Service");
     }
 }
