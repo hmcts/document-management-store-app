@@ -14,7 +14,6 @@ import java.math.BigInteger;
 import java.security.spec.RSAPublicKeySpec;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Throwables.throwIfUnchecked;
 import static com.google.common.collect.Iterables.get;
 import static com.google.common.collect.Iterables.size;
 import static com.google.common.io.BaseEncoding.base64;
@@ -23,12 +22,8 @@ import static org.jclouds.util.Strings2.toStringAndClose;
 @Component
 class RsaPublicKeyReader {
 
-    RSAPublicKeySpec parsePublicKey(@NotNull String idRsaPub) {
-        try {
-            return parsePublicKey(ByteSource.wrap(idRsaPub.getBytes(Charsets.UTF_8)));
-        } catch (IOException e) {
-            throw propagate(e);
-        }
+    RSAPublicKeySpec parsePublicKey(@NotNull String idRsaPub) throws IOException {
+        return parsePublicKey(ByteSource.wrap(idRsaPub.getBytes(Charsets.UTF_8)));
     }
 
     private RSAPublicKeySpec parsePublicKey(ByteSource supplier) throws IOException {
@@ -49,14 +44,9 @@ class RsaPublicKeyReader {
         int byte2 = in.read();
         int byte3 = in.read();
         int byte4 = in.read();
-        int length = (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + (byte4 << 0);
+        int length = (byte1 << 24) + (byte2 << 16) + (byte3 << 8) + byte4;
         byte[] val = new byte[length];
         ByteStreams.readFully(in, val);
         return val;
-    }
-
-    private RuntimeException propagate(Throwable throwable) {
-        throwIfUnchecked(throwable);
-        throw new RuntimeException(throwable);
     }
 }
