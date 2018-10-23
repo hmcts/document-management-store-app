@@ -12,6 +12,7 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'io.franzbecker.gradle-lombok' version '1.14'
+    id "info.solidsoft.pitest" version "1.3.0"
 }
 
 group = 'uk.gov.hmcts.reform.dm'
@@ -185,11 +186,17 @@ dependencies {
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlets', version: versions.jetty
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
 
+<<<<<<< HEAD
     // For batch migration use only
     compile group: 'org.apache.jclouds', name: 'jclouds-compute', version: '2.+'
     compile group: 'net.time4j', name: 'time4j-core', version: '4.38'
     // They can be removed alongside with migration code
 
+=======
+    compile group: 'org.pitest', name: 'pitest', version: '1.3.2'
+    compile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: '1.3.0'
+    compile group: 'org.codehaus.sonar-plugins', name: 'sonar-pitest-plugin', version: '0.5'
+>>>>>>> 7c3450922cfc9ac11a4db451d65d28428bc585dc
 }
 
 def coverageExclusionList = [
@@ -235,11 +242,22 @@ sonarqube {
         property "sonar.projectName", "${rootProject.name}"
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
         property "sonar.exclusions", coverageExclusionList.join(", ")
+        property "sonar.pitest.mode", "reuseReport"
+        property "sonar.pitest.reportsDirectory", "build/reports/pitest"
         // Migration code
         property "sonar.cpd.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
         property "sonar.coverage.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
     }
 }
+
+pitest {
+    targetClasses = ['**uk.gov.hmcts.dm.*']
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+    mutationThreshold = 67  // Traget 75
+    coverageThreshold = 75
+}
+
 
 //(./gradlew clean jar) build/libs/em-api-*-all.jar
 //(./gradlew installDist bootRepackage) build/install/dm-store/bin/dm-store
