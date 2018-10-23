@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -31,26 +32,33 @@ public class MigrateEntry {
     @Getter
     private UUID id;
 
+    @Setter
     @Getter
     private String type;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     @Getter
+    @Setter
     private AuditActions action;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
+    @Setter
+    @Getter
     private Date recordedDateTime;
 
+    @Setter
     @Getter
     @Column(name = "storeddocument_id")
     private UUID storeddocumentId;
 
+    @Setter
     @Getter
     @Column(name = "documentcontentversion_id")
     private UUID documentcontentversionId;
 
+    @Setter
     @Getter
     private String servicename;
 
