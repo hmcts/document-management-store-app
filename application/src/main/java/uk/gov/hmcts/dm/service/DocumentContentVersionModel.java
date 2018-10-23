@@ -3,12 +3,14 @@ package uk.gov.hmcts.dm.service;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.util.UUID;
 
 @JsonPropertyOrder({DocumentContentVersionModel.ATTRIBUTE_DOCUMENT_ID, DocumentContentVersionModel
     .ATTRIBUTE_VERSION_ID, DocumentContentVersionModel.ATTRIBUTE_URI, DocumentContentVersionModel.ATTRIBUTE_CHECKSUM})
+@NoArgsConstructor
 class DocumentContentVersionModel {
 
     static final String ATTRIBUTE_DOCUMENT_ID = "document_id";
