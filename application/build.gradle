@@ -240,7 +240,7 @@ sonarqube {
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
         property "sonar.exclusions", coverageExclusionList.join(", ")
         property "sonar.pitest.mode", "reuseReport"
-        property "sonar.pitest.reportsDirectory", "build/reports/pitest"
+        property "sonar.pitest.reportsDirectory", "${project.buildDir}/reports/pitest"
         // Migration code
         property "sonar.cpd.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
         property "sonar.coverage.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
