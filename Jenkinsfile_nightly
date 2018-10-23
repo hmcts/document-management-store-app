@@ -5,7 +5,7 @@ properties([
     pipelineTriggers([cron('H 05 * * *')])
 ])
 
-@Library("Infrastructure")
+@Library("Infrastructure@ccd_various")
 
 def type = "java"
 def product = "dm"
@@ -27,6 +27,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 withNightlyPipeline(type, product, component) {
     enableSlackNotifications('#ccd-nightly-builds')
     enableDbMigration()
+    enableMutationTest()
     loadVaultSecrets(secrets)
 
     after('checkout') {
