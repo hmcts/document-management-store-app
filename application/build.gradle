@@ -235,6 +235,9 @@ sonarqube {
         property "sonar.projectName", "${rootProject.name}"
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
         property "sonar.exclusions", coverageExclusionList.join(", ")
+        // Migration code
+        property "sonar.cpd.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
+        property "sonar.coverage.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
     }
 }
 
