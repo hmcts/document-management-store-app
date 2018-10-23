@@ -14,7 +14,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -62,7 +62,7 @@ class BatchMigrationTokenService {
                     throw new ValidationErrorException("Incorrect secret");
                 }
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
-                | BadPaddingException | InvalidKeySpecException | UnsupportedEncodingException e) {
+                | BadPaddingException | InvalidKeySpecException | IOException e) {
                 throw new ValidationErrorException(e);
             }
         }

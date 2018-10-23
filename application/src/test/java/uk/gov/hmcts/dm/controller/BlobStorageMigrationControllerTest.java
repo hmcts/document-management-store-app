@@ -11,6 +11,7 @@ import java.util.UUID;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.springframework.http.HttpHeaders.IF_MATCH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class BlobStorageMigrationControllerTest extends ComponentTestBase {
@@ -81,4 +82,33 @@ public class BlobStorageMigrationControllerTest extends ComponentTestBase {
             .post("/documents/" + documentId + "/versions/" + invalidUuid + "/migrate")
             .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void batchMigrateGet() throws Exception {
+        restActions
+            .get("/migrate")
+            .andExpect(status().isOk());
+
+        verify(blobStorageMigrationService).getMigrateProgressReport();
+    }
+
+    @Test
+    public void batchMigratePostWithNoParameters() throws Exception {
+        restActions
+            .post("/migrate")
+            .andExpect(status().isOk());
+
+        verify(blobStorageMigrationService).batchMigrate(null, null, null);
+    }
+
+    @Test
+    public void batchMigratePostWithParameters() throws Exception {
+        restActions
+            .withHeader(IF_MATCH, "secret crypte")
+            .post("/migrate?limit=10&dry-mock-run=true")
+            .andExpect(status().isOk());
+
+        verify(blobStorageMigrationService).batchMigrate("secret crypte", 10, true);
+    }
+
 }

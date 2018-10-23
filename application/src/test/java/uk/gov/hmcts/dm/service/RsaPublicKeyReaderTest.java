@@ -129,7 +129,17 @@ public class RsaPublicKeyReaderTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void badPublicKey() {
+    public void badPublicKey1() throws Exception {
+        publicKeyReader.parsePublicKey("Part1 Part2 devel@ell.lake");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void badPublicKey2() throws Exception {
+        publicKeyReader.parsePublicKey("ARandomString");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void badSSHPublicKey() throws Exception {
         publicKeyReader.parsePublicKey("ssh-rsa Exptected to fail devel@ell.lake");
     }
 

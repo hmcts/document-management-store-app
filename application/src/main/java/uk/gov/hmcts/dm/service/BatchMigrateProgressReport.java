@@ -54,7 +54,7 @@ public class BatchMigrateProgressReport {
                                          Duration duration) {
         this.beforeJob = beforeJob;
         this.migratedDocumentContentVersions = migratedDocumentContentVersions.stream()
-            .map(dcv -> new DocumentContentVersionModel(dcv))
+            .map(DocumentContentVersionModel::new)
             .collect(toList());
         this.afterJob = afterJob;
         this.status = OK;
