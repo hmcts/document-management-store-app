@@ -1,16 +1,18 @@
 package uk.gov.hmcts.dm.service;
 
-import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 
+import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
+import java.net.URL;
+
+import static org.apache.commons.io.IOUtils.copy;
+
 
 @Service
 @Transactional
@@ -25,9 +27,8 @@ public class BlobStorageReadService {
 
     public void loadBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
         try {
-            CloudBlockBlob blob = cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString());
-            blob.download(outputStream);
-        } catch (URISyntaxException | StorageException e) {
+            copy(new URL(documentContentVersion.getContentUri()).openStream(), outputStream);
+        } catch (IOException e) {
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
         }
     }
