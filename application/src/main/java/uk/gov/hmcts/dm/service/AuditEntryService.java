@@ -38,7 +38,8 @@ public class AuditEntryService {
 
     public StoredDocumentAuditEntry createAndSaveEntry(StoredDocument storedDocument,
                                                        AuditActions action,
-                                                       String username, String serviceName) {
+                                                       String username,
+                                                       String serviceName) {
         StoredDocumentAuditEntry storedDocumentAuditEntry = new StoredDocumentAuditEntry();
         populateCommonFields(storedDocumentAuditEntry, action, username, serviceName);
         storedDocumentAuditEntry.setStoredDocument(storedDocument);
@@ -49,8 +50,9 @@ public class AuditEntryService {
     public StoredDocumentAuditEntry createAndSaveEntry(DocumentContentVersion documentContentVersion,
                                                        AuditActions action) {
         return createAndSaveEntry(documentContentVersion, action,
-            securityUtilService.getUserId(), securityUtilService.getCurrentlyAuthenticatedServiceName()
-        );
+                                  securityUtilService.getUserId(),
+                                  securityUtilService.getCurrentlyAuthenticatedServiceName()
+                                 );
     }
 
     public DocumentContentVersionAuditEntry createAndSaveEntry(DocumentContentVersion documentContentVersion,
