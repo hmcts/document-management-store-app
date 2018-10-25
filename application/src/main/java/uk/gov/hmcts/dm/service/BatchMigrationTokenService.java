@@ -65,7 +65,7 @@ class BatchMigrationTokenService {
     private void decrypt(final String authToken) {
         try {
             final RSAPublicKeySpec rsaPublicKeySpec = sshPublicKeyParser.parsePublicKey(migrationPublicKeyStringValue);
-            Cipher cipher = Cipher.getInstance(SSH_ALGORITHM);
+            final Cipher cipher = Cipher.getInstance(SSH_ALGORITHM);
             cipher.init(DECRYPT_MODE, KeyFactory.getInstance(SSH_ALGORITHM).generatePublic(rsaPublicKeySpec));
             final String decryptedSecret = new String(cipher.doFinal(Base64.decodeBase64(authToken)), "UTF-8");
             if (!StringUtils.equals(migrateSecret, decryptedSecret)) {
