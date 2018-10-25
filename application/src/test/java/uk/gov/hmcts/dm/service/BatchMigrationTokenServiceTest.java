@@ -31,14 +31,14 @@ public class BatchMigrationTokenServiceTest {
 
     @Test
     public void acceptBadAuthTokenInNoProductionMode() {
-        underTest.setProductionMode(false);
+        underTest.setPublicKeyRequired(false);
         underTest.checkAuthToken("Some Token");
     }
 
     @Test(expected = BadPaddingException.class)
     public void acceptNoBadAuthTokenInProductionMode() throws Throwable {
         try {
-            underTest.setProductionMode(true);
+            underTest.setPublicKeyRequired(true);
             underTest.checkAuthToken("Some Token");
         } catch (ValidationErrorException e) {
             throw e.getCause();
@@ -48,14 +48,14 @@ public class BatchMigrationTokenServiceTest {
 
     @Test
     public void acceptMatchedToken() {
-        underTest.setProductionMode(true);
+        underTest.setPublicKeyRequired(true);
         underTest.setMigrateSecret("y2hahvdZ9evcTVq2");
         underTest.checkAuthToken(AUTH_TOKEN);
     }
 
     @Test(expected = ValidationErrorException.class)
     public void acceptNoMatchedToken() {
-        underTest.setProductionMode(true);
+        underTest.setPublicKeyRequired(true);
         underTest.setMigrateSecret("secretNoMatched");
         try {
             underTest.checkAuthToken(AUTH_TOKEN);
@@ -63,5 +63,25 @@ public class BatchMigrationTokenServiceTest {
             assertThat(e.getMessage(), is("Incorrect secret"));
             throw e;
         }
+    }
+
+    @Test(expected = ValidationErrorException.class)
+    public void nullAuthToken() {
+        underTest.setPublicKeyRequired(true);
+        underTest.setMigrateSecret("Expects a Token");
+        try {
+            underTest.checkAuthToken(null);
+        } catch (ValidationErrorException e) {
+            assertThat(e.getMessage(), is("An auth token is expected"));
+            throw e;
+        }
+    }
+
+    @Test
+    public void acceptsNullAuthTokenIfNotRequired() {
+        underTest.setPublicKeyRequired(false);
+        underTest.setMigrateSecret("Not Required");
+
+        underTest.checkAuthToken(null);
     }
 }
