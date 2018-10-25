@@ -6,10 +6,12 @@ import uk.gov.hmcts.dm.exception.ValidationErrorException;
 
 import javax.crypto.BadPaddingException;
 
-import static org.junit.Assert.fail;
-import static uk.gov.hmcts.dm.service.RsaPublicKeyReaderTest.PUBLIC_KEY_STRING;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static uk.gov.hmcts.dm.service.RsaPublicKeyReaderTest.PUBLIC_KEY_STRING;
 
 
 
@@ -31,8 +33,12 @@ public class BatchMigrationTokenServiceTest {
 
     @Test
     public void acceptBadAuthTokenInNoProductionMode() {
+        final RsaPublicKeyReader rsaPublicKeyReader = mock(RsaPublicKeyReader.class);
+        underTest = new BatchMigrationTokenService(rsaPublicKeyReader);
         underTest.setPublicKeyRequired(false);
         underTest.checkAuthToken("Some Token");
+
+        verifyZeroInteractions(rsaPublicKeyReader);
     }
 
     @Test(expected = BadPaddingException.class)
@@ -79,9 +85,13 @@ public class BatchMigrationTokenServiceTest {
 
     @Test
     public void acceptsNullAuthTokenIfNotRequired() {
+        final RsaPublicKeyReader rsaPublicKeyReader = mock(RsaPublicKeyReader.class);
+        underTest = new BatchMigrationTokenService(rsaPublicKeyReader);
+
         underTest.setPublicKeyRequired(false);
         underTest.setMigrateSecret("Not Required");
 
         underTest.checkAuthToken(null);
+        verifyZeroInteractions(rsaPublicKeyReader);
     }
 }
