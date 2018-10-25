@@ -22,6 +22,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 
 import static javax.crypto.Cipher.DECRYPT_MODE;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
 @Service
 @Slf4j
@@ -43,8 +44,8 @@ class BatchMigrationTokenService {
 
     @VisibleForTesting
     @Setter
-    @Value("${blobstore.migrate.ccd.productionMode:false}")
-    private boolean productionMode;
+    @Value("${blobstore.migrate.ccd.publicKeyRequired:false}")
+    private boolean publicKeyRequired;
 
     @Autowired
     protected BatchMigrationTokenService(final RsaPublicKeyReader sshPublicKeyParser) {
@@ -52,19 +53,27 @@ class BatchMigrationTokenService {
     }
 
     protected void checkAuthToken(String authToken) {
-        if (productionMode) {
-            try {
-                final RSAPublicKeySpec rsaPublicKeySpec = sshPublicKeyParser.parsePublicKey(migrationPublicKeyStringValue);
-                Cipher cipher = Cipher.getInstance(SSH_ALGORITHM);
-                cipher.init(DECRYPT_MODE, KeyFactory.getInstance(SSH_ALGORITHM).generatePublic(rsaPublicKeySpec));
-                final String decryptedSecret = new String(cipher.doFinal(Base64.decodeBase64(authToken)), "UTF-8");
-                if (!StringUtils.equals(migrateSecret, decryptedSecret)) {
-                    throw new ValidationErrorException("Incorrect secret");
-                }
-            } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
-                | BadPaddingException | InvalidKeySpecException | IOException e) {
-                throw new ValidationErrorException(e);
+        if (publicKeyRequired) {
+            if (isBlank(authToken)) {
+                throw new ValidationErrorException("An auth token is expected");
             }
+
+            decrypt(authToken);
+        }
+    }
+
+    private void decrypt(final String authToken) {
+        try {
+            final RSAPublicKeySpec rsaPublicKeySpec = sshPublicKeyParser.parsePublicKey(migrationPublicKeyStringValue);
+            Cipher cipher = Cipher.getInstance(SSH_ALGORITHM);
+            cipher.init(DECRYPT_MODE, KeyFactory.getInstance(SSH_ALGORITHM).generatePublic(rsaPublicKeySpec));
+            final String decryptedSecret = new String(cipher.doFinal(Base64.decodeBase64(authToken)), "UTF-8");
+            if (!StringUtils.equals(migrateSecret, decryptedSecret)) {
+                throw new ValidationErrorException("Incorrect secret");
+            }
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException
+            | BadPaddingException | InvalidKeySpecException | IOException e) {
+            throw new ValidationErrorException(e);
         }
     }
 }
