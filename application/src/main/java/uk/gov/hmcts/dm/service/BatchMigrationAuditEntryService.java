@@ -24,8 +24,7 @@ class BatchMigrationAuditEntryService {
         return batchMigrationAuditEntryRepository.save(new BatchMigrationAuditEntry(authToken, batchSize, mockRun));
     }
 
-    void save(final BatchMigrationAuditEntry audit,
-                                                     final BatchMigrateProgressReport report) {
+    void save(final BatchMigrationAuditEntry audit, final BatchMigrateProgressReport report) {
         try {
             audit.setStatusReport(MAPPER.writeValueAsString(report));
             batchMigrationAuditEntryRepository.save(audit);

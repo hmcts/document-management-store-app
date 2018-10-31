@@ -10,8 +10,12 @@ import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hmcts.dm.domain.BatchMigrationAuditEntry;
 import uk.gov.hmcts.dm.repository.BatchMigrationAuditEntryRepository;
 
+import java.time.Duration;
+
+import static java.util.Collections.emptyList;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BatchMigrationAuditEntryServiceTest {
@@ -19,6 +23,8 @@ public class BatchMigrationAuditEntryServiceTest {
     private BatchMigrationAuditEntryService underTest;
     @Mock
     private BatchMigrationAuditEntryRepository batchMigrationAuditEntryRepository;
+    @Mock
+    private BatchMigrationAuditEntry audit;
 
     @Before
     public void setUp() {
@@ -33,6 +39,20 @@ public class BatchMigrationAuditEntryServiceTest {
 
     @Test
     public void save() {
+        final MigrateProgressReport migrateProgressReport = new MigrateProgressReport(1L, 1L);
+        final BatchMigrateProgressReport report = new BatchMigrateProgressReport(migrateProgressReport,
+                                                                                 emptyList(),
+                                                                                 migrateProgressReport,
+                                                                                 Duration.ofMillis(30));
+        underTest.save(audit, report);
+        verify(batchMigrationAuditEntryRepository).save(audit);
+    }
+
+    @Test
+    public void withoutSave() {
+        final BatchMigrateProgressReport report = new BadBatchMigrateProgressReport();
+        underTest.save(audit, report);
+        verifyZeroInteractions(batchMigrationAuditEntryRepository);
     }
 
     class BatchMigrationAuditEntryMatcher extends ArgumentMatcher<BatchMigrationAuditEntry> {
@@ -53,6 +73,13 @@ public class BatchMigrationAuditEntryServiceTest {
             return StringUtils.equals(authToken, other.getMigrationKey())
                 && batchSize == other.getBatchSize()
                 && mockRun == other.getMockRun();
+        }
+    }
+
+    class BadBatchMigrateProgressReport extends BatchMigrateProgressReport {
+
+        BadBatchMigrateProgressReport() {
+            super(null, emptyList(), null, null);
         }
     }
 }
