@@ -1,0 +1,26 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet id="RDM-2991-migration-audit" author="WaiHung.Cho@HMCTS.NET" dbms="postgresql">
+        <createTable tableName="batch_migration_audit_entry">
+            <column name="id" type="serial PRIMARY KEY">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="started" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="modified" type="TIMESTAMP WITHOUT TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status_report" type="text"/>
+            <column name="migration_key" type="text"/>
+            <column name="batch_size" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mock_run" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
