@@ -16,6 +16,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.data.domain.PageRequest;
+import uk.gov.hmcts.dm.domain.BatchMigrationAuditEntry;
 import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.MigrateEntry;
@@ -82,6 +83,10 @@ public class BlobStorageMigrationServiceTest {
     private MigrateEntryRepository auditEntryRepository;
     @Mock
     private BatchMigrationTokenService batchMigrationTokenService;
+    @Mock
+    private BatchMigrationAuditEntryService batchMigrationAuditEntryService;
+    @Mock
+    private BatchMigrationAuditEntry batchmigrationAuditEntry;
 
     private CloudBlobContainer cloudBlobContainer;
     private CloudBlockBlob cloudBlockBlob;
@@ -99,10 +104,13 @@ public class BlobStorageMigrationServiceTest {
                                                     documentContentVersionRepository,
                                                     storedDocumentService,
                                                     auditEntryRepository,
-                                                    batchMigrationTokenService);
+                                                    batchMigrationTokenService,
+                                                    batchMigrationAuditEntryService);
         documentContentVersionUuid = UUID.randomUUID();
         documentUuid = UUID.randomUUID();
         data = new SerialBlob(DOC_CONTENT.getBytes());
+        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any())).thenReturn
+            (batchmigrationAuditEntry);
     }
 
     @Test
@@ -220,6 +228,8 @@ public class BlobStorageMigrationServiceTest {
         assertThat(report.getStatus(), is(OK));
         assertThat(report.getErrors(), is(nullValue()));
         assertTrue(report.getMigratedDocumentContentVersions().isEmpty());
+        verify(batchMigrationAuditEntryService).createAuditEntry(null, 5, false);
+        verify(batchMigrationAuditEntryService).save(batchmigrationAuditEntry, report);
     }
 
     @Test
@@ -246,6 +256,8 @@ public class BlobStorageMigrationServiceTest {
         for (DocumentContentVersion dcv: dcvList) {
             verifyMigrateInteractions(dcv, uriMap.get(dcv.getId()));
         }
+        verify(batchMigrationAuditEntryService).createAuditEntry(null, 5, false);
+        verify(batchMigrationAuditEntryService).save(batchmigrationAuditEntry, report);
         verifyBatchMigrateDocumentContentVersionRepositoryQueiries(5);
     }
 
@@ -264,6 +276,8 @@ public class BlobStorageMigrationServiceTest {
         assertThat(report.getMigratedDocumentContentVersions().size(), is(3));
         report.getMigratedDocumentContentVersions()
             .forEach(dcv -> assertThat(dcv.getUri(), is(nullValue())));
+        verify(batchMigrationAuditEntryService).createAuditEntry(null, 7, true);
+        verify(batchMigrationAuditEntryService).save(batchmigrationAuditEntry, report);
         verifyBatchMigrateDocumentContentVersionRepositoryQueiries(7);
     }
 
