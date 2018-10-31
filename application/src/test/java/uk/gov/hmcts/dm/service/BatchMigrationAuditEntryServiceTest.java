@@ -50,8 +50,7 @@ public class BatchMigrationAuditEntryServiceTest {
 
     @Test
     public void withoutSave() {
-        final BatchMigrateProgressReport report = new BadBatchMigrateProgressReport();
-        underTest.save(audit, report);
+        underTest.save(audit, new NoJsonBatchMigrateProgressReport());
         verifyZeroInteractions(batchMigrationAuditEntryRepository);
     }
 
@@ -76,9 +75,8 @@ public class BatchMigrationAuditEntryServiceTest {
         }
     }
 
-    class BadBatchMigrateProgressReport extends BatchMigrateProgressReport {
-
-        BadBatchMigrateProgressReport() {
+    class NoJsonBatchMigrateProgressReport extends BatchMigrateProgressReport {
+        NoJsonBatchMigrateProgressReport() {
             super(null, emptyList(), null, null);
         }
     }
