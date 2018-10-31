@@ -30,7 +30,7 @@ public class BatchMigrationAuditEntry {
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "started", nullable = false, updatable=false)
+    @Column(name = "started", nullable = false, updatable = false)
     @Getter
     private Date started;
 
@@ -41,12 +41,12 @@ public class BatchMigrationAuditEntry {
     @Getter
     private Date modified;
 
-    @Column(name= "status_report")
+    @Column(name = "status_report")
     @Getter
     @Setter
     private String statusReport;
 
-    @Column(name= "migration_key")
+    @Column(name = "migration_key")
     @Getter
     @Setter
     private String migrationKey;
