@@ -251,6 +251,7 @@ pitest {
     targetClasses = ['**uk.gov.hmcts.dm.*']
     threads = 4
     outputFormats = ['XML', 'HTML']
+    timestampedReports = false
     mutationThreshold = 65  // Target 75
     coverageThreshold = 80  // Match our general 80% coverage goal
 }
