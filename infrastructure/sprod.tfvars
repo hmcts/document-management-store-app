@@ -9,3 +9,8 @@ asp_rg = "dm-store-sprod"
 
 enable_postgres_blob_storage = "false"
 enable_azure_storage_container = "true"
+
+////////////////////////////////////////////////
+// Migration Job Specific
+////////////////////////////////////////////////
+blobstore_migrate_ccd_public_key_required = "true"

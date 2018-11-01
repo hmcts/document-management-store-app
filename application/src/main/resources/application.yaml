@@ -148,6 +148,7 @@ toggle:
 blobstore:
   migrate:
     ccd:
+      secret : ${BLOBSTORE_MIGRATE_CCD_SECRET:y2hahvdZ9evcTVq2}
       publicKeyRequired : ${BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED:false}
       publicKey: ${BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiQ//gc/G53d9dLCtf123fIYo49gUySuJuxOcw2GtieWTMSy+O7RNtsAIjVf3mCOdDNuN69tZNPEWMdaW8n11s9MwYFahtxDecyn0KIP9MvPsfSMSbxhp/f7kfbdB/H/S5eYea66JTyeJS6uNd76RdHttx0mLO30ZkRcXB25c2SIXhRYsdoeKS5GXHDdNejkQM0S/Ev94x2UunApmYHjWN1XcDhsEsAeF4WHnvYh2XiMn9vHY44AqvbWLlAmCgzaXpz8Xhl0fO7jDKSeReDyuM3UTMaiFFaxuvliGol7aIXq/aVe/miiD2SLxHZ6RxAPW80bhXrzJMTLTCqhCEhzfv someone@somewhere.sometime}
 #For Testing, use this as a private key and remove me once batch migration finishes
