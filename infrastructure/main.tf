@@ -102,6 +102,11 @@ module "app" {
     ENABLE_AZURE_STORAGE_CONTAINER = "${var.enable_azure_storage_container}"
     ENABLE_POSTGRES_BLOB_STORAGE = "${var.enable_postgres_blob_storage}"
 
+    # Migration Job specific
+    BLOBSTORE_MIGRATE_CCD_SECRET = "${var.blobstore_migrate_ccd_secret}"
+    BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED = "${var.blobstore_migrate_ccd_public_key_required}"
+    BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY = "${var.blobstore_migrate_ccd_public_key}"
+
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_primary_connection_string.value}"
     STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.storageaccount_secondary_connection_string.value}"
