@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.hmcts.dm.domain.BatchMigrationAuditEntry;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.MigrateEntry;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
@@ -48,6 +49,7 @@ public class BlobStorageMigrationService {
     private final DocumentContentVersionRepository documentContentVersionRepository;
     private final MigrateEntryRepository auditEntryRepository;
     private final BatchMigrationTokenService batchMigrationTokenService;
+    private final BatchMigrationAuditEntryService batchMigrationAuditEntryService;
 
     @Value("${blobstore.migrate.default.batchSize:5}")
     protected int defaultBatchSize;
@@ -57,12 +59,14 @@ public class BlobStorageMigrationService {
                                        DocumentContentVersionRepository documentContentVersionRepository,
                                        StoredDocumentService storedDocumentService,
                                        MigrateEntryRepository auditEntryRepository,
-                                       BatchMigrationTokenService batchMigrationTokenService) {
+                                       BatchMigrationTokenService batchMigrationTokenService,
+                                       BatchMigrationAuditEntryService batchMigrationAuditEntryService) {
         this.cloudBlobContainer = cloudBlobContainer;
         this.documentContentVersionRepository = documentContentVersionRepository;
         this.storedDocumentService = storedDocumentService;
         this.auditEntryRepository = auditEntryRepository;
         this.batchMigrationTokenService = batchMigrationTokenService;
+        this.batchMigrationAuditEntryService = batchMigrationAuditEntryService;
     }
 
     public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
@@ -72,8 +76,15 @@ public class BlobStorageMigrationService {
 
     public BatchMigrateProgressReport batchMigrate(String authToken, final Integer limit, final Boolean mockRun) {
         synchronized (this) {
+            Integer actualLimit = defaultIfNull(limit, defaultBatchSize);
+            Boolean actualRun = defaultIfNull(mockRun, false);
+            BatchMigrationAuditEntry audit = batchMigrationAuditEntryService.createAuditEntry(authToken,
+                                                                                              actualLimit,
+                                                                                              actualRun);
             batchMigrationTokenService.checkAuthToken(authToken);
-            return batchMigrate(defaultIfNull(limit, defaultBatchSize), defaultIfNull(mockRun, false));
+            final BatchMigrateProgressReport report = batchMigrate(actualLimit, actualRun);
+            batchMigrationAuditEntryService.save(audit, report);
+            return report;
         }
     }
 
