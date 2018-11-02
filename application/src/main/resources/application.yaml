@@ -13,6 +13,7 @@ spring:
       indent_output: true
   http:
     multipart:
+      location: ${UPLOAD_TEMP_DIR:}
       max-file-size: ${MAX_FILE_SIZE:90MB}
       max-request-size: ${MAX_FILE_SIZE:90MB}
   profiles:
