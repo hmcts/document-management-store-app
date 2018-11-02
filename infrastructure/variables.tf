@@ -159,6 +159,21 @@ variable "enable_postgres_blob_storage" {
 }
 
 ////////////////////////////////////////////////
+// Migration Job Specific
+////////////////////////////////////////////////
+variable "blobstore_migrate_ccd_secret" {
+  default = "y2hahvdZ9evcTVq2"
+}
+
+variable "blobstore_migrate_ccd_public_key_required" {
+  default = "false"
+}
+
+variable "blobstore_migrate_ccd_public_key" {
+  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiQ//gc/G53d9dLCtf123fIYo49gUySuJuxOcw2GtieWTMSy+O7RNtsAIjVf3mCOdDNuN69tZNPEWMdaW8n11s9MwYFahtxDecyn0KIP9MvPsfSMSbxhp/f7kfbdB/H/S5eYea66JTyeJS6uNd76RdHttx0mLO30ZkRcXB25c2SIXhRYsdoeKS5GXHDdNejkQM0S/Ev94x2UunApmYHjWN1XcDhsEsAeF4WHnvYh2XiMn9vHY44AqvbWLlAmCgzaXpz8Xhl0fO7jDKSeReDyuM3UTMaiFFaxuvliGol7aIXq/aVe/miiD2SLxHZ6RxAPW80bhXrzJMTLTCqhCEhzfv someone@somewhere.sometime"
+}
+
+////////////////////////////////////////////////
 // Whitelists
 ////////////////////////////////////////////////
 variable "dm_multipart_whitelist" {
