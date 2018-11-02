@@ -56,6 +56,9 @@ module "app" {
 
     MAX_FILE_SIZE = "${var.max_file_size_in_mb}MB"
 
+    # Temp directory for Spring Boot file uploads
+    UPLOAD_TEMP_DIR = "D:\\home\\tmp"
+
     # idam
     IDAM_USER_BASE_URI = "${var.idam_api_url}"
     IDAM_S2S_BASE_URI = "http://${var.s2s_url}-${local.local_env}.service.core-compute-${local.local_env}.internal"
