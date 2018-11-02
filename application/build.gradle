@@ -240,7 +240,7 @@ sonarqube {
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
         property "sonar.exclusions", coverageExclusionList.join(", ")
         property "sonar.pitest.mode", "reuseReport"
-        property "sonar.pitest.reportsDirectory", "build/reports/pitest"
+        property "sonar.pitest.reportsDirectory", "${project.buildDir}/reports/pitest"
         // Migration code
         property "sonar.cpd.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
         property "sonar.coverage.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
@@ -251,8 +251,9 @@ pitest {
     targetClasses = ['**uk.gov.hmcts.dm.*']
     threads = 4
     outputFormats = ['XML', 'HTML']
-    mutationThreshold = 67  // Traget 75
-    coverageThreshold = 75
+    timestampedReports = false
+    mutationThreshold = 65  // Target 75
+    coverageThreshold = 80  // Match our general 80% coverage goal
 }
 
 
