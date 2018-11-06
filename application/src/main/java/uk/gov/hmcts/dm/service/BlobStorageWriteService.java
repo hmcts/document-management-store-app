@@ -15,6 +15,7 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import javax.validation.constraints.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
@@ -47,9 +48,9 @@ public class BlobStorageWriteService {
     private void writeBinaryStream(UUID documentId,
                                    DocumentContentVersion documentContentVersion,
                                    MultipartFile multiPartFile) {
-        try {
+        try (final InputStream inputStream = multiPartFile.getInputStream()) {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
-            blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
+            blob.upload(inputStream, documentContentVersion.getSize());
             final byte[] bytes = toByteArray(multiPartFile.getInputStream());
             documentContentVersion.setContentUri(blob.getUri().toString());
             final String checksum = shaHex(bytes);
@@ -68,7 +69,7 @@ public class BlobStorageWriteService {
                 throw new FileStorageException(documentId, documentContentVersion.getId());
             }
         } catch (URISyntaxException | StorageException | IOException e) {
-            log.error("Exception caught with docuemntContentVersion, id = {}", documentContentVersion.getId(), e);
+            log.error("Exception caught with documentContentVersion, id = {}", documentContentVersion.getId(), e);
             throw new FileStorageException(e, documentId, documentContentVersion.getId());
         }
     }
