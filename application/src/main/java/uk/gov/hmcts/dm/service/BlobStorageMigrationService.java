@@ -98,7 +98,7 @@ public class BlobStorageMigrationService {
             new PageRequest(0, limit, DESC, "createdOn"));
 
         if (!mockRun) {
-            dcvList.forEach(dcv -> migrateDocumentContentVersion(dcv));
+            dcvList.forEach(this::migrateDocumentContentVersion);
         }
 
         MigrateProgressReport after = getMigrateProgressReport();
