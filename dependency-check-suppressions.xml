@@ -101,4 +101,8 @@ Another long cpe again
         <notes>spring-context-support: 4.3.8 vulnerability, we don't use MappingJackson2JsonView or AbstractJsonpResponseBodyAdvice so unimpacted</notes>
         <cve>CVE-2018-11040</cve>
     </suppress>
+    <suppress>
+        <notes>Temporary suppression while we investigate. See RDM-3324</notes>
+        <cve>CVE-2018-1000632</cve>
+    </suppress>
 </suppressions>
