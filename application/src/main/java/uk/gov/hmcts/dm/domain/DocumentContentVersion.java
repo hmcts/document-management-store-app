@@ -69,14 +69,14 @@ public class DocumentContentVersion implements RolesAware {
 
     /**
      * We will use {@link DocumentContentVersion#contentUri} instead.
-     * @deprecated To be removed when we will migrate to AzureBlobStore.
+//     * @deprecated To be removed when we will migrate to AzureBlobStore.
      */
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
     @Getter
     @Setter
     @JoinColumn(name = "document_content_version_id")
     @LazyToOne(LazyToOneOption.NO_PROXY)
-    @Deprecated
+//    @Deprecated
     private DocumentContent documentContent;
 
     @ManyToOne
