@@ -108,7 +108,7 @@ public class DocumentContentVersion implements RolesAware {
         this.size = file.getSize();
         if (isPostgresBlobStoreEnabled) {
             try {
-                this.documentContent = new DocumentContent(this, new PassThroughBlob(file));
+                this.documentContent = new DocumentContent(this, PassThroughBlob.getInstance(file));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
