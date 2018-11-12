@@ -44,6 +44,7 @@ import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
 @Slf4j
 public class BlobStorageMigrationService {
 
+    protected static final String NO_CONTENT_FOUND = "CONTENT NOT FOUND";
     private final CloudBlobContainer cloudBlobContainer;
     private final StoredDocumentService storedDocumentService;
     private final DocumentContentVersionRepository documentContentVersionRepository;
@@ -142,19 +143,24 @@ public class BlobStorageMigrationService {
 
     private void uploadBinaryStream(DocumentContentVersion dcv) {
         try {
-            CloudBlockBlob cloudBlockBlob = getCloudFileReference(dcv.getId());
-            Blob data = dcv.getDocumentContent().getData();
-            final byte[] bytes = IOUtils.toByteArray(data.getBinaryStream());
-            cloudBlockBlob.upload(new ByteArrayInputStream(bytes), dcv.getSize());
-            dcv.setContentUri(cloudBlockBlob.getUri().toString());
-            final String checksum = shaHex(bytes);
-            dcv.setContentChecksum(checksum);
-            log.debug("Uploaded data to {} Size = {} checksum = {}", cloudBlockBlob.getUri(), dcv.getSize(), checksum);
+            if (null == dcv.getDocumentContent()) {
+                log.warn("Document Content Version (id={} has no content", dcv.getId());
+                dcv.setContentChecksum(NO_CONTENT_FOUND);
+            } else {
+                CloudBlockBlob cloudBlockBlob = getCloudFileReference(dcv.getId());
+                Blob data = dcv.getDocumentContent().getData();
+                final byte[] bytes = IOUtils.toByteArray(data.getBinaryStream());
+                cloudBlockBlob.upload(new ByteArrayInputStream(bytes), dcv.getSize());
+                dcv.setContentUri(cloudBlockBlob.getUri().toString());
+                final String checksum = shaHex(bytes);
+                dcv.setContentChecksum(checksum);
+                log.debug("Uploaded data to {} Size = {} checksum = {}", cloudBlockBlob.getUri(), dcv.getSize(), checksum);
 
-            final ByteArrayOutputStream checksumStream = new ByteArrayOutputStream();
-            cloudBlockBlob.download(checksumStream);
-            if (! checksum.equals(shaHex(checksumStream.toByteArray()))) {
-                throw new FileStorageException(dcv.getStoredDocument().getId(), dcv.getId());
+                final ByteArrayOutputStream checksumStream = new ByteArrayOutputStream();
+                cloudBlockBlob.download(checksumStream);
+                if (! checksum.equals(shaHex(checksumStream.toByteArray()))) {
+                    throw new FileStorageException(dcv.getStoredDocument().getId(), dcv.getId());
+                }
             }
         } catch (URISyntaxException | StorageException | IOException e) {
             throw new FileStorageException(e, dcv.getStoredDocument().getId(), dcv.getId());

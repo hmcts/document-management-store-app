@@ -49,6 +49,7 @@ import static org.apache.commons.io.IOUtils.copy;
 import static org.apache.tika.io.IOUtils.toInputStream;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -65,6 +66,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
 import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
+import static uk.gov.hmcts.dm.service.BlobStorageMigrationService.NO_CONTENT_FOUND;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
@@ -140,6 +142,17 @@ public class BlobStorageMigrationServiceTest {
         when(cloudBlobContainer.getBlockBlobReference(dcv.getId().toString())).thenReturn(cloudBlockBlob);
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
+    }
+
+    @Test
+    public void migrateDocumentContentVersionWithNoDocumentContent() throws Exception {
+        DocumentContentVersion dcv = buildDocumentContentVersion(false);
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+
+        assertNull(dcv.getContentChecksum());
+        underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
+        assertThat(dcv.getContentChecksum(), is(NO_CONTENT_FOUND));
     }
 
     @Test
@@ -319,12 +332,24 @@ public class BlobStorageMigrationServiceTest {
         return buildDocumentContentVersion(UUID.randomUUID(), createStoredDocument());
     }
 
+    private DocumentContentVersion buildDocumentContentVersion(boolean hasContent) throws SQLException {
+        return buildDocumentContentVersion(UUID.randomUUID(), createStoredDocument(), hasContent);
+    }
+
     private DocumentContentVersion buildDocumentContentVersion(UUID documentContentVersionUuid,
                                                                StoredDocument storedDocument) throws SQLException {
+        return buildDocumentContentVersion(documentContentVersionUuid, storedDocument, true);
+    }
+
+    private DocumentContentVersion buildDocumentContentVersion(UUID documentContentVersionUuid,
+                                                               StoredDocument storedDocument,
+                                                               boolean hasContent) throws SQLException {
         DocumentContentVersion doc = new DocumentContentVersion();
         doc.setId(documentContentVersionUuid);
         doc.setStoredDocument(storedDocument);
-        doc.setDocumentContent(createDocumentContent());
+        if (hasContent) {
+            doc.setDocumentContent(createDocumentContent());
+        }
         doc.setSize(data.length());
         return doc;
     }
