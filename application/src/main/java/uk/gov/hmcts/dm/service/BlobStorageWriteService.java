@@ -51,7 +51,7 @@ public class BlobStorageWriteService {
         try (final InputStream inputStream = multiPartFile.getInputStream()) {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(inputStream, documentContentVersion.getSize());
-            final byte[] bytes = toByteArray(multiPartFile.getInputStream());
+            final byte[] bytes = toByteArray(inputStream);
             documentContentVersion.setContentUri(blob.getUri().toString());
             final String checksum = shaHex(bytes);
             documentContentVersion.setContentChecksum(checksum);

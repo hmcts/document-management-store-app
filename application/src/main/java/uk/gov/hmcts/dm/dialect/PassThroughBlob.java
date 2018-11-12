@@ -16,8 +16,10 @@ public class PassThroughBlob implements Blob {
 
     private Long contentLength;
 
-    public PassThroughBlob(MultipartFile file) throws IOException {
-        this(file.getInputStream(), file.getSize());
+    public static PassThroughBlob getInstance(MultipartFile file) throws IOException {
+        try (final InputStream inputStream = file.getInputStream()) {
+            return new PassThroughBlob(inputStream, file.getSize());
+        }
     }
 
     public PassThroughBlob(InputStream binaryStream) {
