@@ -48,10 +48,14 @@ public class BlobStorageWriteService {
     private void writeBinaryStream(UUID documentId,
                                    DocumentContentVersion documentContentVersion,
                                    MultipartFile multiPartFile) {
-        try (final InputStream inputStream = multiPartFile.getInputStream()) {
+        try (// Need to obtain two instances of the MultipartFile InputStream because a stream cannot be reused once
+             // read
+             final InputStream inputStream = multiPartFile.getInputStream();
+             final InputStream inputStreamForByteArray = multiPartFile.getInputStream()
+        ) {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(inputStream, documentContentVersion.getSize());
-            final byte[] bytes = toByteArray(inputStream);
+            final byte[] bytes = toByteArray(inputStreamForByteArray);
             documentContentVersion.setContentUri(blob.getUri().toString());
             final String checksum = shaHex(bytes);
             documentContentVersion.setContentChecksum(checksum);
