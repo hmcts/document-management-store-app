@@ -143,7 +143,7 @@ variable "enable_delete" {
 }
 
 variable "enable_ttl" {
-    default = "true"
+    default = "false"
 }
 
 variable "enable_thumbnail" {
