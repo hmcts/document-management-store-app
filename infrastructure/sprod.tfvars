@@ -7,8 +7,8 @@ asp_rg = "dm-store-sprod"
 // Toggle Features
 ////////////////////////////////////////////////
 
-enable_postgres_blob_storage = "false"
-enable_azure_storage_container = "true"
+enable_postgres_blob_storage = "true"
+enable_azure_storage_container = "false"
 
 ////////////////////////////////////////////////
 // Migration Job Specific
