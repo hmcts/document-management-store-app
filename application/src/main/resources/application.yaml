@@ -125,6 +125,12 @@ management:
     enabled: true
   db:
     enabled: true
+  metrics:
+    enable: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
 
 dm:
   multipart:
