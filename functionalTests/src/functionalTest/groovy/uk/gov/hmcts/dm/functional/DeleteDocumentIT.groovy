@@ -11,6 +11,7 @@ import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import static org.hamcrest.CoreMatchers.containsString
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.equalTo
+import static org.junit.Assume.assumeTrue
 
 @RunWith(SpringRunner.class)
 class DeleteDocumentIT extends BaseIT {
@@ -112,6 +113,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D8 As an owner of the document I could not get the TTL info once, I have done the soft delete"() {
+        assumeTrue(toggleConfiguration.isTtl())
 
         Response response = CreateAUserforTTL CASE_WORKER
 
@@ -153,6 +155,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D9 As an owner of the document I could not get the TTL info once, I have done the hard delete"() {
+        assumeTrue(toggleConfiguration.isTtl())
 
         Response response = CreateAUserforTTL CASE_WORKER
 

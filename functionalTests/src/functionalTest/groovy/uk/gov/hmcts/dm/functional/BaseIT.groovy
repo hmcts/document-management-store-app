@@ -24,6 +24,9 @@ import static org.hamcrest.Matchers.equalTo
 class BaseIT {
 
     @Autowired
+    ToggleConfiguration toggleConfiguration;
+
+    @Autowired
     AuthTokenProvider authTokenProvider
 
     FileUtils fileUtils = new FileUtils()
