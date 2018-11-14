@@ -55,6 +55,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/mappings",
                 "/info",
                 "/migrate",
+                "/metrics",
+                "/metrics/**",
                 "/");
     }
 
