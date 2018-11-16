@@ -105,4 +105,8 @@ Another long cpe again
         <notes>Temporary suppression while we investigate. See RDM-3324</notes>
         <cve>CVE-2018-1000632</cve>
     </suppress>
+    <suppress>
+        <notes>Temporary suppression to ignore CVE with com.google.guava. See RDM-3372</notes>
+        <cve>CVE-2018-10237</cve>
+    </suppress>
 </suppressions>
