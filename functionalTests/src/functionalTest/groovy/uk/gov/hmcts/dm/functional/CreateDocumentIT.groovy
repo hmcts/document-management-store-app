@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.isOneOf
+import static org.junit.Assume.assumeTrue
 
 @RunWith(SpringRunner.class)
 class CreateDocumentIT extends BaseIT {
@@ -74,14 +75,12 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
-            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
 
             .body("_embedded.documents[1].originalDocumentName", equalTo(ATTACHMENT_8_TIF))
             .body("_embedded.documents[1].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
             .body("_embedded.documents[1].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[1].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[1].roles[1]", equalTo("citizen"))
-            .body("_embedded.documents[1].ttl", equalTo("2018-10-31T10:10:10+0000"))
 
             .body("_embedded.documents[2].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
             .body("_embedded.documents[2].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
@@ -272,6 +271,8 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD11 (R1) As authenticated when i upload a file only first TTL will be taken into consideration"() {
+        assumeTrue(toggleConfiguration.isTtl())
+
         givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
@@ -293,6 +294,8 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
+        assumeTrue(toggleConfiguration.isTtl())
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
         def ttlDate = OffsetDateTime.now().minusMinutes(2)
         def ttlFormatted = ttlDate.format(dtf).toString()
