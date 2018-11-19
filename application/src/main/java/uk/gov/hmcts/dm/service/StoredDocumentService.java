@@ -87,6 +87,7 @@ public class StoredDocumentService {
 
             save(storedDocument);
             storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+            closeBlobInputStream(documentContentVersion);
             return storedDocument;
 
         }).collect(Collectors.toList());
@@ -120,6 +121,7 @@ public class StoredDocumentService {
             document.getDocumentContentVersions().add(documentContentVersion);
             save(document);
             storeInAzureBlobStorage(document, documentContentVersion, file);
+            closeBlobInputStream(documentContentVersion);
             return document;
         }).collect(Collectors.toList());
 
@@ -140,6 +142,7 @@ public class StoredDocumentService {
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         documentContentVersionRepository.save(documentContentVersion);
         storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+        closeBlobInputStream(documentContentVersion);
 
         return documentContentVersion;
     }
@@ -181,5 +184,14 @@ public class StoredDocumentService {
                 documentContentVersion,
                 file);
         }
+    }
+
+    /**
+     * Force closure of the persisted blob's InputStream, to ensure the file handle is released.
+     *
+     * @param documentContentVersion DocumentContentVersion instance wrapping a DocumentContent that contains the blob
+     */
+    private void closeBlobInputStream(final DocumentContentVersion documentContentVersion) {
+        documentContentVersion.getDocumentContent().getData().getBinaryStream().close();
     }
 }
