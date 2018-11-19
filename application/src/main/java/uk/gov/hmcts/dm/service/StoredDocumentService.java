@@ -205,6 +205,8 @@ public class StoredDocumentService {
      */
     private void closeBlobInputStream(final DocumentContentVersion documentContentVersion)
         throws IOException, SQLException {
-        documentContentVersion.getDocumentContent().getData().getBinaryStream().close();
+        if (documentContentVersion.getDocumentContent() != null) {
+            documentContentVersion.getDocumentContent().getData().getBinaryStream().close();
+        }
     }
 }
