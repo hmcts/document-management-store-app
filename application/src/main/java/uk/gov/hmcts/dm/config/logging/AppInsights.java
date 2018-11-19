@@ -19,4 +19,8 @@ public class AppInsights extends AbstractAppInsights {
         super(client);
         LOG.info("Building AppInsights");
     }
+
+    public void trackException(Exception e) {
+        telemetry.trackException(e);
+    }
 }
