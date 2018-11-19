@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.dialect;
 
 import lombok.EqualsAndHashCode;
-import org.apache.commons.io.input.AutoCloseInputStream;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class PassThroughBlob implements Blob {
     private Long contentLength;
 
     public PassThroughBlob(MultipartFile file) throws IOException {
-        this(new AutoCloseInputStream(file.getInputStream()), file.getSize());
+        this(file.getInputStream(), file.getSize());
     }
 
     public PassThroughBlob(InputStream binaryStream) {
