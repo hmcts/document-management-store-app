@@ -25,7 +25,9 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import java.io.IOException;
 import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -218,7 +220,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testAddStoredDocumentVersion() {
+    public void testAddStoredDocumentVersion() throws IOException, SQLException {
 
         setupStorageOptions(false, true);
         StoredDocument storedDocument = new StoredDocument();
@@ -240,7 +242,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testAddStoredDocumentVersionWhenAzureBlobStoreEnabled() {
+    public void testAddStoredDocumentVersionWhenAzureBlobStoreEnabled() throws IOException, SQLException {
 
         setupStorageOptions(true, false);
         StoredDocument storedDocument = new StoredDocument();
