@@ -12,6 +12,8 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,7 +63,8 @@ public class AuditedStoredDocumentOperationsService {
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'UPDATE')")
-    public DocumentContentVersion addDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
+    public DocumentContentVersion addDocumentVersion(StoredDocument storedDocument, MultipartFile file)
+        throws IOException, SQLException {
         DocumentContentVersion documentContentVersion =
             storedDocumentService.addStoredDocumentVersion(storedDocument, file);
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);

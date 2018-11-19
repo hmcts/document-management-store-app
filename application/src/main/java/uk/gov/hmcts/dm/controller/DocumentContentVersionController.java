@@ -31,6 +31,7 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,7 @@ public class DocumentContentVersionController {
     })
     public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
-                                                            BindingResult result) {
+                                                            BindingResult result) throws IOException, SQLException {
         return addDocumentContentVersion(documentId, command, result);
     }
 
@@ -73,7 +74,7 @@ public class DocumentContentVersionController {
     })
     public ResponseEntity<Object> addDocumentContentVersion(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
-                                                            BindingResult result) {
+                                                            BindingResult result) throws IOException, SQLException {
         if (result.hasErrors()) {
             throw new ValidationErrorException(result.getFieldErrors().stream()
                 .map(fe -> String.format("%s - %s", fe.getField(), fe.getCode()))
