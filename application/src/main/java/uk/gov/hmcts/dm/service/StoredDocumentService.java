@@ -17,8 +17,6 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -76,25 +74,20 @@ public class StoredDocumentService {
     public void saveItemsToBucket(Folder folder, List<MultipartFile> files) {
         String userId = securityUtilService.getUserId();
         List<StoredDocument> items = files.stream().map(file -> {
-            try {
-                StoredDocument storedDocument = new StoredDocument();
-                storedDocument.setFolder(folder);
-                storedDocument.setCreatedBy(userId);
-                storedDocument.setLastModifiedBy(userId);
-                final DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
-                    file,
-                    userId,
-                    azureStorageConfiguration
-                        .isPostgresBlobStorageEnabled());
-                storedDocument.getDocumentContentVersions().add(documentContentVersion);
+            StoredDocument storedDocument = new StoredDocument();
+            storedDocument.setFolder(folder);
+            storedDocument.setCreatedBy(userId);
+            storedDocument.setLastModifiedBy(userId);
+            final DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
+                                                                                             file,
+                                                                                             userId,
+                                                                                             azureStorageConfiguration
+                                                                                                 .isPostgresBlobStorageEnabled());
+            storedDocument.getDocumentContentVersions().add(documentContentVersion);
 
-                save(storedDocument);
-                storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
-                closeBlobInputStream(documentContentVersion);
-                return storedDocument;
-            } catch (IOException | SQLException e) {
-                throw new RuntimeException(e);
-            }
+            save(storedDocument);
+            storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+            return storedDocument;
         }).collect(Collectors.toList());
 
         folder.getStoredDocuments().addAll(items);
@@ -105,33 +98,28 @@ public class StoredDocumentService {
     public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand) {
         String userId = securityUtilService.getUserId();
         return uploadDocumentsCommand.getFiles().stream().map(file -> {
-            try {
-                StoredDocument document = new StoredDocument();
-                document.setCreatedBy(userId);
-                document.setLastModifiedBy(userId);
-                document.setClassification(uploadDocumentsCommand.getClassification());
-                document.setRoles(uploadDocumentsCommand.getRoles() != null
-                    ? uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
+            StoredDocument document = new StoredDocument();
+            document.setCreatedBy(userId);
+            document.setLastModifiedBy(userId);
+            document.setClassification(uploadDocumentsCommand.getClassification());
+            document.setRoles(uploadDocumentsCommand.getRoles() != null
+                ? uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
 
-                if (toggleConfiguration.isMetadatasearchendpoint()) {
-                    document.setMetadata(uploadDocumentsCommand.getMetadata());
-                }
-                if (toggleConfiguration.isTtl()) {
-                    document.setTtl(uploadDocumentsCommand.getTtl());
-                }
-                DocumentContentVersion documentContentVersion = new DocumentContentVersion(document,
-                    file,
-                    userId,
-                    azureStorageConfiguration
-                        .isPostgresBlobStorageEnabled());
-                document.getDocumentContentVersions().add(documentContentVersion);
-                save(document);
-                storeInAzureBlobStorage(document, documentContentVersion, file);
-                closeBlobInputStream(documentContentVersion);
-                return document;
-            } catch (IOException | SQLException e) {
-                throw new RuntimeException(e);
+            if (toggleConfiguration.isMetadatasearchendpoint()) {
+                document.setMetadata(uploadDocumentsCommand.getMetadata());
             }
+            if (toggleConfiguration.isTtl()) {
+                document.setTtl(uploadDocumentsCommand.getTtl());
+            }
+            DocumentContentVersion documentContentVersion = new DocumentContentVersion(document,
+                                                                                       file,
+                                                                                       userId,
+                                                                                       azureStorageConfiguration
+                                                                                           .isPostgresBlobStorageEnabled());
+            document.getDocumentContentVersions().add(documentContentVersion);
+            save(document);
+            storeInAzureBlobStorage(document, documentContentVersion, file);
+            return document;
         }).collect(Collectors.toList());
 
     }
@@ -142,8 +130,7 @@ public class StoredDocumentService {
         return saveItems(command);
     }
 
-    public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)
-        throws IOException, SQLException {
+    public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
                                                                                    file,
                                                                                    securityUtilService.getUserId(),
@@ -152,7 +139,6 @@ public class StoredDocumentService {
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         documentContentVersionRepository.save(documentContentVersion);
         storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
-        closeBlobInputStream(documentContentVersion);
 
         return documentContentVersion;
     }
@@ -193,20 +179,6 @@ public class StoredDocumentService {
             blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
                 documentContentVersion,
                 file);
-        }
-    }
-
-    /**
-     * Force closure of the persisted blob's InputStream, to ensure the file handle is released.
-     *
-     * @param documentContentVersion DocumentContentVersion instance wrapping a DocumentContent that contains the blob
-     * @throws IOException If the blob InputStream cannot be closed
-     * @throws SQLException If the blob's InputStream cannot be obtained
-     */
-    private void closeBlobInputStream(final DocumentContentVersion documentContentVersion)
-        throws IOException, SQLException {
-        if (documentContentVersion.getDocumentContent() != null) {
-            documentContentVersion.getDocumentContent().getData().getBinaryStream().close();
         }
     }
 }

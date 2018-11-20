@@ -16,8 +16,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +57,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testAddDocumentVersion() throws IOException, SQLException {
+    public void testAddDocumentVersion() {
         StoredDocument storedDocument = new StoredDocument();
         MultipartFile multipartFile = TestUtil.TEST_FILE;
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
