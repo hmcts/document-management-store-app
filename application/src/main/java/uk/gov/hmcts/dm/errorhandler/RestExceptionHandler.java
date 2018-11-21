@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,19 +28,37 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         this.appInsights = appInsights;
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> handleAccessDeniedException(final HttpServletRequest request,
+                                                                           final Exception exception) {
+        trackException(exception);
+
+        return ResponseEntity
+            .status(HttpStatus.FORBIDDEN)
+            .body(bodyFromException(exception));
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<Map<String, String>> handleException(final HttpServletRequest request,
                                                                final Exception exception) {
-        LOG.error(exception.getMessage(), exception);
-        appInsights.trackException(exception);
-
-        final Map<String, String> body = new HashMap<>();
-        body.put("error", exception.getMessage());
+        trackException(exception);
 
         return ResponseEntity
             .status(getHttpStatus(exception))
-            .body(body);
+            .body(bodyFromException(exception));
+    }
+
+    private void trackException(Exception exception) {
+        LOG.error(exception.getMessage(), exception);
+        appInsights.trackException(exception);
+    }
+
+    private Map<String, String> bodyFromException(Exception exception) {
+        final Map<String, String> body = new HashMap<>();
+        body.put("error", exception.getMessage());
+        return body;
     }
 
     private HttpStatus getHttpStatus(Exception exception) {
