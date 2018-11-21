@@ -31,8 +31,13 @@ enable_metadata_search = "true"
 enable_document_and_metadata_upload = "false"
 enable_folder_api = "true"
 enable_delete = "true"
-enable_ttl  = "true"
+enable_ttl  = "false"
 enable_thumbnail = "true"
+
+////////////////////////////////////////////////
+// Migration Job Specific
+////////////////////////////////////////////////
+blobstore_migrate_ccd_public_key_required = "true"
 
 ////////////////////////////////////////////////
 //// Whitelists
