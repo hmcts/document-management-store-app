@@ -37,6 +37,8 @@ compileTestJava {
 }
 
 test {
+    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "some-key")
+
     testLogging {
         events "passed", "skipped", "failed"
         exceptionFormat "full"
