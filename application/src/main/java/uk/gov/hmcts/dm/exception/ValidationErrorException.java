@@ -10,4 +10,7 @@ public class ValidationErrorException extends RuntimeException {
         super(message);
     }
 
+    public ValidationErrorException(Throwable t) {
+        super(t);
+    }
 }

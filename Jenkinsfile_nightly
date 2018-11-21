@@ -2,10 +2,17 @@
 
 properties([
     // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-    pipelineTriggers([cron('H 05 * * *')])
+    pipelineTriggers([cron('H 05 * * *')]),
+    parameters([
+        booleanParam(
+            name: 'RUN_MUTATION',
+            defaultValue: true,
+            description: 'Run pitest mutation tests (duration approx. 1 hour)'
+        )
+    ]),
 ])
 
-@Library("Infrastructure")
+@Library("Infrastructure@ccd_various")
 
 def type = "java"
 def product = "dm"
@@ -28,6 +35,10 @@ withNightlyPipeline(type, product, component) {
     enableSlackNotifications('#ccd-nightly-builds')
     enableDbMigration()
     loadVaultSecrets(secrets)
+
+    if (params.RUN_MUTATION) {
+        enableMutationTest()
+    }
 
     after('checkout') {
         echo '${product}-${component} out'

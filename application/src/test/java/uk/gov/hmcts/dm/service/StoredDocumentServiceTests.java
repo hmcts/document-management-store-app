@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -45,7 +44,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
@@ -208,10 +206,6 @@ public class StoredDocumentServiceTests {
     @Test
     public void testSaveItemsToAzure() {
         setupStorageOptions(true, false);
-        given(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
-            any(DocumentContentVersion.class), any(MultipartFile.class))).willReturn(
-            "someContentUri");
-
         List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TEST_FILE));
 
         assertEquals(1, documents.size());
@@ -220,7 +214,6 @@ public class StoredDocumentServiceTests {
 
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
         assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
-        assertThat(latestVersion.getContentUri(), equalTo("someContentUri"));
         verify(blobStorageWriteService).uploadDocumentContentVersion(documents.get(0), latestVersion, TEST_FILE);
     }
 
@@ -250,9 +243,6 @@ public class StoredDocumentServiceTests {
     public void testAddStoredDocumentVersionWhenAzureBlobStoreEnabled() {
 
         setupStorageOptions(true, false);
-        given(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
-            any(DocumentContentVersion.class), any(MultipartFile.class))).willReturn(
-            "someContentUri");
         StoredDocument storedDocument = new StoredDocument();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
@@ -267,7 +257,6 @@ public class StoredDocumentServiceTests {
 
         ArgumentCaptor<DocumentContentVersion> captor = ArgumentCaptor.forClass(DocumentContentVersion.class);
         verify(blobStorageWriteService).uploadDocumentContentVersion(storedDocument, documentContentVersion, TEST_FILE);
-        assertThat(latestVersion.getContentUri(), equalTo("someContentUri"));
         verify(documentContentVersionRepository).save(captor.capture());
         assertThat(captor.getValue(), is(documentContentVersion));
     }
@@ -340,9 +329,6 @@ public class StoredDocumentServiceTests {
     @Test
     public void testSaveItemsToBucketToBlobStore() throws Exception {
         Folder folder = new Folder();
-        given(blobStorageWriteService.uploadDocumentContentVersion(any(StoredDocument.class),
-            any(DocumentContentVersion.class), any(MultipartFile.class))).willReturn(
-            "someContentUri");
         setupStorageOptions(true, false);
         storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
 
@@ -352,7 +338,6 @@ public class StoredDocumentServiceTests {
 
         assertThat(latestVersionInFolder.getMimeType(), equalTo(TEST_FILE.getContentType()));
         assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
-        assertThat(latestVersionInFolder.getContentUri(), equalTo("someContentUri"));
         verify(securityUtilService).getUserId();
         verify(folderRepository).save(folder);
         verify(blobStorageWriteService).uploadDocumentContentVersion(folder.getStoredDocuments().get(0), latestVersionInFolder, TEST_FILE);

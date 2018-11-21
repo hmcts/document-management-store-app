@@ -2,8 +2,6 @@ java_opts = ""
 
 // Webapp
 capacity = "2"
-asp_name = "dm-store-demo"
-asp_rg = "dm-store-demo"
 
 ////////////////////////////////////////////////
 // Endpoints
@@ -31,7 +29,7 @@ enable_metadata_search = "true"
 enable_document_and_metadata_upload = "false"
 enable_folder_api = "true"
 enable_delete = "true"
-enable_ttl  = "true"
+enable_ttl  = "false"
 enable_thumbnail = "true"
 
 enable_postgres_blob_storage = "false"

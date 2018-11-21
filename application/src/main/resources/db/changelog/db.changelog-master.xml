@@ -15,5 +15,6 @@
     <include relativeToChangelogFile="true" file="./db.changelog-diff-20180205-1604.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-RDM-2828.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-RDM-2828-migration-checksum.xml"/>
+    <include relativeToChangelogFile="true" file="./db.changelog-diff-RDM-2991-migration-audit.xml"/>
 
 </databaseChangeLog>

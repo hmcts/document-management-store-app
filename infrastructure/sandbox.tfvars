@@ -1,9 +1,5 @@
 java_opts = ""
 
-// Webapp
-asp_name = "dm-store-sandbox"
-asp_rg = "dm-store-sandbox"
-
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
@@ -30,7 +26,7 @@ enable_metadata_search = "true"
 enable_document_and_metadata_upload = "true"
 enable_folder_api = "true"
 enable_delete = "true"
-enable_ttl  = "true"
+enable_ttl  = "false"
 enable_thumbnail = "true"
 
 ////////////////////////////////////////////////

@@ -43,6 +43,11 @@ public class RestActions {
         return this;
     }
 
+    public RestActions withHeader(String key, String value) {
+        httpHeaders.add(key, value);
+        return this;
+    }
+
     public ResultActions get(String urlTemplate) {
         return translateException(() -> mvc.perform(MockMvcRequestBuilders.get(urlTemplate)
             .headers(httpHeaders)

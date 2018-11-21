@@ -43,6 +43,10 @@
         <cve>CVE-2018-1115</cve>
     </suppress>
     <suppress>
+        <notes>CVE-2016-7048: only for Postgres lt 9.6 and we use 9.6 on Azure.  Also only impacts the installer.</notes>
+        <cve>CVE-2016-7048</cve>
+    </suppress>
+    <suppress>
         <notes><![CDATA[
    temp disable for prod release, spring boot 2 upgrade coming very soon
    ]]></notes>
@@ -96,5 +100,13 @@ Another long cpe again
     <suppress>
         <notes>spring-context-support: 4.3.8 vulnerability, we don't use MappingJackson2JsonView or AbstractJsonpResponseBodyAdvice so unimpacted</notes>
         <cve>CVE-2018-11040</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporary suppression while we investigate. See RDM-3324</notes>
+        <cve>CVE-2018-1000632</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporary suppression to ignore CVE with com.google.guava. See RDM-3372</notes>
+        <cve>CVE-2018-10237</cve>
     </suppress>
 </suppressions>

@@ -8,6 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.Matchers.equalTo
+import static org.junit.Assume.assumeTrue
 
 @RunWith(SpringRunner.class)
 class AddContentVersionIT extends BaseIT {
@@ -195,6 +196,8 @@ class AddContentVersionIT extends BaseIT {
     @Test
     void "ACV12 As an owner I cannot update the TTL while adding a version to the document"()
     {
+        assumeTrue(toggleConfiguration.isTtl())
+
         Response response = CreateAUserforTTL CASE_WORKER
 
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")

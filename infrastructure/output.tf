@@ -34,10 +34,6 @@ output "enable_metadata_search" {
   value = "${var.enable_metadata_search}"
 }
 
-output "enable_idam_healthcheck" {
-  value = "${var.enable_idam_healthcheck}"
-}
-
 output "enable_document_and_metadata_upload" {
   value = "${var.enable_document_and_metadata_upload}"
 }
