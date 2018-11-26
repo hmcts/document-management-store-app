@@ -17,6 +17,8 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -87,6 +89,7 @@ public class StoredDocumentService {
 
             save(storedDocument);
             storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+            closeBlobInputStream(documentContentVersion);
             return storedDocument;
         }).collect(Collectors.toList());
 
@@ -119,6 +122,7 @@ public class StoredDocumentService {
             document.getDocumentContentVersions().add(documentContentVersion);
             save(document);
             storeInAzureBlobStorage(document, documentContentVersion, file);
+            closeBlobInputStream(documentContentVersion);
             return document;
         }).collect(Collectors.toList());
 
@@ -139,6 +143,7 @@ public class StoredDocumentService {
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         documentContentVersionRepository.save(documentContentVersion);
         storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+        closeBlobInputStream(documentContentVersion);
 
         return documentContentVersion;
     }
@@ -179,6 +184,22 @@ public class StoredDocumentService {
             blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
                 documentContentVersion,
                 file);
+        }
+    }
+
+    /**
+     * Force closure of the persisted blob's InputStream, to ensure the file handle is released.
+     *
+     * @param documentContentVersion DocumentContentVersion instance wrapping a DocumentContent that contains the blob
+     * @throws RuntimeException If the blob's InputStream cannot be obtained or closed
+     */
+    private void closeBlobInputStream(final DocumentContentVersion documentContentVersion) {
+        try {
+            if (documentContentVersion.getDocumentContent() != null) {
+                documentContentVersion.getDocumentContent().getData().getBinaryStream().close();
+            }
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }
