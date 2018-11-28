@@ -17,7 +17,7 @@ class HealthUrlIT extends BaseIT {
 
                 .body('diskSpace.status', equalTo('UP'))
 
-                .body('db.status', equalTo('UP'))
+//                .body('db.status', equalTo('UP'))
             .when()
                 .get('/health')
     }
