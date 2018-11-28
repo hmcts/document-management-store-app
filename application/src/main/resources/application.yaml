@@ -132,7 +132,9 @@ management:
       exposure:
         include: health,info,metrics
   health:
-    db:
+    defaults:
+      enabled: false
+    diskspace:
       enabled: false
 
 dm:
