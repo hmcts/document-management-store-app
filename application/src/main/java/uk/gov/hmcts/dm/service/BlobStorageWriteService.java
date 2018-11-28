@@ -72,7 +72,9 @@ public class BlobStorageWriteService {
                 throw new FileStorageException(documentId, documentContentVersion.getId());
             }
         } catch (URISyntaxException | StorageException | IOException e) {
-            log.warn("Uploading to Azure Blob Storage: FAILED", e);
+            log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
+                     documentId,
+                     documentContentVersion.getId());
             throw new FileStorageException(e, documentId, documentContentVersion.getId());
         }
     }

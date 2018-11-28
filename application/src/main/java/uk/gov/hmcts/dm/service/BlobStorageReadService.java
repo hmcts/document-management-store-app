@@ -26,15 +26,13 @@ public class BlobStorageReadService {
     }
 
     public void loadBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
-        log.debug("Reading document version {} from Azure Blob Storage...",
-                  documentContentVersion.getId());
+        log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
         try {
             CloudBlockBlob blob = cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString());
             blob.download(outputStream);
-            log.debug("Reading document version {} from Azure Blob Storage: OK",
-                      documentContentVersion.getId());
+            log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
         } catch (URISyntaxException | StorageException e) {
-            log.warn("Reading document version from Azure Blob Storage: FAILED", e);
+            log.warn("Reading document version {} from Azure Blob Storage: FAILED", documentContentVersion.getId());
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
         }
     }
