@@ -131,6 +131,9 @@ management:
     web:
       exposure:
         include: health,info,metrics
+  health:
+    db:
+      enabled: false
 
 dm:
   multipart:
