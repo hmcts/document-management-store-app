@@ -134,6 +134,8 @@ management:
   health:
     defaults:
       enabled: false
+    diskspace:
+      enabled: false
 
 dm:
   multipart:
