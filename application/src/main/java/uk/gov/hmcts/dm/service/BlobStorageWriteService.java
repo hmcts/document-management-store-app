@@ -47,6 +47,10 @@ public class BlobStorageWriteService {
     private void writeBinaryStream(UUID documentId,
                                    DocumentContentVersion documentContentVersion,
                                    MultipartFile multiPartFile) {
+        log.debug("Uploading document {} / version {} to Azure Blob Storage...",
+                  documentId,
+                  documentContentVersion.getId());
+
         try {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
@@ -54,7 +58,7 @@ public class BlobStorageWriteService {
             documentContentVersion.setContentUri(blob.getUri().toString());
             final String checksum = shaHex(bytes);
             documentContentVersion.setContentChecksum(checksum);
-            log.debug("Uploaded content for document id: {} documentContentVersion id {} to {}; Size = {} checksum = {}",
+            log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}, checksum = {}",
                       documentId,
                       documentContentVersion.getId(),
                       blob.getUri(),
@@ -68,7 +72,9 @@ public class BlobStorageWriteService {
                 throw new FileStorageException(documentId, documentContentVersion.getId());
             }
         } catch (URISyntaxException | StorageException | IOException e) {
-            log.error("Exception caught with docuemntContentVersion, id = {}", documentContentVersion.getId(), e);
+            log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
+                     documentId,
+                     documentContentVersion.getId());
             throw new FileStorageException(e, documentId, documentContentVersion.getId());
         }
     }
