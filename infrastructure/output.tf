@@ -7,7 +7,7 @@ output "vaultName" {
 }
 
 output "vaultUri" {
-  value = "${data.azurerm_key_vault.dm_shared_vault.vault_uri}"
+  value = "${data.azurerm_key_vault.ccd_shared_vault.vault_uri}"
 }
 
 output "idam_api_url" {
