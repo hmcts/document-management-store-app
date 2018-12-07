@@ -132,6 +132,18 @@ module "db" {
   common_tags  = "${var.common_tags}"
 }
 
+module "adf" {
+  source = "git@github.com:hmcts/cnp-module-adf?ref=master"
+  data_factory_name_resource_group_name = "${local.sharedResourceGroup}"
+  data_factory_name = "${local.storageAccountNameDM}"
+  input_storage_account_resource_group_name = "${local.sharedResourceGroup}"
+  input_storage_account_name = "${local.storageAccountNameDM}"
+  output_storage_account_resource_group_name = "${local.sharedResourceGroup}"
+  output_storage_account_name = "${local.storageAccountNameDM}"
+  input_blob_container = "${local.app_full_name}-docstore-${var.env}"
+  output_blob_container = "incremental-backup"
+}
+
 resource "azurerm_storage_container" "document_container" {
   name = "${local.app_full_name}-docstore-${var.env}"
   resource_group_name = "${local.sharedResourceGroup}"
