@@ -140,7 +140,7 @@ module "adf" {
   input_storage_account_name = "${local.storageAccountNameDM}"
   output_storage_account_resource_group_name = "${local.sharedResourceGroup}"
   output_storage_account_name = "${local.storageAccountNameDM}"
-  input_blob_container = "${local.app_full_name}-docstore-${var.env}"
+  input_blob_container = "${azurerm_storage_container.document_container.name}"
   output_blob_container = "incremental-backup"
 }
 
