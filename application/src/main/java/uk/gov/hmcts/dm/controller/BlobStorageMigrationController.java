@@ -47,9 +47,11 @@ public class BlobStorageMigrationController {
                                                                 authToken,
                                                             @RequestParam(value = "limit", required = false) Integer
                                                                 limit,
+                                                            @RequestParam(value = "page", required = false) Integer
+                                                                page,
                                                             @RequestParam(value = "dry-mock-run", required = false)
                                                                 Boolean mockRun) {
-        return ResponseEntity.ok(blobStorageMigrationService.batchMigrate(authToken, limit, mockRun));
+        return ResponseEntity.ok(blobStorageMigrationService.batchMigrate(authToken, limit, page, mockRun));
     }
 
     @PostMapping(value = "/documents/{documentId}/versions/{versionId}/migrate")

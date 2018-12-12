@@ -237,7 +237,7 @@ public class BlobStorageMigrationServiceTest {
 
     @Test
     public void batchMigrateEmptyDocumentContentVersionSet() {
-        final BatchMigrateProgressReport report = underTest.batchMigrate(null, 5, false);
+        final BatchMigrateProgressReport report = underTest.batchMigrate(null, 5, 0, false);
         assertThat(report.getStatus(), is(OK));
         assertThat(report.getErrors(), is(nullValue()));
         assertTrue(report.getMigratedDocumentContentVersions().isEmpty());
@@ -258,7 +258,7 @@ public class BlobStorageMigrationServiceTest {
             uriMap.put(dcv.getId(), mockAzureBlobUpload(dcv));
         }
 
-        final BatchMigrateProgressReport report = underTest.batchMigrate(null, 5, false);
+        final BatchMigrateProgressReport report = underTest.batchMigrate(null, 5, 0, false);
 
         assertThat(report.getStatus(), is(OK));
         assertThat(report.getErrors(), is(nullValue()));
@@ -283,7 +283,7 @@ public class BlobStorageMigrationServiceTest {
         when(documentContentVersionRepository.findByContentChecksumIsNullAndDocumentContentIsNotNull(any())).thenReturn(
             dcvList);
 
-        final BatchMigrateProgressReport report = underTest.batchMigrate(null, 7, true);
+        final BatchMigrateProgressReport report = underTest.batchMigrate(null, 7, 0, true);
         assertThat(report.getStatus(), is(OK));
         assertThat(report.getErrors(), is(nullValue()));
         assertThat(report.getMigratedDocumentContentVersions().size(), is(3));
