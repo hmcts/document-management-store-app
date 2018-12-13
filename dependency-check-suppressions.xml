@@ -109,4 +109,12 @@ Another long cpe again
         <notes>Temporary suppression to ignore CVE with com.google.guava. See RDM-3372</notes>
         <cve>CVE-2018-10237</cve>
     </suppress>
+    <suppress>
+        <notes>Temporary suppression of an issue related to the current stable slf4j which is brought in by other dependencies.
+            CCD don't explicitly declare dependencies on slf4j.
+            org.slf4j.ext.EventData in the slf4j-ext module in QOS.CH SLF4J before 1.8.0-beta2 allows remote attackers to bypass intended access restrictions via crafted data.
+            Investigation notes can be found in RDM-3549.  slf4j may need to be updated when a future stable version is released</notes>
+        <gav regex="true">^.*slf4j.*$</gav>
+        <cpe>cpe:/a:slf4j:slf4j:1.7.25</cpe>
+    </suppress>
 </suppressions>
