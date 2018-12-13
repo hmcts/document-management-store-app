@@ -25,6 +25,8 @@ locals {
 
   sharedAppServicePlan = "${var.shared_product}-${var.env}"
   sharedASPResourceGroup = "${var.shared_product}-shared-${var.env}"
+
+  testVariabe = "${var.product}-${var.component}"
 }
 
 module "app" {
@@ -54,18 +56,18 @@ module "app" {
     # JAVA_OPTS = "${var.java_opts}"
     # SERVER_PORT = "8080"
 
-    # DB
+    # db
     SPRING_DATASOURCE_URL = "jdbc:postgresql://${module.db.host_name}:${module.db.postgresql_listen_port}/${module.db.postgresql_database}?ssl=true"
     SPRING_DATASOURCE_USERNAME = "${module.db.user_name}"
     SPRING_DATASOURCE_PASSWORD = "${module.db.postgresql_password}"
 
     MAX_FILE_SIZE = "${var.max_file_size_in_mb}MB"
 
-    # IDAM
+    # idam
     IDAM_USER_BASE_URI = "${var.idam_api_url}"
     IDAM_S2S_BASE_URI = "http://${var.s2s_url}-${local.local_env}.service.core-compute-${local.local_env}.internal"
 
-    # Logging vars & healthcheck
+    # logging vars & healthcheck
     REFORM_SERVICE_NAME = "${local.app_full_name}"
     REFORM_TEAM = "${var.team_name}"
     REFORM_SERVICE_TYPE = "${var.app_language}"
@@ -79,7 +81,7 @@ module "app" {
     JSON_CONSOLE_PRETTY_PRINT = "${var.json_console_pretty_print}"
     LOG_OUTPUT = "${var.log_output}"
 
-    # Addtional log
+    # addtional log
     ROOT_LOGGING_LEVEL = "${var.root_logging_level}"
     LOG_LEVEL_SPRING_WEB = "${var.log_level_spring_web}"
     LOG_LEVEL_DM = "${var.log_level_dm}"
