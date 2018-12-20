@@ -81,6 +81,12 @@ variable "postgresql_user" {
 variable "database_name" {
   default = "evidence"
 }
+
+variable "database_storage_mb" {
+  default = "51200"
+  description = "'storage_mb' size for the PaaS database (Note: can't be resized currently)"
+}
+
 ////////////////////////////////////////////////
 // Logging
 ////////////////////////////////////////////////
