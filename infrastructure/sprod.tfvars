@@ -3,6 +3,9 @@ capacity = "2"
 asp_name = "dm-store-sprod"
 asp_rg = "dm-store-sprod"
 
+// Database
+db_storage_size = "509952"
+
 ////////////////////////////////////////////////
 // Toggle Features
 ////////////////////////////////////////////////

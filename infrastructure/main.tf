@@ -132,7 +132,7 @@ module "db" {
   database_name = "${var.database_name}"
   sku_name = "GP_Gen5_2"
   sku_tier = "GeneralPurpose"
-  storage_mb = "51200"
+  storage_mb = "${var.db_storage_size}"
   common_tags  = "${var.common_tags}"
 }
 
