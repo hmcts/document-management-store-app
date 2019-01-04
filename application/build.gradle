@@ -287,3 +287,8 @@ run {
         jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
     }
 }
+
+task installDist(overwrite: true) {
+    // This task must be overwritten to do as it's breaking JAR packaging and it's a mandatory step of swagger
+    // documentation publication.
+}
