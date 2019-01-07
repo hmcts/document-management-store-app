@@ -22,6 +22,7 @@ import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -59,13 +60,13 @@ public abstract class End2EndTestBase {
         when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(false);
 
         doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
-            IOUtils.copy(FILE.getInputStream(), out);
-            out.close();
-            return null;
-        })
-            .when(blobStorageReadService)
-            .loadBlob(any(DocumentContentVersion.class), any(OutputStream.class));
+            try (final InputStream inputStream = FILE.getInputStream();
+                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+            ) {
+                IOUtils.copy(inputStream, out);
+                return null;
+            }
+        }).when(blobStorageReadService).loadBlob(any(DocumentContentVersion.class), any(OutputStream.class));
         doAnswer(invocation -> {
             uploadDocument(invocation);
             return null;

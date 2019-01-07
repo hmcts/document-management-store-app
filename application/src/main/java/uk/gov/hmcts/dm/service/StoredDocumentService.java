@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
 import lombok.NonNull;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,10 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import javax.validation.constraints.NotNull;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +76,7 @@ public class StoredDocumentService {
         return storedDocumentRepository.save(storedDocument);
     }
 
-    public void saveItemsToBucket(Folder folder, List<MultipartFile> files)  {
+    public void saveItemsToBucket(Folder folder, List<MultipartFile> files) {
         String userId = securityUtilService.getUserId();
         List<StoredDocument> items = files.stream().map(file -> {
             StoredDocument storedDocument = new StoredDocument();
@@ -87,8 +92,8 @@ public class StoredDocumentService {
 
             save(storedDocument);
             storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+            closeBlobInputStream(documentContentVersion);
             return storedDocument;
-
         }).collect(Collectors.toList());
 
         folder.getStoredDocuments().addAll(items);
@@ -96,7 +101,7 @@ public class StoredDocumentService {
         folderRepository.save(folder);
     }
 
-    public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand)  {
+    public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand) {
         String userId = securityUtilService.getUserId();
         return uploadDocumentsCommand.getFiles().stream().map(file -> {
             StoredDocument document = new StoredDocument();
@@ -120,18 +125,19 @@ public class StoredDocumentService {
             document.getDocumentContentVersions().add(documentContentVersion);
             save(document);
             storeInAzureBlobStorage(document, documentContentVersion, file);
+            closeBlobInputStream(documentContentVersion);
             return document;
         }).collect(Collectors.toList());
 
     }
 
-    public List<StoredDocument> saveItems(List<MultipartFile> files)  {
+    public List<StoredDocument> saveItems(List<MultipartFile> files) {
         UploadDocumentsCommand command = new UploadDocumentsCommand();
         command.setFiles(files);
         return saveItems(command);
     }
 
-    public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file)  {
+    public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
                                                                                    file,
                                                                                    securityUtilService.getUserId(),
@@ -140,6 +146,7 @@ public class StoredDocumentService {
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         documentContentVersionRepository.save(documentContentVersion);
         storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
+        closeBlobInputStream(documentContentVersion);
 
         return documentContentVersion;
     }
@@ -180,6 +187,27 @@ public class StoredDocumentService {
             blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
                 documentContentVersion,
                 file);
+        }
+    }
+
+    /**
+     * Force closure of the persisted <code>Blob</code>'s <code>InputStream</code>, to ensure the file handle is
+     * released.
+     *
+     * @param documentContentVersion <code>DocumentContentVersion</code> instance wrapping a
+     *                               <code>DocumentContent</code> that contains the <code>Blob</code>
+     * @throws HibernateException If the <code>Blob</code>'s stream cannot be accessed
+     * @throws UncheckedIOException If the stream cannot be closed
+     */
+    private void closeBlobInputStream(@NotNull final DocumentContentVersion documentContentVersion) {
+        try {
+            if (documentContentVersion.getDocumentContent() != null) {
+                documentContentVersion.getDocumentContent().getData().getBinaryStream().close();
+            }
+        } catch (SQLException e) {
+            throw new HibernateException("Unable to access blob stream", e);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Unable to close blob stream", e);
         }
     }
 }
