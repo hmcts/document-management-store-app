@@ -17,9 +17,9 @@ import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
-import java.sql.Blob;
 import java.util.UUID;
 
 import static java.util.Collections.singletonList;
@@ -45,8 +45,6 @@ public class BlobStorageWriteServiceTest {
     @Mock
     private MultipartFile file;
     @Mock
-    private Blob data;
-    @Mock
     private CloudBlockBlob blob;
     @Mock
     private DocumentContentVersionRepository documentContentVersionRepository;
@@ -57,7 +55,9 @@ public class BlobStorageWriteServiceTest {
         cloudBlobContainer = PowerMockito.mock(CloudBlobContainer.class);
         blob = PowerMockito.mock(CloudBlockBlob.class);
         blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer, documentContentVersionRepository);
-        given(file.getInputStream()).willReturn(toInputStream(MOCK_DATA));
+        try (final InputStream inputStream = toInputStream(MOCK_DATA)) {
+            given(file.getInputStream()).willReturn(inputStream);
+        }
     }
 
     @Test
@@ -67,8 +67,13 @@ public class BlobStorageWriteServiceTest {
         given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
         String azureProvidedUri = "someuri";
         given(blob.getUri()).willReturn(new URI(azureProvidedUri));
-        doAnswer(invocation -> copy(toInputStream(MOCK_DATA), invocation.getArgumentAt(0, OutputStream.class))).when(
-            blob).download(any(OutputStream.class));
+        doAnswer(invocation -> {
+            try (final InputStream inputStream = toInputStream(MOCK_DATA);
+                 final OutputStream outputStream = invocation.getArgumentAt(0, OutputStream.class)
+            ) {
+                return copy(inputStream, outputStream);
+            }
+        }).when(blob).download(any(OutputStream.class));
 
         // upload
         blobStorageWriteService.uploadDocumentContentVersion(storedDocument,

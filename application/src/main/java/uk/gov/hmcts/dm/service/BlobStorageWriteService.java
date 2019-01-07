@@ -15,6 +15,7 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import javax.validation.constraints.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
@@ -51,10 +52,14 @@ public class BlobStorageWriteService {
                   documentId,
                   documentContentVersion.getId());
 
-        try {
+        try (// Need to obtain two instances of the MultipartFile InputStream because a stream cannot be reused once
+             // read
+             final InputStream inputStream = multiPartFile.getInputStream();
+             final InputStream inputStreamForByteArray = multiPartFile.getInputStream()
+        ) {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
-            blob.upload(multiPartFile.getInputStream(), documentContentVersion.getSize());
-            final byte[] bytes = toByteArray(multiPartFile.getInputStream());
+            blob.upload(inputStream, documentContentVersion.getSize());
+            final byte[] bytes = toByteArray(inputStreamForByteArray);
             documentContentVersion.setContentUri(blob.getUri().toString());
             final String checksum = shaHex(bytes);
             documentContentVersion.setContentChecksum(checksum);
