@@ -12,7 +12,7 @@ properties([
     ]),
 ])
 
-@Library("Infrastructure@ccd_various")
+@Library("Infrastructure")
 
 def type = "java"
 def product = "dm"
