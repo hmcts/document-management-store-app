@@ -120,9 +120,6 @@ module "app" {
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.dm_store_storageaccount_primary_connection_string.value}"
     STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}"
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME = "${azurerm_storage_container.document_container.name}"
-
-    # Terraform test
-    TEST_VAR = "TEST"
   }
 }
 
