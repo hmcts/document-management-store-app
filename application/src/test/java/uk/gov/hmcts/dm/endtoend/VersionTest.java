@@ -11,6 +11,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.security.Classifications;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -23,10 +24,10 @@ import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
 public class VersionTest extends End2EndTestBase {
 
-    public static final MockMultipartFile FILE_V1 =
+    private static final MockMultipartFile FILE_V1 =
         new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
-    public static final MockMultipartFile FILE_V2 =
+    private static final MockMultipartFile FILE_V2 =
         new MockMultipartFile("file", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
     private HttpHeaders headers = Helper.getHeaders();
@@ -40,15 +41,19 @@ public class VersionTest extends End2EndTestBase {
     @Before
     public void setUp() {
         doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
-            IOUtils.copy(FILE_V1.getInputStream(), out);
-            out.close();
-            return null;
+            try (final InputStream inputStream = FILE_V1.getInputStream();
+                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+            ) {
+                IOUtils.copy(inputStream, out);
+                return null;
+            }
         }).doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
-            IOUtils.copy(FILE_V2.getInputStream(), out);
-            out.close();
-            return null;
+            try (final InputStream inputStream = FILE_V2.getInputStream();
+                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+            ) {
+                IOUtils.copy(inputStream, out);
+                return null;
+            }
         })
             .when(blobStorageReadService)
             .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));

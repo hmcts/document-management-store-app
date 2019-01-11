@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.exception.CantCreateBlobException;
 
 import javax.persistence.EntityManager;
+import java.io.InputStream;
 import java.sql.Blob;
 
 @Service
@@ -18,9 +19,9 @@ public class BlobCreator {
     private EntityManager entityManager;
 
     protected Blob createBlob(@NonNull MultipartFile file) {
-        try {
+        try (final InputStream inputStream = file.getInputStream()) {
             Session session = entityManager.unwrap(Session.class);
-            return Hibernate.getLobCreator(session).createBlob(file.getInputStream(), file.getSize());
+            return Hibernate.getLobCreator(session).createBlob(inputStream, file.getSize());
         } catch (Exception e) {
             throw new CantCreateBlobException(e);
         }
