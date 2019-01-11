@@ -151,11 +151,11 @@ variable "enable_thumbnail" {
 }
 
 variable "enable_azure_storage_container" {
-  default = "false"
+  default = "true"
 }
 
 variable "enable_postgres_blob_storage" {
-  default = "true"
+  default = "false"
 }
 
 ////////////////////////////////////////////////
