@@ -34,9 +34,6 @@ enable_delete = "true"
 enable_ttl  = "false"
 enable_thumbnail = "true"
 
-enable_postgres_blob_storage = "false"
-enable_azure_storage_container = "true"
-
 ////////////////////////////////////////////////
 //// Whitelists
 ////////////////////////////////////////////////

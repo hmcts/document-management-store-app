@@ -28,8 +28,10 @@ def type = "java"
 def product = "dm"
 def component = "store"
 
-List<LinkedHashMap<String, Object>> secrets = [
-    secret('em-gateway-s2s-token', 'S2S_TOKEN')
+def secrets = [
+    's2s-${env}': [
+        secret('microservicekey-em-gw', 'S2S_TOKEN')
+    ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -41,9 +43,15 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+def vaultOverrides = [
+    'preview': 'aat',
+    'spreview': 'saat'
+]
+
 withParameterizedPipeline(type, product, component, params.ENVIRONMENT, 'sandbox') {
     enableSlackNotifications('#ccd-param-builds')
     enableDbMigration()
+    overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
     after('checkout') {

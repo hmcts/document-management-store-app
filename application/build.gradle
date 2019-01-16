@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'pmd'
-    id 'io.spring.dependency-management' version '1.0.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
     id 'org.springframework.boot' version '1.5.15.RELEASE'
     id 'org.owasp.dependencycheck' version '3.3.2'
     id 'se.patrikerdes.use-latest-versions' version '0.2.3'
@@ -115,7 +115,7 @@ def versions = [
 
 dependencies {
     compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.0.0'
-    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.9'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.13'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.19.1'
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '9.0.8'
 
@@ -286,4 +286,10 @@ run {
     if (debug == 'true') {
         jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
     }
+    mainClassName = 'uk.gov.hmcts.dm.DmApp'
+}
+
+task installDist(overwrite: true) {
+    // This task must be overwritten to do as it's breaking JAR packaging and it's a mandatory step of swagger
+    // documentation publication.
 }

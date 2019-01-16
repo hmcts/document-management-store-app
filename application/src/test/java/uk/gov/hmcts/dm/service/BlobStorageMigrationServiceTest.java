@@ -271,7 +271,7 @@ public class BlobStorageMigrationServiceTest {
         }
         verify(batchMigrationAuditEntryService).createAuditEntry(null, 5, false);
         verify(batchMigrationAuditEntryService).save(batchmigrationAuditEntry, report);
-        verifyBatchMigrateDocumentContentVersionRepositoryQueiries(5);
+        verifyBatchMigrateDocumentContentVersionRepositoryQueries(5);
     }
 
     @Test
@@ -291,7 +291,7 @@ public class BlobStorageMigrationServiceTest {
             .forEach(dcv -> assertThat(dcv.getUri(), is(nullValue())));
         verify(batchMigrationAuditEntryService).createAuditEntry(null, 7, true);
         verify(batchMigrationAuditEntryService).save(batchmigrationAuditEntry, report);
-        verifyBatchMigrateDocumentContentVersionRepositoryQueiries(7);
+        verifyBatchMigrateDocumentContentVersionRepositoryQueries(7);
     }
 
     @Test
@@ -361,12 +361,16 @@ public class BlobStorageMigrationServiceTest {
     }
 
     private void prepareDownloadStream() throws StorageException {
-        doAnswer(invocation -> copy(toInputStream(DOC_CONTENT),
-                                    invocation.getArgumentAt(0, OutputStream.class))).when(cloudBlockBlob)
-            .download(any(OutputStream.class));
+        doAnswer(invocation -> {
+            try (final InputStream inputStream = toInputStream(DOC_CONTENT);
+                 final OutputStream outputStream = invocation.getArgumentAt(0, OutputStream.class)
+            ) {
+                return copy(inputStream, outputStream);
+            }
+        }).when(cloudBlockBlob).download(any(OutputStream.class));
     }
 
-    private void verifyBatchMigrateDocumentContentVersionRepositoryQueiries(int pageSize) {
+    private void verifyBatchMigrateDocumentContentVersionRepositoryQueries(int pageSize) {
         verify(documentContentVersionRepository, times(2)).countByContentChecksumIsNull();
         verify(documentContentVersionRepository, times(2)).countByContentChecksumIsNotNull();
         verify(documentContentVersionRepository).findByContentChecksumIsNullAndDocumentContentIsNotNull(argThat(new PageRequestMatcher(pageSize)));
