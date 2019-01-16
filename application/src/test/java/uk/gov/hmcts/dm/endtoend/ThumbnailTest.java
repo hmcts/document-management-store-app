@@ -9,6 +9,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -164,12 +165,13 @@ public class ThumbnailTest extends End2EndTestBase {
 
     private void readFromAzureBlobStorageWillReturn(MockMultipartFile file) {
         Mockito.doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
-            IOUtils.copy(file.getInputStream(), out);
-            out.close();
-            return null;
-        })
-            .when(blobStorageReadService)
+            try (final InputStream inputStream = file.getInputStream();
+                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+            ) {
+                IOUtils.copy(inputStream, out);
+                return null;
+            }
+        }).when(blobStorageReadService)
             .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
     }
 }

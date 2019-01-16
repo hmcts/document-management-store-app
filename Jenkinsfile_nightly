@@ -12,14 +12,16 @@ properties([
     ]),
 ])
 
-@Library("Infrastructure@ccd_various")
+@Library("Infrastructure")
 
 def type = "java"
 def product = "dm"
 def component = "store"
 
-List<LinkedHashMap<String, Object>> secrets = [
-    secret('em-gateway-s2s-token', 'S2S_TOKEN')
+def secrets = [
+    's2s-${env}': [
+        secret('microservicekey-em-gw', 'S2S_TOKEN')
+    ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
