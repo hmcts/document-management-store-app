@@ -75,28 +75,32 @@ public class BlobStorageMigrationService {
         migrateDocumentContentVersion(documentContentVersion);
     }
 
-    public BatchMigrateProgressReport batchMigrate(String authToken, final Integer limit, final Boolean mockRun) {
+    public BatchMigrateProgressReport batchMigrate(String authToken,
+                                                   final Integer limit,
+                                                   final Integer page,
+                                                   final Boolean mockRun) {
         synchronized (this) {
             Integer actualLimit = defaultIfNull(limit, defaultBatchSize);
+            Integer actualPage = defaultIfNull(page, 0);
             Boolean actualRun = defaultIfNull(mockRun, false);
             BatchMigrationAuditEntry audit = batchMigrationAuditEntryService.createAuditEntry(authToken,
                                                                                               actualLimit,
                                                                                               actualRun);
             batchMigrationTokenService.checkAuthToken(authToken);
-            final BatchMigrateProgressReport report = batchMigrate(actualLimit, actualRun);
+            final BatchMigrateProgressReport report = batchMigrate(actualLimit, actualPage, actualRun);
             batchMigrationAuditEntryService.save(audit, report);
             return report;
         }
     }
 
-    private BatchMigrateProgressReport batchMigrate(int limit, boolean mockRun) {
+    private BatchMigrateProgressReport batchMigrate(int limit, int page, boolean mockRun) {
         final long start = currentTimeMillis();
 
         MigrateProgressReport before = getMigrateProgressReport();
 
         final List<DocumentContentVersion> dcvList = documentContentVersionRepository
             .findByContentChecksumIsNullAndDocumentContentIsNotNull(
-            new PageRequest(0, limit, DESC, "createdOn"));
+            new PageRequest(page, limit, DESC, "createdOn"));
 
         if (!mockRun) {
             dcvList.forEach(this::migrateDocumentContentVersion);

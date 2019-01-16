@@ -98,17 +98,17 @@ public class BlobStorageMigrationControllerTest extends ComponentTestBase {
             .post("/migrate")
             .andExpect(status().isOk());
 
-        verify(blobStorageMigrationService).batchMigrate(null, null, null);
+        verify(blobStorageMigrationService).batchMigrate(null, null, null, null);
     }
 
     @Test
     public void batchMigratePostWithParameters() throws Exception {
         restActions
             .withHeader(IF_MATCH, "secret crypte")
-            .post("/migrate?limit=10&dry-mock-run=true")
+            .post("/migrate?limit=10&page=1&dry-mock-run=true")
             .andExpect(status().isOk());
 
-        verify(blobStorageMigrationService).batchMigrate("secret crypte", 10, true);
+        verify(blobStorageMigrationService).batchMigrate("secret crypte", 10, 1, true);
     }
 
 }
