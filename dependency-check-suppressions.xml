@@ -117,4 +117,44 @@ Another long cpe again
         <gav regex="true">^.*slf4j.*$</gav>
         <cpe>cpe:/a:slf4j:slf4j:1.7.25</cpe>
     </suppress>
+    <suppress>
+        <notes>Temporarily suppress jackson-databind CVE see RDM-3796</notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-14718</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress jackson-databind CVE see RDM-3796</notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-14719</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress jackson-databind CVE see RDM-3796</notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-14720</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress jackson-databind CVE see RDM-3796</notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-14721</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress jackson-databind CVE see RDM-3796</notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-19360</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress jackson-databind CVE see RDM-3796</notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-19361</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress jackson-databind CVE see RDM-3796</notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-19362</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress jackson-databind CVE see RDM-3796</notes>
+        <gav regex="true">^com\.fasterxml\.jackson\.core:jackson-databind:.*$</gav>
+        <cve>CVE-2018-1000873</cve>
+    </suppress>
 </suppressions>
