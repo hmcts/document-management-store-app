@@ -2,7 +2,7 @@ plugins {
     id 'groovy'
     id 'java'
     id 'idea'
-    id 'org.springframework.boot' version '1.5.15.RELEASE'
+    id 'org.springframework.boot' version '1.5.19.RELEASE'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
