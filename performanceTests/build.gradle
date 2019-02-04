@@ -1,7 +1,7 @@
 plugins {
     id 'scala'
     id 'com.github.lkishalmi.gatling' version '0.7.1'
-    id 'com.github.ben-manes.versions' version '0.17.0'
+    id 'com.github.ben-manes.versions' version '0.20.0'
 }
 
 version '1.0.0'
