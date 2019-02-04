@@ -61,6 +61,8 @@ withPipeline(type , product, component) {
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
+    installCharts()
+
     after('checkout') {
         echo '${product}-${component} out'
         sh '''

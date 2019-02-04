@@ -1,0 +1,15 @@
+java:
+  environment:
+    # Endpoints
+    IDAM_USER_BASE_URI: https://preprod-idamapi.reform.hmcts.net:3511
+    IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+
+    # logging vars & healthcheck
+    REFORM_ENVIRONMENT: aat
+    PACKAGES_ENVIRONMENT: aat
+
+    # Logging
+    SHOW_SQL: false
+
+    # Toggles
+    ENABLE_DOCUMENT_AND_METADATA_UPLOAD: false
