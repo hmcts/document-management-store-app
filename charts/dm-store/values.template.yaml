@@ -41,8 +41,6 @@ java:
     PACKAGES_NAME: dm-store
     PACKAGES_PROJECT: evidence
 
-    ROOT_APPENDER: JSON_CONSOLE
-    JSON_CONSOLE_PRETTY_PRINT: false
     LOG_OUTPUT: single
 
     # addtional log
