@@ -7,6 +7,6 @@ COPY build/libs/dm-store.jar /opt/app/
 
 HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" curl --silent --fail http://localhost:8080/health
 
-EXPOSE 8080 5005
+EXPOSE 4603 8080 5005
 
 CMD ["dm-store.jar"]
