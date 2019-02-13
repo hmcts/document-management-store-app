@@ -10,7 +10,7 @@ postgresql:
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
-  applicationPort: 4453
+  applicationPort: 4603
   environment:
     POSTGRES_HOST: ${SERVICE_NAME}-postgres
     POSTGRES_PORT: 5432
