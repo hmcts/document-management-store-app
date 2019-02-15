@@ -110,7 +110,7 @@ def versions = [
     powermock          : '1.7.4',
     sonar              : '3.2',
     springBoot         : springBootVersion,
-    springfoxSwagger   : '2.7.0',
+    springfoxSwagger   : '2.9.2',
 ]
 
 dependencies {
