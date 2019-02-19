@@ -26,7 +26,7 @@ ENV APPLICATION_SIZE_ON_DISK_IN_MB 80
 
 ENV JAVA_OPTS ""
 
-COPY --frombuilder /home/gradle/app/build/libs/$APP /opt/app/
+COPY --from=builder /home/gradle/app/build/libs/$APP /opt/app/
 
 HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" curl --silent --fail http://localhost:8080/health
 
