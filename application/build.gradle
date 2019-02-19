@@ -3,7 +3,8 @@ plugins {
     id 'checkstyle'
     id 'pmd'
     id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-    id 'org.springframework.boot' version '1.5.19.RELEASE'
+//    id 'org.springframework.boot' version '1.5.19.RELEASE'
+    id 'org.springframework.boot' version '2.1.3.RELEASE'
     id 'org.owasp.dependencycheck' version '3.3.2'
     id 'se.patrikerdes.use-latest-versions' version '0.2.7'
     id 'com.github.ben-manes.versions' version '0.20.0'
@@ -268,9 +269,9 @@ jar {
     }
 }
 
-bootRepackage {
-    mainClass = 'uk.gov.hmcts.dm.DmApp'
-}
+//bootRepackage {
+//    mainClass = 'uk.gov.hmcts.dm.DmApp'
+//}
 
 //This is used in get the version for fakeversion and buildInfo  (./gradlew -q printVersion)
 task printVersion {
