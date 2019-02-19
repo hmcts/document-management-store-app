@@ -1,10 +1,7 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
-import uk.gov.hmcts.dm.service.BlobStorageReadService;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,7 +15,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import javax.imageio.ImageIO;
+
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
+import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
 public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailCreator {
 

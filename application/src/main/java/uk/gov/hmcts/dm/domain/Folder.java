@@ -1,16 +1,30 @@
 package uk.gov.hmcts.dm.domain;
 
-import lombok.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import uk.gov.hmcts.dm.security.domain.CreatorAware;
 
-import java.util.*;
-import javax.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import uk.gov.hmcts.dm.security.domain.CreatorAware;
 
 
 @Entity

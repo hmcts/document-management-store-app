@@ -1,13 +1,14 @@
 package uk.gov.hmcts.dm.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.FolderRepository;
-
-import java.util.UUID;
 
 @Transactional
 @Service
@@ -17,7 +18,7 @@ public class FolderService {
     private FolderRepository folderRepository;
 
     public Folder findOne(UUID id) {
-        return folderRepository.findOne(id);
+        return folderRepository.findById(id).get();
     }
 
     public StoredDocument findOneItem(UUID id, Integer index) {

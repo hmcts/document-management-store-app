@@ -1,14 +1,15 @@
 package uk.gov.hmcts.dm.actuate.health;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.hmcts.dm.actuate.health.model.HealthCheckResponse;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import uk.gov.hmcts.dm.actuate.health.model.HealthCheckResponse;
 
 public class WebCheckerTest {
 

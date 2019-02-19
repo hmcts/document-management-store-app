@@ -1,19 +1,31 @@
 package uk.gov.hmcts.dm.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.sql.Blob;
+import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import uk.gov.hmcts.dm.dialect.ByteWrappingBlobType;
 
-import javax.persistence.*;
-import java.sql.Blob;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import uk.gov.hmcts.dm.dialect.ByteWrappingBlobType;
 
 /**
  * Make checkstyles happy with a javadoc summary.

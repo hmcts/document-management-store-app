@@ -1,10 +1,11 @@
 package uk.gov.hmcts.dm.hateos;
 
-import org.springframework.hateoas.Resources;
-import uk.gov.hmcts.dm.domain.StoredDocument;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.hateoas.Resources;
+
+import uk.gov.hmcts.dm.domain.StoredDocument;
 
 public class StoredDocumentHalResourceCollection extends Resources<StoredDocumentHalResource> {
 

@@ -1,14 +1,14 @@
 package uk.gov.hmcts.dm.actuate.info;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
-import org.springframework.boot.actuate.info.Info;
+import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertThat;
+import org.hamcrest.CoreMatchers;
+import org.junit.Test;
+import org.springframework.boot.actuate.info.Info;
 
 public class DmBuildInfoTest {
 

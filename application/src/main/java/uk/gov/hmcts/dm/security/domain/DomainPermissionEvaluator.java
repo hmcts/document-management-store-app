@@ -1,13 +1,14 @@
 package uk.gov.hmcts.dm.security.domain;
 
-import lombok.NonNull;
-import org.springframework.stereotype.Component;
-import uk.gov.hmcts.dm.security.Classifications;
-import uk.gov.hmcts.dm.security.Permissions;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Component;
+
+import lombok.NonNull;
+import uk.gov.hmcts.dm.security.Classifications;
+import uk.gov.hmcts.dm.security.Permissions;
 
 @Component
 public class DomainPermissionEvaluator {

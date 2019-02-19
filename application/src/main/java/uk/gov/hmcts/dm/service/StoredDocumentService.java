@@ -1,11 +1,23 @@
 package uk.gov.hmcts.dm.service;
 
-import lombok.NonNull;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import lombok.NonNull;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
@@ -17,16 +29,6 @@ import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-
-import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -57,7 +59,7 @@ public class StoredDocumentService {
     private BlobStorageWriteService blobStorageWriteService;
 
     public Optional<StoredDocument> findOne(UUID id) {
-        Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
+        Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);
         if (storedDocument.isPresent() && storedDocument.get().isDeleted()) {
             return Optional.empty();
         }
@@ -65,7 +67,7 @@ public class StoredDocumentService {
     }
 
     public Optional<StoredDocument> findOneWithBinaryData(UUID id) {
-        Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
+        Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);
         if (storedDocument.isPresent() && storedDocument.get().isHardDeleted()) {
             return Optional.empty();
         }

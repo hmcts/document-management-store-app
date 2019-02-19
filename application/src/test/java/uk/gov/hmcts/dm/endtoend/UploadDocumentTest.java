@@ -1,11 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.springframework.http.HttpHeaders;
-import org.springframework.mock.web.MockHttpServletResponse;
-import uk.gov.hmcts.dm.security.Classifications;
-
 import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -18,6 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getBinaryUrlFromResponse;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
+
+import org.junit.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.mock.web.MockHttpServletResponse;
+
+import lombok.extern.slf4j.Slf4j;
+import uk.gov.hmcts.dm.security.Classifications;
 
 @Slf4j
 public class UploadDocumentTest extends End2EndTestBase {

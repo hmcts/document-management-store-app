@@ -1,16 +1,16 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import uk.gov.hmcts.dm.domain.DocumentContent;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
-import uk.gov.hmcts.dm.service.BlobStorageReadService;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -18,17 +18,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
+import uk.gov.hmcts.dm.domain.DocumentContent;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
+import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
 public class ImageThumbnailCreatorTest {
 
@@ -155,7 +156,7 @@ public class ImageThumbnailCreatorTest {
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
         when(contentVersion.getDocumentContent()).thenReturn(null);
         doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
+            final OutputStream out = invocation.getArgument(1);
             IOUtils.copy(file, out);
             out.close();
             return null;

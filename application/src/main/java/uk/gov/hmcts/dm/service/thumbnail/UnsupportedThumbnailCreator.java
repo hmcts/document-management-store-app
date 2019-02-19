@@ -1,9 +1,10 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import org.springframework.stereotype.Service;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-
 import java.io.InputStream;
+
+import org.springframework.stereotype.Service;
+
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 @Service
 public class UnsupportedThumbnailCreator implements ThumbnailCreator {

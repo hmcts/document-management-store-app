@@ -1,8 +1,8 @@
 package uk.gov.hmcts.dm.dialect;
 
-import org.hibernate.dialect.PostgreSQL94Dialect;
-
 import java.sql.Types;
+
+import org.hibernate.dialect.PostgreSQL94Dialect;
 
 public class CustomPostgresSqlDialect extends PostgreSQL94Dialect {
     public CustomPostgresSqlDialect() {

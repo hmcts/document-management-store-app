@@ -1,17 +1,20 @@
 package uk.gov.hmcts.dm.service;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.FolderRepository;
-
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class FolderServiceTests {
@@ -25,7 +28,7 @@ public class FolderServiceTests {
     @Test
     public void testFindOne() {
 
-        when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID).get()).thenReturn(TestUtil.folder);
 
         Folder folder = folderService.findOne(TestUtil.RANDOM_UUID);
 
@@ -48,7 +51,7 @@ public class FolderServiceTests {
     @Test
     public void testFindOneItem() {
 
-        when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID).get()).thenReturn(TestUtil.folder);
 
         StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
 
@@ -58,7 +61,7 @@ public class FolderServiceTests {
     @Test
     public void testFindOneItemFolderNull() {
 
-        when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID).get()).thenReturn(null);
 
         StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
 
@@ -68,7 +71,7 @@ public class FolderServiceTests {
     @Test
     public void testDelete() {
 
-        when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID).get()).thenReturn(TestUtil.folder);
 
         folderService.delete(TestUtil.RANDOM_UUID);
 

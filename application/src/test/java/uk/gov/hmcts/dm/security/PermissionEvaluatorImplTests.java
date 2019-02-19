@@ -1,5 +1,7 @@
 package uk.gov.hmcts.dm.security;
 
+import static org.mockito.Mockito.mock;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -8,10 +10,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.security.core.Authentication;
+
 import uk.gov.hmcts.dm.repository.RepositoryFinder;
 import uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator;
-
-import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PermissionEvaluatorImplTests {

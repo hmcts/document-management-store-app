@@ -1,7 +1,36 @@
 package uk.gov.hmcts.dm.service;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import static com.google.common.collect.Sets.newHashSet;
+import static java.util.Collections.singletonList;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
+import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
+
+import java.sql.Blob;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +40,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -24,37 +57,6 @@ import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-
-import java.sql.Blob;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.google.common.collect.Sets.newHashSet;
-import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
-import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StoredDocumentServiceTests {
@@ -93,42 +95,42 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testFindOne() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(TestUtil.STORED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class)).orElse(null)).thenReturn(TestUtil.STORED_DOCUMENT);
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertThat(storedDocument.get(), equalTo(TestUtil.STORED_DOCUMENT));
     }
 
     @Test
     public void testFindOneThatDoesNotExist() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(null);
+        when(this.storedDocumentRepository.findById(any(UUID.class)).orElse(null)).thenReturn(null);
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneThatIsMarkedDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class)).orElse(null)).thenReturn(DELETED_DOCUMENT);
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatDoesNotExist() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(null);
+        when(this.storedDocumentRepository.findById(any(UUID.class)).orElse(null)).thenReturn(null);
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatIsMarkedHardDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(HARD_DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class)).orElse(null)).thenReturn(HARD_DELETED_DOCUMENT);
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatIsMarkedDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class)).orElse(null)).thenReturn(DELETED_DOCUMENT);
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertTrue(storedDocument.isPresent());
     }

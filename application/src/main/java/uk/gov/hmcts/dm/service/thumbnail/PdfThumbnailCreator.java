@@ -1,13 +1,14 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
+
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
-
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
 
 public class PdfThumbnailCreator extends AbstractFileSpecificThumbnailCreator {
 

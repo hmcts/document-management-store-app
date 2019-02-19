@@ -1,15 +1,36 @@
 package uk.gov.hmcts.dm.service;
 
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
-import lombok.extern.slf4j.Slf4j;
+import static java.lang.System.currentTimeMillis;
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.springframework.data.domain.Sort.Direction.DESC;
+import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
+import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.sql.Blob;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.util.List;
+import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
+
+import lombok.extern.slf4j.Slf4j;
 import uk.gov.hmcts.dm.domain.BatchMigrationAuditEntry;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.MigrateEntry;
@@ -19,25 +40,6 @@ import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.MigrateEntryRepository;
-
-import javax.validation.constraints.NotNull;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.sql.Blob;
-import java.sql.SQLException;
-import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static java.lang.System.currentTimeMillis;
-import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.springframework.data.domain.Sort.Direction.DESC;
-import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
-import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
 
 @Service
 @Transactional
@@ -73,6 +75,22 @@ public class BlobStorageMigrationService {
     public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
         final DocumentContentVersion documentContentVersion = getDocumentContentVersion(documentId, versionId);
         migrateDocumentContentVersion(documentContentVersion);
+    }
+
+    private void migrateDocumentContentVersion(DocumentContentVersion documentContentVersion) {
+        if (isBlank(documentContentVersion.getContentChecksum())) {
+            log.info("Migrate DocumentContentVersion {}", documentContentVersion.getId());
+            uploadBinaryStream(documentContentVersion);
+            // we cannot use documentContentVersionRepository.save
+            // because { @link ByteWrappingBlobType#replace} is not implemented
+            documentContentVersionRepository.updateContentUriAndContentCheckSum(documentContentVersion.getId(),
+                                                                                documentContentVersion.getContentUri(),
+                                                                                documentContentVersion.getContentChecksum());
+            // For some reason,
+            // auditEntryService.createAndSaveEntry
+            // only creates one database entry; hence use auditEntryRepository.saveAndFlush directly
+            auditEntryRepository.saveAndFlush(newAuditEntry(documentContentVersion));
+        }
     }
 
     public BatchMigrateProgressReport batchMigrate(String authToken,
@@ -117,22 +135,6 @@ public class BlobStorageMigrationService {
                                          documentContentVersionRepository.countByContentChecksumIsNotNull());
     }
 
-    private void migrateDocumentContentVersion(DocumentContentVersion documentContentVersion) {
-        if (isBlank(documentContentVersion.getContentChecksum())) {
-            log.info("Migrate DocumentContentVersion {}", documentContentVersion.getId());
-            uploadBinaryStream(documentContentVersion);
-            // we cannot use documentContentVersionRepository.save
-            // because { @link ByteWrappingBlobType#replace} is not implemented
-            documentContentVersionRepository.updateContentUriAndContentCheckSum(documentContentVersion.getId(),
-                                                                                documentContentVersion.getContentUri(),
-                                                                                documentContentVersion.getContentChecksum());
-            // For some reason,
-            // auditEntryService.createAndSaveEntry
-            // only creates one database entry; hence use auditEntryRepository.saveAndFlush directly
-            auditEntryRepository.saveAndFlush(newAuditEntry(documentContentVersion));
-        }
-    }
-
     private DocumentContentVersion getDocumentContentVersion(final @NotNull UUID documentId,
                                                              final @NotNull UUID versionId) {
         // Sonar fails us if we use orElseThrow
@@ -140,8 +142,7 @@ public class BlobStorageMigrationService {
             throw new DocumentNotFoundException(documentId);
         }
 
-        return Optional
-            .ofNullable(documentContentVersionRepository.findOne(versionId))
+        return documentContentVersionRepository.findById(versionId)
             .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
     }
 

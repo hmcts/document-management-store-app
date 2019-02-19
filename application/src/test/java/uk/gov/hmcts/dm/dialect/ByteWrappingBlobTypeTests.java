@@ -1,11 +1,11 @@
 package uk.gov.hmcts.dm.dialect;
 
+import java.sql.SQLException;
+
 import org.hibernate.HibernateException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
-
-import java.sql.SQLException;
 
 public class ByteWrappingBlobTypeTests {
 

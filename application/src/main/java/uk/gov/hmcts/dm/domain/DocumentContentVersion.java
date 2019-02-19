@@ -1,20 +1,9 @@
 package uk.gov.hmcts.dm.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.dialect.PassThroughBlob;
-import uk.gov.hmcts.dm.security.Classifications;
-import uk.gov.hmcts.dm.security.domain.RolesAware;
-import uk.gov.hmcts.dm.utils.StringUtils;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,10 +18,23 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import uk.gov.hmcts.dm.dialect.PassThroughBlob;
+import uk.gov.hmcts.dm.security.Classifications;
+import uk.gov.hmcts.dm.security.domain.RolesAware;
+import uk.gov.hmcts.dm.utils.StringUtils;
 
 @Entity
 @NoArgsConstructor

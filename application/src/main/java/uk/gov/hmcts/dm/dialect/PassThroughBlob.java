@@ -1,13 +1,14 @@
 package uk.gov.hmcts.dm.dialect;
 
-import lombok.EqualsAndHashCode;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(of = {"contentLength"})
 public class PassThroughBlob implements Blob {

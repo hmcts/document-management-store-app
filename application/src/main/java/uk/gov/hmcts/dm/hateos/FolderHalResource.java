@@ -1,19 +1,20 @@
 package uk.gov.hmcts.dm.hateos;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
-import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.core.Relation;
-import uk.gov.hmcts.dm.controller.FolderController;
-import uk.gov.hmcts.dm.domain.Folder;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.core.Relation;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import uk.gov.hmcts.dm.controller.FolderController;
+import uk.gov.hmcts.dm.domain.Folder;
 
 @Data
 @NoArgsConstructor

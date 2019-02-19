@@ -1,26 +1,29 @@
 package uk.gov.hmcts.dm.service;
 
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.exception.FileStorageException;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
+import static org.apache.commons.io.IOUtils.toByteArray;
+import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
 
-import javax.validation.constraints.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
-import static org.apache.commons.io.IOUtils.toByteArray;
-import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
+
+import lombok.extern.slf4j.Slf4j;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.FileStorageException;
+import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 @Slf4j
 @Service

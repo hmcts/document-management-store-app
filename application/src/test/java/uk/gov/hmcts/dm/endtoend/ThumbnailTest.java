@@ -1,18 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.springframework.http.HttpHeaders;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.mock.web.MockMultipartFile;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 import static org.springframework.http.MediaType.IMAGE_GIF_VALUE;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
@@ -24,6 +11,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.hmcts.dm.endtoend.Helper.getThumbnailUrlFromResponse;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
+import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.http.HttpHeaders;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
+
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+
+@SuppressWarnings("deprecation")
 public class ThumbnailTest extends End2EndTestBase {
 
     private final HttpHeaders headers = Helper.getHeaders();
@@ -166,7 +168,7 @@ public class ThumbnailTest extends End2EndTestBase {
     private void readFromAzureBlobStorageWillReturn(MockMultipartFile file) {
         Mockito.doAnswer(invocation -> {
             try (final InputStream inputStream = file.getInputStream();
-                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+                 final OutputStream out = invocation.getArgument(1)
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;

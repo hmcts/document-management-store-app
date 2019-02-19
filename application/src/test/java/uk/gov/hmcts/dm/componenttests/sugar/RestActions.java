@@ -1,6 +1,11 @@
 package uk.gov.hmcts.dm.componenttests.sugar;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
+
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,15 +14,12 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.reform.auth.checker.core.service.ServiceRequestAuthorizer;
-
-import java.util.List;
-import java.util.UUID;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
 
 public class RestActions {
     private final HttpHeaders httpHeaders = new HttpHeaders();

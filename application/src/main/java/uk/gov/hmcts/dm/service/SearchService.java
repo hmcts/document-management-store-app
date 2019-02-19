@@ -1,10 +1,11 @@
 package uk.gov.hmcts.dm.service;
 
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import lombok.NonNull;
 import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;

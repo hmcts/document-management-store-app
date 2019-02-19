@@ -1,22 +1,25 @@
 package uk.gov.hmcts.dm.componenttests;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import uk.gov.hmcts.dm.domain.DocumentContent;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
-import uk.gov.hmcts.dm.domain.StoredDocument;
-
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.sql.rowset.serial.SerialBlob;
+
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
+import uk.gov.hmcts.dm.domain.DocumentContent;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.Folder;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 
 
 public class TestUtil {

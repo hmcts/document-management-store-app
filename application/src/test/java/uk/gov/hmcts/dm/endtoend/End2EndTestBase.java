@@ -1,5 +1,14 @@
 package uk.gov.hmcts.dm.endtoend;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -14,21 +23,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
+
 import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
-
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
@@ -61,7 +62,7 @@ public abstract class End2EndTestBase {
 
         doAnswer(invocation -> {
             try (final InputStream inputStream = FILE.getInputStream();
-                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+                 final OutputStream out = invocation.getArgument(1)
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;
@@ -77,7 +78,7 @@ public abstract class End2EndTestBase {
     }
 
     private void uploadDocument(final InvocationOnMock invocation) throws IOException {
-        final DocumentContentVersion dcv = invocation.getArgumentAt(1, DocumentContentVersion.class);
+        final DocumentContentVersion dcv = invocation.getArgument(1);
         dcv.setContentUri("uri");
         dcv.setContentChecksum("checksum");
     }

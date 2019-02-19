@@ -1,19 +1,8 @@
 package uk.gov.hmcts.dm.service;
 
-import com.google.common.annotations.VisibleForTesting;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import uk.gov.hmcts.dm.exception.ValidationErrorException;
+import static javax.crypto.Cipher.DECRYPT_MODE;
+import static org.apache.commons.lang.StringUtils.isBlank;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -21,8 +10,22 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
 
-import static javax.crypto.Cipher.DECRYPT_MODE;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.google.common.annotations.VisibleForTesting;
+
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import uk.gov.hmcts.dm.exception.ValidationErrorException;
 
 @Service
 @Slf4j

@@ -1,34 +1,31 @@
 package uk.gov.hmcts.dm.service;
 
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
-import lombok.SneakyThrows;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.hamcrest.Description;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
-import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.data.domain.PageRequest;
-import uk.gov.hmcts.dm.domain.BatchMigrationAuditEntry;
-import uk.gov.hmcts.dm.domain.DocumentContent;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.MigrateEntry;
-import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
-import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
-import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
-import uk.gov.hmcts.dm.exception.FileStorageException;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
-import uk.gov.hmcts.dm.repository.MigrateEntryRepository;
+import static java.nio.charset.Charset.defaultCharset;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.apache.commons.io.IOUtils.copy;
+import static org.apache.tika.io.IOUtils.toInputStream;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.data.domain.Sort.Direction.DESC;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
+import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
+import static uk.gov.hmcts.dm.service.BlobStorageMigrationService.NO_CONTENT_FOUND;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -42,31 +39,37 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.nio.charset.Charset.defaultCharset;
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-import static org.apache.commons.io.IOUtils.copy;
-import static org.apache.tika.io.IOUtils.toInputStream;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.data.domain.Sort.Direction.DESC;
-import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
-import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
-import static uk.gov.hmcts.dm.service.BlobStorageMigrationService.NO_CONTENT_FOUND;
+import javax.sql.rowset.serial.SerialBlob;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.hamcrest.Description;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatcher;
+import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.data.domain.PageRequest;
+
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
+
+import lombok.SneakyThrows;
+import uk.gov.hmcts.dm.domain.BatchMigrationAuditEntry;
+import uk.gov.hmcts.dm.domain.DocumentContent;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.MigrateEntry;
+import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
+import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
+import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
+import uk.gov.hmcts.dm.exception.FileStorageException;
+import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
+import uk.gov.hmcts.dm.repository.MigrateEntryRepository;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
@@ -111,8 +114,7 @@ public class BlobStorageMigrationServiceTest {
         documentContentVersionUuid = UUID.randomUUID();
         documentUuid = UUID.randomUUID();
         data = new SerialBlob(DOC_CONTENT.getBytes());
-        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any())).thenReturn
-            (batchmigrationAuditEntry);
+        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any())).thenReturn(batchmigrationAuditEntry);
     }
 
     @Test
@@ -120,21 +122,21 @@ public class BlobStorageMigrationServiceTest {
         DocumentContentVersion dcv = buildDocumentContentVersion();
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
         when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(dcv);
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
 
         final String azureProvidedUri = mockAzureBlobUpload(dcv);
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
         verifyMigrateInteractions(dcv, azureProvidedUri);
-        verify(documentContentVersionRepository).findOne(documentContentVersionUuid);
+        verify(documentContentVersionRepository).findById(documentContentVersionUuid).get();
     }
 
     @Test(expected = FileStorageException.class)
     public void migrateDocumentContentVersionChecksumFailed() throws Exception {
         DocumentContentVersion dcv = buildDocumentContentVersion();
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         String azureProvidedUri = "someuri";
@@ -148,7 +150,7 @@ public class BlobStorageMigrationServiceTest {
     public void migrateDocumentContentVersionWithNoDocumentContent() throws Exception {
         DocumentContentVersion dcv = buildDocumentContentVersion(false);
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
 
         assertNull(dcv.getContentChecksum());
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
@@ -162,7 +164,7 @@ public class BlobStorageMigrationServiceTest {
         dcv.setContentChecksum("someCheckSum");
 
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         when(cloudBlockBlob.getUri()).thenReturn(new URI("someuri"));
@@ -171,7 +173,7 @@ public class BlobStorageMigrationServiceTest {
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
-        verify(documentContentVersionRepository).findOne(documentContentVersionUuid);
+        verify(documentContentVersionRepository).findById(documentContentVersionUuid).get();
         verifyNoInteractionWithPostgresAndAzureAfterMigrate();
         assertThat(dcv.getContentUri(), is("Migrated"));
         assertThat(dcv.getContentChecksum(), is("someCheckSum"));
@@ -210,7 +212,7 @@ public class BlobStorageMigrationServiceTest {
 
         DocumentContentVersion doc = buildDocumentContentVersion();
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(doc);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(doc);
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         PowerMockito.doThrow(new StorageException("404", "Message", mock(Exception.class)))
@@ -226,7 +228,7 @@ public class BlobStorageMigrationServiceTest {
 
         DocumentContentVersion dcv = buildDocumentContentVersion();
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
 
         final Blob badData = mock(Blob.class);
         dcv.getDocumentContent().setData(badData);
@@ -363,7 +365,7 @@ public class BlobStorageMigrationServiceTest {
     private void prepareDownloadStream() throws StorageException {
         doAnswer(invocation -> {
             try (final InputStream inputStream = toInputStream(DOC_CONTENT);
-                 final OutputStream outputStream = invocation.getArgumentAt(0, OutputStream.class)
+                 final OutputStream outputStream = invocation.getArgument(0)
             ) {
                 return copy(inputStream, outputStream);
             }
@@ -387,7 +389,7 @@ public class BlobStorageMigrationServiceTest {
         assertThat(dcv.getContentChecksum(), is(DOC_CONTENT_CHECKSUM));
     }
 
-    class InputStreamMatcher extends ArgumentMatcher<InputStream> {
+    class InputStreamMatcher implements ArgumentMatcher<InputStream> {
 
         private final String expectedResult;
 
@@ -397,23 +399,20 @@ public class BlobStorageMigrationServiceTest {
 
         @SneakyThrows(IOException.class)
         @Override
-        public boolean matches(Object item) {
-            InputStream inputStream = (InputStream) item;
-
+        public boolean matches(InputStream inputStream) {
             String actual = IOUtils.toString(inputStream, defaultCharset());
             inputStream.reset();
 
             return actual.equals(expectedResult);
         }
 
-        @Override
         public void describeTo(Description description) {
             description.appendText("InputStream containing ").appendValue(expectedResult);
         }
     }
 
 
-    class AuditEntryMatcher extends ArgumentMatcher<MigrateEntry> {
+    class AuditEntryMatcher implements ArgumentMatcher<MigrateEntry> {
 
         private final DocumentContentVersion documentContentVersion;
 
@@ -422,8 +421,7 @@ public class BlobStorageMigrationServiceTest {
         }
 
         @Override
-        public boolean matches(final Object argument) {
-            final MigrateEntry item = (MigrateEntry) argument;
+        public boolean matches(final MigrateEntry item) {
             return item.getDocumentcontentversionId().equals(documentContentVersion.getId())
                 && item.getServicename().equals("Batch Migration Service")
                 && item.getType().equals("Migrate content")
@@ -433,7 +431,7 @@ public class BlobStorageMigrationServiceTest {
         }
     }
 
-    class PageRequestMatcher extends ArgumentMatcher<PageRequest> {
+    class PageRequestMatcher implements ArgumentMatcher<PageRequest> {
 
         private final int pageSize;
 
@@ -442,8 +440,7 @@ public class BlobStorageMigrationServiceTest {
         }
 
         @Override
-        public boolean matches(final Object argument) {
-            final PageRequest pageRequest = (PageRequest)argument;
+        public boolean matches(final PageRequest pageRequest) {
             return pageRequest.getPageSize() == pageSize
                 && pageRequest.getSort().getOrderFor("createdOn").getDirection().equals(DESC)
                 ;

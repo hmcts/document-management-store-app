@@ -1,15 +1,17 @@
 package uk.gov.hmcts.dm.repository;
 
+import java.io.Serializable;
+import java.util.Iterator;
+
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.stereotype.Component;
-import uk.gov.hmcts.dm.exception.RepositoryCouldNotBeFoundException;
 
-import java.io.Serializable;
-import java.util.Iterator;
-import javax.validation.constraints.NotNull;
+import uk.gov.hmcts.dm.exception.RepositoryCouldNotBeFoundException;
 
 @Component
 public class RepositoryFinder {

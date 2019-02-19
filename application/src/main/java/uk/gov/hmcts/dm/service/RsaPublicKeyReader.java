@@ -1,23 +1,25 @@
 package uk.gov.hmcts.dm.service;
 
-import com.google.common.base.Charsets;
-import com.google.common.base.Splitter;
-import com.google.common.io.ByteSource;
-import com.google.common.io.ByteStreams;
-import org.springframework.stereotype.Component;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.collect.Iterables.get;
+import static com.google.common.collect.Iterables.size;
+import static com.google.common.io.BaseEncoding.base64;
+import static org.jclouds.util.Strings2.toStringAndClose;
 
-import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.spec.RSAPublicKeySpec;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.collect.Iterables.get;
-import static com.google.common.collect.Iterables.size;
-import static com.google.common.io.BaseEncoding.base64;
-import static org.jclouds.util.Strings2.toStringAndClose;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.stereotype.Component;
+
+import com.google.common.base.Charsets;
+import com.google.common.base.Splitter;
+import com.google.common.io.ByteSource;
+import com.google.common.io.ByteStreams;
 
 @Component
 class RsaPublicKeyReader {
