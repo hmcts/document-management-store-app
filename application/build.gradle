@@ -112,6 +112,7 @@ def versions = [
     sonar              : '3.2',
     springBoot         : springBootVersion,
     springfoxSwagger   : '2.7.0',
+    reformJavaLogging  : '3.0.2'
 ]
 
 dependencies {
@@ -150,13 +151,14 @@ dependencies {
     compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.3'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '2.1.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: '2.1.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '2.1.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: versions.reformJavaLogging
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: versions.reformJavaLogging
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformJavaLogging
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '2.0.0'
 
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.0.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.0.RELEASE'
+    //compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.0.RELEASE'
+    //compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.0.RELEASE'
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
 
@@ -179,7 +181,7 @@ dependencies {
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.2.3.RELEASE'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: versions.powermock
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: versions.powermock
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: versions.powermock
 
     testCompile group: 'org.eclipse.jetty', name: 'jetty-server', version: versions.jetty
@@ -260,7 +262,7 @@ pitest {
 
 //(./gradlew clean jar) build/libs/em-api-*-all.jar
 //(./gradlew installDist bootRepackage) build/install/dm-store/bin/dm-store
-jar {
+bootJar {
     baseName 'dm-store'
     archiveName = "$baseName"+".jar"
     destinationDir = file("$rootDir/build/libs")

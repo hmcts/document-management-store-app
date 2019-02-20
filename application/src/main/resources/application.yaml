@@ -2,6 +2,8 @@ api:
   version: 1.2.0
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: dm-store
   data:
@@ -44,7 +46,7 @@ spring:
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
 
-liquibase:
+spring.liquibase:
  enabled: ${ENABLE_DB_MIGRATE:true}
  change-log: classpath:/db/changelog/db.changelog-master.xml
 
@@ -123,7 +125,7 @@ management:
   db:
     enabled: true
   metrics:
-    enable: true
+    enable.jvm: true
   endpoints:
     web:
       exposure:
