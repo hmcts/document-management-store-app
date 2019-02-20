@@ -7,7 +7,9 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@SpringBootApplication
+@SpringBootApplication(
+	    scanBasePackages = "uk.gov.hmcts"
+	)
 @EnableSwagger2
 @EnableCircuitBreaker
 @EnableHystrixDashboard
