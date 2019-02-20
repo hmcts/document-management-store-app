@@ -18,7 +18,7 @@ public class FolderService {
     private FolderRepository folderRepository;
 
     public Folder findOne(UUID id) {
-        return folderRepository.findById(id).get();
+        return folderRepository.findById(id).orElse(null);
     }
 
     public StoredDocument findOneItem(UUID id, Integer index) {

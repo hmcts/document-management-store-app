@@ -4,6 +4,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +30,7 @@ public class FolderServiceTests {
     @Test
     public void testFindOne() {
 
-        when(this.folderRepository.findById(TestUtil.RANDOM_UUID).get()).thenReturn(TestUtil.folder);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.ofNullable(TestUtil.folder));
 
         Folder folder = folderService.findOne(TestUtil.RANDOM_UUID);
 
@@ -51,7 +53,7 @@ public class FolderServiceTests {
     @Test
     public void testFindOneItem() {
 
-        when(this.folderRepository.findById(TestUtil.RANDOM_UUID).get()).thenReturn(TestUtil.folder);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.ofNullable(TestUtil.folder));
 
         StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
 
@@ -61,7 +63,7 @@ public class FolderServiceTests {
     @Test
     public void testFindOneItemFolderNull() {
 
-        when(this.folderRepository.findById(TestUtil.RANDOM_UUID).get()).thenReturn(null);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.ofNullable(null));
 
         StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
 
@@ -71,7 +73,7 @@ public class FolderServiceTests {
     @Test
     public void testDelete() {
 
-        when(this.folderRepository.findById(TestUtil.RANDOM_UUID).get()).thenReturn(TestUtil.folder);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.ofNullable(TestUtil.folder));
 
         folderService.delete(TestUtil.RANDOM_UUID);
 

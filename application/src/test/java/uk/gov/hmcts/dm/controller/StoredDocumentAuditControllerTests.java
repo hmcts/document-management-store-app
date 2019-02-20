@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.controller;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,8 +17,8 @@ public class StoredDocumentAuditControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetAuditEntries() throws Exception {
-        when(this.storedDocumentRepository.findById(TestUtil.RANDOM_UUID).get())
-                .thenReturn(TestUtil.STORED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(TestUtil.RANDOM_UUID))
+                .thenReturn(Optional.ofNullable(TestUtil.STORED_DOCUMENT));
 
         StoredDocumentAuditEntry entry = new StoredDocumentAuditEntry();
         entry.setStoredDocument(TestUtil.STORED_DOCUMENT);
