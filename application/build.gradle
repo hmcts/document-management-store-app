@@ -91,10 +91,12 @@ repositories {
 apply from: 'liquibase.gradle'
 
 def springBootVersion = plugins.getPlugin('org.springframework.boot').class.package.implementationVersion
+def springCloudVersion = 'Greenwich.RELEASE'
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
@@ -156,8 +158,8 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformJavaLogging
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '2.0.0'
 
-    //compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.0.RELEASE'
-    //compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.0.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.6.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.6.RELEASE'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
