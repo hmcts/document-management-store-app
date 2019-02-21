@@ -25,7 +25,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
 import uk.gov.hmcts.dm.DmApp;
-import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
@@ -47,9 +46,6 @@ public abstract class End2EndTestBase {
     protected MockMvc mvc;
 
     @MockBean
-    protected AzureStorageConfiguration azureStorageConfiguration;
-
-    @MockBean
     protected BlobStorageWriteService blobStorageWriteService;
 
     @MockBean
@@ -57,8 +53,6 @@ public abstract class End2EndTestBase {
 
     @Before
     public void setUp() {
-        when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
-        when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(false);
 
         doAnswer(invocation -> {
             try (final InputStream inputStream = FILE.getInputStream();
