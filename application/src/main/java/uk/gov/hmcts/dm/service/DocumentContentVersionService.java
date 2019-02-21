@@ -42,7 +42,7 @@ public class DocumentContentVersionService {
     }
 
     public DocumentContentVersion findMostRecentDocumentContentVersionByStoredDocumentId(UUID id) {
-        StoredDocument storedDocument = storedDocumentRepository.findById(id).get();
+        StoredDocument storedDocument = storedDocumentRepository.findById(id).orElse(null);
         return storedDocument != null ? storedDocument.getMostRecentDocumentContentVersion() : null;
     }
 
