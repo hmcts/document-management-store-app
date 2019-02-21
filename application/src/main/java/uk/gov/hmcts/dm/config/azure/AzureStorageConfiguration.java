@@ -36,13 +36,19 @@ public class AzureStorageConfiguration {
     }
 
     @Bean
-    CloudBlobContainer cloudBlobContainer() throws URISyntaxException, InvalidKeyException, StorageException {
+    public CloudBlobContainer cloudBlobContainer() throws URISyntaxException, InvalidKeyException, StorageException {
         final CloudBlobContainer container = cloudBlobClient().getContainerReference(this.containerReference);
-        if (isAzureBlobStoreEnabled() && !container.exists()) {
-            // Current behaviour is that system will hang for a very long time
-            throw new AppConfigurationException("Cloub Blob Container does not exist");
+        if (isAzureBlobStoreEnabled()) {
+        	if (shouldCheckExistence() && !container.exists()) {
+                // Current behaviour is that system will hang for a very long time
+                throw new AppConfigurationException("Cloub Blob Container does not exist");
+        	}
         }
         return container;
+    }
+
+    protected boolean shouldCheckExistence() {
+        return true;
     }
 
     @Bean
