@@ -16,20 +16,20 @@ import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 @Profile("local")
 public class AzureStorageConfigurationForTesting extends AzureStorageConfiguration {
 
-	@Override
-	public Boolean isAzureBlobStoreEnabled() {
-		return true;
-	}
-	
-	@Override
-	public Boolean isPostgresBlobStorageEnabled() {
-		return false;
-	}
-	
-	@Override
-	protected boolean shouldCheckExistence() {
-		return false;
-	}
+    @Override
+    public Boolean isAzureBlobStoreEnabled() {
+        return true;
+    }
+    
+    @Override
+    public Boolean isPostgresBlobStorageEnabled() {
+        return false;
+    }
+    
+    @Override
+    protected boolean shouldCheckExistence() {
+        return false;
+    }
 
     @Bean
     public CloudBlobContainer cloudBlobContainer() throws URISyntaxException, InvalidKeyException, StorageException {

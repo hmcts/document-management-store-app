@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.endtoend;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.InputStream;
