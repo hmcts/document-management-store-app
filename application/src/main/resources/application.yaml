@@ -47,8 +47,8 @@ spring:
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
 
 spring.liquibase:
- enabled: ${ENABLE_DB_MIGRATE:true}
- change-log: classpath:/db/changelog/db.changelog-master.xml
+  enabled: ${ENABLE_DB_MIGRATE:true}
+  change-log: classpath:/db/changelog/db.changelog-master.xml
 
 server:
   port: ${SERVER_PORT:4603}
@@ -111,30 +111,24 @@ health:
   disk:
     threshold: ${HEALTH_DISK_THRESHOLD:262144000}
 
-endpoints:
-  health:
-    sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false}
-  info:
-    sensitive: ${ENDPOINTS_INFO_SENSITIVE:false}
-
 management:
-  security:
-    enabled: ${MANAGEMENT_SECURITY_ENABLED:false}
   diskspace:
     enabled: true
   db:
     enabled: true
-  metrics:
-    enable.jvm: true
   endpoints:
     web:
+      base-path: /
       exposure:
-        include: health,info,metrics
-  health:
-    defaults:
-      enabled: false
-    diskspace:
-      enabled: false
+        include: "*"
+  endpoint:
+    metrics:
+      enabled: true
+    health:
+      enabled: true
+      show-details: never
+    info:
+      enabled: true
 
 dm:
   multipart:
