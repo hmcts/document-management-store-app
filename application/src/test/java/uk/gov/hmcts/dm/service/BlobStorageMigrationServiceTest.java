@@ -120,23 +120,23 @@ public class BlobStorageMigrationServiceTest {
     @Test
     public void migrateDocumentContentVersion() throws Exception {
         DocumentContentVersion dcv = buildDocumentContentVersion();
-        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.ofNullable(createStoredDocument()));
         when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(dcv);
-        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.ofNullable(dcv));
 
         final String azureProvidedUri = mockAzureBlobUpload(dcv);
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
         verifyMigrateInteractions(dcv, azureProvidedUri);
-        verify(documentContentVersionRepository).findById(documentContentVersionUuid).get();
+        verify(documentContentVersionRepository).findById(documentContentVersionUuid);
     }
 
     @Test(expected = FileStorageException.class)
     public void migrateDocumentContentVersionChecksumFailed() throws Exception {
         DocumentContentVersion dcv = buildDocumentContentVersion();
-        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.ofNullable(createStoredDocument()));
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.ofNullable(dcv));
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         String azureProvidedUri = "someuri";
@@ -149,8 +149,8 @@ public class BlobStorageMigrationServiceTest {
     @Test
     public void migrateDocumentContentVersionWithNoDocumentContent() throws Exception {
         DocumentContentVersion dcv = buildDocumentContentVersion(false);
-        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.ofNullable(createStoredDocument()));
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.ofNullable(dcv));
 
         assertNull(dcv.getContentChecksum());
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
@@ -164,7 +164,7 @@ public class BlobStorageMigrationServiceTest {
         dcv.setContentChecksum("someCheckSum");
 
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.ofNullable(dcv));
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         when(cloudBlockBlob.getUri()).thenReturn(new URI("someuri"));
@@ -173,7 +173,7 @@ public class BlobStorageMigrationServiceTest {
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
-        verify(documentContentVersionRepository).findById(documentContentVersionUuid).get();
+        verify(documentContentVersionRepository).findById(documentContentVersionUuid);
         verifyNoInteractionWithPostgresAndAzureAfterMigrate();
         assertThat(dcv.getContentUri(), is("Migrated"));
         assertThat(dcv.getContentChecksum(), is("someCheckSum"));
@@ -211,8 +211,8 @@ public class BlobStorageMigrationServiceTest {
     public void migrateThrowsExceptionOnUploadingTheBlob() throws Exception {
 
         DocumentContentVersion doc = buildDocumentContentVersion();
-        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(doc);
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.ofNullable(createStoredDocument()));
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.ofNullable(doc));
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         PowerMockito.doThrow(new StorageException("404", "Message", mock(Exception.class)))
@@ -227,8 +227,8 @@ public class BlobStorageMigrationServiceTest {
     public void migrateThrowsCantReadDocumentContentVersionBinaryException() throws Exception {
 
         DocumentContentVersion dcv = buildDocumentContentVersion();
-        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findById(documentContentVersionUuid).get()).thenReturn(dcv);
+        when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.ofNullable(createStoredDocument()));
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.ofNullable(dcv));
 
         final Blob badData = mock(Blob.class);
         dcv.getDocumentContent().setData(badData);
