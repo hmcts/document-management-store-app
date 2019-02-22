@@ -33,6 +33,6 @@ public class AzureStorageConfigurationForTesting extends AzureStorageConfigurati
 
     @Bean
     public CloudBlobContainer cloudBlobContainer() throws URISyntaxException, InvalidKeyException, StorageException {
-       return super.cloudBlobContainer();
+        return super.cloudBlobContainer();
     }
 }
