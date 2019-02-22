@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.repository;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
@@ -33,9 +34,9 @@ public class RepositoryFinder {
 
         Iterator<Class<?>> it = repositories.iterator();
         while (it.hasNext()) {
-            Object repository = repositories.getRepositoryFor(domainClass);
-            if (repository != null && repository instanceof CrudRepository) {
-                return (CrudRepository<Object, Serializable>)repository;
+            Optional<Object> repository = repositories.getRepositoryFor(domainClass);
+            if (repository.isPresent() && repository.get() instanceof CrudRepository) {
+                return (CrudRepository<Object, Serializable>)repository.get();
             }
         }
 
