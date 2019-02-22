@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import uk.gov.hmcts.dm.security.Classifications;
 
+//@Ignore
 public class AuditTest extends End2EndTestBase {
 
     private HttpHeaders headers = Helper.getHeaders();

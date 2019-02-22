@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import uk.gov.hmcts.dm.security.Classifications;
 
 @Slf4j
+//@Ignore
 public class UploadDocumentTest extends End2EndTestBase {
 
     private HttpHeaders headers = Helper.getHeaders();

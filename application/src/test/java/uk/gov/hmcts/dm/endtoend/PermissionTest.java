@@ -12,6 +12,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import uk.gov.hmcts.dm.security.Classifications;
 
+//@Ignore
 public class PermissionTest extends End2EndTestBase {
 
     private HttpHeaders headersUser = Helper.getHeaders("user");
