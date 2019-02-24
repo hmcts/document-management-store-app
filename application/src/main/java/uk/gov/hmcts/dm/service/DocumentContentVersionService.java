@@ -27,7 +27,7 @@ public class DocumentContentVersionService {
     private StoredDocumentRepository storedDocumentRepository;
 
     public DocumentContentVersion findOne(UUID id) {
-        return documentContentVersionRepository.findById(id).get();
+        return documentContentVersionRepository.findById(id).orElse(null);
     }
 
     public void streamDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion, @NotNull OutputStream outputStream) {
