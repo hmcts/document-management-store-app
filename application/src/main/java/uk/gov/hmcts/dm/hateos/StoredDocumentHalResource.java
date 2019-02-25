@@ -65,7 +65,7 @@ public class StoredDocumentHalResource extends HalResource {
         
         // Workaround for the changed persistence layer behaviour.
         PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
-        Optional.ofNullable(set).ifPresent(s->s.forceInitialization());
+        Optional.ofNullable(set).ifPresent(s -> s.forceInitialization());
 
         DocumentContentVersion mostRecentDocumentContentVersion = storedDocument.getMostRecentDocumentContentVersion();
         if (mostRecentDocumentContentVersion != null) {
