@@ -7,7 +7,7 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static uk.gov.hmcts.dm.endtoend.Helper.getThumbnailUrlFromResponse;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jetty.http.HttpStatus;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
@@ -112,6 +113,7 @@ public class ThumbnailTest extends End2EndTestBase {
 
         mvc.perform(get(url)
             .headers(headers))
+            .andExpect(status().is(HttpStatus.OK_200))
             .andExpect(content().contentType(IMAGE_JPEG_VALUE));
     }
 
