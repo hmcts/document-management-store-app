@@ -6,8 +6,10 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
@@ -59,6 +61,11 @@ public class StoredDocumentHalResource extends HalResource {
         BeanUtils.copyProperties(storedDocument, this);
 
         roles = storedDocument.getRoles() != null ? storedDocument.getRoles().stream().sorted().collect(Collectors.toList()) : null;
+
+        
+        // Workaround for the changed persistence layer behaviour.
+        PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
+        Optional.ofNullable(set).ifPresent(s->s.forceInitialization());
 
         DocumentContentVersion mostRecentDocumentContentVersion = storedDocument.getMostRecentDocumentContentVersion();
         if (mostRecentDocumentContentVersion != null) {

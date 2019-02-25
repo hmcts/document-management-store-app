@@ -12,10 +12,13 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.HibernateException;
+import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.google.common.collect.ImmutableList;
 
 import lombok.NonNull;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
@@ -157,6 +160,11 @@ public class StoredDocumentService {
         storedDocument.setDeleted(true);
         if (permanent) {
             storedDocument.setHardDeleted(true);
+            
+            // Workaround for the changed persistence layer behaviour.
+            PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
+            Optional.ofNullable(set).ifPresent(s->s.forceInitialization());
+
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
                 Optional.ofNullable(documentContentVersion.getDocumentContent())
                         .ifPresent(dc -> {

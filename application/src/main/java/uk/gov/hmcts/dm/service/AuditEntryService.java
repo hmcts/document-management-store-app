@@ -2,7 +2,9 @@ package uk.gov.hmcts.dm.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +32,10 @@ public class AuditEntryService {
     private SecurityUtilService securityUtilService;
 
     public List<StoredDocumentAuditEntry> findStoredDocumentAudits(StoredDocument storedDocument) {
-        return storedDocumentAuditEntryRepository.findByStoredDocumentOrderByRecordedDateTimeAsc(storedDocument);
+        // Workaround for the changed persistence layer behaviour.
+    	PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
+    	Optional.ofNullable(set).ifPresent(s->s.forceInitialization());
+    	return storedDocumentAuditEntryRepository.findByStoredDocumentOrderByRecordedDateTimeAsc(storedDocument);
     }
 
     public StoredDocumentAuditEntry createAndSaveEntry(StoredDocument storedDocument,

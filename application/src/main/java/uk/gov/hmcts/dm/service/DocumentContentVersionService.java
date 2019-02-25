@@ -1,11 +1,13 @@
 package uk.gov.hmcts.dm.service;
 
 import java.io.OutputStream;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.io.IOUtils;
+import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +45,15 @@ public class DocumentContentVersionService {
 
     public DocumentContentVersion findMostRecentDocumentContentVersionByStoredDocumentId(UUID id) {
         StoredDocument storedDocument = storedDocumentRepository.findById(id).orElse(null);
-        return storedDocument != null ? storedDocument.getMostRecentDocumentContentVersion() : null;
+        
+        if (storedDocument==null)
+        	return null;
+
+        // Workaround for the changed persistence layer behaviour.
+        PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
+        Optional.ofNullable(set).ifPresent(s->s.forceInitialization());
+
+        return storedDocument.getMostRecentDocumentContentVersion();
     }
 
 }
