@@ -1,3 +1,4 @@
+# Keep hub.Dockerfile aligned to this file as far as possible
 FROM hmcts/cnp-java-base:openjdk-8u181-jre-alpine3.8-1.0
 LABEL maintainer="https://github.com/hmcts/document-management-store-api"
 
