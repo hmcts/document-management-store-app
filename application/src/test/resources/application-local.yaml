@@ -10,6 +10,7 @@ spring:
     properties:
       hiberante:
         dialect: uk.gov.hmcts.dm.dialect.CustomH2Dialect
+    hibernate.use-new-id-generator-mappings: false
 
 logging:
   level:
