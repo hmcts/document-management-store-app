@@ -3,7 +3,7 @@ spring:
     driverClassName: org.h2.Driver
   datasource:
 #    url: jdbc:h2:mem:test_mem
-    url: jdbc:h2:build/h2_db/test;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:./h2_db/test;DB_CLOSE_ON_EXIT=FALSE
     platform: h2
   jpa:
     database-platform: uk.gov.hmcts.dm.dialect.CustomH2Dialect
