@@ -58,7 +58,7 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
         boolean result = false;
         CrudRepository<Object, Serializable> repository = repositoryFinder.find(className);
         if (repository != null) {
-            Object targetDomainObject = repository.findById(serializable).get();
+            Object targetDomainObject = repository.findById(serializable).orElse(null);
             if (targetDomainObject instanceof CreatorAware) {
                 result = hasPermission(authentication, targetDomainObject, permissions);
             } else if (targetDomainObject == null) {
