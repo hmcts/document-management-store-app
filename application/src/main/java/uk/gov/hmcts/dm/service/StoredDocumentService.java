@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.ImmutableList;
-
 import lombok.NonNull;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
@@ -163,7 +161,7 @@ public class StoredDocumentService {
             
             // Workaround for the changed persistence layer behaviour.
             PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
-            Optional.ofNullable(set).ifPresent(s->s.forceInitialization());
+            Optional.ofNullable(set).ifPresent(s -> s.forceInitialization());
 
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
                 Optional.ofNullable(documentContentVersion.getDocumentContent())

@@ -33,9 +33,9 @@ public class AuditEntryService {
 
     public List<StoredDocumentAuditEntry> findStoredDocumentAudits(StoredDocument storedDocument) {
         // Workaround for the changed persistence layer behaviour.
-    	PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
-    	Optional.ofNullable(set).ifPresent(s->s.forceInitialization());
-    	return storedDocumentAuditEntryRepository.findByStoredDocumentOrderByRecordedDateTimeAsc(storedDocument);
+        PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
+    	Optional.ofNullable(set).ifPresent(s -> s.forceInitialization());
+        return storedDocumentAuditEntryRepository.findByStoredDocumentOrderByRecordedDateTimeAsc(storedDocument);
     }
 
     public StoredDocumentAuditEntry createAndSaveEntry(StoredDocument storedDocument,

@@ -45,13 +45,14 @@ public class DocumentContentVersionService {
 
     public DocumentContentVersion findMostRecentDocumentContentVersionByStoredDocumentId(UUID id) {
         StoredDocument storedDocument = storedDocumentRepository.findById(id).orElse(null);
-        
-        if (storedDocument==null)
-        	return null;
+
+        if (storedDocument == null) {
+            return null;
+        }
 
         // Workaround for the changed persistence layer behaviour.
         PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
-        Optional.ofNullable(set).ifPresent(s->s.forceInitialization());
+        Optional.ofNullable(set).ifPresent(s -> s.forceInitialization());
 
         return storedDocument.getMostRecentDocumentContentVersion();
     }
