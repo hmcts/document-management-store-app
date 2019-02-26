@@ -60,11 +60,6 @@ public class StoredDocumentHalResource extends HalResource {
 
         roles = storedDocument.getRoles() != null ? storedDocument.getRoles().stream().sorted().collect(Collectors.toList()) : null;
 
-        
-        // Workaround for the changed persistence layer behaviour.
-        PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
-        Optional.ofNullable(set).ifPresent(s -> s.forceInitialization());
-
         DocumentContentVersion mostRecentDocumentContentVersion = storedDocument.getMostRecentDocumentContentVersion();
         if (mostRecentDocumentContentVersion != null) {
             BeanUtils.copyProperties(mostRecentDocumentContentVersion, this);

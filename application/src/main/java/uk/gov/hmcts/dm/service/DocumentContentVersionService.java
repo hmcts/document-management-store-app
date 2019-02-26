@@ -48,10 +48,6 @@ public class DocumentContentVersionService {
             return null;
         }
 
-        // Workaround for the changed persistence layer behaviour.
-        PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
-        Optional.ofNullable(set).ifPresent(s -> s.forceInitialization());
-
         return storedDocument.getMostRecentDocumentContentVersion();
     }
 

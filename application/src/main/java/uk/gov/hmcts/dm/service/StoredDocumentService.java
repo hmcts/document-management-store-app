@@ -156,10 +156,6 @@ public class StoredDocumentService {
         storedDocument.setDeleted(true);
         if (permanent) {
             storedDocument.setHardDeleted(true);
-            
-            // Workaround for the changed persistence layer behaviour.
-            PersistentSet set = (PersistentSet)storedDocument.getAuditEntries();
-            Optional.ofNullable(set).ifPresent(s -> s.forceInitialization());
 
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
                 Optional.ofNullable(documentContentVersion.getDocumentContent())
