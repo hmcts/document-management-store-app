@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.core.Relation;
@@ -20,7 +19,6 @@ import uk.gov.hmcts.dm.security.Classifications;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;

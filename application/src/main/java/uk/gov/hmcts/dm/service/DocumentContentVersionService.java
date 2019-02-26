@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
 import org.apache.commons.io.IOUtils;
-import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,6 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import javax.validation.constraints.NotNull;
 import java.io.OutputStream;
-import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
