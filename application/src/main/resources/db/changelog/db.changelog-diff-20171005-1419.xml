@@ -41,8 +41,6 @@
             <column name="size" type="BIGINT"/>
             <column name="storedDocument_id" type="UUID"/>
             <column name="itm_idx" type="INT"/>
-            <column name="content_checksum" type="text" />
-            <column name="content_uri" type="varchar(512)" />
         </createTable>
     </changeSet>
     <changeSet author="pawel (generated)" id="1507209551827-5">
@@ -101,26 +99,5 @@
     </changeSet>
     <changeSet author="pawel (generated)" id="1507209551827-15">
         <addForeignKeyConstraint baseColumnNames="documentContentVersion_id" baseTableName="AuditEntry" constraintName="FKoyf06kcby1gjm56bilng4tbkf" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="DocumentContentVersion"/>
-    </changeSet>
-    <changeSet id="RDM-2991-migration-audit" author="WaiHung.Cho@HMCTS.NET" dbms="postgresql">
-        <createTable tableName="batch_migration_audit_entry">
-            <column name="id" type="serial PRIMARY KEY">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="started" type="TIMESTAMP WITHOUT TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="modified" type="TIMESTAMP WITHOUT TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="status_report" type="text"/>
-            <column name="migration_key" type="text"/>
-            <column name="batch_size" type="integer">
-                <constraints nullable="false"/>
-            </column>
-            <column name="mock_run" type="boolean">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
     </changeSet>
 </databaseChangeLog>
