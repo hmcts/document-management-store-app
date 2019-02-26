@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
-//@Ignore
 public class PermissionTest extends End2EndTestBase {
 
     private HttpHeaders headersUser = Helper.getHeaders("user");
