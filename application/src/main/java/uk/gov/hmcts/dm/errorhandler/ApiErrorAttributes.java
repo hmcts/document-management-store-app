@@ -1,8 +1,5 @@
 package uk.gov.hmcts.dm.errorhandler;
 
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +8,9 @@ import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.web.context.request.WebRequest;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ApiErrorAttributes extends DefaultErrorAttributes {

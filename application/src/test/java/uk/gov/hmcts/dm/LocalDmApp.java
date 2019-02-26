@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
-
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @EnableSwagger2

@@ -1,16 +1,15 @@
 package uk.gov.hmcts.dm.service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 @Transactional
 @Service

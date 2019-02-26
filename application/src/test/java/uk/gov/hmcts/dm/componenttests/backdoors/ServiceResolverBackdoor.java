@@ -1,12 +1,11 @@
 package uk.gov.hmcts.dm.componenttests.backdoors;
 
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.PostConstruct;
-
 import uk.gov.hmcts.reform.auth.checker.core.SubjectResolver;
 import uk.gov.hmcts.reform.auth.checker.core.exceptions.AuthCheckerException;
 import uk.gov.hmcts.reform.auth.checker.core.service.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ServiceResolverBackdoor implements SubjectResolver<Service> {
 

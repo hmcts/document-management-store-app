@@ -1,19 +1,17 @@
 package uk.gov.hmcts.dm.service;
 
-import java.io.OutputStream;
-import java.net.URISyntaxException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
+
+import java.io.OutputStream;
+import java.net.URISyntaxException;
 
 @Slf4j
 @Service

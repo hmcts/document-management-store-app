@@ -1,19 +1,18 @@
 package uk.gov.hmcts.dm.service.batch;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditEntryService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
+
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuditedStoredDocumentBatchOperationsServiceTests {

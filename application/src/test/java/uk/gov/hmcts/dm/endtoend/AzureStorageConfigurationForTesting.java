@@ -1,16 +1,14 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
-
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
+
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
 
 @Configuration
 @Profile("local")

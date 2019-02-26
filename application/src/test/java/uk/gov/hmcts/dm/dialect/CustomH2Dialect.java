@@ -1,8 +1,8 @@
 package uk.gov.hmcts.dm.dialect;
 
-import java.sql.Types;
-
 import org.hibernate.dialect.H2Dialect;
+
+import java.sql.Types;
 
 public class CustomH2Dialect extends H2Dialect {
 

@@ -1,7 +1,21 @@
 package uk.gov.hmcts.dm.hateos;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import org.hibernate.collection.internal.PersistentSet;
+import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.core.Relation;
+import org.springframework.util.CollectionUtils;
+import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
+import uk.gov.hmcts.dm.controller.FolderController;
+import uk.gov.hmcts.dm.controller.StoredDocumentController;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.Date;
 import java.util.List;
@@ -9,24 +23,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.hibernate.collection.internal.PersistentSet;
-import org.springframework.beans.BeanUtils;
-import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.core.Relation;
-import org.springframework.util.CollectionUtils;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
-import uk.gov.hmcts.dm.controller.FolderController;
-import uk.gov.hmcts.dm.controller.StoredDocumentController;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.security.Classifications;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Data
 @NoArgsConstructor

@@ -1,5 +1,16 @@
 package uk.gov.hmcts.dm.service;
 
+import org.apache.commons.codec.binary.Base64;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.KeySpec;
+import java.security.spec.RSAPublicKeySpec;
+
 import static javax.crypto.Cipher.DECRYPT_MODE;
 import static javax.crypto.Cipher.ENCRYPT_MODE;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
@@ -10,18 +21,6 @@ import static org.hamcrest.core.IsNot.not;
 import static org.jclouds.crypto.Pems.privateKeySpec;
 import static org.junit.Assert.assertThat;
 import static uk.gov.hmcts.dm.service.BatchMigrationTokenService.SSH_ALGORITHM;
-
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.KeySpec;
-import java.security.spec.RSAPublicKeySpec;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-
-import org.apache.commons.codec.binary.Base64;
-import org.junit.Before;
-import org.junit.Test;
 
 public class RsaPublicKeyReaderTest {
 

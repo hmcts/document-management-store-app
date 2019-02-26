@@ -1,16 +1,15 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import java.io.InputStream;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
+
+import java.io.InputStream;
+import java.util.Map;
 
 
 @Service

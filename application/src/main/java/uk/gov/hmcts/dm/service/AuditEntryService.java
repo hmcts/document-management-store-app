@@ -1,22 +1,16 @@
 package uk.gov.hmcts.dm.service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-
 import org.hibernate.collection.internal.PersistentSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import uk.gov.hmcts.dm.domain.AuditActions;
-import uk.gov.hmcts.dm.domain.AuditEntry;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.DocumentContentVersionAuditEntry;
-import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
+import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional

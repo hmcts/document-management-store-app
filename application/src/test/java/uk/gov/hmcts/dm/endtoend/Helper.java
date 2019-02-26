@@ -1,17 +1,16 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
-import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ROLES_HEADER;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+import org.springframework.http.HttpHeaders;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.IOException;
 import java.util.Collections;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.mock.web.MockHttpServletResponse;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
+import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
+import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ROLES_HEADER;
 
 public class Helper {
 

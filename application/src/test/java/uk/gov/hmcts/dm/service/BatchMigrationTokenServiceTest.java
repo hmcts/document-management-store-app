@@ -1,18 +1,17 @@
 package uk.gov.hmcts.dm.service;
 
+import org.junit.Before;
+import org.junit.Test;
+import uk.gov.hmcts.dm.exception.ValidationErrorException;
+
+import javax.crypto.BadPaddingException;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static uk.gov.hmcts.dm.service.RsaPublicKeyReaderTest.PUBLIC_KEY_STRING;
-
-import javax.crypto.BadPaddingException;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import uk.gov.hmcts.dm.exception.ValidationErrorException;
 
 
 

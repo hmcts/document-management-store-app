@@ -1,18 +1,16 @@
 package uk.gov.hmcts.dm.service;
 
-import java.io.InputStream;
-import java.sql.Blob;
-
-import javax.persistence.EntityManager;
-
+import lombok.NonNull;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import lombok.NonNull;
 import uk.gov.hmcts.dm.exception.CantCreateBlobException;
+
+import javax.persistence.EntityManager;
+import java.io.InputStream;
+import java.sql.Blob;
 
 @Service
 public class BlobCreator {

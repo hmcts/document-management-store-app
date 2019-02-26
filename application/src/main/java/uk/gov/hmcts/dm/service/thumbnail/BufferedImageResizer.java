@@ -1,11 +1,9 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class BufferedImageResizer {
 

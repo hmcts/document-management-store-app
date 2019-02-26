@@ -1,11 +1,10 @@
 package uk.gov.hmcts.dm.exception;
 
-import java.util.UUID;
-
+import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import lombok.NonNull;
+import java.util.UUID;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class StoredDocumentNotFoundException extends ResourceNotFoundException {

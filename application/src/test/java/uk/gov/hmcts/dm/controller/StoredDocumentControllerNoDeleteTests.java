@@ -1,25 +1,23 @@
 package uk.gov.hmcts.dm.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
+import uk.gov.hmcts.dm.domain.DocumentContent;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.Folder;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.sql.rowset.serial.SerialBlob;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-
-import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
-import uk.gov.hmcts.dm.domain.DocumentContent;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
-import uk.gov.hmcts.dm.domain.StoredDocument;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {

@@ -1,16 +1,12 @@
 package uk.gov.hmcts.dm.dialect;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.sql.Blob;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
-
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
+
+import java.io.InputStream;
+import java.io.Serializable;
+import java.sql.*;
 
 public class ByteWrappingBlobType implements UserType {
 

@@ -1,17 +1,16 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UnsupportedThumbnailCreatorTest {

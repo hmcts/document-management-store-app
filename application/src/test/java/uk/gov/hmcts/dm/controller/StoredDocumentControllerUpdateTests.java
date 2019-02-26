@@ -1,20 +1,18 @@
 package uk.gov.hmcts.dm.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.google.common.collect.ImmutableMap;
+import org.junit.Test;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
+import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.Date;
 import java.util.UUID;
 
-import org.junit.Test;
-
-import com.google.common.collect.ImmutableMap;
-
-import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
-import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
-import uk.gov.hmcts.dm.domain.StoredDocument;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StoredDocumentControllerUpdateTests extends ComponentTestBase {
 

@@ -1,23 +1,21 @@
 package uk.gov.hmcts.dm.service;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Data;
+import net.time4j.PrettyTime;
+import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+
+import java.time.Duration;
+import java.util.List;
+
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.toList;
 import static net.time4j.format.TextWidth.NARROW;
 import static org.springframework.http.HttpStatus.OK;
-
-import java.time.Duration;
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-import lombok.Data;
-import net.time4j.PrettyTime;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 @Data
 @JsonPropertyOrder({BatchMigrateProgressReport.ATTRIBUTE_BEFORE_JOB, BatchMigrateProgressReport.ATTRIBUTE_MIGRATED,

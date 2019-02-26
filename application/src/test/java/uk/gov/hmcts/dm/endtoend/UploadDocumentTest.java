@@ -1,24 +1,16 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import static org.hamcrest.CoreMatchers.both;
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.hmcts.dm.endtoend.Helper.getBinaryUrlFromResponse;
-import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
-
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
-
-import lombok.extern.slf4j.Slf4j;
 import uk.gov.hmcts.dm.security.Classifications;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static uk.gov.hmcts.dm.endtoend.Helper.getBinaryUrlFromResponse;
+import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
 @Slf4j
 //@Ignore

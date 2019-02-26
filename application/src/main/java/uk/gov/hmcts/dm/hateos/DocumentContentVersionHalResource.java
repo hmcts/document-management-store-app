@@ -1,20 +1,19 @@
 package uk.gov.hmcts.dm.hateos;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
-
-import java.util.Date;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.hateoas.core.Relation;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.BeanUtils;
+import org.springframework.hateoas.core.Relation;
 import uk.gov.hmcts.dm.controller.BlobStorageMigrationController;
 import uk.gov.hmcts.dm.controller.DocumentContentVersionController;
 import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+
+import java.util.Date;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

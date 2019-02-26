@@ -1,14 +1,13 @@
 package uk.gov.hmcts.dm.hateos;
 
-import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.UUID;
 
-import org.junit.Test;
-
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
+import static java.lang.String.format;
+import static org.junit.Assert.assertEquals;
 
 public class DocumentContentVersionHalResourceTest {
 

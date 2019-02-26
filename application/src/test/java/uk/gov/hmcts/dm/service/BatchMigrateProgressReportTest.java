@@ -1,20 +1,18 @@
 package uk.gov.hmcts.dm.service;
 
-import static java.util.Arrays.asList;
-import static java.util.UUID.fromString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
+import org.junit.Test;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.time.Duration;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
+import static java.util.Arrays.asList;
+import static java.util.UUID.fromString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class BatchMigrateProgressReportTest {
 

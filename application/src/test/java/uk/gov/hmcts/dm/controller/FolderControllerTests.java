@@ -1,18 +1,17 @@
 package uk.gov.hmcts.dm.controller;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.junit.Ignore;
+import org.junit.Test;
+import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
+import uk.gov.hmcts.dm.componenttests.TestUtil;
+import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
-import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
-import uk.gov.hmcts.dm.componenttests.TestUtil;
-import uk.gov.hmcts.dm.security.Classifications;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class FolderControllerTests extends ComponentTestBase {
 

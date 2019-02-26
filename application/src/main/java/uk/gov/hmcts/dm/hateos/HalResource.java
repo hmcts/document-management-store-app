@@ -1,16 +1,14 @@
 package uk.gov.hmcts.dm.hateos;
 
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.hateoas.ResourceSupport;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.EqualsAndHashCode;
+import org.springframework.hateoas.ResourceSupport;
+
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
 public abstract class HalResource extends ResourceSupport {

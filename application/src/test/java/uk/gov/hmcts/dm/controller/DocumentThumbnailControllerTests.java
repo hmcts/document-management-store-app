@@ -1,21 +1,19 @@
 package uk.gov.hmcts.dm.controller;
 
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.nio.charset.StandardCharsets;
-import java.util.UUID;
-
-import javax.sql.rowset.serial.SerialBlob;
-
 import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
-
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+
+import javax.sql.rowset.serial.SerialBlob;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class DocumentThumbnailControllerTests extends ComponentTestBase {
 

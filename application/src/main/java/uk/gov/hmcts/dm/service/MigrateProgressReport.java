@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.service;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import lombok.Data;
 
 @Data

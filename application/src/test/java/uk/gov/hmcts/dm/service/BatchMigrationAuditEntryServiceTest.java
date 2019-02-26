@@ -1,12 +1,5 @@
 package uk.gov.hmcts.dm.service;
 
-import static java.util.Collections.emptyList;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
-import java.time.Duration;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,9 +7,15 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import uk.gov.hmcts.dm.domain.BatchMigrationAuditEntry;
 import uk.gov.hmcts.dm.repository.BatchMigrationAuditEntryRepository;
+
+import java.time.Duration;
+
+import static java.util.Collections.emptyList;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BatchMigrationAuditEntryServiceTest {

@@ -1,8 +1,8 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import java.io.InputStream;
-
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+
+import java.io.InputStream;
 
 public interface ThumbnailCreator {
 

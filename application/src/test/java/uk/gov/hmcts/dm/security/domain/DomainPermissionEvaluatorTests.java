@@ -1,16 +1,15 @@
 package uk.gov.hmcts.dm.security.domain;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.Permissions;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DomainPermissionEvaluatorTests {

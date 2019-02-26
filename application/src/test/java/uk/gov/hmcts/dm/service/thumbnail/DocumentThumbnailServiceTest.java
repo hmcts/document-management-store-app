@@ -1,21 +1,20 @@
 package uk.gov.hmcts.dm.service.thumbnail;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.springframework.core.io.Resource;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.springframework.core.io.Resource;
-
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 
 public class DocumentThumbnailServiceTest {
