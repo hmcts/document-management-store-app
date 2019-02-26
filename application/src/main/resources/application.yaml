@@ -13,12 +13,6 @@ spring:
     date-format: "yyyy-MM-dd'T'HH:mm:ssZ"
     serialization:
       indent_output: true
-  servlet:
-    multipart:
-      max-file-size: ${MAX_FILE_SIZE:90MB}
-      max-request-size: ${MAX_FILE_SIZE:90MB}
-  profiles:
-    active: dev
   jpa:
     database-platform: uk.gov.hmcts.dm.dialect.CustomPostgresSqlDialect
     database: postgresql
@@ -26,12 +20,20 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  liquibase:
+    enabled: ${ENABLE_DB_MIGRATE:true}
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE:90MB}
+      max-request-size: ${MAX_FILE_SIZE:90MB}
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
-
     platform: postgresql
     time-between-eviction-runs-millis: ${STALE_CONN_EVICTION_FREQUENCY:60000}
     tomcat:
@@ -45,10 +47,6 @@ spring:
       ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
-
-spring.liquibase:
-  enabled: ${ENABLE_DB_MIGRATE:true}
-  change-log: classpath:/db/changelog/db.changelog-master.xml
 
 server:
   port: ${SERVER_PORT:4603}
