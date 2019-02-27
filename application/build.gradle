@@ -143,6 +143,8 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.6.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.6.RELEASE'
 
+    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: '3.0.10.RELEASE'
+
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
 
