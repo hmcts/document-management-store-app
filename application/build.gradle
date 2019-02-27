@@ -112,7 +112,7 @@ def versions = [
     powermock          : '2.0.0',
     sonar              : '3.2',
     springBoot         : springBootVersion,
-    springBootBatch    : '2.0.0.RELEASE',
+    springBootBatch    : '1.5.19.RELEASE',
     springfoxSwagger   : '2.9.2',
     reformJavaLogging  : '3.0.2'
 ]
