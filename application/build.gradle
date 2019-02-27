@@ -265,6 +265,7 @@ pitest {
 //(./gradlew clean jar) build/libs/em-api-*-all.jar
 //(./gradlew installDist bootRepackage) build/install/dm-store/bin/dm-store
 bootJar {
+	mainClassName = 'uk.gov.hmcts.dm.DmApp'
     baseName 'dm-store'
     archiveName = "$baseName"+".jar"
     destinationDir = file("$rootDir/build/libs")

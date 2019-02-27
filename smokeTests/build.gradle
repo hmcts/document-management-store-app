@@ -74,6 +74,10 @@ sourceSets {
     }
 }
 
+bootJar {
+	mainClassName = 'uk.gov.hmcts.dm.DmApp'
+}
+
 dependencies {
     smokeTestCompile(sourceSets.test.output)
 }

@@ -75,6 +75,10 @@ sourceSets {
     }
 }
 
+bootJar {
+	mainClassName = 'uk.gov.hmcts.dm.DmApp'
+}
+
 dependencies {
     functionalTestCompile(sourceSets.test.output)
 }
