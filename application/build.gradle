@@ -111,8 +111,8 @@ def versions = [
     postgresql         : '42.2.2',
     powermock          : '2.0.0',
     sonar              : '3.2',
-    springBoot         : springBootVersion,
-    springBootBatch    : '1.5.19.RELEASE',
+    springBoot         : springBootVersion, // upgrade Spring Boot,
+    springBootBatch    : '1.5.19.RELEASE',  // but not its Spring Batch dependencies.
     springfoxSwagger   : '2.9.2',
     reformJavaLogging  : '3.0.2'
 ]
@@ -144,6 +144,7 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.6.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.6.RELEASE'
 
+    // Below 2 dependencies enforces older versions that do not have the vulnerabilities reported in pipeline
     compile group: 'org.springframework.batch', name: 'spring-batch-infrastructure', version: '3.0.10.RELEASE'
     compile group: 'org.springframework.batch', name: 'spring-batch-core', version: '3.0.10.RELEASE'
 
