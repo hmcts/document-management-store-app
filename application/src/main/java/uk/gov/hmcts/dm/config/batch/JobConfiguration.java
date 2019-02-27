@@ -4,7 +4,6 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -40,7 +39,7 @@ public class JobConfiguration {
     public Job job() {
         return jobBuilderFactory
             .get("documentRetentionJob")
-            .incrementer(new RunIdIncrementer())
+            .incrementer(null)
             .flow(step1())
             .end()
             .build();
