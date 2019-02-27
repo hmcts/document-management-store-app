@@ -112,7 +112,7 @@ def versions = [
     powermock          : '2.0.0',
     sonar              : '3.2',
     springBoot         : springBootVersion,
-    springBatch        : '1.5.19.RELEASE',
+    springBootBatch    : '2.0.0.RELEASE',
     springfoxSwagger   : '2.9.2',
     reformJavaLogging  : '3.0.2'
 ]
@@ -139,13 +139,13 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBatch
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBootBatch
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.6.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.6.RELEASE'
 
     compile group: 'org.springframework.batch', name: 'spring-batch-infrastructure', version: '4.0.0.RELEASE'
-    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: '3.0.10.RELEASE'
+    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: '4.0.0.RELEASE'
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
