@@ -16,8 +16,7 @@ public class PdfThumbnailCreator extends AbstractFileSpecificThumbnailCreator {
     }
 
     public BufferedImage getImg(InputStream pdf) {
-        try {
-            PDDocument document = PDDocument.load(pdf);
+        try (PDDocument document = PDDocument.load(pdf)) {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
             BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(0, 300, ImageType.RGB);
             return new BufferedImageResizer().resizeImage(bufferedImage);
