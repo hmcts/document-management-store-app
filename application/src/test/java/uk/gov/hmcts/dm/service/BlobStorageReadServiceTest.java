@@ -3,6 +3,8 @@ package uk.gov.hmcts.dm.service;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
+
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,4 +60,16 @@ public class BlobStorageReadServiceTest {
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);
     }
 
+    @AfterClass
+    public static void killRuntimeAgainstNonDaemonThreadsNotResponding() {
+        new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(10000L);
+                } catch (InterruptedException e) {
+                }
+                Runtime.getRuntime().halt(0);            
+            }
+        }.start();
+    }
 }
