@@ -30,7 +30,7 @@ public class BlobStorageMigrationController {
     @ApiOperation("Gets a migration progress report")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "JSON representation of a migration progress report",
         response = MigrateProgressReport.class)})
-    ResponseEntity<MigrateProgressReport> getMigrateProgressReport() {
+    public ResponseEntity<MigrateProgressReport> getMigrateProgressReport() {
         return ResponseEntity.ok(blobStorageMigrationService.getMigrateProgressReport());
     }
 
@@ -38,7 +38,7 @@ public class BlobStorageMigrationController {
     @ApiOperation("Starts a batch migration process")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "JSON representation of a batch migration progress "
         + "report", response = MigrateProgressReport.class)})
-    ResponseEntity<BatchMigrateProgressReport> batchMigrate(@RequestHeader(value = IF_MATCH, required = false) String
+    public ResponseEntity<BatchMigrateProgressReport> batchMigrate(@RequestHeader(value = IF_MATCH, required = false) String
                                                                 authToken,
                                                             @RequestParam(value = "limit", required = false) Integer
                                                                 limit,
