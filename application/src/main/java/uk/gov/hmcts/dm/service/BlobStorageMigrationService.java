@@ -41,6 +41,7 @@ import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
 @Service
 @Transactional
 @Slf4j
+@SuppressWarnings("squid:CallToDeprecatedMethod")
 public class BlobStorageMigrationService {
 
     protected static final String NO_CONTENT_FOUND = "CONTENT NOT FOUND";
