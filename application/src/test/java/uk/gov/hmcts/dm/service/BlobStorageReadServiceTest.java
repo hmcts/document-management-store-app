@@ -60,6 +60,7 @@ public class BlobStorageReadServiceTest {
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);
     }
 
+    @SuppressWarnings("squid:S2925")
     @AfterClass
     public static void killRuntimeAgainstNonDaemonThreadsNotResponding() {
         new Thread() {
