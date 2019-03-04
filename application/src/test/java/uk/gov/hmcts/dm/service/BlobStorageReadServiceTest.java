@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
 public class BlobStorageReadServiceTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BlobStorageReadServiceTest.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(BlobStorageReadServiceTest.class);
 
     private BlobStorageReadService blobStorageReadService;
 
@@ -71,7 +71,7 @@ public class BlobStorageReadServiceTest {
         new Thread() {
             public void run() {
                 try {
-	                TimeUnit.SECONDS.sleep(120);
+                    TimeUnit.SECONDS.sleep(120);
                 } catch (InterruptedException e) {
                     LOGGER.error("Exception trying to forcefully halt the test suit execution.", e);
                 }
