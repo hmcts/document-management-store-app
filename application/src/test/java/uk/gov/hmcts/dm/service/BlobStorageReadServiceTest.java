@@ -4,6 +4,7 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 
+import org.awaitility.Awaitility;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,9 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
@@ -25,6 +29,8 @@ import static org.mockito.Mockito.verify;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
 public class BlobStorageReadServiceTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BlobStorageReadServiceTest.class);
 
     private BlobStorageReadService blobStorageReadService;
 
@@ -68,6 +74,7 @@ public class BlobStorageReadServiceTest {
                 try {
                     Thread.sleep(100 * 1000L);
                 } catch (InterruptedException e) {
+                	LOGGER.error("Exception trying to forcefully halt the test suit execution.", e);
                 }
                 Runtime.getRuntime().halt(0);            
             }

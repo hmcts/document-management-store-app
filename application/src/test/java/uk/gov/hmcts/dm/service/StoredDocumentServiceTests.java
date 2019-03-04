@@ -76,7 +76,7 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testFindOne() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.ofNullable(TestUtil.STORED_DOCUMENT));
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.ofNullable(STORED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertThat(storedDocument.get(), equalTo(TestUtil.STORED_DOCUMENT));
     }

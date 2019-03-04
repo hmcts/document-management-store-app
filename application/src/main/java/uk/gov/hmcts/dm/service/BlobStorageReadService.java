@@ -38,6 +38,6 @@ public class BlobStorageReadService {
     }
     
     CloudBlockBlob callGetBlobReference(String id) throws URISyntaxException, StorageException {
-    	return cloudBlobContainer.getBlockBlobReference(id);
+        return cloudBlobContainer.getBlockBlobReference(id);
     }
 }
