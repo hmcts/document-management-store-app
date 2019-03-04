@@ -71,7 +71,11 @@ public class BlobStorageReadServiceTest {
     public static void killRuntimeAgainstNonDaemonThreadsNotResponding() {
         new Thread() {
             public void run() {
-                Awaitility.await().atLeast(100, TimeUnit.SECONDS);
+                try {
+	                TimeUnit.SECONDS.sleep(120);
+                } catch (InterruptedException e) {
+                    LOGGER.error("Exception trying to forcefully halt the test suit execution.", e);
+                }
                 Runtime.getRuntime().halt(0);            
             }
         }.start();
