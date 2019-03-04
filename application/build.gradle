@@ -166,6 +166,8 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
+    testCompile group: 'org.awaitility', name: 'awaitility', version: '3.0.0'
+
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
 
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {

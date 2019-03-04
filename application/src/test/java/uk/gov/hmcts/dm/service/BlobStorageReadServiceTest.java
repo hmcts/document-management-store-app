@@ -21,6 +21,7 @@ import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.concurrent.TimeUnit;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -66,16 +67,11 @@ public class BlobStorageReadServiceTest {
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);
     }
 
-    @SuppressWarnings("squid:S2925")
     @AfterClass
     public static void killRuntimeAgainstNonDaemonThreadsNotResponding() {
         new Thread() {
             public void run() {
-                try {
-                    Thread.sleep(100 * 1000L);
-                } catch (InterruptedException e) {
-                	LOGGER.error("Exception trying to forcefully halt the test suit execution.", e);
-                }
+                Awaitility.await().atLeast(100, TimeUnit.SECONDS);
                 Runtime.getRuntime().halt(0);            
             }
         }.start();
