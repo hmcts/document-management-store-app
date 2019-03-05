@@ -100,6 +100,7 @@ dependencyManagement {
 }
 
 def versions = [
+    commons            : '2.6',
     ehcache            : '3.5.2',
     jacocoMavenPlugin  : '0.7.9',
     jackson            : '2.9.8',
@@ -110,11 +111,13 @@ def versions = [
     liquibase          : '3.6.1',
     postgresql         : '42.2.2',
     powermock          : '2.0.0',
+    reformJavaLogging  : '3.0.2',
     sonar              : '3.2',
     springBoot         : springBootVersion, // upgrade Spring Boot,
-    springBootBatch    : '1.5.19.RELEASE',  // but not its Spring Batch dependencies.
+    springBootBatch    : '1.5.19.RELEASE',  // but not
+    springBatch        : '3.0.10.RELEASE',  // its Spring Batch dependencies.
     springfoxSwagger   : '2.9.2',
-    reformJavaLogging  : '3.0.2'
+    springCloudHystrix : '1.4.6.RELEASE'
 ]
 
 dependencies {
@@ -141,14 +144,14 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBootBatch
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.6.RELEASE'
-    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.6.RELEASE') {
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: versions.springCloudHystrix
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: versions.springCloudHystrix) {
         exclude(module: 'logback-classic')
     }
 
     // Below 2 dependencies enforces older versions that do not have the vulnerabilities reported in pipeline
-    compile group: 'org.springframework.batch', name: 'spring-batch-infrastructure', version: '3.0.10.RELEASE'
-    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: '3.0.10.RELEASE'
+    compile group: 'org.springframework.batch', name: 'spring-batch-infrastructure', version: versions.springBatch
+    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: versions.springBatch
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
@@ -168,8 +171,8 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformJavaLogging
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '2.0.0'
 
-    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
-    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'commons-lang', name: 'commons-lang', version: versions.commons
+    compile group: 'commons-io', name: 'commons-io', version: versions.commons
 
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
