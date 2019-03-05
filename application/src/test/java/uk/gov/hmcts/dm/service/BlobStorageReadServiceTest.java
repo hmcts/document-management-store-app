@@ -68,6 +68,11 @@ public class BlobStorageReadServiceTest {
 
     @AfterClass
     public static void killRuntimeAgainstNonDaemonThreadsNotResponding() {
+        
+    	// Initiate a new Thread that will wait 2 minutes for test executions to finish,
+        // and will kill the JVM on which the test suite is being executed.
+        // This trick is needed against the none-daemon threads left after test executions,
+        // which are not responding to any signals, causing test JVM and gradle to hang forever.
         new Thread() {
             public void run() {
                 try {
