@@ -27,7 +27,7 @@ public class PersistenceConfig {
                 ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
                 return Optional.ofNullable(userDetails.getUsername());
             } else {
-                return Optional.ofNullable(null);
+                return Optional.empty();
             }
         }
 
