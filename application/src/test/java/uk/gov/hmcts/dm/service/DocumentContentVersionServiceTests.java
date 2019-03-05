@@ -89,7 +89,7 @@ public class DocumentContentVersionServiceTests {
 
     @Test
     public void testMostRecentFileContentVersionByStoredFileIdOnNullStoredFile() {
-        when(storedDocumentRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.ofNullable(null));
+        when(storedDocumentRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         Assert.assertNull(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 

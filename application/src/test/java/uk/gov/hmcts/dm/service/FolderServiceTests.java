@@ -60,7 +60,7 @@ public class FolderServiceTests {
     @Test
     public void testFindOneItemFolderNull() {
 
-        when(this.folderRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.ofNullable(null));
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
 
         StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
 
