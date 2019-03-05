@@ -23,8 +23,7 @@ public class WebConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter()
-    {
+    public FilterRegistrationBean<ForwardedHeaderFilter> forwardedHeaderFilter() {
         FilterRegistrationBean<ForwardedHeaderFilter> bean = new FilterRegistrationBean<>();
         bean.setFilter(new ForwardedHeaderFilter());
         return bean;
