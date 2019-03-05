@@ -16,10 +16,9 @@ import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 //@Ignore
 public class UploadDocumentTest extends End2EndTestBase {
 
-    private HttpHeaders headers = Helper.getHeaders();
-
     @Test
     public void should_upload_a_document() throws Exception {
+        HttpHeaders headers = Helper.getHeaders();
         mvc.perform(fileUpload("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
@@ -35,7 +34,28 @@ public class UploadDocumentTest extends End2EndTestBase {
     }
 
     @Test
+    public void should_upload_a_document_with_hateoas_with_xfh() throws Exception {
+        HttpHeaders headers = Helper.getHeaders();
+        headers.add("X-Forwarded-Host", "dummy-host");
+        headers.add("X-Forwarded-Port", "1111");
+        headers.add("X-Forwarded-Proto", "https");
+        mvc.perform(fileUpload("/documents")
+            .file(FILE)
+            .param("classification", Classifications.PRIVATE.toString())
+            .headers(headers))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$._embedded.documents[0].originalDocumentName", equalTo("test.txt")))
+            .andExpect(jsonPath("$._embedded.documents[0].mimeType", equalTo("text/plain")))
+            .andExpect(jsonPath("$._embedded.documents[0].createdBy", equalTo("user")))
+            .andExpect(jsonPath("$._embedded.documents[0].lastModifiedBy", equalTo("user")))
+            .andExpect(jsonPath("$._embedded.documents[0]._links.self.href", startsWith("https://dummy-host:1111/documents/")))
+            .andExpect(jsonPath("$._embedded.documents[0]._links.binary.href",
+                both(startsWith("https://dummy-host:1111/documents/")).and(endsWith("/binary"))));
+    }
+
+    @Test
     public void should_upload_and_retrieve_a_document() throws Exception {
+        HttpHeaders headers = Helper.getHeaders();
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
@@ -51,6 +71,7 @@ public class UploadDocumentTest extends End2EndTestBase {
 
     @Test
     public void should_upload_and_delete_a_document() throws Exception {
+        HttpHeaders headers = Helper.getHeaders();
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
@@ -70,6 +91,7 @@ public class UploadDocumentTest extends End2EndTestBase {
 
     @Test
     public void should_upload_and_hard_delete_a_document() throws Exception {
+        HttpHeaders headers = Helper.getHeaders();
         final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
                 .file(FILE)
                 .param("classification", Classifications.PRIVATE.toString())
