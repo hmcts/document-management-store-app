@@ -17,8 +17,7 @@ import java.util.UUID;
 
 @Transactional
 @Service
-public class DocumentContentVersionService
- {
+public class DocumentContentVersionService {
 
     @Autowired
     private DocumentContentVersionRepository documentContentVersionRepository;
