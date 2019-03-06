@@ -42,6 +42,6 @@ public class DocumentContentVersionService {
 
     public DocumentContentVersion findMostRecentDocumentContentVersionByStoredDocumentId(UUID id) {
         Optional<StoredDocument> storedDocumentOptional = storedDocumentRepository.findById(id);
-        return storedDocumentOptional.map(sd -> sd.getMostRecentDocumentContentVersion()).orElse(null);
+        return storedDocumentOptional.map(StoredDocument::getMostRecentDocumentContentVersion).orElse(null);
     }
 }
