@@ -144,11 +144,11 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBootBatch
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
-    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: versions.springCloudHyst) {
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.6.RELEASE') {
         exclude(module: 'jackson-databind')
         exclude(module: 'jackson-core')
     }
-    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: versions.springCloudHyst) {
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.6.RELEASE') {
         exclude(module: 'logback-classic')
         exclude(module: 'jackson-databind')
         exclude(module: 'jackson-core')
@@ -176,8 +176,8 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformJavaLogging
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '2.0.0'
 
-    compile group: 'commons-lang', name: 'commons-lang', version: versions.commonsLangAndIO
-    compile group: 'commons-io', name: 'commons-io', version: versions.commonsLangAndIO
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
 
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
