@@ -155,8 +155,8 @@ dependencies {
     }
 
     // Below 2 dependencies enforces older versions that do not have the vulnerabilities reported in pipeline
-    compile group: 'org.springframework.batch', name: 'spring-batch-infrastructure', version: '3.0.10.RELEASE'
-    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: '3.0.10.RELEASE'
+    compile group: 'org.springframework.batch', name: 'spring-batch-infrastructure', version: versions.springBatchPrev
+    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: versions.springBatchPrev
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
@@ -176,8 +176,8 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformJavaLogging
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '2.0.0'
 
-    compile group: 'commons-lang', name: 'commons-lang', version: commonsLangAndIO
-    compile group: 'commons-io', name: 'commons-io', version: commonsLangAndIO
+    compile group: 'commons-lang', name: 'commons-lang', version: versions.commonsLangAndIO
+    compile group: 'commons-io', name: 'commons-io', version: versions.commonsLangAndIO
 
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
 
