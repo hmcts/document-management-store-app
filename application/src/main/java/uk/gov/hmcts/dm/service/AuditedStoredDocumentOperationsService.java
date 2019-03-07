@@ -47,6 +47,7 @@ public class AuditedStoredDocumentOperationsService {
         return storedDocument;
     }
 
+    @Transactional
     @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'UPDATE')")
     public StoredDocument updateDocument(UUID id, UpdateDocumentCommand updateDocumentCommand) {
 

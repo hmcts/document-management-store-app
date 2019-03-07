@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
@@ -34,7 +33,6 @@ public class StoredDocumentUpdateController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns representation of the new state",  response = StoredDocumentHalResource.class)
     })
-    @Transactional
     public ResponseEntity<Object> updateDocument(@PathVariable UUID documentId,
                                          @RequestBody UpdateDocumentCommand updateDocumentCommand) {
 
