@@ -144,11 +144,11 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBootBatch
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
-    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.6.RELEASE') {
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: versions.springCloudHyst) {
         exclude(module: 'jackson-databind')
         exclude(module: 'jackson-core')
     }
-    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.6.RELEASE') {
+    compile(group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: versions.springCloudHyst) {
         exclude(module: 'logback-classic')
         exclude(module: 'jackson-databind')
         exclude(module: 'jackson-core')
