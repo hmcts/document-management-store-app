@@ -155,13 +155,8 @@ dependencies {
     }
 
     // Below 2 dependencies enforces older versions that do not have the vulnerabilities reported in pipeline
-<<<<<<< HEAD
-    compile group: 'org.springframework.batch', name: 'spring-batch-infrastructure', version: versions.springBatch
-    compile group: 'org.springframework.batch', name: 'spring-batch-core', version: versions.springBatch
-=======
     compile group: 'org.springframework.batch', name: 'spring-batch-infrastructure', version: versions.springBatchPrev
     compile group: 'org.springframework.batch', name: 'spring-batch-core', version: versions.springBatchPrev
->>>>>>> refs/remotes/origin/RDM-2506_SpringBoot_Upgrade
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
