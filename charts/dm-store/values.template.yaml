@@ -1,11 +1,11 @@
 postgresql:
-  initdbScripts:
-    init.sql: |-
-      CREATE USER ccd WITH PASSWORD 'ccd';
-      CREATE DATABASE dm_store WITH OWNER = ccd ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-  nameOverride: postgres
-  persistence:
-    enabled: false
+  postgresqlUsername: ccd
+  postgresqlPassword: ccd
+  postgresqlDatabase: dm_store
+  service:
+    port: 5432
+    persistence:
+      enabled: false
 tags:
   postgresql-pod: true
 java:
@@ -13,7 +13,7 @@ java:
   ingressHost: ${SERVICE_FQDN}
   applicationPort: 4603
   environment:
-    POSTGRES_HOST: ${SERVICE_NAME}-postgres
+    POSTGRES_HOST: ${SERVICE_NAME}-postgresql
     POSTGRES_PORT: 5432
     POSTGRES_DATABASE: dm_store
     POSTGRES_USER: ccd
@@ -24,7 +24,7 @@ java:
     # SERVER_PORT: 8080
 
     # db
-    SPRING_DATASOURCE_URL: jdbc:postgresql://${SERVICE_NAME}-postgres:5432/dm_store?ssl=false
+    SPRING_DATASOURCE_URL: jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/dm_store?ssl=false
     SPRING_DATASOURCE_USERNAME: ccd
     SPRING_DATASOURCE_PASSWORD: ccd
 
