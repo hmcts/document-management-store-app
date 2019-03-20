@@ -5,10 +5,14 @@ capacity = "2"
 asp_name = "dm-store-aat"
 asp_rg = "dm-store-aat"
 
+// Database
+database_storage_mb = "100352"
+
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
-idam_api_url = "https://preprod-idamapi.reform.hmcts.net:3511"
+#idam_api_url = "https://preprod-idamapi.reform.hmcts.net:3511"
+idam_api_url = "https://idam-api.aat.platform.hmcts.net"
 
 ////////////////////////////////////////////////
 // Logging

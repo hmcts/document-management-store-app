@@ -1,10 +1,10 @@
 provider "azurerm" {
-  version = "1.19.0"
+  version = "1.22.1"
 }
 
 locals {
   app_full_name = "${var.product}-${var.component}"
-  ase_name = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+  ase_name = "core-compute-${var.env}"
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
 
   // Shared Resource Group - CCD
@@ -132,7 +132,7 @@ module "db" {
   database_name = "${var.database_name}"
   sku_name = "GP_Gen5_2"
   sku_tier = "GeneralPurpose"
-  storage_mb = "51200"
+  storage_mb = "${var.database_storage_mb}"
   common_tags  = "${var.common_tags}"
 }
 
