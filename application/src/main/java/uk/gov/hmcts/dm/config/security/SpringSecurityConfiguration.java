@@ -52,6 +52,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/v2/**",
                 "/favicon.ico",
                 "/health",
+                "/health/liveness",
                 "/mappings",
                 "/info",
                 "/migrate",
