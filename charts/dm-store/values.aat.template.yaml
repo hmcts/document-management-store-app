@@ -9,7 +9,7 @@ java:
     PACKAGES_ENVIRONMENT: aat
 
     # Logging
-    SHOW_SQL: false
+    SHOW_SQL: true
 
     # Toggles
     ENABLE_DOCUMENT_AND_METADATA_UPLOAD: false

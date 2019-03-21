@@ -19,13 +19,13 @@ java:
     POSTGRES_DATABASE: dm_store
     POSTGRES_USER: ccd
     POSTGRES_PASSWORD: ccd
-    MAX_ACTIVE_DB_CONNECTIONS: 70
+    MAX_ACTIVE_DB_CONNECTIONS: 50
 
     # JAVA_OPTS: ${var.java_opts}
     # SERVER_PORT: 8080
 
     # db
-    SPRING_DATASOURCE_URL: jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/dm_store?ssl=false
+    SPRING_DATASOURCE_URL: jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/dm_store
     SPRING_DATASOURCE_USERNAME: ccd
     SPRING_DATASOURCE_PASSWORD: ccd
 
