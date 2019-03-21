@@ -84,6 +84,6 @@ java:
     #STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: ${azurerm_storage_container.document_container.name}
   keyVaults:
     "s2s":
-      resourceGroup: s2s
+      resourceGroup: rpe-service-auth-provider
       secrets:
         - microservicekey-em-gw
