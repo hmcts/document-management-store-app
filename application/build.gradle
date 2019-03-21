@@ -111,7 +111,7 @@ def versions = [
     liquibase          : '3.6.1',
     postgresql         : '42.2.2',
     powermock          : '2.0.0',
-    reformJavaLogging  : '3.0.2',
+    reformJavaLogging  : '5.0.1',
     sonar              : '3.2',
     springBoot         : springBootVersion, // upgrade Spring Boot,
     springBootBatch    : '1.5.19.RELEASE',  // but not
