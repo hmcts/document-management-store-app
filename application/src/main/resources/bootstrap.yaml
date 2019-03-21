@@ -1,0 +1,6 @@
+spring:
+  cloud:
+    propertiesvolume:
+      paths: /mnt/secrets/s2s
+      aliases:
+        s2s.microservicekey-em-gw: S2S_TOKEN
