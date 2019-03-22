@@ -25,7 +25,7 @@ java:
     # SERVER_PORT: 8080
 
     # db
-    SPRING_DATASOURCE_URL: 'jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/dm_store'
+    SPRING_DATASOURCE_URL: 'jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/evidence'
     SPRING_DATASOURCE_USERNAME: evidence
     SPRING_DATASOURCE_PASSWORD: evidence
 
