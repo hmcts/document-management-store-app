@@ -1,0 +1,84 @@
+postgresql:
+  postgresqlUsername: evidence
+  postgresqlPassword: evidence
+  postgresqlDatabase: evidence
+  service:
+    port: '5432'
+    persistence:
+      enabled: 'false'
+tags:
+  postgresql-pod: 'true'
+java:
+  image: ${IMAGE_NAME}
+  ingressHost: ${SERVICE_FQDN}
+  applicationPort: '4603'
+  livenessPath: /health
+  environment:
+    POSTGRES_HOST: ${SERVICE_NAME}-postgresql
+    POSTGRES_PORT: '5432'
+    POSTGRES_DATABASE: evidence
+    POSTGRES_USER: evidence
+    POSTGRES_PASSWORD: evidence
+    MAX_ACTIVE_DB_CONNECTIONS: '50'
+
+      # JAVA_OPTS: ${var.java_opts}
+      # SERVER_PORT: 8080
+
+    # db
+    SPRING_DATASOURCE_URL: 'jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/evidence'
+    SPRING_DATASOURCE_USERNAME: evidence
+    SPRING_DATASOURCE_PASSWORD: evidence
+
+      MAX_FILE_SIZE: '500MB'
+
+      # idam
+    IDAM_USER_BASE_URI: 'https://preprod-idamapi.reform.hmcts.net:3511'
+    IDAM_S2S_BASE_URI: 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
+
+    # logging vars & healthcheck
+    REFORM_SERVICE_NAME: dm-store
+    REFORM_TEAM: evidence
+    REFORM_SERVICE_TYPE: java
+
+      PACKAGES_NAME: dm-store
+    PACKAGES_PROJECT: evidence
+
+      LOG_OUTPUT: single
+
+      # addtional log
+    ROOT_LOGGING_LEVEL: INFO
+    LOG_LEVEL_SPRING_WEB: INFO
+    LOG_LEVEL_DM: INFO
+    SHOW_SQL: 'true'
+
+      ENDPOINTS_HEALTH_SENSITIVE: 'true'
+    ENDPOINTS_INFO_SENSITIVE: 'true'
+
+      ENABLE_DB_MIGRATE: 'true'
+
+      DM_MULTIPART_WHITELIST: 'image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow'
+    DM_MULTIPART_WHITELIST_EXT: '.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx'
+    S2S_NAMES_WHITELIST: 'em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,cmc_claim_store,bulk_scan_processor,em_npa_app,bulk_scan_orchestrator,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api'
+    CASE_WORKER_ROLES: 'caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce'
+
+    # Toggles
+    ENABLE_IDAM_HEALTH_CHECK: 'false'
+    ENABLE_METADATA_SEARCH: 'true'
+    ENABLE_DOCUMENT_AND_METADATA_UPLOAD: 'false'
+    ENABLE_FOLDER_API: 'true'
+    ENABLE_DELETE: 'true'
+    ENABLE_TTL: 'true'
+    ENABLE_THUMBNAIL: 'true'
+
+      ENABLE_AZURE_STORAGE_CONTAINER: 'false'
+    ENABLE_POSTGRES_BLOB_STORAGE: 'true'
+
+    # Migration Job specific
+    BLOBSTORE_MIGRATE_CCD_SECRET: 'y2hahvdZ9evcTVq2'
+    BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED: 'false'
+    BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiQ//gc/G53d9dLCtf123fIYo49gUySuJuxOcw2GtieWTMSy+O7RNtsAIjVf3mCOdDNuN69tZNPEWMdaW8n11s9MwYFahtxDecyn0KIP9MvPsfSMSbxhp/f7kfbdB/H/S5eYea66JTyeJS6uNd76RdHttx0mLO30ZkRcXB25c2SIXhRYsdoeKS5GXHDdNejkQM0S/Ev94x2UunApmYHjWN1XcDhsEsAeF4WHnvYh2XiMn9vHY44AqvbWLlAmCgzaXpz8Xhl0fO7jDKSeReDyuM3UTMaiFFaxuvliGol7aIXq/aVe/miiD2SLxHZ6RxAPW80bhXrzJMTLTCqhCEhzfv someone@somewhere.sometime'
+
+    # Document Storage
+    #STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_primary_connection_string.value}
+    #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
+    #STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: ${azurerm_storage_container.document_container.name}

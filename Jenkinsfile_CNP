@@ -53,6 +53,8 @@ withPipeline(type , product, component) {
     }
     onPR {
         enableSlackNotifications('#ccd-pr-builds')
+        env.IDAM_API_URL = "https://preprod-idamapi.reform.hmcts.net:3511"
+        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     }
 
     enableDbMigration()
@@ -60,6 +62,7 @@ withPipeline(type , product, component) {
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
+    installCharts()
 
     after('checkout') {
         echo '${product}-${component} out'
