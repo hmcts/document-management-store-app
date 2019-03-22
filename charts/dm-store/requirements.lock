@@ -4,6 +4,6 @@ dependencies:
   version: 3.1.4
 - name: java
   repository: https://hmcts.azurecr.io/helm/v1/repo
-  version: 0.0.13
-digest: sha256:6ed3caf66a39700c49e4b5d0a34f0c34b15db46a808ad6761a2d14c52f8ee5ec
-generated: 2019-02-08T20:42:24.277176Z
+  version: 1.1.2
+digest: sha256:9ef7e45bcd29e6ec7808a9cdbdc7352475acdf0f75777f992ac3525baa504516
+generated: 2019-03-22T17:05:47.994988Z
