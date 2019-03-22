@@ -1,7 +1,7 @@
 postgresql:
-  postgresqlUsername: ccd
-  postgresqlPassword: ccd
-  postgresqlDatabase: dm_store
+  postgresqlUsername: evidence
+  postgresqlPassword: evidence
+  postgresqlDatabase: evidence
   service:
     port: 5432
     persistence:
@@ -16,9 +16,9 @@ java:
   environment:
     POSTGRES_HOST: ${SERVICE_NAME}-postgresql
     POSTGRES_PORT: '5432'
-    POSTGRES_DATABASE: dm_store
-    POSTGRES_USER: ccd
-    POSTGRES_PASSWORD: ccd
+    POSTGRES_DATABASE: evidence
+    POSTGRES_USER: evidence
+    POSTGRES_PASSWORD: evidence
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
     # JAVA_OPTS: ${var.java_opts}
@@ -26,8 +26,8 @@ java:
 
     # db
     SPRING_DATASOURCE_URL: 'jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/dm_store'
-    SPRING_DATASOURCE_USERNAME: ccd
-    SPRING_DATASOURCE_PASSWORD: ccd
+    SPRING_DATASOURCE_USERNAME: evidence
+    SPRING_DATASOURCE_PASSWORD: evidence
 
     MAX_FILE_SIZE: '500MB'
 
