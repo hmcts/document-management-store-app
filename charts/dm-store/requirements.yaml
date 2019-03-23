@@ -1,6 +1,6 @@
 dependencies:
   - name: postgresql
-    version: ~3.1.0
+    version: ~2.6.5
     repository: '@stable'
     tags:
       - postgresql-pod
