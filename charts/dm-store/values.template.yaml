@@ -6,8 +6,8 @@ postgresql:
     tag: 9.6.12
   service:
     port: '5432'
-    persistence:
-      enabled: 'false'
+  persistence:
+    enabled: 'false'
 tags:
   postgresql-pod: 'true'
 java:
