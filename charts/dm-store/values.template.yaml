@@ -3,7 +3,7 @@ postgresql:
   postgresqlPassword: evidence
   postgresqlDatabase: evidence
   image:
-    tag: 9.6
+    tag: 9.6.12
   service:
     port: '5432'
     persistence:
