@@ -29,7 +29,7 @@ java:
     SPRING_DATASOURCE_USERNAME: evidence
     SPRING_DATASOURCE_PASSWORD: evidence
 
-      MAX_FILE_SIZE: '500MB'
+    MAX_FILE_SIZE: '500MB'
 
       # idam
     IDAM_USER_BASE_URI: 'https://preprod-idamapi.reform.hmcts.net:3511'
@@ -40,10 +40,10 @@ java:
     REFORM_TEAM: evidence
     REFORM_SERVICE_TYPE: java
 
-      PACKAGES_NAME: dm-store
+    PACKAGES_NAME: dm-store
     PACKAGES_PROJECT: evidence
 
-      LOG_OUTPUT: single
+    LOG_OUTPUT: single
 
       # addtional log
     ROOT_LOGGING_LEVEL: INFO
@@ -51,12 +51,12 @@ java:
     LOG_LEVEL_DM: INFO
     SHOW_SQL: 'true'
 
-      ENDPOINTS_HEALTH_SENSITIVE: 'true'
+    ENDPOINTS_HEALTH_SENSITIVE: 'true'
     ENDPOINTS_INFO_SENSITIVE: 'true'
 
-      ENABLE_DB_MIGRATE: 'true'
+    ENABLE_DB_MIGRATE: 'true'
 
-      DM_MULTIPART_WHITELIST: 'image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow'
+    DM_MULTIPART_WHITELIST: 'image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow'
     DM_MULTIPART_WHITELIST_EXT: '.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx'
     S2S_NAMES_WHITELIST: 'em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,cmc_claim_store,bulk_scan_processor,em_npa_app,bulk_scan_orchestrator,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api'
     CASE_WORKER_ROLES: 'caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce'
@@ -70,7 +70,7 @@ java:
     ENABLE_TTL: 'true'
     ENABLE_THUMBNAIL: 'true'
 
-      ENABLE_AZURE_STORAGE_CONTAINER: 'false'
+    ENABLE_AZURE_STORAGE_CONTAINER: 'false'
     ENABLE_POSTGRES_BLOB_STORAGE: 'true'
 
     # Migration Job specific
