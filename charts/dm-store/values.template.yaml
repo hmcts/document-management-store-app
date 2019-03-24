@@ -7,7 +7,7 @@ postgresql:
   service:
     port: '5432'
   persistence:
-    enabled: 'false'
+    enabled: false
 tags:
   postgresql-pod: 'true'
 java:
