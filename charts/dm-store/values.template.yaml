@@ -7,7 +7,7 @@ postgresql:
   persistence:
     enabled: false
 tags:
-  postgresql-pod: false
+  postgresql-pod: true
   blobstorage: true
 java:
   image: ${IMAGE_NAME}
