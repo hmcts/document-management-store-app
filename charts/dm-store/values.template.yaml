@@ -4,8 +4,8 @@ postgresql:
   postgresqlDatabase: evidence
   service:
     port: 5432
-    persistence:
-      enabled: false
+  persistence:
+    enabled: false
 tags:
   postgresql-pod: true
 java:
