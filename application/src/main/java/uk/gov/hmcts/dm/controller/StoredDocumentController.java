@@ -26,6 +26,7 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RestController
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")
+@Slf4j
 public class StoredDocumentController {
 
     @Autowired
@@ -119,6 +121,9 @@ public class StoredDocumentController {
         response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
         response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
         response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+        log.info("printing size for debugging issue",
+            documentContentVersion.getSize().toString());
+        response.setHeader("Dummy_Header", documentContentVersion.getSize().toString());
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
             format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
