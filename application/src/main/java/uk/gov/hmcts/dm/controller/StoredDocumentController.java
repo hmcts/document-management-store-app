@@ -80,7 +80,7 @@ public class StoredDocumentController {
                     auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
             return ResponseEntity
                     .ok()
-                    .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE).
+                    .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
                     .body(new StoredDocumentHalResourceCollection(storedDocuments));
         }
     }
@@ -120,7 +120,7 @@ public class StoredDocumentController {
         }
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+        //response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
         response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
         log.info("printing size for debugging issue",
             documentContentVersion.getSize().toString());
