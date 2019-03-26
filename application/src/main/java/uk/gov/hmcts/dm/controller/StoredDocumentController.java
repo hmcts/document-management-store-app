@@ -119,7 +119,7 @@ public class StoredDocumentController {
         }
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+        //response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
         response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
         log.info("printing size for debugging issue",
             documentContentVersion.getSize().toString());
