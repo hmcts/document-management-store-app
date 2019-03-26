@@ -47,6 +47,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring()
             .antMatchers("/swagger-ui.html",
+                "/**",
                 "/webjars/springfox-swagger-ui/**",
                 "/swagger-resources/**",
                 "/v2/**",
