@@ -118,7 +118,7 @@ class CreateDocumentIT extends BaseIT {
         .when()
             .get(documentUrl1)
 
-        assertByteArrayEquality ATTACHMENT_7_PNG, givenRequest(CITIZEN)
+        assertByteArrayEquality ATTACHMENT_7_PNG, givenRequest(CITIZEN).header("Accept-Encoding", "")
             .expect()
                 .statusCode(200)
                 .contentType(containsString(MediaType.IMAGE_PNG_VALUE))
