@@ -123,7 +123,6 @@ class CreateDocumentIT extends BaseIT {
                 .statusCode(200)
                 .contentType(containsString(MediaType.IMAGE_PNG_VALUE))
                 .header("OriginalFileName", ATTACHMENT_7_PNG)
-                .header("Content-Length", equalTo(document1Size))
             .when()
                 .get(documentContentUrl1)
             .asByteArray()
