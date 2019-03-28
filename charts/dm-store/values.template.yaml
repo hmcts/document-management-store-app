@@ -25,17 +25,13 @@ java:
       secretRef: container-secret-${SERVICE_NAME}-dm-docstore
       key: containerName
   environment:
-    POSTGRES_HOST: ${SERVICE_NAME}-postgresql
-    POSTGRES_PORT: '5432'
-    POSTGRES_DATABASE: 'evidence'
-    POSTGRES_USER: 'evidence'
-    POSTGRES_PASSWORD: 'evidence'
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
     # db
     SPRING_DATASOURCE_URL: 'jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/evidence'
     SPRING_DATASOURCE_USERNAME: 'evidence'
     SPRING_DATASOURCE_PASSWORD: 'evidence'
+
 
     MAX_FILE_SIZE: '500MB'
 
@@ -58,6 +54,9 @@ java:
     LOG_LEVEL_SPRING_WEB: INFO
     LOG_LEVEL_DM: INFO
     SHOW_SQL: 'false'
+    JSON_CONSOLE_PRETTY_PRINT: 'false'
+    ROOT_APPENDER: JSON_CONSOLE
+
 
     ENDPOINTS_HEALTH_SENSITIVE: 'true'
     ENDPOINTS_INFO_SENSITIVE: 'true'
@@ -89,7 +88,6 @@ java:
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
     #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
-    #STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: ${azurerm_storage_container.document_container.name}
 
 blobstorage:
   resourceGroup: dm-store-aks
