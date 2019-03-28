@@ -17,16 +17,12 @@ RUN mkdir -p application/src/main/resources/META-INF \
 RUN gradle installDist
 
 #### Actual DockerFile
-FROM hmcts/cnp-java-base:openjdk-8u181-jre-alpine3.8-1.0
+FROM hmcts/cnp-java-base:openjdk-8u191-jre-alpine3.9-1.0
 LABEL maintainer="https://github.com/hmcts/document-management-store-api"
-
-ENV APP dm-store.jar
-ENV APPLICATION_TOTAL_MEMORY 940M
-ENV APPLICATION_SIZE_ON_DISK_IN_MB 80
 
 ENV JAVA_OPTS ""
 
-COPY --from=builder /home/gradle/app/build/libs/$APP /opt/app/
+COPY --from=builder /home/gradle/app/build/libs/dm-store.jar /opt/app/
 
 HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" curl --silent --fail http://localhost:8080/health
 
