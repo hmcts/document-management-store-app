@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    propertiesvolume:
+      prefixed: false
+      paths: /mnt/secrets/ccd
+      aliases:
+        dm-store-POSTGRES-PASS: spring.datasoruce.password
+        dm-store-storage-account-primary-connection-string: STORAGEACCOUNT_PRIMARY_CONNECTION_STRING
+        dm-store-storage-account-secondary-connection-string: STORAGEACCOUNT_SECONDARY_CONNECTION_STRING
+
