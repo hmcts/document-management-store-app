@@ -130,4 +130,9 @@ Another long cpe again
         <gav regex="true">^org\.springframework\.boot:spring-boot-starter-batch:.*$</gav>
         <cve>CVE-2019-3774</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[ https://github.com/jeremylong/DependencyCheck/issues/1827 ]]></notes>
+        <gav regex="true">^org\.springframework.*:*:.*$</gav>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
 </suppressions>
