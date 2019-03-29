@@ -1,14 +1,10 @@
 postgresql:
+  enabled: true
   postgresqlUsername: evidence
   postgresqlPassword: evidence
   postgresqlDatabase: evidence
   service:
     port: 5432
-  persistence:
-    enabled: false
-tags:
-  postgresql-pod: true
-  blobstorage: true
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
@@ -16,13 +12,13 @@ java:
   livenessPath: '/health'
   secrets:
     STORAGE_ACCOUNT_NAME:
-      secretRef: storage-secret-${SERVICE_NAME}
+      secretRef: storage-secret-${SERVICE_NAME:-dm-store}
       key: storageAccountName
     STORAGE_ACCOUNT_KEY:
-      secretRef: storage-secret-${SERVICE_NAME}
+      secretRef: storage-secret-${SERVICE_NAME:-dm-store}
       key: accessKey
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-      secretRef: container-secret-${SERVICE_NAME}-dm-docstore
+      secretRef: container-secret-${SERVICE_NAME:-dm-store}-dm-docstore
       key: containerName
   environment:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
@@ -90,9 +86,11 @@ java:
     #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
 
 blobstorage:
+  enabled: true
   resourceGroup: dm-store-aks
   teamName: "CCD"
   location: uksouth
+  secretNameSuffix: ${SERVICE_NAME:-dm-store}
   setup:
     containers:
       - dm-docstore
