@@ -12,13 +12,13 @@ java:
   livenessPath: '/health'
   secrets:
     STORAGE_ACCOUNT_NAME:
-      secretRef: storage-secret-${SERVICE_NAME:-dm-store}
+      secretRef: storage-secret-{{ .Release.Name }}
       key: storageAccountName
     STORAGE_ACCOUNT_KEY:
-      secretRef: storage-secret-${SERVICE_NAME:-dm-store}
+      secretRef: storage-secret-{{ .Release.Name }}
       key: accessKey
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-      secretRef: container-secret-${SERVICE_NAME:-dm-store}-dm-docstore
+      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
       key: containerName
   environment:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
@@ -90,7 +90,6 @@ blobstorage:
   resourceGroup: dm-store-aks
   teamName: "CCD"
   location: uksouth
-  secretNameSuffix: ${SERVICE_NAME:-dm-store}
   setup:
     containers:
       - dm-docstore
