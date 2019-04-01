@@ -130,4 +130,8 @@ Another long cpe again
         <gav regex="true">^org\.springframework\.boot:spring-boot-starter-batch:.*$</gav>
         <cve>CVE-2019-3774</cve>
     </suppress>
+    <suppress>
+        <notes><![CDATA[ spring-security-crypto-5.1.3.RELEASE.jar (pkg:maven/org.springframework.security/spring-security-crypto@5.1.3.RELEASE, cpe:2.3:a:pivotal_software:spring_security:5.1.3:*:*:*:*:*:*:*)  ]]></notes>
+        <cve>CVE-2018-1258</cve>
+    </suppress>
 </suppressions>
