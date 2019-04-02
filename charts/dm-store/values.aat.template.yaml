@@ -13,3 +13,5 @@ java:
 
     # Toggles
     ENABLE_DOCUMENT_AND_METADATA_UPLOAD: 'false'
+postgresql:
+  enabled: true
