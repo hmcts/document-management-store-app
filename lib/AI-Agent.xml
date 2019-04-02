@@ -7,5 +7,44 @@
             <JDBC enabled="true"/>
             <MaxStatementQueryLimitInMS>1000</MaxStatementQueryLimitInMS>
         </BuiltIn>
+        <Class name="uk.gov.hmcts.dm.controller.BlobStorageMigrationController">
+            <Method name="batchMigrate" reportCaughtExceptions="true"/>
+            <Method name="getMigrateProgressReport" reportCaughtExceptions="true"/>
+            <Method name="migrateDocument" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.controller.DocumentContentVersionController">
+            <Method name="addDocumentContentVersion" reportCaughtExceptions="true"/>
+            <Method name="addDocumentContentVersionForVersionsMappingNotPresent" reportCaughtExceptions="true"/>
+            <Method name="getDocumentContentVersionDocument" reportCaughtExceptions="true"/>
+            <Method name="getDocumentContentVersionDocumentBinary" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.controller.DocumentThumbnailController">
+            <Method name="getDocumentContentVersionDocumentPreviewThumbnail" reportCaughtExceptions="true"/>
+            <Method name="getPreviewThumbnail" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.controller.FolderController">
+            <Method name="addDocuments" reportCaughtExceptions="true"/>
+            <Method name="delete" reportCaughtExceptions="true"/>
+            <Method name="get" reportCaughtExceptions="true"/>
+            <Method name="post" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentAuditController">
+            <Method name="findAudits" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentController">
+            <Method name="createFrom" reportCaughtExceptions="true"/>
+            <Method name="getBinary" reportCaughtExceptions="true"/>
+            <Method name="getMetaData" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentUpdateController">
+            <Method name="updateDocument" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentDeleteController">
+            <Method name="deleteDocument" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentSearchController">
+            <Method name="search" reportCaughtExceptions="true"/>
+            <Method name="searchOwned" reportCaughtExceptions="true"/>
+        </Class>
     </Instrumentation>
 </ApplicationInsightsAgent>
