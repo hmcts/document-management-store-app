@@ -31,14 +31,14 @@ azure:
 ```
 
 ```bash
-#Cloning repo and running though docker
+# Cloning repo and running though docker
 git clone https://github.com/hmcts/document-management-store-app.git
 cd document-management-store-app/
 ./buildrundm-docker.sh
 ```
 
 ```bash
-#Run this script to aquire IDAM credentials required for DM API.
+# Run this script to aquire IDAM credentials required for DM API.
 ./idam.sh
 ```
 
