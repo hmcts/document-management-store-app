@@ -5,4 +5,4 @@ dependencies:
   - name: blobstorage
     version: ~0.0.3
     repository: '@hmcts'
-    condition: blobstorage.enabled
+    condition: dm-store.blobstorage.enabled
