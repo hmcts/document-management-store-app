@@ -1,7 +1,7 @@
 java_opts = ""
 
 // Webapp
-capacity = "2"
+capacity = "4"
 asp_name = "dm-store-prod"
 asp_rg = "dm-store-prod"
 
