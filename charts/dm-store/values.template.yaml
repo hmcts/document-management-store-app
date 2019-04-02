@@ -83,8 +83,6 @@ java:
     postgresqlDatabase: evidence
     service:
       port: 5432
-postgresql:
-  enabled: true
 blobstorage:
   enabled: true
   resourceGroup: dm-store-aks
