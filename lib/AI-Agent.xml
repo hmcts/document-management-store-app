@@ -151,5 +151,8 @@
         <Class name="uk.gov.hmcts.dm.security.PermissionEvaluatorImpl">
             <Method name="hasPermission" reportCaughtExceptions="true"/>
         </Class>
+        <Class name="uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator">
+            <Method name="hasPermission" reportCaughtExceptions="true"/>
+        </Class>
     </Instrumentation>
 </ApplicationInsightsAgent>
