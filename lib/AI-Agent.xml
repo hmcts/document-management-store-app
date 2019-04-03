@@ -148,5 +148,8 @@
             <Method name="saveItemsToBucket" reportCaughtExceptions="true"/>
             <Method name="updateStoredDocument" reportCaughtExceptions="true"/>
         </Class>
+        <Class name="uk.gov.hmcts.dm.security.PermissionEvaluatorImpl">
+            <Method name="hasPermission" reportCaughtExceptions="true"/>
+        </Class>
     </Instrumentation>
 </ApplicationInsightsAgent>
