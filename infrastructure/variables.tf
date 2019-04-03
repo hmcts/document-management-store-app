@@ -153,7 +153,7 @@ variable "enable_ttl" {
 }
 
 variable "enable_thumbnail" {
-    default = "true"
+    default = "false"
 }
 
 variable "enable_azure_storage_container" {

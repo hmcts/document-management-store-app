@@ -27,7 +27,7 @@ enable_document_and_metadata_upload = "false"
 enable_folder_api = "true"
 enable_delete = "true"
 enable_ttl  = "false"
-enable_thumbnail = "true"
+enable_thumbnail = "false"
 
 ////////////////////////////////////////////////
 //// Whitelists
