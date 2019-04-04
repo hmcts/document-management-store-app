@@ -177,7 +177,7 @@
         </Class>
         <Class name="org.springframework.security.web.session.SessionManagementFilter">
             <Method name="doFilter" reportCaughtExceptions="true"/>
-        </Class>AnonymousAuthenticationFilter
+        </Class>
         <Class name="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
             <Method name="doFilter" reportCaughtExceptions="true"/>
         </Class>
@@ -193,7 +193,7 @@
         <Class name="org.springframework.security.web.header.HeaderWriterFilter">
             <Method name="doFilterInternal" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="org.springframework.security.web.context.SecurityContextPersistenceFilter.">
+        <Class name="org.springframework.security.web.context.SecurityContextPersistenceFilter">
             <Method name="doFilter" reportCaughtExceptions="true"/>
         </Class>
         <Class name="org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter">
