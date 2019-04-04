@@ -177,7 +177,7 @@
         </Class>
         <Class name="org.springframework.security.web.session.SessionManagementFilter">
             <Method name="doFilter" reportCaughtExceptions="true"/>
-        </Class>AnonymousAuthenticationFilter
+        </Class>
         <Class name="org.springframework.security.web.authentication.AnonymousAuthenticationFilter">
             <Method name="doFilter" reportCaughtExceptions="true"/>
         </Class>
