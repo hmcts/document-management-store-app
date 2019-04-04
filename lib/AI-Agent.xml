@@ -208,5 +208,8 @@
         <Class name="org.springframework.boot.web.filter.OrderedHiddenHttpMethodFilter">
             <Method name="doFilterInternal" reportCaughtExceptions="true"/>
         </Class>
+        <Class name="uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter">
+            <Method name="doFilter" reportCaughtExceptions="true"/>
+        </Class>
     </Instrumentation>
 </ApplicationInsightsAgent>
