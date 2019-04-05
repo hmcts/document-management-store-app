@@ -18,7 +18,7 @@ import uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter;
 public class DmStoreAppInsightsConfig {
 
     @Bean
-    public WebRequestTrackingFilter webRequestTrackingFilter3(
+    public WebRequestTrackingFilter webRequestTrackingFilterForDmStore(
             @Value("${spring.application.name:application}") String applicationName) {
         return new WebRequestTrackingFilter(applicationName);
     }
