@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 
 import com.microsoft.applicationinsights.web.internal.WebRequestTrackingFilter;
 
@@ -37,7 +36,7 @@ public class DmStoreAppInsightsConfig {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(webRequestTrackingFilter);
         registration.addUrlPatterns("/*");
-        registration.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
+        registration.setOrder(HIGHEST_PRECEDENCE + 1);
         return registration;
     }
 }
