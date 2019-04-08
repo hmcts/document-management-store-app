@@ -11,5 +11,5 @@ database_storage_mb = "509952"
 ////////////////////////////////////////////////
 blobstore_migrate_ccd_public_key_required = "true"
 
-idam_api_url = "https://idam-api-idam-sprod.service.core-compute-idam-sprod.internal"
+idam_api_url = "http://idam-api-idam-sprod.service.core-compute-idam-sprod.internal"
 
