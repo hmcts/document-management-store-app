@@ -1,6 +1,5 @@
 java:
-  image: ${IMAGE_NAME}
-  ingressHost: ${SERVICE_FQDN}
+  image: 'https://hmcts.azurecr.io/hmcts/dm-store:latest'
   applicationPort: '4603'
   livenessPath: '/health'
   secrets:
@@ -17,7 +16,7 @@ java:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
     # db
-    SPRING_DATASOURCE_URL: 'jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/evidence'
+    SPRING_DATASOURCE_URL: 'jdbc:postgresql://{{ .Release.Name }}-postgresql:5432/evidence'
     SPRING_DATASOURCE_USERNAME: 'evidence'
     SPRING_DATASOURCE_PASSWORD: 'evidence'
 

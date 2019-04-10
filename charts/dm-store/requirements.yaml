@@ -1,6 +1,6 @@
 dependencies:
   - name: java
-    version: ~2.0.2
+    version: ~2.0.4
     repository: '@hmcts'
   - name: blobstorage
     version: ~0.0.3
