@@ -1,0 +1,17 @@
+java:
+  image: ${IMAGE_NAME}
+  ingressHost: ${SERVICE_FQDN}
+  environment:
+    # Endpoints
+    IDAM_USER_BASE_URI: https://preprod-idamapi.reform.hmcts.net:3511
+    IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+
+    # logging vars & healthcheck
+    REFORM_ENVIRONMENT: aat
+    PACKAGES_ENVIRONMENT: aat
+
+postgresql:
+  enabled: true
+dm-store:
+  blobstorage:
+    enabled: true
