@@ -7,7 +7,7 @@ ENV JAVA_OPTS ""
 
 COPY build/libs/dm-store.jar /opt/app/
 
-HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" curl --silent --fail http://localhost:8080/health
+HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" wget -q --spider http://localhost:8080/health || exit 1
 
 EXPOSE 8080 5005
 
