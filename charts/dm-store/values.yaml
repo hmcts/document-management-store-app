@@ -1,34 +1,22 @@
-postgresql:
-  postgresqlUsername: evidence
-  postgresqlPassword: evidence
-  postgresqlDatabase: evidence
-  service:
-    port: 5432
-  persistence:
-    enabled: false
-tags:
-  postgresql-pod: true
-  blobstorage: true
 java:
-  image: ${IMAGE_NAME}
-  ingressHost: ${SERVICE_FQDN}
+  image: 'https://hmcts.azurecr.io/hmcts/dm-store:latest'
   applicationPort: '4603'
   livenessPath: '/health'
   secrets:
     STORAGE_ACCOUNT_NAME:
-      secretRef: storage-secret-${SERVICE_NAME}
+      secretRef: storage-secret-{{ .Release.Name }}
       key: storageAccountName
     STORAGE_ACCOUNT_KEY:
-      secretRef: storage-secret-${SERVICE_NAME}
+      secretRef: storage-secret-{{ .Release.Name }}
       key: accessKey
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-      secretRef: container-secret-${SERVICE_NAME}-dm-docstore
+      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
       key: containerName
   environment:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
     # db
-    SPRING_DATASOURCE_URL: 'jdbc:postgresql://${SERVICE_NAME}-postgresql:5432/evidence'
+    SPRING_DATASOURCE_URL: 'jdbc:postgresql://{{ .Release.Name }}-postgresql:5432/evidence'
     SPRING_DATASOURCE_USERNAME: 'evidence'
     SPRING_DATASOURCE_PASSWORD: 'evidence'
 
@@ -88,7 +76,12 @@ java:
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
     #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
-
+  postgresql:
+    postgresqlUsername: evidence
+    postgresqlPassword: evidence
+    postgresqlDatabase: evidence
+    service:
+      port: 5432
 blobstorage:
   resourceGroup: dm-store-aks
   teamName: "CCD"
@@ -96,3 +89,6 @@ blobstorage:
   setup:
     containers:
       - dm-docstore
+dm-store:
+  blobstorage:
+    enabled: false

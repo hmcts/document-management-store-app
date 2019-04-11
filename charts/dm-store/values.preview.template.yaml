@@ -9,3 +9,9 @@ java:
     # logging vars & healthcheck
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
+
+postgresql:
+  enabled: true
+dm-store:
+  blobstorage:
+    enabled: true
