@@ -21,6 +21,20 @@ It uses:
 ### Plugins
 * [lombok plugin](https://plugins.jetbrains.com/idea/plugin/6317-lombok-plugin) - Lombok IDEA plugin
 
+#### Environment variables
+The following environment variables are required:
+
+| Name | Default | Description |
+|------|---------|-------------|
+| IDAM_USER_BASE_URI | - | Base URL for IdAM's User API service (idam-app). `http://localhost:4501` for the dockerised local instance or tunneled `dev` instance. |
+| IDAM_S2S_BASE_URI | - | Base URL for IdAM's S2S API service (service-auth-provider). `http://localhost:4502` for the dockerised local instance or tunneled `dev` instance. |
+| MAX_FILE_SIZE | 500MB | Max file size |
+
+**Note:** The MAX_FILE_SIZE enforces limit on the document upload in the document management backend service. 
+Additionally, the max request content length (including file sizes) need to be configured for the IIS web server (on 
+Azure) via *maxAllowedContentLength* property for request filter in **web.config** (config file within source 
+repository).
+
 ## Quickstart
 ```bash
 # Get the connection string for Azure Blob Store and put it in place of getOneFromPortalAzure in application.yaml
