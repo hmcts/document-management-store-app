@@ -21,7 +21,7 @@ java:
     SPRING_DATASOURCE_PASSWORD: 'evidence'
 
 
-    MAX_FILE_SIZE: '500MB'
+    MAX_FILE_SIZE: '100MB'
 
       # idam
     IDAM_USER_BASE_URI: 'https://preprod-idamapi.reform.hmcts.net:3511'
