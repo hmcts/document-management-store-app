@@ -135,4 +135,8 @@ Another long cpe again
         <gav regex="true">^org\.springframework.*:*:.*$</gav>
         <cve>CVE-2018-1258</cve>
     </suppress>
+    <suppress>
+        <notes>Temporarily suppress spring framework CVE. Will be removed with RDM-2506 spring boot upgrade</notes>
+        <cve>CVE-2019-3795</cve>
+    </suppress>
 </suppressions>
