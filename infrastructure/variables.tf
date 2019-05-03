@@ -201,7 +201,7 @@ variable "case_worker_roles" {
 // Addtional
 ////////////////////////////////////////////////
 variable "max_file_size_in_mb" {
-    default = "500"
+    default = "100"
 }
 
 variable "common_tags" {
