@@ -159,7 +159,7 @@ dependencies {
     }
 
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.0.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.0.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.7.RELEASE'
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
 
