@@ -1,0 +1,45 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="rdm-4841-documentroles" author="dwayne.bailey@hmcts.net">
+        <createIndex indexName="idx__documentroles_documentroles_id"
+                     schemaName="public"
+                     tableName="documentroles">
+            <column name="documentroles_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="rdm-4841-storeddocument" author="dwayne.bailey@hmcts.net">
+        <createIndex indexName="idx__storeddocument_folder_id"
+                     schemaName="public"
+                     tableName="storeddocument">
+            <column name="folder_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="rdm-4841-documentcontent" author="dwayne.bailey@hmcts.net">
+        <createIndex indexName="idx__documentcontent_documentcontentversion_id"
+                     schemaName="public"
+                     tableName="documentcontent">
+            <column name="documentcontentversion_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="rdm-4841-documentcontentversion-1" author="dwayne.bailey@hmcts.net">
+        <createIndex indexName="idx__documentcontentversion_storeddocument_id"
+                     schemaName="public"
+                     tableName="documentcontentversion">
+            <column name="storeddocument_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="rdm-4841-documentcontentversion-2" author="dwayne.bailey@hmcts.net">
+        <createIndex indexName="idx__documentcontentversion_createdon"
+                     schemaName="public"
+                     tableName="documentcontentversion">
+            <column name="createdon" descending="true"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
