@@ -2,8 +2,8 @@ java_opts = ""
 
 // Webapp
 capacity = "2"
-asp_name = "dm-store-sprod"
-asp_rg = "dm-store-sprod"
+asp_name = "dm-store-perftest"
+asp_rg = "dm-store-perftest"
 
 // Database
 database_storage_mb = "509952"
@@ -11,7 +11,7 @@ database_storage_mb = "509952"
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
-idam_api_url = "http://idam-api-idam-sprod.service.core-compute-idam-sprod.internal"
+idam_api_url = "http://idam-api-idam-perftest.service.core-compute-idam-perftest.internal"
 
 ////////////////////////////////////////////////
 // Logging
