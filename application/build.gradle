@@ -3,7 +3,7 @@ plugins {
     id 'checkstyle'
     id 'pmd'
     id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-    id 'org.springframework.boot' version '1.5.19.RELEASE'
+    id 'org.springframework.boot' version '1.5.21.RELEASE'
     id 'org.owasp.dependencycheck' version '3.3.2'
     id 'se.patrikerdes.use-latest-versions' version '0.2.7'
     id 'com.github.ben-manes.versions' version '0.20.0'
@@ -79,6 +79,10 @@ dependencyCheck {
     failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
     suppressionFile = "$rootDir/dependency-check-suppressions.xml"
     outputDirectory = "$rootDir/build/reports"
+    analyzers {
+        // Disable scanning of .NET related binaries
+        assemblyEnabled = false
+    }
 }
 
 repositories {
