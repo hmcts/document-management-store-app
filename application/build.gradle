@@ -79,6 +79,10 @@ dependencyCheck {
     failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
     suppressionFile = "$rootDir/dependency-check-suppressions.xml"
     outputDirectory = "$rootDir/build/reports"
+    analyzers {
+        // Disable scanning of .NET related binaries
+        assemblyEnabled = false
+    }
 }
 
 repositories {
