@@ -1,6 +1,13 @@
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  secrets:
+    STORAGE_ACCOUNT_NAME:
+      disabled: true
+    STORAGE_ACCOUNT_KEY:
+      disabled: true
+    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
+      disabled: true
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://preprod-idamapi.reform.hmcts.net:3511
@@ -10,8 +17,11 @@ java:
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
 
+    ENABLE_AZURE_STORAGE_CONTAINER: 'false'
+    POSTGRES_STORAGE_ENABLED: 'true'
+
 postgresql:
   enabled: true
 dm-store:
   blobstorage:
-    enabled: true
+    enabled: false
