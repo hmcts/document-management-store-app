@@ -79,7 +79,7 @@ java:
   postgresql:
     initdbScripts:
       init.sql: |-
-        CREATE DATABASE "evidence" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+        CREATE DATABASE "evidence" WITH OWNER = evidence ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
     persistence:
       enabled: false
     postgresqlUsername: evidence
