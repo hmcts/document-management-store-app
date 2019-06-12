@@ -17,6 +17,7 @@ java:
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
 
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=AAAAAAAAAAAAAAAA;AccountKey=AAAAAAAAAAAAAAAA;EndpointSuffix=core.windows.net'
     ENABLE_AZURE_STORAGE_CONTAINER: 'false'
     POSTGRES_STORAGE_ENABLED: 'true'
 
