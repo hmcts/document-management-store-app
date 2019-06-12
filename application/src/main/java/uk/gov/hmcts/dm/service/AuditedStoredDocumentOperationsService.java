@@ -66,7 +66,6 @@ public class AuditedStoredDocumentOperationsService {
             storedDocumentService.addStoredDocumentVersion(storedDocument, file);
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
-
         return documentContentVersion;
     }
 

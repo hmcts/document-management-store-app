@@ -87,6 +87,9 @@ public class DocumentContentVersionController {
                     auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
                 );
 
+            //close outside any transaction boundaries
+            storedDocumentService.closeBlobInputStream(storedDocument.getMostRecentDocumentContentVersion());
+
             return ResponseEntity
                 .created(resource.getUri())
                 .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)

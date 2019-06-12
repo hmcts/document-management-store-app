@@ -26,6 +26,7 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +42,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")
 public class StoredDocumentController {
+
+    @Autowired
+    private StoredDocumentService storedDocumentService;
 
     @Autowired
     private DocumentContentVersionService documentContentVersionService;
@@ -76,6 +80,10 @@ public class StoredDocumentController {
         } else {
             List<StoredDocument> storedDocuments =
                     auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
+            //close outside any transaction boundaries
+            storedDocuments.stream().forEach(
+                d -> storedDocumentService.closeBlobInputStream(d.getMostRecentDocumentContentVersion())
+            );
             return ResponseEntity
                     .ok()
                     .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)

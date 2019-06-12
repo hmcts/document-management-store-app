@@ -89,10 +89,8 @@ public class StoredDocumentService {
                                                                                              azureStorageConfiguration
                                                                                                  .isPostgresBlobStorageEnabled());
             storedDocument.getDocumentContentVersions().add(documentContentVersion);
-
             save(storedDocument);
             storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
-            closeBlobInputStream(documentContentVersion);
             return storedDocument;
         }).collect(Collectors.toList());
 
@@ -125,7 +123,6 @@ public class StoredDocumentService {
             document.getDocumentContentVersions().add(documentContentVersion);
             save(document);
             storeInAzureBlobStorage(document, documentContentVersion, file);
-            closeBlobInputStream(documentContentVersion);
             return document;
         }).collect(Collectors.toList());
 
@@ -146,8 +143,6 @@ public class StoredDocumentService {
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         documentContentVersionRepository.save(documentContentVersion);
         storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
-        closeBlobInputStream(documentContentVersion);
-
         return documentContentVersion;
     }
 
@@ -199,7 +194,7 @@ public class StoredDocumentService {
      * @throws HibernateException If the <code>Blob</code>'s stream cannot be accessed
      * @throws UncheckedIOException If the stream cannot be closed
      */
-    private void closeBlobInputStream(@NotNull final DocumentContentVersion documentContentVersion) {
+    public void closeBlobInputStream(@NotNull final DocumentContentVersion documentContentVersion) {
         try {
             if (documentContentVersion.getDocumentContent() != null) {
                 documentContentVersion.getDocumentContent().getData().getBinaryStream().close();

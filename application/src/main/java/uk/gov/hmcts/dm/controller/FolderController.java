@@ -48,6 +48,10 @@ public class FolderController {
         }
 
         storedDocumentService.saveItemsToBucket(existingFolder, files);
+        //close only after transaction committed
+        existingFolder.getStoredDocuments().stream().forEach(
+            d -> storedDocumentService.closeBlobInputStream(d.getMostRecentDocumentContentVersion())
+        );
         return ResponseEntity.noContent().build();
     }
 
