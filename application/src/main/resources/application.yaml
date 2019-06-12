@@ -70,10 +70,8 @@ security:
 
 logging:
   level:
-    org.springframework: ${LOG_LEVEL_SPRING_WEB:INFO}
+    org.springframework.web: ${LOG_LEVEL_SPRING_WEB:INFO}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:INFO}
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type: TRACE
 
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:false}
