@@ -1,13 +1,27 @@
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+
+  # Postgres Secrets
+#  secrets:
+#    STORAGE_ACCOUNT_NAME:
+#      disabled: true
+#    STORAGE_ACCOUNT_KEY:
+#      disabled: true
+#    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
+#      disabled: true
+  # Azure Blob Secrets
   secrets:
     STORAGE_ACCOUNT_NAME:
-      disabled: true
+      secretRef: storage-secret-${SERVICE_NAME}
+      key: storageAccountName
     STORAGE_ACCOUNT_KEY:
-      disabled: true
+      secretRef: storage-secret-${SERVICE_NAME}
+      key: accessKey
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-      disabled: true
+      secretRef: container-secret-${SERVICE_NAME}-dm-docstore
+      key: containerName
+
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://preprod-idamapi.reform.hmcts.net:3511
@@ -17,12 +31,17 @@ java:
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
 
-    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=AAAAAAAAAAAAAAAA;AccountKey=AAAAAAAAAAAAAAAA;EndpointSuffix=core.windows.net'
-    ENABLE_AZURE_STORAGE_CONTAINER: 'false'
-    POSTGRES_STORAGE_ENABLED: 'true'
+    # for Postgres
+#    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=AAAAAAAAAAAAAAAA;AccountKey=AAAAAAAAAAAAAAAA;EndpointSuffix=core.windows.net'
+#    ENABLE_AZURE_STORAGE_CONTAINER: 'false'
+#    POSTGRES_STORAGE_ENABLED: 'true'
+    # for Azure
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net'
+    ENABLE_AZURE_STORAGE_CONTAINER: 'true'
+    POSTGRES_STORAGE_ENABLED: 'false'
 
 postgresql:
   enabled: true
 dm-store:
   blobstorage:
-    enabled: false
+    enabled: true # for Postgres: false
