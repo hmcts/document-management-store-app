@@ -20,21 +20,15 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private RequestAuthorizer<Service> serviceRequestAuthorizer;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    private AuthCheckerServiceOnlyFilter serviceOnlyFilter;
+    private DmSecurityFilter dmSecurityFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        serviceOnlyFilter.setAuthenticationManager(authenticationManager());
 
         http.headers().cacheControl().disable();
 
         http
-            .addFilter(serviceOnlyFilter)
+            .addFilter(dmSecurityFilter)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
             .csrf().disable()
             .formLogin().disable()
@@ -60,12 +54,4 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/");
     }
 
-    @Autowired
-    public void setServiceOnlyFilter(Optional<AuthCheckerServiceOnlyFilter> serviceOnlyFilter) {
-        this.serviceOnlyFilter = serviceOnlyFilter.orElseGet(() -> {
-            AuthCheckerServiceOnlyFilter filter = new AuthCheckerServiceOnlyFilter(serviceRequestAuthorizer);
-            filter.setAuthenticationManager(authenticationManager);
-            return filter;
-        });
-    }
 }
