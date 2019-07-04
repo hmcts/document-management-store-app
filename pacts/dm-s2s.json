@@ -1,0 +1,45 @@
+{
+  "provider": {
+    "name": "s2s"
+  },
+  "consumer": {
+    "name": "dm"
+  },
+  "interactions": [
+    {
+      "description": "ExampleJavaConsumerPactRuleTest test interaction",
+      "request": {
+        "method": "GET",
+        "path": "/details",
+        "headers": {
+          "ServiceAuthorization": "鱣罷⼚"
+        },
+        "matchingRules": {
+          "header": {
+            "ServiceAuthorization": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": ".+"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "em_gw"
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "3.6.10"
+    }
+  }
+}

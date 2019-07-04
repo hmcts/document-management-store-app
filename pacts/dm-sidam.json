@@ -1,0 +1,100 @@
+{
+  "provider": {
+    "name": "sidam"
+  },
+  "consumer": {
+    "name": "dm"
+  },
+  "interactions": [
+    {
+      "description": "a request for a token",
+      "request": {
+        "method": "GET",
+        "path": "/details",
+        "headers": {
+          "Authorization": "큄딕"
+        },
+        "matchingRules": {
+          "header": {
+            "Authorization": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": ".+"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "roles": [
+            "SOLICITOR",
+            "SOLICITOR"
+          ],
+          "id": 42
+        },
+        "matchingRules": {
+          "header": {
+            "Content-Type": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "application/json"
+                }
+              ],
+              "combine": "AND"
+            }
+          },
+          "body": {
+            "$.id": {
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.roles": {
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ],
+              "combine": "AND"
+            },
+            "$.roles[*]": {
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "TESTER|DEVELOPER|SOLICITOR"
+                }
+              ],
+              "combine": "AND"
+            }
+          }
+        }
+      },
+      "providerStates": [
+        {
+          "name": "provider returns a SIDAM user"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "3.0.0"
+    },
+    "pact-jvm": {
+      "version": "3.6.10"
+    }
+  }
+}
