@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+    idam:
+        image: pactfoundation/pact-stub-server
+        command: -p 8080 -f pacts/dm-sidam.json
+        ports:
+            - "4501:8080"
+        volumes:
+          - ./pacts:/app/pacts
+
+    s2s:
+        image: pactfoundation/pact-stub-server
+        command: -p 8080 -f pacts/dm-s2s.json
+        ports:
+            - "4502:8080"
+        volumes:
+            - ./pacts:/app/pacts
+
+volumes:
+  pacts:

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,9 +34,12 @@ public class SecurityUtilService {
     public String getCurrentlyAuthenticatedServiceName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
-            if (userDetails != null) {
+            if (authentication instanceof ServiceDetails) {
+                ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
                 return userDetails.getUsername();
+            } else if (authentication instanceof ServiceAndUserDetails) {
+                ServiceAndUserDetails serviceAndUserDetails = (ServiceAndUserDetails) authentication.getPrincipal();
+                return serviceAndUserDetails.getServicename();
             }
         }
         return null;

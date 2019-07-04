@@ -6,6 +6,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import uk.gov.hmcts.reform.auth.checker.spring.serviceanduser.ServiceAndUserDetails;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 @Configuration
@@ -23,11 +24,15 @@ class AuditorAwareImpl implements AuditorAware<String> {
     public String getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
-            return userDetails.getUsername();
-        } else {
-            return null;
+            if (authentication instanceof ServiceDetails) {
+                ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
+                return userDetails.getUsername();
+            } else if (authentication instanceof ServiceAndUserDetails) {
+                ServiceAndUserDetails serviceAndUserDetails = (ServiceAndUserDetails) authentication.getPrincipal();
+                return serviceAndUserDetails.getUsername();
+            }
         }
+        return null;
     }
 
 }
