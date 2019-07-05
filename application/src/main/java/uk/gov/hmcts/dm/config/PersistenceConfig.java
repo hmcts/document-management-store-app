@@ -24,10 +24,10 @@ class AuditorAwareImpl implements AuditorAware<String> {
     public String getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            if (authentication instanceof ServiceDetails) {
+            if (authentication.getPrincipal() instanceof ServiceDetails) {
                 ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
                 return userDetails.getUsername();
-            } else if (authentication instanceof ServiceAndUserDetails) {
+            } else if (authentication.getPrincipal() instanceof ServiceAndUserDetails) {
                 ServiceAndUserDetails serviceAndUserDetails = (ServiceAndUserDetails) authentication.getPrincipal();
                 return serviceAndUserDetails.getUsername();
             }
