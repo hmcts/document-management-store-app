@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,11 +44,63 @@ public class SecurityUtilServiceTests {
         Assert.assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
 
+
+    @Test
+    public void testSuccessfulRetrievalOfUsernameFromSecurityContextWhenServiceOnlyAuthWithUserHeaders() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        ServiceDetails serviceDetails = mock(ServiceDetails.class);
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        when(request.getHeader(SecurityUtilService.USER_ID_HEADER)).thenReturn("u");
+        when(request.getHeader(SecurityUtilService.USER_ROLES_HEADER)).thenReturn("R1, R2");
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(serviceDetails);
+        when(serviceDetails.getUsername()).thenReturn("x");
+
+        SecurityContextHolder.setContext(securityContext);
+
+        Assert.assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
+        Assert.assertEquals("u", securityUtilService.getUserId());
+        Assert.assertEquals("R1", securityUtilService.getUserRoles()[0]);
+        Assert.assertEquals("R2", securityUtilService.getUserRoles()[1]);
+    }
+
     @Test
     public void testSuccessfulRetrievalOfUsernameFromSecurityContextWhenUserAndServiceAuth() {
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
         ServiceAndUserDetails serviceAndUserDetails = mock(ServiceAndUserDetails.class);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(serviceAndUserDetails);
+        when(serviceAndUserDetails.getServicename()).thenReturn("x");
+        when(serviceAndUserDetails.getUsername()).thenReturn("u");
+        when(serviceAndUserDetails.getAuthorities())
+                .thenReturn(Stream.of(new SimpleGrantedAuthority("R")).collect(Collectors.toList()));
+
+        SecurityContextHolder.setContext(securityContext);
+
+        Assert.assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
+        Assert.assertEquals("u", securityUtilService.getUserId());
+        Assert.assertEquals("R", securityUtilService.getUserRoles()[0]);
+    }
+
+
+    @Test
+    public void testSuccessfulRetrievalOfUsernameFromSecurityContextWhenUserAndServiceAuthWithUserHeaders() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+        ServiceAndUserDetails serviceAndUserDetails = mock(ServiceAndUserDetails.class);
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        when(request.getHeader(SecurityUtilService.USER_ID_HEADER)).thenReturn("XXX");
+        when(request.getHeader(SecurityUtilService.USER_ROLES_HEADER)).thenReturn("YYY");
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(serviceAndUserDetails);

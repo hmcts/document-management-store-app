@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +42,7 @@ public class SecurityUtilService {
             if (authentication.getPrincipal() instanceof ServiceDetails) {
                 HttpServletRequest request = getCurrentRequest();
                 return request != null && request.getHeader(USER_ROLES_HEADER) != null
-                        ? request.getHeader(USER_ROLES_HEADER).split(",") : null;
+                        ? request.getHeader(USER_ROLES_HEADER).trim().split("\\s*,\\s*") : null;
             } else if (authentication.getPrincipal() instanceof ServiceAndUserDetails) {
                 ServiceAndUserDetails serviceAndUserDetails = (ServiceAndUserDetails) authentication.getPrincipal();
                 return serviceAndUserDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toArray(size -> new String[size]);
@@ -51,6 +52,7 @@ public class SecurityUtilService {
     }
 
     public String getCurrentlyAuthenticatedServiceName() {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             if (authentication.getPrincipal() instanceof ServiceDetails) {
