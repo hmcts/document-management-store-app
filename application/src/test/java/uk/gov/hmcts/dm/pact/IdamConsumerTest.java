@@ -15,6 +15,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 public class IdamConsumerTest {
@@ -25,18 +26,32 @@ public class IdamConsumerTest {
     @Pact(provider="sidam", consumer="dm")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
         return builder
-                .given("provider returns a SIDAM user")
-                .uponReceiving("a request for a token")
+                .given("provider returns a SIDAM user for a valid token")
+
+                .uponReceiving("0. Incorrect Authorization header")
                 .path("/details")
                 .method("GET")
-                .matchHeader("Authorization", ".+")
+                .headers("Authorization", "x")
+                .willRespondWith()
+                .status(403)
+
+                .uponReceiving("1. Valid auth token")
+                .path("/details")
+                .method("GET")
+                .matchHeader("Authorization", "(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)")
                 .willRespondWith()
                 .status(201)
-                .matchHeader("Content-Type", "application/json")
                 .body(new PactDslJsonBody()
                         .integerType("id", 42)
                         .minArrayLike("roles", 1, PactDslJsonRootValue.
-                                stringMatcher("TESTER|DEVELOPER|SOLICITOR", "SOLICITOR")))
+                                stringMatcher("CASEWORKER", "CASEWORKER")))
+
+                .uponReceiving("2. No auth token")
+                .path("/details")
+                .method("GET")
+                .willRespondWith()
+                .status(403)
+
                 .toPact();
     }
 
@@ -44,12 +59,28 @@ public class IdamConsumerTest {
     @PactVerification("sidam")
     public void runTest() {
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<>();
-
-        requestHeaders.add("Authorization", "some-access-token");
-
+        requestHeaders.add("Authorization", "x");
         HttpEntity<?> httpEntity = new HttpEntity<>(null, requestHeaders);
+        try {
+            new RestTemplate().exchange(mockProvider.getUrl() + "/details", HttpMethod.GET, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) {
+            Assert.assertEquals(403, e.getRawStatusCode());
+        }
+
+        requestHeaders = new LinkedMultiValueMap<>();
+        requestHeaders.add("Authorization", "abc.abc.abc");
+        httpEntity = new HttpEntity<>(null, requestHeaders);
         ResponseEntity r = new RestTemplate().exchange(mockProvider.getUrl() + "/details", HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(201, r.getStatusCodeValue());
+
+        requestHeaders = new LinkedMultiValueMap<>();
+        httpEntity = new HttpEntity<>(null, requestHeaders);
+        try {
+            new RestTemplate().exchange(mockProvider.getUrl() + "/details", HttpMethod.GET, httpEntity, String.class);
+        } catch (HttpStatusCodeException e) {
+            Assert.assertEquals(403, e.getRawStatusCode());
+        }
+
     }
 
 }

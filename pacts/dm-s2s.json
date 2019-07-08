@@ -7,12 +7,30 @@
   },
   "interactions": [
     {
-      "description": "ExampleJavaConsumerPactRuleTest test interaction",
+      "description": "0. Incorrect ServiceAuthorization header",
       "request": {
         "method": "GET",
         "path": "/details",
         "headers": {
-          "ServiceAuthorization": "⧳䨀"
+          "ServiceAuthorization": "x"
+        }
+      },
+      "response": {
+        "status": 403
+      },
+      "providerStates": [
+        {
+          "name": "provider returns a s2s service for a valid token"
+        }
+      ]
+    },
+    {
+      "description": "1. Valid auth token",
+      "request": {
+        "method": "GET",
+        "path": "/details",
+        "headers": {
+          "ServiceAuthorization": "jz17N5XJF0.0.00"
         },
         "matchingRules": {
           "header": {
@@ -20,7 +38,7 @@
               "matchers": [
                 {
                   "match": "regex",
-                  "regex": ".+"
+                  "regex": "(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)"
                 }
               ],
               "combine": "AND"
@@ -29,9 +47,29 @@
         }
       },
       "response": {
-        "status": 200,
+        "status": 201,
         "body": "em_gw"
-      }
+      },
+      "providerStates": [
+        {
+          "name": "provider returns a s2s service for a valid token"
+        }
+      ]
+    },
+    {
+      "description": "2. No auth token",
+      "request": {
+        "method": "GET",
+        "path": "/details"
+      },
+      "response": {
+        "status": 403
+      },
+      "providerStates": [
+        {
+          "name": "provider returns a s2s service for a valid token"
+        }
+      ]
     }
   ],
   "metadata": {
