@@ -12,7 +12,7 @@
         "method": "GET",
         "path": "/details",
         "headers": {
-          "Authorization": "큄딕"
+          "Authorization": "ᣇ"
         },
         "matchingRules": {
           "header": {

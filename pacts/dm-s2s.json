@@ -12,7 +12,7 @@
         "method": "GET",
         "path": "/details",
         "headers": {
-          "ServiceAuthorization": "鱣罷⼚"
+          "ServiceAuthorization": "⧳䨀"
         },
         "matchingRules": {
           "header": {

@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
@@ -21,14 +22,32 @@ public class SecurityUtilService {
 
 
     public String getUserId() {
-        HttpServletRequest request = getCurrentRequest();
-        return request != null ? request.getHeader(USER_ID_HEADER) : null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof ServiceDetails) {
+                HttpServletRequest request = getCurrentRequest();
+                return request != null ? request.getHeader(USER_ID_HEADER) : null;
+            } else if (authentication.getPrincipal() instanceof ServiceAndUserDetails) {
+                ServiceAndUserDetails serviceAndUserDetails = (ServiceAndUserDetails) authentication.getPrincipal();
+                return serviceAndUserDetails.getUsername();
+            }
+        }
+        return null;
     }
 
     public String[] getUserRoles() {
-        HttpServletRequest request = getCurrentRequest();
-        return request != null && request.getHeader(USER_ROLES_HEADER) != null
-            ? request.getHeader(USER_ROLES_HEADER).split(",") : null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof ServiceDetails) {
+                HttpServletRequest request = getCurrentRequest();
+                return request != null && request.getHeader(USER_ROLES_HEADER) != null
+                        ? request.getHeader(USER_ROLES_HEADER).split(",") : null;
+            } else if (authentication.getPrincipal() instanceof ServiceAndUserDetails) {
+                ServiceAndUserDetails serviceAndUserDetails = (ServiceAndUserDetails) authentication.getPrincipal();
+                return serviceAndUserDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toArray(size -> new String[size]);
+            }
+        }
+        return null;
     }
 
     public String getCurrentlyAuthenticatedServiceName() {
