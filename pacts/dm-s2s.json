@@ -7,12 +7,12 @@
   },
   "interactions": [
     {
-      "description": "0. Incorrect ServiceAuthorization header",
+      "description": "0. Incorrect Authorization header",
       "request": {
         "method": "GET",
         "path": "/details",
         "headers": {
-          "ServiceAuthorization": "x"
+          "Authorization": "x"
         }
       },
       "response": {
@@ -30,11 +30,11 @@
         "method": "GET",
         "path": "/details",
         "headers": {
-          "ServiceAuthorization": "jz17N5XJF0.0.00"
+          "Authorization": "r.c2C1N.0"
         },
         "matchingRules": {
           "header": {
-            "ServiceAuthorization": {
+            "Authorization": {
               "matchers": [
                 {
                   "match": "regex",

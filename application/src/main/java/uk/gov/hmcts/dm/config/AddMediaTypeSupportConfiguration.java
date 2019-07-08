@@ -37,6 +37,20 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
                         vendorSpecificTypes.add(V1MediaType.V1_FOLDER_MEDIA_TYPE);
                         vendorSpecificTypes.add(V1MediaType.V1_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE);
                         vendorSpecificTypes.add(V1MediaType.V1_AUDIT_ENTRY_MEDIA_TYPE);
+
+                        vendorSpecificTypes.add(V2MediaType.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE);
+                        vendorSpecificTypes.add(V2MediaType.V2_HAL_DOCUMENT_MEDIA_TYPE);
+                        vendorSpecificTypes.add(V2MediaType.V2_HAL_FOLDER_MEDIA_TYPE);
+                        vendorSpecificTypes.add(V2MediaType.V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE);
+                        vendorSpecificTypes.add(V2MediaType.V2_HAL_AUDIT_ENTRY_MEDIA_TYPE);
+
+                        vendorSpecificTypes.add(V2MediaType.V2_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE);
+
+                        vendorSpecificTypes.add(V2MediaType.V2_DOCUMENT_COLLECTION_MEDIA_TYPE);
+                        vendorSpecificTypes.add(V2MediaType.V2_DOCUMENT_MEDIA_TYPE);
+                        vendorSpecificTypes.add(V2MediaType.V2_FOLDER_MEDIA_TYPE);
+                        vendorSpecificTypes.add(V2MediaType.V2_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE);
+                        vendorSpecificTypes.add(V2MediaType.V2_AUDIT_ENTRY_MEDIA_TYPE);
                         ((MappingJackson2HttpMessageConverter) converter).setSupportedMediaTypes(vendorSpecificTypes);
                     }
                 });

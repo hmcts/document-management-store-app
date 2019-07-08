@@ -3,8 +3,6 @@ package uk.gov.hmcts.dm.pact;
 import au.com.dius.pact.consumer.Pact;
 import au.com.dius.pact.consumer.PactProviderRuleMk2;
 import au.com.dius.pact.consumer.PactVerification;
-import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
-import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.model.RequestResponsePact;
 import org.junit.Assert;
@@ -28,17 +26,17 @@ public class S2sConsumerTest {
         return builder
             .given("provider returns a s2s service for a valid token")
 
-            .uponReceiving("0. Incorrect ServiceAuthorization header")
+            .uponReceiving("0. Incorrect Authorization header")
             .path("/details")
             .method("GET")
-            .headers("ServiceAuthorization", "x")
+            .headers("Authorization", "x")
             .willRespondWith()
             .status(403)
 
             .uponReceiving("1. Valid auth token")
             .path("/details")
             .method("GET")
-            .matchHeader("ServiceAuthorization", "(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)")
+            .matchHeader("Authorization", "(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)")
             .willRespondWith()
             .status(201)
             .body("em_gw")
@@ -56,7 +54,7 @@ public class S2sConsumerTest {
     @PactVerification("s2s")
     public void runTest() {
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<>();
-        requestHeaders.add("ServiceAuthorization", "x");
+        requestHeaders.add("Authorization", "x");
         HttpEntity<?> httpEntity = new HttpEntity<>(null, requestHeaders);
         try {
             new RestTemplate().exchange(mockProvider.getUrl() + "/details", HttpMethod.GET, httpEntity, String.class);
@@ -65,7 +63,7 @@ public class S2sConsumerTest {
         }
 
         requestHeaders = new LinkedMultiValueMap<>();
-        requestHeaders.add("ServiceAuthorization", "abc.abc.abc");
+        requestHeaders.add("Authorization", "abc.abc.abc");
         httpEntity = new HttpEntity<>(null, requestHeaders);
         ResponseEntity r = new RestTemplate().exchange(mockProvider.getUrl() + "/details", HttpMethod.GET, httpEntity, String.class);
         Assert.assertEquals(201, r.getStatusCodeValue());

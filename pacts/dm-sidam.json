@@ -30,7 +30,7 @@
         "method": "GET",
         "path": "/details",
         "headers": {
-          "Authorization": "T.r57362m.7"
+          "Authorization": "Uo0.R82x.yO"
         },
         "matchingRules": {
           "header": {
