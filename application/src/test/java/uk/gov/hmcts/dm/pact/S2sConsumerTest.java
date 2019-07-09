@@ -8,9 +8,7 @@ import au.com.dius.pact.model.RequestResponsePact;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -50,8 +48,22 @@ public class S2sConsumerTest {
             .toPact();
     }
 
+    @Pact(provider="s2s", consumer="dm")
+    public RequestResponsePact createPactForTesting(PactDslWithProvider builder) {
+        return builder
+            .uponReceiving("4. lease request (testing)")
+            .path("/lease")
+            .headers(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .method("POST")
+            .willRespondWith()
+            .status(200)
+            .body("s2s.s2s.s2s")
+
+            .toPact();
+    }
+
     @Test
-    @PactVerification("s2s")
+    @PactVerification(value = "s2s", fragment = "createPact")
     public void runTest() {
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<>();
         requestHeaders.add("Authorization", "x");
@@ -78,5 +90,14 @@ public class S2sConsumerTest {
 
     }
 
+    @Test
+    @PactVerification(value = "s2s", fragment = "createPactForTesting" )
+    public void runTestToCreatePactForTesting() {
+        MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<>();
+        requestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        HttpEntity<?> httpEntity = new HttpEntity<>(null, requestHeaders);
+        ResponseEntity r = new RestTemplate().exchange(mockProvider.getUrl() + "/lease", HttpMethod.POST, httpEntity, String.class);
+        Assert.assertEquals(200, r.getStatusCodeValue());
+    }
 
 }

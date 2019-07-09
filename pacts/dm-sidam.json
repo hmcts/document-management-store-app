@@ -30,7 +30,7 @@
         "method": "GET",
         "path": "/details",
         "headers": {
-          "Authorization": "Uo0.R82x.yO"
+          "Authorization": "S.M.6"
         },
         "matchingRules": {
           "header": {
@@ -99,6 +99,21 @@
             }
           }
         }
+      },
+      "providerStates": [
+        {
+          "name": "provider returns a SIDAM user for a valid token"
+        }
+      ]
+    },
+    {
+      "description": "2. No auth token",
+      "request": {
+        "method": "GET",
+        "path": "/details"
+      },
+      "response": {
+        "status": 403
       },
       "providerStates": [
         {

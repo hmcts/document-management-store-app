@@ -7,6 +7,20 @@
   },
   "interactions": [
     {
+      "description": "4. lease request (testing)",
+      "request": {
+        "method": "POST",
+        "path": "/lease",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": "s2s.s2s.s2s"
+      }
+    },
+    {
       "description": "0. Incorrect Authorization header",
       "request": {
         "method": "GET",
@@ -30,7 +44,7 @@
         "method": "GET",
         "path": "/details",
         "headers": {
-          "Authorization": "r.c2C1N.0"
+          "Authorization": "Z.shxn.9pFodI1W"
         },
         "matchingRules": {
           "header": {

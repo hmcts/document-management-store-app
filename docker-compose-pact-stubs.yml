@@ -3,7 +3,7 @@ version: "3"
 services:
     idam:
         image: pactfoundation/pact-stub-server
-        command: -p 8080 -f pacts/dm-sidam.json
+        command: -p 8080 -f pacts/dm-sidam.json --provider-state-header-name P_STATE
         ports:
             - "4501:8080"
         volumes:
@@ -11,7 +11,7 @@ services:
 
     s2s:
         image: pactfoundation/pact-stub-server
-        command: -p 8080 -f pacts/dm-s2s.json
+        command: -p 8080 -f pacts/dm-s2s.json --provider-state-header-name P_STATE
         ports:
             - "4502:8080"
         volumes:

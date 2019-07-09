@@ -52,11 +52,18 @@ public class IdamConsumerTest {
                 .willRespondWith()
                 .status(403)
 
+                .uponReceiving("2. No auth token")
+                .path("/details")
+                .method("GET")
+                .willRespondWith()
+                .status(403)
+
                 .toPact();
     }
 
+
     @Test
-    @PactVerification("sidam")
+    @PactVerification(value = "sidam", fragment ="createPact")
     public void runTest() {
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<>();
         requestHeaders.add("Authorization", "x");
@@ -82,5 +89,34 @@ public class IdamConsumerTest {
         }
 
     }
+
+//
+//
+//    @Pact(provider="sidam", consumer="dm")
+//    public RequestResponsePact createPactForTesting(PactDslWithProvider builder) {
+//        return builder
+//                .given("provider returns a SIDAM user for a valid token")
+//
+//                .uponReceiving("authorize request")
+//                .path("/oauth2/authorize")
+//                .method("POST")
+//                .matchHeader("Authorization", "(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)")
+//                .willRespondWith()
+//                .status(200)
+//                .body("{\"access-token\": \"t.t.t\"}")
+//
+//
+//                .toPact();
+//    }
+//
+//    @Test
+//    @PactVerification(value = "sidam", fragment = "createPactForTesting")
+//    public void runTestToCreatePactForTesting() {
+//        MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<>();
+//        HttpEntity<?> httpEntity = httpEntity = new HttpEntity<>(null, requestHeaders);
+//        ResponseEntity r = new RestTemplate().exchange(mockProvider.getUrl() + "/testing-support/accounts", HttpMethod.POST, httpEntity, String.class);
+//        Assert.assertEquals(201, r.getStatusCodeValue());
+//
+//    }
 
 }
