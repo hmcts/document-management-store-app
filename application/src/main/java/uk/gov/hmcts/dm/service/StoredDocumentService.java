@@ -200,14 +200,14 @@ public class StoredDocumentService {
      * @throws UncheckedIOException If the stream cannot be closed
      */
     private void closeBlobInputStream(@NotNull final DocumentContentVersion documentContentVersion) {
-//        try {
-//            if (documentContentVersion.getDocumentContent() != null) {
-//                documentContentVersion.getDocumentContent().getData().getBinaryStream().close();
-//            }
-//        } catch (SQLException e) {
-//            throw new HibernateException("Unable to access blob stream", e);
-//        } catch (IOException e) {
-//            throw new UncheckedIOException("Unable to close blob stream", e);
-//        }
+        try {
+            if (documentContentVersion.getDocumentContent() != null) {
+                documentContentVersion.getDocumentContent().getData().getBinaryStream().close();
+            }
+        } catch (SQLException e) {
+            throw new HibernateException("Unable to access blob stream", e);
+        } catch (IOException e) {
+            throw new UncheckedIOException("Unable to close blob stream", e);
+        }
     }
 }
