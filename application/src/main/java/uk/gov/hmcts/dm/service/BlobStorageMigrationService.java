@@ -75,6 +75,23 @@ public class BlobStorageMigrationService {
         migrateDocumentContentVersion(documentContentVersion);
     }
 
+
+    private void migrateDocumentContentVersion(DocumentContentVersion documentContentVersion) {
+        if (isBlank(documentContentVersion.getContentChecksum())) {
+            log.info("Migrate DocumentContentVersion {}", documentContentVersion.getId());
+            uploadBinaryStream(documentContentVersion);
+            // we cannot use documentContentVersionRepository.save
+            // because { @link ByteWrappingBlobType#replace} is not implemented
+            documentContentVersionRepository.updateContentUriAndContentCheckSum(documentContentVersion.getId(),
+                    documentContentVersion.getContentUri(),
+                    documentContentVersion.getContentChecksum());
+            // For some reason,
+            // auditEntryService.createAndSaveEntry
+            // only creates one database entry; hence use auditEntryRepository.saveAndFlush directly
+            auditEntryRepository.saveAndFlush(newAuditEntry(documentContentVersion));
+        }
+    }
+
     public BatchMigrateProgressReport batchMigrate(String authToken,
                                                    final Integer limit,
                                                    final Integer page,
@@ -115,22 +132,6 @@ public class BlobStorageMigrationService {
     public MigrateProgressReport getMigrateProgressReport() {
         return new MigrateProgressReport(documentContentVersionRepository.countByContentChecksumIsNull(),
                                          documentContentVersionRepository.countByContentChecksumIsNotNull());
-    }
-
-    private void migrateDocumentContentVersion(DocumentContentVersion documentContentVersion) {
-        if (isBlank(documentContentVersion.getContentChecksum())) {
-            log.info("Migrate DocumentContentVersion {}", documentContentVersion.getId());
-            uploadBinaryStream(documentContentVersion);
-            // we cannot use documentContentVersionRepository.save
-            // because { @link ByteWrappingBlobType#replace} is not implemented
-            documentContentVersionRepository.updateContentUriAndContentCheckSum(documentContentVersion.getId(),
-                                                                                documentContentVersion.getContentUri(),
-                                                                                documentContentVersion.getContentChecksum());
-            // For some reason,
-            // auditEntryService.createAndSaveEntry
-            // only creates one database entry; hence use auditEntryRepository.saveAndFlush directly
-            auditEntryRepository.saveAndFlush(newAuditEntry(documentContentVersion));
-        }
     }
 
     private DocumentContentVersion getDocumentContentVersion(final @NotNull UUID documentId,

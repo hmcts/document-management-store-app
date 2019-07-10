@@ -32,8 +32,8 @@ public class ApiV2RequestMatcherTest {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         Mockito.when(request.getHeader(HttpHeaders.ACCEPT))
             .thenReturn("application/vnd.document.v2+json;quality=1;charset=UTF-8");
-        assertTrue("'application/vnd.document.v2+json;quality=1;charset=UTF-8' " +
-                "should not match the API V2 pattern",
+        assertTrue("'application/vnd.document.v2+json;quality=1;charset=UTF-8' "
+                + "should not match the API V2 pattern",
             apiV2RequestMatcher.matches(request));
     }
 

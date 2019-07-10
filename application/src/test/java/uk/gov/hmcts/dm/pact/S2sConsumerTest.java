@@ -19,7 +19,7 @@ public class S2sConsumerTest {
     @Rule
     public PactProviderRuleMk2 mockProvider = new PactProviderRuleMk2("s2s", "localhost", 4502, this);
 
-    @Pact(provider="s2s", consumer="dm")
+    @Pact(provider = "s2s", consumer = "dm")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
         return builder
             .given("provider returns a s2s service for a valid token")
@@ -48,7 +48,7 @@ public class S2sConsumerTest {
             .toPact();
     }
 
-    @Pact(provider="s2s", consumer="dm")
+    @Pact(provider = "s2s", consumer = "dm")
     public RequestResponsePact createPactForTesting(PactDslWithProvider builder) {
         return builder
             .uponReceiving("4. lease request (testing)")
@@ -91,7 +91,7 @@ public class S2sConsumerTest {
     }
 
     @Test
-    @PactVerification(value = "s2s", fragment = "createPactForTesting" )
+    @PactVerification(value = "s2s", fragment = "createPactForTesting")
     public void runTestToCreatePactForTesting() {
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<>();
         requestHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);

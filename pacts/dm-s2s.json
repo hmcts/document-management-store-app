@@ -44,7 +44,7 @@
         "method": "GET",
         "path": "/details",
         "headers": {
-          "Authorization": "Z.shxn.9pFodI1W"
+          "Authorization": "iQ.64a0.8"
         },
         "matchingRules": {
           "header": {

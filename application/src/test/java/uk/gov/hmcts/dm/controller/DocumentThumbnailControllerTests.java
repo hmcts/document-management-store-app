@@ -84,7 +84,9 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetThumbnail() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(), new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)), "user", false);
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
+                new MockMultipartFile("files", "filename.txt", "text/plain",
+                        "hello".getBytes(StandardCharsets.UTF_8)), "user", false);
 
         documentContentVersion.setCreatedBy("userId");
 

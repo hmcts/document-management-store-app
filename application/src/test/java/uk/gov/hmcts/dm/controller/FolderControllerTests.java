@@ -45,7 +45,8 @@ public class FolderControllerTests extends ComponentTestBase {
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .post("/folders/", TestUtil.TEST_FOLDER).andExpect(status().isOk());
+            .post("/folders/", TestUtil.TEST_FOLDER)
+                .andExpect(status().isOk());
     }
 
 
@@ -57,7 +58,8 @@ public class FolderControllerTests extends ComponentTestBase {
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents", Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()), Classifications.PUBLIC, null)
+            .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents",
+                    Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()), Classifications.PUBLIC, null)
             .andExpect(status().is(204));
     }
 
@@ -69,7 +71,8 @@ public class FolderControllerTests extends ComponentTestBase {
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents", Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()), Classifications.PUBLIC, null)
+            .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents",
+                    Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()), Classifications.PUBLIC, null)
             .andExpect(status().isNotFound());
     }
 

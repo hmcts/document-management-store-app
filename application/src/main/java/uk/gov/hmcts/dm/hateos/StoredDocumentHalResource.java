@@ -76,7 +76,8 @@ public class StoredDocumentHalResource extends HalResource {
 
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {
             Resources<DocumentContentVersionHalResource> versionResources =
-                    new Resources<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList()));
+                    new Resources<>(storedDocument.getDocumentContentVersions().stream()
+                            .map(DocumentContentVersionHalResource::new).collect(Collectors.toList()));
             embedResource("allDocumentVersions", versionResources);
 
         }
