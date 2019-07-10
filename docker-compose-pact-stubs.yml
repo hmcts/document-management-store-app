@@ -43,7 +43,7 @@ services:
 
   make-container-call:
     image: byrnedo/alpine-curl
-    command: curl -XPUT --verbose http://azure-storage-emulator-azurite:10000/devstoreaccount1/hmctstestcontainer?restype=container
+    command: -XPUT --verbose http://azure-storage-emulator-azurite:10000/devstoreaccount1/hmctstestcontainer?restype=container
     links:
         - azure-storage-emulator-azurite
     depends_on:
