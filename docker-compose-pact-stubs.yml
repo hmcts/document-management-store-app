@@ -30,6 +30,7 @@ services:
     depends_on:
         - dm-store-db
         - azure-storage-emulator-azurite
+        - make-container-call
     ports:
         - $SERVER_PORT:8080
 
@@ -39,6 +40,14 @@ services:
     image: hmcts/dm-store-db:latest
     ports:
         - 5432:5432
+
+  make-container-call:
+    image: byrnedo/alpine-curl
+    command: curl -XPUT --verbose http://azure-storage-emulator-azurite:10000/devstoreaccount1/hmctstestcontainer?restype=container
+    links:
+        - azure-storage-emulator-azurite
+    depends_on:
+        - azure-storage-emulator-azurite
 
   azure-storage-emulator-azurite:
     image: arafato/azurite
