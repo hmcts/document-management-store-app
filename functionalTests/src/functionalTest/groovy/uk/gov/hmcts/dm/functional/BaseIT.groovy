@@ -10,7 +10,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.FileUtils
-import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+import uk.gov.hmcts.dm.functional.v1.V1MediaTypes
 
 import javax.annotation.PostConstruct
 import uk.gov.hmcts.dm.functional.config.FunctionalTestContextConfiguration
@@ -134,7 +134,7 @@ class BaseIT {
         request
     }
 
-    def givenRequest(username = null, userRoles = null) {
+    def givenRequest(username = null, userRoles = null, Map headers = null) {
 
         def request = given().log().all()
 
@@ -148,7 +148,17 @@ class BaseIT {
             }
         }
 
+        if (headers) {
+            headers.each { k, v ->
+                request.header(k, v)
+            }
+        }
+
         request
+    }
+
+    def givenRequestWithAcceptHeader(Medi) {
+        def request = givenRequest()
     }
 
     def givenS2SRequest() {

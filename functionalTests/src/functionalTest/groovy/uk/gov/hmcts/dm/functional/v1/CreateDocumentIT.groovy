@@ -1,6 +1,6 @@
-package uk.gov.hmcts.dm.functional
+package uk.gov.hmcts.dm.functional.v1
 
-import groovy.time.TimeCategory
+
 import io.restassured.response.Response
 import org.junit.Assert
 import org.junit.Ignore
@@ -8,11 +8,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
+import uk.gov.hmcts.dm.functional.BaseIT
 import uk.gov.hmcts.dm.functional.utilities.Classifications
-import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
-import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
+import uk.gov.hmcts.dm.functional.utilities.ExtendedMimeTypes
 
-import java.sql.Time
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.OffsetDateTime
@@ -33,12 +32,12 @@ class CreateDocumentIT extends BaseIT {
     void "CD1 (R1) As authenticated user upload 7 files with correct classification and some roles set"() {
         Response response = givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_7_PNG), MediaType.IMAGE_PNG_VALUE)
-            .multiPart("files", file(ATTACHMENT_8_TIF), V1MimeTypes.IMAGE_TIF_VALUE)
+            .multiPart("files", file(ATTACHMENT_8_TIF), ExtendedMimeTypes.IMAGE_TIF_VALUE)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
-            .multiPart("files", file(ATTACHMENT_25_TIFF), V1MimeTypes.IMAGE_TIF_VALUE)
-            .multiPart("files", file(ATTACHMENT_26_BMP), V1MimeTypes.IMAGE_BMP_VALUE)
-            .multiPart("files", file(ATTACHMENT_27_JPEG), V1MimeTypes.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(ATTACHMENT_25_TIFF), ExtendedMimeTypes.IMAGE_TIF_VALUE)
+            .multiPart("files", file(ATTACHMENT_26_BMP), ExtendedMimeTypes.IMAGE_BMP_VALUE)
+            .multiPart("files", file(ATTACHMENT_27_JPEG), ExtendedMimeTypes.IMAGE_JPEG_VALUE)
 
             .multiPart("files", file(WORD), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
             .multiPart("files", file(WORD_TEMPLATE), "application/vnd.openxmlformats-officedocument.wordprocessingml.template")
@@ -77,7 +76,7 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
 
             .body("_embedded.documents[1].originalDocumentName", equalTo(ATTACHMENT_8_TIF))
-            .body("_embedded.documents[1].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
+            .body("_embedded.documents[1].mimeType", equalTo(ExtendedMimeTypes.IMAGE_TIF_VALUE))
             .body("_embedded.documents[1].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[1].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[1].roles[1]", equalTo("citizen"))
@@ -92,13 +91,13 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[3].mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
 
             .body("_embedded.documents[4].originalDocumentName", equalTo(ATTACHMENT_25_TIFF))
-            .body("_embedded.documents[4].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
+            .body("_embedded.documents[4].mimeType", equalTo(ExtendedMimeTypes.IMAGE_TIF_VALUE))
 
             .body("_embedded.documents[5].originalDocumentName", equalTo(ATTACHMENT_26_BMP))
-            .body("_embedded.documents[5].mimeType", equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
+            .body("_embedded.documents[5].mimeType", equalTo(ExtendedMimeTypes.IMAGE_BMP_VALUE))
 
             .body("_embedded.documents[6].originalDocumentName", equalTo(ATTACHMENT_27_JPEG))
-            .body("_embedded.documents[6].mimeType", equalTo(V1MimeTypes.IMAGE_JPEG_VALUE))
+            .body("_embedded.documents[6].mimeType", equalTo(ExtendedMimeTypes.IMAGE_JPEG_VALUE))
 
         .when()
             .post("/documents")
@@ -257,7 +256,7 @@ class CreateDocumentIT extends BaseIT {
     @Test
     void "CD10 As authenticated user I cannot upload svg file"() {
         givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_10), V1MimeTypes.IMAGE_SVG_VALUE)
+            .multiPart("files", file(ATTACHMENT_10), ExtendedMimeTypes.IMAGE_SVG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
@@ -345,14 +344,14 @@ class CreateDocumentIT extends BaseIT {
     @Test
     void "CD13 (R1) As authenticated when i upload a Tiff I get an icon in return"() {
         def response = givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_25_TIFF), V1MimeTypes.IMAGE_TIF_VALUE)
+            .multiPart("files", file(ATTACHMENT_25_TIFF), ExtendedMimeTypes.IMAGE_TIF_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
             .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_25_TIFF))
-            .body("_embedded.documents[0].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
+            .body("_embedded.documents[0].mimeType", equalTo(ExtendedMimeTypes.IMAGE_TIF_VALUE))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
             .when()
@@ -423,14 +422,14 @@ class CreateDocumentIT extends BaseIT {
     @Test
     void "CD16 (R1) As authenticated user when I upload a bmp, I can get the thumbnail of that bmp"() {
         def url = givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_26_BMP), V1MimeTypes.IMAGE_BMP_VALUE)
+            .multiPart("files", file(ATTACHMENT_26_BMP), ExtendedMimeTypes.IMAGE_BMP_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
             .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_26_BMP))
-            .body("_embedded.documents[0].mimeType", equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
+            .body("_embedded.documents[0].mimeType", equalTo(ExtendedMimeTypes.IMAGE_BMP_VALUE))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
             .when()
@@ -521,7 +520,7 @@ class CreateDocumentIT extends BaseIT {
     void "CD24 (R1) As authenticated user I should not be able to upload gif"() {
 
         givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_6_GIF), V1MimeTypes.IMAGE_GIF_VALUE)
+            .multiPart("files", file(ATTACHMENT_6_GIF), ExtendedMimeTypes.IMAGE_GIF_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()

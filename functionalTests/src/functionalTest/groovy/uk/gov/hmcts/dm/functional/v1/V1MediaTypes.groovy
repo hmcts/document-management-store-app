@@ -1,4 +1,4 @@
-package uk.gov.hmcts.dm.functional.utilities
+package uk.gov.hmcts.dm.functional.v1
 
 class V1MediaTypes {
 

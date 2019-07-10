@@ -4,7 +4,7 @@ import org.springframework.http.MediaType;
 
 import java.io.Serializable;
 
-public class V1MimeTypes extends MediaType implements Serializable {
+public class ExtendedMimeTypes extends MediaType implements Serializable {
 
 
     public static final MediaType APPLICATION_DOCX;
@@ -103,7 +103,7 @@ public class V1MimeTypes extends MediaType implements Serializable {
         VIDEO_MPEG = valueOf(VIDEO_MPEG_VALUE);
     }
 
-    public V1MimeTypes(String type) {
+    public ExtendedMimeTypes(String type) {
         super(type);
     }
 }

@@ -1,11 +1,11 @@
-package uk.gov.hmcts.dm.functional
+package uk.gov.hmcts.dm.functional.v1
 
 import io.restassured.response.Response
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
-import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+import uk.gov.hmcts.dm.functional.BaseIT
 
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assume.assumeTrue

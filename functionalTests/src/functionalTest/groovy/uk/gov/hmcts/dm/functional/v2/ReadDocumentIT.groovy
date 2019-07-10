@@ -1,9 +1,10 @@
-package uk.gov.hmcts.dm.functional
+package uk.gov.hmcts.dm.functional.v2
 
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.test.context.junit4.SpringRunner
+import uk.gov.hmcts.dm.functional.BaseIT
 
 import static org.hamcrest.Matchers.equalTo
 

@@ -1,4 +1,4 @@
-package uk.gov.hmcts.dm.functional
+package uk.gov.hmcts.dm.functional.v2
 
 import groovy.json.JsonOutput
 import io.restassured.http.ContentType
@@ -7,9 +7,10 @@ import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.test.context.junit4.SpringRunner
-import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
-import static org.hamcrest.Matchers.equalTo
+import uk.gov.hmcts.dm.functional.BaseIT
+import uk.gov.hmcts.dm.functional.v1.V1MediaTypes
 
+import static org.hamcrest.Matchers.equalTo
 
 @RunWith(SpringRunner.class)
 class SearchDocumentIT extends BaseIT {

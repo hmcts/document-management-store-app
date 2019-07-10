@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.utilities.Classifications
-import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
+import uk.gov.hmcts.dm.functional.utilities.ExtendedMimeTypes
 
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.containsString
@@ -186,7 +186,7 @@ class ErrorPageIT extends BaseIT {
     void "EP12 As an authenticated user, when I post a SVG document I should get JSON response"() {
 
         givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_10), V1MimeTypes.IMAGE_SVG_VALUE)
+            .multiPart("files", file(ATTACHMENT_10), ExtendedMimeTypes.IMAGE_SVG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()
@@ -201,7 +201,7 @@ class ErrorPageIT extends BaseIT {
     void "EP13 As an authenticated user, when I post a XML document I should get JSON response"() {
 
         givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_18), V1MimeTypes.APPLICATION_XML_VALUE)
+            .multiPart("files", file(ATTACHMENT_18), ExtendedMimeTypes.APPLICATION_XML_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()
@@ -216,7 +216,7 @@ class ErrorPageIT extends BaseIT {
     void "EP14 As an authenticated user, when I post a EXE document I should get JSON response"() {
 
         givenRequest(CITIZEN)
-            .multiPart("files", file(BAD_ATTACHMENT_1), V1MimeTypes.ALL_VALUE)
+            .multiPart("files", file(BAD_ATTACHMENT_1), ExtendedMimeTypes.ALL_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()

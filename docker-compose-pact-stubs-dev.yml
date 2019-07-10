@@ -1,0 +1,40 @@
+---
+version: '3'
+
+services:
+
+  dm-store-db:
+    build:
+        context: ./docker/database
+    image: hmcts/dm-store-db:latest
+    ports:
+        - 5432:5432
+
+  azure-storage-emulator-azurite:
+    image: arafato/azurite
+    ports:
+         - 10000:10000
+    environment:
+        executable: "blob"
+    volumes:
+        - ccd-docker-azure-blob-data:/opt/azurite/folder
+
+  idam-api:
+    image: pactfoundation/pact-stub-server
+    command: -p 8080 -f pacts/dm-sidam.json --provider-state-header-name P_STATE
+    ports:
+        - "4501:8080"
+    volumes:
+        - ./pacts:/app/pacts
+
+  service-auth-provider-api:
+    image: pactfoundation/pact-stub-server
+    command: -p 8080 -f pacts/dm-s2s.json --provider-state-header-name P_STATE
+    ports:
+        - "4502:8080"
+    volumes:
+        - ./pacts:/app/pacts
+
+volumes:
+    pacts:
+    ccd-docker-azure-blob-data:
