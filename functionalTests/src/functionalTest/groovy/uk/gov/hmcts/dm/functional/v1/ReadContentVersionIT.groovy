@@ -31,7 +31,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV1 As creator I read content version by URL"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
                 .statusCode(200)
                 .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
@@ -46,7 +46,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV2 As creator I read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CITIZEN)
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV1Request(CITIZEN)
             .expect()
                 .statusCode(200)
                 .contentType(MediaType.IMAGE_JPEG_VALUE)
@@ -59,7 +59,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV3 As not owner and not a case worker I read content version by URL but I am denied access"() {
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
                 .statusCode(403)
             .when()
@@ -70,7 +70,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV4 As not owner and not a case worker I read content version binary by URL but I am denied access"() {
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
                 .expect()
                 .statusCode(403)
                 .when()
@@ -81,7 +81,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV6 As a probate case-worker I read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .expect()
                 .statusCode(200)
             .when()
@@ -93,7 +93,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV7 As a cmc case-worker I can read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_CMC])
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_CMC])
                 .expect()
                     .statusCode(200)
                 .when()
@@ -104,7 +104,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV8 As a sscs case-worker I can read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_SSCS])
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_SSCS])
                 .expect()
                     .statusCode(200)
                 .when()
@@ -115,7 +115,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV9 As a divorce case-worker I can read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_DIVORCE])
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_DIVORCE])
                 .expect()
                     .statusCode(200)
                 .when()

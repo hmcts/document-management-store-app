@@ -10,6 +10,8 @@ class V2MediaTypes {
 
     public static final String V2_HAL_DOCUMENT_MEDIA_TYPE_VALUE ="application/vnd.uk.gov.hmcts.dm.document.v2+hal+json;charset=UTF-8"
 
+    public static final String V2_HAL_DOCUMENT_CONTENT_MEDIA_TYPE_VALUE ="application/vnd.uk.gov.hmcts.dm.document.content.v2+octet-stream;charset=UTF-8"
+
     public static final String V2_HAL_FOLDER_MEDIA_TYPE_VALUE="application/vnd.uk.gov.hmcts.dm.folder.v2+hal+json;charset=UTF-8"
 
     public static final String V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE ="application/vnd.uk.gov.hmcts.dm.documentContentVersion.v2+hal+json;charset=UTF-8"

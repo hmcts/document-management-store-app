@@ -18,7 +18,7 @@ class AddContentVersionIT extends BaseIT {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
 
-        def response = givenRequest(CITIZEN)
+        def response = givenV1Request(CITIZEN)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
         .expect().log().all()
             .statusCode(201)
@@ -31,7 +31,7 @@ class AddContentVersionIT extends BaseIT {
 
         def newVersionUrl = response.getHeader 'Location'
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
                 .statusCode(200)
             .when()
@@ -43,7 +43,7 @@ class AddContentVersionIT extends BaseIT {
     @Test
     void "ACV2 As authenticated user POST a new version of the content to a not existing document"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
                 .statusCode(404)
@@ -83,7 +83,7 @@ class AddContentVersionIT extends BaseIT {
 
         def url = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
                 .statusCode(403)
@@ -97,7 +97,7 @@ class AddContentVersionIT extends BaseIT {
 
         def url = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
                 .statusCode(403)
@@ -109,7 +109,7 @@ class AddContentVersionIT extends BaseIT {
     @Test
     void "ACV7 As authenticated user who is a case worker POST a new version of the content to a not existing document and expect 404"() {
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
                 .statusCode(404)
@@ -122,7 +122,7 @@ class AddContentVersionIT extends BaseIT {
     void "ACV8 As an authenticated user and the owner I should not be able to upload multiple new content versions then expect 201"() {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
-        def response = givenRequest(CITIZEN)
+        def response = givenV1Request(CITIZEN)
                 .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
                 .multiPart("file", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
                 .multiPart("file", file(ATTACHMENT_3), MediaType.TEXT_PLAIN_VALUE)
@@ -137,7 +137,7 @@ class AddContentVersionIT extends BaseIT {
 
         def newVersionUrl = response.getHeader 'Location'
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
                 .expect()
                 .statusCode(200)
                 .when()
@@ -148,7 +148,7 @@ class AddContentVersionIT extends BaseIT {
     void "ACV9 As an authenticated user and the owner I should be able to upload new version of different format"() {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
-        def response = givenRequest(CITIZEN)
+        def response = givenV1Request(CITIZEN)
                 .multiPart("file", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
                 .expect().log().all()
                 .statusCode(201)
@@ -161,7 +161,7 @@ class AddContentVersionIT extends BaseIT {
 
         def newVersionUrl = response.getHeader 'Location'
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
                 .expect()
                 .statusCode(200)
                 .when()
@@ -173,7 +173,7 @@ class AddContentVersionIT extends BaseIT {
     void "ACV10 As an authenticated user and the owner I should not be able to upload exes"() {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
                 .multiPart("file", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
                 .expect().log().all()
                 .statusCode(422)
@@ -185,7 +185,7 @@ class AddContentVersionIT extends BaseIT {
     void "ACV11 As an authenticated user and the owner I should not be able to upload zip"() {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
                 .multiPart("file", file(BAD_ATTACHMENT_2), MediaType.ALL_VALUE)
                 .expect().log().all()
                 .statusCode(422)
@@ -202,7 +202,7 @@ class AddContentVersionIT extends BaseIT {
 
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("ttl", "2018-01-31T10:10:10+0000")
             .expect().log().all()
@@ -213,7 +213,7 @@ class AddContentVersionIT extends BaseIT {
             .when()
             .post(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect().log().all()
             .statusCode(200)
             .body("ttl", equalTo("2018-10-31T10:10:10+0000"))

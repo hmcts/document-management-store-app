@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.functional.v2
 
-import io.restassured.RestAssured
-import io.restassured.parsing.Parser
+
 import io.restassured.response.Response
 import org.junit.Assert
 import org.junit.Ignore
@@ -31,9 +30,8 @@ class CreateDocumentIT extends BaseIT {
     //as per https://blogs.msdn.microsoft.com/vsofficedeveloper/2008/05/08/office-2007-file-format-mime-types-for-http-content-streaming-2/
     @Test
     void "CD1 (R1) As authenticated user upload 7 files with correct classification and some roles set"() {
-        RestAssured.defaultParser = Parser.JSON;
-        Response response = givenRequest(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE])
-            .header('Authorization', 'xxx.xxx.xxx')
+        Response response = givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE])
+
             .multiPart("files", file(ATTACHMENT_7_PNG), MediaType.IMAGE_PNG_VALUE)
             .multiPart("files", file(ATTACHMENT_8_TIF), ExtendedMimeTypes.IMAGE_TIF_VALUE)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
@@ -109,7 +107,8 @@ class CreateDocumentIT extends BaseIT {
         String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href")
         String document1Size = response.path("_embedded.documents[0].size")
 
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_MEDIA_TYPE_VALUE])
+
         .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
@@ -120,7 +119,8 @@ class CreateDocumentIT extends BaseIT {
         .when()
             .get(documentUrl1)
 
-        assertByteArrayEquality ATTACHMENT_7_PNG, givenRequest(CITIZEN)
+        assertByteArrayEquality ATTACHMENT_7_PNG, givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_MEDIA_TYPE_VALUE])
+
             .expect()
                 .statusCode(200)
                 .contentType(containsString(MediaType.IMAGE_PNG_VALUE))
@@ -146,7 +146,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD3 As authenticated user I fail to upload a file without classification"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -159,7 +159,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD4 As authenticated user I fail to upload files with incorrect classification"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", "XYZ")
             .multiPart("roles", "citizen")
@@ -173,7 +173,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD5 As authenticated user I failed when I tried to make a post request without any file"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("classification", Classifications.RESTRICTED)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -186,7 +186,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD6 As authenticated user I upload file with name containing illegal characters"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ILLEGAL_NAME_FILE), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("files", file(ILLEGAL_NAME_FILE1), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("files", file(ILLEGAL_NAME_FILE2), MediaType.IMAGE_JPEG_VALUE)
@@ -209,7 +209,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD7 As authenticated user I can upload files of different format"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
@@ -231,7 +231,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD8 As authenticated user I can not upload files of different format if not on the whitelist (.exe)"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("files", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
@@ -244,7 +244,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD9 As authenticated user I cannot upload xml file"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_18), MediaType.APPLICATION_XML_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "caseworker")
@@ -258,7 +258,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD10 As authenticated user I cannot upload svg file"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_10), ExtendedMimeTypes.IMAGE_SVG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "caseworker")
@@ -274,7 +274,7 @@ class CreateDocumentIT extends BaseIT {
     void "CD11 (R1) As authenticated when i upload a file only first TTL will be taken into consideration"() {
         assumeTrue(toggleConfiguration.isTtl())
 
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
@@ -300,7 +300,7 @@ class CreateDocumentIT extends BaseIT {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
         def ttlDate = OffsetDateTime.now().minusMinutes(2)
         def ttlFormatted = ttlDate.format(dtf).toString()
-        def url = givenRequest(CITIZEN)
+        def url = givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
@@ -327,7 +327,7 @@ class CreateDocumentIT extends BaseIT {
 
         while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 80)) {
 
-            statusCode = givenRequest(CITIZEN)
+            statusCode = givenV2Request(CITIZEN)
                 .expect()
                 .statusCode(isOneOf(404, 200))
                 .when()
@@ -337,7 +337,7 @@ class CreateDocumentIT extends BaseIT {
             sleep(1000)
         }
 
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .expect()
                 .statusCode(404)
             .when()
@@ -346,7 +346,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD13 (R1) As authenticated when i upload a Tiff I get an icon in return"() {
-        def response = givenRequest(CITIZEN)
+        def response = givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .multiPart("files", file(ATTACHMENT_25_TIFF), ExtendedMimeTypes.IMAGE_TIF_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
@@ -364,10 +364,10 @@ class CreateDocumentIT extends BaseIT {
 //        def notepadUrl = response.path("_embedded.documents[0]._links.thumbnail.href")
         def tiffUrl = response.path("_embedded.documents[0]._links.thumbnail.href")
 
-//        def notepadByteArray =  givenRequest(CITIZEN)
+//        def notepadByteArray =  givenV2Request(CITIZEN)
 //        .get(notepadUrl).asByteArray()
 
-        def tiffByteArray =  givenRequest(CITIZEN)
+        def tiffByteArray =  givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .get(tiffUrl).asByteArray()
 
         def file = file("ThumbnailNPad.jpg").getBytes()
@@ -379,7 +379,7 @@ class CreateDocumentIT extends BaseIT {
     @Test
     @Ignore // FIXME RDM-3133 Thumbnail generation timing out
     void "CD14 (R1) As authenticated user when i upload a JPEG, it gets a thumbnail"() {
-        def url = givenRequest(CITIZEN)
+        def url = givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
@@ -394,7 +394,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href")
 
-        def downloadedFileByteArray =  givenRequest(CITIZEN)
+        def downloadedFileByteArray =  givenV2Request(CITIZEN)
             .get(url).asByteArray()
 
         def file = file("ThumbnailJPG.jpg").getBytes()
@@ -404,7 +404,7 @@ class CreateDocumentIT extends BaseIT {
     @Test
     @Ignore("Fail in CNP")
     void "CD15 (R1) As authenticated user when I upload a pdf, I can get the thumbnail of that pdf"() {
-        def url = givenRequest(CITIZEN)
+        def url = givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
@@ -419,12 +419,12 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href")
 
-        assertByteArrayEquality THUMBNAIL_PDF, givenRequest(CITIZEN).get(url).asByteArray()
+        assertByteArrayEquality THUMBNAIL_PDF, givenV2Request(CITIZEN).get(url).asByteArray()
     }
 
     @Test
     void "CD16 (R1) As authenticated user when I upload a bmp, I can get the thumbnail of that bmp"() {
-        def url = givenRequest(CITIZEN)
+        def url = givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE])
             .multiPart("files", file(ATTACHMENT_26_BMP), ExtendedMimeTypes.IMAGE_BMP_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
@@ -439,7 +439,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href")
 
-        def downloadedFileByteArray =  givenRequest(CITIZEN)
+        def downloadedFileByteArray =  givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE])
             .get(url).asByteArray()
 
         def file = file(THUMBNAIL_BMP).getBytes()
@@ -448,7 +448,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD18 As a user I should not be able to upload an exe if its renamed to pdf"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(EXE_AS_PDF), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
             .expect()
@@ -460,7 +460,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD19 As a user I should not be able to upload an svg if its renamed to pdf"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(SVG_AS_PDF), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
             .expect()
@@ -472,7 +472,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD20 As a user I should not be able to upload an xml if its renamed to pdf"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(XML_AS_PDF), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
             .expect()
@@ -485,7 +485,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD21 As a user I should not be able to upload an exe if its renamed to png"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(EXE_AS_PNG), MediaType.IMAGE_PNG_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
             .expect()
@@ -497,7 +497,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD22 As a user I should not be able to upload an svg if its renamed to png"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(SVG_AS_PNG), MediaType.IMAGE_PNG_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
             .expect()
@@ -509,7 +509,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD23 As a user I should not be able to upload an xml if its renamed to png"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(XML_AS_PNG), MediaType.IMAGE_PNG_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
             .expect()
@@ -522,7 +522,7 @@ class CreateDocumentIT extends BaseIT {
     @Test
     void "CD24 (R1) As authenticated user I should not be able to upload gif"() {
 
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(ATTACHMENT_6_GIF), ExtendedMimeTypes.IMAGE_GIF_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
@@ -535,7 +535,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD25 As authenticated user I cannot upload macro-enabled word"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(WORD_MACRO_ENABLED), "application/vnd.ms-word.document.macroEnabled.12")
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "caseworker")
@@ -549,7 +549,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD26 As authenticated user I cannot upload macro-enabled excel"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(EXCEL_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-excel.template.macroEnabled.12")
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "caseworker")
@@ -564,7 +564,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD27 As authenticated user I cannot upload macro-enabled power point"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .multiPart("files", file(POWER_POINT_SLIDE_SHOW_MACRO_ENABLED), "application/vnd.ms-powerpoint.presentation.macroEnabled.12")
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "caseworker")
@@ -578,7 +578,7 @@ class CreateDocumentIT extends BaseIT {
 
 //    @Test
 //    void "CD9 As authenticated user I can not upload files that are larger than 100MB"() {
-//        givenRequest(CITIZEN)
+//        givenV2Request(CITIZEN)
 //                .accept(MediaType.TEXT_HTML_VALUE)
 //                .multiPart("files", file(TOO_LARGE_ATTACHMENT), MediaType.TEXT_PLAIN_VALUE)
 //                .multiPart("classification", Classifications.PRIVATE as String)
@@ -590,7 +590,7 @@ class CreateDocumentIT extends BaseIT {
 //
 //    @Test
 //    void "CD10 As authenticated user I can upload files of upto 90MB in size"() {
-//        givenRequest(CITIZEN)
+//        givenV2Request(CITIZEN)
 //                .accept(MediaType.TEXT_HTML_VALUE)
 //                .multiPart("files", file(MAX_SIZE_ALLOWED_ATTACHMENT), MediaType.TEXT_PLAIN_VALUE)
 //                .multiPart("classification", Classifications.PRIVATE as String)

@@ -10,6 +10,6 @@ public class ApiV2RequestMatcher implements RequestMatcher {
     @Override
     public boolean matches(HttpServletRequest request) {
         final String acceptHeader = request.getHeader(HttpHeaders.ACCEPT);
-        return StringUtils.isNotBlank(acceptHeader) && acceptHeader.matches("(application/vnd.)(.*)(.v2.*\\+json)(.*)");
+        return StringUtils.isNotBlank(acceptHeader) && acceptHeader.matches("(application/vnd.)(.*)(\\.v2\\+)(.*)");
     }
 }

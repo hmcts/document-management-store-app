@@ -18,7 +18,7 @@ class UpdateDocumentIT  extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .body([ttl: "3000-10-31T10:10:10+0000"])
             .contentType(ContentType.JSON)
             .expect()
@@ -35,7 +35,7 @@ class UpdateDocumentIT  extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .body([ttl: "3000-10-31T10:10:10+0000"])
             .contentType(ContentType.JSON)
             .expect()
@@ -51,7 +51,7 @@ class UpdateDocumentIT  extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .body([ttl: "3000-10-31T10:10:10+0000"])
             .contentType(ContentType.JSON)
             .expect()
@@ -66,7 +66,7 @@ class UpdateDocumentIT  extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .body([ttl: "3000-10-31T10:10:10+0000"])
             .body([ttl: "3000-01-31T10:10:10+0000"])
             .contentType(ContentType.JSON)
@@ -83,7 +83,7 @@ class UpdateDocumentIT  extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .body([ttl: "3000-10-31T10:10:10+0000"])
             .contentType(ContentType.JSON)
             .expect()
@@ -91,7 +91,7 @@ class UpdateDocumentIT  extends BaseIT {
             .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
             .when()
             .patch(documentUrl)
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .contentType(ContentType.JSON)
             .expect()
             .statusCode(400)
@@ -99,7 +99,7 @@ class UpdateDocumentIT  extends BaseIT {
             .when()
             .patch(documentUrl)
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
             .statusCode(200)
             .body("ttl", equalTo("3000-10-31T10:10:10+0000"))

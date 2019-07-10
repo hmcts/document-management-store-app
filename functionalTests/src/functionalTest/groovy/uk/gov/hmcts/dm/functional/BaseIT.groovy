@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.FileUtils
 import uk.gov.hmcts.dm.functional.v1.V1MediaTypes
+import uk.gov.hmcts.dm.functional.v2.V2MediaTypes
 
 import javax.annotation.PostConstruct
 import uk.gov.hmcts.dm.functional.config.FunctionalTestContextConfiguration
@@ -134,7 +135,7 @@ class BaseIT {
         request
     }
 
-    def givenRequest(username = null, userRoles = null, Map headers = null) {
+    def givenV1Request(username = null, userRoles = null, Map headers = null) {
 
         def request = given().log().all()
 
@@ -157,8 +158,21 @@ class BaseIT {
         request
     }
 
-    def givenRequestWithAcceptHeader(Medi) {
-        def request = givenRequest()
+    def givenV2Request(username = null, userRoles = null, Map headers = null) {
+        def request = given().log().all()
+
+        if (username) {
+            request = request.header("serviceauthorization", serviceToken())
+            request = request.header("authorization", 'x.x.x')
+        }
+
+        if (headers) {
+            headers.each { k, v ->
+                request.header(k, v)
+            }
+        }
+
+        request
     }
 
     def givenS2SRequest() {
@@ -193,8 +207,8 @@ class BaseIT {
         authTokenProvider.findServiceToken()
     }
 
-    def createDocument(username,  filename = null, classification = null, roles = null, metadata = null) {
-        def request = givenRequest(username)
+    def createDocument(username, filename = null, classification = null, roles = null, metadata = null, version = 1) {
+        def request = "givenV${version}Request"(username)
                         .multiPart("files", file( filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
                         .multiPart("classification", classification ?: "PUBLIC")
 
@@ -202,8 +216,10 @@ class BaseIT {
             request.multiPart("roles", role)
         }
 
+        request.header('accept', version == 1 ? V1MediaTypes.V1_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE :
+                V2MediaTypes.V2_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE)
+
         if (metadata) {
-            request.accept(V1MediaTypes.V1_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE)
             metadata?.each { key, value ->
                 request.multiPart("metadata[${key}]", value)
             }
@@ -216,18 +232,18 @@ class BaseIT {
                 .post("/documents")
     }
 
-    def createDocumentAndGetUrlAs(username, filename = null, classification = null, roles = null, metadata = null) {
-        createDocument(username, filename, classification, roles, metadata)
+    def createDocumentAndGetUrlAs(username, filename = null, classification = null, roles = null, metadata = null, version = 1) {
+        createDocument(username, filename, classification, roles, metadata, version)
             .path("_embedded.documents[0]._links.self.href")
     }
 
-    def createDocumentAndGetBinaryUrlAs(username,  filename = null, classification = null, roles = null) {
-        createDocument(username, filename, classification, roles)
+    def createDocumentAndGetBinaryUrlAs(username,  filename = null, classification = null, roles = null, version = 1) {
+        createDocument(username, filename, classification, roles, version)
             .path("_embedded.documents[0]._links.binary.href")
     }
 
-    def createDocumentContentVersion(documentUrl, username, filename = null) {
-        givenRequest(username)
+    def createDocumentContentVersion(documentUrl, username, filename = null, version = 1) {
+        "givenV${version}Request"(username)
             .multiPart("file", file( filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
                 .statusCode(201)
@@ -235,16 +251,16 @@ class BaseIT {
                 .post(documentUrl)
     }
 
-    def createDocumentContentVersionAndGetUrlAs(documentUrl, username, filename = null) {
-        createDocumentContentVersion(documentUrl, username, filename).path('_links.self.href')
+    def createDocumentContentVersionAndGetUrlAs(documentUrl, username, filename = null, version = 1) {
+        createDocumentContentVersion(documentUrl, username, filename, version).path('_links.self.href')
     }
 
-    def createDocumentContentVersionAndGetBinaryUrlAs(documentUrl, username, filename = null) {
-        createDocumentContentVersion(documentUrl, username, filename).path('_links.binary.href')
+    def createDocumentContentVersionAndGetBinaryUrlAs(documentUrl, username, filename = null, version = 1) {
+        createDocumentContentVersion(documentUrl, username, filename, version).path('_links.binary.href')
     }
 
-    def CreateAUserforTTL(username) {
-        Response response = givenRequest(username)
+    def CreateAUserforTTL(username, version = 1) {
+        Response response = "givenV${version}Request"(username)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")

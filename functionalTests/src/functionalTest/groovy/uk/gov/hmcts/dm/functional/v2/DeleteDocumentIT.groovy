@@ -4,6 +4,7 @@ import io.restassured.response.Response
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.BaseIT
@@ -21,8 +22,8 @@ class DeleteDocumentIT extends BaseIT {
 
     @Before
     void setup() throws Exception {
-        this.citizenDocumentUrl = createDocumentAndGetUrlAs CITIZEN
-        this.caseWorkerDocumentUrl = createDocumentAndGetUrlAs CASE_WORKER
+        this.citizenDocumentUrl = createDocumentAndGetUrlAs CITIZEN, null, null, null, null, 2
+        this.caseWorkerDocumentUrl = createDocumentAndGetUrlAs CASE_WORKER, null, null, null, null, 2
     }
 
     @Test
@@ -36,13 +37,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D2 Authenticated user can delete their own documents"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(204)
             .when()
             .delete(citizenDocumentUrl)
 
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(404)
             .when()
@@ -51,7 +52,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D3 Authenticated user cannot delete other user's documents"() {
-        givenRequest(CITIZEN_2)
+        givenV2Request(CITIZEN_2, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(403)
             .when()
@@ -60,7 +61,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D4 Case worker cannot delete other users' documents"() {
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(403)
             .when()
@@ -69,13 +70,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D5 Case worker can delete their own document"() {
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(204)
             .when()
             .delete(caseWorkerDocumentUrl)
 
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(404)
             .when()
@@ -84,13 +85,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D6 Case worker can hard delete their own document"() {
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(204)
             .when()
             .delete(caseWorkerDocumentUrl + "?permanent=true")
 
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(404)
             .when()
@@ -99,13 +100,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D7 User can hard delete their own document"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(204)
             .when()
             .delete(citizenDocumentUrl + "?permanent=true")
 
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_MEDIA_TYPE_VALUE])
             .expect()
             .statusCode(404)
             .when()
@@ -121,7 +122,7 @@ class DeleteDocumentIT extends BaseIT {
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
         String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href")
 
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("ttl", "2018-01-31T10:10:10+0000")
             .expect().log().all()
@@ -132,21 +133,21 @@ class DeleteDocumentIT extends BaseIT {
             .when()
             .post(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE])
             .expect().log().all()
             .statusCode(200)
             .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
             .when()
             .get(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE])
             .expect().log().all()
             .statusCode(204)
             .body(not(containsString("ttl:")))
             .when()
             .delete(documentUrl1)
 
-//        givenRequest(CASE_WORKER)
+//        givenV2Request(CASE_WORKER)
 //            .expect().log().all()
 //            .statusCode(404)
 //
@@ -162,7 +163,7 @@ class DeleteDocumentIT extends BaseIT {
 
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
 
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("ttl", "2018-01-31T10:10:10+0000")
             .expect().log().all()
@@ -173,21 +174,21 @@ class DeleteDocumentIT extends BaseIT {
             .when()
             .post(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER)
             .expect().log().all()
             .statusCode(200)
             .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
             .when()
             .get(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV2Request(CASE_WORKER)
             .expect().log().all()
             .statusCode(204)
             .body(not(containsString("ttl:")))
             .when()
             .delete(documentUrl1 + "?permanent=true")
 
-//        givenRequest(CASE_WORKER)
+//        givenV2Request(CASE_WORKER)
 //            .expect().log().all()
 //            .statusCode(404)
 //            .body(not(containsString("ttl:")))

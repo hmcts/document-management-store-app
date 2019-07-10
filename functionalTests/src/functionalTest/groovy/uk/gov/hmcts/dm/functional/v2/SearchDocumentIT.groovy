@@ -26,7 +26,7 @@ class SearchDocumentIT extends BaseIT {
         createDocument CITIZEN, null, null, null, [case:caseNo1]
         createDocument CITIZEN, null, null, null, [case:caseNo2]
 
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case', value:caseNo1]))
         .expect()
@@ -40,7 +40,7 @@ class SearchDocumentIT extends BaseIT {
 
     @Test
     void "S2 As authenticated user I receive error for incorrectly posted search criteria"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case']))
         .expect().log().all()
@@ -63,7 +63,7 @@ class SearchDocumentIT extends BaseIT {
 
     @Test
     void "S4 As authenticated user I receive no records when searched item could not be found"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case', value:'123']))
             .expect().log().all()
@@ -75,7 +75,7 @@ class SearchDocumentIT extends BaseIT {
 
     @Test
     void "S4 As a authenticated user I can search using special characters"() {
-        givenRequest(CITIZEN)
+        givenV2Request(CITIZEN)
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case', value:'!"£$%%^&*()<>:@~[];\'#,./ÄÖÜẞ▒¶§■¾±≡µÞÌ█ð╬¤╠┼▓®¿ØÆ']))
             .expect().log().all()

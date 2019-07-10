@@ -16,7 +16,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
                 .expect()
                 .statusCode(200)
                 .when()
@@ -29,7 +29,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .header('Accept','application/vnd.uk.gov.hmcts.dm.document.v10000+hal+json')
             .expect()
                 .statusCode(406)
@@ -68,7 +68,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
                 .statusCode(403)
             .when()
@@ -82,7 +82,7 @@ class ReadDocumentIT extends BaseIT {
 
         def binaryUrl = createDocumentAndGetBinaryUrlAs CITIZEN
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
                 .statusCode(403)
             .when()
@@ -95,7 +95,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+        givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .expect()
                 .statusCode(200)
             .when()
@@ -106,7 +106,7 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R8 As authenticated user GET document/xxx where xxx is not UUID"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
                 .statusCode(404)
             .when()
@@ -116,7 +116,7 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R9 As authenticated user GET document/111 where 111 is not UUID"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
                 .expect()
                 .statusCode(404)
                 .when()
@@ -126,7 +126,7 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R10 As authenticated user GET document/ where 111 is not UUID"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
                 .expect()
                 .statusCode(405)
                 .when()
@@ -136,7 +136,7 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R11 As authenticated user GET document/xxx where xxx is UUID but it doesn't exist in our BD"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
                 .statusCode(404)
             .when()
@@ -151,7 +151,7 @@ class ReadDocumentIT extends BaseIT {
 //
 //        def jwt = authToken CITIZEN
 //
-//        def response = givenRequest()
+//        def response = givenV1Request()
 //            .param("jwt", jwt)
 //            .redirects().follow(false)
 //            .expect()
@@ -162,7 +162,7 @@ class ReadDocumentIT extends BaseIT {
 //        def authToken = response.cookie('__auth-token')
 //        def newLocation = response.header('Location')
 //
-//        givenRequest()
+//        givenV1Request()
 //            .header('Authorization', authToken)
 //            .expect()
 //                .statusCode(200)
@@ -177,7 +177,7 @@ class ReadDocumentIT extends BaseIT {
 //
 //        def jwt = authToken CITIZEN
 //
-//        def response = givenRequest()
+//        def response = givenV1Request()
 //                .param("jwt", jwt)
 //                .redirects().follow(false)
 //                .expect()
@@ -188,7 +188,7 @@ class ReadDocumentIT extends BaseIT {
 //        def authToken = response.cookie('__auth-token')
 //        def newLocation = response.header('Location')
 //
-//        givenRequest()
+//        givenV1Request()
 //                .header('Authorization', authToken)
 //                .expect()
 //                .statusCode(404)
@@ -204,7 +204,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'RESTRICTED', ['caseworker']
 
-        givenRequest(CITIZEN_2, ['caseworker'])
+        givenV1Request(CITIZEN_2, ['caseworker'])
                 .expect()
                 .statusCode(200)
                 .when()
@@ -219,7 +219,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PRIVATE', roles
 
-        givenRequest(CITIZEN_2, roles)
+        givenV1Request(CITIZEN_2, roles)
                 .expect()
                 .statusCode(403)
                 .when()
@@ -232,7 +232,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', ['caseworker']
 
-        givenRequest(CITIZEN_2, ['caseworker'])
+        givenV1Request(CITIZEN_2, ['caseworker'])
             .expect()
             .statusCode(200)
             .when()
@@ -245,7 +245,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', ['citizen', 'caseworker']
 
-        givenRequest(CITIZEN_2, ['caseworker'])
+        givenV1Request(CITIZEN_2, ['caseworker'])
             .expect()
             .statusCode(200)
             .when()
@@ -257,7 +257,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', [null]
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
             .statusCode(403)
             .when()
@@ -269,7 +269,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', [null]
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
             .statusCode(403)
             .when()
@@ -282,7 +282,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'PUBLIC', ['citizen']
 
-        givenRequest(CITIZEN_2, ['citizen'])
+        givenV1Request(CITIZEN_2, ['citizen'])
             .expect()
             .statusCode(200)
             .when()
@@ -294,7 +294,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN_2, ATTACHMENT_9_JPG, 'PRIVATE', [null]
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
             .statusCode(200)
             .when()
@@ -306,7 +306,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'RESTRICTED', ['caseworker']
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
                 .expect()
                 .statusCode(403)
                 .when()
@@ -318,7 +318,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN_2, ATTACHMENT_9_JPG, 'PRIVATE', ['caseworker']
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
             .statusCode(200)
             .when()
@@ -330,21 +330,21 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+        givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .expect()
             .body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
             .when()
             .get(documentUrl)
 
-        givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_SSCS])
+        givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_SSCS])
             .expect()
             .body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
             .when()
             .get(documentUrl)
 
-        givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_CMC])
+        givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_CMC])
             .expect()
             .body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
@@ -357,13 +357,13 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetBinaryUrlAs "user1"
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
             .statusCode(403)
             .when()
             .get(documentUrl)
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
             .statusCode(403)
             .when()
@@ -375,14 +375,14 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CASE_WORKER
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect()
             .body("createdBy", equalTo(CASE_WORKER))
             .statusCode(200)
             .when()
             .get(documentUrl)
 
-        Map<String, String> map = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+        Map<String, String> map = givenV1Request(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
             .path("_embedded.auditEntries[0]")
@@ -399,13 +399,13 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetBinaryUrlAs CITIZEN
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
             .statusCode(200)
             .when()
             .get(documentUrl)
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
             .statusCode(403)
             .when()

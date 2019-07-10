@@ -35,13 +35,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D2 Authenticated user can delete their own documents"() {
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
             .statusCode(204)
             .when()
             .delete(citizenDocumentUrl)
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
             .statusCode(404)
             .when()
@@ -50,7 +50,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D3 Authenticated user cannot delete other user's documents"() {
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .expect()
             .statusCode(403)
             .when()
@@ -59,7 +59,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D4 Case worker cannot delete other users' documents"() {
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect()
             .statusCode(403)
             .when()
@@ -68,13 +68,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D5 Case worker can delete their own document"() {
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect()
             .statusCode(204)
             .when()
             .delete(caseWorkerDocumentUrl)
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect()
             .statusCode(404)
             .when()
@@ -83,13 +83,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D6 Case worker can hard delete their own document"() {
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect()
             .statusCode(204)
             .when()
             .delete(caseWorkerDocumentUrl + "?permanent=true")
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect()
             .statusCode(404)
             .when()
@@ -98,13 +98,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D7 User can hard delete their own document"() {
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
             .statusCode(204)
             .when()
             .delete(citizenDocumentUrl + "?permanent=true")
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .expect()
             .statusCode(404)
             .when()
@@ -120,7 +120,7 @@ class DeleteDocumentIT extends BaseIT {
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
         String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href")
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("ttl", "2018-01-31T10:10:10+0000")
             .expect().log().all()
@@ -131,21 +131,21 @@ class DeleteDocumentIT extends BaseIT {
             .when()
             .post(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect().log().all()
             .statusCode(200)
             .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
             .when()
             .get(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect().log().all()
             .statusCode(204)
             .body(not(containsString("ttl:")))
             .when()
             .delete(documentUrl1)
 
-//        givenRequest(CASE_WORKER)
+//        givenV1Request(CASE_WORKER)
 //            .expect().log().all()
 //            .statusCode(404)
 //
@@ -161,7 +161,7 @@ class DeleteDocumentIT extends BaseIT {
 
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("ttl", "2018-01-31T10:10:10+0000")
             .expect().log().all()
@@ -172,21 +172,21 @@ class DeleteDocumentIT extends BaseIT {
             .when()
             .post(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect().log().all()
             .statusCode(200)
             .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
             .when()
             .get(documentUrl1)
 
-        givenRequest(CASE_WORKER)
+        givenV1Request(CASE_WORKER)
             .expect().log().all()
             .statusCode(204)
             .body(not(containsString("ttl:")))
             .when()
             .delete(documentUrl1 + "?permanent=true")
 
-//        givenRequest(CASE_WORKER)
+//        givenV1Request(CASE_WORKER)
 //            .expect().log().all()
 //            .statusCode(404)
 //            .body(not(containsString("ttl:")))
