@@ -34,6 +34,11 @@ dependencies {
     compile group: 'org.springframework.boot', name :'spring-boot-starter-jetty', version: versions.springBoot
     compile group: 'org.springframework.boot', name :'spring-boot-starter-logging', version: versions.springBoot
 
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-json-org:2.9.9"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.9.9"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.9.9"
+    compile "com.fasterxml.jackson.module:jackson-module-afterburner:2.9.9"
+
     runtime group: 'org.springframework.boot', name :'spring-boot-devtools', version: versions.springBoot
 
     testRuntime group: 'cglib', name :'cglib-nodep', version:'3.2.4'

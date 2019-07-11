@@ -52,17 +52,11 @@ public class IdamConsumerTest {
                 .willRespondWith()
                 .status(403)
 
-                .given("provider returns a SIDAM user 43 for a valid token", "user-id", 43)
-                .uponReceiving("3. Valid auth token")
+                .uponReceiving("2. No auth token")
                 .path("/details")
                 .method("GET")
-                .matchHeader("Authorization", "(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)")
                 .willRespondWith()
-                .status(201)
-                .body(new PactDslJsonBody()
-                        .integerType("id", 43)
-                        .minArrayLike("roles", 1, PactDslJsonRootValue
-                                .stringMatcher("CASEWORKER", "CASEWORKER")))
+                .status(403)
 
                 .toPact();
     }

@@ -68,7 +68,9 @@ To view our REST API go to {HOST}:{PORT}/swagger-ui.html
 A list of our endpoints can be found here
 > https://hmcts.github.io/reform-api-docs/swagger.html?url=https://hmcts.github.io/reform-api-docs/specs/document-management-store-app.json
 
-##Dev Notes - PACT stubs
+#Dev Notes
+
+##PACT - Running the App
 
 ###To run the app and its dependencies in Docker:
 
@@ -87,6 +89,32 @@ curl -XPUT --verbose http://localhost:10000/devstoreaccount1/hmctstestcontainer?
 ./gradlew migratePostgresDatabase
 
 ./gradlew bootRun (or using IDE)
+
+##Dockerised IDAM
+
+###Run with Dockerised IDAM 
+
+az login
+
+az acr login --name hmcts --subscription 1c4f0704-a29e-403d-b719-b90c34ef14c9
+
+./gradlew clean jar
+
+docker-compose up -d
+
+./gradlew migratePostgresDatabase
+
+###Run with Dockerised IDAM - DEV (app run separately)
+
+az login
+
+az acr login --name hmcts --subscription 1c4f0704-a29e-403d-b719-b90c34ef14c9
+
+docker-compose -d docker-compose-dev.yml up -d
+
+./gradlew migratePostgresDatabase
+
+##Testing
 
 ###To run functional test:
 

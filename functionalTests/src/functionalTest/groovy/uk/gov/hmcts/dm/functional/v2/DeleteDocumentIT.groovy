@@ -52,7 +52,9 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D3 Authenticated user cannot delete other user's documents"() {
-        givenV2Request(CITIZEN_2, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
+        givenV2Request(CITIZEN_2, null,
+                [(HttpHeaders.ACCEPT):
+                             'application/vnd.uk.gov.hmcts.dm.document.v2+hal+json,application/json;charset=UTF-8'])
             .expect()
             .statusCode(403)
             .when()
@@ -61,7 +63,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D4 Case worker cannot delete other users' documents"() {
-        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE])
+        givenV2Request(CASE_WORKER, null, [(HttpHeaders.ACCEPT): 'application/vnd.uk.gov.hmcts.dm.document.v2+hal+json,application/json;charset=UTF-8'])
             .expect()
             .statusCode(403)
             .when()

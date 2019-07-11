@@ -72,7 +72,8 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV4 As not owner and not a case worker I read content version binary by URL but I am denied access"() {
 
-        givenV2Request(CITIZEN_2, null, [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE])
+        givenV2Request(CITIZEN_2, null,
+                [(HttpHeaders.ACCEPT): 'application/vnd.uk.gov.hmcts.dm.document.content.v2+octet-stream,application/json;charset=UTF-8'])
                 .expect()
                 .statusCode(403)
                 .when()
@@ -83,7 +84,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV6 As a probate case-worker I read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenV2Request(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE], [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE])
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV2Request(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE], [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_MEDIA_TYPE_VALUE])
             .expect()
                 .statusCode(200)
             .when()
@@ -95,7 +96,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV7 As a cmc case-worker I can read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenV2Request(CASE_WORKER, [CASE_WORKER_ROLE_CMC], [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE])
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV2Request(CASE_WORKER, [CASE_WORKER_ROLE_CMC], [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_MEDIA_TYPE_VALUE])
                 .expect()
                     .statusCode(200)
                 .when()
@@ -106,7 +107,7 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV8 As a sscs case-worker I can read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenV2Request(CASE_WORKER, [CASE_WORKER_ROLE_SSCS], [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE])
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV2Request(CASE_WORKER, [CASE_WORKER_ROLE_SSCS], [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_MEDIA_TYPE_VALUE])
                 .expect()
                     .statusCode(200)
                 .when()
@@ -117,7 +118,8 @@ class ReadContentVersionIT extends BaseIT {
     @Test
     void "RCV9 As a divorce case-worker I can read content version binary by URL"() {
 
-        assertByteArrayEquality ATTACHMENT_9_JPG, givenV2Request(CASE_WORKER, [CASE_WORKER_ROLE_DIVORCE], [(HttpHeaders.ACCEPT): V2MediaTypes.V2_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE])
+        assertByteArrayEquality ATTACHMENT_9_JPG, givenV2Request(CASE_WORKER, [CASE_WORKER_ROLE_DIVORCE],
+                [(HttpHeaders.ACCEPT): "application/vnd.uk.gov.hmcts.dm.document.content.v2+octet-stream,application/json;charset=UTF-8"])
                 .expect()
                     .statusCode(200)
                 .when()

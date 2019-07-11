@@ -4,8 +4,10 @@ import io.restassured.RestAssured
 import io.restassured.response.Response
 import net.jcip.annotations.NotThreadSafe
 import org.junit.Assert
+import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import uk.gov.hmcts.dm.functional.utilities.Classifications
@@ -124,6 +126,8 @@ class BaseIT {
     final String SVG_AS_PNG = 'svg_as_png.png'
     final String XML_AS_PNG = 'xml_as_png.png'
 
+    TestUtil testUtil = new TestUtil()
+
     @PostConstruct
     void init() {
         RestAssured.baseURI = dmStoreBaseUri
@@ -158,12 +162,12 @@ class BaseIT {
         request
     }
 
-    def givenV2Request(username = null, userRoles = null, Map headers = null) {
+    def givenV2Request(String username = null, List<String> userRoles = null, Map headers = null) {
+
         def request = given().log().all()
 
         if (username) {
-            request = request.header("serviceauthorization", serviceToken())
-            request = request.header("authorization", 'x.x.x')
+            request = testUtil.authRequest(username, userRoles).log().all()
         }
 
         if (headers) {
@@ -238,12 +242,13 @@ class BaseIT {
     }
 
     def createDocumentAndGetBinaryUrlAs(username,  filename = null, classification = null, roles = null, version = 1) {
-        createDocument(username, filename, classification, roles, version)
+        createDocument(username, filename, classification, roles, null, version)
             .path("_embedded.documents[0]._links.binary.href")
     }
 
     def createDocumentContentVersion(documentUrl, username, filename = null, version = 1) {
-        "givenV${version}Request"(username)
+        "givenV${version}Request"(username, null, [(HttpHeaders.ACCEPT): version == 2 ?
+                V2MediaTypes.V2_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE : V1MediaTypes.V1_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE] )
             .multiPart("file", file( filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
                 .statusCode(201)
