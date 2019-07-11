@@ -1,0 +1,136 @@
+---
+version: '3'
+
+services:
+    dm-store:
+        build:
+            context: .
+        image: hmcts/dm-store:latest
+        environment:
+            SERVER_PORT: 8080
+            SPRING_DATASOURCE_URL: jdbc:postgresql://dm-store-db:5432/evidence
+            IDAM_USER_BASE_URI: http://idam-api:8080
+            IDAM_S2S_BASE_URI: http://service-auth-provider-api:8080
+            STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:-DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azure-storage-emulator-azurite:10000/devstoreaccount1}"
+            STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: "${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:-hmctstestcontainer}"
+            BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED: "${BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED:-false}"
+            BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY: "${BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY:-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiQ//gc/G53d9dLCtf123fIYo49gUySuJuxOcw2GtieWTMSy+O7RNtsAIjVf3mCOdDNuN69tZNPEWMdaW8n11s9MwYFahtxDecyn0KIP9MvPsfSMSbxhp/f7kfbdB/H/S5eYea66JTyeJS6uNd76RdHttx0mLO30ZkRcXB25c2SIXhRYsdoeKS5GXHDdNejkQM0S/Ev94x2UunApmYHjWN1XcDhsEsAeF4WHnvYh2XiMn9vHY44AqvbWLlAmCgzaXpz8Xhl0fO7jDKSeReDyuM3UTMaiFFaxuvliGol7aIXq/aVe/miiD2SLxHZ6RxAPW80bhXrzJMTLTCqhCEhzfv someone@somewhere.sometime}"
+            ENABLE_AZURE_STORAGE_CONTAINER: "true"
+            SPRING_PROFILES_ACTIVE: dev
+            # these environment variables are used by java-logging library
+            ROOT_APPENDER: JSON_CONSOLE
+            JSON_CONSOLE_PRETTY_PRINT: "false"
+            REFORM_SERVICE_TYPE: java
+            REFORM_SERVICE_NAME: dm-store
+            REFORM_TEAM: evidence
+            REFORM_ENVIRONMENT: docker
+        links:
+            - dm-store-db
+            - azure-storage-emulator-azurite
+        depends_on:
+            - dm-store-db
+            - azure-storage-emulator-azurite
+            - make-container-call
+        ports:
+            - $SERVER_PORT:8080
+
+    dm-store-db:
+        build:
+            context: ./docker/database
+        image: hmcts/dm-store-db:latest
+        ports:
+            - 5432:5432
+
+    make-container-call:
+        image: byrnedo/alpine-curl
+        command: -XPUT --verbose http://azure-storage-emulator-azurite:10000/devstoreaccount1/hmctstestcontainer?restype=container
+        links:
+            - azure-storage-emulator-azurite
+        depends_on:
+            - azure-storage-emulator-azurite
+
+    azure-storage-emulator-azurite:
+        image: arafato/azurite
+        ports:
+            - 10000:10000
+        environment:
+            executable: "blob"
+        volumes:
+            - ccd-docker-azure-blob-data:/opt/azurite/folder
+
+    idam-api:
+        image: hmcts.azurecr.io/hmcts/tidam-api:latest
+        healthcheck:
+            interval: 10s
+            timeout: 10s
+            retries: 10
+        environment:
+            IDAM_SUPERUSER_EMAIL: ccd@hmcts.net
+            SPRING_DATASOURCE_URL: jdbc:postgresql://database-idam:5432/idam
+            SPRING_DATASOURCE_USERNAME: idam
+            SPRING_DATASOURCE_PASSWORD: idam
+            SPRING_MAIL_HOST: smtp-server
+            IDAM_TESTING_SUPPORT_ENABLED: "true"
+            NOTIFY_API_KEY: AAAAAAAAAAAAAAAA
+            NOTIFY_CMC_ACTIVATE_USER_TEMPLATE: 76aa8695-64e8-4afd-ae13-bc8385302b1f
+            IDAM_SECRET: idam_test_secret
+            IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_GATEWAY: "${OAUTH2_CLIENT_CCD_GATEWAY}"
+            IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_ADMIN: "${OAUTH2_CLIENT_CCD_ADMIN}"
+            IDAM_CCD_WHITELIST: http://localhost:3451/oauth2redirect
+            IDAM_CCD_ADMIN_WHITELIST: https://localhost:3100/oauth2redirect
+            NOTIFY: "false"
+            NOTIFY_CMC_WELCOME_USER_TEMPLATE: fake
+            NOTIFY_DIVORCE_WELCOME_USER_TEMPLATE: fake
+            NOTIFY_SSCS_WELCOME_USER_TEMPLATE: fake
+            NOTIFY_RESET_PASSWORD_TEMPLATE: fake
+            NOTIFY_PROBATE_ACTIVATE_USER_TEMPLATE: fake
+            NOTIFY_DIVORCE_ACTIVATE_USER_TEMPLATE: fake
+            NOTIFY_SSCS_ACTIVATE_USER_TEMPLATE: fake
+            NOTIFY_CCD_ACTIVATE_USER_TEMPLATE: fake
+            REFORM_SERVICE_NAME: idam-api
+            REFORM_TEAM: idam
+            REFORM_ENVIRONMENT: local
+            http_proxy:
+            https_proxy:
+            no_proxy:
+        ports:
+            - 4501:8080
+        links:
+            - smtp-server
+            - database-idam
+        depends_on:
+            - database-idam
+            - smtp-server
+
+    service-auth-provider-api:
+        image: hmcts/service-auth-provider-app
+        healthcheck:
+            interval: 10s
+            timeout: 10s
+            retries: 10
+        ports:
+            - 4502:8080
+        environment:
+            SERVER_PORT: 8080
+            JWT_KEY: wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
+            MICROSERVICEKEYS_CCD_DATA: "${IDAM_KEY_CCD_DATA_STORE}"
+            MICROSERVICEKEYS_CCD_GW: "${IDAM_KEY_CCD_GATEWAY}"
+            MICROSERVICEKEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
+            MICROSERVICEKEYS_CCD_ADMIN: "${IDAM_KEY_CCD_ADMIN}"
+            MICROSERVICEKEYS_FPL_CASE_SERVICE: "${IDAM_KEY_FPL_CASE_SERVICE}"
+            MICROSERVICEKEYS_EM_STITCHING_API: AAAAAAAAAAAAAAAA
+            MICROSERVICEKEYS_EM_CCD_ORCHESTRATOR: AAAAAAAAAAAAAAAA
+            TESTING_SUPPORT_ENABLED: "true"
+
+    database-idam:
+        build:
+            context: ./docker/database-idam
+        ports:
+            - 5433:5432
+
+    smtp-server:
+        image: mailhog/mailhog
+
+volumes:
+    pacts:
+    ccd-docker-azure-blob-data:

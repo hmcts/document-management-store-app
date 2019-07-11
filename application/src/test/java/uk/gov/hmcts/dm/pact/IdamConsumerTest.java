@@ -26,7 +26,7 @@ public class IdamConsumerTest {
     @Pact(provider = "sidam", consumer = "dm")
     public RequestResponsePact createPact(PactDslWithProvider builder) {
         return builder
-                .given("provider returns a SIDAM user for a valid token")
+                .given("provider returns a SIDAM user 42 for a valid token", "user-id", 42)
 
                 .uponReceiving("0. Incorrect Authorization header")
                 .path("/details")
@@ -52,11 +52,17 @@ public class IdamConsumerTest {
                 .willRespondWith()
                 .status(403)
 
-                .uponReceiving("2. No auth token")
+                .given("provider returns a SIDAM user 43 for a valid token", "user-id", 43)
+                .uponReceiving("3. Valid auth token")
                 .path("/details")
                 .method("GET")
+                .matchHeader("Authorization", "(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)\\.(([a-z]|[A-Z]|[0-9])+)")
                 .willRespondWith()
-                .status(403)
+                .status(201)
+                .body(new PactDslJsonBody()
+                        .integerType("id", 43)
+                        .minArrayLike("roles", 1, PactDslJsonRootValue
+                                .stringMatcher("CASEWORKER", "CASEWORKER")))
 
                 .toPact();
     }
