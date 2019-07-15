@@ -14,26 +14,16 @@ public class TestUtil {
 
     private final IdamHelper idamHelper;
 
-    private Map<String, String> idamAuthCache;
+    private final Map<String, String> idamAuthCache;
 
     public TestUtil() {
-        this.idamHelper = new IdamHelper(
-                Env.getIdamUrl(),
-                Env.getOAuthClient(),
-                Env.getOAuthSecret(),
-                Env.getOAuthRedirect()
-        );
-
-        S2sHelper s2sHelper = new S2sHelper(
-                Env.getS2sUrl(),
-                Env.getS2sSecret(),
-                Env.getS2sMicroservice()
-        );
-
+        this.idamHelper = new IdamHelper(Env.getIdamUrl(), Env.getOAuthClient(), Env.getOAuthSecret(), Env.getOAuthRedirect());
         idamAuthCache = new HashMap<>();
 
         RestAssured.useRelaxedHTTPSValidation();
         idamAuth = idamHelper.getIdamToken();
+
+        final S2sHelper s2sHelper = new S2sHelper(Env.getS2sUrl(), Env.getS2sSecret(), Env.getS2sMicroservice());
         s2sAuth = s2sHelper.getS2sToken();
     }
 
