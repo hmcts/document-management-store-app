@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class ApiV2RequestMatcherTest {
 
-    private ApiV2RequestMatcher apiV2RequestMatcher = new ApiV2RequestMatcher();
+    private final ApiV2RequestMatcher apiV2RequestMatcher = new ApiV2RequestMatcher();
 
     @Test
     public void testStringXNotMatching() {

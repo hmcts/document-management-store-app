@@ -12,9 +12,7 @@ public class TestUtil {
     private final String idamAuth;
     private final String s2sAuth;
 
-    private IdamHelper idamHelper;
-
-    private S2sHelper s2sHelper;
+    private final IdamHelper idamHelper;
 
     private Map<String, String> idamAuthCache;
 
@@ -26,7 +24,7 @@ public class TestUtil {
                 Env.getOAuthRedirect()
         );
 
-        this.s2sHelper = new S2sHelper(
+        S2sHelper s2sHelper = new S2sHelper(
                 Env.getS2sUrl(),
                 Env.getS2sSecret(),
                 Env.getS2sMicroservice()

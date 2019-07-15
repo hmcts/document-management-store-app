@@ -53,7 +53,7 @@ public class IdamHelper {
         jsonObject.put("password", PASSWORD);
         jsonObject.put("forename", "test");
         jsonObject.put("surname", "test");
-        jsonObject.put("roles", roles == null || roles.size() == 0 ? null : new JSONArray(roles.stream().map( role -> {
+        jsonObject.put("roles", roles == null || roles.isEmpty() ? null : new JSONArray(roles.stream().map(role -> {
             JSONObject roleObject = new JSONObject();
             roleObject.put("code", role);
             return roleObject;
@@ -69,7 +69,7 @@ public class IdamHelper {
     private void deleteUser(String username) {
         RestAssured
             .given().log().all()
-            .delete(idamUrl + "/testing-support/accounts/"+username);
+            .delete(idamUrl + "/testing-support/accounts/" + username);
     }
 
     private String getCode(String username) {
