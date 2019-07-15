@@ -17,7 +17,7 @@ public class DmSecurityFilter extends AbstractPreAuthenticatedProcessingFilter {
 
     private final RequestAuthorizer<Service> serviceRequestAuthorizer;
     private final RequestAuthorizer<User> userRequestAuthorizer;
-    private ApiV2RequestMatcher apiV2RequestMatcher;
+    private final ApiV2RequestMatcher apiV2RequestMatcher;
 
     public DmSecurityFilter(RequestAuthorizer<Service> serviceRequestAuthorizer,
                             RequestAuthorizer<User> userRequestAuthorizer,
