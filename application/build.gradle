@@ -102,15 +102,15 @@ dependencyManagement {
 }
 
 def versions = [
-    ehcache            : '3.5.2',
+    ehcache            : '3.7.1',
     jacocoMavenPlugin  : '0.7.9',
     jackson            : '2.9.9',
     jetty              : '9.4.11.v20180605',
     jsonUnit           : '1.31.1',
     JUnitParams        : '1.1.1',
     lombok             : '1.18.0',
-    liquibase          : '3.6.1',
-    postgresql         : '42.2.2',
+    liquibase          : '3.6.3',
+    postgresql         : '42.2.6',
     powermock          : '1.7.4',
     sonar              : '3.2',
     springBoot         : springBootVersion,
@@ -126,7 +126,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9.1'
 
     compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.1'
 
