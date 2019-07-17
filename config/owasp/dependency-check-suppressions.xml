@@ -245,4 +245,12 @@ Another long cpe again
         <notes>Temporarily suppress CVE. Will be removed spring boot and tomcat upgrade</notes>
         <cve>CVE-2019-11358</cve>
     </suppress>
+    <suppress>
+        <notes>Temporarily suppress CVE. Will be removed with Gradle upgrade</notes>
+        <cve>CVE-2019-11065</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress CVE. Will be removed with Gradle upgrade</notes>
+        <cve>CVE-2016-6497</cve>
+    </suppress>
 </suppressions>
