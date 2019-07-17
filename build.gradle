@@ -1,0 +1,4 @@
+plugins {
+    id "org.owasp.dependencycheck" version "5.1.1" apply false
+}
+
