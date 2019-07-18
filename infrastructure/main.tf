@@ -53,6 +53,7 @@ module "app" {
     POSTGRES_USER = "${module.db.user_name}"
     POSTGRES_PASSWORD = "${module.db.postgresql_password}"
     MAX_ACTIVE_DB_CONNECTIONS = 70
+    FORCE_APPLY = "true"
 
     # JAVA_OPTS = "${var.java_opts}"
     # SERVER_PORT = "8080"
