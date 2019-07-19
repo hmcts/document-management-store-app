@@ -6,6 +6,11 @@ import java.util.Properties;
 
 public final class Env {
 
+    protected Env() {
+        // prevents calls from subclass
+        throw new UnsupportedOperationException();
+    }
+
     static Properties defaults = new Properties();
 
     static {
