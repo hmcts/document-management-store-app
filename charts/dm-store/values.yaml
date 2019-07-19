@@ -1,5 +1,5 @@
 java:
-  image: 'https://hmcts.azurecr.io/hmcts/dm-store:latest'
+  image: 'hmctspublic.azurecr.io/ccd/dm-store:latest'
   applicationPort: '4603'
   livenessPath: '/health'
   secrets:
