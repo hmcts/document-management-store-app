@@ -5,12 +5,6 @@ import org.apache.commons.lang3.Validate;
 import java.util.Properties;
 
 public final class Env {
-
-    protected Env() {
-        // prevents calls from subclass
-        throw new UnsupportedOperationException();
-    }
-
     static Properties defaults = new Properties();
 
     static {
@@ -23,6 +17,11 @@ public final class Env {
         defaults.setProperty("S2S_BASE_URI", "http://localhost:4502");
         defaults.setProperty("FUNCTIONAL_TEST_CLIENT_S2S_TOKEN", "AAAAAAAAAAAAAAAA");
         defaults.setProperty("S2S_SERVICE_NAME", "em_gw");
+    }
+
+    protected Env() {
+        // prevents calls from subclass
+        throw new UnsupportedOperationException();
     }
 
     public static String getUseProxy() {
