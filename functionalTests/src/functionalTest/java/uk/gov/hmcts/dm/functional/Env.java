@@ -4,7 +4,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.Properties;
 
-public class Env {
+public final class Env {
 
     static Properties defaults = new Properties();
 
