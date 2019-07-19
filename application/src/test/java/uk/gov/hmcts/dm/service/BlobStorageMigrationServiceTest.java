@@ -111,8 +111,8 @@ public class BlobStorageMigrationServiceTest {
         documentContentVersionUuid = UUID.randomUUID();
         documentUuid = UUID.randomUUID();
         data = new SerialBlob(DOC_CONTENT.getBytes());
-        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any())).thenReturn
-            (batchmigrationAuditEntry);
+        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any()))
+                .thenReturn(batchmigrationAuditEntry);
     }
 
     @Test
@@ -292,13 +292,6 @@ public class BlobStorageMigrationServiceTest {
         verify(batchMigrationAuditEntryService).createAuditEntry(null, 7, true);
         verify(batchMigrationAuditEntryService).save(batchmigrationAuditEntry, report);
         verifyBatchMigrateDocumentContentVersionRepositoryQueries(7);
-    }
-
-    @Test
-    public void batchMigrateInvalidAuthToken() {
-//        doThrow(new ValidationErrorException("Thx mate")).when(batchMigrationTokenService.checkAuthToken(anyString()));
-//        when(batchMigrationTokenService.checkAuthToken("token"));
-//        underTest.batchMigrate("token", 7, true);
     }
 
     private String mockAzureBlobUpload(final DocumentContentVersion dcv) throws URISyntaxException, StorageException {

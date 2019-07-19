@@ -45,7 +45,7 @@ spring:
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
 
 liquibase:
- enabled: ${ENABLE_DB_MIGRATE:true}
+ enabled: ${ENABLE_DB_MIGRATE:false}
  change-log: classpath:/db/changelog/db.changelog-master.xml
 
 server:

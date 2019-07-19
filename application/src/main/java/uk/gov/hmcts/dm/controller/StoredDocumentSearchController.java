@@ -40,7 +40,8 @@ public class StoredDocumentSearchController {
     @PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Search stored documents using metadata.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns search results", response = StoredDocumentHalResourceCollection.class),
+        @ApiResponse(code = 200, message = "Returns search results", response =
+                StoredDocumentHalResourceCollection.class),
         @ApiResponse(code = 400, message = "Error when search criteria not specified")
     })
     public ResponseEntity<Object> search(
@@ -48,7 +49,8 @@ public class StoredDocumentSearchController {
         Pageable pageable,
         PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
 
-        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByMetadata(metadataSearchCommand, pageable).map(StoredDocumentHalResource::new);
+        Page<StoredDocumentHalResource> page = searchService
+                .findStoredDocumentsByMetadata(metadataSearchCommand, pageable).map(StoredDocumentHalResource::new);
 
         return ResponseEntity
                 .ok()
@@ -60,14 +62,17 @@ public class StoredDocumentSearchController {
     @PostMapping(value = "/owned")
     @ApiOperation("Search stored documents by ownership.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Returns search results", response = StoredDocumentHalResourceCollection.class),
+            @ApiResponse(code = 200, message = "Returns search results",
+                    response = StoredDocumentHalResourceCollection.class),
             @ApiResponse(code = 400, message = "Error when search criteria not specified")
     })
     public ResponseEntity<Object> searchOwned(
             Pageable pageable,
             PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
 
-        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByCreator(securityUtilService.getUserId(), pageable).map(StoredDocumentHalResource::new);
+        Page<StoredDocumentHalResource> page = searchService
+                .findStoredDocumentsByCreator(securityUtilService.getUserId(), pageable)
+                .map(StoredDocumentHalResource::new);
 
         return ResponseEntity
                 .ok()

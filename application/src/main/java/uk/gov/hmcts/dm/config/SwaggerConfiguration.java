@@ -36,37 +36,40 @@ public class SwaggerConfiguration {
                 .paths(PathSelectors.regex("/documents(.*)"))
                 .build()
                 .globalOperationParameters(
-                    Stream.of(new ParameterBuilder()
-                            .name("ServiceAuthorization")
-                            .description("Service Auth (S2S). Use it when accessing the API on App Tier level.")
-                            .modelRef(new ModelRef(MODEL_REF_TYPE))
-                            .parameterType(PARAMETER_TYPE)
-                            .required(true)
-                            .build()).collect(Collectors.toList()))
+                        Stream.of(new ParameterBuilder()
+                                .name("ServiceAuthorization")
+                                .description("Service Auth (S2S). Use it when accessing the API on App Tier level.")
+                                .modelRef(new ModelRef(MODEL_REF_TYPE))
+                                .parameterType(PARAMETER_TYPE)
+                                .required(true)
+                                .build()).collect(Collectors.toList()))
                 .globalOperationParameters(
-                    Stream.of(new ParameterBuilder()
-                        .name("user-id")
-                        .description("User-id of the currently authenticated user. If provided will be used to populate the creator field of a document and will be used for authorisation.")
-                        .modelRef(new ModelRef(MODEL_REF_TYPE))
-                        .parameterType(PARAMETER_TYPE)
-                        .required(false)
-                        .build()).collect(Collectors.toList()))
+                        Stream.of(new ParameterBuilder()
+                                .name("user-id")
+                                .description("User-id of the currently authenticated user. If provided will be used to "
+                                        + "populate the creator field of a document and will be used for authorisation.")
+                                .modelRef(new ModelRef(MODEL_REF_TYPE))
+                                .parameterType(PARAMETER_TYPE)
+                                .required(false)
+                                .build()).collect(Collectors.toList()))
                 .globalOperationParameters(
-                    Stream.of(new ParameterBuilder()
-                        .name("user-roles")
-                        .description("Comma-separated list of roles of the currently authenticated user. If provided will be used for authorisation.")
-                        .modelRef(new ModelRef(MODEL_REF_TYPE))
-                        .parameterType(PARAMETER_TYPE)
-                        .required(false)
-                        .build()).collect(Collectors.toList()))
-            .apiInfo(apiInfo());
+                        Stream.of(new ParameterBuilder()
+                                .name("user-roles")
+                                .description("Comma-separated list of roles of the currently authenticated user. "
+                                        + "If provided will be used for authorisation.")
+                                .modelRef(new ModelRef(MODEL_REF_TYPE))
+                                .parameterType(PARAMETER_TYPE)
+                                .required(false)
+                                .build()).collect(Collectors.toList()))
+                .apiInfo(apiInfo());
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("Document Management API")
                 .description("Documented API for the interim document management solution."
-                    + "To use the API calls generate an Authorization JWT Tokens (user and service) which is required in the header.")
+                        + "To use the API calls generate an Authorization JWT Tokens (user and service) which "
+                        + "is required in the header.")
                 .version(apiVersion)
                 .build();
     }

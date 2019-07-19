@@ -6,7 +6,7 @@ import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.utilities.Classifications
-import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
+import uk.gov.hmcts.dm.functional.utilities.ExtendedMimeTypes
 
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.containsString
@@ -32,7 +32,7 @@ class ErrorPageIT extends BaseIT {
     @Test
     void "EP2 As an authenticated user trying to access an unknown document, receive JSON error page with 404"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
                 .contentType(ContentType.JSON)
@@ -45,7 +45,7 @@ class ErrorPageIT extends BaseIT {
     @Test
     void "EP3 As an authenticated user trying to access document/, receive JSON error page with 405"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
                 .contentType(ContentType.JSON)
@@ -57,7 +57,7 @@ class ErrorPageIT extends BaseIT {
     @Test
     void "EP4 As an authenticated user trying to post no document, receive JSON error page with 415"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
         .expect()
             .contentType(ContentType.JSON)
@@ -69,7 +69,7 @@ class ErrorPageIT extends BaseIT {
     @Test
     void "EP5 As an authenticated user trying to post bad attachment, receive JSON error page with 415"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .multiPart("file", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
         .expect()
@@ -84,7 +84,7 @@ class ErrorPageIT extends BaseIT {
 
         def url = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN_2)
+        givenV1Request(CITIZEN_2)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
         .expect()
@@ -142,7 +142,7 @@ class ErrorPageIT extends BaseIT {
 
         def url = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .accept(ContentType.JSON)
             .multiPart("file", file(ATTACHMENT_18), MediaType.APPLICATION_XML_VALUE)
             .expect()
@@ -155,7 +155,7 @@ class ErrorPageIT extends BaseIT {
     @Test
     void "EP11 As an authenticated web user trying to post no document, receive JSON error page with 415"() {
 
-        givenRequest(CITIZEN)
+        givenV1Request(CITIZEN)
             .accept(ContentType.XML)
             .multiPart("file", file(ATTACHMENT_18), MediaType.APPLICATION_XML_VALUE)
             .expect()
@@ -170,7 +170,7 @@ class ErrorPageIT extends BaseIT {
 //
 //        def documentUrl = createDocumentAndGetUrlAs CITIZEN
 //
-//        def path1 = givenRequest()
+//        def path1 = givenV1Request()
 //            .accept(ContentType.JSON)
 //            .expect()
 //            .contentType(ContentType.JSON)
@@ -185,8 +185,8 @@ class ErrorPageIT extends BaseIT {
     @Test
     void "EP12 As an authenticated user, when I post a SVG document I should get JSON response"() {
 
-        givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_10), V1MimeTypes.IMAGE_SVG_VALUE)
+        givenV1Request(CITIZEN)
+            .multiPart("files", file(ATTACHMENT_10), ExtendedMimeTypes.IMAGE_SVG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()
@@ -200,8 +200,8 @@ class ErrorPageIT extends BaseIT {
     @Test
     void "EP13 As an authenticated user, when I post a XML document I should get JSON response"() {
 
-        givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_18), V1MimeTypes.APPLICATION_XML_VALUE)
+        givenV1Request(CITIZEN)
+            .multiPart("files", file(ATTACHMENT_18), ExtendedMimeTypes.APPLICATION_XML_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()
@@ -215,8 +215,8 @@ class ErrorPageIT extends BaseIT {
     @Test
     void "EP14 As an authenticated user, when I post a EXE document I should get JSON response"() {
 
-        givenRequest(CITIZEN)
-            .multiPart("files", file(BAD_ATTACHMENT_1), V1MimeTypes.ALL_VALUE)
+        givenV1Request(CITIZEN)
+            .multiPart("files", file(BAD_ATTACHMENT_1), ExtendedMimeTypes.ALL_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()

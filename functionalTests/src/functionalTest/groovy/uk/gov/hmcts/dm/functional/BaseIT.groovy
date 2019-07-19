@@ -4,13 +4,16 @@ import io.restassured.RestAssured
 import io.restassured.response.Response
 import net.jcip.annotations.NotThreadSafe
 import org.junit.Assert
+import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.FileUtils
-import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+import uk.gov.hmcts.dm.functional.v1.V1MediaTypes
+import uk.gov.hmcts.dm.functional.v2.V2MediaTypes
 
 import javax.annotation.PostConstruct
 import uk.gov.hmcts.dm.functional.config.FunctionalTestContextConfiguration
@@ -123,6 +126,8 @@ class BaseIT {
     final String SVG_AS_PNG = 'svg_as_png.png'
     final String XML_AS_PNG = 'xml_as_png.png'
 
+    TestUtil testUtil = new TestUtil()
+
     @PostConstruct
     void init() {
         RestAssured.baseURI = dmStoreBaseUri
@@ -134,7 +139,7 @@ class BaseIT {
         request
     }
 
-    def givenRequest(username = null, userRoles = null) {
+    def givenV1Request(username = null, userRoles = null, Map headers = null) {
 
         def request = given().log().all()
 
@@ -145,6 +150,29 @@ class BaseIT {
             }
             if (userRoles) {
                 request = request.header("user-roles", userRoles.join(','))
+            }
+        }
+
+        if (headers) {
+            headers.each { k, v ->
+                request.header(k, v)
+            }
+        }
+
+        request
+    }
+
+    def givenV2Request(String username = null, List<String> userRoles = null, Map headers = null) {
+
+        def request = given().log().all()
+
+        if (username) {
+            request = testUtil.authRequest(username, userRoles).log().all()
+        }
+
+        if (headers) {
+            headers.each { k, v ->
+                request.header(k, v)
             }
         }
 
@@ -183,8 +211,8 @@ class BaseIT {
         authTokenProvider.findServiceToken()
     }
 
-    def createDocument(username,  filename = null, classification = null, roles = null, metadata = null) {
-        def request = givenRequest(username)
+    def createDocument(username, filename = null, classification = null, roles = null, metadata = null, version = 1) {
+        def request = "givenV${version}Request"(username)
                         .multiPart("files", file( filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
                         .multiPart("classification", classification ?: "PUBLIC")
 
@@ -192,8 +220,10 @@ class BaseIT {
             request.multiPart("roles", role)
         }
 
+        request.header('accept', version == 1 ? V1MediaTypes.V1_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE :
+                V2MediaTypes.V2_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE)
+
         if (metadata) {
-            request.accept(V1MediaTypes.V1_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE_VALUE)
             metadata?.each { key, value ->
                 request.multiPart("metadata[${key}]", value)
             }
@@ -206,18 +236,19 @@ class BaseIT {
                 .post("/documents")
     }
 
-    def createDocumentAndGetUrlAs(username, filename = null, classification = null, roles = null, metadata = null) {
-        createDocument(username, filename, classification, roles, metadata)
+    def createDocumentAndGetUrlAs(username, filename = null, classification = null, roles = null, metadata = null, version = 1) {
+        createDocument(username, filename, classification, roles, metadata, version)
             .path("_embedded.documents[0]._links.self.href")
     }
 
-    def createDocumentAndGetBinaryUrlAs(username,  filename = null, classification = null, roles = null) {
-        createDocument(username, filename, classification, roles)
+    def createDocumentAndGetBinaryUrlAs(username,  filename = null, classification = null, roles = null, version = 1) {
+        createDocument(username, filename, classification, roles, null, version)
             .path("_embedded.documents[0]._links.binary.href")
     }
 
-    def createDocumentContentVersion(documentUrl, username, filename = null) {
-        givenRequest(username)
+    def createDocumentContentVersion(documentUrl, username, filename = null, version = 1) {
+        "givenV${version}Request"(username, null, [(HttpHeaders.ACCEPT): version == 2 ?
+                V2MediaTypes.V2_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE : V1MediaTypes.V1_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE] )
             .multiPart("file", file( filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
                 .statusCode(201)
@@ -225,16 +256,16 @@ class BaseIT {
                 .post(documentUrl)
     }
 
-    def createDocumentContentVersionAndGetUrlAs(documentUrl, username, filename = null) {
-        createDocumentContentVersion(documentUrl, username, filename).path('_links.self.href')
+    def createDocumentContentVersionAndGetUrlAs(documentUrl, username, filename = null, version = 1) {
+        createDocumentContentVersion(documentUrl, username, filename, version).path('_links.self.href')
     }
 
-    def createDocumentContentVersionAndGetBinaryUrlAs(documentUrl, username, filename = null) {
-        createDocumentContentVersion(documentUrl, username, filename).path('_links.binary.href')
+    def createDocumentContentVersionAndGetBinaryUrlAs(documentUrl, username, filename = null, version = 1) {
+        createDocumentContentVersion(documentUrl, username, filename, version).path('_links.binary.href')
     }
 
-    def CreateAUserforTTL(username) {
-        Response response = givenRequest(username)
+    def CreateAUserforTTL(username, version = 1) {
+        Response response = "givenV${version}Request"(username)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
