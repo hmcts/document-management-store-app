@@ -26,8 +26,8 @@ The following environment variables are required:
 
 | Name | Default | Description |
 |------|---------|-------------|
-| IDAM_USER_BASE_URI | - | Base URL for IdAM's User API service (idam-app). `http://localhost:4501` for the dockerised local instance or tunneled `dev` instance. |
-| IDAM_S2S_BASE_URI | - | Base URL for IdAM's S2S API service (service-auth-provider). `http://localhost:4502` for the dockerised local instance or tunneled `dev` instance. |
+| IDAM_API_BASE_URI | - | Base URL for IdAM's User API service (idam-app). `http://localhost:4501` for the dockerised local instance or tunneled `dev` instance. |
+| S2S_BASE_URI | - | Base URL for IdAM's S2S API service (service-auth-provider). `http://localhost:4502` for the dockerised local instance or tunneled `dev` instance. |
 | MAX_FILE_SIZE | 100MB | Max file size |
 
 **Note:** The MAX_FILE_SIZE enforces limit on the document upload in the document management backend service. 
