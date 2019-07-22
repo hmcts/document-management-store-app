@@ -23,17 +23,7 @@ import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.config.security.DmSecurityFilter;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-import uk.gov.hmcts.dm.service.AuditEntryService;
-import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
-import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
-import uk.gov.hmcts.dm.service.BlobStorageMigrationService;
-import uk.gov.hmcts.dm.service.BlobStorageReadService;
-import uk.gov.hmcts.dm.service.BlobStorageWriteService;
-import uk.gov.hmcts.dm.service.DocumentContentVersionService;
-import uk.gov.hmcts.dm.service.FolderService;
-import uk.gov.hmcts.dm.service.SearchService;
-import uk.gov.hmcts.dm.service.StoredDocumentService;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.AuthCheckerServiceOnlyFilter;
+import uk.gov.hmcts.dm.service.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
