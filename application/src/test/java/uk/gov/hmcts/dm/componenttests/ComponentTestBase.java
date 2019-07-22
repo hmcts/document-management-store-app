@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
+import uk.gov.hmcts.dm.config.security.DmSecurityFilter;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.AuditEntryService;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
@@ -66,7 +67,7 @@ public abstract class ComponentTestBase {
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
     @Autowired
-    protected AuthCheckerServiceOnlyFilter filter;
+    protected DmSecurityFilter filter;
 
     @MockBean
     protected FolderService folderService;
