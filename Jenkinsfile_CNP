@@ -18,7 +18,10 @@ def component = "store"
 
 def secrets = [
     's2s-${env}': [
-        secret('microservicekey-em-gw', 'S2S_TOKEN')
+        secret('microservicekey-em-gw', 'FUNCTIONAL_TEST_CLIENT_S2S_TOKEN')
+    ],
+    'rpa-${env}': [
+        secret('show-oauth2-token', 'FUNCTIONAL_TEST_CLIENT_OAUTH_SECRET')
     ]
 ]
 
@@ -31,8 +34,14 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+env.IDAM_API_BASE_URI = 'https://idam-api.aat.platform.hmcts.net'
+env.S2S_BASE_URI = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
+env.IDAM_WEBSHOW_WHITELIST = 'https://em-show-aat.service.core-compute-aat.internal/oauth2/callback'
+env.EM_STITCHING_API_URL = 'http://em-stitching-aat.service.core-compute-aat.internal'
+env.DM_STORE_APP_URL = 'http://dm-store-aat.service.core-compute-aat.internal'
+
 def vaultOverrides = [
-    'preview': 'aat',
+    'preview' : 'aat',
     'spreview': 'saat'
 ]
 
@@ -44,8 +53,6 @@ withPipeline(type , product, component) {
         enableSlackNotifications('#ccd-demo-builds')
     }
     onPR {
-        env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
-        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
         enableSlackNotifications('#ccd-pr-builds')
     }
 
