@@ -360,7 +360,7 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R25 I created a document using S2S token, but I must not access it as a citizen using api gateway"() {
 
-        def documentUrl = createDocumentAndGetBinaryUrlAs "user1@anothertest.com", null, null, null,2
+        def documentUrl = createDocumentAndGetBinaryUrlAs "hmctsuser12345@gmail.com", null, null, null,2
 
         givenV2Request(CITIZEN, null,
                 [(HttpHeaders.ACCEPT): 'application/vnd.uk.gov.hmcts.dm.document.v2+hal+json,application/json;charset=UTF-8'])
