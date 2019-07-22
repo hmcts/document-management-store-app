@@ -4,22 +4,21 @@ import io.restassured.RestAssured
 import io.restassured.response.Response
 import net.jcip.annotations.NotThreadSafe
 import org.junit.Assert
-import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
+import uk.gov.hmcts.dm.functional.config.FunctionalTestContextConfiguration
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.FileUtils
 import uk.gov.hmcts.dm.functional.v1.V1MediaTypes
 import uk.gov.hmcts.dm.functional.v2.V2MediaTypes
 
 import javax.annotation.PostConstruct
-import uk.gov.hmcts.dm.functional.config.FunctionalTestContextConfiguration
 
-import static io.restassured.RestAssured.given
 import static io.restassured.RestAssured.expect
+import static io.restassured.RestAssured.given
 import static org.hamcrest.Matchers.equalTo
 
 @ContextConfiguration(classes = FunctionalTestContextConfiguration)
