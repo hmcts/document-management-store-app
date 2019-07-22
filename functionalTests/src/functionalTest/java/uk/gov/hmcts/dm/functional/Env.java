@@ -10,11 +10,11 @@ public final class Env {
     static {
         defaults.setProperty("PROXY", "false");
         defaults.setProperty("TEST_URL", "http://localhost:8080");
-        defaults.setProperty("IDAM_API_BASE_URI", "http://localhost:4501");
+        defaults.setProperty("IDAM_USER_BASE_URI", "http://localhost:4501");
         defaults.setProperty("OAUTH_CLIENT", "webshow");
         defaults.setProperty("IDAM_WEBSHOW_WHITELIST", "http://localhost:8080/oauth2redirect");
         defaults.setProperty("FUNCTIONAL_TEST_CLIENT_OAUTH_SECRET", "AAAAAAAAAAAAAAAA");
-        defaults.setProperty("S2S_BASE_URI", "http://localhost:4502");
+        defaults.setProperty("IDAM_S2S_BASE_URI", "http://localhost:4502");
         defaults.setProperty("FUNCTIONAL_TEST_CLIENT_S2S_TOKEN", "AAAAAAAAAAAAAAAA");
         defaults.setProperty("S2S_SERVICE_NAME", "em_gw");
     }
@@ -37,7 +37,7 @@ public final class Env {
     }
 
     public static String getIdamUrl() {
-        return require("IDAM_API_BASE_URI");
+        return require("IDAM_USER_BASE_URI");
     }
 
     public static String getOAuthClient() {
@@ -53,7 +53,7 @@ public final class Env {
     }
 
     public static String getS2sUrl() {
-        return require("S2S_BASE_URI");
+        return require("IDAM_S2S_BASE_URI");
     }
 
     public static String getS2sSecret() {

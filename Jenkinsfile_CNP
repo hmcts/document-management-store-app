@@ -34,8 +34,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
-env.IDAM_API_BASE_URI = 'https://idam-api.aat.platform.hmcts.net'
-env.S2S_BASE_URI = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
+env.IDAM_USER_BASE_URI = 'https://idam-api.aat.platform.hmcts.net'
+env.IDAM_S2S_BASE_URI = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
 env.IDAM_WEBSHOW_WHITELIST = 'https://em-show-aat.service.core-compute-aat.internal/oauth2/callback'
 env.DM_STORE_APP_URL = 'http://dm-store-aat.service.core-compute-aat.internal'
 

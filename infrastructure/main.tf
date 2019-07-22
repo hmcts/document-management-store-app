@@ -66,8 +66,8 @@ module "app" {
     MAX_FILE_SIZE = "${var.max_file_size_in_mb}MB"
 
     # idam
-    IDAM_API_BASE_URI = "${var.idam_api_url}"
-    S2S_BASE_URI = "http://${var.s2s_url}-${local.local_env}.service.core-compute-${local.local_env}.internal"
+    IDAM_USER_BASE_URI = "${var.idam_api_url}"
+    IDAM_S2S_BASE_URI = "http://${var.s2s_url}-${local.local_env}.service.core-compute-${local.local_env}.internal"
 
     # logging vars & healthcheck
     REFORM_SERVICE_NAME = "${local.app_full_name}"
