@@ -89,5 +89,5 @@ task functional(type: Test) {
     description = 'Executes functional tests against DM API instance'
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
-    include "uk/gov/hmcts/dm/functional/*IT.*"
+    include "uk/gov/hmcts/dm/functional/**/*IT.*"
 }
