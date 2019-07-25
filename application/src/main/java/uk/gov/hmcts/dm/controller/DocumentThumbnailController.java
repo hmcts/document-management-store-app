@@ -40,18 +40,13 @@ public class DocumentThumbnailController {
     })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID documentId) {
-
-        DocumentContentVersion documentContentVersion =
-            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId);
-
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok()
-            .contentType(MediaType.IMAGE_JPEG)
-            .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion));
-
+        return documentContentVersionService
+            .findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
+                .map( documentContentVersion ->
+                ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion))
+            ).orElse(ResponseEntity.notFound().build());
     }
 
 
@@ -64,18 +59,12 @@ public class DocumentThumbnailController {
     public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(
         @PathVariable UUID documentId,
         @PathVariable UUID versionId) {
-
-        DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
-
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return
-                ResponseEntity
-                    .ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(auditedDocumentContentVersionOperationsService
-                        .readDocumentContentVersionThumbnail(documentContentVersion));
-        }
+        return documentContentVersionService.findById(versionId).map( documentContentVersion ->
+            ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(auditedDocumentContentVersionOperationsService
+                    .readDocumentContentVersionThumbnail(documentContentVersion)))
+            .orElse(ResponseEntity.notFound().build());
     }
 }

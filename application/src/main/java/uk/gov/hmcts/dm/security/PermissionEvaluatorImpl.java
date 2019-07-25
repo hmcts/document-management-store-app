@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,12 +57,9 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
         boolean result = false;
         CrudRepository<Object, Serializable> repository = repositoryFinder.find(className);
         if (repository != null) {
-            Object targetDomainObject = repository.findOne(serializable);
-            if (targetDomainObject instanceof CreatorAware) {
-                result = hasPermission(authentication, targetDomainObject, permissions);
-            } else if (targetDomainObject == null) {
-                result = true;
-            }
+            result = repository.findById(serializable)
+                .map( o -> hasPermission(authentication, o, permissions) )
+                .orElse(true);
         }
         return result;
     }

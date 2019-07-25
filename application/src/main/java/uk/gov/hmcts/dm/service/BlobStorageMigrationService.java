@@ -140,8 +140,7 @@ public class BlobStorageMigrationService {
             throw new DocumentNotFoundException(documentId);
         }
 
-        return Optional
-            .ofNullable(documentContentVersionRepository.findOne(versionId))
+        return documentContentVersionRepository.findById(versionId)
             .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
     }
 

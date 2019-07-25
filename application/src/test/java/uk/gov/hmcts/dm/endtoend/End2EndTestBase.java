@@ -61,7 +61,7 @@ public abstract class End2EndTestBase {
 
         doAnswer(invocation -> {
             try (final InputStream inputStream = FILE.getInputStream();
-                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+                 final OutputStream out = invocation.getArgument(1)
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;
@@ -77,7 +77,7 @@ public abstract class End2EndTestBase {
     }
 
     private void uploadDocument(final InvocationOnMock invocation) throws IOException {
-        final DocumentContentVersion dcv = invocation.getArgumentAt(1, DocumentContentVersion.class);
+        final DocumentContentVersion dcv = invocation.getArgument(1);
         dcv.setContentUri("uri");
         dcv.setContentChecksum("checksum");
     }

@@ -54,7 +54,7 @@ public class BatchMigrationAuditEntryServiceTest {
         verifyZeroInteractions(batchMigrationAuditEntryRepository);
     }
 
-    class BatchMigrationAuditEntryMatcher extends ArgumentMatcher<BatchMigrationAuditEntry> {
+    class BatchMigrationAuditEntryMatcher implements ArgumentMatcher<BatchMigrationAuditEntry> {
 
         private final String authToken;
         private final Integer batchSize;
@@ -67,12 +67,13 @@ public class BatchMigrationAuditEntryServiceTest {
         }
 
         @Override
-        public boolean matches(final Object item) {
-            BatchMigrationAuditEntry other = (BatchMigrationAuditEntry)item;
+        public boolean matches(final BatchMigrationAuditEntry other) {
             return StringUtils.equals(authToken, other.getMigrationKey())
                 && batchSize == other.getBatchSize()
                 && mockRun == other.getMockRun();
         }
+
+
     }
 
     class NoJsonBatchMigrateProgressReport extends BatchMigrateProgressReport {
