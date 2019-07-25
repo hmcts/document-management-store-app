@@ -52,12 +52,10 @@ public class AuditedDocumentContentVersionOperationsService {
 
     @PreAuthorize("hasPermission(#versionId, 'uk.gov.hmcts.dm.domain.DocumentContentVersion', 'READ')")
     public DocumentContentVersion readDocumentContentVersion(@NotNull UUID versionId) {
-        DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            throw new DocumentContentVersionNotFoundException(versionId);
-        }
-        auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
-        return documentContentVersion;
+        return documentContentVersionService.findById(versionId).map(documentContentVersion -> {
+            auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
+            return documentContentVersion;
+        }).orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
     }
 
 }

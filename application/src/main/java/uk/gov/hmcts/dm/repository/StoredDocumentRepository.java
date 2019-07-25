@@ -12,6 +12,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -25,5 +26,7 @@ public interface StoredDocumentRepository extends PagingAndSortingRepository<Sto
     Page<StoredDocument> findByCreatedBy(@Param("creator") String creator, @NonNull Pageable pageable);
 
     List<StoredDocument> findByTtlLessThanAndHardDeleted(Date date, Boolean hardDeleted);
+
+    Optional<StoredDocument> findByIdAndDeleted(UUID uuid, boolean deleted);
 
 }

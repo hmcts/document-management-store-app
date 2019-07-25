@@ -2,8 +2,8 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'pmd'
-    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-    id 'org.springframework.boot' version '1.5.21.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'org.owasp.dependencycheck'
     id 'se.patrikerdes.use-latest-versions' version '0.2.7'
     id 'com.github.ben-manes.versions' version '0.20.0'
@@ -141,7 +141,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
-    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.24.0.RELEASE'
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
 
     compile group: 'org.liquibase', name: 'liquibase-core', version: versions.liquibaseVersion
 
@@ -273,10 +273,6 @@ jar {
     manifest {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
     }
-}
-
-bootRepackage {
-    mainClass = 'uk.gov.hmcts.dm.DmApp'
 }
 
 //This is used in get the version for fakeversion and buildInfo  (./gradlew -q printVersion)

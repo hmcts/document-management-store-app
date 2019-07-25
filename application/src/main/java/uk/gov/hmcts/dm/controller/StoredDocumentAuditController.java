@@ -40,19 +40,17 @@ public class StoredDocumentAuditController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success", response = StoredDocumentAuditEntryHalResource.class)
     })
-    public ResponseEntity<Object> findAudits(@PathVariable UUID documentId) {
-        StoredDocument storedDocument =
-            Optional.ofNullable(storedDocumentRepository.findOne(documentId))
-                .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
-
-        List<StoredDocumentAuditEntry> auditEntries = auditEntryService.findStoredDocumentAudits(storedDocument);
-
-        Resources<StoredDocumentAuditEntryHalResource> resources = new Resources<>(auditEntries
-            .stream()
-            .map(StoredDocumentAuditEntryHalResource::new)
-            .collect(Collectors.toList()));
-
-        return ResponseEntity.ok().contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE).body(resources);
+    public ResponseEntity<Resources<StoredDocumentAuditEntryHalResource>> findAudits(@PathVariable UUID documentId) {
+        return storedDocumentRepository
+            .findById(documentId)
+            .map( storedDocument -> ResponseEntity.ok()
+                .contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE).body(new Resources<>(
+                    auditEntryService
+                        .findStoredDocumentAudits(storedDocument)
+                        .stream()
+                        .map(StoredDocumentAuditEntryHalResource::new)
+                        .collect(Collectors.toList()))) )
+            .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
     }
 
 }

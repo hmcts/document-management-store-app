@@ -107,42 +107,39 @@ public class StoredDocumentController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<Object> getBinary(@PathVariable UUID documentId, HttpServletResponse response) {
+    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response) {
+        return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
+            .map(documentContentVersion -> {
 
-        DocumentContentVersion documentContentVersion =
-            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId);
+                response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+                response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+                response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            return ResponseEntity.notFound().build();
-        }
+                try {
+                    if (isBlank(documentContentVersion.getContentUri())) {
+                        response.setHeader("data-source", "Postgres");
+                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
+                            documentContentVersion,
+                            response.getOutputStream());
+                    } else {
+                        response.setHeader("data-source", "contentURI");
+                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                            documentContentVersion,
+                            response.getOutputStream());
+                    }
 
-        response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-        response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-            format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+                } catch (IOException e) {
+                    return ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(e);
+                }
 
-        try {
-            if (isBlank(documentContentVersion.getContentUri())) {
-                response.setHeader("data-source", "Postgres");
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
-                    documentContentVersion,
-                    response.getOutputStream());
-            } else {
-                response.setHeader("data-source", "contentURI");
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                    documentContentVersion,
-                    response.getOutputStream());
-            }
-            response.flushBuffer();
+                return ResponseEntity.ok().build();
 
-        } catch (IOException e) {
-            return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(e);
-        }
-
-        return null;
+            })
+            .orElse(ResponseEntity.notFound().build());
     }
 }
 

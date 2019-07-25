@@ -16,6 +16,7 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -75,20 +76,20 @@ public class DocumentContentVersionServiceTests {
 
     @Test
     public void testFindOne() {
-        when(documentContentVersionRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(new DocumentContentVersion());
-        Assert.assertNotNull(documentContentVersionService.findOne(TestUtil.RANDOM_UUID));
+        when(documentContentVersionRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(new DocumentContentVersion()));
+        Assert.assertNotNull(documentContentVersionService.findById(TestUtil.RANDOM_UUID));
     }
 
     @Test
     public void testMostRecentFileContentVersionByStoredFileId() {
-        when(storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.STORED_DOCUMENT);
+        when(storedDocumentRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(TestUtil.STORED_DOCUMENT));
         assertEquals(TestUtil.STORED_DOCUMENT.getMostRecentDocumentContentVersion(),
             documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 
     @Test
     public void testMostRecentFileContentVersionByStoredFileIdOnNullStoredFile() {
-        when(storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
+        when(storedDocumentRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(null);
         Assert.assertNull(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 

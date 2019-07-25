@@ -69,7 +69,7 @@ public class BlobStorageWriteServiceTest {
         given(blob.getUri()).willReturn(new URI(azureProvidedUri));
         doAnswer(invocation -> {
             try (final InputStream inputStream = toInputStream(MOCK_DATA);
-                 final OutputStream outputStream = invocation.getArgumentAt(0, OutputStream.class)
+                 final OutputStream outputStream = invocation.getArgument(0)
             ) {
                 return copy(inputStream, outputStream);
             }

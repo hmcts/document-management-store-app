@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
+import java.util.Optional;
+
 @Configuration
 @EnableJpaAuditing
 public class PersistenceConfig {
@@ -20,13 +22,13 @@ public class PersistenceConfig {
 class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override
-    public String getCurrentAuditor() {
+    public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
-            return userDetails.getUsername();
+            return Optional.ofNullable(userDetails.getUsername());
         } else {
-            return null;
+            return Optional.empty();
         }
     }
 

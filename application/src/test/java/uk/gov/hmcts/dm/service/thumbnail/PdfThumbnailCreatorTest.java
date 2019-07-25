@@ -116,7 +116,7 @@ public class PdfThumbnailCreatorTest {
         when(contentVersion.getDocumentContent()).thenReturn(null);
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE);
         Mockito.doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
+            final OutputStream out = invocation.getArgument(1);
             IOUtils.copy(file, out);
             out.close();
             return null;
