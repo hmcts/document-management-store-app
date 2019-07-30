@@ -82,15 +82,18 @@ public class DocumentContentVersionServiceTests {
 
     @Test
     public void testMostRecentFileContentVersionByStoredFileId() {
-        when(storedDocumentRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(TestUtil.STORED_DOCUMENT));
-        assertEquals(TestUtil.STORED_DOCUMENT.getMostRecentDocumentContentVersion(),
+        when(storedDocumentRepository
+            .findByIdAndDeleted(TestUtil.RANDOM_UUID, false))
+                .thenReturn(Optional.of(TestUtil.STORED_DOCUMENT));
+        assertEquals(Optional.of(TestUtil.STORED_DOCUMENT.getMostRecentDocumentContentVersion()),
             documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 
     @Test
     public void testMostRecentFileContentVersionByStoredFileIdOnNullStoredFile() {
-        when(storedDocumentRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(null);
-        Assert.assertNull(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
+        when(storedDocumentRepository.findByIdAndDeleted(TestUtil.RANDOM_UUID, false)).thenReturn(Optional.empty());
+        Assert.assertEquals(Optional.empty(),
+            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 
 }

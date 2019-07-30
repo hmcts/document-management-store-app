@@ -59,12 +59,14 @@ public class DocumentThumbnailController {
     public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(
         @PathVariable UUID documentId,
         @PathVariable UUID versionId) {
-        return documentContentVersionService.findById(versionId).map( documentContentVersion ->
-            ResponseEntity
-                .ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(auditedDocumentContentVersionOperationsService
-                    .readDocumentContentVersionThumbnail(documentContentVersion)))
+        return documentContentVersionService.findById(versionId)
+            .filter(documentContentVersion -> !documentContentVersion.getStoredDocument().isDeleted())
+            .map( documentContentVersion ->
+                ResponseEntity
+                    .ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(auditedDocumentContentVersionOperationsService
+                        .readDocumentContentVersionThumbnail(documentContentVersion)))
             .orElse(ResponseEntity.notFound().build());
     }
 }

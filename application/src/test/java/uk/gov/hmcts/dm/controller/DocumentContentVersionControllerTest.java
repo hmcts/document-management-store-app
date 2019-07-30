@@ -191,7 +191,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     @Test
     public void testGetDocumentVersionBinaryThatDoesNotExist() throws Exception {
         when(this.documentContentVersionService.findById(id))
-            .thenReturn(null);
+            .thenReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")

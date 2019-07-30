@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.data.domain.PageRequest;
@@ -70,6 +71,7 @@ import static uk.gov.hmcts.dm.service.BlobStorageMigrationService.NO_CONTENT_FOU
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
+@PowerMockIgnore({"javax.net.ssl.*"})
 public class BlobStorageMigrationServiceTest {
 
     private BlobStorageMigrationService underTest;

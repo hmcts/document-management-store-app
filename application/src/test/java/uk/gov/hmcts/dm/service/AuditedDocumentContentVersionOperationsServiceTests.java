@@ -104,7 +104,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
 
         UUID uuid = UUID.randomUUID();
 
-        when(documentContentVersionService.findById(uuid)).thenReturn(null);
+        when(documentContentVersionService.findById(uuid)).thenReturn(Optional.empty());
 
         auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
 
