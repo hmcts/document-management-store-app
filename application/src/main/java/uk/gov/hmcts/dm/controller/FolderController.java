@@ -58,7 +58,7 @@ public class FolderController {
             .findById(id)
             .map(FolderHalResource::new)
             .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.noContent().build());
+            .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("{id}")

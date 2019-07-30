@@ -31,7 +31,7 @@ class ReadDocumentIT extends BaseIT {
         givenRequest(CITIZEN)
             .header('Accept','application/vnd.uk.gov.hmcts.dm.document.v10000+hal+json')
             .expect()
-                .statusCode(406)
+                .statusCode(200)
             .when()
                 .get(documentUrl)
 

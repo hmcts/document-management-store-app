@@ -100,7 +100,7 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testFindOneThatDoesNotExist() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(null);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
@@ -114,7 +114,7 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testFindOneWithBinaryDataThatDoesNotExist() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(null);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }

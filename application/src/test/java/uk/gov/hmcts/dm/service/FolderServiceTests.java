@@ -31,7 +31,7 @@ public class FolderServiceTests {
 
         Optional<Folder> folder = folderService.findById(TestUtil.RANDOM_UUID);
 
-        Assert.assertEquals(TestUtil.folder, folder);
+        Assert.assertEquals(Optional.of(TestUtil.folder), folder);
 
     }
 

@@ -31,7 +31,7 @@ public class FolderControllerTests extends ComponentTestBase {
     @Test
     public void testGetFailure() throws Exception {
         when(this.folderService.findById(TestUtil.RANDOM_UUID))
-            .thenReturn(null);
+            .thenReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")
@@ -65,7 +65,7 @@ public class FolderControllerTests extends ComponentTestBase {
     @Test
     public void postDocumentsToFolderThatDoesNotExist() throws Exception {
         given(this.folderService.findById(TestUtil.RANDOM_UUID))
-            .willReturn(null);
+            .willReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")

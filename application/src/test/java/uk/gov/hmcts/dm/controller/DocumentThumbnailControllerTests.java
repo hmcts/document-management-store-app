@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -74,7 +75,7 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
     @Test
     public void testGetDocumentVersionThumbnailThatDoesntExist() throws Exception {
         when(this.documentContentVersionService.findById(id))
-            .thenReturn(null);
+            .thenReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")
