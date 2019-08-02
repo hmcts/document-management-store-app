@@ -198,6 +198,7 @@ EOF
             reportFiles          : 'index.html',
             reportName           : 'AAT Smoke Test'
         ])
+        sh "rm -rf infrastructure/"
     }
 
     after('functionalTest:aat') {
