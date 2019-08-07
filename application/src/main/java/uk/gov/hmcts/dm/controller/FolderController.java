@@ -43,7 +43,7 @@ public class FolderController {
     public ResponseEntity<Object> addDocuments(@PathVariable UUID id, @RequestParam List<MultipartFile> files) {
 
         return folderService.findById(id)
-            .map( folder -> {
+            .map(folder -> {
                 storedDocumentService.saveItemsToBucket(folder, files);
                 return ResponseEntity.noContent().build();
             })

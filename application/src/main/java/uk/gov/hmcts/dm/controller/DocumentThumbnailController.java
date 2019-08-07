@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
@@ -42,7 +41,7 @@ public class DocumentThumbnailController {
     public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID documentId) {
         return documentContentVersionService
             .findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
-                .map( documentContentVersion ->
+                .map(documentContentVersion ->
                 ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion))
@@ -61,7 +60,7 @@ public class DocumentThumbnailController {
         @PathVariable UUID versionId) {
         return documentContentVersionService.findById(versionId)
             .filter(documentContentVersion -> !documentContentVersion.getStoredDocument().isDeleted())
-            .map( documentContentVersion ->
+            .map(documentContentVersion ->
                 ResponseEntity
                     .ok()
                     .contentType(MediaType.IMAGE_JPEG)

@@ -24,7 +24,7 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
     private ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
 
     @Override
-    public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace){
+    public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
 
         Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, true);
 

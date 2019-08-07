@@ -107,10 +107,10 @@ public class AuditedStoredDocumentOperationsServiceTests {
 
     @Test
     public void testDeleteNullStoredDocument() {
-        StoredDocument storedDocument = null;
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
+        StoredDocument storedDocument = null;
         verify(storedDocumentService, times(0)).deleteDocument(storedDocument, false);
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.DELETED);
     }

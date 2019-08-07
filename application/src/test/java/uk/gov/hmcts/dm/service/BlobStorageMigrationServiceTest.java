@@ -6,7 +6,6 @@ import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -113,8 +112,8 @@ public class BlobStorageMigrationServiceTest {
         documentContentVersionUuid = UUID.randomUUID();
         documentUuid = UUID.randomUUID();
         data = new SerialBlob(DOC_CONTENT.getBytes());
-        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any())).thenReturn
-            (batchmigrationAuditEntry);
+        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any()))
+            .thenReturn(batchmigrationAuditEntry);
     }
 
     @Test

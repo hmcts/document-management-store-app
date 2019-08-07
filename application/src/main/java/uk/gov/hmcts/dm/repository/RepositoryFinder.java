@@ -28,7 +28,7 @@ public class RepositoryFinder {
     public CrudRepository<Object, Serializable> find(@NotNull Class<?> domainClass) {
         Repositories repositories = new Repositories(listableBeanFactory);
         return repositories.getRepositoryFor(domainClass)
-            .map( r -> (CrudRepository<Object, Serializable>)r )
+            .map(r -> (CrudRepository<Object, Serializable>)r)
             .orElse(null);
     }
 
