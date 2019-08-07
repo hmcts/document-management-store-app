@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.Folder;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 
 import java.util.Optional;

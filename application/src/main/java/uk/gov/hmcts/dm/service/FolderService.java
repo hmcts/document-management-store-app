@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.Folder;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 
 import java.util.Optional;
@@ -30,7 +29,7 @@ public class FolderService {
     }
 
     public void delete(Optional<Folder> maybeFolder) {
-        maybeFolder.ifPresent( folder -> folderRepository.delete(folder) );
+        maybeFolder.ifPresent(folder -> folderRepository.delete(folder));
     }
 
 
