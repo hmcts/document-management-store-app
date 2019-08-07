@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doThrow;
@@ -46,7 +45,7 @@ public class DocumentContentVersionServiceTests {
         documentContentVersionService.streamDocumentContentVersion(TestUtil.DOCUMENT_CONTENT_VERSION,
             mockHttpServletResponse.getOutputStream());
 
-        assertEquals(mockHttpServletResponse.getContentAsString(),
+        Assert.assertEquals(mockHttpServletResponse.getContentAsString(),
             TestUtil.BLOB_DATA);
     }
 
@@ -85,7 +84,7 @@ public class DocumentContentVersionServiceTests {
         when(storedDocumentRepository
             .findByIdAndDeleted(TestUtil.RANDOM_UUID, false))
                 .thenReturn(Optional.of(TestUtil.STORED_DOCUMENT));
-        assertEquals(Optional.of(TestUtil.STORED_DOCUMENT.getMostRecentDocumentContentVersion()),
+        Assert.assertEquals(Optional.of(TestUtil.STORED_DOCUMENT.getMostRecentDocumentContentVersion()),
             documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 
