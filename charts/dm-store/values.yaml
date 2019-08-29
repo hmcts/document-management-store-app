@@ -68,7 +68,7 @@ java:
     ENABLE_TTL: 'true'
     ENABLE_THUMBNAIL: 'true'
 
-    ENABLE_AZURE_STORAGE_CONTAINER: 'true'
+    ENABLE_AZURE_STORAGE_CONTAINER: 'false'
     ENABLE_POSTGRES_BLOB_STORAGE: 'false'
 
     # Migration Job specific
@@ -77,7 +77,7 @@ java:
     BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiQ//gc/G53d9dLCtf123fIYo49gUySuJuxOcw2GtieWTMSy+O7RNtsAIjVf3mCOdDNuN69tZNPEWMdaW8n11s9MwYFahtxDecyn0KIP9MvPsfSMSbxhp/f7kfbdB/H/S5eYea66JTyeJS6uNd76RdHttx0mLO30ZkRcXB25c2SIXhRYsdoeKS5GXHDdNejkQM0S/Ev94x2UunApmYHjWN1XcDhsEsAeF4WHnvYh2XiMn9vHY44AqvbWLlAmCgzaXpz8Xhl0fO7jDKSeReDyuM3UTMaiFFaxuvliGol7aIXq/aVe/miiD2SLxHZ6RxAPW80bhXrzJMTLTCqhCEhzfv someone@somewhere.sometime'
 
     # Document Storage
-    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=AAAAAAAAAAAAAAAA;AccountKey=AAAAAAAAAAAAAAAA;EndpointSuffix=core.windows.net"
     #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
   postgresql:
     postgresqlUsername: evidence
