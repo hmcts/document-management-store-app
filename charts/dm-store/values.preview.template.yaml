@@ -7,8 +7,8 @@ java:
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat
 
     # logging vars & healthcheck
-    REFORM_ENVIRONMENT: aat
-    PACKAGES_ENVIRONMENT: aat
+    REFORM_ENVIRONMENT: preview
+    PACKAGES_ENVIRONMENT: preview
 
 postgresql:
   enabled: true
