@@ -4,14 +4,17 @@ java:
   livenessPath: '/health'
   secrets:
     STORAGE_ACCOUNT_NAME:
-      secretRef: storage-secret-{{ .Release.Name }}
-      key: storageAccountName
+#      secretRef: storage-secret-{{ .Release.Name }}
+#      key: storageAccountName
+      disabled: true
     STORAGE_ACCOUNT_KEY:
-      secretRef: storage-secret-{{ .Release.Name }}
-      key: accessKey
+#      secretRef: storage-secret-{{ .Release.Name }}
+#      key: accessKey
+      disabled: true
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
-      key: containerName
+#      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
+#      key: containerName
+      disabled: true
   environment:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
