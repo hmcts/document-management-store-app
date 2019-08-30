@@ -1,10 +1,11 @@
 spring:
   cloud:
     propertiesvolume:
-      prefixed: false
-      paths: /mnt/secrets/ccd
+      enabled: true
+      prefixed: true
+      paths: /mnt/secrets/ccd, /mnt/secrets/rpa
       aliases:
-        dm-store-POSTGRES-PASS: spring.datasource.password
-        dm-store-storage-account-primary-connection-string: STORAGEACCOUNT_PRIMARY_CONNECTION_STRING
-        dm-store-storage-account-secondary-connection-string: STORAGEACCOUNT_SECONDARY_CONNECTION_STRING
-
+        ccd.dm-store-POSTGRES-PASS: spring.datasource.password
+        ccd.dm-store-storage-account-primary-connection-string: STORAGEACCOUNT_PRIMARY_CONNECTION_STRING
+        ccd.dm-store-storage-account-secondary-connection-string: STORAGEACCOUNT_SECONDARY_CONNECTION_STRING
+        rpa.AppInsightsInstrumentationKey: APPINSIGHTS_INSTRUMENTATIONKEY
