@@ -84,13 +84,13 @@ java:
     nameOverride: dm-store-db
     service:
       port: 5432
-blobstorage:
-  resourceGroup: dm-store-aks
-  teamName: "CCD"
-  location: uksouth
-  setup:
-    containers:
-      - dm-docstore
-dm-store:
-  blobstorage:
-    enabled: false
+#blobstorage:
+#  resourceGroup: dm-store-aks
+#  teamName: "CCD"
+#  location: uksouth
+#  setup:
+#    containers:
+#      - dm-docstore
+#dm-store:
+#  blobstorage:
+#    enabled: false
