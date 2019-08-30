@@ -3,7 +3,7 @@ java:
   ingressHost: ${SERVICE_FQDN}
   environment:
     # Endpoints
-    IDAM_USER_BASE_URI: https://idam-api.preview.platform.hmcts.net
+    IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat
 
     # logging vars & healthcheck
