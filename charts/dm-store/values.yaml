@@ -2,6 +2,11 @@ java:
   image: 'https://hmctspublic.azurecr.io/dm/store:latest'
   applicationPort: '4603'
   livenessPath: '/health'
+  keyVaults:
+    rpa:
+      resourceGroup: rpa
+      secrets:
+        - AppInsightsInstrumentationKey
   secrets:
     STORAGE_ACCOUNT_NAME:
 #      secretRef: storage-secret-{{ .Release.Name }}
