@@ -7,8 +7,7 @@ variable "raw_product" {
 }
 
 variable "shared_product" {
-  // We use CCD as our common shared product for any shared infra
-  default = "ccd"
+  default = "rpa"
 }
 
 variable "component" {
