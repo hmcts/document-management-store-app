@@ -7,6 +7,10 @@ java:
       resourceGroup: rpa
       secrets:
         - AppInsightsInstrumentationKey
+    s2s:
+      resourceGroup: rpe-service-auth-provider
+      secrets:
+        - microservicekey-em-gw
   secrets:
     STORAGE_ACCOUNT_NAME:
 #      secretRef: storage-secret-{{ .Release.Name }}
