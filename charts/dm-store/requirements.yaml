@@ -2,7 +2,7 @@ dependencies:
   - name: java
     version: '~2.2.2'
     repository: '@hmctspublic'
-  - name: blobstorage
-    version: ~0.0.4
-    repository: '@hmctspublic'
-    condition: dm-store.blobstorage.enabled
+#  - name: blobstorage
+#    version: ~0.0.4
+#    repository: '@hmctspublic'
+#    condition: dm-store.blobstorage.enabled
