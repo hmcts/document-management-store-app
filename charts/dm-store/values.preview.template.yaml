@@ -10,8 +10,8 @@ java:
     REFORM_ENVIRONMENT: preview
     PACKAGES_ENVIRONMENT: preview
 
-postgresql:
-  enabled: true
+#postgresql:
+#  enabled: true
 #dm-store:
 #  blobstorage:
 #    enabled: false
