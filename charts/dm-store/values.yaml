@@ -1,4 +1,10 @@
 java:
+  postgresql:
+    postgresqlUsername: evidence
+    postgresqlPassword: evidence
+    nameOverride: dm-store-db
+    service:
+      port: 5432
   image: 'https://hmctspublic.azurecr.io/dm/store:latest'
   applicationPort: '4603'
   livenessPath: '/health'
@@ -84,12 +90,7 @@ java:
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=AAAAAAAAAAAAAAAA;AccountKey=AAAAAAAAAAAAAAAA;EndpointSuffix=core.windows.net"
     #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
 
-  postgresql:
-    postgresqlUsername: evidence
-    postgresqlPassword: evidence
-    nameOverride: dm-store-db
-    service:
-      port: 5432
+
 #blobstorage:
 #  resourceGroup: dm-store-aks
 #  teamName: "CCD"
