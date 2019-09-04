@@ -14,4 +14,4 @@ postgresql:
   enabled: true
 dm-store:
   blobstorage:
-    enabled: false
+    enabled: true
