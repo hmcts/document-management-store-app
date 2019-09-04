@@ -12,6 +12,6 @@ java:
 
 postgresql:
   enabled: true
-#dm-store:
-#  blobstorage:
-#    enabled: false
+dm-store:
+  blobstorage:
+    enabled: false
