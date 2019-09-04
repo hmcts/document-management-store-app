@@ -3,5 +3,5 @@ name: dm-store
 home: https://github.com/hmcts/document-management-store-app
 version: 2.0.0
 maintainers:
-  - name: HMCTS CCD Dev Team
-    email: ccd-devops@HMCTS.NET
+  - name: HMCTS Evidence Management Team
+    email: EvidenceManagement@HMCTS.NET

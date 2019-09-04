@@ -97,4 +97,4 @@ blobstorage:
       - dm-docstore
 dm-store:
   blobstorage:
-    enabled: false
+    enabled: true
