@@ -50,7 +50,7 @@ def vaultOverrides = [
 
 withParameterizedPipeline(type, product, component, params.ENVIRONMENT, 'sandbox') {
     enableSlackNotifications('#ccd-param-builds')
-    enableDbMigration()
+    enableDbMigration('rpa')
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
