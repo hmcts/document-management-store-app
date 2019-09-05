@@ -7,7 +7,7 @@ variable "raw_product" {
 }
 
 variable "shared_product" {
-  default = "rpa"
+  default = "ccd"
 }
 
 variable "component" {
