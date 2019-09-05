@@ -111,8 +111,8 @@ public class BlobStorageMigrationServiceTest {
         documentContentVersionUuid = UUID.randomUUID();
         documentUuid = UUID.randomUUID();
         data = new SerialBlob(DOC_CONTENT.getBytes());
-        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any())).thenReturn
-            (batchmigrationAuditEntry);
+        when(batchMigrationAuditEntryService.createAuditEntry(any(), any(), any()))
+            .thenReturn(batchmigrationAuditEntry);
     }
 
     @Test
