@@ -1,7 +1,18 @@
 java:
-  image: 'https://hmcts.azurecr.io/hmcts/dm-store:latest'
+  postgresql:
+    postgresqlUsername: evidence
+    postgresqlPassword: evidence
+    nameOverride: dm-store-db
+    service:
+      port: 5432
+  image: 'https://hmctspublic.azurecr.io/dm/store:latest'
   applicationPort: '4603'
   livenessPath: '/health'
+  keyVaults:
+    rpa:
+      resourceGroup: rpa
+      secrets:
+        - AppInsightsInstrumentationKey
   secrets:
     STORAGE_ACCOUNT_NAME:
       secretRef: storage-secret-{{ .Release.Name }}
@@ -16,15 +27,14 @@ java:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
     # db
-    SPRING_DATASOURCE_URL: 'jdbc:postgresql://{{ .Release.Name }}-postgresql:5432/evidence'
-    SPRING_DATASOURCE_USERNAME: 'evidence'
-    SPRING_DATASOURCE_PASSWORD: 'evidence'
-
+    SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/postgres?ssl=disable
+    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}"
+    SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
 
     MAX_FILE_SIZE: '100MB'
 
       # idam
-    IDAM_USER_BASE_URI: 'https://preprod-idamapi.reform.hmcts.net:3511'
+    IDAM_USER_BASE_URI: 'https://idam-api.aat.platform.hmcts.net'
     IDAM_S2S_BASE_URI: 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
 
     # logging vars & healthcheck
@@ -76,12 +86,8 @@ java:
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
     #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
-  postgresql:
-    postgresqlUsername: evidence
-    postgresqlPassword: evidence
-    postgresqlDatabase: evidence
-    service:
-      port: 5432
+
+
 blobstorage:
   resourceGroup: dm-store-aks
   teamName: "CCD"

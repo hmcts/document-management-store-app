@@ -7,3 +7,4 @@
 !performanceTests
 !smokeTests
 !build/libs/**
+!lib/**
