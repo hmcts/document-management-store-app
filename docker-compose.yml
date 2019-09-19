@@ -11,7 +11,6 @@ services:
       - IDAM_USER_BASE_URI=http://idam-api:8080
       - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
       # these environment variables are used by java-logging library
-      - ROOT_APPENDER=JSON_CONSOLE
       - JSON_CONSOLE_PRETTY_PRINT=false
       - ROOT_LOGGING_LEVEL
       - REFORM_SERVICE_TYPE=java
