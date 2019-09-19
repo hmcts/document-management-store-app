@@ -1,7 +1,7 @@
 description: Helm chart for the HMCTS CDM Document Management APO
 name: dm-store
 home: https://github.com/hmcts/document-management-store-app
-version: 1.0.1
+version: 2.0.0
 maintainers:
-  - name: HMCTS CCD Dev Team
-    email: ccd-devops@HMCTS.NET
+  - name: HMCTS Evidence Management Team
+    email: EvidenceManagement@HMCTS.NET
