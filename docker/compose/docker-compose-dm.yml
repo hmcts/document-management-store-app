@@ -15,7 +15,6 @@ services:
     - DM_SEARCH_URL=http://localhost:3603/documents/filter
     - DM_VIEWER_URL=http://localhost:3621
 #      logging env vars
-    - ROOT_APPENDER=JSON_CONSOLE
     - LOG_OUTPUT=single
     - JSON_CONSOLE_PRETTY_PRINT=false
     - REFORM_SERVICE_TYPE=node
@@ -50,7 +49,6 @@ services:
       - https_proxy=
       - no_proxy=
 #      logging env vars
-      - ROOT_APPENDER=JSON_CONSOLE
       - JSON_CONSOLE_PRETTY_PRINT=false
       - REFORM_SERVICE_TYPE=java
       - REFORM_SERVICE_NAME=dm-store
