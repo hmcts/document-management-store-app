@@ -261,4 +261,13 @@ Another long cpe again
         <notes>Temporarily suppress CVE. Will be removed spring boot and tomcat upgrade</notes>
         <cve>CVE-2019-16335</cve>
     </suppress>
+    <suppress>
+        <notes>Temporarily suppress CVE. </notes>
+        <cve>CVE-2019-11065</cve>
+    </suppress>
+    <suppress>
+        <notes>Temporarily suppress CVE. </notes>
+        <cve>CVE-2019-16370</cve>
+    </suppress>
+
 </suppressions>
