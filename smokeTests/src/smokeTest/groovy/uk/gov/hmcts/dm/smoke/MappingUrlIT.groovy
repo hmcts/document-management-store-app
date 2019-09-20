@@ -43,36 +43,36 @@ class MappingUrlIT extends BaseIT {
 
     @Test
     void "toggle.metadatasearchendpoint toggle Mappings"() {
-        assertTrue allEndpoints.find { it ==~ /(.*)(owned)(.*)/ } as Boolean == metadatasearchendpoint
-        assertTrue allEndpoints.find { it ==~ /(.*)(filter)(.*)/ } as Boolean == metadatasearchendpoint
+        assertTrue allEndpoints.any { it ==~ /(.*)(owned)(.*)/ } == metadatasearchendpoint
+        assertTrue allEndpoints.any { it ==~ /(.*)(filter)(.*)/ } == metadatasearchendpoint
     }
 
     @Test
     @Ignore("Not Testable")
     void "toggle.documentandmetadatauploadendpoint toggle Mappings"() {
-        assertTrue allEndpoints.find { it ==~ /(.*)(mappings)(.*)/ } as Boolean == metadatasearchendpoint
+        assertTrue allEndpoints.any { it ==~ /(.*)(mappings)(.*)/ } == metadatasearchendpoint
     }
 
     @Test
     void "toggle.folderendpoint toggle Mappings"() {
-        assertTrue allEndpoints.find { it ==~ /(.*)(folders)(.*)/ } as Boolean == metadatasearchendpoint
+        assertTrue allEndpoints.any { it ==~ /(.*)(folders)(.*)/ } == metadatasearchendpoint
     }
 
 
     @Test
     void "toggle.deleteenabled toggle Mappings"() {
-        assertTrue allEndpoints.find { it == '{DELETE /documents/{documentId}}' } as Boolean == deleteenabled
+        assertTrue allEndpoints.any { it == '{DELETE /documents/{documentId}}' } == deleteenabled
     }
 
     @Test
     void "toggle.ttl toggle Mappings"() {
-        assertTrue allEndpoints.find { it == '{PATCH /documents/{documentId}, consumes [application/json]}' } as Boolean == ttl
+        assertTrue allEndpoints.any { it == '{PATCH /documents/{documentId}, consumes [application/json]}' } == ttl
     }
 
     @Test
     void "toggle.thumbnail toggle Mappings"() {
-        assertTrue allEndpoints.find { it == '{GET /documents/{documentId}/thumbnail}' } as Boolean == thumbnail
-        assertTrue allEndpoints.find { it == '{GET /documents/{documentId}/versions/{versionId}/thumbnail}' } as Boolean == thumbnail
+        assertTrue allEndpoints.any { it == '{GET /documents/{documentId}/thumbnail}' } == thumbnail
+        assertTrue allEndpoints.any { it == '{GET /documents/{documentId}/versions/{versionId}/thumbnail}' } == thumbnail
     }
 
 }
