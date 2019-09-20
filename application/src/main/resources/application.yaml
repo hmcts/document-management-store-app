@@ -1,6 +1,6 @@
 api:
   version: 1.3.0
-actuator:
+
 spring:
   application:
     name: dm-store
@@ -132,6 +132,7 @@ management:
         include:
           - health
           - info
+          - mappings
   health:
     db:
       enabled: true
