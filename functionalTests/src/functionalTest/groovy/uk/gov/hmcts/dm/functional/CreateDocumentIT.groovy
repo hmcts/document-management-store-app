@@ -438,7 +438,6 @@ class CreateDocumentIT extends BaseIT {
             .path("_embedded.documents[0]._links.thumbnail.href")
 
         Assert.assertNotNull givenRequest(CITIZEN).get(url).asByteArray()
-
     }
 
     @Test

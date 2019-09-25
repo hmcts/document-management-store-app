@@ -269,5 +269,4 @@ Another long cpe again
         <notes>Temporarily suppress CVE. </notes>
         <cve>CVE-2019-16370</cve>
     </suppress>
-
 </suppressions>
