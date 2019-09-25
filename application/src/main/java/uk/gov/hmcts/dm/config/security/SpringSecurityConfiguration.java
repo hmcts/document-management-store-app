@@ -33,7 +33,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.headers().cacheControl().disable();
 
-        http
+        http.requestMatchers()
+            .antMatchers("/documents/**", "/folders/**", "/migrate/**")
+            .and()
             .addFilter(serviceOnlyFilter)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
             .csrf().disable()

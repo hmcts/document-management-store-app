@@ -124,9 +124,10 @@ public class DocumentContentVersionController {
         @PathVariable UUID versionId,
         HttpServletResponse response) {
 
-        DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
+        DocumentContentVersion documentContentVersion = documentContentVersionService.findById(versionId)
+            .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
 
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
+        if (documentContentVersion.getStoredDocument().isDeleted()) {
             throw new DocumentContentVersionNotFoundException(versionId);
         }
 
