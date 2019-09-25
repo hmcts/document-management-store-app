@@ -8,7 +8,6 @@ idam_api_url = "http://betaDevBccidamAppLB.reform.hmcts.net:80"
 ////////////////////////////////////////////////
 // Logging
 ////////////////////////////////////////////////
-root_appender = "JSON_CONSOLE"
 json_console_pretty_print = "false"
 log_output = "single"
 root_logging_level = "INFO"

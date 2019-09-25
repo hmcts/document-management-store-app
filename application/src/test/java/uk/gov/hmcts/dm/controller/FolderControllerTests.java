@@ -6,6 +6,7 @@ import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.security.Classifications;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,8 +18,8 @@ public class FolderControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetSuccess() throws Exception {
-        when(this.folderService.findOne(TestUtil.RANDOM_UUID))
-            .thenReturn(TestUtil.TEST_FOLDER);
+        when(this.folderService.findById(TestUtil.RANDOM_UUID))
+            .thenReturn(Optional.of(TestUtil.TEST_FOLDER));
 
         restActions
             .withAuthorizedUser("userId")
@@ -29,8 +30,8 @@ public class FolderControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetFailure() throws Exception {
-        when(this.folderService.findOne(TestUtil.RANDOM_UUID))
-            .thenReturn(null);
+        when(this.folderService.findById(TestUtil.RANDOM_UUID))
+            .thenReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")
@@ -51,8 +52,8 @@ public class FolderControllerTests extends ComponentTestBase {
 
     @Test
     public void postDocuments() throws Exception {
-        given(this.folderService.findOne(TestUtil.RANDOM_UUID))
-            .willReturn(TestUtil.folder);
+        given(this.folderService.findById(TestUtil.RANDOM_UUID))
+            .willReturn(Optional.of(TestUtil.folder));
 
         restActions
             .withAuthorizedUser("userId")
@@ -63,8 +64,8 @@ public class FolderControllerTests extends ComponentTestBase {
 
     @Test
     public void postDocumentsToFolderThatDoesNotExist() throws Exception {
-        given(this.folderService.findOne(TestUtil.RANDOM_UUID))
-            .willReturn(null);
+        given(this.folderService.findById(TestUtil.RANDOM_UUID))
+            .willReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")
@@ -77,8 +78,8 @@ public class FolderControllerTests extends ComponentTestBase {
     @Test
     @Ignore("Code Removed at the moment called as 405")
     public void testDeleteSuccess() throws Exception {
-        when(this.folderService.findOne(TestUtil.RANDOM_UUID))
-            .thenReturn(TestUtil.TEST_FOLDER);
+        when(this.folderService.findById(TestUtil.RANDOM_UUID))
+            .thenReturn(Optional.of(TestUtil.TEST_FOLDER));
 
         restActions
             .withAuthorizedUser("userId")
@@ -90,7 +91,7 @@ public class FolderControllerTests extends ComponentTestBase {
     @Test
     @Ignore("Code Removed at the moment called as 405")
     public void testDeleteFailure() throws Exception {
-        given(this.folderService.findOne(TestUtil.RANDOM_UUID)).willReturn(null);
+        given(this.folderService.findById(TestUtil.RANDOM_UUID)).willReturn(null);
 
         restActions
             .withAuthorizedUser("userId")

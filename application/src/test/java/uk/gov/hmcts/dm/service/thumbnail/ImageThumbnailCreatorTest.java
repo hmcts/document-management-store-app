@@ -155,7 +155,7 @@ public class ImageThumbnailCreatorTest {
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
         when(contentVersion.getDocumentContent()).thenReturn(null);
         doAnswer(invocation -> {
-            final OutputStream out = invocation.getArgumentAt(1, OutputStream.class);
+            final OutputStream out = invocation.getArgument(1);
             IOUtils.copy(file, out);
             out.close();
             return null;

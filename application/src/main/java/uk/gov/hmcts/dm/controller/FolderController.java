@@ -41,26 +41,24 @@ public class FolderController {
     @PostMapping(value = "/{id}/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiOperation("Adds a list of Stored Documents to a Folder (Stored Documents are created from uploaded Documents)")
     public ResponseEntity<Object> addDocuments(@PathVariable UUID id, @RequestParam List<MultipartFile> files) {
-        Folder existingFolder = folderService.findOne(id);
 
-        if (existingFolder == null) {
-            return ResponseEntity.notFound().build();
-        }
+        return folderService.findById(id)
+            .map(folder -> {
+                storedDocumentService.saveItemsToBucket(folder, files);
+                return ResponseEntity.noContent().build();
+            })
+            .orElse(ResponseEntity.notFound().build());
 
-        storedDocumentService.saveItemsToBucket(existingFolder, files);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("{id}")
     @ApiOperation("Retrieves JSON representation of a Folder.")
-    public ResponseEntity<FolderHalResource> get(@PathVariable UUID id) {
-        Folder folder = folderService.findOne(id);
-        if (folder != null) {
-            FolderHalResource resource = new FolderHalResource(folder);
-            return ResponseEntity.ok(resource);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> get(@PathVariable UUID id) {
+        return folderService
+            .findById(id)
+            .map(FolderHalResource::new)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("{id}")

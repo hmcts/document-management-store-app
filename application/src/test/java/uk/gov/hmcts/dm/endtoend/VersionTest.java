@@ -42,14 +42,14 @@ public class VersionTest extends End2EndTestBase {
     public void setUp() {
         doAnswer(invocation -> {
             try (final InputStream inputStream = FILE_V1.getInputStream();
-                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+                 final OutputStream out = invocation.getArgument(1)
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;
             }
         }).doAnswer(invocation -> {
             try (final InputStream inputStream = FILE_V2.getInputStream();
-                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+                 final OutputStream out = invocation.getArgument(1)
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;

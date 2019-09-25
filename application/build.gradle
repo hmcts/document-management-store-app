@@ -2,8 +2,8 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'pmd'
-    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-    id 'org.springframework.boot' version '1.5.21.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'org.owasp.dependencycheck'
     id 'se.patrikerdes.use-latest-versions' version '0.2.7'
     id 'com.github.ben-manes.versions' version '0.20.0'
@@ -12,7 +12,7 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'io.franzbecker.gradle-lombok' version '1.14'
-    id "info.solidsoft.pitest" version "1.3.0"
+    id "info.solidsoft.pitest" version "1.4.5"
 }
 
 group = 'uk.gov.hmcts.reform.dm'
@@ -126,13 +126,13 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9.2'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9.3'
 
     compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.1'
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '4.3.18.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.1.8.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
@@ -141,7 +141,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
-    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.24.0.RELEASE'
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
+
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.3.Final'
 
     compile group: 'org.liquibase', name: 'liquibase-core', version: versions.liquibaseVersion
 
@@ -155,15 +157,16 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.3'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '2.1.1'
     compile group: 'uk.gov.hmcts.reform', name: 'java-logging-httpcomponents', version: '2.1.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '2.1.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: '5.0.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'java-logging-spring', version: '5.0.1'
     compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '2.0.0'
     compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.0.4"){
         exclude group: 'org.springframework.cloud' , module : 'spring-cloud-context'
         exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
     }
 
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: '1.4.0.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix-dashboard', version: '1.4.0.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.2.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.2.RELEASE'
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
@@ -182,11 +185,12 @@ dependencies {
     }
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit', version: versions.jsonUnit
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: versions.jsonUnit
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.2.3.RELEASE'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.1.5.RELEASE'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito', version: versions.powermock
-    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: versions.powermock
+
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.2'
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.2'
 
     testCompile group: 'org.eclipse.jetty', name: 'jetty-server', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: versions.jetty
@@ -198,8 +202,8 @@ dependencies {
     compile group: 'net.time4j', name: 'time4j-core', version: '4.38'
     // They can be removed alongside with migration code
 
-    compile group: 'org.pitest', name: 'pitest', version: '1.3.2'
-    compile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: '1.3.0'
+    compile group: 'org.pitest', name: 'pitest', version: '1.4.10'
+    compile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: '1.4.5'
     compile group: 'org.codehaus.sonar-plugins', name: 'sonar-pitest-plugin', version: '0.5'
 }
 
@@ -267,17 +271,13 @@ pitest {
 
 //(./gradlew clean jar) build/libs/em-api-*-all.jar
 //(./gradlew installDist bootRepackage) build/install/dm-store/bin/dm-store
-jar {
+bootJar {
     baseName 'dm-store'
     archiveName = "$baseName"+".jar"
     destinationDir = file("$rootDir/build/libs")
     manifest {
         attributes 'Implementation-Title': project.name, 'Implementation-Version': project.version
     }
-}
-
-bootRepackage {
-    mainClass = 'uk.gov.hmcts.dm.DmApp'
 }
 
 //This is used in get the version for fakeversion and buildInfo  (./gradlew -q printVersion)

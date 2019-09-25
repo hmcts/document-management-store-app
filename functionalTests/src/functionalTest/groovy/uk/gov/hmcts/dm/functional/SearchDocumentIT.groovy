@@ -44,7 +44,7 @@ class SearchDocumentIT extends BaseIT {
             .body(JsonOutput.toJson([name:'case']))
         .expect().log().all()
             .statusCode(422)
-            .body("error", equalTo("may not be null"))
+            .body("error", equalTo("must not be null"))
             .when()
         .post('/documents/filter')
     }

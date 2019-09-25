@@ -29,7 +29,6 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static java.lang.System.currentTimeMillis;
@@ -68,11 +67,6 @@ public class BlobStorageMigrationService {
         this.auditEntryRepository = auditEntryRepository;
         this.batchMigrationTokenService = batchMigrationTokenService;
         this.batchMigrationAuditEntryService = batchMigrationAuditEntryService;
-    }
-
-    public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
-        final DocumentContentVersion documentContentVersion = getDocumentContentVersion(documentId, versionId);
-        migrateDocumentContentVersion(documentContentVersion);
     }
 
     public BatchMigrateProgressReport batchMigrate(String authToken,
@@ -117,6 +111,11 @@ public class BlobStorageMigrationService {
                                          documentContentVersionRepository.countByContentChecksumIsNotNull());
     }
 
+    public void migrateDocumentContentVersion(@NotNull UUID documentId, @NotNull UUID versionId) {
+        final DocumentContentVersion documentContentVersion = getDocumentContentVersion(documentId, versionId);
+        migrateDocumentContentVersion(documentContentVersion);
+    }
+
     private void migrateDocumentContentVersion(DocumentContentVersion documentContentVersion) {
         if (isBlank(documentContentVersion.getContentChecksum())) {
             log.info("Migrate DocumentContentVersion {}", documentContentVersion.getId());
@@ -140,8 +139,7 @@ public class BlobStorageMigrationService {
             throw new DocumentNotFoundException(documentId);
         }
 
-        return Optional
-            .ofNullable(documentContentVersionRepository.findOne(versionId))
+        return documentContentVersionRepository.findById(versionId)
             .orElseThrow(() -> new DocumentContentVersionNotFoundException(versionId));
     }
 

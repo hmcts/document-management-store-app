@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.Folder;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
@@ -16,17 +16,8 @@ public class FolderService {
     @Autowired
     private FolderRepository folderRepository;
 
-    public Folder findOne(UUID id) {
-        return folderRepository.findOne(id);
-    }
-
-    public StoredDocument findOneItem(UUID id, Integer index) {
-        Folder folder = findOne(id);
-        if (folder != null) {
-            return folder.getStoredDocuments().get(index);
-
-        }
-        return null;
+    public Optional<Folder> findById(UUID id) {
+        return folderRepository.findById(id);
     }
 
     public void save(Folder folder) {
@@ -34,11 +25,11 @@ public class FolderService {
     }
 
     public void delete(UUID id) {
-        delete(findOne(id));
+        delete(findById(id));
     }
 
-    public void delete(Folder folder) {
-        folderRepository.delete(folder);
+    public void delete(Optional<Folder> maybeFolder) {
+        maybeFolder.ifPresent(folder -> folderRepository.delete(folder));
     }
 
 

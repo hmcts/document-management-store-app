@@ -10,7 +10,6 @@ services:
       - IDAM_S2S_BASE_URI=http://service-auth-provider-app:8489
       - SPRING_DATASOURCE_URL=jdbc:postgresql://em-anno-db:5432/annotation
 #      logging env vars
-      - ROOT_APPENDER=JSON_CONSOLE
       - JSON_CONSOLE_PRETTY_PRINT=true
       - REFORM_SERVICE_TYPE=java
       - REFORM_SERVICE_NAME=em-anno
@@ -36,7 +35,6 @@ services:
 #      - IDAM_S2S_BASE_URI=http://service-auth-provider-app:8489
 #      - SPRING_DATASOURCE_URL=jdbc:postgresql://em-redact-db:5432/redaction
 ##      logging env vars
-#      - ROOT_APPENDER=JSON_CONSOLE
 #      - JSON_CONSOLE_PRETTY_PRINT=false
 #      - REFORM_SERVICE_TYPE=java
 #      - REFORM_SERVICE_NAME=em-redact

@@ -126,8 +126,8 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionBinary() throws Exception {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
+        when(this.documentContentVersionService.findById(id))
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -144,8 +144,8 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     @Test
     public void testGetDocumentVersionBinaryFromBlobStore() throws Exception {
         documentContentVersion.setContentUri("someURI");
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
+        when(this.documentContentVersionService.findById(id))
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -165,8 +165,8 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
         documentContentVersion.setStoredDocument(new StoredDocument());
         documentContentVersion.getStoredDocument().setDeleted(true);
 
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
+        when(this.documentContentVersionService.findById(id))
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -190,8 +190,8 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionBinaryThatDoesNotExist() throws Exception {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(null);
+        when(this.documentContentVersionService.findById(id))
+            .thenReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")
@@ -207,8 +207,8 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
         when(documentContentVersion.getStoredDocument()).thenReturn(storedDocument);
         when(storedDocument.isDeleted()).thenReturn(true);
 
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
+        when(this.documentContentVersionService.findById(id))
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")

@@ -93,42 +93,42 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testFindOne() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(TestUtil.STORED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(TestUtil.STORED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertThat(storedDocument.get(), equalTo(TestUtil.STORED_DOCUMENT));
     }
 
     @Test
     public void testFindOneThatDoesNotExist() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(null);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneThatIsMarkedDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(DELETED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatDoesNotExist() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(null);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatIsMarkedHardDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(HARD_DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(HARD_DELETED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatIsMarkedDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(DELETED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertTrue(storedDocument.isPresent());
     }
