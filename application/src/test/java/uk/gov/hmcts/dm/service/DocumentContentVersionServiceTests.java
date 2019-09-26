@@ -16,8 +16,8 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doThrow;
@@ -45,7 +45,7 @@ public class DocumentContentVersionServiceTests {
         documentContentVersionService.streamDocumentContentVersion(TestUtil.DOCUMENT_CONTENT_VERSION,
             mockHttpServletResponse.getOutputStream());
 
-        assertEquals(mockHttpServletResponse.getContentAsString(),
+        Assert.assertEquals(mockHttpServletResponse.getContentAsString(),
             TestUtil.BLOB_DATA);
     }
 
@@ -75,21 +75,24 @@ public class DocumentContentVersionServiceTests {
 
     @Test
     public void testFindOne() {
-        when(documentContentVersionRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(new DocumentContentVersion());
-        Assert.assertNotNull(documentContentVersionService.findOne(TestUtil.RANDOM_UUID));
+        when(documentContentVersionRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(new DocumentContentVersion()));
+        Assert.assertNotNull(documentContentVersionService.findById(TestUtil.RANDOM_UUID));
     }
 
     @Test
     public void testMostRecentFileContentVersionByStoredFileId() {
-        when(storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.STORED_DOCUMENT);
-        assertEquals(TestUtil.STORED_DOCUMENT.getMostRecentDocumentContentVersion(),
+        when(storedDocumentRepository
+            .findByIdAndDeleted(TestUtil.RANDOM_UUID, false))
+                .thenReturn(Optional.of(TestUtil.STORED_DOCUMENT));
+        Assert.assertEquals(Optional.of(TestUtil.STORED_DOCUMENT.getMostRecentDocumentContentVersion()),
             documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 
     @Test
     public void testMostRecentFileContentVersionByStoredFileIdOnNullStoredFile() {
-        when(storedDocumentRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
-        Assert.assertNull(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
+        when(storedDocumentRepository.findByIdAndDeleted(TestUtil.RANDOM_UUID, false)).thenReturn(Optional.empty());
+        Assert.assertEquals(Optional.empty(),
+            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 
 }

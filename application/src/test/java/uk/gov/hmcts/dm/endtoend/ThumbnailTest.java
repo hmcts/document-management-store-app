@@ -166,7 +166,7 @@ public class ThumbnailTest extends End2EndTestBase {
     private void readFromAzureBlobStorageWillReturn(MockMultipartFile file) {
         Mockito.doAnswer(invocation -> {
             try (final InputStream inputStream = file.getInputStream();
-                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+                 final OutputStream out = invocation.getArgument(1)
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;

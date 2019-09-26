@@ -60,7 +60,7 @@ class AddContentVersionIT extends BaseIT {
             .expect()
                 .statusCode(403)
             .when()
-                .post('/documents' + UUID.randomUUID())
+                .post('/documents/' + UUID.randomUUID())
 
     }
 

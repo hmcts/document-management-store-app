@@ -1,0 +1,91 @@
+---
+version: '3'
+
+services:
+
+    dm-store-db:
+        build:
+            context: ./docker/database
+        image: hmcts/dm-store-db:latest
+        ports:
+            - 5432:5432
+
+    make-container-call:
+        image: byrnedo/alpine-curl
+        command: -XPUT --verbose http://azure-storage-emulator-azurite:10000/devstoreaccount1/hmctstestcontainer?restype=container
+        links:
+            - azure-storage-emulator-azurite
+        depends_on:
+            - azure-storage-emulator-azurite
+
+    azure-storage-emulator-azurite:
+        image: arafato/azurite
+        ports:
+            - 10000:10000
+        environment:
+            executable: "blob"
+        volumes:
+            - ccd-docker-azure-blob-data:/opt/azurite/folder
+
+    idam-api:
+        image: hmctsprivate.azurecr.io/tidam/api:latest
+        healthcheck:
+            interval: 10s
+            timeout: 10s
+            retries: 10
+        environment:
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://database-idam:5432/idam
+            - SPRING_DATASOURCE_USERNAME=idam
+            - SPRING_DATASOURCE_PASSWORD=idam
+            - SPRING_MAIL_HOST=smtp-server
+            - IDAM_TESTING_SUPPORT_ENABLED="true"
+            - IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_WEBSHOW=AAAAAAAAAAAAAAAA
+            - IDAM_WEBSHOW_WHITELIST=http://localhost:8080/oauth2redirect
+            - REFORM_SERVICE_NAME=idam-api
+            - REFORM_TEAM=idam
+            - REFORM_ENVIRONMENT=local
+            - http_proxy=
+            - https_proxy=
+            - no_proxy=
+        ports:
+            - 4501:8080
+        links:
+            - smtp-server
+            - database-idam
+        depends_on:
+            - smtp-server
+            - database-idam
+
+    service-auth-provider-api:
+        image: hmcts/service-auth-provider-app
+        healthcheck:
+            interval: 10s
+            timeout: 10s
+            retries: 10
+        ports:
+            - 4502:8080
+        environment:
+            SERVER_PORT: 8080
+            JWT_KEY: wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
+            MICROSERVICEKEYS_CCD_DATA: "${IDAM_KEY_CCD_DATA_STORE}"
+            MICROSERVICEKEYS_CCD_GW: "${IDAM_KEY_CCD_GATEWAY}"
+            MICROSERVICEKEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
+            MICROSERVICEKEYS_CCD_ADMIN: "${IDAM_KEY_CCD_ADMIN}"
+            MICROSERVICEKEYS_FPL_CASE_SERVICE: "${IDAM_KEY_FPL_CASE_SERVICE}"
+            MICROSERVICEKEYS_EM_STITCHING_API: AAAAAAAAAAAAAAAA
+            MICROSERVICEKEYS_EM_CCD_ORCHESTRATOR: AAAAAAAAAAAAAAAA
+            MICROSERVICEKEYS_EM_GW: AAAAAAAAAAAAAAAA
+            TESTING_SUPPORT_ENABLED: "true"
+
+    database-idam:
+        build:
+            context: ./docker/database-idam
+        ports:
+            - 5433:5432
+
+    smtp-server:
+        image: mailhog/mailhog
+
+volumes:
+    pacts:
+    ccd-docker-azure-blob-data:

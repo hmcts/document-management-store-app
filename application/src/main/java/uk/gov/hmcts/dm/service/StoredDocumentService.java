@@ -57,7 +57,7 @@ public class StoredDocumentService {
     private BlobStorageWriteService blobStorageWriteService;
 
     public Optional<StoredDocument> findOne(UUID id) {
-        Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
+        Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);
         if (storedDocument.isPresent() && storedDocument.get().isDeleted()) {
             return Optional.empty();
         }
@@ -65,7 +65,7 @@ public class StoredDocumentService {
     }
 
     public Optional<StoredDocument> findOneWithBinaryData(UUID id) {
-        Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
+        Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);
         if (storedDocument.isPresent() && storedDocument.get().isHardDeleted()) {
             return Optional.empty();
         }

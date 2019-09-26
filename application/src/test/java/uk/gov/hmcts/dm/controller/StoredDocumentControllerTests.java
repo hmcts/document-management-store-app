@@ -15,6 +15,7 @@ import uk.gov.hmcts.dm.security.Classifications;
 import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -64,7 +65,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     @Test
     public void testGetDocumentBinary() throws Exception {
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
-            .thenReturn(documentContentVersion);
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -83,7 +84,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testGetDocumentBinaryFromBlobStore() throws Exception {
         documentContentVersion.setContentUri("someUri");
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
-            .thenReturn(documentContentVersion);
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -169,7 +170,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
-            documentContentVersion
+            Optional.of(documentContentVersion)
         );
 
         restActions

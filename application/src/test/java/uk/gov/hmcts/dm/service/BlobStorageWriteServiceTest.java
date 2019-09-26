@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
+@PowerMockIgnore({"javax.net.ssl.*"})
 public class BlobStorageWriteServiceTest {
 
     private BlobStorageWriteService blobStorageWriteService;
@@ -69,7 +71,7 @@ public class BlobStorageWriteServiceTest {
         given(blob.getUri()).willReturn(new URI(azureProvidedUri));
         doAnswer(invocation -> {
             try (final InputStream inputStream = toInputStream(MOCK_DATA);
-                 final OutputStream outputStream = invocation.getArgumentAt(0, OutputStream.class)
+                 final OutputStream outputStream = invocation.getArgument(0)
             ) {
                 return copy(inputStream, outputStream);
             }

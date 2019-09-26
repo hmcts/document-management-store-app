@@ -8,8 +8,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.Folder;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.FolderRepository;
+
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
@@ -25,11 +26,11 @@ public class FolderServiceTests {
     @Test
     public void testFindOne() {
 
-        when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(TestUtil.folder));
 
-        Folder folder = folderService.findOne(TestUtil.RANDOM_UUID);
+        Optional<Folder> folder = folderService.findById(TestUtil.RANDOM_UUID);
 
-        Assert.assertEquals(TestUtil.folder, folder);
+        Assert.assertEquals(Optional.of(TestUtil.folder), folder);
 
     }
 
@@ -46,29 +47,9 @@ public class FolderServiceTests {
 
 
     @Test
-    public void testFindOneItem() {
-
-        when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
-
-        StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
-
-        Assert.assertEquals(TestUtil.folder.getStoredDocuments().get(0), storedDocument);
-    }
-
-    @Test
-    public void testFindOneItemFolderNull() {
-
-        when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(null);
-
-        StoredDocument storedDocument = folderService.findOneItem(TestUtil.RANDOM_UUID,0);
-
-        Assert.assertEquals(null, storedDocument);
-    }
-
-    @Test
     public void testDelete() {
 
-        when(this.folderRepository.findOne(TestUtil.RANDOM_UUID)).thenReturn(TestUtil.folder);
+        when(this.folderRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(TestUtil.folder));
 
         folderService.delete(TestUtil.RANDOM_UUID);
 
