@@ -42,7 +42,7 @@ public class ExceptionStatusCodeAndMessageResolverTest {
     public void should_throw_404_when_MethodArgumentTypeMismatchException_thrown() throws Exception {
         final MethodArgumentTypeMismatchException exception =
                 new MethodArgumentTypeMismatchException(new HashMap<String, String>(), Map.class,
-                        "test", new MethodParameter(Object.class.getMethod("toString"), 1), null);
+                        "test", new MethodParameter(Object.class.getMethod("toString"), -1), null);
 
         final ErrorStatusCodeAndMessage errorStatusCodeAndMessage =
                 resolver.resolveStatusCodeAndMessage(exception, "It broke", 500, null);

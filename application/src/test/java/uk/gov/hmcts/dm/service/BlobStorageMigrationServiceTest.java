@@ -6,13 +6,13 @@ import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.data.domain.PageRequest;
@@ -70,6 +70,7 @@ import static uk.gov.hmcts.dm.service.BlobStorageMigrationService.NO_CONTENT_FOU
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
+@PowerMockIgnore({"javax.net.ssl.*"})
 public class BlobStorageMigrationServiceTest {
 
     private BlobStorageMigrationService underTest;
@@ -119,22 +120,22 @@ public class BlobStorageMigrationServiceTest {
     public void migrateDocumentContentVersion() throws Exception {
         DocumentContentVersion dcv = buildDocumentContentVersion();
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(dcv);
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionService.findById(documentContentVersionUuid)).thenReturn(Optional.of(dcv));
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.of(dcv));
 
         final String azureProvidedUri = mockAzureBlobUpload(dcv);
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
         verifyMigrateInteractions(dcv, azureProvidedUri);
-        verify(documentContentVersionRepository).findOne(documentContentVersionUuid);
+        verify(documentContentVersionRepository).findById(documentContentVersionUuid);
     }
 
     @Test(expected = FileStorageException.class)
     public void migrateDocumentContentVersionChecksumFailed() throws Exception {
         DocumentContentVersion dcv = buildDocumentContentVersion();
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.of(dcv));
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         String azureProvidedUri = "someuri";
@@ -148,7 +149,7 @@ public class BlobStorageMigrationServiceTest {
     public void migrateDocumentContentVersionWithNoDocumentContent() throws Exception {
         DocumentContentVersion dcv = buildDocumentContentVersion(false);
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.of(dcv));
 
         assertNull(dcv.getContentChecksum());
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
@@ -162,7 +163,7 @@ public class BlobStorageMigrationServiceTest {
         dcv.setContentChecksum("someCheckSum");
 
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.of(dcv));
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         when(cloudBlockBlob.getUri()).thenReturn(new URI("someuri"));
@@ -171,7 +172,7 @@ public class BlobStorageMigrationServiceTest {
 
         underTest.migrateDocumentContentVersion(documentUuid, documentContentVersionUuid);
 
-        verify(documentContentVersionRepository).findOne(documentContentVersionUuid);
+        verify(documentContentVersionRepository).findById(documentContentVersionUuid);
         verifyNoInteractionWithPostgresAndAzureAfterMigrate();
         assertThat(dcv.getContentUri(), is("Migrated"));
         assertThat(dcv.getContentChecksum(), is("someCheckSum"));
@@ -195,7 +196,7 @@ public class BlobStorageMigrationServiceTest {
     @Test(expected = DocumentContentVersionNotFoundException.class)
     public void migrateNonExistentDocumentContentVersion() throws Exception {
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionService.findOne(documentContentVersionUuid)).thenReturn(null);
+        when(documentContentVersionService.findById(documentContentVersionUuid)).thenReturn(null);
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         when(cloudBlockBlob.getUri()).thenReturn(new URI("someuri"));
@@ -210,7 +211,7 @@ public class BlobStorageMigrationServiceTest {
 
         DocumentContentVersion doc = buildDocumentContentVersion();
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(doc);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.of(doc));
 
         cloudBlockBlob = PowerMockito.mock(CloudBlockBlob.class);
         PowerMockito.doThrow(new StorageException("404", "Message", mock(Exception.class)))
@@ -226,7 +227,7 @@ public class BlobStorageMigrationServiceTest {
 
         DocumentContentVersion dcv = buildDocumentContentVersion();
         when(storedDocumentService.findOneWithBinaryData(documentUuid)).thenReturn(Optional.of(createStoredDocument()));
-        when(documentContentVersionRepository.findOne(documentContentVersionUuid)).thenReturn(dcv);
+        when(documentContentVersionRepository.findById(documentContentVersionUuid)).thenReturn(Optional.of(dcv));
 
         final Blob badData = mock(Blob.class);
         dcv.getDocumentContent().setData(badData);
@@ -363,7 +364,7 @@ public class BlobStorageMigrationServiceTest {
     private void prepareDownloadStream() throws StorageException {
         doAnswer(invocation -> {
             try (final InputStream inputStream = toInputStream(DOC_CONTENT);
-                 final OutputStream outputStream = invocation.getArgumentAt(0, OutputStream.class)
+                 final OutputStream outputStream = invocation.getArgument(0)
             ) {
                 return copy(inputStream, outputStream);
             }
@@ -387,7 +388,7 @@ public class BlobStorageMigrationServiceTest {
         assertThat(dcv.getContentChecksum(), is(DOC_CONTENT_CHECKSUM));
     }
 
-    class InputStreamMatcher extends ArgumentMatcher<InputStream> {
+    class InputStreamMatcher implements ArgumentMatcher<InputStream> {
 
         private final String expectedResult;
 
@@ -397,8 +398,7 @@ public class BlobStorageMigrationServiceTest {
 
         @SneakyThrows(IOException.class)
         @Override
-        public boolean matches(Object item) {
-            InputStream inputStream = (InputStream) item;
+        public boolean matches(InputStream inputStream) {
 
             String actual = IOUtils.toString(inputStream, defaultCharset());
             inputStream.reset();
@@ -406,14 +406,10 @@ public class BlobStorageMigrationServiceTest {
             return actual.equals(expectedResult);
         }
 
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("InputStream containing ").appendValue(expectedResult);
-        }
     }
 
 
-    class AuditEntryMatcher extends ArgumentMatcher<MigrateEntry> {
+    class AuditEntryMatcher implements ArgumentMatcher<MigrateEntry> {
 
         private final DocumentContentVersion documentContentVersion;
 
@@ -422,8 +418,7 @@ public class BlobStorageMigrationServiceTest {
         }
 
         @Override
-        public boolean matches(final Object argument) {
-            final MigrateEntry item = (MigrateEntry) argument;
+        public boolean matches(final MigrateEntry item) {
             return item.getDocumentcontentversionId().equals(documentContentVersion.getId())
                 && item.getServicename().equals("Batch Migration Service")
                 && item.getType().equals("Migrate content")
@@ -433,7 +428,7 @@ public class BlobStorageMigrationServiceTest {
         }
     }
 
-    class PageRequestMatcher extends ArgumentMatcher<PageRequest> {
+    class PageRequestMatcher implements ArgumentMatcher<PageRequest> {
 
         private final int pageSize;
 
@@ -442,8 +437,7 @@ public class BlobStorageMigrationServiceTest {
         }
 
         @Override
-        public boolean matches(final Object argument) {
-            final PageRequest pageRequest = (PageRequest)argument;
+        public boolean matches(final PageRequest pageRequest) {
             return pageRequest.getPageSize() == pageSize
                 && pageRequest.getSort().getOrderFor("createdOn").getDirection().equals(DESC)
                 ;

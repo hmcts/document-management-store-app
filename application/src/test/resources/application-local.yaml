@@ -7,9 +7,12 @@ spring:
     platform: h2
   jpa:
     database-platform: uk.gov.hmcts.dm.dialect.CustomH2Dialect
+    hibernate:
+      ddl-auto: create-drop
     properties:
       hiberante:
         dialect: uk.gov.hmcts.dm.dialect.CustomH2Dialect
+
 
 logging:
   level:

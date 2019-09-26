@@ -10,6 +10,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.when;
@@ -34,7 +35,7 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
     public void testGetDocumentThumbnail() {
 
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
-            .thenReturn(documentContentVersion);
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -44,8 +45,8 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionThumbnail() {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
+        when(this.documentContentVersionService.findById(id))
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -59,8 +60,8 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
         documentContentVersion.setStoredDocument(new StoredDocument());
         documentContentVersion.getStoredDocument().setDeleted(true);
 
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(documentContentVersion);
+        when(this.documentContentVersionService.findById(id))
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -72,8 +73,8 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionThumbnailThatDoesntExist() throws Exception {
-        when(this.documentContentVersionService.findOne(id))
-            .thenReturn(null);
+        when(this.documentContentVersionService.findById(id))
+            .thenReturn(Optional.empty());
 
         restActions
             .withAuthorizedUser("userId")
@@ -89,7 +90,7 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
         documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
-            documentContentVersion
+            Optional.of(documentContentVersion)
         );
 
         restActions

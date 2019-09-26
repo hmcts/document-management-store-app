@@ -18,6 +18,7 @@ import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.service.BlobStorageMigrationService;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
@@ -54,6 +55,9 @@ public abstract class End2EndTestBase {
     @MockBean
     protected BlobStorageReadService blobStorageReadService;
 
+    @MockBean
+    protected BlobStorageMigrationService blobStorageMigrationService;
+
     @Before
     public void setUp() {
         when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
@@ -61,7 +65,7 @@ public abstract class End2EndTestBase {
 
         doAnswer(invocation -> {
             try (final InputStream inputStream = FILE.getInputStream();
-                 final OutputStream out = invocation.getArgumentAt(1, OutputStream.class)
+                 final OutputStream out = invocation.getArgument(1)
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;
@@ -77,7 +81,7 @@ public abstract class End2EndTestBase {
     }
 
     private void uploadDocument(final InvocationOnMock invocation) throws IOException {
-        final DocumentContentVersion dcv = invocation.getArgumentAt(1, DocumentContentVersion.class);
+        final DocumentContentVersion dcv = invocation.getArgument(1);
         dcv.setContentUri("uri");
         dcv.setContentChecksum("checksum");
     }

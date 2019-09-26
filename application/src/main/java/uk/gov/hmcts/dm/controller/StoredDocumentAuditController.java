@@ -12,15 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.dm.config.V1MediaType;
-import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.hateos.StoredDocumentAuditEntryHalResource;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.AuditEntryService;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -40,19 +36,17 @@ public class StoredDocumentAuditController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success", response = StoredDocumentAuditEntryHalResource.class)
     })
-    public ResponseEntity<Object> findAudits(@PathVariable UUID documentId) {
-        StoredDocument storedDocument =
-            Optional.ofNullable(storedDocumentRepository.findOne(documentId))
-                .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
-
-        List<StoredDocumentAuditEntry> auditEntries = auditEntryService.findStoredDocumentAudits(storedDocument);
-
-        Resources<StoredDocumentAuditEntryHalResource> resources = new Resources<>(auditEntries
-            .stream()
-            .map(StoredDocumentAuditEntryHalResource::new)
-            .collect(Collectors.toList()));
-
-        return ResponseEntity.ok().contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE).body(resources);
+    public ResponseEntity<Resources<StoredDocumentAuditEntryHalResource>> findAudits(@PathVariable UUID documentId) {
+        return storedDocumentRepository
+            .findById(documentId)
+            .map(storedDocument -> ResponseEntity.ok()
+                .contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE).body(new Resources<>(
+                    auditEntryService
+                        .findStoredDocumentAudits(storedDocument)
+                        .stream()
+                        .map(StoredDocumentAuditEntryHalResource::new)
+                        .collect(Collectors.toList()))))
+            .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
     }
 
 }
