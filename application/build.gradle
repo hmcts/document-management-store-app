@@ -126,7 +126,7 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
 
     compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.1'
 
