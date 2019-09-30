@@ -11,19 +11,16 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
-import static org.apache.tika.io.IOUtils.toInputStream;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.BDDMockito.given;
@@ -39,21 +36,15 @@ public class BlobStorageDeleteServiceTest {
     private CloudBlobContainer cloudBlobContainer;
 
     @Mock
-    private MultipartFile file;
-    @Mock
     private CloudBlockBlob blob;
     @Mock
     private DocumentContentVersionRepository documentContentVersionRepository;
-    private static final String MOCK_DATA = "mock data";
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         cloudBlobContainer = PowerMockito.mock(CloudBlobContainer.class);
         blob = PowerMockito.mock(CloudBlockBlob.class);
         blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
-        try (final InputStream inputStream = toInputStream(MOCK_DATA)) {
-            given(file.getInputStream()).willReturn(inputStream);
-        }
     }
 
     @Test
@@ -78,7 +69,7 @@ public class BlobStorageDeleteServiceTest {
     }
 
     @Test(expected = FileStorageException.class)
-    public void deleteDocumentContentVersionThrowsURISyntaxException() throws Exception {
+    public void deleteDocumentContentVersionThrowsUriSyntaxException() throws Exception {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString()))
