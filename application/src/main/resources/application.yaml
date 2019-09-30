@@ -87,11 +87,6 @@ postgres:
   storage:
     enabled: ${ENABLE_POSTGRES_BLOB_STORAGE:true}
 
-app-insights:
-  dev-mode: off
-  request-component: on
-  telemetry-component: on
-
 errors:
   globalIncludeStackTrace: ${SHOW_STACK_TRACE:true}
 
