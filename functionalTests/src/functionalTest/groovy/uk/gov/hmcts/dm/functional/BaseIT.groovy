@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
+import uk.gov.hmcts.dm.functional.utilities.BlobStorageClient
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.FileUtils
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
@@ -28,6 +29,9 @@ class BaseIT {
 
     @Autowired
     AuthTokenProvider authTokenProvider
+
+    @Autowired
+    BlobStorageClient blobStorageClient
 
     FileUtils fileUtils = new FileUtils()
 
@@ -209,6 +213,10 @@ class BaseIT {
     def createDocumentAndGetUrlAs(username, filename = null, classification = null, roles = null, metadata = null) {
         createDocument(username, filename, classification, roles, metadata)
             .path("_embedded.documents[0]._links.self.href")
+    }
+
+    def fetchDocumentMetaDataAs(username, documentUrl) {
+        givenRequest(username).get(documentUrl).andReturn()
     }
 
     def createDocumentAndGetBinaryUrlAs(username,  filename = null, classification = null, roles = null) {
