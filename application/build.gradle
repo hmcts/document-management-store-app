@@ -171,7 +171,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testCompile(group: 'com.github.tomakehurst', name: 'wiremock', version: '2.18.0') {
+    testCompile(group: 'com.github.tomakehurst', name: 'wiremock', version: '2.25.0') {
         exclude(module: 'jetty')
         exclude(module: 'httpclient')
         exclude(module: 'json-path')
