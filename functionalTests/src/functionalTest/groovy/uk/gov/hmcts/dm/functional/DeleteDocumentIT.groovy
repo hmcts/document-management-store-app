@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -83,6 +84,11 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D6 Case worker can hard delete their own document"() {
+        def metadata = fetchDocumentMetaDataAs CITIZEN, citizenDocumentUrl
+
+        def versionId = metadata.body().jsonPath().get('_embedded.allDocumentVersions._embedded.documentVersions[0]._links.self.href')
+            .split('\\/').last()
+
         givenRequest(CASE_WORKER)
             .expect()
             .statusCode(204)
@@ -94,10 +100,20 @@ class DeleteDocumentIT extends BaseIT {
             .statusCode(404)
             .when()
             .get(caseWorkerDocumentUrl)
+
+        Assert.assertTrue blobStorageClient.doesDocumentExist(versionId)
     }
 
     @Test
     void "D7 User can hard delete their own document"() {
+
+        def metadata = fetchDocumentMetaDataAs CITIZEN, citizenDocumentUrl
+
+        def versionId = metadata.body().jsonPath().get('_embedded.allDocumentVersions._embedded.documentVersions[0]._links.self.href')
+            .split('\\/').last()
+
+        Assert.assertTrue blobStorageClient.doesDocumentExist(versionId)
+
         givenRequest(CITIZEN)
             .expect()
             .statusCode(204)
@@ -109,6 +125,8 @@ class DeleteDocumentIT extends BaseIT {
             .statusCode(404)
             .when()
             .get(citizenDocumentUrl)
+
+        Assert.assertFalse blobStorageClient.doesDocumentExist(versionId)
     }
 
     @Test
