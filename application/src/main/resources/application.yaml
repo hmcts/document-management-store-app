@@ -68,10 +68,6 @@ auth:
       client:
         baseUrl: ${IDAM_S2S_BASE_URI:http://localhost:4502}
 
-security:
-  headers:
-    cache: false
-
 logging:
   level:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
@@ -114,12 +110,6 @@ health:
     - UP
   disk:
     threshold: ${HEALTH_DISK_THRESHOLD:262144000}
-
-endpoints:
-  health:
-    sensitive: ${ENDPOINTS_HEALTH_SENSITIVE:false}
-  info:
-    sensitive: ${ENDPOINTS_INFO_SENSITIVE:false}
 
 management:
   endpoint:
