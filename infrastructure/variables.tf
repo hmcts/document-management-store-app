@@ -114,13 +114,6 @@ variable "show_sql" {
   default = "true"
 }
 
-variable "endpoints_health_sensitive" {
-  default = "true"
-}
-
-variable "endpoints_info_sensitive" {
-  default = "true"
-}
 ////////////////////////////////////////////////
 // Toggle Features
 ////////////////////////////////////////////////
