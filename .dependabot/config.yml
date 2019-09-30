@@ -1,0 +1,6 @@
+version: 1
+update_configs:
+  - package_manager: "java:gradle"
+    directory: "/src/"
+    update_schedule: "daily"
+
