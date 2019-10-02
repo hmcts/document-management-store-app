@@ -128,7 +128,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.9.3'
 
-    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.1'
+    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.2'
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
