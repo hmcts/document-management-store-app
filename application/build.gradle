@@ -185,7 +185,7 @@ dependencies {
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: versions.jsonUnit
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.1.5.RELEASE'
 
-    testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.199'
 
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.2'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.2'
