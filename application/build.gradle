@@ -11,7 +11,7 @@ plugins {
     id 'jacoco'
     id 'idea'
     id 'eclipse'
-    id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'io.franzbecker.gradle-lombok' version '3.2.0'
     id "info.solidsoft.pitest" version "1.4.5"
 }
 
