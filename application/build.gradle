@@ -141,7 +141,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
-    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '1.0.0.RELEASE'
 
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.3.Final'
 
