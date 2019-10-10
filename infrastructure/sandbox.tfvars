@@ -14,8 +14,6 @@ root_logging_level = "INFO"
 log_level_spring_web = "INFO"
 log_level_dm = "INFO"
 show_sql = "true"
-endpoints_health_sensitive = "true"
-endpoints_info_sensitive = "true"
 
 ////////////////////////////////////////////////
 // Toggle Features
