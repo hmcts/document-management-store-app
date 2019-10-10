@@ -88,8 +88,6 @@ module "app" {
     LOG_LEVEL_DM = "${var.log_level_dm}"
     SHOW_SQL = "${var.show_sql}"
 
-    ENDPOINTS_HEALTH_SENSITIVE = "${var.endpoints_health_sensitive}"
-    ENDPOINTS_INFO_SENSITIVE = "${var.endpoints_info_sensitive}"
 
     ENABLE_DB_MIGRATE="false"
 

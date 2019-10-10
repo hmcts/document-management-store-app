@@ -6,7 +6,7 @@ plugins {
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'org.owasp.dependencycheck'
     id 'se.patrikerdes.use-latest-versions' version '0.2.7'
-    id 'com.github.ben-manes.versions' version '0.20.0'
+    id 'com.github.ben-manes.versions' version '0.25.0'
     id 'org.sonarqube' version '2.6.2'
     id 'jacoco'
     id 'idea'
@@ -171,7 +171,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testCompile(group: 'com.github.tomakehurst', name: 'wiremock', version: '2.18.0') {
+    testCompile(group: 'com.github.tomakehurst', name: 'wiremock', version: '2.25.0') {
         exclude(module: 'jetty')
         exclude(module: 'httpclient')
         exclude(module: 'json-path')
