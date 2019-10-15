@@ -145,6 +145,10 @@ variable "enable_thumbnail" {
     default = "true"
 }
 
+variable "enable_testing" {
+  default = "true"
+}
+
 variable "enable_azure_storage_container" {
   default = "true"
 }

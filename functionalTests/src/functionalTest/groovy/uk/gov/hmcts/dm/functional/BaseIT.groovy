@@ -211,6 +211,10 @@ class BaseIT {
             .path("_embedded.documents[0]._links.self.href")
     }
 
+    def fetchDocumentMetaDataAs(username, documentUrl) {
+        givenRequest(username).get(documentUrl).andReturn()
+    }
+
     def createDocumentAndGetBinaryUrlAs(username,  filename = null, classification = null, roles = null) {
         createDocument(username, filename, classification, roles)
             .path("_embedded.documents[0]._links.binary.href")
