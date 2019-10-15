@@ -6,7 +6,7 @@ plugins {
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'org.owasp.dependencycheck'
     id 'se.patrikerdes.use-latest-versions' version '0.2.7'
-    id 'com.github.ben-manes.versions' version '0.20.0'
+    id 'com.github.ben-manes.versions' version '0.25.0'
     id 'org.sonarqube' version '2.6.2'
     id 'jacoco'
     id 'idea'
@@ -142,6 +142,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
+    compile 'uk.gov.hmcts.reform:health-spring-boot-starter:0.0.5'
 
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.3.Final'
 
