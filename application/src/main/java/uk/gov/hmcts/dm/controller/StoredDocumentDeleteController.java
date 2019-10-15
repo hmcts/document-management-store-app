@@ -23,6 +23,7 @@ public class StoredDocumentDeleteController {
     @Autowired
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
+
     @DeleteMapping(value = "{documentId}")
     @ApiOperation("Deletes a Stored Document.")
     @ApiResponses(value = {

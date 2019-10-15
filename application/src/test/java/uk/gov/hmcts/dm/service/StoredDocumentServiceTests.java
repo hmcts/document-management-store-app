@@ -83,6 +83,9 @@ public class StoredDocumentServiceTests {
     @Mock
     private AzureStorageConfiguration azureStorageConfiguration;
 
+    @Mock
+    private BlobStorageDeleteService blobStorageDeleteService;
+
     @InjectMocks
     private StoredDocumentService storedDocumentService;
 
@@ -284,6 +287,22 @@ public class StoredDocumentServiceTests {
         assertThat(storedDocumentWithContent.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
         verify(documentContentRepository).delete(documentContent);
+    }
+
+    @Test
+    public void testHardDeleteAzureBlobEnabled() {
+        StoredDocument storedDocumentWithContent = StoredDocument.builder()
+            .documentContentVersions(ImmutableList.of(DocumentContentVersion.builder()
+                .build()))
+            .build();
+
+        when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
+
+        storedDocumentService.deleteDocument(storedDocumentWithContent, true);
+
+        verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
+        verify(blobStorageDeleteService)
+            .deleteDocumentContentVersion(storedDocumentWithContent.getMostRecentDocumentContentVersion());
     }
 
     @Test
