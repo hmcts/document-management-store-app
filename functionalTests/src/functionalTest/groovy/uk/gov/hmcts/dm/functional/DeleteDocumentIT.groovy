@@ -101,7 +101,7 @@ class DeleteDocumentIT extends BaseIT {
             .when()
             .get(caseWorkerDocumentUrl)
 
-        Assert.assertTrue blobStorageClient.doesDocumentExist(versionId)
+        Assert.assertFalse blobStorageClient.doesDocumentExist(versionId)
     }
 
     @Test
@@ -112,7 +112,7 @@ class DeleteDocumentIT extends BaseIT {
         def versionId = metadata.body().jsonPath().get('_embedded.allDocumentVersions._embedded.documentVersions[0]._links.self.href')
             .split('\\/').last()
 
-        Assert.assertTrue blobStorageClient.doesDocumentExist(versionId)
+        Assert.assertTrue "Document with version ${versionId} should exist (${metadata.body().print()})", blobStorageClient.doesDocumentExist(versionId)
 
         givenRequest(CITIZEN)
             .expect()
@@ -126,7 +126,7 @@ class DeleteDocumentIT extends BaseIT {
             .when()
             .get(citizenDocumentUrl)
 
-        Assert.assertFalse blobStorageClient.doesDocumentExist(versionId)
+        Assert.assertFalse "Document with version ${versionId} should NOT exist (${metadata.body().print()})", blobStorageClient.doesDocumentExist(versionId)
     }
 
     @Test
