@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.functional
 
-import groovy.time.TimeCategory
 import io.restassured.response.Response
 import org.junit.Assert
 import org.junit.Ignore
@@ -12,7 +11,6 @@ import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
 
-import java.sql.Time
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.OffsetDateTime

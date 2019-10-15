@@ -18,6 +18,7 @@ import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageMigrationService;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
@@ -57,6 +58,9 @@ public abstract class End2EndTestBase {
 
     @MockBean
     protected BlobStorageMigrationService blobStorageMigrationService;
+
+    @MockBean
+    protected BlobStorageDeleteService blobStorageDeleteService;
 
     @Before
     public void setUp() {

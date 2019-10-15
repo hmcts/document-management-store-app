@@ -29,7 +29,7 @@ spring:
     allow-bean-definition-overriding: true
 
   liquibase:
-    enabled: ${ENABLE_DB_MIGRATE:true}
+    enabled: ${ENABLE_DB_MIGRATE:false}
     change-log: classpath:/db/changelog/db.changelog-master.xml
 
   datasource:
@@ -76,10 +76,10 @@ logging:
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
   application-insights:
-    instrumentation-key: ${APPINSIGHTS_INSTRUMENTATIONKEY:d30268e8-8979-4579-8d58-010dbe03a1e6}
+    instrumentation-key: ${APPINSIGHTS_INSTRUMENTATIONKEY:d04b52b1-20e5-473a-8ac4-3f6859ea113c}
   storage:
-      connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=https;AccountName=yourAccountName;AccountKey=DmfyEajwVWcioSbjJWaR+EHYfP88CI2OScLlJGIQkmHTikiFwn1o2MHHysnyHgh586wKaP5fH9WrzWWjUZmv9uOa;EndpointSuffix=core.windows.net}
-      blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:dm-docstore-sandbox}
+      connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1}
+      blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
       enabled: ${ENABLE_AZURE_STORAGE_CONTAINER:false}
 
 postgres:
@@ -165,6 +165,7 @@ toggle:
   deleteenabled: ${ENABLE_DELETE:true}
   ttl: ${ENABLE_TTL:true}
   thumbnail: ${ENABLE_THUMBNAIL:true}
+  testing: ${ENABLE_TESTING:true}
 
 blobstore:
   migrate:
