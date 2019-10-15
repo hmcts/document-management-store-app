@@ -67,11 +67,3 @@ To view our REST API go to {HOST}:{PORT}/swagger-ui.html
 ### API Endpoints
 A list of our endpoints can be found here
 > https://hmcts.github.io/reform-api-docs/swagger.html?url=https://hmcts.github.io/reform-api-docs/specs/document-management-store-app.json
-
-### Running functional tests locally
-Functional tests assume Azure Blob storage for binaries.
-- Set ENABLE_AZURE_STORAGE_CONTAINER to true
-- Set ENABLE_POSTGRES_BLOB_STORAGE to false
-- Run docker-compose -f docker-compose-dev.yml up
-- Run dm-store using gradle
-- Run functional tests
