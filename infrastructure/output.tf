@@ -42,3 +42,8 @@ output "enable_thumbnail" {
   value = "${var.enable_thumbnail}"
 }
 
+output "enable_testing" {
+  value = "${var.enable_testing}"
+}
+
+
