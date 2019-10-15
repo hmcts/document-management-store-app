@@ -12,6 +12,7 @@ import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 
 import java.io.OutputStream;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -28,12 +29,20 @@ public class BlobStorageReadService {
     public void loadBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
         log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
         try {
-            CloudBlockBlob blob = cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString());
+            CloudBlockBlob blob = loadBlob(documentContentVersion.getId().toString());
             blob.download(outputStream);
             log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
         } catch (URISyntaxException | StorageException e) {
             log.warn("Reading document version {} from Azure Blob Storage: FAILED", documentContentVersion.getId());
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
         }
+    }
+
+    public boolean doesBinaryExist(UUID uuid) throws URISyntaxException, StorageException {
+        return loadBlob(uuid.toString()).exists();
+    }
+
+    private CloudBlockBlob loadBlob(String id) throws URISyntaxException, StorageException {
+        return cloudBlobContainer.getBlockBlobReference(id);
     }
 }

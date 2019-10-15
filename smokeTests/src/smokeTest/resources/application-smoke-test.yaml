@@ -13,3 +13,4 @@ toggle.includeidamhealth=${ENABLE_IDAM_HEALTH_CHECK:false}
 toggle.deleteenabled=${ENABLE_DELETE:true}
 toggle.ttl=${ENABLE_TTL:true}
 toggle.thumbnail=${ENABLE_THUMBNAIL:true}
+toggle.testing=${ENABLE_TESTING:true}

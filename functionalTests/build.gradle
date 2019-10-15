@@ -36,6 +36,8 @@ dependencies {
 
     runtime group: 'org.springframework.boot', name :'spring-boot-devtools', version: versions.springBoot
 
+    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.0.0'
+
     testRuntime group: 'cglib', name :'cglib-nodep', version:'3.2.4'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
     testCompile group: 'com.fasterxml.jackson.core', name :'jackson-databind'
