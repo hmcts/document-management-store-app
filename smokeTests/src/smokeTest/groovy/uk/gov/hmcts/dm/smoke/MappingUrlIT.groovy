@@ -32,6 +32,9 @@ class MappingUrlIT extends BaseIT {
     @Value('${toggle.thumbnail}')
     boolean thumbnail
 
+    @Value('${toggle.testing}')
+    boolean testing
+
     List allEndpoints
 
     @Before
@@ -73,6 +76,11 @@ class MappingUrlIT extends BaseIT {
     void "toggle.thumbnail toggle Mappings"() {
         assertTrue allEndpoints.any { it == '{GET /documents/{documentId}/thumbnail}' } == thumbnail
         assertTrue allEndpoints.any { it == '{GET /documents/{documentId}/versions/{versionId}/thumbnail}' } == thumbnail
+    }
+
+    @Test
+    void "toggle.testing toggle Testing"() {
+        assertTrue "Testing endpoint should be enabled: ${testing}",  allEndpoints.any { it == '{GET /testing/azure-storage-binary-exists/{id}}' } == testing
     }
 
 }
