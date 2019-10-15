@@ -30,9 +30,6 @@ class BaseIT {
     @Autowired
     AuthTokenProvider authTokenProvider
 
-    @Autowired
-    BlobStorageClient blobStorageClient
-
     FileUtils fileUtils = new FileUtils()
 
     @Value('${base-urls.dm-store}')

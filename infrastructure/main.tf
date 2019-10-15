@@ -104,6 +104,7 @@ module "app" {
     ENABLE_DELETE = "${var.enable_delete}"
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
+    ENABLE_TESTING = "${var.enable_testing}"
 
     ENABLE_AZURE_STORAGE_CONTAINER = "${var.enable_azure_storage_container}"
     ENABLE_POSTGRES_BLOB_STORAGE = "${var.enable_postgres_blob_storage}"

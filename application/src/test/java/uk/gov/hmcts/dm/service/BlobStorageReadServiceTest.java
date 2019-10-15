@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.service;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -59,4 +60,12 @@ public class BlobStorageReadServiceTest {
 
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);
     }
+
+    @Test
+    public void doesBinaryExist() throws URISyntaxException, StorageException {
+        given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
+        given(blob.exists()).willReturn(true);
+        Assert.assertTrue(blobStorageReadService.doesBinaryExist(documentContentVersion.getId()));
+    }
+
 }

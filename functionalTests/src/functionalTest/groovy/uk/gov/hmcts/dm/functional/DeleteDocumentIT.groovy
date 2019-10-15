@@ -84,10 +84,13 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D6 Case worker can hard delete their own document"() {
-        def metadata = fetchDocumentMetaDataAs CITIZEN, citizenDocumentUrl
+        def metadata = fetchDocumentMetaDataAs CASE_WORKER, caseWorkerDocumentUrl
 
         def versionId = metadata.body().jsonPath().get('_embedded.allDocumentVersions._embedded.documentVersions[0]._links.self.href')
             .split('\\/').last()
+
+        Assert.assertTrue "Document with version ${versionId} should exist (${metadata.body().print()})",
+            Boolean.parseBoolean(givenRequest(CASE_WORKER).when().get("/testing/azure-storage-binary-exists/${versionId}").print())
 
         givenRequest(CASE_WORKER)
             .expect()
@@ -101,7 +104,8 @@ class DeleteDocumentIT extends BaseIT {
             .when()
             .get(caseWorkerDocumentUrl)
 
-        Assert.assertFalse blobStorageClient.doesDocumentExist(versionId)
+        Assert.assertFalse "Document with version ${versionId} should NOT exist (${metadata.body().print()})",
+            Boolean.parseBoolean(givenRequest(CASE_WORKER).when().get("/testing/azure-storage-binary-exists/${versionId}").print())
     }
 
     @Test
@@ -112,7 +116,8 @@ class DeleteDocumentIT extends BaseIT {
         def versionId = metadata.body().jsonPath().get('_embedded.allDocumentVersions._embedded.documentVersions[0]._links.self.href')
             .split('\\/').last()
 
-        Assert.assertTrue "Document with version ${versionId} should exist (${metadata.body().print()})", blobStorageClient.doesDocumentExist(versionId)
+        Assert.assertTrue "Document with version ${versionId} should exist (${metadata.body().print()})",
+            Boolean.parseBoolean(givenRequest(CITIZEN).when().get("/testing/azure-storage-binary-exists/${versionId}").print())
 
         givenRequest(CITIZEN)
             .expect()
@@ -126,7 +131,8 @@ class DeleteDocumentIT extends BaseIT {
             .when()
             .get(citizenDocumentUrl)
 
-        Assert.assertFalse "Document with version ${versionId} should NOT exist (${metadata.body().print()})", blobStorageClient.doesDocumentExist(versionId)
+        Assert.assertFalse "Document with version ${versionId} should NOT exist (${metadata.body().print()})",
+            Boolean.parseBoolean(givenRequest(CITIZEN).when().get("/testing/azure-storage-binary-exists/${versionId}").print())
     }
 
     @Test
