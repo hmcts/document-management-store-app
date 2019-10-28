@@ -159,11 +159,6 @@ EOF
             reportFiles          : 'index.html',
             reportName           : 'SPREVIEW Functional Test'
         ])
-        if (params.RUN_PT) {
-//            Performance Test
-            sh './gradlew gatlingRun'
-            gatlingArchive()
-        }
     }
 
     after('smoketest:saat') {
@@ -186,11 +181,6 @@ EOF
             reportFiles          : 'index.html',
             reportName           : 'SAAT Functional Test'
         ])
-        if (params.RUN_PT) {
-//            Performance Test
-            sh './gradlew gatlingRun'
-            gatlingArchive()
-        }
     }
 
     after('smoketest:sprod'){
