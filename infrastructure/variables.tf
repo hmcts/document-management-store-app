@@ -212,3 +212,7 @@ variable "asp_rg" {
   description = "App Service Plan (ASP) resource group for 'asp_name', 'use_shared' to make use of the shared resource group"
   default = "use_shared"
 }
+
+variable "managed_identity_object_id" {
+  default = ""
+}
