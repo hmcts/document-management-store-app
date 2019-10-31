@@ -51,3 +51,4 @@ blobstore_migrate_ccd_public_key_required = "true"
 // Addtional
 ////////////////////////////////////////////////
 max_file_size_in_mb = "500"
+managed_identity_object_id="5cf9fbee-5b89-4664-b25d-39cb24e8684c"
