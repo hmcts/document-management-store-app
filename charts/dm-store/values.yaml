@@ -10,8 +10,8 @@ java:
   livenessPath: '/health'
   aadIdentityName: dm
   keyVaults:
-    rpa:
-      resourceGroup: rpa
+    dm:
+      resourceGroup: dm-shared
       secrets:
         - AppInsightsInstrumentationKey
   secrets:
