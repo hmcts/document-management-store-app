@@ -29,6 +29,7 @@ locals {
 
   sharedAppServicePlan = "${var.shared_product}-${var.env}"
   sharedASPResourceGroup = "${var.shared_product}-shared-${var.env}"
+  managed_identity_object_id = "${var.managed_identity_object_id}"
 }
 
 module "app" {
@@ -79,7 +80,6 @@ module "app" {
     PACKAGES_PROJECT = "${var.team_name}"
     PACKAGES_ENVIRONMENT = "${var.env}"
 
-    ROOT_APPENDER = "${var.root_appender}"
     JSON_CONSOLE_PRETTY_PRINT = "${var.json_console_pretty_print}"
     LOG_OUTPUT = "${var.log_output}"
 
@@ -89,8 +89,6 @@ module "app" {
     LOG_LEVEL_DM = "${var.log_level_dm}"
     SHOW_SQL = "${var.show_sql}"
 
-    ENDPOINTS_HEALTH_SENSITIVE = "${var.endpoints_health_sensitive}"
-    ENDPOINTS_INFO_SENSITIVE = "${var.endpoints_info_sensitive}"
 
     ENABLE_DB_MIGRATE="false"
 
@@ -107,6 +105,7 @@ module "app" {
     ENABLE_DELETE = "${var.enable_delete}"
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
+    ENABLE_TESTING = "${var.enable_testing}"
 
     ENABLE_AZURE_STORAGE_CONTAINER = "${var.enable_azure_storage_container}"
     ENABLE_POSTGRES_BLOB_STORAGE = "${var.enable_postgres_blob_storage}"
@@ -152,31 +151,31 @@ data "azurerm_key_vault" "ccd_shared_vault" {
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name = "${local.app_full_name}-POSTGRES-USER"
+  name = "${var.component}-POSTGRES-USER"
   value = "${module.db.user_name}"
   key_vault_id = "${data.azurerm_key_vault.ccd_shared_vault.id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name = "${local.app_full_name}-POSTGRES-PASS"
+  name = "${var.component}-POSTGRES-PASS"
   value = "${module.db.postgresql_password}"
   key_vault_id = "${data.azurerm_key_vault.ccd_shared_vault.id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name = "${local.app_full_name}-POSTGRES-HOST"
+  name = "${var.component}-POSTGRES-HOST"
   value = "${module.db.host_name}"
   key_vault_id = "${data.azurerm_key_vault.ccd_shared_vault.id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name = "${local.app_full_name}-POSTGRES-PORT"
+  name = "${var.component}-POSTGRES-PORT"
   value = "${module.db.postgresql_listen_port}"
   key_vault_id = "${data.azurerm_key_vault.ccd_shared_vault.id}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name = "${local.app_full_name}-POSTGRES-DATABASE"
+  name = "${var.component}-POSTGRES-DATABASE"
   value = "${module.db.postgresql_database}"
   key_vault_id = "${data.azurerm_key_vault.ccd_shared_vault.id}"
 }

@@ -12,6 +12,7 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import javax.validation.constraints.NotNull;
 import java.io.OutputStream;
+import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
@@ -24,8 +25,8 @@ public class DocumentContentVersionService {
     @Autowired
     private StoredDocumentRepository storedDocumentRepository;
 
-    public DocumentContentVersion findOne(UUID id) {
-        return documentContentVersionRepository.findOne(id);
+    public Optional<DocumentContentVersion> findById(UUID id) {
+        return documentContentVersionRepository.findById(id);
     }
 
     public void streamDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion, @NotNull OutputStream outputStream) {
@@ -39,9 +40,10 @@ public class DocumentContentVersionService {
         }
     }
 
-    public DocumentContentVersion findMostRecentDocumentContentVersionByStoredDocumentId(UUID id) {
-        StoredDocument storedDocument = storedDocumentRepository.findOne(id);
-        return storedDocument != null ? storedDocument.getMostRecentDocumentContentVersion() : null;
+    public Optional<DocumentContentVersion> findMostRecentDocumentContentVersionByStoredDocumentId(UUID id) {
+        return storedDocumentRepository
+                    .findByIdAndDeleted(id, false)
+                    .map(StoredDocument::getMostRecentDocumentContentVersion);
     }
 
 }

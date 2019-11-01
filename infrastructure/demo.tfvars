@@ -16,15 +16,12 @@ idam_api_url = "https://idam-api.demo.platform.hmcts.net/"
 ////////////////////////////////////////////////
 // Logging
 ////////////////////////////////////////////////
-root_appender = "JSON_CONSOLE"
 json_console_pretty_print = "false"
 log_output = "single"
 root_logging_level = "INFO"
 log_level_spring_web = "INFO"
 log_level_dm = "INFO"
 show_sql = "false"
-endpoints_health_sensitive = "true"
-endpoints_info_sensitive = "true"
 
 ////////////////////////////////////////////////
 // Toggle Features
@@ -40,8 +37,8 @@ enable_thumbnail = "true"
 ////////////////////////////////////////////////
 //// Whitelists
 ////////////////////////////////////////////////
-//dm_multipart_whitelist = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp"
-//dm_multipart_whitelist_ext = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf"
+//dm_multipart_whitelist = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp,application/rtf,text/csv"
+//dm_multipart_whitelist_ext = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.rtf,.csv"
 //s2s_names_whitelist = "em_api,em_gw,ccd,sscs,divorce_document_upload,divorce_document_generator,probate_backend"
 //case_worker_roles = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
 

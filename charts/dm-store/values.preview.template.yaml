@@ -22,14 +22,16 @@ java:
       secretRef: container-secret-${SERVICE_NAME}-dm-docstore
       key: containerName
 
+
+  aadIdentityName:
   environment:
     # Endpoints
-    IDAM_USER_BASE_URI: https://preprod-idamapi.reform.hmcts.net:3511
+    IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
 
     # logging vars & healthcheck
-    REFORM_ENVIRONMENT: aat
-    PACKAGES_ENVIRONMENT: aat
+    REFORM_ENVIRONMENT: preview
+    PACKAGES_ENVIRONMENT: preview
 
     # for Postgres
 #    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: 'DefaultEndpointsProtocol=https;AccountName=AAAAAAAAAAAAAAAA;AccountKey=AAAAAAAAAAAAAAAA;EndpointSuffix=core.windows.net'

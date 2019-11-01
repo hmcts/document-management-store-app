@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
@@ -40,18 +39,13 @@ public class DocumentThumbnailController {
     })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID documentId) {
-
-        DocumentContentVersion documentContentVersion =
-            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId);
-
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok()
-            .contentType(MediaType.IMAGE_JPEG)
-            .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion));
-
+        return documentContentVersionService
+            .findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
+                .map(documentContentVersion ->
+                ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion))
+            ).orElse(ResponseEntity.notFound().build());
     }
 
 
@@ -64,18 +58,14 @@ public class DocumentThumbnailController {
     public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(
         @PathVariable UUID documentId,
         @PathVariable UUID versionId) {
-
-        DocumentContentVersion documentContentVersion = documentContentVersionService.findOne(versionId);
-
-        if (documentContentVersion == null || documentContentVersion.getStoredDocument().isDeleted()) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return
+        return documentContentVersionService.findById(versionId)
+            .filter(documentContentVersion -> !documentContentVersion.getStoredDocument().isDeleted())
+            .map(documentContentVersion ->
                 ResponseEntity
                     .ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(auditedDocumentContentVersionOperationsService
-                        .readDocumentContentVersionThumbnail(documentContentVersion));
-        }
+                        .readDocumentContentVersionThumbnail(documentContentVersion)))
+            .orElse(ResponseEntity.notFound().build());
     }
 }

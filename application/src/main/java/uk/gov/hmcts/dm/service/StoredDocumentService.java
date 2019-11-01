@@ -56,8 +56,11 @@ public class StoredDocumentService {
     @Autowired
     private BlobStorageWriteService blobStorageWriteService;
 
+    @Autowired
+    private BlobStorageDeleteService blobStorageDeleteService;
+
     public Optional<StoredDocument> findOne(UUID id) {
-        Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
+        Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);
         if (storedDocument.isPresent() && storedDocument.get().isDeleted()) {
             return Optional.empty();
         }
@@ -65,7 +68,7 @@ public class StoredDocumentService {
     }
 
     public Optional<StoredDocument> findOneWithBinaryData(UUID id) {
-        Optional<StoredDocument> storedDocument = Optional.ofNullable(storedDocumentRepository.findOne(id));
+        Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);
         if (storedDocument.isPresent() && storedDocument.get().isHardDeleted()) {
             return Optional.empty();
         }
@@ -151,11 +154,12 @@ public class StoredDocumentService {
         if (permanent) {
             storedDocument.setHardDeleted(true);
             storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
-                Optional.ofNullable(documentContentVersion.getDocumentContent())
-                        .ifPresent(dc -> {
-                            documentContentRepository.delete(dc);
-                            documentContentVersion.setDocumentContent(null);
-                        });
+                if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
+                    blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+                } else if (documentContentVersion.getDocumentContent() != null) {
+                    documentContentRepository.delete(documentContentVersion.getDocumentContent());
+                    documentContentVersion.setDocumentContent(null);
+                }
             });
         }
         storedDocumentRepository.save(storedDocument);

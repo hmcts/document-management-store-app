@@ -1,11 +1,3 @@
-output "microserviceName" {
-  value = "${var.product}-${var.component}"
-}
-
-output "vaultName" {
-  value = "${local.vaultName}"
-}
-
 output "idam_api_url" {
   value = "${var.idam_api_url}"
 }
@@ -49,4 +41,9 @@ output "enable_ttl" {
 output "enable_thumbnail" {
   value = "${var.enable_thumbnail}"
 }
+
+output "enable_testing" {
+  value = "${var.enable_testing}"
+}
+
 

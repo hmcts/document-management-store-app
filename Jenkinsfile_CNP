@@ -22,6 +22,7 @@ def secrets = [
     ]
 ]
 
+
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     [ $class: 'AzureKeyVaultSecret',
       secretType: 'Secret',
@@ -49,12 +50,13 @@ withPipeline(type , product, component) {
         enableSlackNotifications('#ccd-pr-builds')
     }
 
-    enableDbMigration()
+    enableDbMigration('ccd')
     enableDockerBuild()
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
     installCharts()
+//    enableAksStagingDeployment()
     after('checkout') {
         echo '${product}-${component} out'
         sh '''
@@ -138,6 +140,10 @@ EOF
                 reportName           : 'Jacoco Coverage Report'
             ])
         }
+        sh '''
+        curl https://raw.githubusercontent.com/hmcts/reform-api-docs/master/bin/publish-swagger-docs.sh > publish-swagger-docs.sh
+        sh ./publish-swagger-docs.sh
+         '''
     }
 
     after('smoketest:demo') {
@@ -182,11 +188,6 @@ EOF
             reportFiles          : 'index.html',
             reportName           : 'PREVIEW Functional Test'
         ])
-        if (params.RUN_PT) {
-//            Performance Test
-            sh './gradlew gatlingRun'
-//            gatlingArchive()
-        }
     }
 
     after('smoketest:aat') {
@@ -209,11 +210,6 @@ EOF
             reportFiles          : 'index.html',
             reportName           : 'AAT Functional Test'
         ])
-        if (params.RUN_PT) {
-//            Performance Test
-            sh './gradlew gatlingRun'
-//            gatlingArchive()
-        }
     }
 
     after('smoketest:prod'){

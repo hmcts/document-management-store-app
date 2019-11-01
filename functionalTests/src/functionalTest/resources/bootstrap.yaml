@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    propertiesvolume:
+      enabled: true
+      prefixed: true
+      paths: /mnt/secrets/ccd, /mnt/secrets/rpa
+      aliases:
+        ccd.dm-store-storage-account-primary-connection-string: STORAGEACCOUNT_PRIMARY_CONNECTION_STRING
+        ccd.dm-store-storage-account-secondary-connection-string: STORAGEACCOUNT_SECONDARY_CONNECTION_STRING

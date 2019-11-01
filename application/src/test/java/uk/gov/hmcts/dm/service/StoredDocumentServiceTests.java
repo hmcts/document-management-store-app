@@ -83,6 +83,9 @@ public class StoredDocumentServiceTests {
     @Mock
     private AzureStorageConfiguration azureStorageConfiguration;
 
+    @Mock
+    private BlobStorageDeleteService blobStorageDeleteService;
+
     @InjectMocks
     private StoredDocumentService storedDocumentService;
 
@@ -93,42 +96,42 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testFindOne() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(TestUtil.STORED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(TestUtil.STORED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertThat(storedDocument.get(), equalTo(TestUtil.STORED_DOCUMENT));
     }
 
     @Test
     public void testFindOneThatDoesNotExist() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(null);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneThatIsMarkedDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(DELETED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatDoesNotExist() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(null);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatIsMarkedHardDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(HARD_DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(HARD_DELETED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertFalse(storedDocument.isPresent());
     }
 
     @Test
     public void testFindOneWithBinaryDataThatIsMarkedDeleted() {
-        when(this.storedDocumentRepository.findOne(any(UUID.class))).thenReturn(DELETED_DOCUMENT);
+        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(DELETED_DOCUMENT));
         Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
         assertTrue(storedDocument.isPresent());
     }
@@ -284,6 +287,22 @@ public class StoredDocumentServiceTests {
         assertThat(storedDocumentWithContent.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
         verify(documentContentRepository).delete(documentContent);
+    }
+
+    @Test
+    public void testHardDeleteAzureBlobEnabled() {
+        StoredDocument storedDocumentWithContent = StoredDocument.builder()
+            .documentContentVersions(ImmutableList.of(DocumentContentVersion.builder()
+                .build()))
+            .build();
+
+        when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
+
+        storedDocumentService.deleteDocument(storedDocumentWithContent, true);
+
+        verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
+        verify(blobStorageDeleteService)
+            .deleteDocumentContentVersion(storedDocumentWithContent.getMostRecentDocumentContentVersion());
     }
 
     @Test

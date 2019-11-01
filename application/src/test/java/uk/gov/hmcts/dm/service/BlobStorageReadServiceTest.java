@@ -3,10 +3,12 @@ package uk.gov.hmcts.dm.service;
 import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -22,6 +24,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
+@PowerMockIgnore({"javax.net.ssl.*"})
 public class BlobStorageReadServiceTest {
 
     private BlobStorageReadService blobStorageReadService;
@@ -57,4 +60,12 @@ public class BlobStorageReadServiceTest {
 
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);
     }
+
+    @Test
+    public void doesBinaryExist() throws URISyntaxException, StorageException {
+        given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
+        given(blob.exists()).willReturn(true);
+        Assert.assertTrue(blobStorageReadService.doesBinaryExist(documentContentVersion.getId()));
+    }
+
 }

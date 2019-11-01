@@ -8,15 +8,12 @@ idam_api_url = "https://idam-api.aat.platform.hmcts.net"
 ////////////////////////////////////////////////
 // Logging
 ////////////////////////////////////////////////
-root_appender = "JSON_CONSOLE"
 json_console_pretty_print = "false"
 log_output = "single"
 root_logging_level = "INFO"
 log_level_spring_web = "INFO"
 log_level_dm = "INFO"
 show_sql = "false"
-endpoints_health_sensitive = "true"
-endpoints_info_sensitive = "true"
 
 ////////////////////////////////////////////////
 // Toggle Features

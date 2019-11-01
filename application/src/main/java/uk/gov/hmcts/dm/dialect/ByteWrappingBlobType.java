@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.dialect;
 
 import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 import java.io.InputStream;
@@ -41,13 +41,13 @@ public class ByteWrappingBlobType implements UserType {
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws SQLException {
+    public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner) throws SQLException {
         InputStream inputStream = rs.getBinaryStream(names[0]);
         return new PassThroughBlob(inputStream, 0L);
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) {
         try {
             Blob b = (Blob) value;
             st.setBinaryStream(index, b.getBinaryStream(), b.length());

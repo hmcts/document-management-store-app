@@ -14,6 +14,7 @@ import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
 import java.io.OutputStream;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.mockito.Mockito.times;
@@ -77,7 +78,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
         documentContentVersion.setStoredDocument(storedDocument);
         UUID uuid = UUID.randomUUID();
-        when(documentContentVersionService.findOne(uuid)).thenReturn(documentContentVersion);
+        when(documentContentVersionService.findById(uuid)).thenReturn(Optional.of(documentContentVersion));
         auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
 
@@ -92,7 +93,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
 
         UUID uuid = UUID.randomUUID();
 
-        when(documentContentVersionService.findOne(uuid)).thenReturn(documentContentVersion);
+        when(documentContentVersionService.findById(uuid)).thenReturn(Optional.of(documentContentVersion));
 
         auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
 
@@ -103,7 +104,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
 
         UUID uuid = UUID.randomUUID();
 
-        when(documentContentVersionService.findOne(uuid)).thenReturn(null);
+        when(documentContentVersionService.findById(uuid)).thenReturn(Optional.empty());
 
         auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
 

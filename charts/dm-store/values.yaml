@@ -1,7 +1,20 @@
 java:
   image: 'hmcts.azurecr.io/hmcts/dm-store:latest'
+  postgresql:
+    postgresqlUsername: evidence
+    postgresqlPassword: evidence
+    nameOverride: dm-store-db
+    service:
+      port: 5432
+  image: 'hmctspublic.azurecr.io/dm/store:latest'
   applicationPort: '4603'
   livenessPath: '/health'
+  aadIdentityName: dm
+  keyVaults:
+    rpa:
+      resourceGroup: rpa
+      secrets:
+        - AppInsightsInstrumentationKey
   secrets:
     STORAGE_ACCOUNT_NAME:
       secretRef: storage-secret-{{ .Release.Name }}
@@ -16,15 +29,14 @@ java:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
     # db
-    SPRING_DATASOURCE_URL: 'jdbc:postgresql://{{ .Release.Name }}-postgresql:5432/evidence'
-    SPRING_DATASOURCE_USERNAME: 'evidence'
-    SPRING_DATASOURCE_PASSWORD: 'evidence'
-
+    SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/postgres?ssl=disable
+    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}"
+    SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
 
     MAX_FILE_SIZE: '100MB'
 
       # idam
-    IDAM_USER_BASE_URI: 'https://preprod-idamapi.reform.hmcts.net:3511'
+    IDAM_USER_BASE_URI: 'https://idam-api.aat.platform.hmcts.net'
     IDAM_S2S_BASE_URI: 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
 
     # logging vars & healthcheck
@@ -43,16 +55,11 @@ java:
     LOG_LEVEL_DM: INFO
     SHOW_SQL: 'false'
     JSON_CONSOLE_PRETTY_PRINT: 'false'
-    ROOT_APPENDER: JSON_CONSOLE
-
-
-    ENDPOINTS_HEALTH_SENSITIVE: 'true'
-    ENDPOINTS_INFO_SENSITIVE: 'true'
 
     ENABLE_DB_MIGRATE: 'true'
 
-    DM_MULTIPART_WHITELIST: 'image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow'
-    DM_MULTIPART_WHITELIST_EXT: '.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx'
+    DM_MULTIPART_WHITELIST: 'image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv'
+    DM_MULTIPART_WHITELIST_EXT: '.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.png,.pdf,.rtf,.csv'
     S2S_NAMES_WHITELIST: 'em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,cmc_claim_store,bulk_scan_processor,em_npa_app,bulk_scan_orchestrator,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service'
     CASE_WORKER_ROLES: 'caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce'
 
@@ -76,6 +83,7 @@ java:
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
     #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
+
   postgresql:
     initdbScripts:
       init.sql: |-
@@ -87,6 +95,7 @@ java:
     postgresqlDatabase: evidence
     service:
       port: 5432
+
 blobstorage:
   resourceGroup: dm-store-aks
   teamName: "CCD"

@@ -7,7 +7,6 @@ variable "raw_product" {
 }
 
 variable "shared_product" {
-  // We use CCD as our common shared product for any shared infra
   default = "ccd"
 }
 
@@ -90,9 +89,6 @@ variable "database_storage_mb" {
 ////////////////////////////////////////////////
 // Logging
 ////////////////////////////////////////////////
-variable "root_appender" {
-  default = "JSON_CONSOLE"
-}
 
 variable "json_console_pretty_print" {
   default = "false"
@@ -118,13 +114,6 @@ variable "show_sql" {
   default = "true"
 }
 
-variable "endpoints_health_sensitive" {
-  default = "true"
-}
-
-variable "endpoints_info_sensitive" {
-  default = "true"
-}
 ////////////////////////////////////////////////
 // Toggle Features
 ////////////////////////////////////////////////
@@ -156,6 +145,10 @@ variable "enable_thumbnail" {
     default = "true"
 }
 
+variable "enable_testing" {
+  default = "true"
+}
+
 variable "enable_azure_storage_container" {
   default = "true"
 }
@@ -183,15 +176,15 @@ variable "blobstore_migrate_ccd_public_key" {
 // Whitelists
 ////////////////////////////////////////////////
 variable "dm_multipart_whitelist" {
-  default = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow"
+  default = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv"
 }
 
 variable "dm_multipart_whitelist_ext" {
-  default = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx"
+  default = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv"
 }
 
 variable "s2s_names_whitelist" {
-  default = "em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,cmc_claim_store,bulk_scan_processor,em_npa_app,bulk_scan_orchestrator,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals"
+  default = "em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,cmc_claim_store,bulk_scan_processor,em_npa_app,bulk_scan_orchestrator,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals,xui_webapp"
 }
 
 variable "case_worker_roles" {
@@ -218,4 +211,8 @@ variable "asp_rg" {
   type = "string"
   description = "App Service Plan (ASP) resource group for 'asp_name', 'use_shared' to make use of the shared resource group"
   default = "use_shared"
+}
+
+variable "managed_identity_object_id" {
+  default = ""
 }
