@@ -3,7 +3,7 @@ spring:
     propertiesvolume:
       enabled: true
       prefixed: true
-      paths: /mnt/secrets/ccd, /mnt/secrets/rpa
+      paths: /mnt/secrets/ccd, /mnt/secrets/dm
       aliases:
         ccd.dm-store-POSTGRES-PASS: spring.datasource.password
         ccd.dm-store-storage-account-primary-connection-string: STORAGEACCOUNT_PRIMARY_CONNECTION_STRING
