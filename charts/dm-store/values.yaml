@@ -14,16 +14,8 @@ java:
       resourceGroup: dm-shared
       secrets:
         - AppInsightsInstrumentationKey
-  secrets:
-    STORAGE_ACCOUNT_NAME:
-      secretRef: storage-secret-{{ .Release.Name }}
-      key: storageAccountName
-    STORAGE_ACCOUNT_KEY:
-      secretRef: storage-secret-{{ .Release.Name }}
-      key: accessKey
-    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
-      key: containerName
+        - dm-store-storage-account-primary-connection-string
+        - dm-store-storage-account-secondary-connection-string
   environment:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
