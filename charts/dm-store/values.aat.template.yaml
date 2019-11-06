@@ -5,7 +5,6 @@ java:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat
-    SPRING_DATASOURCE_URL: jdbc:postgresql://dm-store-postgres-db-aat.postgres.database.azure.com:5432/postgres?ssl=disable
 
     # logging vars & healthcheck
     REFORM_ENVIRONMENT: aat
