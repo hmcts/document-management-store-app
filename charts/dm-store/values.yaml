@@ -8,7 +8,7 @@ java:
   image: 'hmctspublic.azurecr.io/dm/store:latest'
   applicationPort: '4603'
   livenessPath: '/health'
-  aadIdentityName: dm
+  aadIdentityName: dm-store
   keyVaults:
     dm:
       resourceGroup: dm-shared
