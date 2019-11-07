@@ -9,4 +9,4 @@ spring:
         dm-store-storage-account-primary-connection-string: STORAGEACCOUNT_PRIMARY_CONNECTION_STRING
         dm-store-storage-account-secondary-connection-string: STORAGEACCOUNT_SECONDARY_CONNECTION_STRING
         AppInsightsInstrumentationKey: APPINSIGHTS_INSTRUMENTATIONKEY
-        POSTGRES-PASS: spring.datasource.password
+        POSTGRES-PASS: SPRING_DATASOURCE_PASSWORD
