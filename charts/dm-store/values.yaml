@@ -16,14 +16,15 @@ java:
         - AppInsightsInstrumentationKey
         - dm-store-storage-account-primary-connection-string
         - dm-store-storage-account-secondary-connection-string
+        - POSTGRES-PASS
+
   environment:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
 
     # db
-    SPRING_DATASOURCE_URL: jdbc:postgresql://dm-store-postgres-db-{{ .Values.global.environment }}.postgres.database.azure.com:5432/postgres?ssl=disable
+    SPRING_DATASOURCE_URL: jdbc:postgresql://dm-store-postgres-db-{{ .Values.global.environment }}.postgres.database.azure.com:5432/evidence?ssl=disable
 #    SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/postgres?ssl=disable
-    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}"
-    SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
+    SPRING_DATASOURCE_USERNAME: evidence@dm-store-postgres-db-{{ .Values.global.environment }}
 
     MAX_FILE_SIZE: '100MB'
 
