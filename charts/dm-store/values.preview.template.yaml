@@ -22,6 +22,7 @@ java:
     # logging vars & healthcheck
     REFORM_ENVIRONMENT: preview
     PACKAGES_ENVIRONMENT: preview
+    ENABLE_DB_MIGRATE: 'true'
 
 postgresql:
   enabled: true

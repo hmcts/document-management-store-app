@@ -6,7 +6,7 @@ java:
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat
 #    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}@dm-store-postgres-db-aat"
-    SPRING_DATASOURCE_PASSWORD: 'eQr[<Ybqs83K-GGC'
+#    SPRING_DATASOURCE_PASSWORD: 'eQr[<Ybqs83K-GGC'
     # logging vars & healthcheck
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
