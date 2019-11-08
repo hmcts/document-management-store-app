@@ -24,6 +24,7 @@ java:
     PACKAGES_ENVIRONMENT: preview
     ENABLE_DB_MIGRATE: 'true'
 
+
 postgresql:
   enabled: true
 dm-store:
