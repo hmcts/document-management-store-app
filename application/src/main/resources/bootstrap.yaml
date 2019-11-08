@@ -2,7 +2,7 @@ spring:
   cloud:
     propertiesvolume:
       enabled: true
-      prefixed: true
+      prefixed: false
       paths: /mnt/secrets/dm
       aliases:
 #        dm-store-POSTGRES-PASS: spring.datasource.password
