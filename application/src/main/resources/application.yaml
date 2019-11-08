@@ -56,6 +56,9 @@ server:
   port: ${SERVER_PORT:4603}
   use-forward-headers: false
 
+connection:
+  upload-timeout-min: ${UPLOAD_TIMEOUT_MIN:60}
+
 authorization:
   s2s-names-whitelist: ${S2S_NAMES_WHITELIST:sscs,divorce,ccd,em_gw,ccd_gw}
 
