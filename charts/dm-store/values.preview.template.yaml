@@ -2,16 +2,16 @@ java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   aadIdentityName:
-  secrets:
-    STORAGE_ACCOUNT_NAME:
-      secretRef: storage-secret-{{ .Release.Name }}
-      key: storageAccountName
-    STORAGE_ACCOUNT_KEY:
-      secretRef: storage-secret-{{ .Release.Name }}
-      key: accessKey
-    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
-      key: containerName
+#  secrets:
+#    STORAGE_ACCOUNT_NAME:
+#      secretRef: storage-secret-{{ .Release.Name }}
+#      key: storageAccountName
+#    STORAGE_ACCOUNT_KEY:
+#      secretRef: storage-secret-{{ .Release.Name }}
+#      key: accessKey
+#    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
+#      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
+#      key: containerName
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
