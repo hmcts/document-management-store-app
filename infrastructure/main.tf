@@ -29,6 +29,7 @@ locals {
 
   sharedAppServicePlan = "${var.shared_product}-${var.env}"
   sharedASPResourceGroup = "${var.shared_product}-shared-${var.env}"
+  managed_identity_object_id = "${var.managed_identity_object_id}"
 }
 
 module "app" {
@@ -105,9 +106,6 @@ module "app" {
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
     ENABLE_TESTING = "${var.enable_testing}"
-
-    ENABLE_AZURE_STORAGE_CONTAINER = "${var.enable_azure_storage_container}"
-    ENABLE_POSTGRES_BLOB_STORAGE = "${var.enable_postgres_blob_storage}"
 
     # Migration Job specific
     BLOBSTORE_MIGRATE_CCD_SECRET = "${var.blobstore_migrate_ccd_secret}"
