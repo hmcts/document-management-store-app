@@ -107,9 +107,6 @@ module "app" {
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
     ENABLE_TESTING = "${var.enable_testing}"
 
-    ENABLE_AZURE_STORAGE_CONTAINER = "${var.enable_azure_storage_container}"
-    ENABLE_POSTGRES_BLOB_STORAGE = "${var.enable_postgres_blob_storage}"
-
     # Migration Job specific
     BLOBSTORE_MIGRATE_CCD_SECRET = "${var.blobstore_migrate_ccd_secret}"
     BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED = "${var.blobstore_migrate_ccd_public_key_required}"

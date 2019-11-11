@@ -65,9 +65,6 @@ java:
     ENABLE_TTL: 'true'
     ENABLE_THUMBNAIL: 'true'
 
-    ENABLE_AZURE_STORAGE_CONTAINER: 'true'
-    ENABLE_POSTGRES_BLOB_STORAGE: 'false'
-
     # Migration Job specific
     BLOBSTORE_MIGRATE_CCD_SECRET: 'y2hahvdZ9evcTVq2'
     BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED: 'false'
