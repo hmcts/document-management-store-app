@@ -149,14 +149,6 @@ variable "enable_testing" {
   default = "true"
 }
 
-variable "enable_azure_storage_container" {
-  default = "true"
-}
-
-variable "enable_postgres_blob_storage" {
-  default = "false"
-}
-
 ////////////////////////////////////////////////
 // Migration Job Specific
 ////////////////////////////////////////////////
