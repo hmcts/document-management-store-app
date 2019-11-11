@@ -13,6 +13,13 @@ spring:
       hiberante:
         dialect: uk.gov.hmcts.dm.dialect.CustomH2Dialect
 
+azure:
+  storage:
+    enabled: false
+
+postgres:
+  storage:
+    enabled: true
 
 logging:
   level:

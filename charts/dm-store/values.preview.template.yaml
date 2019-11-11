@@ -2,14 +2,28 @@ java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   aadIdentityName:
+  secrets:
+    STORAGE_ACCOUNT_NAME:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: storageAccountName
+    STORAGE_ACCOUNT_KEY:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: accessKey
+    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
+      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
+      key: containerName
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-
+    SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/postgres?ssl=disable
+    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}"
+    SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
     # logging vars & healthcheck
     REFORM_ENVIRONMENT: preview
     PACKAGES_ENVIRONMENT: preview
+    ENABLE_DB_MIGRATE: 'true'
+
 
 postgresql:
   enabled: true

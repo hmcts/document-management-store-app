@@ -149,14 +149,6 @@ variable "enable_testing" {
   default = "true"
 }
 
-variable "enable_azure_storage_container" {
-  default = "true"
-}
-
-variable "enable_postgres_blob_storage" {
-  default = "false"
-}
-
 ////////////////////////////////////////////////
 // Migration Job Specific
 ////////////////////////////////////////////////
@@ -211,4 +203,8 @@ variable "asp_rg" {
   type = "string"
   description = "App Service Plan (ASP) resource group for 'asp_name', 'use_shared' to make use of the shared resource group"
   default = "use_shared"
+}
+
+variable "managed_identity_object_id" {
+  default = ""
 }
