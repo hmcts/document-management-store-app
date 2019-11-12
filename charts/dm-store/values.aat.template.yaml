@@ -7,6 +7,10 @@ java:
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat
 #    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}@dm-store-postgres-db-aat"
     SPRING_DATASOURCE_PASSWORD: 'eQr[<Ybqs83K-GGC'
+    STORAGE_ACCOUNT_NAME: dmstoredocaat
+    STORAGE_ACCOUNT_KEY: "sep+FGKq4wbq2nCW9l+4q69yOFPYfh54Ge9FvlJROqxUDVc9O6g+BWVS06jLJ6THU5rRpPiAt6eIt6cgrj8SZw=="
+    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: dm-store-docstore-{{ .Values.global.environment }}
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=dmstoredocaat;AccountKey=sep+FGKq4wbq2nCW9l+4q69yOFPYfh54Ge9FvlJROqxUDVc9O6g+BWVS06jLJ6THU5rRpPiAt6eIt6cgrj8SZw==;EndpointSuffix=core.windows.net"
     # logging vars & healthcheck
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
