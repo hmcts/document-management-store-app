@@ -19,6 +19,9 @@ def component = "store"
 def secrets = [
     's2s-${env}': [
         secret('microservicekey-em-gw', 'S2S_TOKEN')
+    ],
+    'dm-${env}': [
+        secret('dm-store-storage-account-primary-connection-string', 'STORAGEACCOUNT_PRIMARY_CONNECTION_STRING')
     ]
 ]
 
