@@ -8,16 +8,16 @@ java:
       resourceGroup: dm-shared
       secrets:
         - dm-store-storage-account-primary-connection-string
-#  secrets:
-#    STORAGE_ACCOUNT_NAME:
-#      secretRef: storage-secret-{{ .Release.Name }}
-#      key: storageAccountName
-#    STORAGE_ACCOUNT_KEY:
-#      secretRef: storage-secret-{{ .Release.Name }}
-#      key: accessKey
-#    STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:
-#      secretRef: container-secret-{{ .Release.Name }}-dm-docstore
-#      key: containerName
+  secrets:
+    BLOB_ACCOUNT_NAME:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: storageAccountName
+    BLOB_ACCESS_KEY:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: accessKey
+    BLOB_SERVICE_ENDPOINT:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: primaryBlobServiceEndPoint
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
@@ -29,6 +29,7 @@ java:
     REFORM_ENVIRONMENT: preview
     PACKAGES_ENVIRONMENT: preview
     ENABLE_DB_MIGRATE: 'true'
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(BLOB_ACCOUNT_NAME);AccountKey=$(BLOB_ACCESS_KEY);EndpointSuffix=core.windows.net"
 
 
 postgresql:
