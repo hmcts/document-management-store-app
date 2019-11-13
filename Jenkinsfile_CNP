@@ -42,6 +42,8 @@ def vaultOverrides = [
 
 withPipeline(type , product, component) {
     onMaster {
+        env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
         enableSlackNotifications('#ccd-master-builds')
     }
     onDemo {
