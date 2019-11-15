@@ -109,7 +109,7 @@ def versions = [
     jsonUnit           : '1.31.1',
     JUnitParams        : '1.1.1',
     lombok             : '1.18.0',
-    liquibase          : '3.6.3',
+    liquibase          : '3.8.1',
     postgresql         : '42.2.6',
     powermock          : '1.7.4',
     sonar              : '3.2',
@@ -147,7 +147,7 @@ dependencies {
 
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.8.Final'
 
-    compile group: 'org.liquibase', name: 'liquibase-core', version: versions.liquibaseVersion
+    compile group: 'uk.gov.hmcts.reform', name: 'liquibase-core', version: '3.8.1'
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
