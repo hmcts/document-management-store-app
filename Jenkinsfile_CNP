@@ -61,6 +61,7 @@ withPipeline(type , product, component) {
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
     installCharts()
+    disableLegacyDeploymentOnAAT()
     enableAksStagingDeployment()
     after('checkout') {
         echo '${product}-${component} out'
