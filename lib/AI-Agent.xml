@@ -4,6 +4,7 @@
     <Instrumentation>
         <BuiltIn enabled="true">
             <HTTP enabled="true"/>
+            <Logging enabled="true" />
             <JDBC enabled="true"/>
             <MaxStatementQueryLimitInMS>1000</MaxStatementQueryLimitInMS>
         </BuiltIn>
