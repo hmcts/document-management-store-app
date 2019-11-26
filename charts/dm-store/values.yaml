@@ -82,6 +82,4 @@ blobstorage:
   setup:
     containers:
       - dm-docstore
-dm-store:
-  blobstorage:
-    enabled: false
+  enabled: false
