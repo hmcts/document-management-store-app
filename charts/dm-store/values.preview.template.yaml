@@ -32,5 +32,5 @@ java:
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(BLOB_ACCOUNT_NAME);AccountKey=$(BLOB_ACCESS_KEY);EndpointSuffix=core.windows.net"
   postgresql:
     enabled: true
-  blobstorage:
-    enabled: true
+blobstorage:
+  enabled: true
