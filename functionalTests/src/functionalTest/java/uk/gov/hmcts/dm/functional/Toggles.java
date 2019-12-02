@@ -1,39 +1,33 @@
 package uk.gov.hmcts.dm.functional;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Component
+@ConfigurationProperties(prefix = "toggle")
 public class Toggles {
 
-    @Value("${toggle.metadatasearchendpoint}")
-    private String metadatasearchendpoint;
-    @Value("${toggle.documentandmetadatauploadendpoint}")
-    private String documentandmetadatauploadendpoint;
-    @Value("${toggle.folderendpoint}")
-    private String folderendpoint;
-    @Value("${toggle.includeidamhealth}")
-    private String includeidamhealth;
-    @Value("${toggle.ttl}")
-    private String ttl;
+    private boolean metadatasearchendpoint;
+    private boolean documentandmetadatauploadendpoint;
+    private boolean folderendpoint;
+    private boolean includeidamhealth;
+    private boolean ttl;
 
     public boolean isMetadatasearchendpoint() {
-        return Boolean.valueOf(metadatasearchendpoint);
+        return metadatasearchendpoint;
     }
 
     public boolean isDocumentandmetadatauploadendpoint() {
-        return Boolean.valueOf(documentandmetadatauploadendpoint);
+        return documentandmetadatauploadendpoint;
     }
 
     public boolean isFolderendpoint() {
-        return Boolean.valueOf(folderendpoint);
+        return folderendpoint;
     }
 
     public boolean isIncludeidamhealth() {
-        return Boolean.valueOf(includeidamhealth);
+        return includeidamhealth;
     }
 
     public boolean isTtl() {
-        return Boolean.valueOf(ttl);
+        return ttl;
     }
 }
