@@ -117,7 +117,7 @@ public class StoredDocumentService {
             if (toggleConfiguration.isMetadatasearchendpoint()) {
                 document.setMetadata(uploadDocumentsCommand.getMetadata());
             }
-            if (toggleTtlEnabled) {
+            if (toggleConfiguration.isTtl()) {
                 document.setTtl(uploadDocumentsCommand.getTtl());
             }
             DocumentContentVersion documentContentVersion = new DocumentContentVersion(document,
