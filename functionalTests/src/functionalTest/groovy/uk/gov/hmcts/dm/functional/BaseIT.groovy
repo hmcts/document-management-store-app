@@ -27,15 +27,15 @@ import static org.hamcrest.Matchers.equalTo
 abstract class BaseIT {
 
     @Autowired
-    Toggles toggleConfiguration;
-
-    @Autowired
     AuthTokenProvider authTokenProvider
 
     FileUtils fileUtils = new FileUtils()
 
     @Value('${base-urls.dm-store}')
     String dmStoreBaseUri
+
+    @Value('${toggle.ttl}')
+    boolean toggleTtlEnabled
 
     final String PASSWORD = '123'
 

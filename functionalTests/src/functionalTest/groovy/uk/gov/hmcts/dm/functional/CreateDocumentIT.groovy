@@ -263,7 +263,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD11 (R1) As authenticated when i upload a file only first TTL will be taken into consideration"() {
-        assumeTrue(toggleConfiguration.isTtl())
+        assumeTrue(toggleTtlEnabled)
 
         givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
@@ -286,7 +286,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
-        assumeTrue(toggleConfiguration.isTtl())
+        assumeTrue(toggleTtlEnabled)
 
         def url = givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)

@@ -171,7 +171,7 @@ public class StoredDocumentServiceTests {
     public void testSaveItemsWithCommandAndToggleConfiguration() {
 
         when(toggleConfiguration.isMetadatasearchendpoint()).thenReturn(true);
-        when(toggleConfiguration.isTtl()).thenReturn(true);
+        when(toggleTtlEnabled).thenReturn(true);
 
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
