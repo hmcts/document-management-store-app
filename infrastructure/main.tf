@@ -118,6 +118,8 @@ module "app" {
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME = "${azurerm_storage_container.document_container.name}"
 
     TEMP_FORCE_REDEPLOY = "1"
+
+    TASK_ENV = "documentTaskLock-${var.env}"
   }
 }
 
@@ -146,7 +148,7 @@ data "azurerm_key_vault" "ccd_shared_vault" {
   name = "${local.vaultName}"
   resource_group_name = "${local.sharedResourceGroup}"
 }
-  
+
 data "azurerm_key_vault" "dm_shared_vault" {
   name = "dm-${var.env}"
   resource_group_name = "dm-shared-${var.env}"
@@ -163,7 +165,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   value = "${module.db.postgresql_password}"
   key_vault_id = "${data.azurerm_key_vault.ccd_shared_vault.id}"
 }
-  
+
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-DM" {
   name = "${var.component}-POSTGRES-PASS"
   value = "${module.db.postgresql_password}"
@@ -192,7 +194,7 @@ data "azurerm_key_vault_secret" "dm_store_storageaccount_primary_connection_stri
   name = "dm-store-storage-account-primary-connection-string"
   key_vault_id = "${data.azurerm_key_vault.ccd_shared_vault.id}"
 }
-  
+
 resource "azurerm_key_vault_secret" "primary_connection_string" {
   name = "dm-store-storage-account-primary-connection-string"
   value = "${data.azurerm_key_vault_secret.dm_store_storageaccount_primary_connection_string.value}"
@@ -202,7 +204,7 @@ resource "azurerm_key_vault_secret" "primary_connection_string" {
 data "azurerm_key_vault_secret" "dm_store_storageaccount_secondary_connection_string" {
   name = "dm-store-storage-account-secondary-connection-string"
   key_vault_id = "${data.azurerm_key_vault.ccd_shared_vault.id}"
-}  
+}
 
 resource "azurerm_key_vault_secret" "secondary_connection_string" {
   name = "dm-store-storage-account-secondary-connection-string"

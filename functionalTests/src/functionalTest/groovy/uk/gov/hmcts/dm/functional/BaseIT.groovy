@@ -4,27 +4,30 @@ import io.restassured.RestAssured
 import io.restassured.response.Response
 import net.jcip.annotations.NotThreadSafe
 import org.junit.Assert
+import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.junit4.SpringRunner
+import uk.gov.hmcts.dm.FunctionalTestContextConfiguration
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.FileUtils
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import javax.annotation.PostConstruct
-import uk.gov.hmcts.dm.functional.config.FunctionalTestContextConfiguration
 
-import static io.restassured.RestAssured.given
 import static io.restassured.RestAssured.expect
+import static io.restassured.RestAssured.given
 import static org.hamcrest.Matchers.equalTo
 
-@ContextConfiguration(classes = FunctionalTestContextConfiguration)
 @NotThreadSafe
-class BaseIT {
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = FunctionalTestContextConfiguration)
+abstract class BaseIT {
 
     @Autowired
-    ToggleConfiguration toggleConfiguration;
+    Toggles toggleConfiguration;
 
     @Autowired
     AuthTokenProvider authTokenProvider
