@@ -19,6 +19,7 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -33,6 +34,7 @@ import java.util.Date;
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
 @Configuration
+@ConditionalOnProperty("toggle.ttl")
 public class BatchConfiguration {
 
     @Autowired
@@ -50,7 +52,7 @@ public class BatchConfiguration {
     @Autowired
     public DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor;
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 1000 * 60)
     @SchedulerLock(name = "${task.env}")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         jobLauncher
