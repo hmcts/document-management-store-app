@@ -89,3 +89,11 @@ task functional(type: Test) {
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
     include "uk/gov/hmcts/dm/functional/*IT.*"
 }
+
+task prodSmoke(type: Test) {
+    group = 'Delivery pipeline'
+    description = 'Execute smoke test against DM API instance'
+    setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
+    setClasspath(sourceSets.functionalTest.runtimeClasspath)
+    include "uk/gov/hmcts/dm/prod/smoke/*Test.*"
+}
