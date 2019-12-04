@@ -15,7 +15,7 @@ java:
         - AppInsightsInstrumentationKey
         - dm-store-storage-account-primary-connection-string
         - dm-store-storage-account-secondary-connection-string
-        - POSTGRES-PASS
+        - store-POSTGRES-PASS
 
   environment:
     MAX_ACTIVE_DB_CONNECTIONS: '50'
