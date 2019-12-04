@@ -199,6 +199,7 @@ dependencies {
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
 
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
+    testCompile group: 'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
 
     // For batch migration use only
     compile group: 'org.apache.jclouds', name: 'jclouds-compute', version: '2.+'
