@@ -175,13 +175,6 @@ variable "dm_multipart_whitelist_ext" {
   default = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv"
 }
 
-variable "s2s_names_whitelist" {
-  default = "em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,cmc_claim_store,bulk_scan_processor,em_npa_app,bulk_scan_orchestrator,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals,xui_webapp"
-}
-
-variable "case_worker_roles" {
-  default = "caseworker-probate,caseworker-cmc,caseworker-sscs,caseworker-divorce"
-}
 ////////////////////////////////////////////////
 // Addtional
 ////////////////////////////////////////////////
