@@ -92,9 +92,6 @@ module "app" {
 
     ENABLE_DB_MIGRATE="false"
 
-    DM_MULTIPART_WHITELIST = "${var.dm_multipart_whitelist}"
-    DM_MULTIPART_WHITELIST_EXT = "${var.dm_multipart_whitelist_ext}"
-
     # Toggles
     ENABLE_IDAM_HEALTH_CHECK = "${var.enable_idam_healthcheck}"
     ENABLE_METADATA_SEARCH = "${var.enable_metadata_search}"
