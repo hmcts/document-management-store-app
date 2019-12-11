@@ -13,8 +13,8 @@ spring:
       indent_output: true
   servlet:
     multipart:
-      max-file-size: ${MAX_FILE_SIZE:90MB}
-      max-request-size: ${MAX_FILE_SIZE:90MB}
+      max-file-size: ${MAX_FILE_SIZE:4000MB}
+      max-request-size: ${MAX_FILE_SIZE:4000MB}
   profiles:
     active: dev
   jpa:
