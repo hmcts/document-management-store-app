@@ -6,6 +6,7 @@ plugins {
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'org.owasp.dependencycheck'
     id 'se.patrikerdes.use-latest-versions' version '0.2.7'
+    
     id 'com.github.ben-manes.versions' version '0.27.0'
     id 'org.sonarqube' version '2.6.2'
     id 'jacoco'
@@ -126,14 +127,14 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.0'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.1'
 
     compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.1'
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '5.1.8.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.2.2.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
@@ -189,10 +190,8 @@ dependencies {
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.2.1.RELEASE'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.2'
-    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.2'
-
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.4'
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.4'
     testCompile group: 'org.eclipse.jetty', name: 'jetty-server', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlets', version: versions.jetty
