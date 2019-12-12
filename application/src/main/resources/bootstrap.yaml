@@ -8,4 +8,4 @@ spring:
 #        dm-store-POSTGRES-PASS: spring.datasource.password
         dm-store-storage-account-primary-connection-string: azure.storage.connection-string
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
-        POSTGRES-PASS: spring.datasource.password
+        store-POSTGRES-PASS: spring.datasource.password
