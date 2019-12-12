@@ -45,41 +45,41 @@ class MappingUrlIT extends BaseIT {
     }
 
     @Test
-    void "toggle.metadatasearchendpoint toggle Mappings"() {
+    void "toggle_metadatasearchendpoint toggle Mappings"() {
         assertTrue allEndpoints.any { it ==~ /(.*)(owned)(.*)/ } == metadatasearchendpoint
         assertTrue allEndpoints.any { it ==~ /(.*)(filter)(.*)/ } == metadatasearchendpoint
     }
 
     @Test
     @Ignore("Not Testable")
-    void "toggle.documentandmetadatauploadendpoint toggle Mappings"() {
+    void "toggle_documentandmetadatauploadendpoint toggle Mappings"() {
         assertTrue allEndpoints.any { it ==~ /(.*)(mappings)(.*)/ } == metadatasearchendpoint
     }
 
     @Test
-    void "toggle.folderendpoint toggle Mappings"() {
+    void "toggle_folderendpoint toggle Mappings"() {
         assertTrue allEndpoints.any { it ==~ /(.*)(folders)(.*)/ } == metadatasearchendpoint
     }
 
 
     @Test
-    void "toggle.deleteenabled toggle Mappings"() {
+    void "toggle_deleteenabled toggle Mappings"() {
         assertTrue allEndpoints.any { it == '{DELETE /documents/{documentId}}' } == deleteenabled
     }
 
     @Test
-    void "toggle.ttl toggle Mappings"() {
+    void "toggle_ttl toggle Mappings"() {
         assertTrue allEndpoints.any { it == '{PATCH /documents/{documentId}, consumes [application/json]}' } == ttl
     }
 
     @Test
-    void "toggle.thumbnail toggle Mappings"() {
+    void "toggle_thumbnail toggle Mappings"() {
         assertTrue allEndpoints.any { it == '{GET /documents/{documentId}/thumbnail}' } == thumbnail
         assertTrue allEndpoints.any { it == '{GET /documents/{documentId}/versions/{versionId}/thumbnail}' } == thumbnail
     }
 
     @Test
-    void "toggle.testing toggle Testing"() {
+    void "toggle_testing toggle Testing"() {
         assertTrue "Testing endpoint should be enabled: ${testing}",  allEndpoints.any { it == '{GET /testing/azure-storage-binary-exists/{id}}' } == testing
     }
 
