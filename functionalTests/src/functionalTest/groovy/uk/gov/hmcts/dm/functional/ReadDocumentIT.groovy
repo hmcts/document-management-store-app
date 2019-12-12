@@ -24,7 +24,7 @@ class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    void "R2 As authenticated user who is an owner, but Accept Header is application/vnd.uk.gov.hmcts.dm.document.v10000+hal+json"() {
+    void "R2 As authenticated user who is an owner, but Accept Header is application hal json"() {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
@@ -103,7 +103,7 @@ class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    void "R8 As authenticated user GET document/xxx where xxx is not UUID"() {
+    void "R8 As authenticated user GET document xxx where xxx is not UUID"() {
 
         givenRequest(CITIZEN)
             .expect()
@@ -113,7 +113,7 @@ class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    void "R9 As authenticated user GET document/111 where 111 is not UUID"() {
+    void "R9 As authenticated user GET document 111 where 111 is not UUID"() {
 
         givenRequest(CITIZEN)
                 .expect()
@@ -123,7 +123,7 @@ class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    void "R10 As authenticated user GET document/ where 111 is not UUID"() {
+    void "R10 As authenticated user GET document where 111 is not UUID"() {
 
         givenRequest(CITIZEN)
                 .expect()
@@ -133,7 +133,7 @@ class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    void "R11 As authenticated user GET document/xxx where xxx is UUID but it doesn't exist in our BD"() {
+    void "R11 As authenticated user GET document xxx where xxx is UUID but it doesn't exist in our BD"() {
 
         givenRequest(CITIZEN)
             .expect()
