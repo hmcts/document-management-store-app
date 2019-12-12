@@ -11,7 +11,7 @@ plugins {
     id 'jacoco'
     id 'idea'
     id 'eclipse'
-    id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'io.franzbecker.gradle-lombok' version '3.2.0'
     id "info.solidsoft.pitest" version "1.4.5"
 }
 
@@ -108,7 +108,7 @@ def versions = [
     jetty              : '9.4.11.v20180605',
     jsonUnit           : '1.31.1',
     JUnitParams        : '1.1.1',
-    lombok             : '1.18.0',
+    lombok             : '1.18.10',
     liquibase          : '3.8.1',
     postgresql         : '42.2.6',
     powermock          : '1.7.4',
@@ -126,8 +126,8 @@ dependencies {
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.0'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.1'
 
     compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.1'
 
@@ -189,14 +189,14 @@ dependencies {
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.2.1.RELEASE'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.2'
-    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.2'
-
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.4'
+    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.4'
     testCompile group: 'org.eclipse.jetty', name: 'jetty-server', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlets', version: versions.jetty
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
+
+    testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
 
     // For batch migration use only
     compile group: 'org.apache.jclouds', name: 'jclouds-compute', version: '2.+'
