@@ -43,7 +43,7 @@ class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    void "EP3 As an authenticated user trying to access document/, receive JSON error page with 405"() {
+    void "EP3 As an authenticated user trying to access document dir, receive JSON error page with 405"() {
 
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
