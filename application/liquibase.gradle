@@ -4,7 +4,7 @@ configurations {
 }
 
 dependencies {
-    liquibase group: 'org.liquibase.ext', name: 'liquibase-hibernate5', version: 3.6
+    liquibase group: 'org.liquibase.ext', name: 'liquibase-hibernate5', version: 3.8
 }
 
 //loading properties file.
@@ -33,7 +33,7 @@ task migratePostgresDatabase(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.liquibase
     main = "liquibase.integration.commandline.Main"
-
+    systemProperty "liquibase.useDbLock", true
     def urlString = project.hasProperty("dburl") ? "jdbc:postgresql://$dburl" : liquibaseProps.getProperty('url')
     def user = project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : liquibaseProps.getProperty('username')
     def password = project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : liquibaseProps.getProperty('password')
