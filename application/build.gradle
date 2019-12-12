@@ -11,7 +11,7 @@ plugins {
     id 'jacoco'
     id 'idea'
     id 'eclipse'
-    id 'io.franzbecker.gradle-lombok' version '1.14'
+    id 'io.franzbecker.gradle-lombok' version '3.2.0'
     id "info.solidsoft.pitest" version "1.4.5"
 }
 
@@ -108,7 +108,7 @@ def versions = [
     jetty              : '9.4.11.v20180605',
     jsonUnit           : '1.31.1',
     JUnitParams        : '1.1.1',
-    lombok             : '1.18.0',
+    lombok             : '1.18.10',
     liquibase          : '3.8.1',
     postgresql         : '42.2.6',
     powermock          : '1.7.4',
@@ -197,6 +197,8 @@ dependencies {
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlets', version: versions.jetty
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
+
+    testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
 
     // For batch migration use only
     compile group: 'org.apache.jclouds', name: 'jclouds-compute', version: '2.+'
