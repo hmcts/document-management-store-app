@@ -46,6 +46,7 @@ module "app" {
   asp_name = "${(var.asp_name == "use_shared") ? local.sharedAppServicePlan : var.asp_name}"
   asp_rg = "${(var.asp_rg == "use_shared") ? local.sharedASPResourceGroup : var.asp_rg}"
   website_local_cache_sizeinmb = 1600
+  enable_ase = false
 
   app_settings = {
     POSTGRES_HOST = "${module.db.host_name}"
@@ -94,8 +95,6 @@ module "app" {
 
     DM_MULTIPART_WHITELIST = "${var.dm_multipart_whitelist}"
     DM_MULTIPART_WHITELIST_EXT = "${var.dm_multipart_whitelist_ext}"
-    S2S_NAMES_WHITELIST = "${var.s2s_names_whitelist}"
-    CASE_WORKER_ROLES = "${var.case_worker_roles}"
 
     # Toggles
     ENABLE_IDAM_HEALTH_CHECK = "${var.enable_idam_healthcheck}"
