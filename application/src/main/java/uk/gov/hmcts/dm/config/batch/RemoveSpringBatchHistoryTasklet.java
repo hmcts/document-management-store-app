@@ -44,11 +44,11 @@ public class RemoveSpringBatchHistoryTasklet implements Tasklet {
     /**
      * Default value for the data retention (in month).
      */
-    private String tablePrefix = DEFAULT_TABLE_PREFIX;
+    private static final String tablePrefix = DEFAULT_TABLE_PREFIX;
 
-    private Integer historicRetentionMiliseconds;
+    private final Integer historicRetentionMiliseconds;
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     private static final Logger LOG = LoggerFactory.getLogger(RemoveSpringBatchHistoryTasklet.class);
 
