@@ -13,14 +13,14 @@ import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import javax.validation.constraints.NotNull;
-import java.io.ByteArrayOutputStream;
+//import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
-import static org.apache.commons.io.IOUtils.toByteArray;
-import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
+//import static org.apache.commons.io.IOUtils.toByteArray;
+//import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
 
 @Slf4j
 @Service

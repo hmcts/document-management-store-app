@@ -38,11 +38,12 @@ public class BlobStorageReadService {
         }
     }
 
+    private CloudBlockBlob loadBlob(String id) throws URISyntaxException, StorageException {
+        return cloudBlobContainer.getBlockBlobReference(id);
+    }
+
     public boolean doesBinaryExist(UUID uuid) throws URISyntaxException, StorageException {
         return loadBlob(uuid.toString()).exists();
     }
 
-    private CloudBlockBlob loadBlob(String id) throws URISyntaxException, StorageException {
-        return cloudBlobContainer.getBlockBlobReference(id);
-    }
 }
