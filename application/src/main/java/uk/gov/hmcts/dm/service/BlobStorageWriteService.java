@@ -55,13 +55,14 @@ public class BlobStorageWriteService {
         try (// Need to obtain two instances of the MultipartFile InputStream because a stream cannot be reused once
              // read
              final InputStream inputStream = multiPartFile.getInputStream();
-             final InputStream inputStreamForByteArray = multiPartFile.getInputStream()
+             //final InputStream inputStreamForByteArray = multiPartFile.getInputStream()
         ) {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(inputStream, documentContentVersion.getSize());
-            final byte[] bytes = toByteArray(inputStreamForByteArray);
             documentContentVersion.setContentUri(blob.getUri().toString());
-            final String checksum = shaHex(bytes);
+            //final byte[] bytes = toByteArray(inputStreamForByteArray);
+            //final String checksum = shaHex(bytes);
+            final String checksum = blob.getProperties().getContentMD5();
             documentContentVersion.setContentChecksum(checksum);
             log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}, checksum = {}",
                       documentId,
@@ -71,11 +72,11 @@ public class BlobStorageWriteService {
                       checksum);
 
             // checks that we uploaded correctly
-            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            /*final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             blob.download(byteArrayOutputStream);
             if (! checksum.equals(shaHex(byteArrayOutputStream.toByteArray()))) {
                 throw new FileStorageException(documentId, documentContentVersion.getId());
-            }
+            }*/
         } catch (URISyntaxException | StorageException | IOException e) {
             log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
                      documentId,
