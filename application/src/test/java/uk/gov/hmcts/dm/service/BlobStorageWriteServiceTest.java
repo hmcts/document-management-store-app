@@ -93,26 +93,6 @@ public class BlobStorageWriteServiceTest {
         verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
     }
 
-    @Ignore
-    @Test(expected = FileStorageException.class)
-    public void uploadDocumentContentVersionChecksumFailed() throws Exception {
-        final StoredDocument storedDocument = createStoredDocument();
-        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
-        String azureProvidedUri = "someuri";
-        given(blob.getUri()).willReturn(new URI(azureProvidedUri));
-        given(blob.getProperties()).willReturn(blobProperties);
-
-        // upload
-        blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
-                                                             documentContentVersion,
-                                                             file);
-
-        assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
-        assertThat(documentContentVersion.getContentChecksum(), is("contentmd5"));
-        verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
-    }
-
     @Test(expected = FileStorageException.class)
     public void uploadDocumentContentVersionThrowsFileStorageException() throws Exception {
         given(cloudBlobContainer.getBlockBlobReference(anyString())).willThrow(new StorageException("Bad",

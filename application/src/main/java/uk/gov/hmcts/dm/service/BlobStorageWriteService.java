@@ -13,14 +13,10 @@ import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import javax.validation.constraints.NotNull;
-//import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.UUID;
-
-//import static org.apache.commons.io.IOUtils.toByteArray;
-//import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
 
 @Slf4j
 @Service
@@ -55,13 +51,10 @@ public class BlobStorageWriteService {
         try (// Need to obtain two instances of the MultipartFile InputStream because a stream cannot be reused once
              // read
              final InputStream inputStream = multiPartFile.getInputStream();
-             //final InputStream inputStreamForByteArray = multiPartFile.getInputStream()
         ) {
             CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
             blob.upload(inputStream, documentContentVersion.getSize());
             documentContentVersion.setContentUri(blob.getUri().toString());
-            //final byte[] bytes = toByteArray(inputStreamForByteArray);
-            //final String checksum = shaHex(bytes);
             final String checksum = blob.getProperties().getContentMD5();
             documentContentVersion.setContentChecksum(checksum);
             log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}, checksum = {}",
@@ -71,12 +64,6 @@ public class BlobStorageWriteService {
                       documentContentVersion.getSize(),
                       checksum);
 
-            // checks that we uploaded correctly
-            /*final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            blob.download(byteArrayOutputStream);
-            if (! checksum.equals(shaHex(byteArrayOutputStream.toByteArray()))) {
-                throw new FileStorageException(documentId, documentContentVersion.getId());
-            }*/
         } catch (URISyntaxException | StorageException | IOException e) {
             log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
                      documentId,
