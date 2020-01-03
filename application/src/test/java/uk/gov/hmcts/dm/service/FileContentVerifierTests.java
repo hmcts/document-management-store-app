@@ -54,12 +54,6 @@ public class FileContentVerifierTests {
     }
 
     @Test
-    public void testUploadTikaDetectionFailure() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename.txt", "text/plain", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        assertFalse(fileContentVerifier.verifyContentType(file));
-    }
-
-    @Test
     public void testInputException() throws Exception {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         Mockito.when(file.getContentType()).thenReturn("application/pdf");
@@ -80,9 +74,9 @@ public class FileContentVerifierTests {
     }
 
     @Test
-    public void testUploadMimeTypeAllowedButDoesNotMatchActualType() throws Exception {
+    public void testIgnoreClientMimeType() throws Exception {
         MultipartFile file = new MockMultipartFile("files", "filename.txt", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        assertFalse(fileContentVerifier.verifyContentType(file));
+        assertTrue(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
