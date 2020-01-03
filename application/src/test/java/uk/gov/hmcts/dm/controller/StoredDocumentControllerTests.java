@@ -137,7 +137,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testCreateFromDocumentsWithNonWhitelistFile() throws Exception {
         List<MultipartFile> files = Stream.of(
             new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
-            new MockMultipartFile("files", "filename.txt", "", "hello2".getBytes(StandardCharsets.UTF_8)))
+            new MockMultipartFile("files", "filename.exe", "", "hello2".getBytes(StandardCharsets.UTF_8)))
             .collect(Collectors.toList());
 
         List<StoredDocument> storedDocuments = files.stream()
