@@ -46,6 +46,7 @@ module "app" {
   asp_name = "${(var.asp_name == "use_shared") ? local.sharedAppServicePlan : var.asp_name}"
   asp_rg = "${(var.asp_rg == "use_shared") ? local.sharedASPResourceGroup : var.asp_rg}"
   website_local_cache_sizeinmb = 1600
+  enable_ase = false
 
   app_settings = {
     POSTGRES_HOST = "${module.db.host_name}"
