@@ -37,20 +37,15 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
 
-    platform: postgresql
-    time-between-eviction-runs-millis: ${STALE_CONN_EVICTION_FREQUENCY:60000}
-    tomcat:
-      max-active: ${MAX_ACTIVE_DB_CONNECTIONS:50} # Maximum number of active connections that can be allocated from this pool at the same time.
-      max-idle: ${MAX_IDLE_DB_CONNECTIONS:25}
-      max-wait: ${MAX_WAIT_DB_CONNECTIONS:10000} # Number of ms to wait before throwing an exception if no connection is available.
-      test-on-borrow: ${TEST_ON_BORROW_DB_CONNECTION:true} # Validate the connection before borrowing it from the pool.
   batch:
     job:
       enabled: ${ENABLE_TTL:true}
-      ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
     initialize-schema: always
+    document-task-milliseconds: ${DOCUMENT_TASK_MILLISECONDS:60000}
+    # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
+    historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
 
 server:
   port: ${SERVER_PORT:4603}
@@ -204,3 +199,7 @@ blobstore:
 #56EJZMpbmeidFNymPaigTQuNENSmhGGswWRfMwCWTRIu+cvfPQjyWvqnsj2aHIQA
 #DkvPBLopLN3KYZ9OQGvZitfVzvN5l63XCbioWYNdr2vej3cPT8dNLQ==
 #-----END RSA PRIVATE KEY-----
+
+
+task:
+  env: ${TASK_ENV:documentTaskLock-local}
