@@ -6,6 +6,14 @@ java:
     service:
       port: 5432
   image: 'hmctspublic.azurecr.io/dm/store:latest'
+  readinessDelay: 40
+  readinessTimeout: 5
+  readinessPeriod: 15
+  readinessFailureThreshold: 10
+  livenessDelay: 40
+  livenessTimeout: 5
+  livenessPeriod: 15
+  livenessFailureThreshold: 10
   applicationPort: '4603'
   aadIdentityName: dm-store
   keyVaults:
@@ -71,6 +79,8 @@ java:
     #STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
     #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: dm-store-docstore-{{ .Values.global.environment }}
+
+    TASK_ENV: documentTaskLock-aat
 
 blobstorage:
   resourceGroup: dm-store-aks

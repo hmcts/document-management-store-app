@@ -47,10 +47,12 @@ spring:
   batch:
     job:
       enabled: ${ENABLE_TTL:true}
-      ttlCronExpression: ${TTL_CRON_EXPRESSION:"*/60 * * * * *"}
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
     initialize-schema: always
+    document-task-milliseconds: ${DOCUMENT_TASK_MILLISECONDS:60000}
+    # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
+    historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
 
 server:
   port: ${SERVER_PORT:4603}
@@ -204,3 +206,7 @@ blobstore:
 #56EJZMpbmeidFNymPaigTQuNENSmhGGswWRfMwCWTRIu+cvfPQjyWvqnsj2aHIQA
 #DkvPBLopLN3KYZ9OQGvZitfVzvN5l63XCbioWYNdr2vej3cPT8dNLQ==
 #-----END RSA PRIVATE KEY-----
+
+
+task:
+  env: ${TASK_ENV:documentTaskLock-local}
