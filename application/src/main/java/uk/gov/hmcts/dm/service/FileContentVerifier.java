@@ -37,11 +37,6 @@ public class FileContentVerifier {
         if (multipartFile == null) {
             return false;
         }
-        if (!mimeTypeList.stream().anyMatch(m -> m.equalsIgnoreCase(multipartFile.getContentType()))) {
-            log.info(
-                String.format("Warning. The mime-type of uploaded file is not white-listed: %s", multipartFile.getContentType()));
-            return false;
-        }
 
         String fileNameExtension = getOriginalFileNameExtension(multipartFile);
         if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
@@ -49,6 +44,7 @@ public class FileContentVerifier {
                 String.format("Warning. The extension of uploaded file is not white-listed: %s", fileNameExtension));
             return false;
         }
+
         try (InputStream inputStream = multipartFile.getInputStream();
              TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
             Metadata metadata = new Metadata();
@@ -57,18 +53,17 @@ public class FileContentVerifier {
                 metadata.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
             }
             String detected = tika.detect(tikaInputStream, metadata);
-            boolean fileTypeMatch = multipartFile.getContentType().equals(detected);
-            if (!fileTypeMatch) {
-                log.info(
-                    String.format(
-                        "Warning. Uploaded file type does not match the detected content type. Expected: %s, Detected: %s",
-                        multipartFile.getContentType(), detected));
+            if (mimeTypeList.stream().noneMatch(m -> m.equalsIgnoreCase(detected))) {
+                log.error(
+                    String.format("Warning. The mime-type of uploaded file is not white-listed: %s", detected));
+                return false;
             }
-            return fileTypeMatch;
         } catch (IOException e) {
             log.error("Could not verify the file content type", e);
             return false;
         }
+
+        return true;
     }
 
     private String getOriginalFileNameExtension(MultipartFile multipartFile) {
