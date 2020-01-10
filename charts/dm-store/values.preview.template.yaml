@@ -2,7 +2,7 @@ java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   aadIdentityName:
-  readinessDelay: 45
+  readinessDelay: 60
   keyVaults:
     dm:
       resourceGroup: dm-shared
