@@ -54,7 +54,6 @@ module "app" {
     POSTGRES_DATABASE = "${module.db.postgresql_database}"
     POSTGRES_USER = "${module.db.user_name}"
     POSTGRES_PASSWORD = "${module.db.postgresql_password}"
-    MAX_ACTIVE_DB_CONNECTIONS = 70
     FORCE_APPLY = "true"
 
     # JAVA_OPTS = "${var.java_opts}"
