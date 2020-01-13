@@ -4,6 +4,7 @@
 !config
 !application
 !functionalTests
+!performanceTests
 !smokeTests
 !build/libs/**
 !lib/**
