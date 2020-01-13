@@ -4,4 +4,3 @@ java:
   environment:
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
-    TASK_ENV: documentTaskLock-aat-staging
