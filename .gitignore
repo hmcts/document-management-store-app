@@ -58,6 +58,7 @@ hs_err_pid*
 # IntelliJ
 out
 application/out
+performanceTests/out
 functionalTests/out
 
 # mpeltonen/sbt-idea plugin
