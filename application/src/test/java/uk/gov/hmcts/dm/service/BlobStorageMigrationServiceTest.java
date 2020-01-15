@@ -1,8 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
+import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.implementation.models.StorageError;
-import com.azure.storage.blob.implementation.models.StorageErrorException;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
@@ -17,11 +16,7 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.data.domain.PageRequest;
-import uk.gov.hmcts.dm.domain.BatchMigrationAuditEntry;
-import uk.gov.hmcts.dm.domain.DocumentContent;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.MigrateEntry;
-import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.exception.DocumentNotFoundException;
@@ -37,11 +32,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.nio.charset.Charset.defaultCharset;
 import static java.util.Arrays.asList;
@@ -50,19 +41,10 @@ import static org.apache.commons.io.IOUtils.copy;
 import static org.apache.tika.io.IOUtils.toInputStream;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
@@ -94,6 +76,7 @@ public class BlobStorageMigrationServiceTest {
 
     private BlobContainerClient cloudBlobContainer;
     private BlockBlobClient cloudBlockBlob;
+    private BlobClient blob;
     private UUID documentContentVersionUuid;
     private UUID documentUuid;
 
@@ -103,6 +86,11 @@ public class BlobStorageMigrationServiceTest {
     @Before
     public void setUp() throws Exception {
         cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
+        blob = PowerMockito.mock(BlobClient.class);
+        cloudBlockBlob = PowerMockito.mock(BlockBlobClient.class);
+
+        when(cloudBlobContainer.getBlobClient(any())).thenReturn(blob);
+        when(blob.getBlockBlobClient()).thenReturn(cloudBlockBlob);
 
         underTest = new BlobStorageMigrationService(cloudBlobContainer,
                                                     documentContentVersionRepository,
@@ -289,9 +277,11 @@ public class BlobStorageMigrationServiceTest {
 
     private String mockAzureBlobUpload(final DocumentContentVersion dcv) throws URISyntaxException {
         cloudBlockBlob = PowerMockito.mock(BlockBlobClient.class);
+        blob = PowerMockito.mock(BlobClient.class);
         final String azureProvidedUri = RandomStringUtils.randomAlphanumeric(32);
         when(cloudBlockBlob.getBlobUrl()).thenReturn(new URI(azureProvidedUri).toString());
-        when(cloudBlobContainer.getBlobClient(dcv.getId().toString()).getBlockBlobClient()).thenReturn(cloudBlockBlob);
+        when(cloudBlobContainer.getBlobClient(dcv.getId().toString())).thenReturn(blob);
+        when(blob.getBlockBlobClient()).thenReturn(cloudBlockBlob);
         prepareDownloadStream();
         return azureProvidedUri;
     }

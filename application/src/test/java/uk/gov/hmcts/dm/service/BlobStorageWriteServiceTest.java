@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
@@ -16,7 +17,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -30,7 +30,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
@@ -42,6 +41,8 @@ public class BlobStorageWriteServiceTest {
     private BlobStorageWriteService blobStorageWriteService;
 
     private BlobContainerClient cloudBlobContainer;
+
+    private BlobClient blobClient;
 
     @Mock
     private MultipartFile file;
@@ -55,6 +56,11 @@ public class BlobStorageWriteServiceTest {
     public void setUp() throws Exception {
         cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
         blob = PowerMockito.mock(BlockBlobClient.class);
+        blobClient = PowerMockito.mock(BlobClient.class);
+
+        given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
+        given(blobClient.getBlockBlobClient()).willReturn(blob);
+
         blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer, documentContentVersionRepository);
         try (final InputStream inputStream = toInputStream(MOCK_DATA)) {
             given(file.getInputStream()).willReturn(inputStream);
@@ -65,7 +71,6 @@ public class BlobStorageWriteServiceTest {
     public void uploadDocumentContentVersion() throws Exception {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        given(cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient()).willReturn(blob);
         String azureProvidedUri = "someuri";
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
         doAnswer(invocation -> {
@@ -89,7 +94,6 @@ public class BlobStorageWriteServiceTest {
     public void uploadDocumentContentVersionChecksumFailed() throws Exception {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        given(cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient()).willReturn(blob);
         String azureProvidedUri = "someuri";
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
 

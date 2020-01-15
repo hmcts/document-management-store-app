@@ -1,12 +1,11 @@
 package uk.gov.hmcts.dm.config.azure;
 
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.BlobServiceClient;
-import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.BlobContainerClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import uk.gov.hmcts.dm.exception.AppConfigurationException;
 
 import java.util.Optional;
 
@@ -26,28 +25,14 @@ public class AzureStorageConfiguration {
     private Boolean postgresStorageEnabled;
 
     @Bean
-    public BlobServiceClient cloudBlobClient() {
-        return new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
-    }
-
-    @Bean
+    @ConditionalOnProperty(
+        value = "azure.storage.enabled",
+        havingValue = "true")
     BlobContainerClient cloudBlobContainer() {
-        final BlobContainerClient containerClient = cloudBlobClient().createBlobContainer(containerReference);
-        if (isAzureBlobStoreEnabled() && !containerClient.exists()) {
-            // Current behaviour is that system will hang for a very long time
-            throw new AppConfigurationException("Cloub Blob Container does not exist");
-        }
-        return containerClient;
-    }
-
-    @Bean
-    Boolean blobEnabled() {
-        if (!isAzureBlobStoreEnabled() && !isPostgresBlobStorageEnabled()) {
-            throw new AppConfigurationException(
-                "At least one of Azure and postgres blob storage needs to be enabled"
-            );
-        }
-        return true;
+        return new BlobContainerClientBuilder()
+            .connectionString(connectionString)
+            .containerName(containerReference)
+            .buildClient();
     }
 
     public Boolean isAzureBlobStoreEnabled() {
