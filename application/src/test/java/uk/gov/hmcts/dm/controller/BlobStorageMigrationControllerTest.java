@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.controller;
 
-import com.microsoft.azure.storage.StorageException;
 import org.junit.Test;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
@@ -42,21 +41,6 @@ public class BlobStorageMigrationControllerTest extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .post("/documents/" + documentId + "/versions/" + versionId + "/migrate")
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void failsWith500OnAzureBlobStoreStorageException() throws Exception {
-
-        doThrow(new FileStorageException(new StorageException("404", "Message", mock(Exception.class)),
-            documentId,
-            versionId))
-            .when(this.blobStorageMigrationService).migrateDocumentContentVersion(documentId, versionId);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .post("/documents/" + documentId + "/versions/" + versionId + "/migrate")
-            .andExpect(status().isInternalServerError());
     }
 
     @Test

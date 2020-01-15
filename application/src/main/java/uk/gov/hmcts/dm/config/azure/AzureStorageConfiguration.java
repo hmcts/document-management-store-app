@@ -1,16 +1,13 @@
 package uk.gov.hmcts.dm.config.azure;
 
-import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobClient;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import uk.gov.hmcts.dm.exception.AppConfigurationException;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
 import java.util.Optional;
 
 @Configuration
@@ -29,18 +26,18 @@ public class AzureStorageConfiguration {
     private Boolean postgresStorageEnabled;
 
     @Bean
-    public CloudBlobClient cloudBlobClient() throws URISyntaxException, InvalidKeyException {
-        return storageAccount().createCloudBlobClient();
+    public BlobServiceClient cloudBlobClient() {
+        return new BlobServiceClientBuilder().connectionString(connectionString).buildClient();
     }
 
     @Bean
-    CloudBlobContainer cloudBlobContainer() throws URISyntaxException, InvalidKeyException, StorageException {
-        final CloudBlobContainer container = cloudBlobClient().getContainerReference(this.containerReference);
-        if (isAzureBlobStoreEnabled() && !container.exists()) {
+    BlobContainerClient cloudBlobContainer() {
+        final BlobContainerClient containerClient = cloudBlobClient().createBlobContainer(containerReference);
+        if (isAzureBlobStoreEnabled() && !containerClient.exists()) {
             // Current behaviour is that system will hang for a very long time
             throw new AppConfigurationException("Cloub Blob Container does not exist");
         }
-        return container;
+        return containerClient;
     }
 
     @Bean
@@ -59,10 +56,6 @@ public class AzureStorageConfiguration {
 
     public Boolean isPostgresBlobStorageEnabled() {
         return Optional.ofNullable(postgresStorageEnabled).orElse(true);
-    }
-
-    private CloudStorageAccount storageAccount() throws URISyntaxException, InvalidKeyException {
-        return CloudStorageAccount.parse(connectionString);
     }
 
 }

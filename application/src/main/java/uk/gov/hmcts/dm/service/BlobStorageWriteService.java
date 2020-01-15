@@ -1,8 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 import static org.apache.commons.io.IOUtils.toByteArray;
@@ -26,11 +24,11 @@ import static org.springframework.security.core.token.Sha512DigestUtils.shaHex;
 @Service
 public class BlobStorageWriteService {
 
-    private final CloudBlobContainer cloudBlobContainer;
+    private final BlobContainerClient cloudBlobContainer;
     private final DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
-    public BlobStorageWriteService(CloudBlobContainer cloudBlobContainer,
+    public BlobStorageWriteService(BlobContainerClient cloudBlobContainer,
                                    DocumentContentVersionRepository documentContentVersionRepository) {
         this.cloudBlobContainer = cloudBlobContainer;
         this.documentContentVersionRepository = documentContentVersionRepository;
@@ -57,16 +55,16 @@ public class BlobStorageWriteService {
              final InputStream inputStream = multiPartFile.getInputStream();
              final InputStream inputStreamForByteArray = multiPartFile.getInputStream()
         ) {
-            CloudBlockBlob blob = getCloudFile(documentContentVersion.getId());
+            BlockBlobClient blob = getCloudFile(documentContentVersion.getId());
             blob.upload(inputStream, documentContentVersion.getSize());
             final byte[] bytes = toByteArray(inputStreamForByteArray);
-            documentContentVersion.setContentUri(blob.getUri().toString());
+            documentContentVersion.setContentUri(blob.getBlobUrl());
             final String checksum = shaHex(bytes);
             documentContentVersion.setContentChecksum(checksum);
             log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}, checksum = {}",
                       documentId,
                       documentContentVersion.getId(),
-                      blob.getUri(),
+                      blob.getBlobUrl(),
                       documentContentVersion.getSize(),
                       checksum);
 
@@ -76,7 +74,7 @@ public class BlobStorageWriteService {
             if (! checksum.equals(shaHex(byteArrayOutputStream.toByteArray()))) {
                 throw new FileStorageException(documentId, documentContentVersion.getId());
             }
-        } catch (URISyntaxException | StorageException | IOException e) {
+        } catch (IOException e) {
             log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
                      documentId,
                      documentContentVersion.getId());
@@ -84,7 +82,7 @@ public class BlobStorageWriteService {
         }
     }
 
-    private CloudBlockBlob getCloudFile(UUID uuid) throws StorageException, URISyntaxException {
-        return cloudBlobContainer.getBlockBlobReference(uuid.toString());
+    private BlockBlobClient getCloudFile(UUID uuid) {
+        return cloudBlobContainer.getBlobClient(uuid.toString()).getBlockBlobClient();
     }
 }

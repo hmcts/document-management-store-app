@@ -1,8 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,26 +35,26 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({CloudBlobContainer.class, CloudBlockBlob.class})
+@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class})
 @PowerMockIgnore({"javax.net.ssl.*"})
 public class BlobStorageWriteServiceTest {
 
     private BlobStorageWriteService blobStorageWriteService;
 
-    private CloudBlobContainer cloudBlobContainer;
+    private BlobContainerClient cloudBlobContainer;
 
     @Mock
     private MultipartFile file;
     @Mock
-    private CloudBlockBlob blob;
+    private BlockBlobClient blob;
     @Mock
     private DocumentContentVersionRepository documentContentVersionRepository;
     private static final String MOCK_DATA = "mock data";
 
     @Before
     public void setUp() throws Exception {
-        cloudBlobContainer = PowerMockito.mock(CloudBlobContainer.class);
-        blob = PowerMockito.mock(CloudBlockBlob.class);
+        cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
+        blob = PowerMockito.mock(BlockBlobClient.class);
         blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer, documentContentVersionRepository);
         try (final InputStream inputStream = toInputStream(MOCK_DATA)) {
             given(file.getInputStream()).willReturn(inputStream);
@@ -66,9 +65,9 @@ public class BlobStorageWriteServiceTest {
     public void uploadDocumentContentVersion() throws Exception {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
+        given(cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient()).willReturn(blob);
         String azureProvidedUri = "someuri";
-        given(blob.getUri()).willReturn(new URI(azureProvidedUri));
+        given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
         doAnswer(invocation -> {
             try (final InputStream inputStream = toInputStream(MOCK_DATA);
                  final OutputStream outputStream = invocation.getArgument(0)
@@ -90,9 +89,9 @@ public class BlobStorageWriteServiceTest {
     public void uploadDocumentContentVersionChecksumFailed() throws Exception {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        given(cloudBlobContainer.getBlockBlobReference(documentContentVersion.getId().toString())).willReturn(blob);
+        given(cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient()).willReturn(blob);
         String azureProvidedUri = "someuri";
-        given(blob.getUri()).willReturn(new URI(azureProvidedUri));
+        given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
 
         // upload
         blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
@@ -101,19 +100,6 @@ public class BlobStorageWriteServiceTest {
 
         assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
         verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
-    }
-
-    @Test(expected = FileStorageException.class)
-    public void uploadDocumentContentVersionThrowsFileStorageException() throws Exception {
-        given(cloudBlobContainer.getBlockBlobReference(anyString())).willThrow(new StorageException("Bad",
-                                                                                                    "Things happened",
-                                                                                                    new IOException()));
-        final StoredDocument storedDocument = createStoredDocument();
-        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-
-        blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
-                                                             documentContentVersion,
-                                                             file);
     }
 
     private StoredDocument createStoredDocument() {

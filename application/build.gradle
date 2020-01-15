@@ -113,12 +113,14 @@ def versions = [
     postgresql         : '42.2.6',
     powermock          : '1.7.4',
     sonar              : '3.2',
-    springBoot         : springBootVersion,
+//    springBoot         : springBootVersion,
+    springBoot         : '2.1.6.RELEASE',
     springfoxSwagger   : '2.9.2',
 ]
 
 dependencies {
-    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.6.0'
+//    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.0.0'
+    compile group: 'com.azure', name: 'azure-storage-blob', version: '12.1.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.18'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.23'
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '9.0.30'
@@ -145,6 +147,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
     compile 'uk.gov.hmcts.reform:health-spring-boot-starter:0.0.5'
+
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.10.Final'
 
