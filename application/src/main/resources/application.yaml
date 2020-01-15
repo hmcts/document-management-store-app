@@ -13,8 +13,8 @@ spring:
       indent_output: true
   servlet:
     multipart:
-      max-file-size: ${MAX_FILE_SIZE:90MB}
-      max-request-size: ${MAX_FILE_SIZE:90MB}
+      max-file-size: ${MAX_FILE_SIZE:4000MB}
+      max-request-size: ${MAX_FILE_SIZE:4000MB}
   profiles:
     active: dev
   jpa:
@@ -44,13 +44,6 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
 
-    platform: postgresql
-    time-between-eviction-runs-millis: ${STALE_CONN_EVICTION_FREQUENCY:60000}
-    tomcat:
-      max-active: ${MAX_ACTIVE_DB_CONNECTIONS:50} # Maximum number of active connections that can be allocated from this pool at the same time.
-      max-idle: ${MAX_IDLE_DB_CONNECTIONS:25}
-      max-wait: ${MAX_WAIT_DB_CONNECTIONS:10000} # Number of ms to wait before throwing an exception if no connection is available.
-      test-on-borrow: ${TEST_ON_BORROW_DB_CONNECTION:true} # Validate the connection before borrowing it from the pool.
   batch:
     job:
       enabled: ${ENABLE_TTL:true}
@@ -159,8 +152,8 @@ management:
 
 dm:
   multipart:
-    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv}
-    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv}
+    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv,audio/x-ms-wma,video/x-ms-asf,audio/aac,audio/x-aac,audio/wav,audio/vnd.wave,audio/ogg,video/ogg,audio/vorbis,application/ogg,audio/mpeg,video/mp4,video/mpeg,application/x-troff-msvideo,video/avi,video/vnd.avi,video/msvideo,video/x-msvideo,video/quicktime,video/webm,audio/webm,video/x-ms-wmv,video/x-matroska,audio/mp4,audio/x-matroska}
+    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv,.wma,.aac,.wav,.oga,ogv,.ogx,.mp3,.mp4,.mpg,.mpeg,.avi,.wmv,.mov,.ogg,.webm,.mpa,.m4a,.mka,.mpv}
 
 thumbnail:
     imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}

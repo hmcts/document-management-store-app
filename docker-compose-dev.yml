@@ -27,35 +27,6 @@ services:
         volumes:
             - ccd-docker-azure-blob-data:/opt/azurite/folder
 
-    idam-api:
-        image: hmctsprivate.azurecr.io/tidam/api:latest
-        healthcheck:
-            interval: 10s
-            timeout: 10s
-            retries: 10
-        environment:
-            - SPRING_DATASOURCE_URL=jdbc:postgresql://database-idam:5432/idam
-            - SPRING_DATASOURCE_USERNAME=idam
-            - SPRING_DATASOURCE_PASSWORD=idam
-            - SPRING_MAIL_HOST=smtp-server
-            - IDAM_TESTING_SUPPORT_ENABLED="true"
-            - IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_WEBSHOW=AAAAAAAAAAAAAAAA
-            - IDAM_WEBSHOW_WHITELIST=http://localhost:8080/oauth2redirect
-            - REFORM_SERVICE_NAME=idam-api
-            - REFORM_TEAM=idam
-            - REFORM_ENVIRONMENT=local
-            - http_proxy=
-            - https_proxy=
-            - no_proxy=
-        ports:
-            - 4501:8080
-        links:
-            - smtp-server
-            - database-idam
-        depends_on:
-            - smtp-server
-            - database-idam
-
     service-auth-provider-api:
         image: hmcts/service-auth-provider-app
         healthcheck:
@@ -76,15 +47,6 @@ services:
             MICROSERVICEKEYS_EM_CCD_ORCHESTRATOR: AAAAAAAAAAAAAAAA
             MICROSERVICEKEYS_EM_GW: AAAAAAAAAAAAAAAA
             TESTING_SUPPORT_ENABLED: "true"
-
-    database-idam:
-        build:
-            context: ./docker/database-idam
-        ports:
-            - 5433:5432
-
-    smtp-server:
-        image: mailhog/mailhog
 
 volumes:
     pacts:
