@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.specialized.BlobOutputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
@@ -88,6 +89,34 @@ public class BlobStorageWriteServiceTest {
 
         assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
         verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
+    }
+
+    @Test
+    public void uploadLargeDocument() throws Exception {
+        final StoredDocument storedDocument = createStoredDocument();
+        final DocumentContentVersion documentContentVersion = PowerMockito.mock(DocumentContentVersion.class);
+        given(documentContentVersion.getSize()).willReturn((long) 256 * 1024 * 1024);
+        given(documentContentVersion.getId()).willReturn(storedDocument.getDocumentContentVersions().get(0).getId());
+
+        String azureProvidedUri = "someuri";
+        given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
+        doAnswer(invocation -> {
+            try (final InputStream inputStream = file.getInputStream();
+                 final OutputStream outputStream = invocation.getArgument(0)
+            ) {
+                return copy(inputStream, outputStream);
+            }
+        }).when(blob).download(any(OutputStream.class));
+
+        BlobOutputStream outputStream = PowerMockito.mock(BlobOutputStream.class);
+        given(blob.getBlobOutputStream()).willReturn(outputStream);
+
+        // upload
+        blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
+            documentContentVersion,
+            file);
+
+        verify(blob).getBlobOutputStream();
     }
 
     @Test(expected = FileStorageException.class)

@@ -221,7 +221,6 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/commandobject/*',
     '**uk/gov/hmcts/dm/hibernate/*',
     '**uk/gov/hmcts/dm/config/**/*',
-    '**uk/gov/hmcts/dm/service/**/*',
     '**uk/gov/hmcts/dm/errorhandler/*',
     '**uk/gov/hmcts/dm/repository/RepositoryFinder.java',
     '**uk/gov/hmcts/dm/service/batch/CustomItemWriter.java',
