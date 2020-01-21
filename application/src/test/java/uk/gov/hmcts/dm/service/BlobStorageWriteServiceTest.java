@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.BlobProperties;
 import com.azure.storage.blob.specialized.BlobOutputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
@@ -35,7 +36,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class})
+@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobProperties.class})
 @PowerMockIgnore({"javax.net.ssl.*"})
 public class BlobStorageWriteServiceTest {
 
@@ -74,6 +75,10 @@ public class BlobStorageWriteServiceTest {
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         String azureProvidedUri = "someuri";
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
+        BlobProperties properties = PowerMockito.mock(BlobProperties.class);
+        given(blob.getProperties()).willReturn(properties);
+        given(properties.getContentMd5()).willReturn("dummy-md5".getBytes());
+
         doAnswer(invocation -> {
             try (final InputStream inputStream = toInputStream(MOCK_DATA);
                  final OutputStream outputStream = invocation.getArgument(0)
@@ -98,6 +103,10 @@ public class BlobStorageWriteServiceTest {
         given(documentContentVersion.getSize()).willReturn((long) 256 * 1024 * 1024);
         given(documentContentVersion.getId()).willReturn(storedDocument.getDocumentContentVersions().get(0).getId());
 
+        BlobProperties properties = PowerMockito.mock(BlobProperties.class);
+        given(blob.getProperties()).willReturn(properties);
+        given(properties.getContentMd5()).willReturn("dummy-md5".getBytes());
+
         String azureProvidedUri = "someuri";
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
         doAnswer(invocation -> {
@@ -117,22 +126,6 @@ public class BlobStorageWriteServiceTest {
             file);
 
         verify(blob).getBlobOutputStream();
-    }
-
-    @Test(expected = FileStorageException.class)
-    public void uploadDocumentContentVersionChecksumFailed() throws Exception {
-        final StoredDocument storedDocument = createStoredDocument();
-        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        String azureProvidedUri = "someuri";
-        given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
-
-        // upload
-        blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
-                                                             documentContentVersion,
-                                                             file);
-
-        assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
-        verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
     }
 
     private StoredDocument createStoredDocument() {

@@ -6,6 +6,7 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -17,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.apache.commons.io.IOUtils.toByteArray;
@@ -52,16 +54,14 @@ public class BlobStorageWriteService {
                   documentId,
                   documentContentVersion.getId());
 
-        try (// Need to obtain two instances of the MultipartFile InputStream because a stream cannot be reused once
-             // read
-             final InputStream inputStream = multiPartFile.getInputStream();
-             final InputStream inputStreamForByteArray = multiPartFile.getInputStream()
+        try (
+            final InputStream inputStream = multiPartFile.getInputStream()
         ) {
             BlockBlobClient blob = getCloudFile(documentContentVersion.getId());
             uploadDocument(blob, inputStream, documentContentVersion.getSize());
-            final byte[] bytes = toByteArray(inputStreamForByteArray);
+
+            String checksum = new String(Hex.encode(blob.getProperties().getContentMd5()));
             documentContentVersion.setContentUri(blob.getBlobUrl());
-            final String checksum = shaHex(bytes);
             documentContentVersion.setContentChecksum(checksum);
             log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}, checksum = {}",
                       documentId,
@@ -69,13 +69,6 @@ public class BlobStorageWriteService {
                       blob.getBlobUrl(),
                       documentContentVersion.getSize(),
                       checksum);
-
-            // checks that we uploaded correctly
-            final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            blob.download(byteArrayOutputStream);
-            if (! checksum.equals(shaHex(byteArrayOutputStream.toByteArray()))) {
-                throw new FileStorageException(documentId, documentContentVersion.getId());
-            }
         } catch (IOException e) {
             log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
                      documentId,
