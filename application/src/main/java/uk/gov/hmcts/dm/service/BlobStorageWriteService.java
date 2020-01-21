@@ -78,14 +78,14 @@ public class BlobStorageWriteService {
 
     /**
      * The Azure Blob API expects a different call for files over 256mb. See:
-     *
+     * <p>
      * https://github.com/Azure/azure-sdk-for-java/issues/6005
+     * </p>
      */
     private void uploadDocument(BlockBlobClient blob, InputStream inputStream, long length) throws IOException {
         if (length < 256 * 1024 * 1024) {
             blob.upload(inputStream, length);
-        }
-        else {
+        } else {
             BlobOutputStream blobOutputStream = blob.getBlobOutputStream();
             IOUtils.copy(inputStream, blobOutputStream);
             blobOutputStream.close();
