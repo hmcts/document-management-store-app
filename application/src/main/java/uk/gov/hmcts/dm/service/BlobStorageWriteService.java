@@ -6,7 +6,6 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -55,15 +54,12 @@ public class BlobStorageWriteService {
             BlockBlobClient blob = getCloudFile(documentContentVersion.getId());
             uploadDocument(blob, inputStream, documentContentVersion.getSize());
 
-            String checksum = new String(Hex.encode(blob.getProperties().getContentMd5()));
             documentContentVersion.setContentUri(blob.getBlobUrl());
-            documentContentVersion.setContentChecksum(checksum);
-            log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}, checksum = {}",
+            log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}",
                       documentId,
                       documentContentVersion.getId(),
                       blob.getBlobUrl(),
-                      documentContentVersion.getSize(),
-                      checksum);
+                      documentContentVersion.getSize());
         } catch (IOException e) {
             log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
                      documentId,

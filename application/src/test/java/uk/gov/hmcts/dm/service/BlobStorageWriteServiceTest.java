@@ -74,9 +74,6 @@ public class BlobStorageWriteServiceTest {
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         String azureProvidedUri = "someuri";
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
-        BlobProperties properties = PowerMockito.mock(BlobProperties.class);
-        given(blob.getProperties()).willReturn(properties);
-        given(properties.getContentMd5()).willReturn("dummy-md5".getBytes());
 
         doAnswer(invocation -> {
             try (final InputStream inputStream = toInputStream(MOCK_DATA);
@@ -101,10 +98,6 @@ public class BlobStorageWriteServiceTest {
         final DocumentContentVersion documentContentVersion = PowerMockito.mock(DocumentContentVersion.class);
         given(documentContentVersion.getSize()).willReturn((long) 256 * 1024 * 1024);
         given(documentContentVersion.getId()).willReturn(storedDocument.getDocumentContentVersions().get(0).getId());
-
-        BlobProperties properties = PowerMockito.mock(BlobProperties.class);
-        given(blob.getProperties()).willReturn(properties);
-        given(properties.getContentMd5()).willReturn("dummy-md5".getBytes());
 
         String azureProvidedUri = "someuri";
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
