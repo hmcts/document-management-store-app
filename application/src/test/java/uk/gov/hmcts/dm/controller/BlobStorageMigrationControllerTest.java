@@ -1,15 +1,12 @@
 package uk.gov.hmcts.dm.controller;
 
-import com.microsoft.azure.storage.StorageException;
 import org.junit.Test;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
-import uk.gov.hmcts.dm.exception.FileStorageException;
 
 import java.util.UUID;
 
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.HttpHeaders.IF_MATCH;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,21 +39,6 @@ public class BlobStorageMigrationControllerTest extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .post("/documents/" + documentId + "/versions/" + versionId + "/migrate")
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void failsWith500OnAzureBlobStoreStorageException() throws Exception {
-
-        doThrow(new FileStorageException(new StorageException("404", "Message", mock(Exception.class)),
-            documentId,
-            versionId))
-            .when(this.blobStorageMigrationService).migrateDocumentContentVersion(documentId, versionId);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .post("/documents/" + documentId + "/versions/" + versionId + "/migrate")
-            .andExpect(status().isInternalServerError());
     }
 
     @Test
