@@ -25,6 +25,13 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 5
+          batch_versioned_data: true
   main:
     allow-bean-definition-overriding: true
 

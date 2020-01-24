@@ -1,8 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ import javax.validation.constraints.NotNull;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -44,7 +42,7 @@ import static uk.gov.hmcts.dm.domain.AuditActions.MIGRATED;
 public class BlobStorageMigrationService {
 
     protected static final String NO_CONTENT_FOUND = "CONTENT NOT FOUND";
-    private final CloudBlobContainer cloudBlobContainer;
+    private final BlobContainerClient cloudBlobContainer;
     private final StoredDocumentService storedDocumentService;
     private final DocumentContentVersionRepository documentContentVersionRepository;
     private final MigrateEntryRepository auditEntryRepository;
@@ -55,7 +53,7 @@ public class BlobStorageMigrationService {
     protected int defaultBatchSize;
 
     @Autowired
-    public BlobStorageMigrationService(CloudBlobContainer cloudBlobContainer,
+    public BlobStorageMigrationService(BlobContainerClient cloudBlobContainer,
                                        DocumentContentVersionRepository documentContentVersionRepository,
                                        StoredDocumentService storedDocumentService,
                                        MigrateEntryRepository auditEntryRepository,
@@ -149,14 +147,14 @@ public class BlobStorageMigrationService {
                 log.warn("Document Content Version (id={} has no content", dcv.getId());
                 dcv.setContentChecksum(NO_CONTENT_FOUND);
             } else {
-                CloudBlockBlob cloudBlockBlob = getCloudFileReference(dcv.getId());
+                BlockBlobClient cloudBlockBlob = getCloudFileReference(dcv.getId());
                 Blob data = dcv.getDocumentContent().getData();
                 final byte[] bytes = IOUtils.toByteArray(data.getBinaryStream());
                 cloudBlockBlob.upload(new ByteArrayInputStream(bytes), dcv.getSize());
-                dcv.setContentUri(cloudBlockBlob.getUri().toString());
+                dcv.setContentUri(cloudBlockBlob.getBlobUrl());
                 final String checksum = shaHex(bytes);
                 dcv.setContentChecksum(checksum);
-                log.debug("Uploaded data to {} Size = {} checksum = {}", cloudBlockBlob.getUri(), dcv.getSize(), checksum);
+                log.debug("Uploaded data to {} Size = {} checksum = {}", cloudBlockBlob.getBlobUrl(), dcv.getSize(), checksum);
 
                 final ByteArrayOutputStream checksumStream = new ByteArrayOutputStream();
                 cloudBlockBlob.download(checksumStream);
@@ -164,7 +162,7 @@ public class BlobStorageMigrationService {
                     throw new FileStorageException(dcv.getStoredDocument().getId(), dcv.getId());
                 }
             }
-        } catch (URISyntaxException | StorageException | IOException e) {
+        } catch (IOException e) {
             throw new FileStorageException(e, dcv.getStoredDocument().getId(), dcv.getId());
         } catch (SQLException e) {
             log.error("Exception with Document Content Version {}", dcv.getId(), e);
@@ -172,8 +170,8 @@ public class BlobStorageMigrationService {
         }
     }
 
-    private CloudBlockBlob getCloudFileReference(UUID uuid) throws StorageException, URISyntaxException {
-        return cloudBlobContainer.getBlockBlobReference(uuid.toString());
+    private BlockBlobClient getCloudFileReference(UUID uuid) {
+        return cloudBlobContainer.getBlobClient(uuid.toString()).getBlockBlobClient();
     }
 
     private MigrateEntry newAuditEntry(DocumentContentVersion documentContentVersion) {

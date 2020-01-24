@@ -1,17 +1,14 @@
 package uk.gov.hmcts.dm.service;
 
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.exception.CantReadDocumentContentVersionBinaryException;
 
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.util.UUID;
 
 @Slf4j
@@ -19,30 +16,26 @@ import java.util.UUID;
 @Transactional
 public class BlobStorageReadService {
 
-    private final CloudBlobContainer cloudBlobContainer;
+    private final BlobContainerClient cloudBlobContainer;
 
     @Autowired
-    public BlobStorageReadService(CloudBlobContainer cloudBlobContainer) {
+    public BlobStorageReadService(BlobContainerClient cloudBlobContainer) {
         this.cloudBlobContainer = cloudBlobContainer;
     }
 
     public void loadBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
         log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
-        try {
-            CloudBlockBlob blob = loadBlob(documentContentVersion.getId().toString());
-            blob.download(outputStream);
-            log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
-        } catch (URISyntaxException | StorageException e) {
-            log.warn("Reading document version {} from Azure Blob Storage: FAILED", documentContentVersion.getId());
-            throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
-        }
+        BlockBlobClient blob = loadBlob(documentContentVersion.getId().toString());
+        blob.download(outputStream);
+        log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
     }
 
-    public boolean doesBinaryExist(UUID uuid) throws URISyntaxException, StorageException {
+    private BlockBlobClient loadBlob(String id) {
+        return cloudBlobContainer.getBlobClient(id).getBlockBlobClient();
+    }
+
+    public boolean doesBinaryExist(UUID uuid) {
         return loadBlob(uuid.toString()).exists();
     }
 
-    private CloudBlockBlob loadBlob(String id) throws URISyntaxException, StorageException {
-        return cloudBlobContainer.getBlockBlobReference(id);
-    }
 }
