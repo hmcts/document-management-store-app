@@ -19,6 +19,7 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.PlatformTransactionManager;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import javax.persistence.EntityManagerFactory;
@@ -56,6 +58,9 @@ public class BatchConfiguration {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    @Qualifier("transactionManager") PlatformTransactionManager transactionManager;
 
     @Value("${spring.batch.historicExecutionsRetentionMilliseconds}")
     int historicExecutionsRetentionMilliseconds;
@@ -118,6 +123,7 @@ public class BatchConfiguration {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
+            .transactionManager(transactionManager)
             .<StoredDocument, StoredDocument>chunk(10)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
