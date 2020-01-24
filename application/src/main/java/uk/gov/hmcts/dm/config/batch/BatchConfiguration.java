@@ -8,9 +8,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
@@ -25,6 +23,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -64,6 +63,16 @@ public class BatchConfiguration {
 
     @Value("${spring.batch.historicExecutionsRetentionMilliseconds}")
     int historicExecutionsRetentionMilliseconds;
+
+    @Bean
+    public BatchConfigurer batchConfigurer(EntityManagerFactory emf) {
+        return new DefaultBatchConfigurer() {
+            @Override
+            public PlatformTransactionManager getTransactionManager() {
+                return new JpaTransactionManager(emf);
+            }
+        };
+    }
 
     @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
     @SchedulerLock(name = "${task.env}")
@@ -136,7 +145,6 @@ public class BatchConfiguration {
     public Job clearHistoryData() {
         return jobBuilderFactory.get("clearHistoricBatchExecutions")
             .flow(stepBuilderFactory.get("deleteAllExpiredBatchExecutions")
-                .transactionManager(transactionManager)
                 .tasklet(new RemoveSpringBatchHistoryTasklet(historicExecutionsRetentionMilliseconds, jdbcTemplate))
                 .build()).build().build();
     }
