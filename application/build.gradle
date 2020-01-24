@@ -129,7 +129,7 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.1'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.2'
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.10.1'
 
     compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
