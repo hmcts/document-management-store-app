@@ -94,7 +94,7 @@ public class BatchConfiguration {
             .entityManagerFactory(entityManagerFactory)
             .queryString("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
                 + "where d.hardDeleted = false AND d.ttl < current_timestamp()")
-            .pageSize(100)
+            .pageSize(1000)
             .build();
     }
 
