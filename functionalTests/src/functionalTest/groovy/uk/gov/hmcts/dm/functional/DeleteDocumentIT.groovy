@@ -137,7 +137,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D8 As an owner of the document I could not get the TTL info once, I have done the soft delete"() {
-        assumeTrue(toggleTtlEnabled)
+        assumeTrue(toggleConfiguration.isTtl())
 
         Response response = CreateAUserforTTL CASE_WORKER
 
@@ -179,7 +179,7 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D9 As an owner of the document I could not get the TTL info once, I have done the hard delete"() {
-        assumeTrue(toggleTtlEnabled)
+        assumeTrue(toggleConfiguration.isTtl())
 
         Response response = CreateAUserforTTL CASE_WORKER
 
