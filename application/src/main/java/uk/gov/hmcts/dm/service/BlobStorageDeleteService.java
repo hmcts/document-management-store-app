@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.service;
 
 import com.azure.core.http.rest.Response;
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
@@ -32,15 +33,20 @@ public class BlobStorageDeleteService {
             documentContentVersion.getStoredDocument().getId(), documentContentVersion.getId());
 
         BlockBlobClient blob = cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
-        Response res = blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
-        if (res.getStatusCode() != 202) {
+        try {
+            Response res = blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+            if (res.getStatusCode() != 202) {
+                log.info("Deleting document {} / version {} from Azure Blob Storage: Blob could not be found.",
+                    documentContentVersion.getId());
+            } else {
+                documentContentVersionRepository.updateContentUriAndContentCheckSum(
+                    documentContentVersion.getId(), null, null);
+            }
+        } catch (BlobStorageException e) {
+            log.info(e.getServiceMessage());
             log.info("Deleting document {} / version {} from Azure Blob Storage: Blob could not be found.",
                 documentContentVersion.getId());
-        } else {
-            documentContentVersionRepository.updateContentUriAndContentCheckSum(
-                documentContentVersion.getId(), null, null);
         }
-
     }
 
 }
