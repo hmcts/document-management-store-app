@@ -196,7 +196,7 @@ class AddContentVersionIT extends BaseIT {
     @Test
     void "ACV12 As an owner I cannot update the TTL while adding a version to the document"()
     {
-        assumeTrue(toggleConfiguration.isTtl())
+        assumeTrue(toggleTtlEnabled)
 
         Response response = CreateAUserforTTL CASE_WORKER
 
