@@ -136,6 +136,7 @@ public class BatchConfiguration {
     public Job clearHistoryData() {
         return jobBuilderFactory.get("clearHistoricBatchExecutions")
             .flow(stepBuilderFactory.get("deleteAllExpiredBatchExecutions")
+                .transactionManager(transactionManager)
                 .tasklet(new RemoveSpringBatchHistoryTasklet(historicExecutionsRetentionMilliseconds, jdbcTemplate))
                 .build()).build().build();
     }
