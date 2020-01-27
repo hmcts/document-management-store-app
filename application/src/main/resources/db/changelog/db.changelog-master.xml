@@ -17,6 +17,5 @@
     <include relativeToChangelogFile="true" file="./db.changelog-diff-RDM-2828-migration-checksum.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-RDM-2991-migration-audit.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-RDM-4841-add_indexes.xml"/>
-    <include relativeToChangelogFile="true" file="./db.changelog-diff-EM-2390-shedlock.xml"/>
 
 </databaseChangeLog>
