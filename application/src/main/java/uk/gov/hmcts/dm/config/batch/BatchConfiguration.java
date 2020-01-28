@@ -63,10 +63,10 @@ public class BatchConfiguration {
     @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
     @SchedulerLock(name = "${task.env}")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-//        jobLauncher
-//            .run(processDocument(step1()), new JobParametersBuilder()
-//            .addDate("date", new Date())
-//            .toJobParameters());
+        jobLauncher
+            .run(processDocument(step1()), new JobParametersBuilder()
+            .addDate("date", new Date())
+            .toJobParameters());
 
     }
 
@@ -77,9 +77,9 @@ public class BatchConfiguration {
         JobRestartException,
         JobInstanceAlreadyCompleteException {
 
-//        jobLauncher.run(clearHistoryData(), new JobParametersBuilder()
-//            .addDate("date", new Date())
-//            .toJobParameters());
+        jobLauncher.run(clearHistoryData(), new JobParametersBuilder()
+            .addDate("date", new Date())
+            .toJobParameters());
 
     }
 
