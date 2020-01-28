@@ -77,9 +77,9 @@ public class BatchConfiguration {
         JobRestartException,
         JobInstanceAlreadyCompleteException {
 
-        jobLauncher.run(clearHistoryData(), new JobParametersBuilder()
-            .addDate("date", new Date())
-            .toJobParameters());
+//        jobLauncher.run(clearHistoryData(), new JobParametersBuilder()
+//            .addDate("date", new Date())
+//            .toJobParameters());
 
     }
 
