@@ -76,6 +76,7 @@ auth:
 logging:
   level:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
+    org.springframework.batch: ${LOG_LEVEL_SPRING_BATCH:DEBUG}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
 
 azure:

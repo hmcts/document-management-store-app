@@ -308,7 +308,7 @@ class CreateDocumentIT extends BaseIT {
         def statusCode = null
         def start = LocalDateTime.now()
 
-        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 120)) {
+        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 300)) {
 
             statusCode = givenRequest(CITIZEN)
                 .expect()
