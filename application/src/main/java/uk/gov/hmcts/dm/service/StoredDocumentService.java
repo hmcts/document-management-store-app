@@ -156,7 +156,7 @@ public class StoredDocumentService {
         storedDocument.setDeleted(true);
         if (permanent) {
             storedDocument.setHardDeleted(true);
-            storedDocument.getDocumentContentVersions().forEach(documentContentVersion -> {
+            storedDocument.getDocumentContentVersions().parallelStream().forEach(documentContentVersion -> {
                 if (azureStorageConfiguration.isAzureBlobStoreEnabled()) {
                     blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
                 } else if (documentContentVersion.getDocumentContent() != null) {
