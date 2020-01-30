@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'pmd'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'org.owasp.dependencycheck'
     id 'se.patrikerdes.use-latest-versions' version '0.2.13'
