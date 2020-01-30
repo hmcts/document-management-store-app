@@ -7,11 +7,6 @@
             <JDBC enabled="true"/>
             <MaxStatementQueryLimitInMS>1000</MaxStatementQueryLimitInMS>
         </BuiltIn>
-        <Class name="uk.gov.hmcts.dm.controller.BlobStorageMigrationController">
-            <Method name="batchMigrate" reportCaughtExceptions="true"/>
-            <Method name="getMigrateProgressReport" reportCaughtExceptions="true"/>
-            <Method name="migrateDocument" reportCaughtExceptions="true"/>
-        </Class>
         <Class name="uk.gov.hmcts.dm.controller.DocumentContentVersionController">
             <Method name="addDocumentContentVersion" reportCaughtExceptions="true"/>
             <Method name="addDocumentContentVersionForVersionsMappingNotPresent" reportCaughtExceptions="true"/>
@@ -92,19 +87,8 @@
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.BatchMigrationAuditEntryService">
-            <Method name="createAuditEntry" reportCaughtExceptions="true"/>
-            <Method name="save" reportCaughtExceptions="true"/>
-        </Class>
-        <Class name="uk.gov.hmcts.dm.service.BatchMigrationTokenService">
-            <Method name="checkAuthToken" reportCaughtExceptions="true"/>
-        </Class>
         <Class name="uk.gov.hmcts.dm.service.BlobCreator">
             <Method name="createBlob" reportCaughtExceptions="true"/>
-        </Class>
-        <Class name="uk.gov.hmcts.dm.service.BlobStorageMigrationService">
-            <Method name="batchMigrate" reportCaughtExceptions="true"/>
-            <Method name="migrateDocumentContentVersion" reportCaughtExceptions="true"/>
         </Class>
         <Class name="uk.gov.hmcts.dm.service.BlobStorageReadService">
             <Method name="loadBlob" reportCaughtExceptions="true"/>
@@ -125,9 +109,6 @@
             <Method name="save" reportCaughtExceptions="true"/>
             <Method name="findOneItem" reportCaughtExceptions="true"/>
             <Method name="findOne" reportCaughtExceptions="true"/>
-        </Class>
-        <Class name="uk.gov.hmcts.dm.service.RsaPublicKeyReader">
-            <Method name="parsePublicKey" reportCaughtExceptions="true"/>
         </Class>
         <Class name="uk.gov.hmcts.dm.service.SearchService">
             <Method name="findStoredDocumentsByCreator" reportCaughtExceptions="true"/>

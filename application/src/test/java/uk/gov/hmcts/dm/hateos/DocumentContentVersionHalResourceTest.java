@@ -31,8 +31,5 @@ public class DocumentContentVersionHalResourceTest {
 
         assertEquals(format("/documents/%s/versions/%s/thumbnail", storedDocument.getId(),
             documentContentVersion.getId()), halResource.getLink("thumbnail").getHref());
-
-        assertEquals(format("/documents/%s/versions/%s/migrate", storedDocument.getId(),
-            documentContentVersion.getId()), halResource.getLink("migrate").getHref());
     }
 }
