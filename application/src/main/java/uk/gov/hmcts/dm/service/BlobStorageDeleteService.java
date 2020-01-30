@@ -8,6 +8,8 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
@@ -28,6 +30,7 @@ public class BlobStorageDeleteService {
         this.documentContentVersionRepository = documentContentVersionRepository;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion) {
         log.debug("Deleting document {} / version {} from Azure Blob Storage...",
             documentContentVersion.getStoredDocument().getId(), documentContentVersion.getId());
