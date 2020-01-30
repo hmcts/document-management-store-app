@@ -111,8 +111,6 @@ abstract class BaseIT {
 
     final String BAD_ATTACHMENT_1 = '1MB.exe'
     final String BAD_ATTACHMENT_2 = 'Attachment3.zip'
-    final String MAX_SIZE_ALLOWED_ATTACHMENT = '90MB.pdf'
-    final String TOO_LARGE_ATTACHMENT = '100MB.pdf'
     final String ILLEGAL_NAME_FILE = 'uploadFile~@$!.jpg'
     final String ILLEGAL_NAME_FILE1 = 'uploadFile~`\';][{}!@£$%^&()}{_-.jpg'
     final String ILLEGAL_NAME_FILE2 = 'uploadFile9 @_-.jpg'
