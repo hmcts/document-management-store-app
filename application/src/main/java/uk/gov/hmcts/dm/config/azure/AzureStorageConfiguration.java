@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Optional;
 
 @Configuration
@@ -32,12 +34,15 @@ public class AzureStorageConfiguration {
     @ConditionalOnProperty(
         value = "azure.storage.enabled",
         havingValue = "true")
-    BlobContainerClient cloudBlobContainer() {
-        log.info("Azure Blob Connection: " + connectionString);
-        log.info("Azure Blob Container: " + containerReference);
+    BlobContainerClient cloudBlobContainer() throws UnknownHostException {
+        String blobAddress = containerReference.contains("azure-storage-emulator-azurite")
+            ? connectionString.replace(
+                "azure-storage-emulator-azurite",
+                InetAddress.getByName("azure-storage-emulator-azurite").getHostAddress())
+            : connectionString;
 
         return new BlobContainerClientBuilder()
-            .connectionString(connectionString)
+            .connectionString(blobAddress)
             .containerName(containerReference)
             .buildClient();
     }
