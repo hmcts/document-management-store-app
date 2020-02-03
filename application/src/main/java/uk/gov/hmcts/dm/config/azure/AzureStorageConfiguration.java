@@ -35,7 +35,7 @@ public class AzureStorageConfiguration {
         value = "azure.storage.enabled",
         havingValue = "true")
     BlobContainerClient cloudBlobContainer() throws UnknownHostException {
-        String blobAddress = containerReference.contains("azure-storage-emulator-azurite")
+        String blobAddress = connectionString.contains("azure-storage-emulator-azurite")
             ? connectionString.replace(
                 "azure-storage-emulator-azurite",
                 InetAddress.getByName("azure-storage-emulator-azurite").getHostAddress())
