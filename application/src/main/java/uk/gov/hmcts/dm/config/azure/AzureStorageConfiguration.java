@@ -2,6 +2,8 @@ package uk.gov.hmcts.dm.config.azure;
 
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -24,11 +26,16 @@ public class AzureStorageConfiguration {
     @Value("${postgres.storage.enabled}")
     private Boolean postgresStorageEnabled;
 
+    private static final Logger log = LoggerFactory.getLogger(AzureStorageConfiguration.class);
+
     @Bean
     @ConditionalOnProperty(
         value = "azure.storage.enabled",
         havingValue = "true")
     BlobContainerClient cloudBlobContainer() {
+        log.info("Azure Blob Connection: " + connectionString);
+        log.info("Azure Blob Container: " + containerReference);
+
         return new BlobContainerClientBuilder()
             .connectionString(connectionString)
             .containerName(containerReference)
