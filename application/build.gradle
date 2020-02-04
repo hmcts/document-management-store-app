@@ -104,33 +104,30 @@ dependencyManagement {
 def versions = [
     ehcache            : '3.7.1',
     jacocoMavenPlugin  : '0.8.2',
-    jackson            : '2.9.9',
     jetty              : '9.4.11.v20180605',
     jsonUnit           : '1.31.1',
     JUnitParams        : '1.1.1',
     lombok             : '1.18.10',
     liquibase          : '3.8.1',
     postgresql         : '42.2.6',
+    jackson            : '2.10.2',
     powermock          : '1.7.4',
     sonar              : '3.2',
-//    springBoot         : springBootVersion,
     springBoot         : '2.1.6.RELEASE',
     springfoxSwagger   : '2.9.2',
 ]
 
 dependencies {
-//    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.0.0'
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.3.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.18'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.23'
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '9.0.30'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.2'
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.10.2'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
 
     compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
 
