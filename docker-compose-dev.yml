@@ -12,7 +12,7 @@ services:
 
     make-container-call:
         image: byrnedo/alpine-curl
-        command: -XPUT --verbose http://azure-storage-emulator-azurite:10000/devstoreaccount1/hmctstestcontainer?restype=container
+        command: -XPUT --verbose http://azure-storage-emulator-azurite/devstoreaccount1/hmctstestcontainer?restype=container
         links:
             - azure-storage-emulator-azurite
         depends_on:
@@ -21,9 +21,9 @@ services:
     azure-storage-emulator-azurite:
         image: arafato/azurite
         ports:
-            - 10000:10000
+            - 10000:80
         environment:
-            executable: "blob"
+            executable: "blob --blobPort 80"
         volumes:
             - ccd-docker-azure-blob-data:/opt/azurite/folder
 
