@@ -88,7 +88,6 @@ public class BatchConfiguration {
         return new JdbcTemplateLockProvider(dataSource);
     }
 
-    @Bean
     public JpaPagingItemReader undeletedDocumentsWithTtl() {
         return new JpaPagingItemReaderBuilder<StoredDocument>()
             .name("documentTaskReader")
@@ -99,15 +98,12 @@ public class BatchConfiguration {
             .build();
     }
 
-
-    @Bean
     public JpaItemWriter itemWriter() {
         JpaItemWriter writer = new JpaItemWriter<StoredDocument>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
 
-    @Bean
     public Job processDocument(Step step1) {
         return jobBuilderFactory.get("processDocumentJob")
             .flow(step1)
@@ -115,7 +111,6 @@ public class BatchConfiguration {
             .build();
     }
 
-    @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
             .<StoredDocument, StoredDocument>chunk(10)
@@ -126,7 +121,6 @@ public class BatchConfiguration {
 
     }
 
-    @Bean
     public Job clearHistoryData() {
         return jobBuilderFactory.get("clearHistoricBatchExecutions")
             .flow(stepBuilderFactory.get("deleteAllExpiredBatchExecutions")

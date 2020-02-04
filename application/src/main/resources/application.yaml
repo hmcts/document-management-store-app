@@ -13,8 +13,8 @@ spring:
       indent_output: true
   servlet:
     multipart:
-      max-file-size: ${MAX_FILE_SIZE:90MB}
-      max-request-size: ${MAX_FILE_SIZE:90MB}
+      max-file-size: ${MAX_FILE_SIZE:4000MB}
+      max-request-size: ${MAX_FILE_SIZE:4000MB}
   profiles:
     active: dev
   jpa:
@@ -25,6 +25,13 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 5
+          batch_versioned_data: true
   main:
     allow-bean-definition-overriding: true
 
@@ -69,6 +76,7 @@ auth:
 logging:
   level:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
+    org.springframework.batch: ${LOG_LEVEL_SPRING_BATCH:DEBUG}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
 
 azure:
@@ -147,8 +155,8 @@ management:
 
 dm:
   multipart:
-    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv}
-    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv}
+    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv,audio/x-ms-wma,video/x-ms-asf,audio/aac,audio/x-aac,audio/wav,audio/vnd.wave,audio/ogg,video/ogg,audio/vorbis,application/ogg,audio/mpeg,video/mp4,video/mpeg,application/x-troff-msvideo,video/avi,video/vnd.avi,video/msvideo,video/x-msvideo,video/quicktime,video/webm,audio/webm,video/x-ms-wmv,video/x-matroska,audio/mp4,audio/x-matroska}
+    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv,.wma,.aac,.wav,.oga,ogv,.ogx,.mp3,.mp4,.mpg,.mpeg,.avi,.wmv,.mov,.ogg,.webm,.mpa,.m4a,.mka,.mpv}
 
 thumbnail:
     imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
@@ -164,42 +172,6 @@ toggle:
   ttl: ${ENABLE_TTL:true}
   thumbnail: ${ENABLE_THUMBNAIL:true}
   testing: ${ENABLE_TESTING:true}
-
-blobstore:
-  migrate:
-    ccd:
-      secret : ${BLOBSTORE_MIGRATE_CCD_SECRET:y2hahvdZ9evcTVq2}
-      publicKeyRequired : ${BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED:false}
-      publicKey: ${BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiQ//gc/G53d9dLCtf123fIYo49gUySuJuxOcw2GtieWTMSy+O7RNtsAIjVf3mCOdDNuN69tZNPEWMdaW8n11s9MwYFahtxDecyn0KIP9MvPsfSMSbxhp/f7kfbdB/H/S5eYea66JTyeJS6uNd76RdHttx0mLO30ZkRcXB25c2SIXhRYsdoeKS5GXHDdNejkQM0S/Ev94x2UunApmYHjWN1XcDhsEsAeF4WHnvYh2XiMn9vHY44AqvbWLlAmCgzaXpz8Xhl0fO7jDKSeReDyuM3UTMaiFFaxuvliGol7aIXq/aVe/miiD2SLxHZ6RxAPW80bhXrzJMTLTCqhCEhzfv someone@somewhere.sometime}
-#For Testing, use this as a private key and remove me once batch migration finishes
-#-----BEGIN RSA PRIVATE KEY-----
-#MIIEpAIBAAKCAQEA4kP/4HPxud3fXSwrX9dt3yGKOPYFMkribsTnMNhrYnlkzEsv
-#ju0TbbACI1X95gjnQzbjevbWTTxFjHWlvJ9dbPTMGBWobcQ3nMp9CiD/TLz7H0jE
-#m8Yaf3+5H23Qfx/0uXmHmuuiU8niUurjXe+kXR7bcdJizt9GZEXFwduXNkiF4UWL
-#HaHikuRlxw3TXo5EDNEvxL/eMdlLpwKZmB41jdV3A4bBLAHheFh572Idl4jJ/bx2
-#OOAKr21i5QJgoM2l6c/F4ZdHzu4wyknkXg8rjN1EzGohRWsbr5YhqJe2iF6v2lXv
-#5oog9ki8R2ekcQD1vNG4V68yTEy0wqoQhIc37wIDAQABAoIBAQCUN/0/WFRp8Ejo
-#rQ2AzAuCVmNIawj+aAWqkDvuSGcX6/O2zC3MT8shWGIeKa+X6A8ufZ9Ipre9gpUA
-#rPSz+iVmQXoM8OsTdK0FfbOpVfJHn6hVVwLMFFq5WL65MuOY0yMp+M13E5KTlrU2
-#of3tRBWElrkj97CYWbSv7PDdy+5jNKVLmLmBwmGTbh9US+7bZ+dkLZlLL0MV7IqM
-#68cnkePA5m8JduP8LwkKq88M84FqQ3kaiTYRUpoA4+kYv1YFN1EP7Awgy8wMx1/g
-#lR+aXcTc+If4XIj+K+e3KvcDZKrempQ4KIkElBrqE7jFbGxNvPZVlIHohvzTt2ZK
-#nroqC5lJAoGBAPnw938mTw0b2OLTgUCiLW7yb19I2z5s1VTw8hMffBj0Fs6GCRrN
-#LJc9MtqIx2ANEUVwEwzAI6RZbkDRmgOcFwc4XIniIgL+fnDnDL5YMuFjIeyKuYaa
-#E4J9tf/uOUjShJUUvQr7bBIwwhpuF4rao12ZI4Q56yq6Srx58vbJowXbAoGBAOfA
-#HH/ECr0NqulUHoevLW6dkcQ4ICVOIFPAAMU69opsZordyF7KGjvFurNj8Q2vjUHE
-#XvWqdr5LRopxenBS0MKhjtTCqkgDT5AiwFpBoEIbxRtMAkcuqs03Ulpf+g6LWDlq
-#5o5XEmWg3gD7jTYDJeelxX+SlShnmmEskcp7fNR9AoGBAJp6vt3NlapqfcCkLQz/
-#r8kU+pUP+MI6jhgz28rJ+O+LXdVDrrjr+xV288lyJJhPO0+Jl5yX3O+lfql9Yw28
-#GdeSlE98fr0PAqNRiuTSqo/3r239x/FTpZ9Ph3+pg6powx1JdhYlk4QisrWXOeHO
-#hI5DKlp9WcZM4ghf7zVtJt9lAoGAdG6iYtZ9hqn9OijXBdhO/QoRGAIStGth9nG6
-#cVzETJtVkWMHrgff0jPvLv2BOB0A3Q/pnYc9DTIIiLmmiBQzafV9Kwt6PZ/cM1Ai
-#T7Y068HD74jqhBTAH0YyC9G4ceI0OvSoTM8WIRUHNHstYPuH6a/xX7ynT5tthnC7
-#9nzAJIkCgYBg41OqziHmNd+9nhhxVyYs7+0l48+nyVDRbvqX6jdvDIG7iu0ERpLV
-#56EJZMpbmeidFNymPaigTQuNENSmhGGswWRfMwCWTRIu+cvfPQjyWvqnsj2aHIQA
-#DkvPBLopLN3KYZ9OQGvZitfVzvN5l63XCbioWYNdr2vej3cPT8dNLQ==
-#-----END RSA PRIVATE KEY-----
-
 
 task:
   env: ${TASK_ENV:documentTaskLock-local}
