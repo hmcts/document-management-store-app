@@ -287,5 +287,7 @@ Another long cpe again
         <cve>CVE-2019-12418</cve>
         <cve>CVE-2019-17563</cve>
         <cve>CVE-2020-5398</cve>
+        <cve>CVE-2019-20445</cve>
+        <cve>CVE-2019-20444</cve>
     </suppress>
 </suppressions>
