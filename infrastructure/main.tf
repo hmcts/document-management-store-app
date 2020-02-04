@@ -54,7 +54,6 @@ module "app" {
     POSTGRES_DATABASE = "${module.db.postgresql_database}"
     POSTGRES_USER = "${module.db.user_name}"
     POSTGRES_PASSWORD = "${module.db.postgresql_password}"
-    MAX_ACTIVE_DB_CONNECTIONS = 70
     FORCE_APPLY = "true"
 
     # JAVA_OPTS = "${var.java_opts}"
@@ -93,9 +92,6 @@ module "app" {
 
     ENABLE_DB_MIGRATE="false"
 
-    DM_MULTIPART_WHITELIST = "${var.dm_multipart_whitelist}"
-    DM_MULTIPART_WHITELIST_EXT = "${var.dm_multipart_whitelist_ext}"
-
     # Toggles
     ENABLE_IDAM_HEALTH_CHECK = "${var.enable_idam_healthcheck}"
     ENABLE_METADATA_SEARCH = "${var.enable_metadata_search}"
@@ -105,11 +101,6 @@ module "app" {
     ENABLE_TTL = "${var.enable_ttl}"
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
     ENABLE_TESTING = "${var.enable_testing}"
-
-    # Migration Job specific
-    BLOBSTORE_MIGRATE_CCD_SECRET = "${var.blobstore_migrate_ccd_secret}"
-    BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED = "${var.blobstore_migrate_ccd_public_key_required}"
-    BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY = "${var.blobstore_migrate_ccd_public_key}"
 
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.dm_store_storageaccount_primary_connection_string.value}"

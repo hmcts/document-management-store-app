@@ -1,16 +1,16 @@
 package uk.gov.hmcts.dm.config.azure;
 
-import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlobClient;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobContainerClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import uk.gov.hmcts.dm.exception.AppConfigurationException;
 
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Optional;
 
 @Configuration
@@ -28,29 +28,23 @@ public class AzureStorageConfiguration {
     @Value("${postgres.storage.enabled}")
     private Boolean postgresStorageEnabled;
 
-    @Bean
-    public CloudBlobClient cloudBlobClient() throws URISyntaxException, InvalidKeyException {
-        return storageAccount().createCloudBlobClient();
-    }
+    private static final Logger log = LoggerFactory.getLogger(AzureStorageConfiguration.class);
 
     @Bean
-    CloudBlobContainer cloudBlobContainer() throws URISyntaxException, InvalidKeyException, StorageException {
-        final CloudBlobContainer container = cloudBlobClient().getContainerReference(this.containerReference);
-        if (isAzureBlobStoreEnabled() && !container.exists()) {
-            // Current behaviour is that system will hang for a very long time
-            throw new AppConfigurationException("Cloub Blob Container does not exist");
-        }
-        return container;
-    }
+    @ConditionalOnProperty(
+        value = "azure.storage.enabled",
+        havingValue = "true")
+    BlobContainerClient cloudBlobContainer() throws UnknownHostException {
+        String blobAddress = connectionString.contains("azure-storage-emulator-azurite")
+            ? connectionString.replace(
+                "azure-storage-emulator-azurite",
+                InetAddress.getByName("azure-storage-emulator-azurite").getHostAddress())
+            : connectionString;
 
-    @Bean
-    Boolean blobEnabled() {
-        if (!isAzureBlobStoreEnabled() && !isPostgresBlobStorageEnabled()) {
-            throw new AppConfigurationException(
-                "At least one of Azure and postgres blob storage needs to be enabled"
-            );
-        }
-        return true;
+        return new BlobContainerClientBuilder()
+            .connectionString(blobAddress)
+            .containerName(containerReference)
+            .buildClient();
     }
 
     public Boolean isAzureBlobStoreEnabled() {
@@ -59,10 +53,6 @@ public class AzureStorageConfiguration {
 
     public Boolean isPostgresBlobStorageEnabled() {
         return Optional.ofNullable(postgresStorageEnabled).orElse(true);
-    }
-
-    private CloudStorageAccount storageAccount() throws URISyntaxException, InvalidKeyException {
-        return CloudStorageAccount.parse(connectionString);
     }
 
 }

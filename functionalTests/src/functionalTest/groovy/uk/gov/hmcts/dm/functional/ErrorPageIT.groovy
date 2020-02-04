@@ -153,14 +153,14 @@ class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    void "EP11 As an authenticated web user trying to post no document, receive JSON error page with 415"() {
+    void "EP11 As an authenticated web user trying to post no document, receive JSON error page with 422"() {
 
         givenRequest(CITIZEN)
             .accept(ContentType.XML)
             .multiPart("file", file(ATTACHMENT_18), MediaType.APPLICATION_XML_VALUE)
             .expect()
             .body(not(containsString("<!DOCTYPE html>")))
-            .statusCode(406)
+            .statusCode(422)
             .when()
             .post('documents/')
     }

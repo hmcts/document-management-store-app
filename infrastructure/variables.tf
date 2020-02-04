@@ -150,32 +150,6 @@ variable "enable_testing" {
 }
 
 ////////////////////////////////////////////////
-// Migration Job Specific
-////////////////////////////////////////////////
-variable "blobstore_migrate_ccd_secret" {
-  default = "y2hahvdZ9evcTVq2"
-}
-
-variable "blobstore_migrate_ccd_public_key_required" {
-  default = "false"
-}
-
-variable "blobstore_migrate_ccd_public_key" {
-  default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiQ//gc/G53d9dLCtf123fIYo49gUySuJuxOcw2GtieWTMSy+O7RNtsAIjVf3mCOdDNuN69tZNPEWMdaW8n11s9MwYFahtxDecyn0KIP9MvPsfSMSbxhp/f7kfbdB/H/S5eYea66JTyeJS6uNd76RdHttx0mLO30ZkRcXB25c2SIXhRYsdoeKS5GXHDdNejkQM0S/Ev94x2UunApmYHjWN1XcDhsEsAeF4WHnvYh2XiMn9vHY44AqvbWLlAmCgzaXpz8Xhl0fO7jDKSeReDyuM3UTMaiFFaxuvliGol7aIXq/aVe/miiD2SLxHZ6RxAPW80bhXrzJMTLTCqhCEhzfv someone@somewhere.sometime"
-}
-
-////////////////////////////////////////////////
-// Whitelists
-////////////////////////////////////////////////
-variable "dm_multipart_whitelist" {
-  default = "image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv"
-}
-
-variable "dm_multipart_whitelist_ext" {
-  default = ".jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv"
-}
-
-////////////////////////////////////////////////
 // Addtional
 ////////////////////////////////////////////////
 variable "max_file_size_in_mb" {

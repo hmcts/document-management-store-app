@@ -308,7 +308,7 @@ class CreateDocumentIT extends BaseIT {
         def statusCode = null
         def start = LocalDateTime.now()
 
-        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 120)) {
+        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 300)) {
 
             statusCode = givenRequest(CITIZEN)
                 .expect()
@@ -555,27 +555,4 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
     }
 
-//    @Test
-//    void "CD9 As authenticated user I can not upload files that are larger than 100MB"() {
-//        givenRequest(CITIZEN)
-//                .accept(MediaType.TEXT_HTML_VALUE)
-//                .multiPart("files", file(TOO_LARGE_ATTACHMENT), MediaType.TEXT_PLAIN_VALUE)
-//                .multiPart("classification", Classifications.PRIVATE as String)
-//                .expect().log().all()
-//                .statusCode(413)
-//                .when()
-//                .post("/documents")
-//    }
-//
-//    @Test
-//    void "CD10 As authenticated user I can upload files of upto 90MB in size"() {
-//        givenRequest(CITIZEN)
-//                .accept(MediaType.TEXT_HTML_VALUE)
-//                .multiPart("files", file(MAX_SIZE_ALLOWED_ATTACHMENT), MediaType.TEXT_PLAIN_VALUE)
-//                .multiPart("classification", Classifications.PRIVATE as String)
-//                .expect().log().all()
-//                .statusCode(200)
-//                .when()
-//                .post("/documents")
-//    }
 }

@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.core.Relation;
-import uk.gov.hmcts.dm.controller.BlobStorageMigrationController;
 import uk.gov.hmcts.dm.controller.DocumentContentVersionController;
 import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
@@ -47,10 +46,6 @@ public class DocumentContentVersionHalResource extends HalResource {
         add(linkTo(methodOn(DocumentThumbnailController.class).getDocumentContentVersionDocumentPreviewThumbnail(
             documentContentVersion.getStoredDocument().getId(),
             documentContentVersion.getId())).withRel("thumbnail"));
-
-        add(linkTo(methodOn(BlobStorageMigrationController.class).migrateDocument(
-            documentContentVersion.getStoredDocument().getId(),
-            documentContentVersion.getId())).withRel("migrate"));
     }
 
     public Date getCreatedOn() {

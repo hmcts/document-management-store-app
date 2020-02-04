@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'pmd'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'org.owasp.dependencycheck'
     id 'se.patrikerdes.use-latest-versions' version '0.2.13'
@@ -103,7 +103,7 @@ dependencyManagement {
 
 def versions = [
     ehcache            : '3.7.1',
-    jacocoMavenPlugin  : '0.7.9',
+    jacocoMavenPlugin  : '0.8.2',
     jackson            : '2.9.9',
     jetty              : '9.4.11.v20180605',
     jsonUnit           : '1.31.1',
@@ -113,12 +113,14 @@ def versions = [
     postgresql         : '42.2.6',
     powermock          : '1.7.4',
     sonar              : '3.2',
-    springBoot         : springBootVersion,
+//    springBoot         : springBootVersion,
+    springBoot         : '2.1.6.RELEASE',
     springfoxSwagger   : '2.9.2',
 ]
 
 dependencies {
-    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.0.0'
+//    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.0.0'
+    compile group: 'com.azure', name: 'azure-storage-blob', version: '12.3.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.18'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.23'
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '9.0.30'
@@ -128,12 +130,13 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.1'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.10.1'
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.10.1'
 
-    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '5.1'
+    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '5.2.2.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.2.3.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
@@ -144,6 +147,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
     compile 'uk.gov.hmcts.reform:health-spring-boot-starter:0.0.5'
+
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.10.Final'
 
@@ -162,7 +167,6 @@ dependencies {
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
     }
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: '5.1.1'
-    compile group: 'uk.gov.hmcts.reform', name: 'http-proxy-spring-boot-autoconfigure', version: '2.0.0'
     compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.0.4"){
         exclude group: 'org.springframework.cloud' , module : 'spring-cloud-context'
         exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
@@ -191,7 +195,7 @@ dependencies {
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.2.1.RELEASE'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.4'
+    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.5'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.4'
     testCompile group: 'org.eclipse.jetty', name: 'jetty-server', version: versions.jetty
     testCompile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: versions.jetty
@@ -199,11 +203,6 @@ dependencies {
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
 
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
-
-    // For batch migration use only
-    compile group: 'org.apache.jclouds', name: 'jclouds-compute', version: '2.+'
-    compile group: 'net.time4j', name: 'time4j-core', version: '4.38'
-    // They can be removed alongside with migration code
 
     compile group: 'org.pitest', name: 'pitest', version: '1.4.10'
     compile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: '1.4.5'
@@ -229,7 +228,7 @@ def coverageExclusionList = [
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
-    toolVersion = '0.7.9' // jacocoMavenPluginVersion
+    toolVersion = '0.8.2' // jacocoMavenPluginVersion
     reportsDir = file("$buildDir/reports/jacoco")
 }
 
@@ -256,9 +255,6 @@ sonarqube {
         property "sonar.exclusions", coverageExclusionList.join(", ")
         property "sonar.pitest.mode", "reuseReport"
         property "sonar.pitest.reportsDirectory", "${project.buildDir}/reports/pitest"
-        // Migration code
-        property "sonar.cpd.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
-        property "sonar.coverage.exclusions", "**/MigrateProgressReport.java,**/BatchMigrateProgressReport.java"
     }
 }
 
