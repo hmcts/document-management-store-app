@@ -13,13 +13,8 @@ import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
 
 import java.time.Duration
 import java.time.LocalDateTime
-import java.time.OffsetDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
-import static org.hamcrest.Matchers.containsString
-import static org.hamcrest.Matchers.equalTo
-import static org.hamcrest.Matchers.isOneOf
+import static org.hamcrest.Matchers.*
 import static org.junit.Assume.assumeTrue
 
 @RunWith(SpringRunner.class)
@@ -268,7 +263,7 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD11 (R1) As authenticated when i upload a file only first TTL will be taken into consideration"() {
-        assumeTrue(toggleConfiguration.isTtl())
+        assumeTrue(toggleTtlEnabled)
 
         givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
@@ -291,17 +286,14 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
-        assumeTrue(toggleConfiguration.isTtl())
+        assumeTrue(toggleTtlEnabled)
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
-        def ttlDate = OffsetDateTime.now().minusMinutes(2)
-        def ttlFormatted = ttlDate.format(dtf).toString()
         def url = givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
-            .multiPart("ttl", ttlFormatted)
+            .multiPart("ttl", "2018-01-31T10:10:10+0000")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
@@ -309,11 +301,6 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].ttl",
-            equalTo(
-                ttlDate.atZoneSameInstant(ZoneId.of("GMT+0"))
-                .format(dtf))
-            )
             .when()
             .post("/documents")
             .path("_embedded.documents[0]._links.self.href")
@@ -321,7 +308,7 @@ class CreateDocumentIT extends BaseIT {
         def statusCode = null
         def start = LocalDateTime.now()
 
-        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 80)) {
+        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 300)) {
 
             statusCode = givenRequest(CITIZEN)
                 .expect()
@@ -568,27 +555,4 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
     }
 
-//    @Test
-//    void "CD9 As authenticated user I can not upload files that are larger than 100MB"() {
-//        givenRequest(CITIZEN)
-//                .accept(MediaType.TEXT_HTML_VALUE)
-//                .multiPart("files", file(TOO_LARGE_ATTACHMENT), MediaType.TEXT_PLAIN_VALUE)
-//                .multiPart("classification", Classifications.PRIVATE as String)
-//                .expect().log().all()
-//                .statusCode(413)
-//                .when()
-//                .post("/documents")
-//    }
-//
-//    @Test
-//    void "CD10 As authenticated user I can upload files of upto 90MB in size"() {
-//        givenRequest(CITIZEN)
-//                .accept(MediaType.TEXT_HTML_VALUE)
-//                .multiPart("files", file(MAX_SIZE_ALLOWED_ATTACHMENT), MediaType.TEXT_PLAIN_VALUE)
-//                .multiPart("classification", Classifications.PRIVATE as String)
-//                .expect().log().all()
-//                .statusCode(200)
-//                .when()
-//                .post("/documents")
-//    }
 }

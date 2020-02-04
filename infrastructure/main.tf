@@ -102,17 +102,14 @@ module "app" {
     ENABLE_THUMBNAIL = "${var.enable_thumbnail}"
     ENABLE_TESTING = "${var.enable_testing}"
 
-    # Migration Job specific
-    BLOBSTORE_MIGRATE_CCD_SECRET = "${var.blobstore_migrate_ccd_secret}"
-    BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY_REQUIRED = "${var.blobstore_migrate_ccd_public_key_required}"
-    BLOBSTORE_MIGRATE_CCD_PUBLIC_KEY = "${var.blobstore_migrate_ccd_public_key}"
-
     # Document Storage
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.dm_store_storageaccount_primary_connection_string.value}"
     STORAGEACCOUNT_SECONDARY_CONNECTION_STRING = "${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}"
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME = "${azurerm_storage_container.document_container.name}"
 
     TEMP_FORCE_REDEPLOY = "1"
+
+    TASK_ENV = "documentTaskLock-${var.env}"
   }
 }
 
