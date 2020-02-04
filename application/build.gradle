@@ -2,7 +2,6 @@ plugins {
     id 'application'
     id 'checkstyle'
     id 'pmd'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'org.owasp.dependencycheck'
     id 'se.patrikerdes.use-latest-versions' version '0.2.13'
@@ -10,7 +9,6 @@ plugins {
     id 'org.sonarqube' version '2.6.2'
     id 'jacoco'
     id 'idea'
-    id 'eclipse'
     id 'io.franzbecker.gradle-lombok' version '3.2.0'
     id "info.solidsoft.pitest" version "1.4.6"
 }
@@ -27,15 +25,6 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-//    XLINT
-compileJava {
-    options.compilerArgs << '-parameters' << '-Xlint:deprecation'
-}
-
-compileTestJava {
-    options.compilerArgs << '-parameters' << '-Xlint:deprecation'
-}
-
 test {
     testLogging {
         events "passed", "skipped", "failed"
@@ -43,9 +32,9 @@ test {
     }
 }
 
-tasks.withType(Test) {
-    maxParallelForks = 1
-}
+//tasks.withType(Test) {
+//    maxParallelForks = 1
+//}
 
 // Xlint type thingy????
 checkstyle {
@@ -72,7 +61,6 @@ tasks.withType(Checkstyle) {
     }
 }
 
-//    OWASP (./gradlew -DdependencyCheck.failBuild=true dependencyCheck;)
 dependencyCheck {
     // Specifies if the build should be failed if a CVSS score above a specified level is identified.
     // range of 0-10 fails the build, anything greater and it doesn't fail the build
@@ -92,14 +80,6 @@ repositories {
 }
 
 apply from: 'liquibase.gradle'
-
-def springBootVersion = plugins.getPlugin('org.springframework.boot').class.package.implementationVersion
-
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
-    }
-}
 
 def versions = [
     ehcache            : '3.7.1',
@@ -223,7 +203,6 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java'
 ]
 
-//(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
     toolVersion = '0.8.2' // jacocoMavenPluginVersion
     reportsDir = file("$buildDir/reports/jacoco")
@@ -244,7 +223,6 @@ jacocoTestReport {
     }
 }
 
-//(./gradlew sonarqube)
 sonarqube {
     properties {
         property "sonar.projectName", "${rootProject.name}"
@@ -264,9 +242,6 @@ pitest {
     coverageThreshold = 80  // Match our general 80% coverage goal
 }
 
-
-//(./gradlew clean jar) build/libs/em-api-*-all.jar
-//(./gradlew installDist bootRepackage) build/install/dm-store/bin/dm-store
 bootJar {
     baseName 'dm-store'
     archiveName = "$baseName"+".jar"
@@ -282,18 +257,4 @@ task printVersion {
     doLast {
         print project.version
     }
-}
-
-// Run the app (./gradlew run -Ddebug=true)
-run {
-    def debug = System.getProperty("debug")
-    if (debug == 'true') {
-        jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005']
-    }
-    mainClassName = 'uk.gov.hmcts.dm.DmApp'
-}
-
-task installDist(overwrite: true) {
-    // This task must be overwritten to do as it's breaking JAR packaging and it's a mandatory step of swagger
-    // documentation publication.
 }
