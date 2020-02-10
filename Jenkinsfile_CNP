@@ -56,8 +56,6 @@ withPipeline(type , product, component) {
     }
 
     enableDbMigration('ccd')
-    enableDockerBuild()
-
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
     installCharts()
