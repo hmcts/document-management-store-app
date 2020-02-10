@@ -1,7 +1,6 @@
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
-  aadIdentityName:
   readinessDelay: 60
   keyVaults:
     dm:
