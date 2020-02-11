@@ -15,10 +15,13 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
 public class PermissionEvaluatorImpl implements PermissionEvaluator {
+
+    private static final String CASE_DOCUMENT_ACCESS_API = "ccd-case-document-am-api";
 
     @Autowired
     private SecurityUtilService securityUtilService;
@@ -33,6 +36,11 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
     public boolean hasPermission(@NotNull Authentication authentication,
                                  @NotNull Object targetDomainObject,
                                  @NotNull Object permissionString) {
+
+        if (Objects.equals(securityUtilService.getCurrentlyAuthenticatedServiceName(), CASE_DOCUMENT_ACCESS_API)) {
+            return true;
+        }
+
         if (targetDomainObject instanceof CreatorAware) {
             Collection<String> userRoles = securityUtilService.getUserRoles() != null
                 ? Arrays.stream(securityUtilService.getUserRoles()).collect(Collectors.toSet())
