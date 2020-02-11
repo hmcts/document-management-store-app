@@ -6,12 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.security.core.Authentication;
+import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.dm.repository.RepositoryFinder;
 import uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PermissionEvaluatorImplTests {
@@ -22,14 +22,15 @@ public class PermissionEvaluatorImplTests {
     @Mock
     RepositoryFinder repositoryFinder;
 
+    @Mock
+    SecurityUtilService securityUtilService;
+
     @InjectMocks
     PermissionEvaluatorImpl permissionEvaluator;
 
-    Authentication authentication;
-
     @Before
     public void setup() {
-        authentication = mock(Authentication.class);
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("em_gw");
     }
 
     @Test
@@ -37,4 +38,9 @@ public class PermissionEvaluatorImplTests {
         Assert.assertFalse(permissionEvaluator.hasPermission(null, null, "READ"));
     }
 
+    @Test
+    public void testLetCaseDocumentAccessManagementDoAnything() {
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("ccd-case-document-am-api");
+        Assert.assertTrue(permissionEvaluator.hasPermission(null, null, "READ"));
+    }
 }
