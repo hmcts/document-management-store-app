@@ -147,7 +147,7 @@ dependencies {
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.10.Final'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.12.Final'
 
     compile group: 'uk.gov.hmcts.reform', name: 'liquibase-core', version: '3.8.1'
 
