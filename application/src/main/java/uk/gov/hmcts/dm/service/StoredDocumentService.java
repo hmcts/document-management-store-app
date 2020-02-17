@@ -21,10 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -169,13 +166,25 @@ public class StoredDocumentService {
     }
 
     public void updateStoredDocument(@NonNull StoredDocument storedDocument, @NonNull UpdateDocumentCommand command) {
+        updateStoredDocument(storedDocument, command.getTtl(), null);
+    }
 
-        if (!storedDocument.isDeleted()) {
-            storedDocument.setTtl(command.getTtl());
-            storedDocument.setLastModifiedBy(securityUtilService.getUserId());
-            save(storedDocument);
+    public void updateStoredDocument(
+        @NonNull StoredDocument storedDocument,
+        Date ttl,
+        Map<String, String> metadata
+    ) {
+        if (storedDocument.isDeleted()) {
+            return;
         }
 
+        if (metadata != null) {
+            storedDocument.getMetadata().putAll(metadata);
+        }
+
+        storedDocument.setTtl(ttl);
+        storedDocument.setLastModifiedBy(securityUtilService.getUserId());
+        save(storedDocument);
     }
 
     public List<StoredDocument> findAllExpiredStoredDocuments() {

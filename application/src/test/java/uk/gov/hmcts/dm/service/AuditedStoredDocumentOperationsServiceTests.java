@@ -1,5 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
+import org.assertj.core.util.Lists;
+import org.assertj.core.util.Maps;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
@@ -16,9 +20,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -157,6 +159,32 @@ public class AuditedStoredDocumentOperationsServiceTests {
         UpdateDocumentCommand command = new UpdateDocumentCommand();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
+    }
+
+    @Test
+    public void testBulkUpdateDocument() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
+        StoredDocument storedDocument2 = new StoredDocument();
+        storedDocument2.setId(UUID.randomUUID());
+        Map<String, String> metadata = Maps.newHashMap("UpdateKey", "UpdateValue");
+        Map<String, String> metadata2 = Maps.newHashMap("UpdateKey2", "UpdateValue2");
+
+        Date newTtl = new Date();
+        UpdateDocumentsCommand command = new UpdateDocumentsCommand(newTtl, Lists.list(
+            new DocumentUpdate(storedDocument.getId(), metadata),
+            new DocumentUpdate(storedDocument2.getId(), metadata2)
+        ));
+
+        when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.of(storedDocument));
+        when(storedDocumentService.findOne(storedDocument2.getId())).thenReturn(Optional.of(storedDocument2));
+        auditedStoredDocumentOperationsService.updateDocuments(command);
+        verify(storedDocumentService, times(1)).findOne(storedDocument.getId());
+        verify(storedDocumentService, times(1)).findOne(storedDocument2.getId());
+        verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument, newTtl, metadata);
+        verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument2, newTtl, metadata2);
+        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
+        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument2, AuditActions.UPDATED);
     }
 }
 

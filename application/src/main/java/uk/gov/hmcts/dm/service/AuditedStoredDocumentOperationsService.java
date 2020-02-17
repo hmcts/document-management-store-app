@@ -1,20 +1,22 @@
 package uk.gov.hmcts.dm.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -58,6 +60,27 @@ public class AuditedStoredDocumentOperationsService {
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
 
         return storedDocument;
+    }
+
+    public Map<UUID, String> updateDocuments(UpdateDocumentsCommand updateDocumentsCommand) {
+        return updateDocumentsCommand.documents
+            .parallelStream()
+            .map(d -> this.updateDocument(d, updateDocumentsCommand.ttl))
+            .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
+    }
+
+    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'UPDATE')")
+    public Pair<UUID, String> updateDocument(DocumentUpdate documentUpdate, Date ttl) {
+        try {
+            StoredDocument storedDocument = storedDocumentService.findOne(documentUpdate.documentId)
+                .orElseThrow(() -> new StoredDocumentNotFoundException(documentUpdate.documentId));
+            storedDocumentService.updateStoredDocument(storedDocument, ttl, documentUpdate.metadata);
+            auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
+
+            return Pair.of(documentUpdate.documentId, UpdateDocumentsCommand.UPDATE_SUCCESS);
+        } catch (Exception e) {
+            return Pair.of(documentUpdate.documentId, e.getMessage());
+        }
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'UPDATE')")

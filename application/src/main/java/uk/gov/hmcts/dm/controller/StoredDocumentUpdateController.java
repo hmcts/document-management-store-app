@@ -11,18 +11,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
 @RequestMapping(
     path = "/documents/")
 @Api("Endpoint for Update of Documents")
-@ConditionalOnProperty("toggle.ttl")
 public class StoredDocumentUpdateController {
 
     @Autowired
@@ -35,6 +36,7 @@ public class StoredDocumentUpdateController {
         @ApiResponse(code = 200, message = "Returns representation of the new state",  response = StoredDocumentHalResource.class)
     })
     @Transactional
+    @ConditionalOnProperty("toggle.ttl")
     public ResponseEntity<Object> updateDocument(@PathVariable UUID documentId,
                                          @RequestBody UpdateDocumentCommand updateDocumentCommand) {
 
@@ -47,6 +49,20 @@ public class StoredDocumentUpdateController {
             .body(new StoredDocumentHalResource(storedDocument));
 
     }
+
+    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation("Bulk update of document TTL and metadata")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Update completed",  response = StoredDocumentHalResource.class)
+    })
+    public ResponseEntity<Object> updateDocuments(@RequestBody UpdateDocumentsCommand updateDocumentsCommand) {
+        Map<UUID, String> results = auditedStoredDocumentOperationsService.updateDocuments(updateDocumentsCommand);
+
+        return ResponseEntity
+            .ok()
+            .body(results);
+    }
+
 
 }
 
