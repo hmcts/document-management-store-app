@@ -105,4 +105,31 @@ class UpdateDocumentIT  extends BaseIT {
             .when()
             .get(documentUrl)
     }
+
+    @Test
+    void "UD6 bulk update metadata and ttl"() {
+        assumeTrue(toggleTtlEnabled)
+
+        def documentUrl = createDocumentAndGetUrlAs(CITIZEN)
+        def documentUrl2 = createDocumentAndGetUrlAs(CITIZEN)
+        def documentId = documentUrl.split("/").last()
+        def documentId2 = documentUrl2.split("/").last()
+
+        givenRequest(CITIZEN)
+            .body([
+                ttl: "3000-10-31T10:10:10+0000",
+                documents: [
+                    [id: documentId, metadata: [metakey: "metavalue"]],
+                    [id: documentId2, metadata: [metakey2: "metavalue2"]]
+                ]
+            ])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(200)
+            .body(documentId as String, equalTo("Success"))
+            .body(documentId2 as String, equalTo("Success"))
+            .when()
+            .patch("/documents")
+    }
+
 }

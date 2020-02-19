@@ -1,8 +1,10 @@
 package uk.gov.hmcts.dm.controller;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
@@ -32,5 +34,26 @@ public class StoredDocumentControllerUpdateTests extends ComponentTestBase {
 
     }
 
+    @Test
+    public void testBulkUpdate() throws Exception {
+
+        when(this.auditedStoredDocumentOperationsService.updateDocuments(any(UpdateDocumentsCommand.class)))
+            .thenReturn(ImmutableMap.of(id, "Success"));
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .patch("/documents", ImmutableMap.of(
+                "ttl", new Date(),
+                "documents", Lists.newArrayList(
+                    ImmutableMap.of(
+                        "id", id,
+                        "metadata", ImmutableMap.of("key", "value")
+                    )
+                )
+            ))
+            .andExpect(status().isOk());
+
+    }
 
 }

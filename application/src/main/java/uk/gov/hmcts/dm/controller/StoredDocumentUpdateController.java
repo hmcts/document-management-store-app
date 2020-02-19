@@ -22,14 +22,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(
-    path = "/documents/")
+    path = "/documents")
 @Api("Endpoint for Update of Documents")
 public class StoredDocumentUpdateController {
 
     @Autowired
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @PatchMapping(value = "{documentId}",
+    @PatchMapping(value = "/{documentId}",
         consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Updates document instance (ex. ttl)")
     @ApiResponses(value = {
@@ -50,7 +50,7 @@ public class StoredDocumentUpdateController {
 
     }
 
-    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Bulk update of document TTL and metadata")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Update completed",  response = StoredDocumentHalResource.class)
