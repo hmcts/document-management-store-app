@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.service;
 
-import org.assertj.core.util.Lists;
 import org.assertj.core.util.Maps;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,9 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
-import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
@@ -24,9 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuditedStoredDocumentOperationsServiceTests {
@@ -165,55 +160,26 @@ public class AuditedStoredDocumentOperationsServiceTests {
     public void testBulkUpdateDocument() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.randomUUID());
-        StoredDocument storedDocument2 = new StoredDocument();
-        storedDocument2.setId(UUID.randomUUID());
         Map<String, String> metadata = Maps.newHashMap("UpdateKey", "UpdateValue");
-        Map<String, String> metadata2 = Maps.newHashMap("UpdateKey2", "UpdateValue2");
 
         Date newTtl = new Date();
-        UpdateDocumentsCommand command = new UpdateDocumentsCommand(newTtl, Lists.list(
-            new DocumentUpdate(storedDocument.getId(), metadata),
-            new DocumentUpdate(storedDocument2.getId(), metadata2)
-        ));
 
         when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.of(storedDocument));
-        when(storedDocumentService.findOne(storedDocument2.getId())).thenReturn(Optional.of(storedDocument2));
-        auditedStoredDocumentOperationsService.updateDocuments(command);
+        auditedStoredDocumentOperationsService.updateDocument(storedDocument.getId(), metadata, newTtl);
         verify(storedDocumentService, times(1)).findOne(storedDocument.getId());
-        verify(storedDocumentService, times(1)).findOne(storedDocument2.getId());
         verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument, newTtl, metadata);
-        verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument2, newTtl, metadata2);
         verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
-        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument2, AuditActions.UPDATED);
     }
 
-    @Test
+    @Test(expected = StoredDocumentNotFoundException.class)
     public void testBulkUpdateDocumentWithError() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.randomUUID());
-        StoredDocument storedDocument2 = new StoredDocument();
-        storedDocument2.setId(UUID.randomUUID());
         Map<String, String> metadata = Maps.newHashMap("UpdateKey", "UpdateValue");
-        Map<String, String> metadata2 = Maps.newHashMap("UpdateKey2", "UpdateValue2");
-
         Date newTtl = new Date();
-        UpdateDocumentsCommand command = new UpdateDocumentsCommand(newTtl, Lists.list(
-            new DocumentUpdate(storedDocument.getId(), metadata),
-            new DocumentUpdate(storedDocument2.getId(), metadata2)
-        ));
 
-        when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.of(storedDocument));
-        when(storedDocumentService.findOne(storedDocument2.getId())).thenReturn(Optional.empty());
-        Map<UUID, String> results = auditedStoredDocumentOperationsService.updateDocuments(command);
-
-        Assert.assertEquals(results.get(storedDocument.getId()), UpdateDocumentsCommand.UPDATE_SUCCESS);
-        Assert.assertNotEquals(results.get(storedDocument2.getId()), UpdateDocumentsCommand.UPDATE_SUCCESS);
-        verify(storedDocumentService, times(1)).findOne(storedDocument.getId());
-        verify(storedDocumentService, times(1)).findOne(storedDocument2.getId());
-        verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument, newTtl, metadata);
-        verify(storedDocumentService, times(0)).updateStoredDocument(storedDocument2, newTtl, metadata2);
-        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
-        verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument2, AuditActions.UPDATED);
+        when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.empty());
+        auditedStoredDocumentOperationsService.updateDocument(storedDocument.getId(), metadata, newTtl);
     }
 }
 
