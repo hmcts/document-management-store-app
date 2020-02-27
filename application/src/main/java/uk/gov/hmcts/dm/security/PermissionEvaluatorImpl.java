@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Component
 public class PermissionEvaluatorImpl implements PermissionEvaluator {
 
-    private static final String CASE_DOCUMENT_ACCESS_API = "ccd-case-document-am-api";
+    private static final String CASE_DOCUMENT_ACCESS_API = "ccd_case_document_am_api";
 
     @Autowired
     private SecurityUtilService securityUtilService;
