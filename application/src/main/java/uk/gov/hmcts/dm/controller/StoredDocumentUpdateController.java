@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +15,13 @@ import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.DocumentUpdateException;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 
-import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static java.util.AbstractMap.SimpleEntry;
 
 @RestController
 @RequestMapping(
@@ -59,27 +58,21 @@ public class StoredDocumentUpdateController {
         @ApiResponse(code = 200, message = "Update completed",  response = StoredDocumentHalResource.class),
         @ApiResponse(code = 400, message = "Bad request")
     })
+    @Transactional
     public ResponseEntity<Object> updateDocuments(@RequestBody UpdateDocumentsCommand updateDocumentsCommand) {
-        Map<UUID, String> results = updateDocumentsCommand.documents
-            .stream()
-            .map(d -> this.patchDocument(d, updateDocumentsCommand.ttl))
-            .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
+
+        try {
+            for (DocumentUpdate d : updateDocumentsCommand.documents) {
+                documentService.updateDocument(d.documentId, d.metadata, updateDocumentsCommand.ttl);
+            }
+        } catch (Exception e) {
+            throw new DocumentUpdateException(e.getMessage());
+        }
 
         return ResponseEntity
             .ok()
-            .body(results);
+            .body(new SimpleEntry("result", "Success"));
     }
-
-    private Pair<UUID, String> patchDocument(DocumentUpdate d, Date ttl) {
-        try {
-            documentService.updateDocument(d.documentId, d.metadata, ttl);
-
-            return Pair.of(d.documentId, UpdateDocumentsCommand.UPDATE_SUCCESS);
-        } catch (Exception e) {
-            return Pair.of(d.documentId, e.getMessage());
-        }
-    }
-
 
 }
 

@@ -150,8 +150,7 @@ class UpdateDocumentIT  extends BaseIT {
             .contentType(ContentType.JSON)
             .expect()
             .statusCode(200)
-            .body(documentId as String, equalTo("Success"))
-            .body(documentId2 as String, equalTo("Success"))
+            .body("result", equalTo("Success"))
             .when()
             .patch("/documents")
     }
@@ -176,9 +175,8 @@ class UpdateDocumentIT  extends BaseIT {
             ])
             .contentType(ContentType.JSON)
             .expect()
-            .statusCode(200)
-            .body(documentId as String, equalTo("Success"))
-            .body(uuid.toString(), equalTo("Document with ID: " + uuid + " could not be found"))
+            .statusCode(500)
+            .body("error", equalTo("Document with ID: " + uuid + " could not be found"))
             .when()
             .patch("/documents")
     }
