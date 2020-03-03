@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import org.assertj.core.util.Maps;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,34 +27,17 @@ import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.sql.Blob;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.*;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -370,6 +354,19 @@ public class StoredDocumentServiceTests {
         command.setTtl(newTtl);
         storedDocumentService.updateStoredDocument(storedDocument, command);
         assertEquals(newTtl, storedDocument.getTtl());
+    }
+
+    @Test
+    public void testUpdateDocumentWithMetaData() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setMetadata(Maps.newHashMap("Key", "Value"));
+
+        Date newTtl = new Date();
+        storedDocumentService.updateStoredDocument(storedDocument, newTtl, Maps.newHashMap("UpdateKey", "UpdateValue"));
+
+        assertEquals(newTtl, storedDocument.getTtl());
+        assertEquals(storedDocument.getMetadata().get("Key"), "Value");
+        assertEquals(storedDocument.getMetadata().get("UpdateKey"), "UpdateValue");
     }
 
     @Test
