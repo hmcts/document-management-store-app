@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import org.assertj.core.util.Maps;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,15 +17,11 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuditedStoredDocumentOperationsServiceTests {
@@ -157,6 +154,32 @@ public class AuditedStoredDocumentOperationsServiceTests {
         UpdateDocumentCommand command = new UpdateDocumentCommand();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
+    }
+
+    @Test
+    public void testBulkUpdateDocument() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
+        Map<String, String> metadata = Maps.newHashMap("UpdateKey", "UpdateValue");
+
+        Date newTtl = new Date();
+
+        when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.of(storedDocument));
+        auditedStoredDocumentOperationsService.updateDocument(storedDocument.getId(), metadata, newTtl);
+        verify(storedDocumentService, times(1)).findOne(storedDocument.getId());
+        verify(storedDocumentService, times(1)).updateStoredDocument(storedDocument, newTtl, metadata);
+        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
+    }
+
+    @Test(expected = StoredDocumentNotFoundException.class)
+    public void testBulkUpdateDocumentWithError() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
+        Map<String, String> metadata = Maps.newHashMap("UpdateKey", "UpdateValue");
+        Date newTtl = new Date();
+
+        when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.empty());
+        auditedStoredDocumentOperationsService.updateDocument(storedDocument.getId(), metadata, newTtl);
     }
 }
 
