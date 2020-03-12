@@ -12,7 +12,7 @@ services:
 
     make-container-call:
         image: byrnedo/alpine-curl
-        command: -XPUT --verbose http://azure-storage-emulator-azurite/devstoreaccount1/hmctstestcontainer?restype=container
+        command: --retry 10 --retry-connrefused -XPUT --verbose http://azure-storage-emulator-azurite/devstoreaccount1/hmctstestcontainer?restype=container
         links:
             - azure-storage-emulator-azurite
         depends_on:
