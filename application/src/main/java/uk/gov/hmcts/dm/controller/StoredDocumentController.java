@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -27,9 +28,9 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RestController
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")
+@Slf4j
 public class StoredDocumentController {
 
     @Autowired
@@ -106,9 +108,42 @@ public class StoredDocumentController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response) {
+    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletRequest request, HttpServletResponse response) {
+
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
+
+                response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+//                response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+                response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+
+                try {
+                    if (isBlank(documentContentVersion.getContentUri())) {
+
+                        response.setHeader("data-source", "Postgres");
+                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
+                            documentContentVersion,
+                            response.getOutputStream());
+                        response.setStatus(HttpStatus.OK.value());
+                    } else {
+//                        response.setHeader("data-source", "contentURI");
+
+                        log.debug("Trying to stream...");
+
+                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                            documentContentVersion,
+                            request,
+                            response);
+//                        return ResponseEntity.status(response.getStatus()).body(response.getOutputStream());
+                    }
+
+                } catch (Exception e) {
+                    return ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(e);
+                }
 
                 response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
                 response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
@@ -116,24 +151,7 @@ public class StoredDocumentController {
                 response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                     format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
-                try {
-                    if (isBlank(documentContentVersion.getContentUri())) {
-                        response.setHeader("data-source", "Postgres");
-                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
-                            documentContentVersion,
-                            response.getOutputStream());
-                    } else {
-                        response.setHeader("data-source", "contentURI");
-                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                            documentContentVersion,
-                            response.getOutputStream());
-                    }
-
-                } catch (IOException e) {
-                    return ResponseEntity
-                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(e);
-                }
+                log.debug("Have set headers...");
 
                 return ResponseEntity.ok().build();
 
