@@ -33,21 +33,20 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
         try {
             final File csv = File.createTempFile("metadata", ".csv");
             final String filename = csv.getAbsolutePath();
+
             csv.delete();
             client.downloadToFile(filename);
 
             final InputStream stream = new FileInputStream(filename);
 
-            return new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
+            return new BufferedReader(new InputStreamReader(stream));
         } catch (IOException e) {
             throw new UpdateDocumentMetaDataException(e);
         }
     }
 
     private void processItem(BlobClient client) {
-        final BufferedReader csv = getCsvFile(client);
-
-        csv
+        getCsvFile(client)
             .lines()
             .skip(1)
             .map(i -> i.split(","))
