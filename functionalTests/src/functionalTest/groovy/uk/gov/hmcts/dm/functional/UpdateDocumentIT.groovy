@@ -105,4 +105,79 @@ class UpdateDocumentIT  extends BaseIT {
             .when()
             .get(documentUrl)
     }
+
+    @Test
+    void "UD6 invalid bulk update request"() {
+        assumeTrue(toggleTtlEnabled)
+
+        def documentUrl = createDocumentAndGetUrlAs(CITIZEN)
+        def documentUrl2 = createDocumentAndGetUrlAs(CITIZEN)
+        def documentId = documentUrl.split("/").last()
+        def documentId2 = documentUrl2.split("/").last()
+
+        givenRequest(CITIZEN)
+            .body([
+                ttl: "3000-10-31T10:10:10+0000",
+                documents: [
+                    [id: documentId, metadata: [metakey: "metavalue"]],
+                    [id: documentId2, metadata: [metakey2: "metavalue2"]]
+                ]
+            ])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(500)
+            .when()
+            .patch("/documents")
+    }
+
+    @Test
+    void "UD7 valid bulk update request"() {
+        assumeTrue(toggleTtlEnabled)
+
+        def documentUrl = createDocumentAndGetUrlAs(CITIZEN)
+        def documentUrl2 = createDocumentAndGetUrlAs(CITIZEN)
+        def documentId = documentUrl.split("/").last()
+        def documentId2 = documentUrl2.split("/").last()
+
+        givenRequest(CITIZEN)
+            .body([
+                ttl: "3000-10-31T10:10:10+0000",
+                documents: [
+                    [documentId: documentId, metadata: [metakey: "metavalue"]],
+                    [documentId: documentId2, metadata: [metakey2: "metavalue2"]]
+                ]
+            ])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(200)
+            .body("result", equalTo("Success"))
+            .when()
+            .patch("/documents")
+    }
+
+
+
+    @Test
+    void "UD8 partial bulk update request success"() {
+        assumeTrue(toggleTtlEnabled)
+
+        def documentUrl = createDocumentAndGetUrlAs(CITIZEN)
+        def documentId = documentUrl.split("/").last()
+        def uuid = UUID.randomUUID()
+
+        givenRequest(CITIZEN)
+            .body([
+                ttl: "3000-10-31T10:10:10+0000",
+                documents: [
+                    [documentId: documentId, metadata: [metakey: "metavalue"]],
+                    [documentId: uuid, metadata: [metakey2: "metavalue2"]]
+                ]
+            ])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(500)
+            .body("error", equalTo("Document with ID: " + uuid + " could not be found"))
+            .when()
+            .patch("/documents")
+    }
 }
