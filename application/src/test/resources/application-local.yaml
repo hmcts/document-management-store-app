@@ -34,7 +34,6 @@ thumbnail:
 
 toggle:
     deleteenabled: true
-    ttl: true
 
 dm:
   multipart:
