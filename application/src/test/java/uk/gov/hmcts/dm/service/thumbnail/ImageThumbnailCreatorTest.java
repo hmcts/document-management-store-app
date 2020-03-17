@@ -12,8 +12,11 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
@@ -150,7 +153,7 @@ public class ImageThumbnailCreatorTest {
     }
 
     @Test
-    public void shouldBuildThumbnailFromAzure() {
+    public void shouldBuildThumbnailFromAzure() throws IOException {
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
         when(contentVersion.getDocumentContent()).thenReturn(null);
@@ -161,12 +164,12 @@ public class ImageThumbnailCreatorTest {
             return null;
         })
                .when(blobStorageReadService)
-               .loadBlob(same(contentVersion), Mockito.any(OutputStream.class));
+               .loadBlob(same(contentVersion), Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
 
         final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
-        verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(OutputStream.class));
+        verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
     }
 
 }

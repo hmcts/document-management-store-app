@@ -28,6 +28,7 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -122,6 +123,7 @@ public class DocumentContentVersionController {
     public ResponseEntity<Object> getDocumentContentVersionDocumentBinary(
         @PathVariable UUID documentId,
         @PathVariable UUID versionId,
+        HttpServletRequest request,
         HttpServletResponse response) {
 
         DocumentContentVersion documentContentVersion = documentContentVersionService.findById(versionId)
@@ -132,7 +134,7 @@ public class DocumentContentVersionController {
         }
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+//        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
         response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
             String.format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
@@ -145,7 +147,8 @@ public class DocumentContentVersionController {
                 response.setHeader("data-source", "contentURI");
                 auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                     documentContentVersion,
-                    response.getOutputStream());
+                    request,
+                    response);
             }
             response.flushBuffer();
 

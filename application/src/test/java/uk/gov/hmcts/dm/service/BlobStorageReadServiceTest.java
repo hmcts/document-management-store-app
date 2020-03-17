@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -14,6 +15,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import static org.mockito.BDDMockito.given;
@@ -29,6 +33,8 @@ public class BlobStorageReadServiceTest {
     private BlobContainerClient cloudBlobContainer;
     private BlobClient blobClient;
     private DocumentContentVersion documentContentVersion;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
     private OutputStream outputStream;
 
     @Before
@@ -36,6 +42,8 @@ public class BlobStorageReadServiceTest {
         cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
         blobClient = PowerMockito.mock(BlobClient.class);
         blob = PowerMockito.mock(BlockBlobClient.class);
+        request = Mockito.mock(HttpServletRequest.class);
+        response = Mockito.mock(HttpServletResponse.class);
         outputStream = mock(OutputStream.class);
 
         when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
@@ -46,10 +54,10 @@ public class BlobStorageReadServiceTest {
     }
 
     @Test
-    public void loadsBlob() {
-        blobStorageReadService.loadBlob(documentContentVersion, outputStream);
+    public void loadsBlob() throws IOException {
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
-        verify(blob).download(outputStream);
+        verify(blob).download(OutputStream.nullOutputStream());
     }
 
     @Test
