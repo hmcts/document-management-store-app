@@ -10,20 +10,11 @@ services:
         ports:
             - 5432:5432
 
-    make-container-call:
-        image: byrnedo/alpine-curl
-        command: --retry 10 --retry-connrefused -XPUT --verbose http://azure-storage-emulator-azurite/devstoreaccount1/hmctstestcontainer?restype=container
-        links:
-            - azure-storage-emulator-azurite
-        depends_on:
-            - azure-storage-emulator-azurite
-
     azure-storage-emulator-azurite:
-        image: arafato/azurite
+        image: mcr.microsoft.com/azure-storage/azurite
         ports:
-            - 10000:80
-        environment:
-            executable: "blob --blobPort 80"
+            - 10000:10000
+        command: "azurite-blob --blobHost 0.0.0.0 --loose"
         volumes:
             - ccd-docker-azure-blob-data:/opt/azurite/folder
 

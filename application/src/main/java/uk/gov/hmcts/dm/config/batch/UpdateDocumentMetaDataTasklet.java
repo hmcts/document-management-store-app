@@ -8,6 +8,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class UpdateDocumentMetaDataTasklet implements Tasklet {
 
@@ -31,10 +32,13 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
     private BufferedReader getCsvFile(BlobClient client) {
         try {
             final File csv = File.createTempFile("metadata", ".csv");
-            client.downloadToFile(csv.getAbsolutePath());
-            final InputStream stream = new FileInputStream(csv);
+            final String filename = csv.getAbsolutePath();
+            csv.delete();
+            client.downloadToFile(filename);
 
-            return new BufferedReader(new InputStreamReader(stream));
+            final InputStream stream = new FileInputStream(filename);
+
+            return new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new UpdateDocumentMetaDataException(e);
         }
@@ -49,6 +53,6 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
             .map(i -> i.split(","))
             .forEach(row -> System.out.println(row));
 
-        client.delete();
+//        client.delete();
     }
 }
