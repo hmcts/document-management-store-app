@@ -34,7 +34,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.headers().cacheControl().disable();
 
         http.requestMatchers()
-            .antMatchers("/documents/**", "/folders/**")
+            .antMatchers("/documents", "/documents/**", "/folders/**")
             .and()
             .addFilter(serviceOnlyFilter)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()

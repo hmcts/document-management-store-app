@@ -40,7 +40,7 @@ public class PermissionEvaluatorImplTests {
 
     @Test
     public void testLetCaseDocumentAccessManagementDoAnything() {
-        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("ccd-case-document-am-api");
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("ccd_case_document_am_api");
         Assert.assertTrue(permissionEvaluator.hasPermission(null, null, "READ"));
     }
 }
