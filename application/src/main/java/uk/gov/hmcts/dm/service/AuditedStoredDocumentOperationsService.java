@@ -12,9 +12,7 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Transactional
 @Service
@@ -55,6 +53,16 @@ public class AuditedStoredDocumentOperationsService {
 
         storedDocumentService.updateStoredDocument(storedDocument, updateDocumentCommand);
 
+        auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
+
+        return storedDocument;
+    }
+
+    @PreAuthorize("hasPermission(#id, 'uk.gov.hmcts.dm.domain.StoredDocument', 'UPDATE')")
+    public StoredDocument updateDocument(UUID id, Map<String, String> metadata, Date ttl) {
+        StoredDocument storedDocument = storedDocumentService.findOne(id)
+            .orElseThrow(() -> new StoredDocumentNotFoundException(id));
+        storedDocumentService.updateStoredDocument(storedDocument, ttl, metadata);
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
 
         return storedDocument;
