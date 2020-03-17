@@ -41,6 +41,9 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
         .documentContent(documentContent).build();
 
+
+
+
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .folder(Folder.builder().id(id).build()).documentContentVersions(
             Stream.of(documentContentVersion)
