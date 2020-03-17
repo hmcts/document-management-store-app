@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.config.batch;
 
+import com.azure.storage.blob.BlobContainerClient;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.core.SchedulerLock;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
@@ -19,6 +20,7 @@ import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -57,6 +59,10 @@ public class BatchConfiguration {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    @Qualifier("metadata-storage")
+    private BlobContainerClient blobClient;
+
     @Value("${spring.batch.historicExecutionsRetentionMilliseconds}")
     int historicExecutionsRetentionMilliseconds;
 
@@ -78,6 +84,19 @@ public class BatchConfiguration {
         JobInstanceAlreadyCompleteException {
 
         jobLauncher.run(clearHistoryData(), new JobParametersBuilder()
+            .addDate("date", new Date())
+            .toJobParameters());
+
+    }
+
+    @Scheduled(fixedDelayString = "${spring.batch.documentMetaDataUpdateMilliseconds}")
+    @SchedulerLock(name = "${task.env}-documentMetaDataUpdate")
+    public void scheduleDocumentMetaDataUpdate() throws JobParametersInvalidException,
+        JobExecutionAlreadyRunningException,
+        JobRestartException,
+        JobInstanceAlreadyCompleteException {
+
+        jobLauncher.run(updateDocumentMetaDataJob(), new JobParametersBuilder()
             .addDate("date", new Date())
             .toJobParameters());
 
@@ -128,5 +147,10 @@ public class BatchConfiguration {
                 .build()).build().build();
     }
 
-
+    public Job updateDocumentMetaDataJob() {
+        return jobBuilderFactory.get("updateDocumentMetaDataJob")
+            .flow(stepBuilderFactory.get("updateDocumentMetaDataStep")
+                .tasklet(new UpdateDocumentMetaDataTasklet(blobClient))
+                .build()).build().build();
+    }
 }
