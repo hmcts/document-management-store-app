@@ -46,9 +46,7 @@ public class TestController {
 
         try {
             client.delete();
-        } catch (BlobStorageException e) {
-            e.printStackTrace();
-        }
+        } catch (BlobStorageException ignored) { }
 
         client.upload(file.getInputStream(), file.getSize());
 
