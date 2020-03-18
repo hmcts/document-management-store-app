@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.controller.testing;
 
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.models.BlobErrorCode;
 import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,9 @@ public class TestController {
 
         try {
             client.delete();
-        } catch (BlobStorageException ignored) {}
+        } catch (BlobStorageException e) {
+            e.printStackTrace();
+        }
 
         client.upload(file.getInputStream(), file.getSize());
 
