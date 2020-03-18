@@ -1,11 +1,9 @@
 package uk.gov.hmcts.dm.service;
 
-import com.azure.core.http.HttpHeader;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.models.BlobDownloadResponse;
 import com.azure.storage.blob.models.BlobRange;
 import com.azure.storage.blob.models.DownloadRetryOptions;
-import com.azure.storage.blob.specialized.BlobInputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import static java.lang.String.format;
 
 @Slf4j
 @Service
@@ -39,120 +39,88 @@ public class BlobStorageReadService {
         log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
         BlockBlobClient blobClient = loadBlob(documentContentVersion.getId().toString());
 
-//        blobClient.openInputStream(new BlobRange(0L, 20480L), null);
+        log.debug("Range headers: ");
+        String rangeHeader = request.getHeader(HttpHeaders.RANGE);
 
-        BlobDownloadResponse result = blobClient.downloadWithResponse(
-            response.getOutputStream(),
-            null,
-            new DownloadRetryOptions().setMaxRetryRequests(5),
-            null,
-            false,
-            null,
-            null
-        );
+        response.setHeader("Accept-Ranges", "bytes");
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
 
-//        response.getOutputStream().flush();
+        response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+            format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
-//        blobClient.download(response.getOutputStream());
+        response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
 
-//        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "inline;filename=\"" + documentContentVersion.getOriginalDocumentName() + "\"");
+        if (rangeHeader == null) {
+            log.debug("No Range header provided; returning entire document");
+            response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+            blobClient.download(response.getOutputStream());
+            return;
+        }
 
-//        BlobInputStream blobInputStream = blobClient.openInputStream(new BlobRange(0L, 1024L), null);
-//        response.getOutputStream().write(blobInputStream.readAllBytes());
-//
-        log.debug("Result status code: " + result.getStatusCode());
-//
-//        String rangeHeader = request.getHeader("Range");
-//
-//        BlobRange full = new BlobRange(0);
-//
-//        String disposition = "inline";
-//        String contentType = documentContentVersion.getMimeType();
-//        Long length = documentContentVersion.getSize();
-//
-//        if (contentType == null) {
-//            contentType = "application/octet-stream";
-//        }
-//        log.debug("Range requested: {}", rangeHeader);
-//        log.debug("Content-Type: {}", contentType);
-//
-//        response.reset();
-//        response.setHeader(HttpHeaders.CONTENT_TYPE, contentType);
-//        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, disposition + ";filename=\"" + documentContentVersion.getOriginalDocumentName() + "\"");
-////        response.setHeader(HttpHeaders.ACCEPT_RANGES, "bytes");
-//
-//        if (rangeHeader == null) {
-//            log.debug("No Range header provided; returning entire document");
-//            response.setHeader("Content-Length", length.toString());
-//            blobClient.download(response.getOutputStream());
-//            return;
-//        }
-//
-//        response.setBufferSize(DEFAULT_BUFFER_SIZE);
-//
-//        List<BlobRange> blobRanges = new ArrayList<>();
-//
-//        if (rangeHeader != null) {
-//            if (!rangeHeader.matches("^bytes=\\d*-\\d*(,\\d*-\\d*)*$")) {
-//                response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes */" + length); // Required in 416.
-//                response.sendError(HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
-//                return;
-//            }
-//            Long lengthAccumulator = 0L;
-//            for (String part : rangeHeader.substring(6).split(",")) {
-//                // Assuming a file with length of 100, the following examples returns bytes at:
-//                // 50-80 (50 to 80), 40- (40 to length=100), -20 (length-20=80 to length=100).
-//                long start = sublong(part, 0, part.indexOf("-"));
-//                long end = sublong(part, part.indexOf("-") + 1, part.length());
-//
-//                if (start == -1) {
-//                    start = length - end;
-//                    end = length;
-//                } else if (end == -1 || end > length) {
-//                    end = length;
-//                }
-//
-//                log.debug("Start {}", start);
-//                log.debug("End {}", end);
-//                log.debug("Length {}", length);
-//
-//                // Check if Range is syntactically valid. If not, then return 416.
-//                if (start > end) {
-//                    response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes */" + length); // Required in 416.
-//                    response.sendError(HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
-//                    return;
-//                }
-//
-//                // Add range.
-//                BlobRange b = new BlobRange(start, end - start);
-//                blobRanges.add(b);
-//
-//                response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + (end - 1) + "/" + length);
-//                lengthAccumulator += end;
-//                // @todo add multipart support here
-//            }
-//            response.setHeader("Content-Length", lengthAccumulator.toString());
-//
-//            response.setStatus(HttpStatus.PARTIAL_CONTENT.value());
-//
-//        } else {
-//            blobRanges.add(full);
-//        }
-//
-//        for (BlobRange b : blobRanges) {
-//            log.debug("Processing blob range: {}", b.toString());
-//            BlobDownloadResponse r = blobClient.downloadWithResponse(
-//                response.getOutputStream(),
-//                b,
-//                new DownloadRetryOptions().setMaxRetryRequests(5),
-//                null,
-//                false,
-//                null,
-//                null
-//            );
-//            log.debug("HTTP response status from Azure: {}", r.getStatusCode());
-//            log.debug("HTTP response headers from Azure: {}", r.getHeaders());
-//        }
+        Long length = documentContentVersion.getSize();
+
+        log.debug("Range requested: {}", rangeHeader);
+
+        response.setBufferSize(DEFAULT_BUFFER_SIZE);
+
+        List<BlobRange> blobRanges = new ArrayList<>();
+
+        if (!rangeHeader.matches("^bytes=\\d*-\\d*(,\\d*-\\d*)*$")) {
+            response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes */" + length); // Required in 416.
+            response.sendError(HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
+            return;
+        }
+
+        Long lengthAccumulator = 0L;
+        for (String part : rangeHeader.substring(6).split(",")) {
+            // Assuming a file with length of 100, the following examples returns bytes at:
+            // 50-80 (50 to 80), 40- (40 to length=100), -20 (length-20=80 to length=100).
+            long start = sublong(part, 0, part.indexOf("-"));
+            long end = sublong(part, part.indexOf("-") + 1, part.length());
+
+            if (start == -1) {
+                start = length - end;
+                end = length;
+            } else if (end == -1 || end > length) {
+                end = length;
+            }
+
+            log.debug("Start {}", start);
+            log.debug("End {}", end);
+            log.debug("Length {}", length);
+
+            // Check if Range is syntactically valid. If not, then return 416.
+            if (start > end) {
+                response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes */" + length); // Required in 416.
+                response.sendError(HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
+                return;
+            }
+
+            // Add range.
+            BlobRange b = new BlobRange(start, end - start);
+            blobRanges.add(b);
+
+            response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + (end - 1) + "/" + length);
+            lengthAccumulator += end;
+            // @todo add multipart support here
+        }
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, lengthAccumulator.toString());
+
+        response.setStatus(HttpStatus.PARTIAL_CONTENT.value());
+
+        for (BlobRange b : blobRanges) {
+            log.debug("Processing blob range: {}", b.toString());
+            BlobDownloadResponse r = blobClient.downloadWithResponse(
+                response.getOutputStream(),
+                b,
+                new DownloadRetryOptions().setMaxRetryRequests(5),
+                null,
+                false,
+                null,
+                null
+            );
+        }
     }
 
     private BlockBlobClient loadBlob(String id) {
