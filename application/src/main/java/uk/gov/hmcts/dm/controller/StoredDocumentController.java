@@ -109,8 +109,6 @@ public class StoredDocumentController {
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
 
-
-
                 try {
                     log.debug("Trying to stream...");
 

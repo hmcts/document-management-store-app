@@ -48,17 +48,15 @@ public class BlobStorageReadService {
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
 
-
         String rangeHeader = request.getHeader(HttpHeaders.RANGE);
+        Long length = documentContentVersion.getSize();
 
         if (rangeHeader == null) {
             log.debug("No Range header provided; returning entire document");
-            response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+            response.setHeader(HttpHeaders.CONTENT_LENGTH, length.toString());
             blobClient.download(response.getOutputStream());
             return;
         }
-
-        Long length = documentContentVersion.getSize();
 
         log.debug("Range requested: {}", rangeHeader);
 

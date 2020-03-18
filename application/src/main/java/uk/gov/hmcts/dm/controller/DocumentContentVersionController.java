@@ -134,7 +134,7 @@ public class DocumentContentVersionController {
         }
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-//        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
         response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
             String.format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
