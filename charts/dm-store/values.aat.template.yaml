@@ -5,3 +5,4 @@ java:
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
     TASK_ENV: documentTaskLock-aat-staging
+    DOCUMENT_METADATA_UPDATE_MILLISECONDS: 10000

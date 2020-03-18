@@ -1,22 +1,10 @@
 package uk.gov.hmcts.dm.functional
 
-import io.restassured.response.Response
-import org.apache.http.entity.ContentType
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.utilities.Classifications
-import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
-import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
-
-import java.time.Duration
-import java.time.LocalDateTime
-
-import static org.hamcrest.Matchers.*
-import static org.junit.Assume.assumeTrue
 
 @RunWith(SpringRunner.class)
 class MetadataMigrationIT extends BaseIT {
@@ -44,6 +32,25 @@ class MetadataMigrationIT extends BaseIT {
             .when()
             .post("/testing/metadata-migration-csv")
 
+        // let the job run
+        sleep(15000)
+
+        def metadata1 = fetchDocumentMetaDataAs CITIZEN, document1Url
+        def caseId1 = metadata1.body().prettyPeek().jsonPath().get('metadata.case_id')
+        def caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get('metadata.case_type_id')
+        def jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get('metadata.jurisdiction')
+
+        def metadata2 = fetchDocumentMetaDataAs CITIZEN, document2Url
+        def caseId2 = metadata2.body().prettyPeek().jsonPath().get('metadata.case_id')
+        def caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get('metadata.case_type_id')
+        def jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get('metadata.jurisdiction')
+
+        Assert.assertTrue caseId1 == "1"
+        Assert.assertTrue caseTypeId1 == "AAT"
+        Assert.assertTrue jurisdiction1 == "AUTOTEST1"
+        Assert.assertTrue caseId2 == "2"
+        Assert.assertTrue caseTypeId2 == "AAT"
+        Assert.assertTrue jurisdiction2 == "AUTOTEST1"
     }
 
 

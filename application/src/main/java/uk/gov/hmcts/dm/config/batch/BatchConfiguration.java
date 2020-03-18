@@ -29,6 +29,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -62,6 +63,9 @@ public class BatchConfiguration {
     @Autowired
     @Qualifier("metadata-storage")
     private BlobContainerClient blobClient;
+
+    @Autowired
+    private StoredDocumentService storedDocumentService;
 
     @Value("${spring.batch.historicExecutionsRetentionMilliseconds}")
     int historicExecutionsRetentionMilliseconds;
@@ -150,7 +154,7 @@ public class BatchConfiguration {
     public Job updateDocumentMetaDataJob() {
         return jobBuilderFactory.get("updateDocumentMetaDataJob")
             .flow(stepBuilderFactory.get("updateDocumentMetaDataStep")
-                .tasklet(new UpdateDocumentMetaDataTasklet(blobClient))
+                .tasklet(new UpdateDocumentMetaDataTasklet(blobClient, storedDocumentService))
                 .build()).build().build();
     }
 }

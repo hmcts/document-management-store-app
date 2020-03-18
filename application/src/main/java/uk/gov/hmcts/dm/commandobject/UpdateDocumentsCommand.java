@@ -8,9 +8,6 @@ import java.util.List;
 
 @Data
 public class UpdateDocumentsCommand {
-    public static final String UPDATE_SUCCESS = "Success";
-
     public final Date ttl;
     public final @NotEmpty List<DocumentUpdate> documents;
-
 }

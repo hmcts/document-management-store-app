@@ -5,7 +5,9 @@ import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
@@ -17,6 +19,7 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -133,6 +136,13 @@ public class StoredDocumentService {
         UploadDocumentsCommand command = new UploadDocumentsCommand();
         command.setFiles(files);
         return saveItems(command);
+    }
+
+    @Transactional
+    public void updateItems(UpdateDocumentsCommand command) {
+        for (DocumentUpdate update : command.documents) {
+            findOne(update.documentId).ifPresent(d -> updateStoredDocument(d, d.getTtl(), update.metadata));
+        }
     }
 
     public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
