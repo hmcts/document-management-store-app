@@ -113,45 +113,22 @@ public class StoredDocumentController {
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
 
-                response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-//                response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-                response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                    format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+
 
                 try {
-                    if (isBlank(documentContentVersion.getContentUri())) {
+                    log.debug("Trying to stream...");
 
-                        response.setHeader("data-source", "Postgres");
-                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
-                            documentContentVersion,
-                            response.getOutputStream());
-                        response.setStatus(HttpStatus.OK.value());
-                    } else {
-//                        response.setHeader("data-source", "contentURI");
-
-                        log.debug("Trying to stream...");
-
-                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                            documentContentVersion,
-                            request,
-                            response);
+                    auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                        documentContentVersion,
+                        request,
+                        response);
 //                        return ResponseEntity.status(response.getStatus()).body(response.getOutputStream());
-                    }
 
                 } catch (Exception e) {
                     return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(e);
                 }
-
-                response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-                response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-                response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                    format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
-
-                log.debug("Have set headers...");
 
                 return ResponseEntity.ok().build();
 
