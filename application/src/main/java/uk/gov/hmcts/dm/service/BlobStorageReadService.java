@@ -39,9 +39,6 @@ public class BlobStorageReadService {
         log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
         BlockBlobClient blobClient = loadBlob(documentContentVersion.getId().toString());
 
-        log.debug("Range headers: ");
-        String rangeHeader = request.getHeader(HttpHeaders.RANGE);
-
         response.setHeader("Accept-Ranges", "bytes");
         response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
 
@@ -50,6 +47,9 @@ public class BlobStorageReadService {
             format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
         response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+
+
+        String rangeHeader = request.getHeader(HttpHeaders.RANGE);
 
         if (rangeHeader == null) {
             log.debug("No Range header provided; returning entire document");
