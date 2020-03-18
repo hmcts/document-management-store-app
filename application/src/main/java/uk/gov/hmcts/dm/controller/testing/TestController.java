@@ -24,12 +24,14 @@ public class TestController {
 
     private final BlobStorageReadService blobStorageReadService;
 
-    @Autowired
-    @Qualifier("metadata-storage")
-    private BlobContainerClient blobClient;
+    private final BlobContainerClient blobClient;
 
-    public TestController(BlobStorageReadService blobStorageReadService) {
+    public TestController(
+        BlobStorageReadService blobStorageReadService,
+        @Autowired @Qualifier("metadata-storage") BlobContainerClient blobClient
+    ) {
         this.blobStorageReadService = blobStorageReadService;
+        this.blobClient = blobClient;
     }
 
     @GetMapping("/azure-storage-binary-exists/{id}")

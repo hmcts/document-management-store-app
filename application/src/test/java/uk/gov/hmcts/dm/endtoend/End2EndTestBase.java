@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
+import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
@@ -57,6 +58,9 @@ public abstract class End2EndTestBase {
 
     @MockBean
     protected BlobStorageDeleteService blobStorageDeleteService;
+
+    @MockBean
+    protected TestController testController;
 
     @Before
     public void setUp() {
