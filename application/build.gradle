@@ -200,7 +200,7 @@ dependencies {
 
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
 
-    compile group: 'org.pitest', name: 'pitest', version: '1.4.11'
+    compile group: 'org.pitest', name: 'pitest', version: '1.5.0'
     compile group: 'info.solidsoft.gradle.pitest', name: 'gradle-pitest-plugin', version: '1.4.6'
 }
 
