@@ -45,6 +45,7 @@ java:
     ENABLE_DELETE: 'true'
     ENABLE_TTL: 'true'
     ENABLE_THUMBNAIL: 'true'
+    ENABLE_METADATA_MIGRATION: 'false'
 
     # Document Storage
     #STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
