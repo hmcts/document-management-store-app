@@ -54,13 +54,13 @@ public class BlobStorageReadServiceTest {
         blobStorageReadService = new BlobStorageReadService(cloudBlobContainer);
     }
 
-    @Test
-    @Ignore("Temp ignore so i can get a test image made")
-    public void loadsBlob() throws IOException {
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-
-        verify(blob).download(OutputStream.nullOutputStream());
-    }
+//    @Test
+//    @Ignore("Temp ignore so i can get a test image made")
+//    public void loadsBlob() throws IOException {
+//        blobStorageReadService.loadBlob(documentContentVersion, request, response);
+//
+//        verify(blob).download(OutputStream.nullOutputStream());
+//    }
 
     @Test
     public void doesBinaryExist() {
