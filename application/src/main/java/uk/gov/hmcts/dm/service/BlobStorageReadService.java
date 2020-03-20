@@ -96,7 +96,7 @@ public class BlobStorageReadService {
             }
 
             // Add range.
-            BlobRange b = new BlobRange(start, end - start);
+            BlobRange b = new BlobRange(start, end - start + 1);
             blobRanges.add(b);
 
             response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + length);
