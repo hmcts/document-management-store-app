@@ -102,7 +102,7 @@ public class BlobStorageReadService {
             b.toHeaderValue();
 
             response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + length);
-            lengthAccumulator += end + 1;
+            lengthAccumulator += (end - start) + 1;
             // @todo add multipart support here
         }
         response.setHeader(HttpHeaders.CONTENT_LENGTH, lengthAccumulator.toString());
