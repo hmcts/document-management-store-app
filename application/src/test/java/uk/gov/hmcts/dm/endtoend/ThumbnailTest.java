@@ -63,7 +63,6 @@ public class ThumbnailTest extends End2EndTestBase {
     }
 
     @Test
-    @Ignore("Temp ignore so i can get a test image made")
     public void should_upload_a_pdf_and_retrieve_a_supported_pdf_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(pdfFile);
 
@@ -80,26 +79,25 @@ public class ThumbnailTest extends End2EndTestBase {
             .andExpect(content().contentType(IMAGE_JPEG_VALUE));
     }
 
-//    @Test
-//    public void should_upload_a_jpg_and_retrieve_a_supported_image_thumbnail() throws Exception {
-//        readFromAzureBlobStorageWillReturn(jpgFile);
-//
-//        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
-//            .file(jpgFile)
-//            .param("classification", PRIVATE.toString())
-//            .headers(headers))
-//            .andReturn()
-//            .getResponse();
-//
-//        final String url = getThumbnailUrlFromResponse(response);
-//
-//        mvc.perform(get(url)
-//            .headers(headers))
-//            .andExpect(content().contentType(IMAGE_JPEG_VALUE));
-//    }
+    @Test
+    public void should_upload_a_jpg_and_retrieve_a_supported_image_thumbnail() throws Exception {
+        readFromAzureBlobStorageWillReturn(jpgFile);
+
+        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+            .file(jpgFile)
+            .param("classification", PRIVATE.toString())
+            .headers(headers))
+            .andReturn()
+            .getResponse();
+
+        final String url = getThumbnailUrlFromResponse(response);
+
+        mvc.perform(get(url)
+            .headers(headers))
+            .andExpect(content().contentType(IMAGE_JPEG_VALUE));
+    }
 
     @Test
-    @Ignore("Temp ignore so i can get a test image made")
     public void should_upload_a_png_and_retrieve_a_supported_image_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(pngFile);
 
@@ -118,7 +116,6 @@ public class ThumbnailTest extends End2EndTestBase {
     }
 
     @Test
-    @Ignore("Temp ignore so i can get a test image made")
     public void should_upload_a_gif_and_retrieve_a_supported_image_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(gifFile);
 
@@ -137,7 +134,6 @@ public class ThumbnailTest extends End2EndTestBase {
     }
 
     @Test
-    @Ignore("Temp ignore so i can get a test image made")
     public void should_upload_a_gif_ani_and_retrieve_a_supported_image_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(gifAniFile);
 
@@ -171,8 +167,9 @@ public class ThumbnailTest extends End2EndTestBase {
 
     private void readFromAzureBlobStorageWillReturn(MockMultipartFile file) throws IOException {
         Mockito.doAnswer(invocation -> {
+            HttpServletResponse r =invocation.getArgument(1);
             try (final InputStream inputStream = file.getInputStream();
-                 final OutputStream out = invocation.getArgument(1)
+                 final OutputStream out = r.getOutputStream()
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;

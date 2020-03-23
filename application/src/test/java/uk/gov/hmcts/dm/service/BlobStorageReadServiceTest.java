@@ -17,6 +17,7 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import static org.mockito.BDDMockito.given;
@@ -37,28 +38,25 @@ public class BlobStorageReadServiceTest {
     private OutputStream outputStream;
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
         blobClient = PowerMockito.mock(BlobClient.class);
         blob = PowerMockito.mock(BlockBlobClient.class);
         request = Mockito.mock(HttpServletRequest.class);
         response = Mockito.mock(HttpServletResponse.class);
-        outputStream = mock(OutputStream.class);
 
         when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.getBlockBlobClient()).thenReturn(blob);
 
         documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
-        blobStorageReadService = new BlobStorageReadService(cloudBlobContainer);
+        blobStorageReadService = new BlobStorageReadService(cloudBlobContainer, request);
     }
 
-//    @Test
-//    @Ignore("Temp ignore so i can get a test image made")
-//    public void loadsBlob() throws IOException {
-//        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-//
-//        verify(blob).download(OutputStream.nullOutputStream());
-//    }
+    @Test
+    public void loadsBlob() throws IOException, IOException {
+        blobStorageReadService.loadBlob(documentContentVersion, response);
+        verify(blob).download(response.getOutputStream());
+    }
 
     @Test
     public void doesBinaryExist() {

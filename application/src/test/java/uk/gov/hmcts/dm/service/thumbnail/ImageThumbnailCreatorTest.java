@@ -153,7 +153,6 @@ public class ImageThumbnailCreatorTest {
     }
 
     @Test
-    @Ignore("Temp ignore so i can get a test image made")
     public void shouldBuildThumbnailFromAzure() throws IOException {
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
