@@ -27,18 +27,7 @@ class MetadataMigrationIT extends BaseIT {
         File file = File.createTempFile("migration", ".csv")
         file.write(body);
 
-        givenRequest(CITIZEN)
-            .multiPart("files", file, "text/csv")
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
-            .expect()
-            .statusCode(200)
-            .when()
-            .post("/testing/metadata-migration-csv")
-
-        // let the job run
-        sleep(15000)
+        postCsvFileAndTriggerSpringBatchJob(file)
 
         def metadata1 = fetchDocumentMetaDataAs CITIZEN, document1Url
         def caseId1 = metadata1.body().prettyPeek().jsonPath().get('metadata.case_id')
@@ -72,7 +61,7 @@ class MetadataMigrationIT extends BaseIT {
         def document3Url = createDocumentAndGetUrlAs(CITIZEN)
         def document3Id = document3Url.split("/").last()
 
-        // only 2 records are in the CSV , 3rd one is missing and will not be enriched by metadata migration.
+        // only 2 records are in the CSV , 3rd one is not Present  and should not be Enriched by Metadata Migration.
         def body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,case_created_date,case_last_modified_date,migrated\n" +
             "1,1,AAT,AUTOTEST1,${document1Id},http://dm-store:8080/documents/${document1Id},2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f\n" +
             "2,2,AAT,AUTOTEST1,${document2Id},http://dm-store:8080/documents/${document2Id},2020-03-02 11:10:56.615,2020-03-02 11:10:56.622,f"
@@ -80,18 +69,7 @@ class MetadataMigrationIT extends BaseIT {
         File file = File.createTempFile("migration", ".csv")
         file.write(body);
 
-        givenRequest(CITIZEN)
-            .multiPart("files", file, "text/csv")
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
-            .expect()
-            .statusCode(200)
-            .when()
-            .post("/testing/metadata-migration-csv")
-
-        // let the job run
-        sleep(15000)
+        postCsvFileAndTriggerSpringBatchJob(file)
 
         def metadata1 = fetchDocumentMetaDataAs CITIZEN, document1Url
         def caseId1 = metadata1.body().prettyPeek().jsonPath().get('metadata.case_id')
@@ -116,7 +94,7 @@ class MetadataMigrationIT extends BaseIT {
         Assert.assertTrue caseTypeId2 == "AAT"
         Assert.assertTrue jurisdiction2 == "AUTOTEST1"
 
-        // Document3 must not be enriched with metadata as it was not present in the CSV
+        // Document3 must not be enriched with metadata as it was not present in the CSV File.
         Assert.assertNull(caseId3)
         Assert.assertNull(caseTypeId3)
         Assert.assertNull(jurisdiction3)
@@ -138,18 +116,7 @@ class MetadataMigrationIT extends BaseIT {
         File file = File.createTempFile("migration", ".csv")
         file.write(body);
 
-        givenRequest(CITIZEN)
-            .multiPart("files", file, "text/csv")
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
-            .expect()
-            .statusCode(200)
-            .when()
-            .post("/testing/metadata-migration-csv")
-
-        // let the job run
-        sleep(15000)
+        postCsvFileAndTriggerSpringBatchJob(file)
 
         def metadata1 = fetchDocumentMetaDataAs CITIZEN, document1Url
         def caseId1 = metadata1.body().prettyPeek().jsonPath().get('metadata.case_id')
@@ -179,18 +146,7 @@ class MetadataMigrationIT extends BaseIT {
         File file = File.createTempFile("migration", ".csv")
         file.write(body);
 
-        response = givenRequest(CITIZEN)
-            .multiPart("files", file, "text/csv")
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
-            .expect()
-            .statusCode(200)
-            .when()
-            .post("/testing/metadata-migration-csv")
-
-        // let the job run
-        sleep(15000)
+        postCsvFileAndTriggerSpringBatchJob(file)
 
         def metadata1 = fetchDocumentMetaDataAs CITIZEN, document1Url
         def caseId1 = metadata1.body().prettyPeek().jsonPath().get('metadata.case_id')
@@ -211,6 +167,7 @@ class MetadataMigrationIT extends BaseIT {
         assertThat(jurisdiction2,is("AUTOTEST2"))
     }
 
+
     @Test
     void "As a As authenticated user I want to process a CSV file which has random documentId generated and metadata should not be updated."() {
 
@@ -228,18 +185,7 @@ class MetadataMigrationIT extends BaseIT {
         File file = File.createTempFile("migration", ".csv")
         file.write(body);
 
-        response = givenRequest(CITIZEN)
-            .multiPart("files", file, "text/csv")
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
-            .expect()
-            .statusCode(200)
-            .when()
-            .post("/testing/metadata-migration-csv")
-
-        // let the job run
-        sleep(15000)
+        postCsvFileAndTriggerSpringBatchJob(file)
 
         def metadata1 = fetchDocumentMetaDataAs CITIZEN, document1Url
         def caseId1 = metadata1.body().prettyPeek().jsonPath().get('metadata.case_id')
@@ -251,4 +197,19 @@ class MetadataMigrationIT extends BaseIT {
         Assert.assertNull(jurisdiction1)
     }
 
+
+      def postCsvFileAndTriggerSpringBatchJob(file) {
+        givenRequest(CITIZEN)
+            .multiPart("files", file, "text/csv")
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect()
+            .statusCode(200)
+            .when()
+            .post("/testing/metadata-migration-csv")
+
+        // let the job run
+        sleep(15000)
+    }
 }
