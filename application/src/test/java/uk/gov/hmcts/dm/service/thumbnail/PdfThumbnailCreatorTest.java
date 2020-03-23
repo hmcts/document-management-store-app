@@ -114,7 +114,7 @@ public class PdfThumbnailCreatorTest {
     }
 
     @Test
-    @Ignore("Temp ignore so i can get a test image made")
+    @Ignore(" ̰")
     public void shouldBuildThumbnailFromAzure() throws IOException {
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
         when(contentVersion.getDocumentContent()).thenReturn(null);

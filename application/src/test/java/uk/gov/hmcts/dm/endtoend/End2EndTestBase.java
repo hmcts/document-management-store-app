@@ -69,8 +69,9 @@ public abstract class End2EndTestBase {
         when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(false);
 
         doAnswer(invocation -> {
+            HttpServletResponse r = invocation.getArgument(1);
             try (final InputStream inputStream = FILE.getInputStream();
-                 final OutputStream out = invocation.getArgument(1)
+                 final OutputStream out = r.getOutputStream()
             ) {
                 IOUtils.copy(inputStream, out);
                 return null;

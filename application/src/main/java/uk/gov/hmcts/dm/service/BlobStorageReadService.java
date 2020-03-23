@@ -24,15 +24,15 @@ import java.util.UUID;
 @Transactional
 public class BlobStorageReadService {
 
-    @Autowired
-    private HttpServletRequest request;
 
     private final BlobContainerClient cloudBlobContainer;
+    private final HttpServletRequest request;
     private static final int DEFAULT_BUFFER_SIZE = 20480; // ..bytes = 20KB.
 
     @Autowired
-    public BlobStorageReadService(BlobContainerClient cloudBlobContainer) {
+    public BlobStorageReadService(BlobContainerClient cloudBlobContainer, HttpServletRequest request) {
         this.cloudBlobContainer = cloudBlobContainer;
+        this.request = request;
     }
 
     /**
