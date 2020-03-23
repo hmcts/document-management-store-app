@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+
+import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
 @RequestMapping(path = "/documents")
@@ -110,13 +114,27 @@ public class StoredDocumentController {
             .map(documentContentVersion -> {
 
                 try {
-                    log.debug("Trying to stream...");
+                    response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+                    response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                        format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+                    response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
 
-                    auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                        documentContentVersion,
-                        request,
-                        response);
-//                        return ResponseEntity.status(response.getStatus()).body(response.getOutputStream());
+                    if (isBlank(documentContentVersion.getContentUri())) {
+                        response.setHeader("data-source", "Postgres");
+                        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
+                            documentContentVersion,
+                            response.getOutputStream());
+                    } else {
+                        response.setHeader("data-source", "contentURI");
+                        response.setHeader("Accept-Ranges", "bytes");
+                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
+
+                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                            documentContentVersion,
+                            request,
+                            response);
+                    }
 
                 } catch (Exception e) {
                     return ResponseEntity

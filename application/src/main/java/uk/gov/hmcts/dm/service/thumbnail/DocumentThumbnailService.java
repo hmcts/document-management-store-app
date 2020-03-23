@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.util.Map;
 
@@ -26,9 +28,9 @@ public class DocumentThumbnailService {
         this.unsupportedThumbnailService = unsupportedThumbnailService;
     }
 
-    public Resource generateThumbnail(DocumentContentVersion documentContentVersion) {
+    public Resource generateThumbnail(DocumentContentVersion documentContentVersion, HttpServletRequest request, HttpServletResponse response) {
         ThumbnailCreator thumbnailCreator = selectThumbnailCreator(documentContentVersion);
-        InputStream inputStream = thumbnailCreator.getThumbnail(documentContentVersion);
+        InputStream inputStream = thumbnailCreator.getThumbnail(documentContentVersion, request, response);
         if (inputStream != null) {
             return new InputStreamResource(inputStream);
         } else {

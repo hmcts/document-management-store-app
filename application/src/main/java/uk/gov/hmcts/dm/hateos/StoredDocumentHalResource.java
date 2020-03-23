@@ -67,7 +67,7 @@ public class StoredDocumentHalResource extends HalResource {
 
         if (mostRecentDocumentContentVersion != null) {
             add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId(), null, null)).withRel("binary"));
-            add(linkTo(methodOn(DocumentThumbnailController.class).getPreviewThumbnail(storedDocument.getId())).withRel("thumbnail"));
+            add(linkTo(methodOn(DocumentThumbnailController.class).getPreviewThumbnail(storedDocument.getId(), null, null)).withRel("thumbnail"));
         }
 
         if (storedDocument.getFolder() != null) {

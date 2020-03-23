@@ -13,7 +13,6 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -147,7 +146,7 @@ public class ImageThumbnailCreatorTest {
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
         when(blob.getBinaryStream()).thenReturn(file);
 
-        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
+        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion, null, null);
 
         assertThat(thumbnail, is(notNullValue()));
         verifyZeroInteractions(blobStorageReadService);
@@ -166,12 +165,12 @@ public class ImageThumbnailCreatorTest {
             return null;
         })
                .when(blobStorageReadService)
-               .loadBlob(same(contentVersion), Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
+               .loadBlob(same(contentVersion), Mockito.any(HttpServletResponse.class));
 
-        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
+        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion, null, null);
 
         assertThat(thumbnail, is(notNullValue()));
-        verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
+        verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(HttpServletResponse.class));
     }
 
 }

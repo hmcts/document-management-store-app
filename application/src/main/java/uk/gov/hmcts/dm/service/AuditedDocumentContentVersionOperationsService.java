@@ -44,14 +44,16 @@ public class AuditedDocumentContentVersionOperationsService {
     public void readDocumentContentVersionBinaryFromBlobStore(DocumentContentVersion documentContentVersion,
                                                               HttpServletRequest request,
                                                               HttpServletResponse response) throws IOException {
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
+        blobStorageReadService.loadBlob(documentContentVersion, response);
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
     }
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
-    public Resource readDocumentContentVersionThumbnail(@NotNull DocumentContentVersion documentContentVersion) {
+    public Resource readDocumentContentVersionThumbnail(@NotNull DocumentContentVersion documentContentVersion,
+                                                        HttpServletRequest request,
+                                                        HttpServletResponse response) {
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
-        return documentThumbnailService.generateThumbnail(documentContentVersion);
+        return documentThumbnailService.generateThumbnail(documentContentVersion, request, response);
     }
 
     @PreAuthorize("hasPermission(#versionId, 'uk.gov.hmcts.dm.domain.DocumentContentVersion', 'READ')")

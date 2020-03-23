@@ -217,10 +217,7 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/repository/RepositoryFinder.java',
     '**uk/gov/hmcts/dm/service/batch/CustomItemWriter.java',
     '**uk/gov/hmcts/dm/appinsights/*',
-    '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java',
-    '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
-    '**uk/gov/hmcts/dm/service/BlobStorageReadService.java',
-    '**uk/gov/hmcts/dm/controller/StoredDocumentController.java'
+    '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java'
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)

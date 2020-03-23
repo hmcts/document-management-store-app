@@ -11,7 +11,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +58,7 @@ public class VersionTest extends End2EndTestBase {
             }
         })
             .when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
+            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(HttpServletResponse.class));
     }
 
     @Test

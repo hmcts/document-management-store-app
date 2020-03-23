@@ -39,14 +39,14 @@ public class DocumentThumbnailServiceTest {
 
     @Test(expected = CantCreateThumbnailException.class)
     public void nullThumbnailInputStream() {
-        when(unsupportedThumbnailService.getThumbnail(documentContentVersion)).thenReturn(null);
-        underTest.generateThumbnail(documentContentVersion);
+        when(unsupportedThumbnailService.getThumbnail(documentContentVersion, null, null)).thenReturn(null);
+        underTest.generateThumbnail(documentContentVersion, null, null);
     }
 
     @Test
     public void withThumbnailInputStream() throws IOException {
-        when(unsupportedThumbnailService.getThumbnail(documentContentVersion)).thenReturn(inputStream);
-        final Resource resource = underTest.generateThumbnail(documentContentVersion);
+        when(unsupportedThumbnailService.getThumbnail(documentContentVersion, null, null)).thenReturn(inputStream);
+        final Resource resource = underTest.generateThumbnail(documentContentVersion, null, null);
         assertThat(resource.getInputStream(), is(inputStream));
     }
 }
