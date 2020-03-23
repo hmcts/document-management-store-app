@@ -46,7 +46,7 @@ public class DocumentContentVersionHalResource extends HalResource {
 
         add(linkTo(methodOn(DocumentThumbnailController.class).getDocumentContentVersionDocumentPreviewThumbnail(
             documentContentVersion.getStoredDocument().getId(),
-            documentContentVersion.getId())).withRel("thumbnail"));
+            documentContentVersion.getId(), null, null)).withRel("thumbnail"));
     }
 
     public Date getCreatedOn() {

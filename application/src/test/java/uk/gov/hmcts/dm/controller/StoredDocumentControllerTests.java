@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.controller;
 
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,8 +21,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.String.format;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StoredDocumentControllerTests extends ComponentTestBase {
@@ -70,16 +73,18 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary");
 
+        String headerValue = header().toString();
+
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
-            .andExpect(status().isOk());
-//            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
-//            .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString()))
-//            .andExpect(header().string("OriginalFileName", documentContentVersion.getOriginalDocumentName()))
-//            .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION,
-//                format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName())));
+            .andExpect(status().isOk())
+            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
+            .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString()))
+            .andExpect(header().string("OriginalFileName", documentContentVersion.getOriginalDocumentName()))
+            .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION,
+                format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName())));
     }
 
     @Test

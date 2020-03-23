@@ -9,7 +9,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -179,6 +178,6 @@ public class ThumbnailTest extends End2EndTestBase {
                 return null;
             }
         }).when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
+            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(HttpServletResponse.class));
     }
 }

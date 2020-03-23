@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @RestController
@@ -38,13 +40,13 @@ public class DocumentThumbnailController {
         @ApiResponse(code = 200, message = "Returns thumbnail of a file")
     })
     @Transactional(readOnly = true)
-    public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID documentId) {
+    public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID documentId, HttpServletRequest request, HttpServletResponse response) {
         return documentContentVersionService
             .findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
                 .map(documentContentVersion ->
                 ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
-                    .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion))
+                    .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion, request, response))
             ).orElse(ResponseEntity.notFound().build());
     }
 
@@ -57,7 +59,9 @@ public class DocumentThumbnailController {
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(
         @PathVariable UUID documentId,
-        @PathVariable UUID versionId) {
+        @PathVariable UUID versionId,
+        HttpServletRequest request,
+        HttpServletResponse response) {
         return documentContentVersionService.findById(versionId)
             .filter(documentContentVersion -> !documentContentVersion.getStoredDocument().isDeleted())
             .map(documentContentVersion ->
@@ -65,7 +69,7 @@ public class DocumentThumbnailController {
                     .ok()
                     .contentType(MediaType.IMAGE_JPEG)
                     .body(auditedDocumentContentVersionOperationsService
-                        .readDocumentContentVersionThumbnail(documentContentVersion)))
+                        .readDocumentContentVersionThumbnail(documentContentVersion, request, response)))
             .orElse(ResponseEntity.notFound().build());
     }
 }

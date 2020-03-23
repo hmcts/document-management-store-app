@@ -63,7 +63,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
 
         auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(documentContentVersion, request, response);
 
-        verify(blobStorageReadService, times(1)).loadBlob(documentContentVersion,  request, response);
+        verify(blobStorageReadService, times(1)).loadBlob(documentContentVersion, response);
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
     }
 
@@ -71,10 +71,10 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     public void testReadDocumentContentVersionThumbnail() {
         DocumentContentVersion documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
 
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion);
+        auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion, null, null);
 
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
-        verify(documentThumbnailService, times(1)).generateThumbnail(documentContentVersion);
+        verify(documentThumbnailService, times(1)).generateThumbnail(documentContentVersion, null, null);
     }
 
     @Test

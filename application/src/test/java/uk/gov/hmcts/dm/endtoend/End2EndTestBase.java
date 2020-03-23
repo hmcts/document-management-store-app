@@ -23,7 +23,6 @@ import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,7 +75,7 @@ public abstract class End2EndTestBase {
                 IOUtils.copy(inputStream, out);
                 return null;
             }
-        }).when(blobStorageReadService).loadBlob(any(DocumentContentVersion.class), any(HttpServletRequest.class), any(HttpServletResponse.class));
+        }).when(blobStorageReadService).loadBlob(any(DocumentContentVersion.class), any(HttpServletResponse.class));
         doAnswer(invocation -> {
             uploadDocument(invocation);
             return null;
