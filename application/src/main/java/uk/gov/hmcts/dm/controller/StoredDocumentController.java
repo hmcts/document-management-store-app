@@ -31,6 +31,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -136,7 +137,7 @@ public class StoredDocumentController {
                             response);
                     }
 
-                } catch (Exception e) {
+                } catch (IOException e) {
                     return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(e);

@@ -175,5 +175,16 @@ public class ThumbnailTest extends End2EndTestBase {
             }
         }).when(blobStorageReadService)
             .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(HttpServletResponse.class));
+
+
+        Mockito.doAnswer(invocation -> {
+            try (final InputStream inputStream = file.getInputStream();
+                 final OutputStream out = invocation.getArgument(1)
+            ) {
+                IOUtils.copy(inputStream, out);
+                return null;
+            }
+        }).when(blobStorageReadService)
+            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
     }
 }
