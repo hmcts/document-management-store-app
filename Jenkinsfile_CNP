@@ -44,15 +44,16 @@ withPipeline(type , product, component) {
     onMaster {
         env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
         env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-        enableSlackNotifications('#ccd-master-builds')
+        enableSlackNotifications('#em-dev-chat')
     }
     onDemo {
-        enableSlackNotifications('#ccd-demo-builds')
+        enableSlackNotifications('#em-dev-chat')
     }
     onPR {
         env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+        env.ENABLE_METADATA_MIGRATION = true
         env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-        enableSlackNotifications('#ccd-pr-builds')
+        enableSlackNotifications('#em-dev-chat')
     }
 
     enableDbMigration('ccd')

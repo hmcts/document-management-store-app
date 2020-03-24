@@ -12,5 +12,4 @@ toggle:
     ttl: ${ENABLE_TTL:true}
     thumbnail: ${ENABLE_THUMBNAIL:true}
     includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
-
-
+    metadatamigration: ${ENABLE_METADATA_MIGRATION:false}

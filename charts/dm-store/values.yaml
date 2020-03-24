@@ -45,6 +45,8 @@ java:
     ENABLE_DELETE: 'true'
     ENABLE_TTL: 'true'
     ENABLE_THUMBNAIL: 'true'
+    ENABLE_METADATA_MIGRATION: 'false'
+
 
     # Document Storage
     #STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
@@ -52,6 +54,7 @@ java:
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: dm-store-docstore-{{ .Values.global.environment }}
 
     TASK_ENV: documentTaskLock-aat
+    DOCUMENT_METADATA_UPDATE_MILLISECONDS: 3600000
 
 blobstorage:
   resourceGroup: dm-store-aks
