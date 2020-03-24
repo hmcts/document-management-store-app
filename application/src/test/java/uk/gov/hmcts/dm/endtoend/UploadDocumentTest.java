@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.endtoend;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;

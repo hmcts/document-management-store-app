@@ -71,10 +71,10 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     public void testReadDocumentContentVersionThumbnail() {
         DocumentContentVersion documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
 
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion, null, null);
+        auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion);
 
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
-        verify(documentThumbnailService, times(1)).generateThumbnail(documentContentVersion, null, null);
+        verify(documentThumbnailService, times(1)).generateThumbnail(documentContentVersion);
     }
 
     @Test

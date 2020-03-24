@@ -19,7 +19,7 @@ public class UnsupportedThumbnailCreatorTest {
     public void getThumbnail() throws IOException {
         DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
         UnsupportedThumbnailCreator unsupportedThumbnailService = new UnsupportedThumbnailCreator();
-        InputStream thumbnail = unsupportedThumbnailService.getThumbnail(documentContentVersion, null, null);
+        InputStream thumbnail = unsupportedThumbnailService.getThumbnail(documentContentVersion);
 
         InputStream expectInputStream = getClass().getResourceAsStream(UnsupportedThumbnailCreator.DEFAULT_FILE_THUMBNAIL);
         assertTrue(IOUtils.contentEquals(thumbnail,expectInputStream));

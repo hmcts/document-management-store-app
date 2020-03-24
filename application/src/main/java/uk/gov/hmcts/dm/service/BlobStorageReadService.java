@@ -7,6 +7,7 @@ import com.azure.storage.blob.models.DownloadRetryOptions;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.UUID;
 
 @Slf4j
@@ -26,13 +28,20 @@ public class BlobStorageReadService {
 
 
     private final BlobContainerClient cloudBlobContainer;
-    private final HttpServletRequest request;
+    private HttpServletRequest request;
     private static final int DEFAULT_BUFFER_SIZE = 20480; // ..bytes = 20KB.
 
     @Autowired
     public BlobStorageReadService(BlobContainerClient cloudBlobContainer, HttpServletRequest request) {
         this.cloudBlobContainer = cloudBlobContainer;
         this.request = request;
+    }
+
+    public void loadBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
+        log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
+        BlockBlobClient blobClient = blockBlobClient(documentContentVersion.getId().toString());
+        blobClient.download(outputStream);
+        log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
     }
 
     /**
@@ -48,8 +57,7 @@ public class BlobStorageReadService {
 
         if (rangeHeader == null) {
             log.debug("No Range header provided; returning entire document");
-            response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-            blobClient.download(response.getOutputStream());
+            loadBlob(documentContentVersion, response.getOutputStream());
             return;
         }
 
