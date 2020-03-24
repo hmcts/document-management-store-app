@@ -163,12 +163,12 @@ public class ImageThumbnailCreatorTest {
             return null;
         })
                .when(blobStorageReadService)
-               .loadBlob(same(contentVersion), Mockito.any(HttpServletResponse.class));
+               .loadBlob(same(contentVersion), Mockito.any(OutputStream.class));
 
         final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
-        verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(HttpServletResponse.class));
+        verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(OutputStream.class));
     }
 
 }
