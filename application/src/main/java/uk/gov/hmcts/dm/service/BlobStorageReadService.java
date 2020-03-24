@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.models.BlobDownloadResponse;
 import com.azure.storage.blob.models.BlobRange;
 import com.azure.storage.blob.models.DownloadRetryOptions;
 import com.azure.storage.blob.specialized.BlockBlobClient;
@@ -85,7 +84,7 @@ public class BlobStorageReadService {
         response.setStatus(HttpStatus.PARTIAL_CONTENT.value());
 
         log.debug("Processing blob range: {}", b.toString());
-        BlobDownloadResponse r = blobClient.downloadWithResponse(
+        blobClient.downloadWithResponse(
             response.getOutputStream(),
             b,
             new DownloadRetryOptions().setMaxRetryRequests(5),
@@ -97,8 +96,8 @@ public class BlobStorageReadService {
     }
 
     private BlobRange processPart(String part, Long length, HttpServletResponse response) {
-        long start = subLong(part, 0, part.indexOf("-"));
-        long end = subLong(part, part.indexOf("-") + 1, part.length());
+        long start = subLong(part, 0, part.indexOf('-'));
+        long end = subLong(part, part.indexOf('-') + 1, part.length());
 
         if (start == -1) {
             start = length - end;

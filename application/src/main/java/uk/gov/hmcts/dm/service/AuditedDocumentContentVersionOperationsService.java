@@ -10,7 +10,6 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -42,7 +41,6 @@ public class AuditedDocumentContentVersionOperationsService {
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
     public void readDocumentContentVersionBinaryFromBlobStore(DocumentContentVersion documentContentVersion,
-                                                              HttpServletRequest request,
                                                               HttpServletResponse response) throws IOException {
         blobStorageReadService.loadBlob(documentContentVersion, response);
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
