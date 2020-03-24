@@ -28,7 +28,7 @@ public class TestController {
 
     public TestController(
         BlobStorageReadService blobStorageReadService,
-        @Autowired @Qualifier("metadata-storage") BlobContainerClient blobClient
+        @Autowired(required = false) @Qualifier("metadata-storage") BlobContainerClient blobClient
     ) {
         this.blobStorageReadService = blobStorageReadService;
         this.blobClient = blobClient;
