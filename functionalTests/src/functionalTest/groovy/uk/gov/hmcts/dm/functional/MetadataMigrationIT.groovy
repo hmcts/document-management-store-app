@@ -16,6 +16,7 @@ class MetadataMigrationIT extends BaseIT {
 
     @Test
     void "As a Shashank I want to process a CSV of metadata changes"() {
+        assumeTrue(metadataMigrationEnabled)
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
         def document1Id = document1Url.split("/").last()
         def document2Url = createDocumentAndGetUrlAs(CITIZEN)
@@ -50,6 +51,7 @@ class MetadataMigrationIT extends BaseIT {
 
     @Test
     void "As a Shashank  I want metadata changes applied to only Matching records from CSV"() {
+        assumeTrue(metadataMigrationEnabled)
 
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
         def document1Id = document1Url.split("/").last()
@@ -102,6 +104,7 @@ class MetadataMigrationIT extends BaseIT {
 
     @Test
     void "As a As authenticated user  I want to process a CSV file which has missing metadata for one Case"() {
+        assumeTrue(metadataMigrationEnabled)
 
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
         def document1Id = document1Url.split("/").last()
@@ -131,6 +134,7 @@ class MetadataMigrationIT extends BaseIT {
 
     @Test
     void "As a As authenticated user I  want to process a CSV file which has missing metadata for one Case and valid metadata for Another"() {
+        assumeTrue(metadataMigrationEnabled)
 
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
         def document1Id = document1Url.split("/").last()
@@ -170,6 +174,7 @@ class MetadataMigrationIT extends BaseIT {
 
     @Test
     void "As a As authenticated user I want to process a CSV file which has random documentId generated and metadata should not be updated."() {
+        assumeTrue(metadataMigrationEnabled)
 
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
         def document1Id = document1Url.split("/").last()
