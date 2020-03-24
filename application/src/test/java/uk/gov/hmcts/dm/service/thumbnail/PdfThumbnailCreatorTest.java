@@ -107,7 +107,7 @@ public class PdfThumbnailCreatorTest {
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE);
         when(blob.getBinaryStream()).thenReturn(file);
 
-        final InputStream thumbnail = pdfThumbnailService.getThumbnail(contentVersion, null, null);
+        final InputStream thumbnail = pdfThumbnailService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
         verifyZeroInteractions(blobStorageReadService);
@@ -128,7 +128,7 @@ public class PdfThumbnailCreatorTest {
                .when(blobStorageReadService)
                .loadBlob(same(contentVersion), Mockito.any(HttpServletResponse.class));
 
-        final InputStream thumbnail = pdfThumbnailService.getThumbnail(contentVersion, null, null);
+        final InputStream thumbnail = pdfThumbnailService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
         verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(HttpServletResponse.class));

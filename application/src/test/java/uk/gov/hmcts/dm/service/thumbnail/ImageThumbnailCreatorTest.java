@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.service.thumbnail;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -146,7 +145,7 @@ public class ImageThumbnailCreatorTest {
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
         when(blob.getBinaryStream()).thenReturn(file);
 
-        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion, null, null);
+        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
         verifyZeroInteractions(blobStorageReadService);
@@ -166,7 +165,7 @@ public class ImageThumbnailCreatorTest {
                .when(blobStorageReadService)
                .loadBlob(same(contentVersion), Mockito.any(HttpServletResponse.class));
 
-        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion, null, null);
+        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
         verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(HttpServletResponse.class));

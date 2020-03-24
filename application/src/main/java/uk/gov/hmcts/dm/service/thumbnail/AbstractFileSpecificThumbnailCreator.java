@@ -5,8 +5,6 @@ import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -33,13 +31,13 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
     }
 
     @Override
-    public InputStream getThumbnail(DocumentContentVersion documentContentVersion, HttpServletRequest request, HttpServletResponse response) {
+    public InputStream getThumbnail(DocumentContentVersion documentContentVersion) {
         try {
             BufferedImage bufferedImage;
             if (isBlank(documentContentVersion.getContentUri())) {
                 bufferedImage = getImgFromPostgres(documentContentVersion);
             } else {
-                bufferedImage = getImgFromAzureBlobStore(documentContentVersion, request, response);
+                bufferedImage = getImgFromAzureBlobStore(documentContentVersion);
             }
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -57,9 +55,7 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
         return getImg(inputStream);
     }
 
-    private BufferedImage getImgFromAzureBlobStore(DocumentContentVersion documentContentVersion,
-                                                   HttpServletRequest request,
-                                                   HttpServletResponse response) throws IOException {
+    private BufferedImage getImgFromAzureBlobStore(DocumentContentVersion documentContentVersion) throws IOException {
         // Pipe blob store output into thumbnail creator input
         try (
             final PipedInputStream in = new PipedInputStream();
@@ -68,10 +64,10 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
 
             Thread loadThread = new Thread(() -> {
                 try {
-                    blobStorageReadService.loadBlob(documentContentVersion, response);
+                    blobStorageReadService.loadBlob(documentContentVersion, out);
                     // Await end of image buffering to terminate thread.
                     latch.await();
-                } catch (InterruptedException | IOException e) {
+                } catch (InterruptedException e) {
                     LOGGER.log(Level.WARNING, "Error while loading blob", e);
                     Thread.currentThread().interrupt();
                 }

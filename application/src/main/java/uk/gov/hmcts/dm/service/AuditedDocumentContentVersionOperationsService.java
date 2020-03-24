@@ -49,11 +49,9 @@ public class AuditedDocumentContentVersionOperationsService {
     }
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
-    public Resource readDocumentContentVersionThumbnail(@NotNull DocumentContentVersion documentContentVersion,
-                                                        HttpServletRequest request,
-                                                        HttpServletResponse response) {
+    public Resource readDocumentContentVersionThumbnail(@NotNull DocumentContentVersion documentContentVersion) {
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
-        return documentThumbnailService.generateThumbnail(documentContentVersion, request, response);
+        return documentThumbnailService.generateThumbnail(documentContentVersion);
     }
 
     @PreAuthorize("hasPermission(#versionId, 'uk.gov.hmcts.dm.domain.DocumentContentVersion', 'READ')")
