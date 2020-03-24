@@ -136,6 +136,7 @@ public class StoredDocumentController {
                     }
 
                 } catch (IOException e) {
+                    response.reset();
                     return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(e);
@@ -144,7 +145,7 @@ public class StoredDocumentController {
                 return ResponseEntity.ok().build();
 
             })
-            .orElse(ResponseEntity.notFound().build());
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
 
