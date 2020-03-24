@@ -53,6 +53,7 @@ spring:
     document-task-milliseconds: ${DOCUMENT_TASK_MILLISECONDS:60000}
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
+    documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
 
 server:
   port: ${SERVER_PORT:4603}
@@ -87,6 +88,7 @@ azure:
       connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1}
       blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
       enabled: true
+      metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
 
 postgres:
   storage:
@@ -172,6 +174,7 @@ toggle:
   ttl: ${ENABLE_TTL:true}
   thumbnail: ${ENABLE_THUMBNAIL:true}
   testing: ${ENABLE_TESTING:true}
+  metadatamigration: ${ENABLE_METADATA_MIGRATION:true}
 
 task:
   env: ${TASK_ENV:documentTaskLock-local}

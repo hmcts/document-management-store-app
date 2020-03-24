@@ -127,6 +127,4 @@ public class BatchConfiguration {
                 .tasklet(new RemoveSpringBatchHistoryTasklet(historicExecutionsRetentionMilliseconds, jdbcTemplate))
                 .build()).build().build();
     }
-
-
 }
