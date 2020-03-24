@@ -12,7 +12,6 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
