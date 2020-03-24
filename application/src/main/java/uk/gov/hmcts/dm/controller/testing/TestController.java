@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.controller.testing;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.specialized.BlockBlobClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
+@Slf4j
 @RequestMapping(
     path = "/testing")
 @ConditionalOnProperty("toggle.testing")
@@ -46,7 +48,9 @@ public class TestController {
 
         try {
             client.delete();
-        } catch (BlobStorageException ignored) { }
+        } catch (BlobStorageException ignored) {
+            log.debug("Ignored BlobStorageException in TestController " + ignored.getMessage());
+        }
 
         client.upload(file.getInputStream(), file.getSize());
 
