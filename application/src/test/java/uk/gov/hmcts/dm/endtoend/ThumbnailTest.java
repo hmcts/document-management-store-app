@@ -42,7 +42,7 @@ public class ThumbnailTest extends End2EndTestBase {
         pngFile = createMockMultipartFile("document-png-example.png",  IMAGE_PNG_VALUE);
         gifFile = createMockMultipartFile("document-gif-example.gif", IMAGE_GIF_VALUE);
         gifAniFile = createMockMultipartFile("document-gif-animated-example.gif", IMAGE_GIF_VALUE);
-        pdfFile = createMockMultipartFile("1MB.PDF", APPLICATION_PDF_VALUE);
+        pdfFile = createMockMultipartFile("1MB.pdf", APPLICATION_PDF_VALUE);
     }
 
     @Test
@@ -152,6 +152,7 @@ public class ThumbnailTest extends End2EndTestBase {
 
     private byte[] fileToByteArray(String file) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
+        System.out.println("fileToByteArray: " + file);
         return IOUtils.toByteArray(classLoader.getResourceAsStream(file));
     }
 
