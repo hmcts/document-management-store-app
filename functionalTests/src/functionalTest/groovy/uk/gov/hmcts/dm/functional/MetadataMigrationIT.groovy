@@ -173,7 +173,7 @@ class MetadataMigrationIT extends BaseIT {
 
 
     @Test
-    void "As a As authenticated user I want to process a CSV file which has random documentId generated and metadata should not be updated."() {
+    void "As a As authenticated user I want to process a CSV file which has random documentId generated and metadata should not be updated"() {
         assumeTrue(metadataMigrationEnabled)
 
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
