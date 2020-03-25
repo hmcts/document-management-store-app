@@ -81,6 +81,12 @@ public class BlobStorageReadService {
         String part = rangeHeader.substring(6).split(",")[0].trim();
 
         BlobRange b = processPart(part, length, response);
+
+        if (b.getOffset() == 0 && b.getCount() > length) {
+            loadBlob(documentContentVersion, response.getOutputStream());
+            return;
+        }
+
         response.setStatus(HttpStatus.PARTIAL_CONTENT.value());
 
         log.debug("Processing blob range: {}", b.toString());
