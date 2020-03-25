@@ -1,9 +1,5 @@
 package uk.gov.hmcts.dm.config.batch;
 
-import net.javacrumbs.shedlock.core.LockProvider;
-import net.javacrumbs.shedlock.core.SchedulerLock;
-import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
-import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.hibernate.LockOptions;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -23,7 +19,6 @@ import org.springframework.batch.item.database.orm.JpaQueryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -34,12 +29,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
-import javax.sql.DataSource;
 import java.util.Date;
 
 @EnableBatchProcessing
 @EnableScheduling
-@EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
 @Configuration
 @ConditionalOnProperty("toggle.ttl")
 public class BatchConfiguration {
@@ -75,7 +68,6 @@ public class BatchConfiguration {
     }
 
     @Scheduled(fixedDelayString = "${spring.batch.historicExecutionsRetentionMilliseconds}")
-    @SchedulerLock(name = "${task.env}-historicExecutionsRetention")
     public void scheduleCleanup() throws JobParametersInvalidException,
         JobExecutionAlreadyRunningException,
         JobRestartException,
@@ -85,11 +77,6 @@ public class BatchConfiguration {
             .addDate("date", new Date())
             .toJobParameters());
 
-    }
-
-    @Bean
-    public LockProvider lockProvider(DataSource dataSource) {
-        return new JdbcTemplateLockProvider(dataSource);
     }
 
     public JpaPagingItemReader undeletedDocumentsWithTtl() {
