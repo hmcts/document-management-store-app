@@ -190,7 +190,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetBinaryIOException() throws Exception {
+    public void testGetBinaryIoException() throws Exception {
 
         okDocumentContentVersion.setCreatedBy("userId");
         okDocumentContentVersion.setContentUri("something");

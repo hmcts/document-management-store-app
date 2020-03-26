@@ -6,12 +6,10 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -21,30 +19,38 @@ import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobStorageReadService.class})
-@PowerMockIgnore({"javax.net.ssl.*"})
+@ExtendWith(MockitoExtension.class)
 public class BlobStorageReadServiceTest {
 
     private BlobStorageReadService blobStorageReadService;
-    private BlockBlobClient blob;
-    private BlobContainerClient cloudBlobContainer;
-    private BlobClient blobClient;
     private DocumentContentVersion documentContentVersion;
+
+    @Mock
+    private BlockBlobClient blob;
+
+    @Mock
+    private BlobContainerClient cloudBlobContainer;
+
+    @Mock
+    private BlobClient blobClient;
+
+    @Mock
     private HttpServletRequest request;
+
+    @Mock
     private HttpServletResponse response;
-    private OutputStream outputStream;
 
     @Before
     public void setUp() throws IOException {
-        cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
-        blobClient = PowerMockito.mock(BlobClient.class);
-        blob = PowerMockito.mock(BlockBlobClient.class);
+
+        blobStorageReadService = Mockito.mock(BlobStorageReadService.class);
+        cloudBlobContainer = Mockito.mock(BlobContainerClient.class);
+        blobClient = Mockito.mock(BlobClient.class);
+        blob = Mockito.mock(BlockBlobClient.class);
         request = Mockito.mock(HttpServletRequest.class);
         response = Mockito.mock(HttpServletResponse.class);
 
