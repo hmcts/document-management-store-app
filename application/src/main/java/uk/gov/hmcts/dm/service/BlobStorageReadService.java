@@ -47,17 +47,18 @@ public class BlobStorageReadService {
     }
 
     public void loadFullBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
-        log.debug("No Range header provided; returning entire document");
-        log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
-        BlockBlobClient blobClient = blockBlobClient(documentContentVersion.getId().toString());
-        blobClient.download(outputStream);
+        log.debug("No Range header provided; returning entire document {}", documentContentVersion.getId());
+
+        blockBlobClient(documentContentVersion.getId().toString()).download(outputStream);
+
         log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
     }
 
     private void loadPartialBlob(DocumentContentVersion documentContentVersion,
                                  HttpServletResponse response) throws IOException {
 
-        log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
+        log.debug("Range header provided; returning entire document {}", documentContentVersion.getId());
+
         String rangeHeader = request.getHeader(HttpHeaders.RANGE);
         log.debug("Range requested: {}", rangeHeader);
 
@@ -83,17 +84,17 @@ public class BlobStorageReadService {
 
         response.setStatus(HttpStatus.PARTIAL_CONTENT.value());
 
-        BlockBlobClient blobClient = blockBlobClient(documentContentVersion.getId().toString());
         log.debug("Processing blob range: {}", b.toString());
-        blobClient.downloadWithResponse(
-            response.getOutputStream(),
-            b,
-            new DownloadRetryOptions().setMaxRetryRequests(5),
-            null,
-            false,
-            null,
-            null
-        );
+        blockBlobClient(documentContentVersion.getId().toString())
+            .downloadWithResponse(
+                response.getOutputStream(),
+                b,
+                new DownloadRetryOptions().setMaxRetryRequests(5),
+                null,
+                false,
+                null,
+                null
+            );
     }
 
     private BlobRange processPart(String part, Long length, HttpServletResponse response) {
