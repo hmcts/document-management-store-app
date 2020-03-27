@@ -117,6 +117,9 @@ public class StoredDocumentController {
                         format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
                     response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
 
+                    // Set Default content size for whole document
+                    response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+
                     if (isBlank(documentContentVersion.getContentUri())) {
                         response.setHeader("data-source", "Postgres");
                         response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());

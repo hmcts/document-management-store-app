@@ -35,37 +35,31 @@ public class BlobStorageReadService {
         this.request = request;
     }
 
-    public void loadBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
+    /**
+     * Streams the content of a document from blob storage. Processes a Range request when possible
+     */
+    public void loadBlob(DocumentContentVersion documentContentVersion, HttpServletResponse response) throws IOException {
+        if (request.getHeader(HttpHeaders.RANGE) == null) {
+            loadFullBlob(documentContentVersion, response.getOutputStream());
+        } else {
+            loadPartialBlob(documentContentVersion, response);
+        }
+    }
+
+    public void loadFullBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
+        log.debug("No Range header provided; returning entire document");
         log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
         BlockBlobClient blobClient = blockBlobClient(documentContentVersion.getId().toString());
         blobClient.download(outputStream);
         log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
     }
 
-    /**
-     * Streams the content of a document from blob storage. Processes a Range request when possible
-     */
-    public void loadBlob(DocumentContentVersion documentContentVersion, HttpServletResponse response) throws IOException {
+    private void loadPartialBlob(DocumentContentVersion documentContentVersion,
+                                 HttpServletResponse response) throws IOException {
+
         log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
-        BlockBlobClient blobClient = blockBlobClient(documentContentVersion.getId().toString());
-
         String rangeHeader = request.getHeader(HttpHeaders.RANGE);
-
         log.debug("Range requested: {}", rangeHeader);
-
-        if (rangeHeader == null) {
-            log.debug("No Range header provided; returning entire document");
-            loadBlob(documentContentVersion, response.getOutputStream());
-            return;
-        }
-
-        processRangeRequest(rangeHeader, documentContentVersion, blobClient, response);
-    }
-
-    private void processRangeRequest(String rangeHeader,
-                                     DocumentContentVersion documentContentVersion,
-                                     BlockBlobClient blobClient,
-                                     HttpServletResponse response) throws IOException {
 
         Long length = documentContentVersion.getSize();
 
@@ -83,12 +77,13 @@ public class BlobStorageReadService {
         BlobRange b = processPart(part, length, response);
 
         if (b.getOffset() == 0 && b.getCount() > length) {
-            loadBlob(documentContentVersion, response.getOutputStream());
+            loadFullBlob(documentContentVersion, response.getOutputStream());
             return;
         }
 
         response.setStatus(HttpStatus.PARTIAL_CONTENT.value());
 
+        BlockBlobClient blobClient = blockBlobClient(documentContentVersion.getId().toString());
         log.debug("Processing blob range: {}", b.toString());
         blobClient.downloadWithResponse(
             response.getOutputStream(),
