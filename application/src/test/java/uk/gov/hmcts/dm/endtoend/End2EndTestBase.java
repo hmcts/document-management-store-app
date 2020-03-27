@@ -85,7 +85,7 @@ public abstract class End2EndTestBase {
                 IOUtils.copy(inputStream, out);
                 return null;
             }
-        }).when(blobStorageReadService).loadBlob(any(DocumentContentVersion.class), any(OutputStream.class));
+        }).when(blobStorageReadService).loadFullBlob(any(DocumentContentVersion.class), any(OutputStream.class));
 
         doAnswer(invocation -> {
             uploadDocument(invocation);

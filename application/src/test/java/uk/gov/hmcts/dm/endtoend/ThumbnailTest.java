@@ -186,6 +186,6 @@ public class ThumbnailTest extends End2EndTestBase {
                 return null;
             }
         }).when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
+            .loadFullBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
     }
 }

@@ -123,12 +123,12 @@ public class PdfThumbnailCreatorTest {
             return null;
         })
                .when(blobStorageReadService)
-               .loadBlob(same(contentVersion), Mockito.any(OutputStream.class));
+               .loadFullBlob(same(contentVersion), Mockito.any(OutputStream.class));
 
         final InputStream thumbnail = pdfThumbnailService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
-        verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(OutputStream.class));
+        verify(blobStorageReadService).loadFullBlob(same(contentVersion), Mockito.any(OutputStream.class));
     }
 
 }
