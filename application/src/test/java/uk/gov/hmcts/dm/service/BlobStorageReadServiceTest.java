@@ -58,12 +58,12 @@ public class BlobStorageReadServiceTest {
         when(blobClient.getBlockBlobClient()).thenReturn(blob);
 
         documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
-        blobStorageReadService = new BlobStorageReadService(cloudBlobContainer, request);
+        blobStorageReadService = new BlobStorageReadService(cloudBlobContainer);
     }
 
     @Test
     public void loadsBlob() throws IOException {
-        blobStorageReadService.loadBlob(documentContentVersion, response);
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
         verify(blob).download(response.getOutputStream());
     }
 
@@ -72,7 +72,7 @@ public class BlobStorageReadServiceTest {
 
         when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=A-Z");
 
-        blobStorageReadService.loadBlob(documentContentVersion, response);
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
     }
 
@@ -81,7 +81,7 @@ public class BlobStorageReadServiceTest {
 
         when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=1023-0");
 
-        blobStorageReadService.loadBlob(documentContentVersion, response);
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
     }
 
@@ -90,7 +90,7 @@ public class BlobStorageReadServiceTest {
 
         when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=0-1023");
 
-        blobStorageReadService.loadBlob(documentContentVersion, response);
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
         // whole doc is returned so we never set the partial content header
         Mockito.verify(response, Mockito.times(0)).setStatus(HttpStatus.PARTIAL_CONTENT.value());
@@ -103,7 +103,7 @@ public class BlobStorageReadServiceTest {
 
         when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=0-2");
 
-        blobStorageReadService.loadBlob(documentContentVersion, response);
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
         Mockito.verify(response, Mockito.times(1)).setStatus(HttpStatus.PARTIAL_CONTENT.value());
         Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 0-2/4");

@@ -14,6 +14,7 @@ import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
@@ -203,8 +204,8 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .when(this.auditedDocumentContentVersionOperationsService)
             .readDocumentContentVersionBinaryFromBlobStore(
                 Mockito.any(DocumentContentVersion.class),
-                Mockito.any(HttpServletResponse.class)
-            );
+                Mockito.any(HttpServletRequest.class),
+                Mockito.any(HttpServletResponse.class));
 
         restActions
             .withAuthorizedUser("userId")

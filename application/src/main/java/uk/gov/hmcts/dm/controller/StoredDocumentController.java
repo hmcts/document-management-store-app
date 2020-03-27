@@ -27,6 +27,7 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -106,7 +107,7 @@ public class StoredDocumentController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response) {
+    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletRequest request, HttpServletResponse response) {
 
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
@@ -133,6 +134,7 @@ public class StoredDocumentController {
 
                         auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                             documentContentVersion,
+                            request,
                             response);
                     }
 
