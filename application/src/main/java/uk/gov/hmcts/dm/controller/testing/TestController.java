@@ -15,6 +15,7 @@ import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -37,12 +38,12 @@ public class TestController {
     }
 
     @GetMapping("/azure-storage-binary-exists/{id}")
-    public ResponseEntity<Boolean> get(@PathVariable UUID id) throws Exception {
+    public ResponseEntity<Boolean> get(@PathVariable UUID id) {
         return ResponseEntity.ok(blobStorageReadService.doesBinaryExist(id));
     }
 
     @PostMapping(value = "/metadata-migration-csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Boolean> uploadCsv(@Valid UploadDocumentsCommand command) throws Exception {
+    public ResponseEntity<Boolean> uploadCsv(@Valid UploadDocumentsCommand command) throws BlobStorageException, IOException {
         MultipartFile file = command.getFiles().get(0);
         BlockBlobClient client = blobClient.getBlobClient(file.getName()).getBlockBlobClient();
 

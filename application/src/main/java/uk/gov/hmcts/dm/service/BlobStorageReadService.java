@@ -26,23 +26,23 @@ public class BlobStorageReadService {
 
 
     private final BlobContainerClient cloudBlobContainer;
-    private HttpServletRequest request;
     private static final int DEFAULT_BUFFER_SIZE = 20480; // ..bytes = 20KB.
 
     @Autowired
-    public BlobStorageReadService(BlobContainerClient cloudBlobContainer, HttpServletRequest request) {
+    public BlobStorageReadService(BlobContainerClient cloudBlobContainer) {
         this.cloudBlobContainer = cloudBlobContainer;
-        this.request = request;
     }
 
     /**
      * Streams the content of a document from blob storage. Processes a Range request when possible
      */
-    public void loadBlob(DocumentContentVersion documentContentVersion, HttpServletResponse response) throws IOException {
+    public void loadBlob(DocumentContentVersion documentContentVersion,
+                         HttpServletRequest request,
+                         HttpServletResponse response) throws IOException {
         if (request.getHeader(HttpHeaders.RANGE) == null) {
             loadFullBlob(documentContentVersion, response.getOutputStream());
         } else {
-            loadPartialBlob(documentContentVersion, response);
+            loadPartialBlob(documentContentVersion, request, response);
         }
     }
 
@@ -55,6 +55,7 @@ public class BlobStorageReadService {
     }
 
     private void loadPartialBlob(DocumentContentVersion documentContentVersion,
+                                 HttpServletRequest request,
                                  HttpServletResponse response) throws IOException {
 
         log.debug("Range header provided; returning entire document {}", documentContentVersion.getId());
