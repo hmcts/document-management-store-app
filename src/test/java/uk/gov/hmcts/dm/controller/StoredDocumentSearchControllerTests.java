@@ -29,7 +29,7 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
             new StoredDocument(),
             new StoredDocument());
 
-        PageRequest pageRequest = new PageRequest(0, 2);
+        PageRequest pageRequest = PageRequest.of(0, 2);
 
         when(
             this.searchService

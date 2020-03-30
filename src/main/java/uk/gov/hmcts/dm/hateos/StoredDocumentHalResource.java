@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.beans.BeanUtils;
-import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.core.Relation;
 import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
 import uk.gov.hmcts.dm.controller.FolderController;
@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Data
 @NoArgsConstructor
@@ -75,8 +75,8 @@ public class StoredDocumentHalResource extends HalResource {
         }
 
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {
-            Resources<DocumentContentVersionHalResource> versionResources =
-                    new Resources<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList()));
+            CollectionModel<DocumentContentVersionHalResource> versionResources =
+                    new CollectionModel<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList()));
             embedResource("allDocumentVersions", versionResources);
 
         }
