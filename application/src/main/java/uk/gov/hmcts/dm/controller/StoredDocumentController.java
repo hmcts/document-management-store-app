@@ -27,6 +27,7 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -106,30 +107,39 @@ public class StoredDocumentController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response) {
+    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletRequest request, HttpServletResponse response) {
+
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
 
-                response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-                response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-                response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                    format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
-
                 try {
+                    response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+                    response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                        format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+                    response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+
+                    // Set Default content size for whole document
+                    response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+
                     if (isBlank(documentContentVersion.getContentUri())) {
                         response.setHeader("data-source", "Postgres");
+                        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
                         auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
                             documentContentVersion,
                             response.getOutputStream());
                     } else {
                         response.setHeader("data-source", "contentURI");
+                        response.setHeader("Accept-Ranges", "bytes");
+                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
+
                         auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                             documentContentVersion,
-                            response.getOutputStream());
+                            request,
+                            response);
                     }
 
                 } catch (IOException e) {
+                    response.reset();
                     return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(e);
@@ -138,7 +148,7 @@ public class StoredDocumentController {
                 return ResponseEntity.ok().build();
 
             })
-            .orElse(ResponseEntity.notFound().build());
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
 
