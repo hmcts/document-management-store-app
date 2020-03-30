@@ -53,7 +53,7 @@ public class StoredDocumentSearchController {
         return ResponseEntity
                 .ok()
                 .contentType(V1MediaType.V1_HAL_DOCUMENT_PAGE_MEDIA_TYPE)
-                .body(assembler.toResource(page));
+                .body(assembler.toModel(page));
     }
 
 
@@ -72,7 +72,7 @@ public class StoredDocumentSearchController {
         return ResponseEntity
                 .ok()
                 .contentType(V1MediaType.V1_HAL_DOCUMENT_PAGE_MEDIA_TYPE)
-                .body(assembler.toResource(page));
+                .body(assembler.toModel(page));
     }
 
 }

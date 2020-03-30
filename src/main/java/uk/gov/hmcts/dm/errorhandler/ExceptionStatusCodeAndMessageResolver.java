@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.errorhandler;
 
-import org.apache.tomcat.util.http.fileupload.FileUploadBase;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,8 @@ public class ExceptionStatusCodeAndMessageResolver {
 
     @PostConstruct
     public void init() {
-        exceptionToStatusCodeMap.put(FileUploadBase.FileSizeLimitExceededException.class, 413);
-        exceptionToStatusCodeMap.put(FileUploadBase.SizeLimitExceededException.class, 413);
+        exceptionToStatusCodeMap.put(FileSizeLimitExceededException.class, 413);
+        exceptionToStatusCodeMap.put(SizeLimitExceededException.class, 413);
         exceptionToStatusCodeMap.put(MethodArgumentTypeMismatchException.class, 404);
         exceptionToStatusCodeMap.put(MethodArgumentNotValidException.class, 422);
 
