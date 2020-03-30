@@ -12,7 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
@@ -344,6 +346,23 @@ public class StoredDocumentServiceTests {
         verify(securityUtilService).getUserId();
         verify(folderRepository).save(folder);
         verify(blobStorageWriteService).uploadDocumentContentVersion(folder.getStoredDocuments().get(0), latestVersionInFolder, TEST_FILE);
+    }
+
+    @Test
+    public void testUpdateItems() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
+        storedDocument.setMetadata(Maps.newHashMap("Key", "Value"));
+
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
+
+        DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), Maps.newHashMap("UpdateKey", "UpdateValue"));
+        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, singletonList(update));
+
+        storedDocumentService.updateItems(command);
+
+        assertEquals(storedDocument.getMetadata().get("Key"), "Value");
+        assertEquals(storedDocument.getMetadata().get("UpdateKey"), "UpdateValue");
     }
 
     @Test

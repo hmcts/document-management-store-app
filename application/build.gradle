@@ -44,7 +44,7 @@ test {
 }
 
 tasks.withType(Test) {
-    maxParallelForks = 1
+    maxParallelForks = 3
 }
 
 // Xlint type thingy????
@@ -119,7 +119,7 @@ def versions = [
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.5.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.18'
-    compile group: 'org.apache.tika', name: 'tika-core', version: '1.23'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '1.24'
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '9.0.31'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.6'

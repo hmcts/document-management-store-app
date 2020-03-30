@@ -37,6 +37,9 @@ abstract class BaseIT {
     @Value('${toggle.ttl}')
     boolean toggleTtlEnabled
 
+    @Value('${toggle.metadatamigration}')
+    boolean metadataMigrationEnabled
+
     final String PASSWORD = '123'
 
     String CITIZEN = 'test12@test.com'
