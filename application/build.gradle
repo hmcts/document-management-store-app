@@ -12,7 +12,7 @@ plugins {
     id 'idea'
     id 'eclipse'
     id 'io.franzbecker.gradle-lombok' version '3.3.0'
-    id "info.solidsoft.pitest" version "1.4.6"
+    id "info.solidsoft.pitest" version "1.4.7"
 }
 
 group = 'uk.gov.hmcts.reform.dm'
