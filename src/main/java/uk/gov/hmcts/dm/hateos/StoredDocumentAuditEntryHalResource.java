@@ -4,7 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
-import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.server.core.Relation;
 import uk.gov.hmcts.dm.controller.DocumentContentVersionController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
 import uk.gov.hmcts.dm.domain.AuditActions;
@@ -13,8 +13,8 @@ import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
 
 import java.util.Date;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @EqualsAndHashCode(callSuper = true)
 @Relation(collectionRelation = "auditEntries")

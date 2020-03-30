@@ -39,7 +39,7 @@ public class SearchServiceTests {
                 new StoredDocument(),
                 new StoredDocument());
 
-        Pageable pageable = new PageRequest(0, 2);
+        Pageable pageable = PageRequest.of(0, 2);
 
         Page<StoredDocument> mockedPage = new PageImpl<>(documents, pageable, 3);
 
@@ -65,7 +65,7 @@ public class SearchServiceTests {
             new StoredDocument(),
             new StoredDocument());
 
-        Pageable pageable = new PageRequest(0, 2);
+        Pageable pageable = PageRequest.of(0, 2);
 
         Page<StoredDocument> mockedPage = new PageImpl<>(documents, pageable, 3);
 
