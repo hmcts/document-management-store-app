@@ -1,2 +1,4 @@
 #!/bin/sh
-echo $(curl -s -d "microservice=${1}" ${2}/testing-support/lease)
+echo $(curl -X "POST" "${2}/testing-support/lease" \
+     -H 'Content-Type: application/json; charset=utf-8' \
+     -d $'{"microservice": "${1}"}')
