@@ -10,8 +10,10 @@ plugins {
     id 'groovy'
     id 'org.owasp.dependencycheck' version '5.3.0'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-    id 'org.springframework.boot' version '2.1.6.RELEASE'
-    id 'com.github.ben-manes.versions' version '0.27.0'
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'org.owasp.dependencycheck'
+    id 'se.patrikerdes.use-latest-versions' version '0.2.13'
+    id 'com.github.ben-manes.versions' version '0.28.0'
     id 'org.sonarqube' version '2.8'
     id 'jacoco'
     id 'checkstyle'
@@ -92,9 +94,9 @@ def versions = [
     postgresql         : '42.2.6',
     jackson            : '2.10.2',
     powermock          : '1.7.4',
-    springBoot         : '2.1.6.RELEASE',
     serenity           : '2.0.23',
     serenityreporter   : '2.1.4',
+    springBoot         : '2.2.6.RELEASE',
     springfoxSwagger   : '2.9.2',
 ]
 
