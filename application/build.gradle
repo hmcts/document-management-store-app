@@ -153,7 +153,7 @@ dependencies {
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.25.1.RELEASE'
     compile 'uk.gov.hmcts.reform:health-spring-boot-starter:0.0.5'
 
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
 
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.12.Final'
 
