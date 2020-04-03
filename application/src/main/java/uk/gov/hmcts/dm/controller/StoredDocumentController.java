@@ -147,10 +147,9 @@ public class StoredDocumentController {
                         .body(e);
                 }
 
-                log.debug("Response: Content-Length, {}", response.getHeader(HttpHeaders.CONTENT_LENGTH));
-                log.debug("Response: Content-Type, {}", response.getHeader(HttpHeaders.CONTENT_TYPE));
-                log.debug("Response: Content-Range, {}", response.getHeader(HttpHeaders.CONTENT_RANGE));
-                log.debug("Response: Accept-Ranges, {}", response.getHeader(HttpHeaders.ACCEPT_RANGES));
+                for (String headerName: response.getHeaderNames()) {
+                    log.debug("Response Header {}: {}", headerName, response.getHeader(headerName));
+                }
 
                 return ResponseEntity.ok().build();
 
