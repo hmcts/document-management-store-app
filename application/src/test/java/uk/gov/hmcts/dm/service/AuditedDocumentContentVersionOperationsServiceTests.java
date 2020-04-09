@@ -13,9 +13,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,14 +53,12 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     }
 
     @Test
-    public void testReadFileContentVersionBinaryFromBlobStore() throws IOException {
+    public void testReadFileContentVersionBinaryFromBlobStore() {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
+        OutputStream outputStream = Mockito.mock(OutputStream.class);
+        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(documentContentVersion, outputStream);
 
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(documentContentVersion, request, response);
-
-        verify(blobStorageReadService, times(1)).loadBlob(documentContentVersion, request, response);
+        verify(blobStorageReadService, times(1)).loadBlob(documentContentVersion, outputStream);
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
     }
 

@@ -103,7 +103,7 @@ class MetadataMigrationIT extends BaseIT {
     }
 
     @Test
-    void "As an authenticated user  I want to process a CSV file which has missing metadata for one Case"() {
+    void "As a As authenticated user  I want to process a CSV file which has missing metadata for one Case"() {
         assumeTrue(metadataMigrationEnabled)
 
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
@@ -133,7 +133,7 @@ class MetadataMigrationIT extends BaseIT {
     }
 
     @Test
-    void "As an authenticated user I  want to process a CSV file which has missing metadata for one Case and valid metadata for Another"() {
+    void "As a As authenticated user I  want to process a CSV file which has missing metadata for one Case and valid metadata for Another"() {
         assumeTrue(metadataMigrationEnabled)
 
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
@@ -173,8 +173,7 @@ class MetadataMigrationIT extends BaseIT {
 
 
     @Test
-    void "As an authenticated user I want to process a CSV file which has random documentId generated and metadata should not be updated."() {
-
+    void "As a As authenticated user I want to process a CSV file which has random documentId generated and metadata should not be updated"() {
         assumeTrue(metadataMigrationEnabled)
 
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)

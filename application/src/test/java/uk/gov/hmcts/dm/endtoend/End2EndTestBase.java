@@ -23,8 +23,6 @@ import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -65,23 +63,9 @@ public abstract class End2EndTestBase {
     protected TestController testController;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
         when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(false);
-
-        doAnswer(invocation -> {
-            HttpServletResponse r = invocation.getArgument(2);
-            try (final InputStream inputStream = FILE.getInputStream();
-                 final OutputStream out = r.getOutputStream()
-            ) {
-                IOUtils.copy(inputStream, out);
-                return null;
-            }
-        }).when(blobStorageReadService).loadBlob(
-            any(DocumentContentVersion.class),
-            any(HttpServletRequest.class),
-            any(HttpServletResponse.class)
-        );
 
         doAnswer(invocation -> {
             try (final InputStream inputStream = FILE.getInputStream();
@@ -90,8 +74,7 @@ public abstract class End2EndTestBase {
                 IOUtils.copy(inputStream, out);
                 return null;
             }
-        }).when(blobStorageReadService).loadFullBlob(any(DocumentContentVersion.class), any(OutputStream.class));
-
+        }).when(blobStorageReadService).loadBlob(any(DocumentContentVersion.class), any(OutputStream.class));
         doAnswer(invocation -> {
             uploadDocument(invocation);
             return null;

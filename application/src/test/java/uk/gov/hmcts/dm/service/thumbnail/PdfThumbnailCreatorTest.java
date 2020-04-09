@@ -14,7 +14,6 @@ import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
@@ -112,7 +111,7 @@ public class PdfThumbnailCreatorTest {
     }
 
     @Test
-    public void shouldBuildThumbnailFromAzure() throws IOException {
+    public void shouldBuildThumbnailFromAzure() {
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
         when(contentVersion.getDocumentContent()).thenReturn(null);
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE);
@@ -123,12 +122,12 @@ public class PdfThumbnailCreatorTest {
             return null;
         })
                .when(blobStorageReadService)
-               .loadFullBlob(same(contentVersion), Mockito.any(OutputStream.class));
+               .loadBlob(same(contentVersion), Mockito.any(OutputStream.class));
 
         final InputStream thumbnail = pdfThumbnailService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
-        verify(blobStorageReadService).loadFullBlob(same(contentVersion), Mockito.any(OutputStream.class));
+        verify(blobStorageReadService).loadBlob(same(contentVersion), Mockito.any(OutputStream.class));
     }
 
 }

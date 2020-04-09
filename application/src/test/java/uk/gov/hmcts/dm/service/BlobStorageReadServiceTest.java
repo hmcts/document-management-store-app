@@ -6,53 +6,37 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.OutputStream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class})
+@PowerMockIgnore({"javax.net.ssl.*"})
 public class BlobStorageReadServiceTest {
 
     private BlobStorageReadService blobStorageReadService;
-    private DocumentContentVersion documentContentVersion;
-
-    @Mock
     private BlockBlobClient blob;
-
-    @Mock
     private BlobContainerClient cloudBlobContainer;
-
-    @Mock
     private BlobClient blobClient;
-
-    @Mock
-    private HttpServletRequest request;
-
-    @Mock
-    private HttpServletResponse response;
+    private DocumentContentVersion documentContentVersion;
+    private OutputStream outputStream;
 
     @Before
-    public void setUp() throws IOException {
-
-        blobStorageReadService = Mockito.mock(BlobStorageReadService.class);
-        cloudBlobContainer = Mockito.mock(BlobContainerClient.class);
-        blobClient = Mockito.mock(BlobClient.class);
-        blob = Mockito.mock(BlockBlobClient.class);
-        request = Mockito.mock(HttpServletRequest.class);
-        response = Mockito.mock(HttpServletResponse.class);
+    public void setUp() {
+        cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
+        blobClient = PowerMockito.mock(BlobClient.class);
+        blob = PowerMockito.mock(BlockBlobClient.class);
+        outputStream = mock(OutputStream.class);
 
         when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.getBlockBlobClient()).thenReturn(blob);
@@ -62,52 +46,10 @@ public class BlobStorageReadServiceTest {
     }
 
     @Test
-    public void loadsBlob() throws IOException {
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-        verify(blob).download(response.getOutputStream());
-    }
+    public void loadsBlob() {
+        blobStorageReadService.loadBlob(documentContentVersion, outputStream);
 
-    @Test(expected = InvalidRangeRequestException.class)
-    public void loadsRangedBlobInvalidRangeHeaderStart() throws IOException {
-
-        when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=A-Z");
-
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-
-    }
-
-    @Test(expected = InvalidRangeRequestException.class)
-    public void loadsRangedBlobInvalidRangeHeaderStartGreaterThanEnd() throws IOException {
-
-        when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=1023-0");
-
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-
-    }
-
-    @Test
-    public void loadsRangedBlobTooLargeRangeHeader() throws IOException {
-
-        when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=0-1023");
-
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-
-        // whole doc is returned so we never set the partial content header
-        Mockito.verify(response, Mockito.times(0)).setStatus(HttpStatus.PARTIAL_CONTENT.value());
-        Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 0-4/4");
-        Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_LENGTH, "5");
-    }
-
-    @Test
-    public void loadsRangedBlobInvalidRangeHeader() throws IOException {
-
-        when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=0-2");
-
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-
-        Mockito.verify(response, Mockito.times(1)).setStatus(HttpStatus.PARTIAL_CONTENT.value());
-        Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 0-2/4");
-        Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_LENGTH, "3");
+        verify(blob).download(outputStream);
     }
 
     @Test
