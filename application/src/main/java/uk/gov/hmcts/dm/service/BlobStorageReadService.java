@@ -58,7 +58,7 @@ public class BlobStorageReadService {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws IOException {
 
-        log.debug("Range header provided {}", documentContentVersion.getId());
+        log.debug("Range header provided; returning entire document {}", documentContentVersion.getId());
 
         String rangeHeader = request.getHeader(HttpHeaders.RANGE);
         log.debug("Range requested: {}", rangeHeader);
