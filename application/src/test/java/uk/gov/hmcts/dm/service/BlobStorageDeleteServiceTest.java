@@ -8,10 +8,12 @@ import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
@@ -26,15 +28,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobStorageException.class})
+@PowerMockIgnore({"javax.net.ssl.*"})
 public class BlobStorageDeleteServiceTest {
 
     private BlobStorageDeleteService blobStorageDeleteService;
 
-    @Mock
     private BlobContainerClient cloudBlobContainer;
 
-    @Mock
     private BlobClient blobClient;
 
     @Mock
@@ -44,11 +46,9 @@ public class BlobStorageDeleteServiceTest {
 
     @Before
     public void setUp() {
-
-        cloudBlobContainer = Mockito.mock(BlobContainerClient.class);
-        blobClient = Mockito.mock(BlobClient.class);
-        blob = Mockito.mock(BlockBlobClient.class);
-        documentContentVersionRepository = Mockito.mock(DocumentContentVersionRepository.class);
+        cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
+        blob = PowerMockito.mock(BlockBlobClient.class);
+        blobClient = PowerMockito.mock(BlobClient.class);
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
@@ -83,7 +83,7 @@ public class BlobStorageDeleteServiceTest {
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         documentContentVersion.setContentUri("x");
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(Mockito.mock(BlobStorageException.class));
+            .thenThrow(PowerMockito.mock(BlobStorageException.class));
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         assertNotNull(documentContentVersion.getContentUri());
     }
