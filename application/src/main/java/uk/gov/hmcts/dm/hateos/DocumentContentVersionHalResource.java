@@ -41,10 +41,7 @@ public class DocumentContentVersionHalResource extends HalResource {
 
         add(linkTo(methodOn(DocumentContentVersionController.class).getDocumentContentVersionDocumentBinary(
             documentContentVersion.getStoredDocument().getId(),
-            documentContentVersion.getId(),
-            null,
-            null
-        )).withRel("binary"));
+            documentContentVersion.getId(), null)).withRel("binary"));
 
         add(linkTo(methodOn(DocumentThumbnailController.class).getDocumentContentVersionDocumentPreviewThumbnail(
             documentContentVersion.getStoredDocument().getId(),

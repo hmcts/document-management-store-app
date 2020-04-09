@@ -4,7 +4,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +27,6 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -41,7 +39,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RestController
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")
-@Slf4j
 public class StoredDocumentController {
 
     @Autowired
@@ -109,53 +106,39 @@ public class StoredDocumentController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletRequest request, HttpServletResponse response) {
-
+    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response) {
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
 
+                response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+                response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+                response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                    format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+
                 try {
-                    response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-                    response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                        format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
-                    response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-
-                    // Set Default content size for whole document
-                    response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-
                     if (isBlank(documentContentVersion.getContentUri())) {
                         response.setHeader("data-source", "Postgres");
-                        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
                         auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
                             documentContentVersion,
                             response.getOutputStream());
                     } else {
                         response.setHeader("data-source", "contentURI");
-                        response.setHeader("Accept-Ranges", "bytes");
-                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
-
                         auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                             documentContentVersion,
-                            request,
-                            response);
+                            response.getOutputStream());
                     }
 
                 } catch (IOException e) {
-                    response.reset();
                     return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(e);
                 }
 
-                log.debug("Response: Content-Length, {}", response.getHeader(HttpHeaders.CONTENT_LENGTH));
-                log.debug("Response: Content-Type, {}", response.getHeader(HttpHeaders.CONTENT_TYPE));
-                log.debug("Response: Content-Range, {}", response.getHeader(HttpHeaders.CONTENT_RANGE));
-                log.debug("Response: Accept-Ranges, {}", response.getHeader(HttpHeaders.ACCEPT_RANGES));
-
                 return ResponseEntity.ok().build();
 
             })
-            .orElseGet(() -> ResponseEntity.notFound().build());
+            .orElse(ResponseEntity.notFound().build());
     }
 }
 

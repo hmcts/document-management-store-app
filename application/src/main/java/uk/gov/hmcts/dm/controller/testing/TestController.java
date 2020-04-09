@@ -3,7 +3,6 @@ package uk.gov.hmcts.dm.controller.testing;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.specialized.BlockBlobClient;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -15,11 +14,9 @@ import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.UUID;
 
 @RestController
-@Slf4j
 @RequestMapping(
     path = "/testing")
 @ConditionalOnProperty("toggle.testing")
@@ -38,20 +35,18 @@ public class TestController {
     }
 
     @GetMapping("/azure-storage-binary-exists/{id}")
-    public ResponseEntity<Boolean> get(@PathVariable UUID id) {
+    public ResponseEntity<Boolean> get(@PathVariable UUID id) throws Exception {
         return ResponseEntity.ok(blobStorageReadService.doesBinaryExist(id));
     }
 
     @PostMapping(value = "/metadata-migration-csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Boolean> uploadCsv(@Valid UploadDocumentsCommand command) throws BlobStorageException, IOException {
+    public ResponseEntity<Boolean> uploadCsv(@Valid UploadDocumentsCommand command) throws Exception {
         MultipartFile file = command.getFiles().get(0);
         BlockBlobClient client = blobClient.getBlobClient(file.getName()).getBlockBlobClient();
 
         try {
             client.delete();
-        } catch (BlobStorageException ignored) {
-            log.debug("Ignored BlobStorageException in TestController " + ignored.getMessage());
-        }
+        } catch (BlobStorageException ignored) { }
 
         client.upload(file.getInputStream(), file.getSize());
 
