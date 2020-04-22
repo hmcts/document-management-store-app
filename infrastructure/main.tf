@@ -30,11 +30,6 @@ locals {
   sharedAppServicePlan = "${var.shared_product}-${var.env}"
   sharedASPResourceGroup = "${var.shared_product}-shared-${var.env}"
   managed_identity_object_id = "${var.managed_identity_object_id}"
-
-  // Media Service
-  mediaServiceRgName = "${var.product}-media-service-rg-${var.env}"
-  mediaServiceSAName = "dmmediaservice${var.env}"
-  mediaServiceName = "${var.product}-media-service-${var.env}"
 }
 
 module "app" {
@@ -207,29 +202,11 @@ resource "azurerm_key_vault_secret" "secondary_connection_string" {
   key_vault_id = "${data.azurerm_key_vault.dm_shared_vault.id}"
 }
 
-resource "azurerm_resource_group" "dm_store_media_service_rg" {
-  count    = var.enable_azure_media_service ? 1 : 0
-  name     = local.mediaServiceRgName
-  location = var.location
-}
-
-resource "azurerm_storage_account" "dm_store_media_service_sa" {
-  count                    = var.enable_azure_media_service ? 1 : 0
-  name                     = local.mediaServiceSAName
-  resource_group_name      = azurerm_resource_group.dm_store_media_service_rg.name
-  location                 = azurerm_resource_group.dm_store_media_service_rg.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-}
-
-resource "azurerm_media_services_account" "dm_store_media_service" {
-  count               = var.enable_azure_media_service ? 1 : 0
-  name                = local.mediaServiceName
-  location            = azurerm_resource_group.dm_store_media_service_rg.location
-  resource_group_name = azurerm_resource_group.dm_store_media_service_rg.name
-
-  storage_account {
-    id         = azurerm_storage_account.dm_store_media_service_sa.id
-    is_primary = true
-  }
+module "azure-media-services" {
+  source                   = "git@github.com:hmcts/cnp-module-azure-media-services"
+  location                 = "${var.location}"
+  env                      = "${var.env}"
+  common_tags              = "${var.common_tags}"
+  product                  = "${var.product}"
+  enabled                  = "${var.enable_azure_media_service}"
 }
