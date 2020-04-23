@@ -153,6 +153,9 @@ dependencies {
 
     compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+    compile (group: 'io.springfox', name: 'springfox-data-rest', version: versions.springfoxSwagger) {
+        exclude group: 'org.springframework.hateoas', module: 'spring-hateoas'
+    }
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"3.0.0"
