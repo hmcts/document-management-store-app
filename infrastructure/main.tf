@@ -128,6 +128,15 @@ module "db" {
   common_tags     = var.common_tags
 }
 
+module "azure-media-services" {
+  source      = "git@github.com:hmcts/cnp-module-azure-media-services"
+  location    = var.location
+  env         = var.env
+  common_tags = var.common_tags
+  product     = var.product
+  enabled     = var.enable_azure_media_service
+}
+
 resource "azurerm_storage_container" "document_container" {
   name                  = "${local.app_full_name}-docstore-${var.env}"
   storage_account_name  = local.storageAccountNameDM
@@ -200,13 +209,4 @@ resource "azurerm_key_vault_secret" "secondary_connection_string" {
   name         = "dm-store-storage-account-secondary-connection-string"
   value        = data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-module "azure-media-services" {
-  source      = "git@github.com:hmcts/cnp-module-azure-media-services"
-  location    = var.location
-  env         = var.env
-  common_tags = var.common_tags
-  product     = var.product
-  enabled     = var.enable_azure_media_service
 }
