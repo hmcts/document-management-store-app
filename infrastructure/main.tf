@@ -202,3 +202,11 @@ resource "azurerm_key_vault_secret" "secondary_connection_string" {
   key_vault_id = "${data.azurerm_key_vault.dm_shared_vault.id}"
 }
 
+module "azure-media-services" {
+  source                   = "git@github.com:hmcts/cnp-module-azure-media-services"
+  location                 = "${var.location}"
+  env                      = "${var.env}"
+  common_tags              = "${var.common_tags}"
+  product                  = "${var.product}"
+  enabled                  = "${var.enable_azure_media_service}"
+}
