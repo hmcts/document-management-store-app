@@ -150,8 +150,7 @@ variable "enable_testing" {
 }
 
 variable "enable_azure_media_service" {
-  type = bool
-  default = false
+  default = "false"
 }
 
 ////////////////////////////////////////////////
