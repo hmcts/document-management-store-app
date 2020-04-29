@@ -1,4 +1,6 @@
 java:
+  memoryLimits: "4096Mi"
+  cpuLimits: "2000m"
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 60
