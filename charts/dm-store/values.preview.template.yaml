@@ -1,7 +1,7 @@
 java:
   devmemoryLimits: "3Gi"
   devmemoryRequests: "1Gi"
-  devcpuRequests:"500m"
+  devcpuRequests: "500m"
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 60
