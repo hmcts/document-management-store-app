@@ -1,5 +1,5 @@
 java:
-  devmemoryLimit: "4096Mi"
+  devmemoryLimits: "4096Mi"
   cpuLimits: "2000m"
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
