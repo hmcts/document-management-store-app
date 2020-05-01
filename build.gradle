@@ -54,7 +54,6 @@ configurations {
     smokeTestRuntime.extendsFrom(testRuntime)
 }
 
-
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-parameters' << '-Xlint:deprecation'
 }
@@ -63,9 +62,9 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-tasks.withType(Test) {
-    maxParallelForks = 3
-}
+//tasks.withType(Test) {
+//    maxParallelForks = 3
+//}
 
 repositories {
     maven { url "https://dl.bintray.com/hmcts/hmcts-maven" }
@@ -78,7 +77,6 @@ apply from: 'liquibase.gradle'
 def versions = [
     ehcache            : '3.7.1',
     jacocoMavenPlugin  : '0.8.2',
-    jetty              : '9.4.11.v20180605',
     jsonUnit           : '1.31.1',
     JUnitParams        : '1.1.1',
     lombok             : '1.18.10',
@@ -150,16 +148,6 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testCompile(group: 'com.github.tomakehurst', name: 'wiremock', version: '2.25.0') {
-        exclude(module: 'jetty')
-        exclude(module: 'httpclient')
-        exclude(module: 'json-path')
-        exclude(module: 'jopt-simple')
-        exclude(module: 'jetty-server')
-        exclude(module: 'jetty-servlet')
-        exclude(module: 'jetty-servlets')
-        exclude(module: 'jetty-webapp')
-    }
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit', version: versions.jsonUnit
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: versions.jsonUnit
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.2.1.RELEASE'
@@ -167,9 +155,6 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.5'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.5'
-    testCompile group: 'org.eclipse.jetty', name: 'jetty-server', version: versions.jetty
-    testCompile group: 'org.eclipse.jetty', name: 'jetty-servlet', version: versions.jetty
-    testCompile group: 'org.eclipse.jetty', name: 'jetty-servlets', version: versions.jetty
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
     testCompile group: 'io.rest-assured', name :'rest-assured', version:'3.3.0'
