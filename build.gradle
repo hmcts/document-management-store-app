@@ -1,15 +1,16 @@
 plugins {
     id 'application'
     id 'groovy'
-    id 'pmd'
+    id 'org.owasp.dependencycheck' version '5.3.0'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'org.springframework.boot' version '2.1.6.RELEASE'
     id 'com.github.ben-manes.versions' version '0.27.0'
     id 'org.sonarqube' version '2.8'
     id 'jacoco'
+    id 'checkstyle'
+    id 'pmd'
     id 'idea'
     id 'io.franzbecker.gradle-lombok' version '3.3.0'
-    id 'uk.gov.hmcts.java' version '0.5.0'
 }
 
 group = 'uk.gov.hmcts.reform.dm'
@@ -178,7 +179,21 @@ dependencies {
 }
 
 dependencyCheck {
-    suppressionFile = "$rootDir/config/owasp/dependency-check-suppressions.xml"
+    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+    // range of 0-10 fails the build, anything greater and it doesn't fail the build
+    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 11 : 0
+    suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
+    analyzers {
+        // Disable scanning of .NET related binaries
+        assemblyEnabled = false
+    }
+}
+
+checkstyle {
+    maxWarnings = 0
+    toolVersion = '8.8'
+    // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
+    configDir = new File(rootDir, 'config/checkstyle')
 }
 
 pmd {
