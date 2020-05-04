@@ -1,13 +1,11 @@
 #!groovy
 
 properties([
-    parameters([
-        booleanParam(
-            defaultValue: false,
-            description: 'Run Performance',
-            name: 'RUN_PT'
-        )
-    ])
+    [
+        $class: 'GithubProjectProperty',
+        displayName: 'Document Management Store API',
+        projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
+    ],
 ])
 
 @Library("Infrastructure")
@@ -41,177 +39,24 @@ def vaultOverrides = [
 ]
 
 withPipeline(type , product, component) {
-    onMaster {
-        env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
-        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-        enableSlackNotifications('#em-dev-chat')
-    }
-    onDemo {
-        enableSlackNotifications('#em-dev-chat')
-    }
-    onPR {
-        env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
-        env.ENABLE_METADATA_MIGRATION = true
-        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-        enableSlackNotifications('#em-dev-chat')
-    }
-
     enableDbMigration('ccd')
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
     installCharts()
     disableLegacyDeployment()
     enableAksStagingDeployment()
+    enableSlackNotifications('#em-dev-chat')
 
-    after('test'){
-        junit 'application/build/test-results/test/**/*.xml'
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "application/build/reports/tests/test/",
-            reportFiles          : 'index.html',
-            reportName           : 'Unit Test Report'
-        ])
+    onMaster {
+        env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "application/build/reports/checkstyle/",
-            reportFiles          : 'main.html',
-            reportName           : 'Checkstyle Main Report'
-        ])
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "application/build/reports/checkstyle/",
-            reportFiles          : 'test.html',
-            reportName           : 'Checkstyle Test Report'
-        ])
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "application/build/reports/pmd/",
-            reportFiles          : 'main.html',
-            reportName           : 'PMD Main Report'
-        ])
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "application/build/reports/pmd/",
-            reportFiles          : 'test.html',
-            reportName           : 'PMD Test Report'
-        ])
-
-        try {
-            sh './gradlew jacocoTestReport --info'
-        }finally {
-            jacoco(execPattern: 'application/build/jacoco/test.exec', buildOverBuild: false,
-                exclusionPattern: '**/test/*, ' +
-                    '**/uk/gov/hmcts/dm/DmApp.java,'+
-                    '**/uk/gov/hmcts/dm/hateos/*,'+
-                    '**/uk/gov/hmcts/dm/exception/*,'+
-                    '**/uk/gov/hmcts/dm/domain/*,'+
-                    '**/uk/gov/hmcts/dm/commandobject/*,'+
-                    '**/uk/gov/hmcts/dm/hibernate/*,'+
-                    '**/uk/gov/hmcts/dm/config/**/*,'+
-                    '**/uk/gov/hmcts/dm/errorhandler/*,'+
-                    '**/uk/gov/hmcts/dm/repository/RepositoryFinder.java')
-            publishHTML([
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : "application/build/reports/jacoco/test/html/",
-                reportFiles          : 'index.html',
-                reportName           : 'Jacoco Coverage Report'
-            ])
-        }
-        onMaster {
+        after('test') {
             sh '''
             curl https://raw.githubusercontent.com/hmcts/reform-api-docs/master/bin/publish-swagger-docs.sh > publish-swagger-docs.sh
             sh ./publish-swagger-docs.sh
-            '''
+             '''
         }
     }
 
-    after('smoketest:demo') {
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "smokeTests/build/reports/tests/smoke/",
-            reportFiles          : 'index.html',
-            reportName           : 'DEMO Smoke Test'
-        ])
-    }
-
-    after('functionalTest:demo') {
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "functionalTests/build/reports/tests/functional/",
-            reportFiles          : 'index.html',
-            reportName           : 'DEMO Functional Test'
-        ])
-    }
-
-    after('smoketest:preview') {
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "smokeTests/build/reports/tests/smoke/",
-            reportFiles          : 'index.html',
-            reportName           : 'PREVIEW Smoke Test'
-        ])
-    }
-
-    after('functionalTest:preview') {
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "functionalTests/build/reports/tests/functional/",
-            reportFiles          : 'index.html',
-            reportName           : 'PREVIEW Functional Test'
-        ])
-    }
-
-    after('smoketest:aat') {
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "smokeTests/build/reports/tests/smoke/",
-            reportFiles          : 'index.html',
-            reportName           : 'AAT Smoke Test'
-        ])
-    }
-
-    after('functionalTest:aat') {
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "functionalTests/build/reports/tests/functional/",
-            reportFiles          : 'index.html',
-            reportName           : 'AAT Functional Test'
-        ])
-    }
-
-    after('smoketest:prod'){
-        publishHTML([
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "smokeTests/build/reports/tests/smoke/",
-            reportFiles          : 'index.html',
-            reportName           : 'PROD Smoke Test'
-        ])
-    }
 }
