@@ -4,6 +4,7 @@
        <cve>CVE-2019-10782</cve>
        <cve>CVE-2020-1938</cve>
        <cve>CVE-2019-10797</cve>
+        <cve>CVE-2020-9488</cve>
     </suppress>
     <suppress>
         <notes><![CDATA[
