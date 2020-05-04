@@ -97,7 +97,6 @@ def versions = [
     serenity           : '2.0.23',
     serenityreporter   : '2.1.4',
     springBoot         : '2.2.6.RELEASE',
-    springfoxSwagger   : '2.9.2',
 ]
 
 dependencies {
@@ -135,8 +134,8 @@ dependencies {
 
     compile group: 'uk.gov.hmcts.reform', name: 'liquibase-core', version: '3.8.1'
 
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
-    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+    compile group: 'io.swagger', name: 'swagger-core', version: '1.6.1'
+    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"3.0.0"
