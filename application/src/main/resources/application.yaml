@@ -89,6 +89,14 @@ azure:
       blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
       enabled: true
       metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
+  media-services:
+    client:
+      id:
+      secret:
+    tenant:
+      id:
+    subscription:
+      id:
 
 postgres:
   storage:

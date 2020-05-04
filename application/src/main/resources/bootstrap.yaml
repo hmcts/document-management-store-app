@@ -9,3 +9,7 @@ spring:
         dm-store-storage-account-primary-connection-string: azure.storage.connection-string
         AppInsightsInstrumentationKey: azure.application-insights.instrumentation-key
         store-POSTGRES-PASS: spring.datasource.password
+        azure-media-services-client-id: azure.media-services.client.id
+        azure-media-services-client-secret: azure.media-services.client.secret
+        azure-media-services-tenant-id: azure.media-services.tenant.id
+        azure-media-services-subscription-id: azure.media-services.subscription.id
