@@ -83,10 +83,26 @@ def versions = [
     liquibase          : '3.8.1',
     postgresql         : '42.2.6',
     jackson            : '2.10.2',
-    powermock          : '1.7.4',
+    mockitoJupiter     : '3.0.0',
+    junit              : '5.5.1',
+    junitPlatform      : '1.5.1',
     springBoot         : '2.1.6.RELEASE',
     springfoxSwagger   : '2.9.2',
 ]
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-starter-parent:${versions.springBoot}"
+    }
+
+    dependencies {
+        // align with jupiter
+        dependencySet(group: 'org.mockito', version: versions.mockitoJupiter) {
+            entry 'mockito-core'
+        }
+    }
+}
+
 
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
@@ -153,8 +169,15 @@ dependencies {
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.2.1.RELEASE'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.5'
-    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.5'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
+    testCompile group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
+    testCompile group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+    testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: versions.mockitoJupiter
+    testCompile group: 'net.bytebuddy', name: 'byte-buddy', version: '1.10.1'
+    testCompile group: 'net.bytebuddy', name: 'byte-buddy-agent', version: '1.10.1'
+    testCompile group: 'org.objenesis', name: 'objenesis', version: '2.6'
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
     testCompile group: 'io.rest-assured', name :'rest-assured', version:'3.3.0'
