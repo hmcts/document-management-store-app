@@ -38,6 +38,9 @@ def vaultOverrides = [
     'spreview': 'saat'
 ]
 
+env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+
 withPipeline(type , product, component) {
     enableDbMigration('ccd')
     overrideVaultEnvironments(vaultOverrides)
@@ -48,8 +51,6 @@ withPipeline(type , product, component) {
     enableSlackNotifications('#em-dev-chat')
 
     onMaster {
-        env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
-        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
 
         after('test') {
             sh '''
