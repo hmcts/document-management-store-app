@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -110,6 +111,10 @@ public class StoredDocumentController {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
     public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletRequest request, HttpServletResponse response) {
+
+        for (String header : Collections.list(request.getHeaderNames())) {
+            log.debug("Request: " + header);
+        }
 
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
