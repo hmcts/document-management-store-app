@@ -6,12 +6,12 @@ spring:
 #    url: jdbc:h2:build/h2_db/test;DB_CLOSE_ON_EXIT=FALSE
     platform: h2
   jpa:
-    database-platform: uk.gov.hmcts.reform.dm.dialect.CustomH2Dialect
+    database-platform: uk.gov.hmcts.dm.dialect.CustomH2Dialect
     hibernate:
       ddl-auto: create-drop
     properties:
       hiberante:
-        dialect: uk.gov.hmcts.reform.dm.dialect.CustomH2Dialect
+        dialect: uk.gov.hmcts.dm.dialect.CustomH2Dialect
 
 azure:
   storage:
