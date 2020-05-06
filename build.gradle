@@ -13,9 +13,9 @@ plugins {
     id 'io.franzbecker.gradle-lombok' version '3.3.0'
 }
 
-group = 'uk.gov.hmcts.reform.dm'
+group = 'uk.gov.hmcts.dm'
 version = '2.0.0'
-mainClassName = 'uk.gov.hmcts.reform.dm.DmApp'
+mainClassName = 'uk.gov.hmcts.dm.DmApp'
 
 sourceSets {
     functionalTest {
