@@ -7,72 +7,72 @@
             <JDBC enabled="true"/>
             <MaxStatementQueryLimitInMS>1000</MaxStatementQueryLimitInMS>
         </BuiltIn>
-        <Class name="uk.gov.hmcts.dm.controller.DocumentContentVersionController">
+        <Class name="uk.gov.hmcts.reform.dm.controller.DocumentContentVersionController">
             <Method name="addDocumentContentVersion" reportCaughtExceptions="true"/>
             <Method name="addDocumentContentVersionForVersionsMappingNotPresent" reportCaughtExceptions="true"/>
             <Method name="getDocumentContentVersionDocument" reportCaughtExceptions="true"/>
             <Method name="getDocumentContentVersionDocumentBinary" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.controller.DocumentThumbnailController">
+        <Class name="uk.gov.hmcts.reform.dm.controller.DocumentThumbnailController">
             <Method name="getDocumentContentVersionDocumentPreviewThumbnail" reportCaughtExceptions="true"/>
             <Method name="getPreviewThumbnail" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.controller.FolderController">
+        <Class name="uk.gov.hmcts.reform.dm.controller.FolderController">
             <Method name="addDocuments" reportCaughtExceptions="true"/>
             <Method name="delete" reportCaughtExceptions="true"/>
             <Method name="get" reportCaughtExceptions="true"/>
             <Method name="post" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentAuditController">
+        <Class name="uk.gov.hmcts.reform.dm.controller.StoredDocumentAuditController">
             <Method name="findAudits" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentController">
+        <Class name="uk.gov.hmcts.reform.dm.controller.StoredDocumentController">
             <Method name="createFrom" reportCaughtExceptions="true"/>
             <Method name="getBinary" reportCaughtExceptions="true"/>
             <Method name="getMetaData" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentUpdateController">
+        <Class name="uk.gov.hmcts.reform.dm.controller.StoredDocumentUpdateController">
             <Method name="updateDocument" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentDeleteController">
+        <Class name="uk.gov.hmcts.reform.dm.controller.StoredDocumentDeleteController">
             <Method name="deleteDocument" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.controller.StoredDocumentSearchController">
+        <Class name="uk.gov.hmcts.reform.dm.controller.StoredDocumentSearchController">
             <Method name="search" reportCaughtExceptions="true"/>
             <Method name="searchOwned" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService">
+        <Class name="uk.gov.hmcts.reform.dm.service.batch.AuditedStoredDocumentBatchOperationsService">
             <Method name="hardDeleteStoredDocument" reportCaughtExceptions="true"/>
             <Method name="hardDeleteAllExpiredStoredDocuments" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.batch.DeleteAllExpiredStoredDocumentTasklet">
+        <Class name="uk.gov.hmcts.reform.dm.service.batch.DeleteAllExpiredStoredDocumentTasklet">
             <Method name="execute" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.thumbnail.AbstractFileSpecificThumbnailCreator">
+        <Class name="uk.gov.hmcts.reform.dm.service.thumbnail.AbstractFileSpecificThumbnailCreator">
             <Method name="getThumbnail" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.thumbnail.BufferedImageResizer">
+        <Class name="uk.gov.hmcts.reform.dm.service.thumbnail.BufferedImageResizer">
             <Method name="resizeImage" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService">
+        <Class name="uk.gov.hmcts.reform.dm.service.thumbnail.DocumentThumbnailService">
             <Method name="generateThumbnail" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.thumbnail.ImageThumbnailCreator">
+        <Class name="uk.gov.hmcts.reform.dm.service.thumbnail.ImageThumbnailCreator">
             <Method name="getImg" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.thumbnail.PdfThumbnailCreator">
+        <Class name="uk.gov.hmcts.reform.dm.service.thumbnail.PdfThumbnailCreator">
             <Method name="getImg" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.thumbnail.UnsupportedThumbnailCreator">
+        <Class name="uk.gov.hmcts.reform.dm.service.thumbnail.UnsupportedThumbnailCreator">
             <Method name="getThumbnail" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService">
+        <Class name="uk.gov.hmcts.reform.dm.service.AuditedDocumentContentVersionOperationsService">
             <Method name="readDocumentContentVersionBinary" reportCaughtExceptions="true"/>
             <Method name="readDocumentContentVersionBinaryFromBlobStore" reportCaughtExceptions="true"/>
             <Method name="readDocumentContentVersionThumbnail" reportCaughtExceptions="true"/>
             <Method name="readDocumentContentVersion" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService">
+        <Class name="uk.gov.hmcts.reform.dm.service.AuditedStoredDocumentOperationsService">
             <Method name="addDocumentVersion" reportCaughtExceptions="true"/>
             <Method name="createStoredDocuments" reportCaughtExceptions="true"/>
             <Method name="deleteStoredDocument" reportCaughtExceptions="true"/>
@@ -80,46 +80,46 @@
             <Method name="readStoredDocument" reportCaughtExceptions="true"/>
             <Method name="updateDocument" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.AuditEntryService">
+        <Class name="uk.gov.hmcts.reform.dm.service.AuditEntryService">
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.BlobCreator">
+        <Class name="uk.gov.hmcts.reform.dm.service.BlobCreator">
             <Method name="createBlob" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.BlobStorageReadService">
+        <Class name="uk.gov.hmcts.reform.dm.service.BlobStorageReadService">
             <Method name="loadBlob" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.BlobStorageWriteService">
+        <Class name="uk.gov.hmcts.reform.dm.service.BlobStorageWriteService">
             <Method name="uploadDocumentContentVersion" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.DocumentContentVersionService">
+        <Class name="uk.gov.hmcts.reform.dm.service.DocumentContentVersionService">
             <Method name="findMostRecentDocumentContentVersionByStoredDocumentId" reportCaughtExceptions="true"/>
             <Method name="streamDocumentContentVersion" reportCaughtExceptions="true"/>
             <Method name="findOne" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.FileContentVerifier">
+        <Class name="uk.gov.hmcts.reform.dm.service.FileContentVerifier">
             <Method name="verifyContentType" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.FolderService">
+        <Class name="uk.gov.hmcts.reform.dm.service.FolderService">
             <Method name="delete" reportCaughtExceptions="true"/>
             <Method name="save" reportCaughtExceptions="true"/>
             <Method name="findOneItem" reportCaughtExceptions="true"/>
             <Method name="findOne" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.SearchService">
+        <Class name="uk.gov.hmcts.reform.dm.service.SearchService">
             <Method name="findStoredDocumentsByCreator" reportCaughtExceptions="true"/>
             <Method name="findStoredDocumentsByMetadata" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.SecurityUtilService">
+        <Class name="uk.gov.hmcts.reform.dm.service.SecurityUtilService">
             <Method name="getCurrentlyAuthenticatedServiceName" reportCaughtExceptions="true"/>
             <Method name="getUserRoles" reportCaughtExceptions="true"/>
             <Method name="getUserId" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.StoredDocumentService">
+        <Class name="uk.gov.hmcts.reform.dm.service.StoredDocumentService">
             <Method name="addStoredDocumentVersion" reportCaughtExceptions="true"/>
             <Method name="deleteDocument" reportCaughtExceptions="true"/>
             <Method name="findOne" reportCaughtExceptions="true"/>
@@ -129,10 +129,10 @@
             <Method name="saveItemsToBucket" reportCaughtExceptions="true"/>
             <Method name="updateStoredDocument" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.security.PermissionEvaluatorImpl">
+        <Class name="uk.gov.hmcts.reform.dm.security.PermissionEvaluatorImpl">
             <Method name="hasPermission" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator">
+        <Class name="uk.gov.hmcts.reform.dm.security.domain.DomainPermissionEvaluator">
             <Method name="hasPermission" reportCaughtExceptions="true"/>
         </Class>
         <Class name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
