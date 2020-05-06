@@ -113,7 +113,7 @@ public class StoredDocumentController {
     public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletRequest request, HttpServletResponse response) {
 
         for (String header : Collections.list(request.getHeaderNames())) {
-            log.debug("Request: " + header);
+            log.debug("Request: {}, {}", header, request.getHeader(header));
         }
 
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
