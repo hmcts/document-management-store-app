@@ -147,6 +147,8 @@ dependencies {
     compile group: 'com.microsoft.azure', name: 'azure-client-runtime', version: '1.7.3'
     compile group: 'com.microsoft.azure.mediaservices.v2018_07_01', name: 'azure-mgmt-media', version: '1.0.0-beta'
     compile group: 'com.microsoft.azure', name: 'azure-client-authentication', version: '1.7.3'
+    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.6.4'
+
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {

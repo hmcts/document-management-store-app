@@ -33,14 +33,17 @@ public class AzureMediaServicesConfiguration {
         MediaManager manager = null;
 
         try {
+            // Connect to media services
             ApplicationTokenCredentials credentials = new ApplicationTokenCredentials(clientId, tenantId, clientSecret, AzureEnvironment.AZURE);
             credentials.withDefaultSubscriptionId(subscriptionId);
 
+            // MediaManager is the entry point to Azure Media resource management.
             manager = MediaManager
                 .configure()
                 .withLogLevel(LogLevel.BODY_AND_HEADERS)
                 .authenticate(credentials, credentials.defaultSubscriptionId());
             log.info(" AzureMediaServicesConfiguration created");
+            // Signed in.
 
         } catch (Exception e) {
                 log.error(e.getMessage(), e);
