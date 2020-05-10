@@ -111,12 +111,11 @@ public class AzureMediaUploadService {
                     List<String> urls = azureMediaAssetService.getHlsAndDashStreamingUrls(manager, resourceGroup, accountName, locator.name(), streamingEndpoint);
 
                     for (String url: urls) {
-                        log.info("Streaming URL : "+url);
+                        log.info("Streaming URL : " + url);
                     }
 
                     log.info("Copy and paste the Streaming URL into the Azure Media Player at 'http://aka.ms/azuremediaplayer'.");
-                }
-                else {
+                } else {
                     log.info("Could not find streaming endpoint: " + STREAMING_ENDPOINT_NAME);
                 }
 
@@ -131,8 +130,7 @@ public class AzureMediaUploadService {
                 if (cause instanceof AuthenticationException) {
                     log.error("ERROR: Authentication error, please check your account settings in appsettings.json.");
                     break;
-                }
-                else if (cause instanceof ApiErrorException) {
+                } else if (cause instanceof ApiErrorException) {
                     ApiErrorException apiException = (ApiErrorException) cause;
                     log.error("ERROR: " + apiException.body().error().message());
                     break;

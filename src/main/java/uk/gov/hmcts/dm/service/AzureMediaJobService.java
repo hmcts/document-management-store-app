@@ -41,10 +41,9 @@ public class AzureMediaJobService {
                 .withInput(jobInput)
                 .withOutputs(jobOutputs)
                 .create();
-        }
-        catch (ApiErrorException exception) {
-            log.error("ERROR: API call failed with error code " + exception.body().error().code() +
-                " and message '" + exception.body().error().message() + "'");
+        } catch (ApiErrorException exception) {
+            log.error("ERROR: API call failed with error code " + exception.body().error().code()
+                + " and message '" + exception.body().error().message() + "'");
             throw exception;
         }
 
@@ -63,7 +62,8 @@ public class AzureMediaJobService {
      */
     public Job waitForJobToFinish(MediaManager manager, String resourceGroup, String accountName,
                                   String transformName, String jobName) {
-        final int SLEEP_INTERVAL = 10 * 1000;
+
+        final int Sleep_Interval = 10 * 1000;
 
         Job job = null;
         boolean exit = false;
@@ -86,7 +86,7 @@ public class AzureMediaJobService {
                 }
 
                 try {
-                    Thread.sleep(SLEEP_INTERVAL);
+                    Thread.sleep(Sleep_Interval);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -98,7 +98,7 @@ public class AzureMediaJobService {
 
 
     /**
-     * Cleanup
+     * Cleanup.
      * @param manager               The entry point of Azure Media resource management.
      * @param resourceGroupName     The name of the resource group within the Azure subscription.
      * @param accountName           The Media Services account name.
@@ -123,8 +123,7 @@ public class AzureMediaJobService {
         if (stopEndpoint) {
             // Because we started the endpoint, we'll stop it.
             manager.streamingEndpoints().stopAsync(resourceGroupName, accountName, streamingEndpointName).await();
-        }
-        else {
+        } else {
             // We will keep the endpoint running because it was not started by this sample. Please note, There are costs to keep it running.
             // Please refer https://azure.microsoft.com/en-us/pricing/details/media-services/ for pricing.
             log.info("The endpoint '" + streamingEndpointName + "' is running. To halt further billing on the endpoint, please stop it in azure portal or AMS Explorer.");

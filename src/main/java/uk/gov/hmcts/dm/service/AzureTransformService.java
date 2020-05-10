@@ -39,9 +39,7 @@ public class AzureTransformService {
                 .getAsync(resourceGroup, accountName, transformName)
                 .toBlocking()
                 .first();
-        }
-        catch(NoSuchElementException nse)
-        {
+        } catch (NoSuchElementException nse) {
             // Media Services V3 throws an exception when not found.
             transform = null;
         }

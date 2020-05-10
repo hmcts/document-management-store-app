@@ -85,8 +85,7 @@ public class AzureMediaAssetService {
 
             if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.HLS) {
                 streamingUrls.add("HLS url: " + uriBuilder.toString());
-            }
-            else if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.DASH) {
+            } else if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.DASH) {
                 streamingUrls.add("DASH url: " + uriBuilder.toString());
             }
         }
@@ -111,8 +110,7 @@ public class AzureMediaAssetService {
             // If you already have an asset with the desired name, use the Assets.getAsync method
             // to get the existing asset.
             asset = manager.assets().getAsync(resourceGroupName, accountName, assetName).toBlocking().first();
-        }
-        catch (NoSuchElementException nse) {
+        } catch (NoSuchElementException nse) {
             asset = null;
         }
 
@@ -122,8 +120,7 @@ public class AzureMediaAssetService {
             // This method creates a container in storage for the Asset.
             // The files (blobs) associated with the asset will be stored in this container.
             asset = manager.assets().define(assetName).withExistingMediaservice(resourceGroupName, accountName).create();
-        }
-        else {
+        } else {
             // The asset already exists and we are going to overwrite it. In your application, if you don't want to overwrite
             // an existing asset, use an unique name.
             log.warn("Warning: The asset named " + assetName + "already exists. It will be overwritten.");
