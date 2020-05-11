@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.http.MediaType
@@ -10,7 +11,7 @@ import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assume.assumeTrue
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringIntegrationSerenityRunner.class)
 class AddContentVersionIT extends BaseIT {
 
     @Test
