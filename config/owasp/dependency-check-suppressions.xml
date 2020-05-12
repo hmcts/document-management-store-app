@@ -296,6 +296,7 @@ Another long cpe again
         <cve>CVE-2019-20444</cve>
         <cve>CVE-2020-1938</cve>
         <cve>CVE-2020-1935</cve>
+        <cve>CVE-2020-9488</cve>
     </suppress>
     <suppress>
         <notes>Temporarily suppress CVE for Netty (azure-storage-blob dep - still an issue in latest 12.6.0) </notes>
