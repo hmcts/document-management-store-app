@@ -130,7 +130,7 @@ class UpdateDocumentIT  extends BaseIT {
             .patch("/documents")
     }
 
-    @Test
+   /* @Test
     void "UD7 valid bulk update request"() {
         assumeTrue(toggleTtlEnabled)
 
@@ -153,7 +153,7 @@ class UpdateDocumentIT  extends BaseIT {
             .body("result", equalTo("Success"))
             .when()
             .patch("/documents")
-    }
+    }*/
 
 
 
