@@ -260,7 +260,7 @@ task functional(type: Test) {
     description = 'Executes functional tests'
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
-    include "uk/gov/hmcts/reform/dm/functional/**"
+    include "uk/gov/hmcts/dm/functional/**"
     failFast = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
@@ -271,7 +271,7 @@ task smoke(type: Test) {
     description = 'Executes non-destructive smoke tests'
     setTestClassesDirs(sourceSets.smokeTest.output.classesDirs)
     setClasspath(sourceSets.smokeTest.runtimeClasspath)
-    include "uk/gov/hmcts/reform/dm/smoke/**"
+    include "uk/gov/hmcts/dm/smoke/**"
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
