@@ -287,6 +287,10 @@ task functional(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
+serenity {
+    reports = ["single-page-html"]
+}
+
 task smoke(type: Test) {
     group = 'Delivery pipeline'
     description = 'Executes non-destructive smoke tests'
@@ -295,8 +299,4 @@ task smoke(type: Test) {
     include "uk/gov/hmcts/dm/smoke/**"
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-}
-
-serenity {
-    reports = ["single-page-html"]
 }
