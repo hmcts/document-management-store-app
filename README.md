@@ -68,3 +68,4 @@ To view our REST API go to {HOST}:{PORT}/swagger-ui.html
 A list of our endpoints can be found here
 > https://hmcts.github.io/reform-api-docs/swagger.html?url=https://hmcts.github.io/reform-api-docs/specs/document-management-store-app.json
 
+### Checking PR build
