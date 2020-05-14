@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.functional
 
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 
 import static org.hamcrest.Matchers.*
@@ -11,7 +11,7 @@ import static org.junit.Assume.assumeTrue
 import static org.junit.Assert.assertThat;
 
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringIntegrationSerenityRunner.class)
 class MetadataMigrationIT extends BaseIT {
 
     @Test
