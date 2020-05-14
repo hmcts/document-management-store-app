@@ -1,16 +1,13 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Test
-import org.junit.runner.RunWith
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
-@RunWith(SpringIntegrationSerenityRunner.class)
 class MultiMediaUploadIT extends BaseIT {
 
     @Test

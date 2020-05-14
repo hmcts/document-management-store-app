@@ -1,15 +1,12 @@
 package uk.gov.hmcts.dm.functional
 
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.Matchers.equalTo
 
-@RunWith(SpringIntegrationSerenityRunner.class)
 class ReadContentVersionIT extends BaseIT {
 
     String documentUrl
