@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.FunctionalTestContextConfiguration
 import uk.gov.hmcts.dm.functional.utilities.Classifications
@@ -23,7 +24,7 @@ import static org.hamcrest.Matchers.equalTo
 
 @NotThreadSafe
 @RunWith(SpringIntegrationSerenityRunner.class)
-@SpringBootTest(classes = FunctionalTestContextConfiguration)
+@SpringBootTest(classes = FunctionalTestContextConfiguration, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 abstract class BaseIT {
 
     @Autowired
@@ -39,6 +40,9 @@ abstract class BaseIT {
 
     @Value('${toggle.metadatamigration}')
     boolean metadataMigrationEnabled
+
+    @LocalServerPort
+    private int port;
 
     final String PASSWORD = '123'
 
@@ -131,6 +135,7 @@ abstract class BaseIT {
     void init() {
         RestAssured.baseURI = dmStoreBaseUri
         RestAssured.useRelaxedHTTPSValidation()
+        RestAssured.port = port
     }
 
     def givenUnauthenticatedRequest() {
