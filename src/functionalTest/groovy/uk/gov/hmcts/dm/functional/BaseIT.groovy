@@ -3,14 +3,13 @@ package uk.gov.hmcts.dm.functional
 import io.restassured.RestAssured
 import io.restassured.response.Response
 import net.jcip.annotations.NotThreadSafe
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Assert
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.MediaType
+import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.FunctionalTestContextConfiguration
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.FileUtils
@@ -23,8 +22,8 @@ import static io.restassured.RestAssured.given
 import static org.hamcrest.Matchers.equalTo
 
 @NotThreadSafe
-@RunWith(SpringIntegrationSerenityRunner.class)
-@SpringBootTest(classes = FunctionalTestContextConfiguration, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = FunctionalTestContextConfiguration)
 abstract class BaseIT {
 
     @Autowired
@@ -40,9 +39,6 @@ abstract class BaseIT {
 
     @Value('${toggle.metadatamigration}')
     boolean metadataMigrationEnabled
-
-    @LocalServerPort
-    private int port;
 
     final String PASSWORD = '123'
 
@@ -135,7 +131,6 @@ abstract class BaseIT {
     void init() {
         RestAssured.baseURI = dmStoreBaseUri
         RestAssured.useRelaxedHTTPSValidation()
-        RestAssured.port = port
     }
 
     def givenUnauthenticatedRequest() {
