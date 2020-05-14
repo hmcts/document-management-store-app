@@ -1,3 +1,10 @@
+buildscript {
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.83")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.1.4")
+    }
+}
+
 plugins {
     id 'application'
     id 'groovy'
@@ -73,6 +80,7 @@ repositories {
 }
 
 apply from: 'liquibase.gradle'
+apply plugin: 'net.serenity-bdd.aggregator'
 
 def versions = [
     ehcache            : '3.7.1',
@@ -85,6 +93,8 @@ def versions = [
     jackson            : '2.10.2',
     powermock          : '1.7.4',
     springBoot         : '2.1.6.RELEASE',
+    serenity           : '2.0.23',
+    serenityreporter   : '2.1.4',
     springfoxSwagger   : '2.9.2',
 ]
 
@@ -161,6 +171,12 @@ dependencies {
     testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
     testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
+
+    testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 }
 
 dependencyCheck {
@@ -264,6 +280,13 @@ task functional(type: Test) {
     failFast = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+}
+
+// Serenity Single page Reports
+functional.finalizedBy(aggregate)
+
+serenity {
+    reports = ["single-page-html"]
 }
 
 task smoke(type: Test) {

@@ -1,12 +1,12 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.http.MediaType
-import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.CoreMatchers.containsString
@@ -14,7 +14,7 @@ import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assume.assumeTrue
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringIntegrationSerenityRunner.class)
 class DeleteDocumentIT extends BaseIT {
     private citizenDocumentUrl
     private caseWorkerDocumentUrl
