@@ -18,7 +18,7 @@ public class AzureMediaUploadService {
     private static final Logger log = LoggerFactory.getLogger(AzureMediaUploadService.class);
 
     //TODO -  Please change this to your endpoint name
-    private static final String STREAMING_ENDPOINT_NAME = "se";
+    private static final String STREAMING_ENDPOINT_NAME = "jason-streaming-endpoint";
 
     @Value("${azure.media-services.resourcegroup}")
     private String resourceGroup;

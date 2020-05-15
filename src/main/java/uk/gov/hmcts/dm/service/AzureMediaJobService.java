@@ -117,9 +117,10 @@ public class AzureMediaJobService {
         }
 
         manager.jobs().deleteAsync(resourceGroupName, accountName, transformName, jobName).await();
-        manager.assets().deleteAsync(resourceGroupName, accountName, inputAssetName).await();
-        manager.assets().deleteAsync(resourceGroupName, accountName, outputAssetName).await();
-        manager.streamingLocators().deleteAsync(resourceGroupName, accountName, streamingLocatorName).await();
+        //TODO - Need to check if we need to delete below 3 things
+//        manager.assets().deleteAsync(resourceGroupName, accountName, inputAssetName).await();
+//        manager.assets().deleteAsync(resourceGroupName, accountName, outputAssetName).await();
+//        manager.streamingLocators().deleteAsync(resourceGroupName, accountName, streamingLocatorName).await();
         if (stopEndpoint) {
             // Because we started the endpoint, we'll stop it.
             manager.streamingEndpoints().stopAsync(resourceGroupName, accountName, streamingEndpointName).await();

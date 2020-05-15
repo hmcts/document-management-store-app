@@ -144,10 +144,11 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.2.RELEASE'
 
     compile group: 'com.microsoft.azure', name: 'azure-media', version: '0.9.8'
-    compile group: 'com.microsoft.azure', name: 'azure-client-runtime', version: '1.7.3'
-    compile group: 'com.microsoft.azure.mediaservices.v2018_07_01', name: 'azure-mgmt-media', version: '1.0.0-beta'
-    compile group: 'com.microsoft.azure', name: 'azure-client-authentication', version: '1.7.3'
-    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.6.4'
+    compile group: 'com.microsoft.azure', name: 'azure-client-runtime', version: '1.6.8'
+    compile group: 'com.microsoft.azure.mediaservices.v2018_07_01', name: 'azure-mgmt-media', version: '1.0.0-beta-4'
+    compile group: 'com.microsoft.azure', name: 'azure-client-authentication', version: '1.6.8'
+    compile group: 'com.microsoft.azure', name: 'azure-arm-client-runtime', version: '1.6.8'
+    compile group: 'com.microsoft.azure', name: 'azure-storage', version: '8.3.0'
 
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
