@@ -33,9 +33,6 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
-
-env.IDAM_S2S_BASE_URI = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
-
 def vaultOverrides = [
     'preview': 'aat',
     'spreview': 'saat'
@@ -60,6 +57,11 @@ withPipeline(type , product, component) {
             sh ./publish-swagger-docs.sh
              '''
         }
+    }
+    onPR {
+        env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+        env.ENABLE_METADATA_MIGRATION = true
+        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     }
 
 }
