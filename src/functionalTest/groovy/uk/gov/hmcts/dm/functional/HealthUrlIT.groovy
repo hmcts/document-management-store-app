@@ -1,12 +1,12 @@
 package uk.gov.hmcts.dm.functional
 
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.test.context.junit4.SpringRunner
 
 import static org.hamcrest.Matchers.equalTo
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringIntegrationSerenityRunner.class)
 class HealthUrlIT extends BaseIT {
 
     @Test
