@@ -1,7 +1,9 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.http.ContentType
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
@@ -10,6 +12,7 @@ import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
+@RunWith(SpringIntegrationSerenityRunner.class)
 class ErrorPageIT extends BaseIT {
 
     @Test

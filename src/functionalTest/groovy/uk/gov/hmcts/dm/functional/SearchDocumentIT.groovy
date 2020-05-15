@@ -2,13 +2,16 @@ package uk.gov.hmcts.dm.functional
 
 import groovy.json.JsonOutput
 import io.restassured.http.ContentType
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.Matchers
 import org.junit.Test
+import org.junit.runner.RunWith
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import static org.hamcrest.Matchers.equalTo
 
 
+@RunWith(SpringIntegrationSerenityRunner.class)
 class SearchDocumentIT extends BaseIT {
 
     @Test

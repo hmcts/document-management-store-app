@@ -1,9 +1,11 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
@@ -15,7 +17,7 @@ import java.time.LocalDateTime
 import static org.hamcrest.Matchers.*
 import static org.junit.Assume.assumeTrue
 
-
+@RunWith(SpringIntegrationSerenityRunner.class)
 class CreateDocumentIT extends BaseIT {
 
 
