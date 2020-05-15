@@ -33,6 +33,9 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+
+env.IDAM_S2S_BASE_URI = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
+
 def vaultOverrides = [
     'preview': 'aat',
     'spreview': 'saat'
