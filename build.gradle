@@ -1,3 +1,10 @@
+buildscript {
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.0.83")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.1.4")
+    }
+}
+
 plugins {
     id 'application'
     id 'groovy'
@@ -73,6 +80,7 @@ repositories {
 }
 
 apply from: 'liquibase.gradle'
+apply plugin: 'net.serenity-bdd.aggregator'
 
 def versions = [
     ehcache            : '3.7.1',
@@ -87,6 +95,8 @@ def versions = [
     junit              : '5.5.1',
     junitPlatform      : '1.5.1',
     springBoot         : '2.1.6.RELEASE',
+    serenity           : '2.0.23',
+    serenityreporter   : '2.1.4',
     springfoxSwagger   : '2.9.2',
 ]
 
@@ -184,6 +194,12 @@ dependencies {
     testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
     testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
+
+    testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+    testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 }
 
 dependencyCheck {
@@ -213,20 +229,20 @@ pmd {
 }
 
 def coverageExclusionList = [
-    '**uk/gov/hmcts/reform/dm/domain/',
-    '**uk/gov/hmcts/reform/dm/DmApp.java',
-    '**uk/gov/hmcts/reform/dm/hateos/*',
-    '**uk/gov/hmcts/reform/dm/exception/*',
-    '**uk/gov/hmcts/reform/dm/domain/*',
-    '**uk/gov/hmcts/reform/dm/commandobject/*',
-    '**uk/gov/hmcts/reform/dm/hibernate/*',
-    '**uk/gov/hmcts/reform/dm/config/**/*',
-    '**uk/gov/hmcts/reform/dm/errorhandler/*',
-    '**uk/gov/hmcts/reform/dm/repository/RepositoryFinder.java',
-    '**uk/gov/hmcts/reform/dm/service/batch/CustomItemWriter.java',
-    '**uk/gov/hmcts/reform/dm/appinsights/*',
-    '**uk/gov/hmcts/reform/dm/actuate/health/IdamHealth.java',
-    '**uk/gov/hmcts/reform/dm/actuate/health/IdamServiceHealth.java'
+    '**uk/gov/hmcts/dm/domain/',
+    '**uk/gov/hmcts/dm/DmApp.java',
+    '**uk/gov/hmcts/dm/hateos/*',
+    '**uk/gov/hmcts/dm/exception/*',
+    '**uk/gov/hmcts/dm/domain/*',
+    '**uk/gov/hmcts/dm/commandobject/*',
+    '**uk/gov/hmcts/dm/hibernate/*',
+    '**uk/gov/hmcts/dm/config/**/*',
+    '**uk/gov/hmcts/dm/errorhandler/*',
+    '**uk/gov/hmcts/dm/repository/RepositoryFinder.java',
+    '**uk/gov/hmcts/dm/service/batch/CustomItemWriter.java',
+    '**uk/gov/hmcts/dm/appinsights/*',
+    '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java',
+    '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java'
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
@@ -283,10 +299,17 @@ task functional(type: Test) {
     description = 'Executes functional tests'
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
-    include "uk/gov/hmcts/reform/dm/functional/**"
+    include "uk/gov/hmcts/dm/functional/**"
     failFast = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+}
+
+// Serenity Single page Reports
+functional.finalizedBy(aggregate)
+
+serenity {
+    reports = ["single-page-html"]
 }
 
 task smoke(type: Test) {
@@ -294,7 +317,7 @@ task smoke(type: Test) {
     description = 'Executes non-destructive smoke tests'
     setTestClassesDirs(sourceSets.smokeTest.output.classesDirs)
     setClasspath(sourceSets.smokeTest.runtimeClasspath)
-    include "uk/gov/hmcts/reform/dm/smoke/**"
+    include "uk/gov/hmcts/dm/smoke/**"
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
