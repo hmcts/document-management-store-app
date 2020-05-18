@@ -59,4 +59,18 @@ withPipeline(type , product, component) {
         }
     }
 
+    onPR {
+        env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+        env.ENABLE_METADATA_MIGRATION = true
+        env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    }
+
+    after('functionalTest:preview') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    }
+
+    after('functionalTest:aat') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    }
+
 }
