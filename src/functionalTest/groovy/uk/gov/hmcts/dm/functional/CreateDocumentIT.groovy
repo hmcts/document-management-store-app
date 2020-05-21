@@ -3,13 +3,13 @@ package uk.gov.hmcts.dm.functional
 import io.restassured.response.Response
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Assert
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
+import net.thucydides.core.annotations.Pending;
 
 import java.time.Duration
 import java.time.LocalDateTime
@@ -360,7 +360,8 @@ class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    @Ignore // FIXME RDM-3133 Thumbnail generation timing out
+    //@Ignore // FIXME RDM-3133 Thumbnail generation timing out
+    @Pending
     void "CD14 (R1) As authenticated user when i upload a JPEG, it gets a thumbnail"() {
         def url = givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
@@ -385,7 +386,8 @@ class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    @Ignore("Fail in CNP")
+    //@Ignore("Fail in CNP")
+    @Pending
     void "CD15 (R1) As authenticated user when I upload a pdf, I can get the thumbnail of that pdf"() {
         def url = givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
