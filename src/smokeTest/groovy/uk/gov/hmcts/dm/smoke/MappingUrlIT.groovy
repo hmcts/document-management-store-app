@@ -2,8 +2,8 @@ package uk.gov.hmcts.dm.smoke
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import net.thucydides.core.annotations.Pending
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Value
@@ -51,7 +51,8 @@ class MappingUrlIT extends BaseIT {
     }
 
     @Test
-    @Ignore("Not Testable")
+    @Pending
+    //@Ignore("Not Testable")
     void "toggle_documentandmetadatauploadendpoint toggle Mappings"() {
         assertTrue allEndpoints.any { it ==~ /(.*)(mappings)(.*)/ } == metadatasearchendpoint
     }
