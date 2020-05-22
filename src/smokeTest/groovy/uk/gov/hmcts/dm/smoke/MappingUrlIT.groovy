@@ -52,7 +52,7 @@ class MappingUrlIT extends BaseIT {
 
     @Test
     @Pending
-    //@Ignore("Not Testable")
+    //@Ignore("Not Testable") // FIXME To Revisit and keep/remove based on decision.
     void "toggle_documentandmetadatauploadendpoint toggle Mappings"() {
         assertTrue allEndpoints.any { it ==~ /(.*)(mappings)(.*)/ } == metadatasearchendpoint
     }

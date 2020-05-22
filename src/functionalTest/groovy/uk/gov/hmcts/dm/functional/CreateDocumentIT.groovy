@@ -35,20 +35,13 @@ class CreateDocumentIT extends BaseIT {
 
             .multiPart("files", file(WORD), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
             .multiPart("files", file(WORD_TEMPLATE), "application/vnd.openxmlformats-officedocument.wordprocessingml.template")
-            //.multiPart("files", file(WORD_MACRO_ENABLED), "application/vnd.ms-word.document.macroEnabled.12")
-//            .multiPart("files", file(WORD_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-word.template.macroEnabled.12")
 
             .multiPart("files", file(EXCEL), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-//            .multiPart("files", file(EXCEL_MACRO_ENABLED), "application/vnd.ms-excel.sheet.macroEnabled.12")
             .multiPart("files", file(EXCEL_TEMPLATE), "application/vnd.openxmlformats-officedocument.spreadsheetml.template")
-//            .multiPart("files", file(EXCEL_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-excel.template.macroEnabled.12")
 
             .multiPart("files", file(POWER_POINT), "application/vnd.openxmlformats-officedocument.presentationml.presentation")
-            //.multiPart("files", file(POWER_POINT_MACRO_ENABLED), "application/vnd.ms-powerpoint.presentation.macroEnabled.12")
             .multiPart("files", file(POWER_POINT_TEMPLATE), "application/vnd.openxmlformats-officedocument.presentationml.template")
-//            .multiPart("files", file(POWER_POINT_TEMPLATE_MACRO_ENABLED), "application/vnd.ms-powerpoint.template.macroenabled.12")
             .multiPart("files", file(POWER_POINT_SLIDE_SHOW), "application/vnd.openxmlformats-officedocument.presentationml.slideshow")
-//            .multiPart("files", file(POWER_POINT_SLIDE_SHOW_MACRO_ENABLED), "application/vnd.ms-powerpoint.slideshow.macroEnabled.12")
 
             .multiPart("files", file(WORD_OLD), "application/msword")
             .multiPart("files", file(EXCEL_OLD), "application/vnd.ms-excel")
@@ -344,18 +337,13 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .andReturn()
 
-//        def notepadUrl = response.path("_embedded.documents[0]._links.thumbnail.href")
         def tiffUrl = response.path("_embedded.documents[0]._links.thumbnail.href")
-
-//        def notepadByteArray =  givenRequest(CITIZEN)
-//        .get(notepadUrl).asByteArray()
 
         def tiffByteArray =  givenRequest(CITIZEN)
             .get(tiffUrl).asByteArray()
 
         def file = file("ThumbnailNPad.jpg").getBytes()
 
-        //Assert.assertTrue(Arrays.equals(notepadByteArray, file))
         Assert.assertTrue(Arrays.equals(tiffByteArray, file))
     }
 
