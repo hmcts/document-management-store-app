@@ -7,9 +7,11 @@ import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,17 @@ public class AzureMediaAssetService {
 
     private static final Logger log = LoggerFactory.getLogger(AzureMediaAssetService.class);
 
+    //TODO -  Please change this to your endpoint name
+    private static final String STREAMING_ENDPOINT_NAME = "jason-streaming-endpoint";
+
+    @Value("${azure.media-services.resourcegroup}")
+    private String resourceGroup;
+
+    @Value("${azure.media-services.account.name}")
+    private String accountName;
+
+    @Autowired
+    private MediaManager manager;
 
     /**
      * Create an asset.
@@ -63,16 +76,17 @@ public class AzureMediaAssetService {
 
     /**
      * Checks if the streaming endpoint is in the running state, if not, starts it.
-     * @param manager       The entry point of Azure Media resource management.
-     * @param resourceGroup The name of the resource group within the Azure subscription.
-     * @param accountName   The Media Services account name.
-     * @param locatorName   The name of the StreamingLocator that was created.
+     * @param manager       The entry point of Azure Media resource management
+     * @param resourceGroup The name of the resource group within the Azure subscription
+     * @param accountName   The Media Services account name
+     * @param locatorName   The name of the StreamingLocator that was created
      * @param streamingEndpoint     The streaming endpoint.
-     * @return              List of streaming urls.
+     * @return              List of streaming urls
      */
-    public List<String> getHlsAndDashStreamingUrls(MediaManager manager, String resourceGroup, String accountName,
-                                                           String locatorName, StreamingEndpoint streamingEndpoint) {
+    public List<String> getStreamingUrls(MediaManager manager, String resourceGroup, String accountName,
+                                                 String locatorName, StreamingEndpoint streamingEndpoint) {
         List<String> streamingUrls = new ArrayList<>();
+
         ListPathsResponse paths = manager.streamingLocators().listPathsAsync(resourceGroup, accountName, locatorName)
             .toBlocking().first();
 
@@ -83,11 +97,7 @@ public class AzureMediaAssetService {
                 .append("/")
                 .append(path.paths().get(0));
 
-            if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.HLS) {
-                streamingUrls.add("HLS url: " + uriBuilder.toString());
-            } else if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.DASH) {
-                streamingUrls.add("DASH url: " + uriBuilder.toString());
-            }
+            streamingUrls.add(uriBuilder.toString());
         }
         return streamingUrls;
     }
@@ -95,21 +105,17 @@ public class AzureMediaAssetService {
     /**
      * Creates a new input Asset and uploads the specified local video file into it.
      *
-     * @param manager           This is the entry point of Azure Media resource management.
-     * @param resourceGroupName The name of the resource group within the Azure subscription.
-     * @param accountName       The Media Services account name.
      * @param assetName         The name of the asset where the media file to uploaded to.
-     * @param fileToUpload      The Media file to be uploaded into the asset.
+     * @param file              The Media file to be uploaded into the asset.
      * @return                  The asset.
      */
-    public Asset createInputAsset(MediaManager manager, String resourceGroupName, String accountName,
-                                          String assetName, final File fileToUpload) throws Exception {
+    public Asset createInputAsset(String assetName, final MultipartFile file) throws Exception {
         Asset asset;
         try {
             // In this example, we are assuming that the asset name is unique.
             // If you already have an asset with the desired name, use the Assets.getAsync method
             // to get the existing asset.
-            asset = manager.assets().getAsync(resourceGroupName, accountName, assetName).toBlocking().first();
+            asset = manager.assets().getAsync(resourceGroup, accountName, assetName).toBlocking().first();
         } catch (NoSuchElementException nse) {
             asset = null;
         }
@@ -119,7 +125,7 @@ public class AzureMediaAssetService {
             // Call Media Services API to create an Asset.
             // This method creates a container in storage for the Asset.
             // The files (blobs) associated with the asset will be stored in this container.
-            asset = manager.assets().define(assetName).withExistingMediaservice(resourceGroupName, accountName).create();
+            asset = manager.assets().define(assetName).withExistingMediaservice(resourceGroup, accountName).create();
         } else {
             // The asset already exists and we are going to overwrite it. In your application, if you don't want to overwrite
             // an existing asset, use an unique name.
@@ -133,18 +139,18 @@ public class AzureMediaAssetService {
         ListContainerSasInput parameters = new ListContainerSasInput()
             .withPermissions(AssetContainerPermission.READ_WRITE).withExpiryTime(DateTime.now().plusHours(4));
         AssetContainerSas response = manager.assets()
-            .listContainerSasAsync(resourceGroupName, accountName, assetName, parameters).toBlocking().first();
+            .listContainerSasAsync(resourceGroup, accountName, assetName, parameters).toBlocking().first();
         URI sasUri = new URI(response.assetContainerSasUrls().get(0));
 
         // Use Storage API to get a reference to the Asset container
         // that was created by calling Asset's create method.
         CloudBlobContainer container = new CloudBlobContainer(sasUri);
 
-        CloudBlockBlob blob = container.getBlockBlobReference(fileToUpload.getName());
+        CloudBlockBlob blob = container.getBlockBlobReference(file.getOriginalFilename());
 
         // Use Storage API to upload the file into the container in storage.
         log.info("Uploading a media file to the asset...");
-        blob.uploadFromFile(fileToUpload.getPath());
+        blob.upload(file.getInputStream(), file.getSize());
 
         return asset;
 

@@ -16,23 +16,10 @@ import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 import uk.gov.hmcts.dm.utils.StringUtils;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor
@@ -99,6 +86,13 @@ public class DocumentContentVersion implements RolesAware {
     @Column(name = "content_checksum")
     private String contentChecksum;
 
+
+    @Getter
+    @Setter
+    @Column(name = "streaming_uris")
+    @ElementCollection
+    private List<String> streamingUris;
+
     public DocumentContentVersion(StoredDocument item,
                                   MultipartFile file,
                                   String userId,
@@ -127,7 +121,8 @@ public class DocumentContentVersion implements RolesAware {
                                   StoredDocument storedDocument,
                                   Long size,
                                   String contentUri,
-                                  String contentChecksum) {
+                                  String contentChecksum,
+                                  List<String> streamingUris) {
         this.id = id;
         this.mimeType = mimeType;
         setOriginalDocumentName(originalDocumentName);
@@ -139,6 +134,7 @@ public class DocumentContentVersion implements RolesAware {
         this.size = size;
         this.contentUri = contentUri;
         this.contentChecksum = contentChecksum;
+        this.streamingUris = streamingUris;
     }
 
     public Date getCreatedOn() {

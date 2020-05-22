@@ -1,18 +1,19 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.springframework.test.context.junit4.SpringRunner
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
-@RunWith(SpringIntegrationSerenityRunner.class)
+@RunWith(SpringRunner.class)
 class MultiMediaUploadIT extends BaseIT {
 
+    @org.junit.Ignore
     @Test
     void "MV1 (R1) As authenticated user I upload multi media files"() {
         uploadFileThenDownload("video_test.mp4", "video/mp4")
@@ -28,6 +29,35 @@ class MultiMediaUploadIT extends BaseIT {
         uploadFileThenDownload("audio_test.ogg", "audio/vorbis")
         uploadFileThenDownload("audio_test.wma", "audio/x-ms-wma")
         uploadFileThenDownload("audio_test.m4a", "audio/mp4")
+    }
+
+    @Test
+    void "MV2 (R2) As authenticated user I upload multi media files"() {
+        uploadFile("video_test.mp4", "video/mp4")
+    }
+
+    private uploadFile(String filename, String mimeType) {
+        Response response = givenRequest(CITIZEN)
+            .multiPart("files", file(filename), mimeType)
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect().log().all()
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+//
+//            .body("_embedded.documents[0].originalDocumentName", equalTo(filename))
+//            .body("_embedded.documents[0].mimeType", equalTo(mimeType))
+//            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
+//            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
+//            .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
+            .when()
+            .post("/documents")
+
+        String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
+        String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href")
+        println documentUrl1
+        println documentContentUrl1
     }
 
     private uploadFileThenDownload(String filename, String mimeType) {

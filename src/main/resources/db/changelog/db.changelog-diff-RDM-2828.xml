@@ -10,4 +10,11 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="streaming-url" author="yogesh(manual)" dbms="postgresql">
+        <!-- Add new Streaming Uris field to the documentcontentversion table -->
+        <addColumn tableName="documentcontentversion">
+            <column name="streaming_uris" type="varchar(512) []" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -9,8 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.service.AzureMediaUploadService;
 
-import java.io.File;
-
 @NotThreadSafe
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DmApp.class)
@@ -25,7 +23,7 @@ public class MediaServiceTest {
     @Test
     public void testUploadMediaFile() {
 
-        azureMediaUploadService.uploadMediaFile("emshowcasespike-streaming-transform",
-            new File(ClassLoader.getSystemResource(PDF_FILENAME).getFile()));
+//        azureMediaUploadService.uploadMediaFile("emshowcasespike-streaming-transform",
+//            new File(ClassLoader.getSystemResource(PDF_FILENAME).getFile()));
     }
 }

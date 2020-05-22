@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
@@ -72,11 +73,15 @@ public class StoredDocumentServiceTests {
     @Mock
     private BlobStorageDeleteService blobStorageDeleteService;
 
+    @Mock
+    private AzureMediaUploadService azureMediaUploadService;;
+
     @InjectMocks
     private StoredDocumentService storedDocumentService;
 
     @Before
     public void setUp() {
+        ReflectionTestUtils.setField(storedDocumentService, "mediaMimeTypes", Arrays.asList("video/mp4"));
         when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
     }
 

@@ -2,7 +2,10 @@ package uk.gov.hmcts.dm.service;
 
 import lombok.NonNull;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
@@ -30,6 +33,11 @@ import java.util.stream.Collectors;
 @Service
 public class StoredDocumentService {
 
+    private static final Logger log = LoggerFactory.getLogger(StoredDocumentService.class);
+
+    @Value("#{'${dm.media.allowed}'.split(',')}")
+    List<String> mediaMimeTypes;
+
     @Autowired
     private FolderRepository folderRepository;
 
@@ -56,6 +64,9 @@ public class StoredDocumentService {
 
     @Autowired
     private BlobStorageDeleteService blobStorageDeleteService;
+
+    @Autowired
+    private AzureMediaUploadService azureMediaUploadService;
 
     public Optional<StoredDocument> findOne(UUID id) {
         Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);
@@ -125,10 +136,27 @@ public class StoredDocumentService {
                                                                                            .isPostgresBlobStorageEnabled());
             document.getDocumentContentVersions().add(documentContentVersion);
             save(document);
-            storeInAzureBlobStorage(document, documentContentVersion, file);
-            closeBlobInputStream(documentContentVersion);
+            if (isMediaFile(file.getContentType())) {
+                try {
+
+                    azureMediaUploadService.uploadMediaFile("emshowcasespike-streaming-transform",
+                        file, documentContentVersion);
+
+                } catch (Exception e) {
+                    log.error("ERROR: Could not create InputAsset : " + e.getMessage());
+                }
+            }else{
+                storeInAzureBlobStorage(document, documentContentVersion, file);
+                closeBlobInputStream(documentContentVersion);
+            }
             return document;
         }).collect(Collectors.toList());
+
+    }
+
+    private boolean isMediaFile(String contentType) {
+
+        return mediaMimeTypes.contains(contentType);
 
     }
 
