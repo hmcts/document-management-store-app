@@ -74,7 +74,7 @@ public class StoredDocumentServiceTests {
     private BlobStorageDeleteService blobStorageDeleteService;
 
     @Mock
-    private AzureMediaUploadService azureMediaUploadService;;
+    private AzureMediaUploadService azureMediaUploadService;
 
     @InjectMocks
     private StoredDocumentService storedDocumentService;

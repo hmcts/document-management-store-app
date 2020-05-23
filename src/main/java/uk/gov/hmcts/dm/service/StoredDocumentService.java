@@ -145,18 +145,12 @@ public class StoredDocumentService {
                 } catch (Exception e) {
                     log.error("ERROR: Could not create InputAsset : " + e.getMessage());
                 }
-            }else{
+            } else {
                 storeInAzureBlobStorage(document, documentContentVersion, file);
                 closeBlobInputStream(documentContentVersion);
             }
             return document;
         }).collect(Collectors.toList());
-
-    }
-
-    private boolean isMediaFile(String contentType) {
-
-        return mediaMimeTypes.contains(contentType);
 
     }
 
@@ -258,5 +252,11 @@ public class StoredDocumentService {
         } catch (IOException e) {
             throw new UncheckedIOException("Unable to close blob stream", e);
         }
+    }
+
+    private boolean isMediaFile(String contentType) {
+
+        return mediaMimeTypes.contains(contentType);
+
     }
 }

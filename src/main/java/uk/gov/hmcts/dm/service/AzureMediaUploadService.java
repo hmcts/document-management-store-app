@@ -59,12 +59,12 @@ public class AzureMediaUploadService {
             amsJobRepository.save(AmsJob.builder().inputAssetName(inputAssetName)
                                                 .outputAssetName(outputAssetName)
                                                 .locatorName(locatorName)
-                                                .documentContentVersion(documentContentVersion )
+                                                .documentContentVersion(documentContentVersion)
                                                 .taskState(TaskState.NEW)
                                                 .build());
 
         } catch (Exception e) {
-            log.error("Error Creating Input  Asset : "+e.getMessage());
+            log.error("Error Creating Input  Asset : " + e.getMessage());
         }
     }
 
