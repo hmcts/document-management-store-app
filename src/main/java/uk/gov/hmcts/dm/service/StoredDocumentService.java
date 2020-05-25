@@ -14,13 +14,8 @@ import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
-import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.repository.DocumentContentRepository;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
-import uk.gov.hmcts.dm.repository.FolderRepository;
-import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
+import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.repository.*;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
@@ -67,6 +62,9 @@ public class StoredDocumentService {
 
     @Autowired
     private AzureMediaUploadService azureMediaUploadService;
+
+    @Autowired
+    private AmsJobRepository amsJobRepository;
 
     public Optional<StoredDocument> findOne(UUID id) {
         Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);
@@ -139,11 +137,15 @@ public class StoredDocumentService {
             if (isMediaFile(file.getContentType())) {
                 try {
 
-                    azureMediaUploadService.uploadMediaFile("emshowcasespike-streaming-transform",
-                        file, documentContentVersion);
+                    AmsJob amsJob = azureMediaUploadService.uploadMediaFile(file, documentContentVersion);
+
+                    azureMediaUploadService.submitJob(amsJob);
+
+                    amsJob.setJobStatus(JobStatus.IN_PROGRESS);
+                    amsJobRepository.save(amsJob);
 
                 } catch (Exception e) {
-                    log.error("ERROR: Could not create InputAsset : " + e.getMessage());
+                    log.error("ERROR: Dealing with Media File : " + e.getMessage());
                 }
             } else {
                 storeInAzureBlobStorage(document, documentContentVersion, file);

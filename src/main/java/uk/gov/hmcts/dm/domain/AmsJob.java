@@ -27,6 +27,8 @@ public class AmsJob {
 
     private String locatorName;
 
+    private String jobName;
+
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
@@ -35,7 +37,7 @@ public class AmsJob {
     private DocumentContentVersion documentContentVersion;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "task_state")
-    private TaskState taskState;
+    @Column(name = "job_status")
+    private JobStatus jobStatus;
 
 }
