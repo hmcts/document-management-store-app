@@ -42,7 +42,6 @@ withPipeline(type , product, component) {
     enableDbMigration('ccd')
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
-    installCharts()
     disableLegacyDeployment()
     enableAksStagingDeployment()
     enableSlackNotifications('#em-dev-chat')
