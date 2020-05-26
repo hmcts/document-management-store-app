@@ -1,8 +1,6 @@
 package uk.gov.hmcts.dm.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -13,7 +11,9 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AmsJob {
 
     @Id

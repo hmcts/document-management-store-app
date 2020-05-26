@@ -151,13 +151,31 @@ public class AzureMediaUploadService {
     }
 
     /**
+     * Returns a StreamingLocator for the specified asset and with the specified streaming policy name.
+     * Once the StreamingLocator is created the output asset is available to clients for playback.
+     * @param resourceGroup The name of the resource group within the Azure subscription.
+     * @param accountName   The Media Services account name.
+     * @param locatorName         The StreamingLocator name (unique in this case).
+     * @return                    The locator created.
+     */
+    public StreamingLocator getStreamingLocator(String resourceGroup, String accountName, String locatorName) {
+        // Note that we are using one of the PredefinedStreamingPolicies which tell the Origin component
+        // of Azure Media Services how to publish the content for streaming.
+        StreamingLocator locator = manager
+            .streamingLocators().getAsync(resourceGroup, accountName, locatorName)
+            .toBlocking().first();
+
+        return locator;
+    }
+
+    /**
      * Creates a StreamingLocator for the specified asset and with the specified streaming policy name.
      * Once the StreamingLocator is created the output asset is available to clients for playback.
      * @param outPutAssetName     The name of the output asset.
      * @param locatorName         The StreamingLocator name (unique in this case).
      * @return                    The locator created.
      */
-    public StreamingLocator getStreamingLocator(String outPutAssetName, String locatorName) {
+    public StreamingLocator createStreamingLocator(String outPutAssetName, String locatorName) {
         // Note that we are using one of the PredefinedStreamingPolicies which tell the Origin component
         // of Azure Media Services how to publish the content for streaming.
         StreamingLocator locator = manager
