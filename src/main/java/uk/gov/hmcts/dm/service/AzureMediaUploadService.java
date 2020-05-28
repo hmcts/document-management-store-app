@@ -11,16 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.domain.AmsJob;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.JobStatus;
+import uk.gov.hmcts.dm.domain.*;
 import uk.gov.hmcts.dm.repository.AmsJobRepository;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AzureMediaUploadService {
@@ -194,20 +189,38 @@ public class AzureMediaUploadService {
      * @param streamingEndpoint     The streaming endpoint.
      * @return              List of streaming urls
      */
-    public List<String> getStreamingUrls(String locatorName, StreamingEndpoint streamingEndpoint) {
-        List<String> streamingUrls = new ArrayList<>();
+    public Set<StreamingUrlComponent> getStreamingUrls(String locatorName, StreamingEndpoint streamingEndpoint) {
+
+        Set<StreamingUrlComponent> streamingUrls = new HashSet<>();
 
         ListPathsResponse paths = manager.streamingLocators().listPathsAsync(resourceGroup, accountName, locatorName)
             .toBlocking().first();
 
         for (StreamingPath path: paths.streamingPaths()) {
+            StreamingUrlComponent streamingUrlComponent = null;
             StringBuilder uriBuilder = new StringBuilder();
             uriBuilder.append("https://")
                 .append(streamingEndpoint.hostName())
                 .append("/")
                 .append(path.paths().get(0));
 
-            streamingUrls.add(uriBuilder.toString());
+            if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.HLS) {
+                streamingUrlComponent = StreamingUrlComponent.builder()
+                                                    .streamingProtocolType(StreamingProtocolType.HLS)
+                                                    .streamingUrl(uriBuilder.toString())
+                                                    .build();
+            } else if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.DASH) {
+                streamingUrlComponent = StreamingUrlComponent.builder()
+                    .streamingProtocolType(StreamingProtocolType.DASH)
+                    .streamingUrl(uriBuilder.toString())
+                    .build();
+            } else if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.SMOOTH_STREAMING) {
+                streamingUrlComponent = StreamingUrlComponent.builder()
+                    .streamingProtocolType(StreamingProtocolType.SMOOTH)
+                    .streamingUrl(uriBuilder.toString())
+                    .build();
+            }
+            streamingUrls.add(streamingUrlComponent);
         }
         return streamingUrls;
     }

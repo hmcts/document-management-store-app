@@ -19,7 +19,10 @@ import uk.gov.hmcts.dm.utils.StringUtils;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
@@ -86,12 +89,10 @@ public class DocumentContentVersion implements RolesAware {
     @Column(name = "content_checksum")
     private String contentChecksum;
 
-
     @Getter
     @Setter
-    @Column(name = "streaming_uris")
-    @ElementCollection
-    private List<String> streamingUris;
+    @OneToMany(mappedBy = "documentContentVersion", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<StreamingUrlComponent> streamingUris = new HashSet<>();
 
     public DocumentContentVersion(StoredDocument item,
                                   MultipartFile file,
@@ -122,7 +123,7 @@ public class DocumentContentVersion implements RolesAware {
                                   Long size,
                                   String contentUri,
                                   String contentChecksum,
-                                  List<String> streamingUris) {
+                                  Set<StreamingUrlComponent> streamingUris) {
         this.id = id;
         this.mimeType = mimeType;
         setOriginalDocumentName(originalDocumentName);

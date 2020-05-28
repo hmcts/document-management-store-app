@@ -20,4 +20,5 @@
     <include relativeToChangelogFile="true" file="./db.changelog-diff-EM-2390-shedlock.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-EM-2542-clean-batch-tables.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-EM-2861-ams.xml"/>
+    <include relativeToChangelogFile="true" file="./db.changelog-diff-EM-2861-suc.xml"/>
 </databaseChangeLog>
