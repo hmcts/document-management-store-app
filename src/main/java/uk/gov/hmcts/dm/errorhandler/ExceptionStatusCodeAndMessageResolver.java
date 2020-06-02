@@ -23,6 +23,7 @@ public class ExceptionStatusCodeAndMessageResolver {
 
     private Map<Class<? extends Throwable>, String> exceptionToMessageMap = new HashMap<>();
 
+
     @Autowired
     private MessageSource messageSource;
 
