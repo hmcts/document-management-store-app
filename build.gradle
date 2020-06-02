@@ -124,7 +124,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
-    compile 'uk.gov.hmcts.reform:health-spring-boot-starter:0.0.5'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
 

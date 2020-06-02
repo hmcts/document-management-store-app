@@ -4,6 +4,7 @@ import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededExceptio
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Map;
 
 @ControllerAdvice()
@@ -38,7 +40,7 @@ public class DocumentStoreControllerAdvice extends ResponseEntityExceptionHandle
     @ResponseBody
     ResponseEntity<?> handleControllerException(HttpServletRequest request, Throwable ex) {
         WebRequest webRequest = new ServletWebRequest(request);
-        Map<String, Object> body = errorAttributes.getErrorAttributes(webRequest, globalIncludeStackTrace);
+        Map<String, Object> body = errorAttributes.getErrorAttributes(webRequest, getOptions());
 
         return new ResponseEntity<>(body, getStatus(webRequest));
     }
@@ -46,7 +48,7 @@ public class DocumentStoreControllerAdvice extends ResponseEntityExceptionHandle
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
         MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        Map<String, Object> body = errorAttributes.getErrorAttributes(request, globalIncludeStackTrace);
+        Map<String, Object> body = errorAttributes.getErrorAttributes(request, getOptions());
 
         return handleExceptionInternal(ex, body, headers, getStatus(request), request);
     }
@@ -58,5 +60,13 @@ public class DocumentStoreControllerAdvice extends ResponseEntityExceptionHandle
         }
 
         return HttpStatus.valueOf(statusCode);
+    }
+
+    private ErrorAttributeOptions getOptions() {
+        ArrayList<ErrorAttributeOptions.Include> includes = new ArrayList<ErrorAttributeOptions.Include>();
+        if (globalIncludeStackTrace) {
+            includes.add(ErrorAttributeOptions.Include.STACK_TRACE);
+        }
+        return ErrorAttributeOptions.of(includes);
     }
 }
