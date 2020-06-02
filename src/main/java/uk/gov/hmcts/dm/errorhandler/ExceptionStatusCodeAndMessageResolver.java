@@ -31,7 +31,7 @@ public class ExceptionStatusCodeAndMessageResolver {
     public void init() {
         exceptionToStatusCodeMap.put(FileSizeLimitExceededException.class, 413);
         exceptionToStatusCodeMap.put(SizeLimitExceededException.class, 413);
-        exceptionToStatusCodeMap.put(MethodArgumentTypeMismatchException.class, 400);
+        exceptionToStatusCodeMap.put(MethodArgumentTypeMismatchException.class, 404);
         exceptionToStatusCodeMap.put(MethodArgumentNotValidException.class, 422);
 
         exceptionToMessageMap.put(MethodArgumentNotValidException.class, "Request validation failed");
