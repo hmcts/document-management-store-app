@@ -34,7 +34,7 @@ public class ExceptionStatusCodeAndMessageResolver {
         exceptionToStatusCodeMap.put(MethodArgumentTypeMismatchException.class, 404);
         exceptionToStatusCodeMap.put(MethodArgumentNotValidException.class, 422);
 
-        exceptionToMessageMap.put(MethodArgumentNotValidException.class, "Request validation failed");
+        exceptionToMessageMap.put(MethodArgumentNotValidException.class, "Your upload contains a disallowed file type");
     }
 
     public ErrorStatusCodeAndMessage resolveStatusCodeAndMessage(

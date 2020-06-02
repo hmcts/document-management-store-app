@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
@@ -63,8 +64,8 @@ public class WebConfig {
         return new DefaultErrorAttributes() {
 
             @Override
-            public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
-                Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, true);
+            public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+                Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, options);
 
                 List<FieldError> errors = (List<FieldError>)errorAttributes.remove("errors");
 
@@ -77,7 +78,6 @@ public class WebConfig {
                         (Integer) webRequest.getAttribute("javax.servlet.error.status_code", 0),
                         errors);
 
-                errorAttributes.put("message", errorStatusCodeAndMessage.getMessage());
                 errorAttributes.put("error", errorStatusCodeAndMessage.getMessage());
                 webRequest.setAttribute("javax.servlet.error.status_code", errorStatusCodeAndMessage.getStatusCode(), 0);
                 errorAttributes.put("status", errorStatusCodeAndMessage.getStatusCode());
@@ -85,10 +85,12 @@ public class WebConfig {
                     log.error(throwable.getMessage(), throwable);
                 }
 
-                if (!includeStackTrace) {
+                if (!options.isIncluded(ErrorAttributeOptions.Include.STACK_TRACE)) {
                     errorAttributes.remove("exception");
                     errorAttributes.remove("trace");
                 }
+
+                errorAttributes.remove("message");
 
                 return errorAttributes;
             }
