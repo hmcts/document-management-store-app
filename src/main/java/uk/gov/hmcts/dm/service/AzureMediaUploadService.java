@@ -205,24 +205,22 @@ public class AzureMediaUploadService {
                 .append(path.paths().get(0));
 
             if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.HLS) {
-                streamingUrlComponent = StreamingUrlComponent.builder()
-                                                    .streamingProtocolType(StreamingProtocolType.HLS)
-                                                    .streamingUrl(uriBuilder.toString())
-                                                    .build();
+                streamingUrlComponent = createStreamingUrlComponent(uriBuilder.toString(), StreamingProtocolType.HLS);
             } else if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.DASH) {
-                streamingUrlComponent = StreamingUrlComponent.builder()
-                    .streamingProtocolType(StreamingProtocolType.DASH)
-                    .streamingUrl(uriBuilder.toString())
-                    .build();
+                streamingUrlComponent = createStreamingUrlComponent(uriBuilder.toString(), StreamingProtocolType.DASH);
             } else if (path.streamingProtocol() == StreamingPolicyStreamingProtocol.SMOOTH_STREAMING) {
-                streamingUrlComponent = StreamingUrlComponent.builder()
-                    .streamingProtocolType(StreamingProtocolType.SMOOTH)
-                    .streamingUrl(uriBuilder.toString())
-                    .build();
+                streamingUrlComponent = createStreamingUrlComponent(uriBuilder.toString(), StreamingProtocolType.SMOOTH);
             }
             streamingUrls.add(streamingUrlComponent);
         }
         return streamingUrls;
+    }
+
+    private StreamingUrlComponent createStreamingUrlComponent(String uri, StreamingProtocolType hls) {
+        return StreamingUrlComponent.builder()
+            .streamingProtocolType(hls)
+            .streamingUrl(uri)
+            .build();
     }
 
 
@@ -252,30 +250,6 @@ public class AzureMediaUploadService {
                 + " and message '" + exception.body().error().message() + "'");
             throw exception;
         }
-    }
-
-    /**
-     * Checks for the status of the Job.
-     *
-     * @param amsJob        The AmsJob.
-     * @return              True if encoding Job is completed else False.
-     */
-    public boolean isEncodingJobCompleted(final AmsJob amsJob) {
-
-        //TODO - Do all below inside the Processor
-        Job job = manager.jobs().getAsync(resourceGroup, accountName, encodingTransformName, amsJob.getJobName())
-            .toBlocking().first();
-
-        //TODO - How to handle failed Jobs?
-        if (job.state() == JobState.FINISHED) {
-            //TODO - Call the methods to create Streaming Locator, create Streaming URI's and Save the Streaming URI's against DocumentContentVersion
-        } else if (job.state() == JobState.ERROR || job.state() == JobState.CANCELED) {
-            amsJob.setJobStatus(JobStatus.FAILED);
-            //TODO - Just log the error with failed AmsJob details
-        }
-
-        return false;
-
     }
 
     /**
