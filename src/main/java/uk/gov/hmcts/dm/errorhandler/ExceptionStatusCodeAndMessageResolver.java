@@ -31,6 +31,7 @@ public class ExceptionStatusCodeAndMessageResolver {
     public void init() {
         exceptionToStatusCodeMap.put(FileSizeLimitExceededException.class, 413);
         exceptionToStatusCodeMap.put(SizeLimitExceededException.class, 413);
+//        exceptionToStatusCodeMap.put(IllegalArgumentException.class, 404);
         exceptionToStatusCodeMap.put(MethodArgumentTypeMismatchException.class, 404);
         exceptionToStatusCodeMap.put(MethodArgumentNotValidException.class, 422);
 
