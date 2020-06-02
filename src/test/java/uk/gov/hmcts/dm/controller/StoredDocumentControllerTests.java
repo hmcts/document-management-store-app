@@ -236,7 +236,8 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
             .get("/documents/123456")
-            .andExpect(status().isBadRequest());
+//            .andExpect(status().isBadRequest());
+            .andExpect(status().isNotFound());
     }
 
 }
