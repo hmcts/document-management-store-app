@@ -95,7 +95,7 @@ class UpdateDocumentIT  extends BaseIT {
             .contentType(ContentType.JSON)
             .expect()
             .statusCode(400)
-//            .body("ttl", equalTo(null)) // @todo should this whole body be null or 400 with a body?
+            .body("ttl", equalTo(null))
             .when()
             .patch(documentUrl)
 
