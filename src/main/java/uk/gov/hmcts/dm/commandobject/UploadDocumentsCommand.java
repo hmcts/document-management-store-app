@@ -19,9 +19,11 @@ import java.util.Map;
 @Data
 public class UploadDocumentsCommand {
 
+    public static final String DISALLOWED_FILE_ERR_MSG = "Your upload contains a disallowed file type.";
+
     @NotNull(message = "Provide some files to be uploaded.")
     @Size(min = 1, message = "Please provide at least one file to be uploaded.")
-    @MultipartFileListWhiteList(message = "Your upload contains a disallowed file type.")
+    @MultipartFileListWhiteList(message = DISALLOWED_FILE_ERR_MSG)
     private List<MultipartFile> files;
 
     @NotNull(message = "Please provide classification")
