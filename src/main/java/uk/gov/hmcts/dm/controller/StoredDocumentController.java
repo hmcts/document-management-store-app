@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.exception.DisallowedFileTypeException;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
@@ -72,11 +71,7 @@ public class StoredDocumentController {
             BindingResult result) throws MethodArgumentNotValidException {
 
         if (result.hasErrors()) {
-            if (result.getFieldError("files").getDefaultMessage().equals(UploadDocumentsCommand.DISALLOWED_FILE_ERR_MSG)) {
-                throw new DisallowedFileTypeException(uploadDocumentsCommandMethodParameter, result);
-            } else {
-                throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
-            }
+            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
             List<StoredDocument> storedDocuments =
                     auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
