@@ -9,6 +9,7 @@ import org.springframework.hateoas.server.core.Relation;
 import uk.gov.hmcts.dm.controller.FolderController;
 import uk.gov.hmcts.dm.domain.Folder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -35,10 +36,10 @@ public class FolderHalResource extends HalResource {
         BeanUtils.copyProperties(folder, this);
         if (folder.getStoredDocuments() != null) {
             CollectionModel<StoredDocumentHalResource> itemResources =
-                    new CollectionModel<>(folder.getStoredDocuments()
+                    CollectionModel.of(new ArrayList<>(folder.getStoredDocuments()
                             .stream()
                             .map(StoredDocumentHalResource::new)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())));
             embedResource("items", itemResources);
         }
         add(linkTo(methodOn(FolderController.class).get(folder.getId())).withSelfRel());
