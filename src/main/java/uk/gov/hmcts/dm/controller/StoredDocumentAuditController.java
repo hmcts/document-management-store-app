@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +16,7 @@ import uk.gov.hmcts.dm.hateos.StoredDocumentAuditEntryHalResource;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.AuditEntryService;
 
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -36,11 +36,11 @@ public class StoredDocumentAuditController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success", response = StoredDocumentAuditEntryHalResource.class)
     })
-    public ResponseEntity<CollectionModel<StoredDocumentAuditEntryHalResource>> findAudits(@PathVariable UUID documentId) {
+    public ResponseEntity<ArrayList<StoredDocumentAuditEntryHalResource>> findAudits(@PathVariable UUID documentId) {
         return storedDocumentRepository
             .findById(documentId)
             .map(storedDocument -> ResponseEntity.ok()
-                .contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE).body(new CollectionModel<>(
+                .contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE).body(new ArrayList<StoredDocumentAuditEntryHalResource>(
                     auditEntryService
                         .findStoredDocumentAudits(storedDocument)
                         .stream()

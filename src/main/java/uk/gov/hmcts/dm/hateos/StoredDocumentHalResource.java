@@ -16,6 +16,7 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +77,7 @@ public class StoredDocumentHalResource extends HalResource {
 
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {
             CollectionModel<DocumentContentVersionHalResource> versionResources =
-                    new CollectionModel<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList()));
+                    CollectionModel.of(new ArrayList<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList())));
             embedResource("allDocumentVersions", versionResources);
 
         }
