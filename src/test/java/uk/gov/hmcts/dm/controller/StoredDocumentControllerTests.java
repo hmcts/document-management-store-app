@@ -236,9 +236,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
             .get("/documents/123456")
-            .andExpect(status().isNotFound());
-        // @todo confirm this is ok. changed from 400 as there is a test called
-        //  should_throw_404_when_MethodArgumentTypeMismatchException_thrown
+            .andExpect(status().isBadRequest());
     }
 
 }
