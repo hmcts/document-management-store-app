@@ -3,8 +3,13 @@ package uk.gov.hmcts.dm.functional.utilities
 class FileUtils {
 
     File getResourceFile(String fileName) {
-        new File(getClass().getClassLoader().getResource(fileName).path.replace("%20", " "))
+        String file = getClass().getClassLoader().getResource(fileName).getFile();
+
+        try {
+            String result = URLDecoder.decode(file, "UTF-8");
+            new File(result);
+        } catch (UnsupportedEncodingException e) {
+            new File(file);
+        }
     }
-
-
 }
