@@ -90,6 +90,7 @@ class UpdateDocumentIT  extends BaseIT {
             .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
             .when()
             .patch(documentUrl)
+
         givenRequest(CITIZEN)
             .contentType(ContentType.JSON)
             .expect()
