@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.errorhandler;
 
-import org.apache.tomcat.util.http.fileupload.FileUploadBase;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,8 +52,8 @@ public class ExceptionStatusCodeAndMessageResolverTest {
 
     @Test
     public void should_find_cause_from_exception_and_return_appropriate_code() {
-        final FileUploadBase.FileSizeLimitExceededException fileSizeLimitExceededException =
-                new FileUploadBase.FileSizeLimitExceededException("Too Big", 1234, 1024);
+        final FileSizeLimitExceededException fileSizeLimitExceededException =
+                new FileSizeLimitExceededException("Too Big", 1234, 1024);
         final MultipartException multipartException =
                 new MultipartException("Limit exceeded", fileSizeLimitExceededException);
 
