@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.functional
 
+import io.restassured.http.ContentType
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Assert
 import org.junit.Test
@@ -410,4 +411,29 @@ class ReadDocumentIT extends BaseIT {
             .when()
             .get(documentUrl)
     }
+
+    @Test
+    void "R28 As a citizen if I update metadata for a document then I should be able to access the updated metadata"() {
+
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN
+
+        def mp = ["rotationAngle" : "90"]
+
+        givenRequest(CITIZEN)
+            .body([metadata: mp])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(200)
+            .when()
+            .patch(documentUrl)
+
+        Map<String, String> map =  givenRequest(CITIZEN)
+                                        .expect()
+                                        .statusCode(200)
+                                        .when()
+                                        .get(documentUrl).body().path("metadata")
+
+        Assert.assertEquals(map.get("rotationAngle"), "90")
+    }
+
 }
