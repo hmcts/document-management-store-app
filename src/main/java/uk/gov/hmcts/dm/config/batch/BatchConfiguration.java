@@ -103,7 +103,7 @@ public class BatchConfiguration {
 
     public Step step1() {
         return stepBuilderFactory.get("step1")
-            .<StoredDocument, StoredDocument>chunk(10)
+            .<StoredDocument, StoredDocument>chunk(100)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
