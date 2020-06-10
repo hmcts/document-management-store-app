@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.controller;
 
+import net.thucydides.core.annotations.Pending;
 import org.junit.Ignore;
 import org.junit.Test;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
@@ -77,6 +78,7 @@ public class FolderControllerTests extends ComponentTestBase {
 
     @Test
     @Ignore("Code Removed at the moment called as 405")
+    @Pending
     public void testDeleteSuccess() throws Exception {
         when(this.folderService.findById(TestUtil.RANDOM_UUID))
             .thenReturn(Optional.of(TestUtil.TEST_FOLDER));
@@ -90,6 +92,7 @@ public class FolderControllerTests extends ComponentTestBase {
 
     @Test
     @Ignore("Code Removed at the moment called as 405")
+    @Pending
     public void testDeleteFailure() throws Exception {
         given(this.folderService.findById(TestUtil.RANDOM_UUID)).willReturn(null);
 
