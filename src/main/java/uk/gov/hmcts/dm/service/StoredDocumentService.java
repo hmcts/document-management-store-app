@@ -176,7 +176,7 @@ public class StoredDocumentService {
     }
 
     public void updateStoredDocument(@NonNull StoredDocument storedDocument, @NonNull UpdateDocumentCommand command) {
-        updateStoredDocument(storedDocument, command.getTtl(), null);
+        updateStoredDocument(storedDocument, command.getTtl(), command.getMetadata());
     }
 
     public void updateStoredDocument(
