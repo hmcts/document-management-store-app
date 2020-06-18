@@ -556,7 +556,7 @@ class CreateDocumentIT extends BaseIT {
             .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0]._links.binary.href", containsString(forwardedHost))
+            .body("_embedded.documents[0]._links.binary.href", not(containsString(forwardedHost)))
             .when()
             .post("/documents")
     }
