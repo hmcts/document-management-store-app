@@ -546,4 +546,18 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
     }
 
+    @Test
+    void "CD28 As authenticated user I can upload with x-forward headers"() {
+        def forwardedHost = "ccd-gateway.service.internal";
+        givenRequest(CITIZEN)
+            .header("x-forwarded-host", forwardedHost)
+            .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("classification", Classifications.PRIVATE as String)
+            .expect()
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+            .body("_embedded.documents[0]._links.binary.href", containsString(forwardedHost))
+            .when()
+            .post("/documents")
+    }
 }
