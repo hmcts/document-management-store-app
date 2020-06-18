@@ -84,7 +84,7 @@ apply from: 'liquibase.gradle'
 apply plugin: 'net.serenity-bdd.aggregator'
 
 def versions = [
-    ehcache            : '3.7.1',
+    ehcache            : '3.8.1',
     jacocoMavenPlugin  : '0.8.2',
     jsonUnit           : '1.31.1',
     JUnitParams        : '1.1.1',
