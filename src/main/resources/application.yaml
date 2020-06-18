@@ -57,7 +57,7 @@ spring:
 
 server:
   port: ${SERVER_PORT:4603}
-  use-forward-headers: false
+  forward-headers-strategy: none
 
 connection:
   upload-timeout-min: ${UPLOAD_TIMEOUT_MIN:60}
