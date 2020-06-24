@@ -14,23 +14,28 @@ import static org.hamcrest.Matchers.equalTo
 class MultiMediaUploadIT extends BaseIT {
 
     @Test
-    void "MV1 (R1) As authenticated user I upload multi media files"() {
-        uploadFileThenDownload("video_test.mp4", "video/mp4")
-        uploadFileThenDownload("video_test.mov", "video/quicktime")
-        uploadFileThenDownload("video_test.avi", "video/x-msvideo")
-        uploadFileThenDownload("video_test.mpg", "video/mpeg")
-        uploadFileThenDownload("video_test.webm", "video/webm")
-        uploadFileThenDownload("video_test.wmv", "video/x-ms-wmv")
+    void "MV1 (R1) As authenticated user I upload whitelisted multi media files"() {
+        uploadWhitelistedFileThenDownload("video_test.mp4", "video/mp4")
 
-        uploadFileThenDownload("audio_test.mp3", "audio/mpeg")
-        uploadFileThenDownload("audio_test.wav", "audio/vnd.wave")
-        uploadFileThenDownload("audio_test.aac", "audio/x-aac")
-        uploadFileThenDownload("audio_test.ogg", "audio/vorbis")
-        uploadFileThenDownload("audio_test.wma", "audio/x-ms-wma")
-        uploadFileThenDownload("audio_test.m4a", "audio/mp4")
+        uploadWhitelistedFileThenDownload("audio_test.mp3", "audio/mpeg")
     }
 
-    private uploadFileThenDownload(String filename, String mimeType) {
+    @Test
+    void "MV1 (R1) As authenticated user I cannot upload not whitelisted multi media files"() {
+        uploadNotWhitelistedFileThenDownload("video_test.mov", "video/quicktime")
+        uploadNotWhitelistedFileThenDownload("video_test.avi", "video/x-msvideo")
+        uploadNotWhitelistedFileThenDownload("video_test.mpg", "video/mpeg")
+        uploadNotWhitelistedFileThenDownload("video_test.webm", "video/webm")
+        uploadNotWhitelistedFileThenDownload("video_test.wmv", "video/x-ms-wmv")
+
+        uploadNotWhitelistedFileThenDownload("audio_test.wav", "audio/vnd.wave")
+        uploadNotWhitelistedFileThenDownload("audio_test.aac", "audio/x-aac")
+        uploadNotWhitelistedFileThenDownload("audio_test.ogg", "audio/vorbis")
+        uploadNotWhitelistedFileThenDownload("audio_test.wma", "audio/x-ms-wma")
+
+    }
+
+    private uploadWhitelistedFileThenDownload(String filename, String mimeType) {
         Response response = givenRequest(CITIZEN)
             .multiPart("files", file(filename), mimeType)
             .multiPart("classification", Classifications.PUBLIC as String)
@@ -70,6 +75,19 @@ class MultiMediaUploadIT extends BaseIT {
             .when()
             .get(documentContentUrl1)
             .asByteArray()
+    }
+
+    private uploadNotWhitelistedFileThenDownload(String filename, String mimeType) {
+        Response response = givenRequest(CITIZEN)
+            .multiPart("files", file(filename), mimeType)
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect().log().all()
+            .statusCode(422)
+            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
     }
 
 }
