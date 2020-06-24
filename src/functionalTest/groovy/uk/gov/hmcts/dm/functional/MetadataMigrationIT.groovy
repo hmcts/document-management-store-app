@@ -1,6 +1,8 @@
 package uk.gov.hmcts.dm.functional
 
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+import net.thucydides.core.annotations.Pending
+
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,6 +17,7 @@ import static org.junit.Assert.assertThat;
 class MetadataMigrationIT extends BaseIT {
 
     @Test
+    @Pending // To remove once metadataMigrationEnabled toggle is enabled
     void "As a Shashank I want to process a CSV of metadata changes"() {
         assumeTrue(metadataMigrationEnabled)
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
@@ -50,6 +53,7 @@ class MetadataMigrationIT extends BaseIT {
 
 
     @Test
+    @Pending // To remove once metadataMigrationEnabled toggle is enabled
     void "As a Shashank  I want metadata changes applied to only Matching records from CSV"() {
         assumeTrue(metadataMigrationEnabled)
 
@@ -103,6 +107,7 @@ class MetadataMigrationIT extends BaseIT {
     }
 
     @Test
+    @Pending // To remove once metadataMigrationEnabled toggle is enabled
     void "As a As authenticated user  I want to process a CSV file which has missing metadata for one Case"() {
         assumeTrue(metadataMigrationEnabled)
 
@@ -133,6 +138,7 @@ class MetadataMigrationIT extends BaseIT {
     }
 
     @Test
+    @Pending // To remove once metadataMigrationEnabled toggle is enabled
     void "As a As authenticated user I  want to process a CSV file which has missing metadata for one Case and valid metadata for Another"() {
         assumeTrue(metadataMigrationEnabled)
 
@@ -173,6 +179,7 @@ class MetadataMigrationIT extends BaseIT {
 
 
     @Test
+    @Pending // To remove once metadataMigrationEnabled toggle is enabled
     void "As a As authenticated user I want to process a CSV file which has random documentId generated and metadata should not be updated"() {
         assumeTrue(metadataMigrationEnabled)
 
