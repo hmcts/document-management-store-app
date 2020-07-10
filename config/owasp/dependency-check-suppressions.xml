@@ -297,9 +297,12 @@ Another long cpe again
         <cve>CVE-2020-1938</cve>
         <cve>CVE-2020-1935</cve>
         <cve>CVE-2020-9488</cve>
+        <!-- Need to remove below after upgrading to Spring 2.3.0-->
+        <cve>CVE-2020-5411</cve>
+        <cve>CVE-2020-5411</cve>
     </suppress>
     <suppress>
         <notes>Temporarily suppress CVE for Netty (azure-storage-blob dep - still an issue in latest 12.6.0) </notes>
-        <cve>CVE-2020-11612</cve>
+        <cve>CVE-2020-10683</cve>
     </suppress>
 </suppressions>
