@@ -18,14 +18,6 @@
     </suppress>
     <suppress>
         <notes><![CDATA[
-        Can remove once Springfox is updated to v3
-   file name: guava-21.0.jar
-   ]]></notes>
-        <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
-        <vulnerabilityName>CVE-2018-10237</vulnerabilityName>
-    </suppress>
-    <suppress>
-        <notes><![CDATA[
    file name: jquery-3.4.1.jar Used by Hystrix dashboard
    ]]></notes>
         <packageUrl regex="true">^pkg:javascript/jquery@.*$</packageUrl>
