@@ -95,8 +95,7 @@ def versions = [
     powermock          : '1.7.4',
     serenity           : '2.0.23',
     serenityreporter   : '2.1.4',
-    springBoot         : springBoot.class.package.implementationVersion,
-    springfoxSwagger   : '2.9.2',
+    springBoot         : springBoot.class.package.implementationVersion
 ]
 
 dependencies {
@@ -132,8 +131,8 @@ dependencies {
 
     compile group: 'uk.gov.hmcts.reform', name: 'liquibase-core', version: '3.8.1'
 
-    compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
-    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
+    compile group: 'io.swagger', name: 'swagger-core', version: '1.6.1'
+    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
     compile group: 'org.springframework.plugin', name: 'spring-plugin-core', version: '1.2.0.RELEASE', force: 'true'
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
