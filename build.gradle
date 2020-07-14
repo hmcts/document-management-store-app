@@ -127,13 +127,12 @@ dependencies {
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
 
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.12.Final'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.18.Final'
 
     compile group: 'uk.gov.hmcts.reform', name: 'liquibase-core', version: '3.8.1'
 
     compile group: 'io.swagger', name: 'swagger-core', version: '1.6.1'
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
-    compile group: 'org.springframework.plugin', name: 'spring-plugin-core', version: '1.2.0.RELEASE', force: 'true'
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.12.0"

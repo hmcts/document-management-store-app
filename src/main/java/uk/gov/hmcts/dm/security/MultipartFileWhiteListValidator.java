@@ -17,7 +17,8 @@ public class MultipartFileWhiteListValidator implements ConstraintValidator<Mult
     }
 
     @Override
-    public void initialize(MultipartFileWhiteList fileWhiteList) {}
+    public void initialize(MultipartFileWhiteList fileWhiteList) {
+    }
 
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
