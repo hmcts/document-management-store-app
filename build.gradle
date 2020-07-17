@@ -118,7 +118,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
+    compile (group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot) {
+        exclude group: "org.hibernate", module: "hibernate-core"
+    }
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
@@ -149,8 +151,8 @@ dependencies {
         exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
     }
 
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.3.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.2.3.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.5.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE'
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
