@@ -17,6 +17,10 @@ class MultiMediaUploadIT extends BaseIT {
     void "MV1 (R1) As authenticated user I upload whitelisted multi media files"() {
         uploadWhitelistedFileThenDownload("video_test.mp4", "video/mp4")
 
+        // larger sizes video file
+        uploadWhitelistedFileThenDownload("27_MB_video_mp4", "video/mp4")
+        uploadWhitelistedFileThenDownload("video_file_58MB.mp4", "video/mp4")
+
         uploadWhitelistedFileThenDownload("audio_test.mp3", "audio/mpeg")
     }
 
