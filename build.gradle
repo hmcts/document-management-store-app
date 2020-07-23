@@ -24,6 +24,7 @@ plugins {
 group = 'uk.gov.hmcts.dm'
 version = '2.0.0'
 mainClassName = 'uk.gov.hmcts.dm.DmApp'
+sourceCompatibility = 11
 
 sourceSets {
     functionalTest {
@@ -90,18 +91,29 @@ def versions = [
     JUnitParams        : '1.1.1',
     lombok             : '1.18.10',
     liquibase          : '3.8.1',
-    postgresql         : '42.2.6',
+    postgresql         : '42.2.13',
     jackson            : '2.10.2',
     powermock          : '1.7.4',
     serenity           : '2.0.23',
     serenityreporter   : '2.1.4',
-    springBoot         : springBoot.class.package.implementationVersion
+    springBoot         : springBoot.class.package.implementationVersion,
+    logging            : '5.1.5'
 ]
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group in ['org.apache.tomcat.embed']) {
+                details.useVersion '9.0.36'
+            }
+        }
+    }
+}
 
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.18'
-    compile group: 'org.apache.tika', name: 'tika-core', version: '1.24'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '1.24.1'
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '9.0.31'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.6'
@@ -143,7 +155,7 @@ dependencies {
     compile (group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.3') {
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
     }
-    compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: '5.1.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
     compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.0.4"){
         exclude group: 'org.springframework.cloud' , module : 'spring-cloud-context'
         exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
@@ -166,13 +178,19 @@ dependencies {
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.5'
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
-    testCompile group: 'io.rest-assured', name :'rest-assured', version:'3.3.0'
+    testCompile (group: 'io.rest-assured', name :'rest-assured', version:'3.3.0') {
+        exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
+    }
     testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
     testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
 
-    testCompile group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
-    testCompile group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
+    testCompile (group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity) {
+        exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
+    }
+    testCompile (group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity) {
+        exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
+    }
     testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
@@ -191,7 +209,7 @@ dependencyCheck {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '8.8'
+    toolVersion = '8.18'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     configDir = new File(rootDir, 'config/checkstyle')
 }
