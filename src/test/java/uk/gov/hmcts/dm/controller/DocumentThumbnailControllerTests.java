@@ -29,7 +29,8 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
         .documentContent(documentContent).build();
 
-    public DocumentThumbnailControllerTests() throws Exception {}
+    public DocumentThumbnailControllerTests() throws Exception {
+    }
 
     @Test
     public void testGetDocumentThumbnail() {
