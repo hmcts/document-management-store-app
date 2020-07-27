@@ -255,11 +255,11 @@ jacocoTestReport {
         csv.enabled = true
     }
 
-//    afterEvaluate {
-//        classDirectories = files(classDirectories.files.collect {
-//            fileTree(dir: it, exclude: coverageExclusionList)
-//        })
-//    }
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: coverageExclusionList)
+        })
+    }
 }
 
 project.tasks['sonarqube'].dependsOn jacocoTestReport
