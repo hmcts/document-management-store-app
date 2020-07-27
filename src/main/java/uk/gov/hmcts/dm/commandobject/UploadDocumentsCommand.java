@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteList;
+import uk.gov.hmcts.dm.security.MultipartFileSizeLimit;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,9 +22,12 @@ public class UploadDocumentsCommand {
 
     public static final String DISALLOWED_FILE_ERR_MSG = "Your upload contains a disallowed file type.";
 
+    public static final String FILE_SIZE_ERR_MSG = "Your upload file size is more than allowed limit.";
+
     @NotNull(message = "Provide some files to be uploaded.")
     @Size(min = 1, message = "Please provide at least one file to be uploaded.")
     @MultipartFileListWhiteList(message = DISALLOWED_FILE_ERR_MSG)
+    @MultipartFileSizeLimit(message = FILE_SIZE_ERR_MSG)
     private List<MultipartFile> files;
 
     @NotNull(message = "Please provide classification")

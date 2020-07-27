@@ -28,7 +28,6 @@ java:
   environment:
     # db
     SPRING_DATASOURCE_URL: jdbc:postgresql://dm-store-postgres-db-{{ .Values.global.environment }}.postgres.database.azure.com:5432/evidence?ssl=disable
-#    SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/postgres?ssl=disable
     SPRING_DATASOURCE_USERNAME: evidence@dm-store-postgres-db-{{ .Values.global.environment }}
 
       # idam
@@ -49,12 +48,13 @@ java:
 
 
     # Document Storage
-    #STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(STORAGE_ACCOUNT_NAME);AccountKey=$(STORAGE_ACCOUNT_KEY);EndpointSuffix=core.windows.net"
-    #STORAGEACCOUNT_SECONDARY_CONNECTION_STRING: ${data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value}
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: dm-store-docstore-{{ .Values.global.environment }}
 
     TASK_ENV: documentTaskLock-aat
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 3600000
+    #Below File size limits are in MB
+    MAX_MEDIA_FILE_SIZE: 500
+    MAX_NON_MEDIA_FILE_SIZE: 300
 
 blobstorage:
   resourceGroup: dm-store-aks
