@@ -93,7 +93,7 @@ def versions = [
     postgresql         : '42.2.13',
     jackson            : '2.10.2',
     powermock          : '1.7.4',
-    serenity           : '2.0.23',
+    serenity           : '2.2.12',
     serenityreporter   : '2.1.4',
     springBoot         : springBoot.class.package.implementationVersion
 ]
