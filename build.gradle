@@ -152,7 +152,7 @@ dependencies {
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
     }
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: '5.1.1'
-    compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.0.4"){
+    compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.1.0"){
         exclude group: 'org.springframework.cloud' , module : 'spring-cloud-context'
         exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
     }
