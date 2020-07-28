@@ -173,7 +173,7 @@ dependencies {
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.5'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.5'
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
-    testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
+    testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.3'
     testCompile group: 'io.rest-assured', name :'rest-assured', version:'3.3.0'
     testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
     testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
