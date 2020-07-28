@@ -91,7 +91,7 @@ def versions = [
     lombok             : '1.18.10',
     liquibase          : '3.8.1',
     postgresql         : '42.2.13',
-    jackson            : '2.10.2',
+    jackson            : '2.11.1',
     powermock          : '1.7.4',
     serenity           : '2.0.23',
     serenityreporter   : '2.1.4',
