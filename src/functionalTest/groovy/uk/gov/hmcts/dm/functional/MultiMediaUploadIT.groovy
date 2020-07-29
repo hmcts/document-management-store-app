@@ -18,7 +18,7 @@ class MultiMediaUploadIT extends BaseIT {
     void "MV1 (R1) As authenticated user I upload  multi media files"() {
         uploadWhitelistedFileThenDownload("video_test.mp4", "video/mp4")
         uploadWhitelistedFileThenDownload("27_MB_video_mp4.mp4", "video/mp4")
-        uploadWhitelistedFileThenDownload("115_MB_video_mp4.mp4", "video/mp4")
+        uploadWhitelistedFileThenDownload("115MB_video_mp4.mp4", "video/mp4")
         uploadWhitelistedFileThenDownload("audio_test.mp3", "audio/mpeg")
     }
 
