@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+import net.thucydides.core.annotations.Pending
 import org.junit.Test
 import org.junit.runner.RunWith
 import uk.gov.hmcts.dm.functional.utilities.Classifications
@@ -14,11 +15,20 @@ import static org.hamcrest.Matchers.equalTo
 class MultiMediaUploadIT extends BaseIT {
 
     @Test
-    void "MV1 (R1) As authenticated user I upload whitelisted multi media files"() {
+    void "MV1 (R1) As authenticated user I upload  multi media files"() {
         uploadWhitelistedFileThenDownload("video_test.mp4", "video/mp4")
         uploadWhitelistedFileThenDownload("27_MB_video_mp4.mp4", "video/mp4")
-
+        uploadWhitelistedFileThenDownload("115MB_video_mp4.mp4", "video/mp4")
         uploadWhitelistedFileThenDownload("audio_test.mp3", "audio/mpeg")
+    }
+
+    @Test
+    @Pending
+    // See https://tools.hmcts.net/jira/browse/EM-3029 for details.
+    void "MV1 (R1) As authenticated user I should not be able to upload files that exceed permitted sizes"(){
+        uploadingFileThrowsValidationSizeErrorMessage("516MB_video_mp4.mp4", "video/mp4")
+        uploadingFileThrowsValidationSizeErrorMessage("367MB_word.doc",  "application/msword")
+
     }
 
     @Test
@@ -87,6 +97,19 @@ class MultiMediaUploadIT extends BaseIT {
             .expect().log().all()
             .statusCode(422)
             .body("error", equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents")
+    }
+
+    private uploadingFileThrowsValidationSizeErrorMessage(String filename, String mimeType) {
+        Response response = givenRequest(CITIZEN)
+            .multiPart("files", file(filename), mimeType)
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect().log().all()
+            .statusCode(422)
+            .body("error", equalTo("Your upload file size is more than allowed limit."))
             .when()
             .post("/documents")
     }
