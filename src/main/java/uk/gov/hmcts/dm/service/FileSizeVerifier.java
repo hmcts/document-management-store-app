@@ -52,7 +52,8 @@ public class FileSizeVerifier {
                 log.error(
                     String.format("Warning. The uploaded Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, mediaFileSize));
                 return false;
-            } else if (fileSizeInBytes > nonMediaFileSizeInBytes) {
+            } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(detected))
+                    && fileSizeInBytes > nonMediaFileSizeInBytes) {
                 log.error(
                     String.format("Warning. The uploaded Non-Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, nonMediaFileSize));
                 return false;
