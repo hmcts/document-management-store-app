@@ -151,7 +151,7 @@ dependencies {
     compile (group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.3') {
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
     }
-    compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: '5.1.1'
+    compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: '5.1.7'
     compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.0.4"){
         exclude group: 'org.springframework.cloud' , module : 'spring-cloud-context'
         exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
