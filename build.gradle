@@ -143,7 +143,7 @@ dependencies {
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"3.0.0"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.14.0"
     compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.3.1"
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
