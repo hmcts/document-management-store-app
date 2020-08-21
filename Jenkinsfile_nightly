@@ -2,7 +2,8 @@
 
 properties([
     // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-    pipelineTriggers([cron('H 05 * * *')]),
+
+    pipelineTriggers([cron('21 10 * * *')]), // scheduling to trigger jenkins job
     parameters([
         booleanParam(
             name: 'RUN_MUTATION',
@@ -36,8 +37,25 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+def vaultOverrides = [
+    'preview' : 'aat',
+    'spreview': 'saat'
+]
+
 withNightlyPipeline(type, product, component) {
-    enableSlackNotifications('#ccd-nightly-builds')
+
+    // Vars for Kubernetes
+    env.IDAM_API_BASE_URI = 'https://idam-api.aat.platform.hmcts.net'
+    env.OPEN_ID_API_BASE_URI = 'https://idam-web-public.aat.platform.hmcts.net/o'
+    env.OIDC_ISSUER_BASE_URI = 'https://forgerock-am.service.core-compute-idam-aat.internal:8443/openam/oauth2/hmcts'
+    env.S2S_BASE_URI = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
+    env.IDAM_WEBSHOW_WHITELIST = 'https://em-show-aat.service.core-compute-aat.internal/oauth2/callback'
+    env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
+    env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
+
+    enableFullFunctionalTest()
+    enableSlackNotifications('#em-dev-chat')
+
     enableDbMigration('ccd')
     loadVaultSecrets(secrets)
 
