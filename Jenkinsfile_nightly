@@ -1,9 +1,12 @@
 #!groovy
 
 properties([
-    // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-
-    pipelineTriggers([cron('21 10 * * *')]), // scheduling to trigger jenkins job
+    [
+        $class: 'GithubProjectProperty',
+        displayName: 'Document Management Store API',
+        projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
+    ],
+    pipelineTriggers([cron('H21 30 * * *')]), // scheduling to trigger jenkins job
     parameters([
         booleanParam(
             name: 'RUN_MUTATION',
@@ -14,7 +17,6 @@ properties([
         string(name: 'SecurityRules',
             defaultValue: 'http://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
             description: 'The URL you want to run these tests against'),
-
     ]),
 ])
 
@@ -32,6 +34,7 @@ def secrets = [
         secret('dm-store-storage-account-primary-connection-string', 'STORAGEACCOUNT_PRIMARY_CONNECTION_STRING')
     ]
 ]
+
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     [ $class: 'AzureKeyVaultSecret',
@@ -58,28 +61,13 @@ withNightlyPipeline(type, product, component) {
     env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
     env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
 
-    enableFullFunctionalTest()
-    enableSlackNotifications('#em-dev-chat')
-
-    enableDbMigration('ccd')
+    overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
 
-
-    after('checkout') {
-        echo '${product}-${component} out'
-        sh '''
-mkdir -p application/src/main/resources/META-INF
-echo "allprojects { task printVersionInit { doLast { println project.version } } }" > init.gradle
-
-tee application/src/main/resources/META-INF/build-info.properties <<EOF 2>/dev/null
-build.version=$(./gradlew -q printVersion)
-build.number=${BUILD_NUMBER}
-build.commit=$(git rev-parse HEAD)
-build.date=$(date)
-EOF
-
-'''
-    }
+    enableFullFunctionalTest()
+    enableSlackNotifications('#em-dev-chat')
 
 }
+
+
