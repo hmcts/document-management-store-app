@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.functional
 
 import io.restassured.http.ContentType
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
-import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -182,24 +181,4 @@ class UpdateDocumentIT  extends BaseIT {
             .when()
             .patch("/documents")
     }
-
-    @Test
-    void "UD9 update metadata for a Document"() {
-
-        def documentUrl = createDocumentAndGetUrlAs CITIZEN
-
-        def mp = ["rotationAngle" : "90"]
-
-        Map<String, String> map = givenRequest(CITIZEN)
-                                        .body([metadata: mp])
-                                        .contentType(ContentType.JSON)
-                                        .expect()
-                                        .statusCode(200)
-                                        .when()
-                                        .patch(documentUrl).body().path("metadata")
-
-        Assert.assertEquals(map.get("rotationAngle"), "90")
-
-    }
-
 }

@@ -111,7 +111,8 @@ public class TestUtil {
         .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList()))
         .build();
 
-    private TestUtil() {}
+    private TestUtil() {
+    }
 
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
         ObjectMapper om = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);

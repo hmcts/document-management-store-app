@@ -16,7 +16,8 @@ public class Helper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private Helper(){}
+    private Helper() {
+    }
 
     public static String getThumbnailUrlFromResponse(MockHttpServletResponse response) throws IOException {
         final String path = "/_links/thumbnail/href";
