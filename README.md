@@ -68,3 +68,13 @@ To view our REST API go to {HOST}:{PORT}/swagger-ui.html
 A list of our endpoints can be found here
 > https://hmcts.github.io/reform-api-docs/swagger.html?url=https://hmcts.github.io/reform-api-docs/specs/document-management-store-app.json
 
+### Functional Tests
+To use the functional tests locally for large .mp4 and .doc files please first download them 
+from here : [Large Files](https://portal.azure.com/#blade/Microsoft_Azure_Storage/ContainerMenuBlade/overview/storageAccountId/%2Fsubscriptions%2Fbf308a5c-0624-4334-8ff8-8dca9fd43783%2FresourceGroups%2Fdm-store-sandbox%2Fproviders%2FMicrosoft.Storage%2FstorageAccounts%2Fdmstorefiles/path/dm-store-files/etag/%220x8D83471B8B0648C%22/defaultEncryptionScope/%24account-encryption-key/denyEncryptionScopeOverride//defaultId//publicAccessVal/None)
+and place them under your resources folder document-management-store-app/src/functionalTest/resources
+This would make them available to be used in the Functional Test - 
+```bash
+MV1 (R1) As authenticated user I should not be able to upload files that exceed permitted sizes
+```
+- Ensure the @Pending annotation is removed before running the test locally.
+- Revert your changes after tests are run  as these are for running the above F-Test on local only.
