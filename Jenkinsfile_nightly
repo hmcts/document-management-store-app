@@ -40,6 +40,8 @@ withNightlyPipeline(type, product, component) {
     enableSlackNotifications('#ccd-nightly-builds')
     enableDbMigration('ccd')
     loadVaultSecrets(secrets)
+    enableMutationTest()
+
 
     if (params.RUN_MUTATION) {
         enableMutationTest()
