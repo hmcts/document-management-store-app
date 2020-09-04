@@ -1,15 +1,13 @@
 #!groovy
 
 properties([
-    // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-    pipelineTriggers([cron('H 05 * * *')]),
-    parameters([
-        booleanParam(
-            name: 'RUN_MUTATION',
-            defaultValue: true,
-            description: 'Run pitest mutation tests (duration approx. 1 hour)'
-        )
-    ]),
+    [
+        $class: 'GithubProjectProperty',
+        displayName: 'Document Management Store API',
+        projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
+    ],
+    pipelineTriggers([cron('21 02 * * *')]) // scheduling to trigger jenkins job
+
 ])
 
 @Library("Infrastructure")
@@ -36,29 +34,26 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+def vaultOverrides = [
+    'preview' : 'aat',
+    'spreview': 'saat'
+]
+
 withNightlyPipeline(type, product, component) {
-    enableSlackNotifications('#ccd-nightly-builds')
-    enableDbMigration('ccd')
+
+    // Vars for Kubernetes
+    env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+    env.S2S_URL  = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
+
+    overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
+    enableMutationTest()
 
-    if (params.RUN_MUTATION) {
-        enableMutationTest()
-    }
 
-    after('checkout') {
-        echo '${product}-${component} out'
-        sh '''
-mkdir -p application/src/main/resources/META-INF
-echo "allprojects { task printVersionInit { doLast { println project.version } } }" > init.gradle
-
-tee application/src/main/resources/META-INF/build-info.properties <<EOF 2>/dev/null
-build.version=$(./gradlew -q printVersion)
-build.number=${BUILD_NUMBER}
-build.commit=$(git rev-parse HEAD)
-build.date=$(date)
-EOF
-
-'''
-    }
+    enableFullFunctionalTest()
+    enableSlackNotifications('#em-dev-chat')
 
 }
+
+
