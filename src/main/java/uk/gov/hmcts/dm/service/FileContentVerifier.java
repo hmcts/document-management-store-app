@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
@@ -68,13 +69,14 @@ public class FileContentVerifier {
 
     private String getOriginalFileNameExtension(MultipartFile multipartFile) {
         String originalFileName = multipartFile.getOriginalFilename();
-        int lastDotIndex = originalFileName.lastIndexOf('.');
-        if (lastDotIndex >= 0) {
-            return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length())
-                        .toLowerCase(Locale.UK);
-        } else {
-            return EMPTY_STRING;
+        if (StringUtils.isNotBlank(originalFileName)) {
+            int lastDotIndex = originalFileName.lastIndexOf('.');
+            if (lastDotIndex >= 0) {
+                return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length())
+                    .toLowerCase(Locale.UK);
+            }
         }
+        return EMPTY_STRING;
     }
 
 }
