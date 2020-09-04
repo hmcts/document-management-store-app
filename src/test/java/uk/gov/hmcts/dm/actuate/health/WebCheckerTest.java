@@ -46,4 +46,17 @@ public class WebCheckerTest {
         Assert.assertEquals(Status.DOWN,webChecker.health().getStatus());
     }
 
+    @Test
+    public void healthNoResponseDown() {
+        when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class)).thenReturn(null);
+        WebChecker webChecker = new WebChecker(NAME,URL,restTemplate);
+        Assert.assertEquals(Status.DOWN,webChecker.health().getStatus());
+    }
+
+    @Test
+    public void healthBlankResponseDown() {
+        when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class)).thenReturn(new HealthCheckResponse(" "));
+        WebChecker webChecker = new WebChecker(NAME,URL,restTemplate);
+        Assert.assertEquals(Status.DOWN,webChecker.health().getStatus());
+    }
 }
