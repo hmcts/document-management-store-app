@@ -50,7 +50,6 @@ withNightlyPipeline(type, product, component) {
     loadVaultSecrets(secrets)
     enableMutationTest()
 
-
     enableFullFunctionalTest()
     enableSlackNotifications('#em-dev-chat')
 
