@@ -382,16 +382,13 @@ class ReadDocumentIT extends BaseIT {
             .when()
             .get(documentUrl)
 
-        Thread.sleep(3000)
-
-        Map<String, String> map = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+       final String  userFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
-            .path("_embedded.auditEntries[0]")
+            .body
+            .prettyPeek().jsonPath().get('_embedded.auditEntries[0].username');
 
-        Thread.sleep(3000)
-
-        Assert.assertEquals(map.get("username"), CASE_WORKER)
+        Assert.assertEquals(userFromResponse,CASE_WORKER);
     }
 
     @Test
