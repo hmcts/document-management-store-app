@@ -6,6 +6,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 import static org.hamcrest.Matchers.equalTo
+import static org.junit.Assume.assumeTrue
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 class ReadDocumentIT extends BaseIT {
@@ -372,7 +373,7 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R26 userId provided during data creation can be obtained as username in the audit trail"() {
 
-        def documentUrl = createDocumentAndGetUrlAs CASE_WORKER
+        def documentUrl = createDocumentAndGetUrlAs (CASE_WORKER)
 
         givenRequest(CASE_WORKER)
             .expect()
@@ -381,10 +382,14 @@ class ReadDocumentIT extends BaseIT {
             .when()
             .get(documentUrl)
 
+        Thread.sleep(3000)
+
         Map<String, String> map = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
             .path("_embedded.auditEntries[0]")
+
+        Thread.sleep(3000)
 
         Assert.assertEquals(map.get("username"), CASE_WORKER)
     }
