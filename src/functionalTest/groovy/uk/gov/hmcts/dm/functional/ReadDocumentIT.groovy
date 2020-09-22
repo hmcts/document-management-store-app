@@ -382,13 +382,13 @@ class ReadDocumentIT extends BaseIT {
             .when()
             .get(documentUrl)
 
-       final String  userFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+       final String  userNameFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
             .body
-            .prettyPeek().jsonPath().get('_embedded.auditEntries[0].username');
+            .jsonPath().get('_embedded.auditEntries[0].username');
 
-        Assert.assertEquals(userFromResponse,CASE_WORKER);
+        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
     }
 
     @Test
