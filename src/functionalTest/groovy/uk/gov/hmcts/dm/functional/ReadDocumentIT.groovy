@@ -2,9 +2,11 @@ package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.ResponseBody
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+import org.jsoup.helper.StringUtil
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import uk.gov.hmcts.dm.domain.AuditEntry
 
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assume.assumeTrue
@@ -393,6 +395,18 @@ class ReadDocumentIT extends BaseIT {
             .when()
             .get(documentUrl + "/auditEntries")
             .body();
+
+        Thread.sleep(5000);
+        String uuName  = responseBody.path("_embedded.auditEntries[0].username");
+        Thread.sleep(2000);
+        System.out.println( " ~~~~~~~~~ VIA uuName " + uuName ) ;
+
+//        String uName = null;
+//        if(nonNull(auditEntry) && !StringUtil.isBlank(auditEntry.username)){
+//            System.out.println( " ~~~~~~~~~ VIA JAVA Casting route user name is " + uName ) ;
+//            uName = auditEntry.username;
+//            Assert.assertEquals(uName,CASE_WORKER) ;
+//        }
 
         Assert.assertEquals(responseBody.path("_embedded.auditEntries[0].username"),CASE_WORKER);
     }
