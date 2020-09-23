@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.functional
 
+import io.restassured.response.ResponseBody
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Assert
 import org.junit.Test
@@ -382,13 +383,18 @@ class ReadDocumentIT extends BaseIT {
             .when()
             .get(documentUrl)
 
-       final String  userNameFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+//       final String  userNameFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+//            .when()
+//            .get(documentUrl + "/auditEntries")
+//            .body
+//            .jsonPath().get('_embedded.auditEntries[0].username');
+
+        final ResponseBody  responseBody = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
-            .body
-            .jsonPath().get('_embedded.auditEntries[0].username');
+            .body();
 
-        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
+        Assert.assertEquals(responseBody.path("_embedded.auditEntries[0].username"),CASE_WORKER);
     }
 
     @Test
