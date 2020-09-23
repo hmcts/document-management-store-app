@@ -408,7 +408,7 @@ class ReadDocumentIT extends BaseIT {
 //            Assert.assertEquals(uName,CASE_WORKER) ;
 //        }
 
-        Assert.assertEquals("both usernames are idential" ,userNameFromResponse,CASE_WORKER);
+        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
     }
 
     @Test
