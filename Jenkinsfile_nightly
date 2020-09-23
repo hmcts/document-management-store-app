@@ -51,7 +51,7 @@ withNightlyPipeline(type, product, component) {
     // enableMutationTest()
 
     enableFullFunctionalTest()
-    enableSlackNotifications('#em-dev-chat')
+   // enableSlackNotifications('#em-dev-chat')
 
 }
 
