@@ -9,6 +9,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.is
 
 
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -54,7 +55,7 @@ class SearchDocumentIT extends BaseIT {
         givenUnauthenticatedRequest()
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case', value:'123']))
-        .expect().log().all()
+            .expect().log().all()
             .statusCode(403)
             .when()
         .post('/documents/filter')
@@ -62,14 +63,18 @@ class SearchDocumentIT extends BaseIT {
 
     @Test
     void "S4 As authenticated user I receive no records when searched item could not be found"() {
-        givenRequest(CITIZEN)
+         givenRequest(CITIZEN)
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name:'case', value:'123']))
             .expect().log().all()
             .statusCode(200)
-            .body("page.totalElements", equalTo(0))
+             //.body("page.totalElements", equalTo(0)) // error here.
+            .body("page.totalElements",is(0))
             .when()
             .post('/documents/filter')
+
+        //System.out.println( " ~~~~~~~~~ totatl Elements is " + totalElements.size() )
+
     }
 
     @Test
