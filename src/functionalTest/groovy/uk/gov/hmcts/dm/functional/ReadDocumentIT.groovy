@@ -391,20 +391,23 @@ class ReadDocumentIT extends BaseIT {
 //            .body
 //            .jsonPath().get('_embedded.auditEntries[0].username');
 
-        final ResponseBody  responseBody = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+        def userNameFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
-            .body();
+            .body()
+            .jsonPath().get('_embedded.auditEntries[0].username');
 
-        Thread.sleep(5000);
+        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
 
-        def userNameFromResponse =  responseBody
+        // Thread.sleep(5000);
+
+        // def userNameFromResponse =  responseBody.jsonPath().get('_embedded.auditEntries[0].username');
+
         //.prettyPeek().jsonPath().get('_embedded.auditEntries[0].username')
-        .jsonPath().get('_embedded.auditEntries[0].username');
 
 
         // String userNameFromResponse  = responseBody.path("_embedded.auditEntries[0].username");
-        Thread.sleep(5000);
+        // Thread.sleep(5000);
 
 //        String uName = null;
 //        if(nonNull(auditEntry) && !StringUtil.isBlank(auditEntry.username)){
@@ -413,7 +416,7 @@ class ReadDocumentIT extends BaseIT {
 //            Assert.assertEquals(uName,CASE_WORKER) ;
 //        }
 
-        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
+
     }
 
     @Test
