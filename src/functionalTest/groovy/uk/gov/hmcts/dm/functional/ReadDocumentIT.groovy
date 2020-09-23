@@ -391,11 +391,17 @@ class ReadDocumentIT extends BaseIT {
 //            .body
 //            .jsonPath().get('_embedded.auditEntries[0].username');
 
-        def userNameFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+        def response  = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
-            .body()
-            .jsonPath().get('_embedded.auditEntries[0].username');
+            .body();
+
+        println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        //response.prettyPrint();
+
+        Thread.sleep(5000);
+        def userNameFromResponse = response.jsonPath().get('_embedded.auditEntries[0].username');
+        Thread.sleep(5000);
 
         Assert.assertEquals(userNameFromResponse,CASE_WORKER);
 
