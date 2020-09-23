@@ -396,10 +396,10 @@ class ReadDocumentIT extends BaseIT {
             .get(documentUrl + "/auditEntries")
             .body();
 
-        Thread.sleep(5000);
-        String uuName  = responseBody.path("_embedded.auditEntries[0].username");
-        Thread.sleep(2000);
-        System.out.println( " ~~~~~~~~~ VIA uuName " + uuName ) ;
+        Thread.sleep(3000);
+        String userNameFromResponse  = responseBody.path("_embedded.auditEntries[0].username");
+        Thread.sleep(3000);
+        System.out.println( " ~~~~~~~~~ VIA uuName " + userNameFromResponse ) ;
 
 //        String uName = null;
 //        if(nonNull(auditEntry) && !StringUtil.isBlank(auditEntry.username)){
@@ -408,7 +408,7 @@ class ReadDocumentIT extends BaseIT {
 //            Assert.assertEquals(uName,CASE_WORKER) ;
 //        }
 
-        Assert.assertEquals(responseBody.path("_embedded.auditEntries[0].username"),CASE_WORKER);
+        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
     }
 
     @Test
