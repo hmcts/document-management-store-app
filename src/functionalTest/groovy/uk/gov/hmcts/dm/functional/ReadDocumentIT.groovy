@@ -397,9 +397,14 @@ class ReadDocumentIT extends BaseIT {
             .body();
 
         Thread.sleep(5000);
-        String userNameFromResponse  = responseBody.path("_embedded.auditEntries[0].username");
+
+        def userNameFromResponse =  responseBody
+        //.prettyPeek().jsonPath().get('_embedded.auditEntries[0].username')
+        .jsonPath().get('_embedded.auditEntries[0].username');
+
+
+        // String userNameFromResponse  = responseBody.path("_embedded.auditEntries[0].username");
         Thread.sleep(5000);
-        System.out.println( " ~~~~~~~~~ VIA uuName " + userNameFromResponse ) ;
 
 //        String uName = null;
 //        if(nonNull(auditEntry) && !StringUtil.isBlank(auditEntry.username)){
