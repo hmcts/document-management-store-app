@@ -378,6 +378,8 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs (CASE_WORKER)
 
+        Thread.sleep(2000);
+
         givenRequest(CASE_WORKER)
             .expect()
             .body("createdBy", equalTo(CASE_WORKER))
@@ -385,23 +387,24 @@ class ReadDocumentIT extends BaseIT {
             .when()
             .get(documentUrl)
 
+        Thread.sleep(2000);
+
 //       final String  userNameFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
 //            .when()
 //            .get(documentUrl + "/auditEntries")
 //            .body
 //            .jsonPath().get('_embedded.auditEntries[0].username');
 
-        def response  = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+        def userNameFromResponse  = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
-            .body();
+            .body().path('_embedded.auditEntries[0].username');
 
         println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         //response.prettyPrint();
 
-        Thread.sleep(5000);
-        def userNameFromResponse = response.jsonPath().get('_embedded.auditEntries[0].username');
-        Thread.sleep(5000);
+        //def userNameFromResponse = response.jsonPath()path('_embedded.auditEntries[0].username');
+        Thread.sleep(6000);
 
         Assert.assertEquals(userNameFromResponse,CASE_WORKER);
 
@@ -410,7 +413,6 @@ class ReadDocumentIT extends BaseIT {
         // def userNameFromResponse =  responseBody.jsonPath().get('_embedded.auditEntries[0].username');
 
         //.prettyPeek().jsonPath().get('_embedded.auditEntries[0].username')
-
 
         // String userNameFromResponse  = responseBody.path("_embedded.auditEntries[0].username");
         // Thread.sleep(5000);
