@@ -396,9 +396,9 @@ class ReadDocumentIT extends BaseIT {
             .get(documentUrl + "/auditEntries")
             .body();
 
-        Thread.sleep(3000);
+        Thread.sleep(5000);
         String userNameFromResponse  = responseBody.path("_embedded.auditEntries[0].username");
-        Thread.sleep(3000);
+        Thread.sleep(5000);
         System.out.println( " ~~~~~~~~~ VIA uuName " + userNameFromResponse ) ;
 
 //        String uName = null;
@@ -408,7 +408,7 @@ class ReadDocumentIT extends BaseIT {
 //            Assert.assertEquals(uName,CASE_WORKER) ;
 //        }
 
-        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
+        Assert.assertEquals("both usernames are idential" ,userNameFromResponse,CASE_WORKER);
     }
 
     @Test
