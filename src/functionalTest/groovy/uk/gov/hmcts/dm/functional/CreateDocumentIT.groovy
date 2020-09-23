@@ -1,7 +1,9 @@
 package uk.gov.hmcts.dm.functional
 
+import io.restassured.http.ContentType
 import io.restassured.response.Response
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+import net.thucydides.core.annotations.Pending
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -9,7 +11,6 @@ import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
-import net.thucydides.core.annotations.Pending;
 
 import java.time.Duration
 import java.time.LocalDateTime
@@ -105,14 +106,15 @@ class CreateDocumentIT extends BaseIT {
         .when()
             .get(documentUrl1)
 
+        System.out.println("~~~~~~~~~~~ Kasi ~~~~~~~~~~~~~~~~ Kasi ~~~~~~~~~~~~~~~~ Kasi ~~~~~~~~~~~~~~~~ Kasi ~~~~~ ")
         assertByteArrayEquality ATTACHMENT_7_PNG, givenRequest(CITIZEN)
-            .expect()
-                .statusCode(200)
-                .contentType(containsString(MediaType.IMAGE_PNG_VALUE))
-                .header("OriginalFileName", ATTACHMENT_7_PNG)
-            .when()
-                .get(documentContentUrl1)
-            .asByteArray()
+             .expect().log().all()
+             .statusCode(200)
+             .contentType(equalTo(MediaType.IMAGE_PNG_VALUE))// error here
+             .header("OriginalFileName", ATTACHMENT_7_PNG)
+             .when()
+             .get(documentContentUrl1)
+             .asByteArray()
     }
 
     @Test
