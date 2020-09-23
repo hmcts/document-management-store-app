@@ -9,6 +9,7 @@ import org.junit.runner.RunWith
 import uk.gov.hmcts.dm.domain.AuditEntry
 
 import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.is
 import static org.junit.Assume.assumeTrue
 
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -406,7 +407,7 @@ class ReadDocumentIT extends BaseIT {
         //def userNameFromResponse = response.jsonPath()path('_embedded.auditEntries[0].username');
         Thread.sleep(6000);
 
-        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
+        Assert.assertThat(userNameFromResponse,is(CASE_WORKER));
 
         // Thread.sleep(5000);
 
