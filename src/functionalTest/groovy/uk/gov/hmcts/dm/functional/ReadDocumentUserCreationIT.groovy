@@ -24,7 +24,7 @@ public class ReadDocumentUserCreationIT extends BaseIT {
             .get(documentUrl)
 
 
-        def  userNameFromResponse  = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
+        String  userNameFromResponse  = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .when()
             .get(documentUrl + "/auditEntries")
             .body().path('_embedded.auditEntries[0].username');
