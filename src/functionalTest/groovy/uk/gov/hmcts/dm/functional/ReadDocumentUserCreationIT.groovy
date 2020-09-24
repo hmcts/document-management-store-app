@@ -4,7 +4,7 @@ package uk.gov.hmcts.dm.functional;
 import static org.hamcrest.Matchers.equalTo;
 
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import org.junit.Assert;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -29,7 +29,7 @@ public class ReadDocumentUserCreationIT extends BaseIT {
             .get(documentUrl + "/auditEntries")
             .body().path('_embedded.auditEntries[0].username');
 
-        Assert.assertEquals(userNameFromResponse,CASE_WORKER);
+        assertThat(userNameFromResponse,equalTo(CASE_WORKER));
     }
 
 }
