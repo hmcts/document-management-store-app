@@ -3,7 +3,9 @@ package uk.gov.hmcts.dm.functional;
 
 import static org.hamcrest.Matchers.equalTo;
 
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +31,10 @@ public class ReadDocumentUserCreationIT extends BaseIT {
             .get(documentUrl + "/auditEntries")
             .body().path('_embedded.auditEntries[0].username');
 
-        assertThat(userNameFromResponse,equalTo(CASE_WORKER));
+        println('~~~~~~~~~~~~~ response ...' + userNameFromResponse)
+        println('~~~~~~~~~~~~~caseworker string....' +CASE_WORKER )
+        assertEquals(userNameFromResponse.strip(),CASE_WORKER.strip())
+        //assertThat(userNameFromResponse,equalTo(CASE_WORKER));
     }
 
 }
