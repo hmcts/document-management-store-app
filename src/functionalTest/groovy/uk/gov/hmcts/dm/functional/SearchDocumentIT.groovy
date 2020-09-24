@@ -8,9 +8,9 @@ import org.hamcrest.Matchers
 import org.junit.Test
 import org.junit.runner.RunWith
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
-
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 class SearchDocumentIT extends BaseIT {
@@ -68,13 +68,9 @@ class SearchDocumentIT extends BaseIT {
             .body(JsonOutput.toJson([name:'case', value:'123']))
             .expect().log().all()
             .statusCode(200)
-             //.body("page.totalElements", equalTo(0)) // error here.
             .body("page.totalElements",is(0))
             .when()
             .post('/documents/filter')
-
-        //System.out.println( " ~~~~~~~~~ totatl Elements is " + totalElements.size() )
-
     }
 
     @Test
