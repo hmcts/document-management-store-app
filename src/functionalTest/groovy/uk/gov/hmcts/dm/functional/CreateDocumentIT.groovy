@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.functional
 
-import io.restassured.http.ContentType
+
 import io.restassured.response.Response
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import net.thucydides.core.annotations.Pending
@@ -106,11 +106,10 @@ class CreateDocumentIT extends BaseIT {
         .when()
             .get(documentUrl1)
 
-        System.out.println("~~~~~~~~~~~ Kasi ~~~~~~~~~~~~~~~~ Kasi ~~~~~~~~~~~~~~~~ Kasi ~~~~~~~~~~~~~~~~ Kasi ~~~~~ ")
         assertByteArrayEquality ATTACHMENT_7_PNG, givenRequest(CITIZEN)
-             .expect().log().all()
+             .expect()
              .statusCode(200)
-             .contentType(equalTo(MediaType.IMAGE_PNG_VALUE))// error here
+             .contentType(equalTo(MediaType.IMAGE_PNG_VALUE))
              .header("OriginalFileName", ATTACHMENT_7_PNG)
              .when()
              .get(documentContentUrl1)
