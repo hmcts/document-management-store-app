@@ -19,12 +19,15 @@ plugins {
     id 'pmd'
     id 'idea'
     id 'io.franzbecker.gradle-lombok' version '3.3.0'
+    id "info.solidsoft.pitest" version '1.5.1'
+
 }
 
 group = 'uk.gov.hmcts.dm'
 version = '2.0.0'
 mainClassName = 'uk.gov.hmcts.dm.DmApp'
 sourceCompatibility = 11
+targetCompatibility = 11
 
 sourceSets {
     functionalTest {
