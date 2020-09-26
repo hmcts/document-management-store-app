@@ -39,15 +39,10 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
-def vaultOverrides = [
-    'preview' : 'aat',
-    'spreview': 'saat'
-]
-
 withNightlyPipeline(type, product, component) {
 
     // Vars for Kubernetes
-    env.IDAM_API_BASE_URI = 'https://idam-api.aat.platform.hmcts.net'
+    env.IDAM_API_URL = 'https://idam-api.aat.platform.hmcts.net'
     env.S2S_URL  = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
 
@@ -57,8 +52,8 @@ withNightlyPipeline(type, product, component) {
 
     enableFullFunctionalTest()
     enableSecurityScan()
+
     enableSlackNotifications('#em-dev-chat')
 
+
 }
-
-
