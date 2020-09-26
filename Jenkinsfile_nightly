@@ -8,11 +8,6 @@ properties([
     ],
     pipelineTriggers([cron('H21 30 * * *')]), // scheduling to trigger jenkins job
     parameters([
-        booleanParam(
-            name: 'RUN_MUTATION',
-            defaultValue: true,
-            description: 'Run pitest mutation tests (duration approx. 1 hour)'
-        ),
         string(name: 'URL_TO_TEST', defaultValue: 'http://dm-store-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
         string(name: 'SecurityRules',
             defaultValue: 'http://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
@@ -53,20 +48,16 @@ withNightlyPipeline(type, product, component) {
 
     // Vars for Kubernetes
     env.IDAM_API_BASE_URI = 'https://idam-api.aat.platform.hmcts.net'
-    env.OPEN_ID_API_BASE_URI = 'https://idam-web-public.aat.platform.hmcts.net/o'
-    env.OIDC_ISSUER_BASE_URI = 'https://forgerock-am.service.core-compute-idam-aat.internal:8443/openam/oauth2/hmcts'
-    env.S2S_BASE_URI = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
-    env.IDAM_WEBSHOW_WHITELIST = 'https://em-show-aat.service.core-compute-aat.internal/oauth2/callback'
-    env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
+    env.S2S_URL  = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
 
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
     enableMutationTest()
 
-
     enableFullFunctionalTest()
-   // enableSlackNotifications('#em-dev-chat')
+    enableSecurityScan()
+    enableSlackNotifications('#em-dev-chat')
 
 }
 
