@@ -387,9 +387,7 @@ class ReadDocumentIT extends BaseIT {
             .get(documentUrl + "/auditEntries")
             .body().path('_embedded.auditEntries[0].username');
 
-        println('~~~~~~~~~~~~~ response ...' + userNameFromResponse)
-        println('~~~~~~~~~~~~~caseworker string....' +CASE_WORKER )
-        // TODO : Note , this assert Fails on Nighthly build only , and PASSES on Local,  Preview as well as Master
+        // TODO : This assert Fails on Nightly build only. Passes on Local,  Preview as well as Master build.
         //assertThat(userNameFromResponse,equalTo(CASE_WORKER));
     }
 
