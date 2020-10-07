@@ -1,6 +1,4 @@
-variable "product" {
-  type = string
-}
+variable "product" {}
 
 variable "raw_product" {
   default = "dm" // jenkins-library overrides product for PRs and adds e.g. pr-118-dm
@@ -10,9 +8,7 @@ variable "shared_product" {
   default = "ccd"
 }
 
-variable "component" {
-  type = string
-}
+variable "component" {}
 
 variable "team_name" {
   default = "evidence"
@@ -23,24 +19,18 @@ variable "app_language" {
 }
 
 variable "location" {
-  type    = string
   default = "UK South"
 }
 
-variable "env" {
-  type = string
-}
+variable "env" {}
 
-variable "subscription" {
-  type = string
-}
+variable "subscription" {}
 
 variable "ilbIp" {}
 
 variable "tenant_id" {}
 
 variable "jenkins_AAD_objectId" {
-  type        = string
   description = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
 }
 
@@ -163,17 +153,15 @@ variable "max_file_size_in_mb" {
 }
 
 variable "common_tags" {
-  type = map
+  type = map(string)
 }
 
 variable "asp_name" {
-  type        = string
   description = "App Service Plan (ASP) to use for the webapp, 'use_shared' to make use of the shared ASP"
   default     = "use_shared"
 }
 
 variable "asp_rg" {
-  type        = string
   description = "App Service Plan (ASP) resource group for 'asp_name', 'use_shared' to make use of the shared resource group"
   default     = "use_shared"
 }
