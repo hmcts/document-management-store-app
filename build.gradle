@@ -190,7 +190,7 @@ dependencies {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
     }
     testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
-    testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
+    testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.5.13'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
 
     testCompile (group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity) {
