@@ -186,7 +186,7 @@ dependencies {
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.5'
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
-    testCompile (group: 'io.rest-assured', name :'rest-assured', version:'3.3.0') {
+    testCompile (group: 'io.rest-assured', name :'rest-assured', version:'4.3.1') {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
     }
     testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
