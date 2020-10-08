@@ -145,7 +145,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.10'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
 
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.18.Final'
 
