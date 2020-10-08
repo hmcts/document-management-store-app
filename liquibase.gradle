@@ -8,7 +8,7 @@ dependencies {
         exclude group: "org.hibernate", module: "hibernate-core"
         exclude group: "org.hibernate", module: "hibernate-envers"
     }
-    liquibase group: 'org.hibernate', name: 'hibernate-envers', version: '5.4.18.Final'
+    liquibase group: 'org.hibernate', name: 'hibernate-envers', version: '5.4.22.Final'
 }
 
 //loading properties file.
