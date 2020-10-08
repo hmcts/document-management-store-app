@@ -1,4 +1,5 @@
 {
+    "enabledManagers": ["helm-requirements","gradle-wrapper"],
   "helm-requirements": 
     {
       "enabled": true,
