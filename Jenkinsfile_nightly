@@ -6,8 +6,13 @@ properties([
         displayName: 'Document Management Store API',
         projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
     ],
-    pipelineTriggers([cron('21 02 * * *')]) // scheduling to trigger jenkins job
-
+    pipelineTriggers([cron('H 21 * * *')]), // scheduling to trigger jenkins job.
+    parameters([
+        string(name: 'URL_TO_TEST', defaultValue: 'http://dm-store-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
+        string(name: 'SecurityRules',
+            defaultValue: 'http://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
+            description: 'The URL you want to run these tests against'),
+    ]),
 ])
 
 @Library("Infrastructure")
@@ -34,6 +39,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+
 def vaultOverrides = [
     'preview' : 'aat',
     'spreview': 'saat'
@@ -50,10 +56,10 @@ withNightlyPipeline(type, product, component) {
     loadVaultSecrets(secrets)
     enableMutationTest()
 
-
     enableFullFunctionalTest()
+    enableSecurityScan()
+
     enableSlackNotifications('#em-dev-chat')
 
+
 }
-
-
