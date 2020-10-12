@@ -106,13 +106,13 @@ class CreateDocumentIT extends BaseIT {
             .get(documentUrl1)
 
         assertByteArrayEquality ATTACHMENT_7_PNG, givenRequest(CITIZEN)
-            .expect()
-                .statusCode(200)
-                .contentType(containsString(MediaType.IMAGE_PNG_VALUE))
-                .header("OriginalFileName", ATTACHMENT_7_PNG)
-            .when()
-                .get(documentContentUrl1)
-            .asByteArray()
+             .expect()
+             .statusCode(200)
+             .contentType(equalTo(MediaType.IMAGE_PNG_VALUE))
+             .header("OriginalFileName", ATTACHMENT_7_PNG)
+             .when()
+             .get(documentContentUrl1)
+             .asByteArray()
     }
 
     @Test
