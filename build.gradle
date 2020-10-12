@@ -245,7 +245,8 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/appinsights/*',
     '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java',
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
-    '**uk/gov/hmcts/dm/service/FileSizeVerifier.java'
+    '**uk/gov/hmcts/dm/service/FileSizeVerifier.java',
+    '**uk/gov/hmcts/dm/controller/WelcomeController.java'
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
