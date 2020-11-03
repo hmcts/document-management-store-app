@@ -73,6 +73,8 @@ configurations {
     functionalTestRuntime.extendsFrom(testRuntime)
     smokeTestCompile.extendsFrom(testCompile)
     smokeTestRuntime.extendsFrom(testRuntime)
+    contractTestCompile.extendsFrom(testCompile)
+    contractTestRuntime.extendsFrom(testRuntime)
 
 }
 

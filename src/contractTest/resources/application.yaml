@@ -85,10 +85,10 @@ azure:
   application-insights:
     instrumentation-key: ${APPINSIGHTS_INSTRUMENTATIONKEY:d04b52b1-20e5-473a-8ac4-3f6859ea113c}
   storage:
-      connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1}
-      blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
-      enabled: false
-      metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
+    connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1}
+    blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
+    enabled: true
+    metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
 
 postgres:
   storage:
@@ -112,10 +112,10 @@ info:
 health:
   status:
     order:
-    - FATAL
-    - DOWN
-    - UNKNOWN
-    - UP
+      - FATAL
+      - DOWN
+      - UNKNOWN
+      - UP
   disk:
     threshold: ${HEALTH_DISK_THRESHOLD:262144000}
 
@@ -166,8 +166,8 @@ dm:
     sizelimit: ${MAX_NON_MEDIA_FILE_SIZE:300}
 
 thumbnail:
-    imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
-    pdfThumbnailCreator: ${SUPPORT_PDF_THUMBNAIL_MIME_TYPES:application/pdf}
+  imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
+  pdfThumbnailCreator: ${SUPPORT_PDF_THUMBNAIL_MIME_TYPES:application/pdf}
 
 
 toggle:
@@ -183,10 +183,3 @@ toggle:
 
 task:
   env: ${TASK_ENV:documentTaskLock-local}
-logging:
-  level:
-    org.springframework.web: ERROR
-    uk.gov.hmcts.reform.dmstore.provider: DEBUG
-    au.com.dius.pact: DEBUG
-  pattern:
-    console: "%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n"

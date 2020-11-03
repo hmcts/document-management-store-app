@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
+import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
 import uk.gov.hmcts.dm.repository.*;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteListValidator;
 import uk.gov.hmcts.dm.security.MultipartFileSizeValidator;
@@ -18,7 +20,7 @@ import java.util.Arrays;
 
 
 @TestConfiguration
-@Lazy
+@ComponentScan(basePackages = "uk.gov.hmcts.dm.security")
 public class StoreDocumentControllerTestConfiguration {
 
     @MockBean
@@ -84,6 +86,9 @@ public class StoreDocumentControllerTestConfiguration {
         return  new MultipartFileListWhiteListValidator(fileContentVerifier());
     }
 
+    @MockBean
+    RepositoryFinder repositoryFinder;
+
     @Bean
     @Primary
     public AuditEntryService auditEntryService() {
@@ -102,16 +107,18 @@ public class StoreDocumentControllerTestConfiguration {
         return new AuditedStoredDocumentOperationsService();
     }
 
-    @Bean
-    @Primary
-    public StoredDocumentController storedDocumentController() {
-        return new StoredDocumentController();
-    }
 
     @Bean
     @Primary
     public ToggleConfiguration toggleConfiguration(){
         return new ToggleConfiguration();
+    }
+
+
+    @Bean
+    @Primary
+    public ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver() {
+        return new ExceptionStatusCodeAndMessageResolver();
     }
 
 
