@@ -42,14 +42,9 @@ public class DpTest {
     @MockBean
     private AuthenticationManager authenticationManager;
 
-//    @MockBean
-//    private DocumentContentVersionService documentContentVersionService;
-
     @MockBean
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
-//
-//    @MockBean
-//    private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
