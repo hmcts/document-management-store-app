@@ -1,12 +1,15 @@
 package uk.gov.hmcts.dm.smoke
 
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+import net.thucydides.core.annotations.WithTag
+import net.thucydides.core.annotations.WithTags
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.springframework.test.context.junit4.SpringRunner
 
 import static org.hamcrest.Matchers.equalTo
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringIntegrationSerenityRunner.class)
+@WithTags(@WithTag("testType:Smoke"))
 class HealthUrlIT extends BaseIT {
 
     @Test
