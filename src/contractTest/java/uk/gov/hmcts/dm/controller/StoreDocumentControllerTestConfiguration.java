@@ -1,15 +1,12 @@
-package uk.gov.hmcts.reform.dmstore.provider;
+package uk.gov.hmcts.dm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
-import uk.gov.hmcts.dm.controller.StoredDocumentController;
 import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
 import uk.gov.hmcts.dm.repository.*;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteListValidator;
@@ -20,7 +17,6 @@ import java.util.Arrays;
 
 
 @TestConfiguration
-@ComponentScan(basePackages = "uk.gov.hmcts.dm.security")
 public class StoreDocumentControllerTestConfiguration {
 
     @MockBean
@@ -54,9 +50,6 @@ public class StoreDocumentControllerTestConfiguration {
     private DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository;
 
     @MockBean
-    private DocumentContentVersionService documentContentVersionService;
-
-    @MockBean
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @Autowired
@@ -70,19 +63,19 @@ public class StoreDocumentControllerTestConfiguration {
 
     @Bean
     @Primary
-    public MultipartFileSizeValidator multipartFileSizeValidator(){
+    public MultipartFileSizeValidator multipartFileSizeValidator() {
         return  new MultipartFileSizeValidator(fileSizeVerifier());
     }
 
     @Bean
     @Primary
     public FileContentVerifier fileContentVerifier() {
-        return new FileContentVerifier(Arrays.asList("application/pdf"), Arrays.asList(".pdf"));
+        return new FileContentVerifier(Arrays.asList("application/pdf", "text/plain"), Arrays.asList(".pdf",".txt"));
     }
 
     @Bean
     @Primary
-    public MultipartFileListWhiteListValidator multipartFileListWhiteListValidator(){
+    public MultipartFileListWhiteListValidator multipartFileListWhiteListValidator() {
         return  new MultipartFileListWhiteListValidator(fileContentVerifier());
     }
 
@@ -110,7 +103,7 @@ public class StoreDocumentControllerTestConfiguration {
 
     @Bean
     @Primary
-    public ToggleConfiguration toggleConfiguration(){
+    public ToggleConfiguration toggleConfiguration() {
         return new ToggleConfiguration();
     }
 
