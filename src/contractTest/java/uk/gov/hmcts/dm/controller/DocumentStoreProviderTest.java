@@ -15,12 +15,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.reform.auth.checker.core.RequestAuthorizer;
 import uk.gov.hmcts.reform.auth.checker.core.service.Service;
-import uk.gov.hmcts.reform.dmstore.provider.StoreDocumentControllerTestConfiguration;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.mockito.Mockito.when;
 
 
 @Provider("em_dm_store")
@@ -28,10 +37,10 @@ import uk.gov.hmcts.reform.dmstore.provider.StoreDocumentControllerTestConfigura
     host = "localhost",
     consumerVersionSelectors = {
         @VersionSelector(tag = "${PACT_BRANCH_NAME:Dev}")})
-@WebMvcTest(StoredDocumentController.class)
+@WebMvcTest({StoredDocumentController.class, StoredDocumentDeleteController.class})
 @AutoConfigureMockMvc(addFilters = false)
 @Import(StoreDocumentControllerTestConfiguration.class)
-public class DpTest {
+public class DocumentStoreProviderTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -45,13 +54,16 @@ public class DpTest {
     @MockBean
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
+    @MockBean
+    protected DocumentContentVersionService documentContentVersionService;
+
+    private final UUID id = UUID.fromString("5c3c3906-2b51-468e-8cbb-a4002eded075");
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
         context.verifyInteraction();
     }
-
 
     @BeforeEach
     void before(PactVerificationContext context) {
@@ -60,8 +72,20 @@ public class DpTest {
 
     }
 
-    @State({"I have authenticated with service"})
-    public void toUploadDocuments() {
-    }
+    @State({"I have existing document"})
+    public void toDeleteDocuments() {
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
+            new MockMultipartFile("files",
+                "filename.txt",
+                "text/plain",
+                "hello".getBytes(
+                    StandardCharsets.UTF_8)),
+            "user",
+            false);
 
+        documentContentVersion.setCreatedBy("userId");
+        when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
+            .thenReturn(Optional.of(documentContentVersion));
+
+    }
 }
