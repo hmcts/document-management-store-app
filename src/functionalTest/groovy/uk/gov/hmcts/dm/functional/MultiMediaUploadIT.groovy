@@ -1,17 +1,14 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import net.thucydides.core.annotations.Pending
 import org.junit.Test
-import org.junit.runner.RunWith
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
-@RunWith(SpringIntegrationSerenityRunner.class)
 class MultiMediaUploadIT extends BaseIT {
 
     @Test
@@ -25,9 +22,9 @@ class MultiMediaUploadIT extends BaseIT {
     @Test
     @Pending
     // See https://tools.hmcts.net/jira/browse/EM-3029 for details.
-    void "MV1 (R1) As authenticated user I should not be able to upload files that exceed permitted sizes"(){
+    void "MV1 (R1) As authenticated user I should not be able to upload files that exceed permitted sizes"() {
         uploadingFileThrowsValidationSizeErrorMessage("516MB_video_mp4.mp4", "video/mp4")
-        uploadingFileThrowsValidationSizeErrorMessage("367MB_word.doc",  "application/msword")
+        uploadingFileThrowsValidationSizeErrorMessage("367MB_word.doc", "application/msword")
 
     }
 

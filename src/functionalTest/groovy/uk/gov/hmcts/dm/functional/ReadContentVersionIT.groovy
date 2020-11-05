@@ -1,15 +1,13 @@
 package uk.gov.hmcts.dm.functional
 
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.Matchers.equalTo
 
-@RunWith(SpringIntegrationSerenityRunner.class)
 class ReadContentVersionIT extends BaseIT {
 
     String documentUrl
@@ -33,12 +31,12 @@ class ReadContentVersionIT extends BaseIT {
 
         givenRequest(CITIZEN)
             .expect()
-                .statusCode(200)
-                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-                .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
-                .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
+            .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
+            .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .when()
-                .get(documentVersionUrl)
+            .get(documentVersionUrl)
 
     }
 
@@ -48,10 +46,10 @@ class ReadContentVersionIT extends BaseIT {
 
         assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CITIZEN)
             .expect()
-                .statusCode(200)
-                .contentType(MediaType.IMAGE_JPEG_VALUE)
+            .statusCode(200)
+            .contentType(MediaType.IMAGE_JPEG_VALUE)
             .when()
-                .get(documentVersionBinaryUrl)
+            .get(documentVersionBinaryUrl)
             .asByteArray()
 
     }
@@ -61,9 +59,9 @@ class ReadContentVersionIT extends BaseIT {
 
         givenRequest(CITIZEN_2)
             .expect()
-                .statusCode(403)
+            .statusCode(403)
             .when()
-                .get(documentVersionUrl)
+            .get(documentVersionUrl)
 
     }
 
@@ -71,10 +69,10 @@ class ReadContentVersionIT extends BaseIT {
     void "RCV4 As not owner and not a case worker I read content version binary by URL but I am denied access"() {
 
         givenRequest(CITIZEN_2)
-                .expect()
-                .statusCode(403)
-                .when()
-                .get(documentVersionBinaryUrl)
+            .expect()
+            .statusCode(403)
+            .when()
+            .get(documentVersionBinaryUrl)
 
     }
 
@@ -83,9 +81,9 @@ class ReadContentVersionIT extends BaseIT {
 
         assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .expect()
-                .statusCode(200)
+            .statusCode(200)
             .when()
-                .get(documentVersionBinaryUrl)
+            .get(documentVersionBinaryUrl)
             .asByteArray()
 
     }
@@ -94,33 +92,33 @@ class ReadContentVersionIT extends BaseIT {
     void "RCV7 As a cmc case-worker I can read content version binary by URL"() {
 
         assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_CMC])
-                .expect()
-                    .statusCode(200)
-                .when()
-                    .get(documentVersionBinaryUrl)
-                .asByteArray()
+            .expect()
+            .statusCode(200)
+            .when()
+            .get(documentVersionBinaryUrl)
+            .asByteArray()
     }
 
     @Test
     void "RCV8 As a sscs case-worker I can read content version binary by URL"() {
 
         assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_SSCS])
-                .expect()
-                    .statusCode(200)
-                .when()
-                    .get(documentVersionBinaryUrl)
-                .asByteArray()
+            .expect()
+            .statusCode(200)
+            .when()
+            .get(documentVersionBinaryUrl)
+            .asByteArray()
     }
 
     @Test
     void "RCV9 As a divorce case-worker I can read content version binary by URL"() {
 
         assertByteArrayEquality ATTACHMENT_9_JPG, givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_DIVORCE])
-                .expect()
-                    .statusCode(200)
-                .when()
-                    .get(documentVersionBinaryUrl)
-                .asByteArray()
+            .expect()
+            .statusCode(200)
+            .when()
+            .get(documentVersionBinaryUrl)
+            .asByteArray()
     }
 
 }

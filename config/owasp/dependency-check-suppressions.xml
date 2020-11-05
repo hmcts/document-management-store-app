@@ -37,5 +37,6 @@
         <cve>CVE-2019-14900</cve>
         <cve>CVE-2020-10663</cve>
         <cve>CVE-2020-5421</cve>
+        <cve>CVE-2020-13943</cve>
     </suppress>
 </suppressions>

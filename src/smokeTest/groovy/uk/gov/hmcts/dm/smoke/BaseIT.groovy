@@ -1,21 +1,23 @@
 package uk.gov.hmcts.dm.smoke
 
-import io.restassured.RestAssured
+
 import net.jcip.annotations.NotThreadSafe
+import net.serenitybdd.rest.SerenityRest
+import net.thucydides.core.annotations.WithTag
+import net.thucydides.core.annotations.WithTags
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
+import uk.gov.hmcts.dm.smoke.config.SmokeTestContextConfiguration
 import uk.gov.hmcts.dm.smoke.utilities.FileUtils
 import uk.gov.hmcts.dm.smoke.utilities.V1MediaTypes
 
 import javax.annotation.PostConstruct
-import uk.gov.hmcts.dm.smoke.config.SmokeTestContextConfiguration
-
-import static io.restassured.RestAssured.given
 
 @ContextConfiguration(classes = SmokeTestContextConfiguration)
 @NotThreadSafe
+@WithTags(@WithTag("testType:Smoke"))
 class BaseIT {
 
     @Autowired
@@ -31,16 +33,21 @@ class BaseIT {
 
     @PostConstruct
     void init() {
-        RestAssured.baseURI = dmStoreBaseUri
-        RestAssured.useRelaxedHTTPSValidation()
+        SerenityRest.useRelaxedHTTPSValidation()
     }
 
     def givenUnauthenticatedRequest() {
-        given().log().all()
+        SerenityRest
+            .given()
+            .baseUri(dmStoreBaseUri)
+            .log().all()
     }
 
     def givenRequest() {
-        given().log().all().header("ServiceAuthorization", serviceToken())
+        SerenityRest
+            .given()
+            .baseUri(dmStoreBaseUri)
+            .log().all().header("ServiceAuthorization", serviceToken())
     }
 
     def serviceToken() {

@@ -1,16 +1,13 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assume.assumeTrue
 
-@RunWith(SpringIntegrationSerenityRunner.class)
 class AddContentVersionIT extends BaseIT {
 
     @Test
@@ -20,12 +17,12 @@ class AddContentVersionIT extends BaseIT {
 
         def response = givenRequest(CITIZEN)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-        .expect().log().all()
+            .expect().log().all()
             .statusCode(201)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
             .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
             .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
-        .when()
+            .when()
             .post(documentURL)
             .thenReturn()
 
@@ -33,9 +30,9 @@ class AddContentVersionIT extends BaseIT {
 
         givenRequest(CITIZEN)
             .expect()
-                .statusCode(200)
+            .statusCode(200)
             .when()
-                .get(newVersionUrl)
+            .get(newVersionUrl)
 
     }
 
@@ -46,9 +43,9 @@ class AddContentVersionIT extends BaseIT {
         givenRequest(CITIZEN)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(404)
+            .statusCode(404)
             .when()
-                .post('/documents' + UUID.randomUUID())
+            .post('/documents' + UUID.randomUUID())
 
     }
 
@@ -58,9 +55,9 @@ class AddContentVersionIT extends BaseIT {
         givenUnauthenticatedRequest()
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(403)
+            .statusCode(403)
             .when()
-                .post('/documents/' + UUID.randomUUID())
+            .post('/documents/' + UUID.randomUUID())
 
     }
 
@@ -72,9 +69,9 @@ class AddContentVersionIT extends BaseIT {
         givenUnauthenticatedRequest()
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(403)
+            .statusCode(403)
             .when()
-                .post(url)
+            .post(url)
 
     }
 
@@ -86,9 +83,9 @@ class AddContentVersionIT extends BaseIT {
         givenRequest(CITIZEN_2)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(403)
+            .statusCode(403)
             .when()
-                .post(url)
+            .post(url)
 
     }
 
@@ -100,9 +97,9 @@ class AddContentVersionIT extends BaseIT {
         givenRequest(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(403)
+            .statusCode(403)
             .when()
-                .post(url)
+            .post(url)
 
     }
 
@@ -112,9 +109,9 @@ class AddContentVersionIT extends BaseIT {
         givenRequest(CASE_WORKER)
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(404)
+            .statusCode(404)
             .when()
-                .post("documents/${UUID.randomUUID()}")
+            .post("documents/${UUID.randomUUID()}")
 
     }
 
@@ -123,25 +120,25 @@ class AddContentVersionIT extends BaseIT {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
         def response = givenRequest(CITIZEN)
-                .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-                .multiPart("file", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
-                .multiPart("file", file(ATTACHMENT_3), MediaType.TEXT_PLAIN_VALUE)
-                .expect().log().all()
-                .statusCode(201)
-                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-                .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
-                .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
-                .when()
-                .post(documentURL)
-                .thenReturn()
+            .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("file", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
+            .multiPart("file", file(ATTACHMENT_3), MediaType.TEXT_PLAIN_VALUE)
+            .expect().log().all()
+            .statusCode(201)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
+            .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
+            .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+            .when()
+            .post(documentURL)
+            .thenReturn()
 
         def newVersionUrl = response.getHeader 'Location'
 
         givenRequest(CITIZEN)
-                .expect()
-                .statusCode(200)
-                .when()
-                .get(newVersionUrl)
+            .expect()
+            .statusCode(200)
+            .when()
+            .get(newVersionUrl)
     }
 
     @Test
@@ -149,23 +146,23 @@ class AddContentVersionIT extends BaseIT {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
         def response = givenRequest(CITIZEN)
-                .multiPart("file", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
-                .expect().log().all()
-                .statusCode(201)
-                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-                .body("originalDocumentName", equalTo(ATTACHMENT_4_PDF))
-                .body("mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
-                .when()
-                .post(documentURL)
-                .thenReturn()
+            .multiPart("file", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
+            .expect().log().all()
+            .statusCode(201)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
+            .body("originalDocumentName", equalTo(ATTACHMENT_4_PDF))
+            .body("mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
+            .when()
+            .post(documentURL)
+            .thenReturn()
 
         def newVersionUrl = response.getHeader 'Location'
 
         givenRequest(CITIZEN)
-                .expect()
-                .statusCode(200)
-                .when()
-                .get(newVersionUrl)
+            .expect()
+            .statusCode(200)
+            .when()
+            .get(newVersionUrl)
 
     }
 
@@ -174,11 +171,11 @@ class AddContentVersionIT extends BaseIT {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
         givenRequest(CITIZEN)
-                .multiPart("file", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
-                .expect().log().all()
-                .statusCode(422)
-                .when()
-                .post(documentURL)
+            .multiPart("file", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
+            .expect().log().all()
+            .statusCode(422)
+            .when()
+            .post(documentURL)
     }
 
     @Test
@@ -186,16 +183,15 @@ class AddContentVersionIT extends BaseIT {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
         givenRequest(CITIZEN)
-                .multiPart("file", file(BAD_ATTACHMENT_2), MediaType.ALL_VALUE)
-                .expect().log().all()
-                .statusCode(422)
-                .when()
-                .post(documentURL)
+            .multiPart("file", file(BAD_ATTACHMENT_2), MediaType.ALL_VALUE)
+            .expect().log().all()
+            .statusCode(422)
+            .when()
+            .post(documentURL)
     }
 
     @Test
-    void "ACV12 As an owner I cannot update the TTL while adding a version to the document"()
-    {
+    void "ACV12 As an owner I cannot update the TTL while adding a version to the document"() {
         assumeTrue(toggleTtlEnabled)
 
         Response response = CreateAUserforTTL CASE_WORKER
