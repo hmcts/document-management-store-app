@@ -7,6 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @ComponentScan("uk.gov.hmcts.dm.functional")
 @PropertySource("classpath:application.yml")
+public
 class FunctionalTestContextConfiguration {
 
 }

@@ -1,15 +1,13 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+import net.thucydides.core.annotations.Pending
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
-import net.thucydides.core.annotations.Pending;
 
 import java.time.Duration
 import java.time.LocalDateTime
@@ -17,7 +15,6 @@ import java.time.LocalDateTime
 import static org.hamcrest.Matchers.*
 import static org.junit.Assume.assumeTrue
 
-@RunWith(SpringIntegrationSerenityRunner.class)
 class CreateDocumentIT extends BaseIT {
 
 
@@ -53,7 +50,7 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("roles", "caseworker")
             .multiPart("ttl", "2018-10-31T10:10:10+0000")
 //            .multiPart("ttl", LocalDateTime.now().plusDays(1).withHour(0))
-        .expect().log().all()
+            .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
 
@@ -87,7 +84,7 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[6].originalDocumentName", equalTo(ATTACHMENT_27_JPEG))
             .body("_embedded.documents[6].mimeType", equalTo(V1MimeTypes.IMAGE_JPEG_VALUE))
 
-        .when()
+            .when()
             .post("/documents")
 
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
@@ -95,24 +92,24 @@ class CreateDocumentIT extends BaseIT {
         String document1Size = response.path("_embedded.documents[0].size")
 
         givenRequest(CITIZEN)
-        .expect()
+            .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
             .body("originalDocumentName", equalTo(ATTACHMENT_7_PNG))
             .body("classification", equalTo(Classifications.PUBLIC as String))
             .body("roles[0]", equalTo("caseworker"))
             .body("roles[1]", equalTo("citizen"))
-        .when()
+            .when()
             .get(documentUrl1)
 
         assertByteArrayEquality ATTACHMENT_7_PNG, givenRequest(CITIZEN)
-             .expect()
-             .statusCode(200)
-             .contentType(equalTo(MediaType.IMAGE_PNG_VALUE))
-             .header("OriginalFileName", ATTACHMENT_7_PNG)
-             .when()
-             .get(documentContentUrl1)
-             .asByteArray()
+            .expect()
+            .statusCode(200)
+            .contentType(equalTo(MediaType.IMAGE_PNG_VALUE))
+            .header("OriginalFileName", ATTACHMENT_7_PNG)
+            .when()
+            .get(documentContentUrl1)
+            .asByteArray()
     }
 
     @Test
@@ -123,9 +120,9 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
-        .expect()
+            .expect()
             .statusCode(403)
-        .when()
+            .when()
             .post("/documents")
     }
 
@@ -135,10 +132,10 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
-        .expect()
+            .expect()
             .statusCode(422)
             .body("error", equalTo("Please provide a valid classification: PRIVATE, RESTRICTED or PUBLIC"))
-        .when()
+            .when()
             .post("/documents")
     }
 
@@ -149,10 +146,10 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("classification", "XYZ")
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
-        .expect()
+            .expect()
             .statusCode(422)
             .body("error", equalTo("Please provide a valid classification: PRIVATE, RESTRICTED or PUBLIC"))
-        .when()
+            .when()
             .post("/documents")
     }
 
@@ -162,10 +159,10 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("classification", Classifications.RESTRICTED)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
-        .expect().log().all()
+            .expect().log().all()
             .statusCode(422)
             .body("error", equalTo("Provide some files to be uploaded."))
-        .when()
+            .when()
             .post("/documents")
     }
 
@@ -178,7 +175,7 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
-        .expect()
+            .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
             .body("_embedded.documents[0].originalDocumentName", equalTo("uploadFile.jpg"))
@@ -187,7 +184,7 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[1].originalDocumentName", equalTo("uploadFile_-.jpg"))
             .body("_embedded.documents[2].originalDocumentName", equalTo("uploadFile9 _-.jpg"))
-        .when()
+            .when()
             .post("/documents")
     }
 
@@ -198,7 +195,7 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
-        .expect()
+            .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
             .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
@@ -209,7 +206,7 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[1].mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
             .body("_embedded.documents[1].classification", equalTo(Classifications.PRIVATE as String))
             .body("_embedded.documents[1].roles", equalTo(null))
-        .when()
+            .when()
             .post("/documents")
     }
 
@@ -220,10 +217,10 @@ class CreateDocumentIT extends BaseIT {
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("files", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
-        .expect()
+            .expect()
             .statusCode(422)
             .body("error", equalTo("Your upload contains a disallowed file type"))
-        .when()
+            .when()
             .post("/documents")
     }
 
@@ -274,8 +271,8 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
             .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
-        .when()
-        .post("/documents")
+            .when()
+            .post("/documents")
     }
 
     @Test
@@ -316,9 +313,9 @@ class CreateDocumentIT extends BaseIT {
 
         givenRequest(CITIZEN)
             .expect()
-                .statusCode(404)
+            .statusCode(404)
             .when()
-                .get(url)
+            .get(url)
     }
 
     @Test
@@ -340,7 +337,7 @@ class CreateDocumentIT extends BaseIT {
 
         def tiffUrl = response.path("_embedded.documents[0]._links.thumbnail.href")
 
-        def tiffByteArray =  givenRequest(CITIZEN)
+        def tiffByteArray = givenRequest(CITIZEN)
             .get(tiffUrl).asByteArray()
 
         def file = file("ThumbnailNPad.jpg").getBytes()
@@ -367,7 +364,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href")
 
-        def downloadedFileByteArray =  givenRequest(CITIZEN)
+        def downloadedFileByteArray = givenRequest(CITIZEN)
             .get(url).asByteArray()
 
         def file = file("ThumbnailJPG.jpg").getBytes()
