@@ -34,9 +34,9 @@ import static org.mockito.Mockito.when;
 
 @Provider("em_dm_store")
 @PactBroker(scheme = "${PACT_BROKER_SCHEME:http}",
-    host = "localhost",
-    consumerVersionSelectors = {
-        @VersionSelector(tag = "${PACT_BRANCH_NAME:Dev}")})
+    host = "${PACT_BROKER_URL:localhost}",
+    port = "${PACT_BROKER_PORT:80}",
+    consumerVersionSelectors = {@VersionSelector(tag = "${PACT_BRANCH_NAME:Dev}")})
 @WebMvcTest({StoredDocumentController.class, StoredDocumentDeleteController.class})
 @AutoConfigureMockMvc(addFilters = false)
 @Import(StoreDocumentControllerTestConfiguration.class)
