@@ -49,6 +49,7 @@ withPipeline(type , product, component) {
     onMaster {
         env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
         env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+        env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
 
         after('test') {
             sh '''
@@ -56,6 +57,7 @@ withPipeline(type , product, component) {
             sh ./publish-swagger-docs.sh
              '''
         }
+        enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
     }
 
     onPR {
