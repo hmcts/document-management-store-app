@@ -1,0 +1,185 @@
+api:
+  version: 1.3.0
+
+spring:
+  application:
+    name: dm-store
+  data:
+    rest:
+      detection-strategy: annotated
+  jackson:
+    date-format: "yyyy-MM-dd'T'HH:mm:ssZ"
+    serialization:
+      indent_output: true
+  servlet:
+    multipart:
+      max-file-size: ${MAX_FILE_SIZE:4000MB}
+      max-request-size: ${MAX_FILE_SIZE:4000MB}
+  profiles:
+    active: dev
+  jpa:
+    database: postgresql
+    show-sql: ${SHOW_SQL:true}
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 5
+          batch_versioned_data: true
+  main:
+    allow-bean-definition-overriding: true
+
+  liquibase:
+    enabled: ${ENABLE_DB_MIGRATE:true}
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
+    username: ${SPRING_DATASOURCE_USERNAME:evidence}
+    password: ${SPRING_DATASOURCE_PASSWORD:evidence}
+
+  batch:
+    job:
+      enabled: ${ENABLE_TTL:true}
+      auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
+      auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
+    initialize-schema: always
+    document-task-milliseconds: ${DOCUMENT_TASK_MILLISECONDS:60000}
+    # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
+    historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
+    documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
+
+server:
+  port: ${SERVER_PORT:4603}
+  forward-headers-strategy: none
+
+connection:
+  upload-timeout-min: ${UPLOAD_TIMEOUT_MIN:60}
+
+authorization:
+  s2s-names-whitelist: ${S2S_NAMES_WHITELIST:divorce,ccd,em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,jui_webapp,pui_webapp,cmc_claim_store,bulk_scan_processor,em_npa_app,bulk_scan_orchestrator,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals,xui_webapp,ccd_case_document_am_api,unspec_service}
+
+auth:
+  idam:
+    client:
+      baseUrl: ${IDAM_USER_BASE_URI:http://localhost:4501}
+  provider:
+    service:
+      client:
+        baseUrl: ${IDAM_S2S_BASE_URI:http://localhost:4502}
+
+logging:
+  level:
+    org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
+    org.springframework.batch: ${LOG_LEVEL_SPRING_BATCH:DEBUG}
+    uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
+
+azure:
+  app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
+  application-insights:
+    instrumentation-key: ${APPINSIGHTS_INSTRUMENTATIONKEY:d04b52b1-20e5-473a-8ac4-3f6859ea113c}
+  storage:
+    connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1}
+    blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
+    enabled: true
+    metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
+
+postgres:
+  storage:
+    enabled: false
+
+app-insights:
+  dev-mode: off
+  request-component: on
+  telemetry-component: on
+
+errors:
+  globalIncludeStackTrace: ${SHOW_STACK_TRACE:true}
+
+info:
+  app:
+    environment: ${PACKAGES_ENVIRONMENT:local}
+    project: ${PACKAGES_PROJECT:evidence}
+    name: ${PACKAGES_NAME:dm-store}
+#    version: ${PACKAGES_VERSION:unknown}
+
+health:
+  status:
+    order:
+      - FATAL
+      - DOWN
+      - UNKNOWN
+      - UP
+  disk:
+    threshold: ${HEALTH_DISK_THRESHOLD:262144000}
+
+management:
+  endpoint:
+    health:
+      show-details: "always"
+  endpoints:
+    web:
+      base-path: '/'
+      exposure:
+        include:
+          - health
+          - info
+          - mappings
+  health:
+    db:
+      enabled: true
+    disk:
+      enabled: true
+    status:
+      order:
+        - FATAL
+        - DOWN
+        - UNKNOWN
+        - UP
+  info:
+    build:
+      enabled: true # Whether to enable build info.
+    defaults:
+      enabled: true # Whether to enable default info contributors.
+    env:
+      enabled: true # Whether to enable environment info.
+    git:
+      enabled: true # Whether to enable git info.
+      mode: simple # Mode to us
+#  metrics:
+#    enable: true
+
+dm:
+  multipart:
+    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv,audio/mpeg,video/mp4}
+    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv,.mp3,.mp4}
+  mediafile:
+    whitelist: ${DM_MEDIAFILE_WHITELIST:audio/mpeg,video/mp4}
+    sizelimit: ${MAX_MEDIA_FILE_SIZE:500}
+  nonmediafile:
+    sizelimit: ${MAX_NON_MEDIA_FILE_SIZE:300}
+
+thumbnail:
+  imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
+  pdfThumbnailCreator: ${SUPPORT_PDF_THUMBNAIL_MIME_TYPES:application/pdf}
+
+
+toggle:
+  includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
+  metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:true}
+  documentandmetadatauploadendpoint: ${ENABLE_DOCUMENT_AND_METADATA_UPLOAD:true}
+  folderendpoint: ${ENABLE_FOLDER_API:true}
+  deleteenabled: ${ENABLE_DELETE:true}
+  ttl: ${ENABLE_TTL:true}
+  thumbnail: ${ENABLE_THUMBNAIL:true}
+  testing: ${ENABLE_TESTING:true}
+  metadatamigration: ${ENABLE_METADATA_MIGRATION:true}
+
+task:
+  env: ${TASK_ENV:documentTaskLock-local}

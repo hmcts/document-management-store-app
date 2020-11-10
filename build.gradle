@@ -20,6 +20,7 @@ plugins {
     id 'idea'
     id 'io.franzbecker.gradle-lombok' version '3.3.0'
     id "info.solidsoft.pitest" version '1.5.2'
+    id 'au.com.dius.pact' version '4.1.0'
 
 }
 
@@ -57,6 +58,14 @@ sourceSets {
         }
         resources.srcDir file('src/smokeTest/resources')
     }
+    contractTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+            srcDir file('src/contractTest/java')
+        }
+        resources.srcDir file('src/contractTest/resources')
+    }
 }
 
 configurations {
@@ -64,6 +73,9 @@ configurations {
     functionalTestRuntime.extendsFrom(testRuntime)
     smokeTestCompile.extendsFrom(testCompile)
     smokeTestRuntime.extendsFrom(testRuntime)
+    contractTestCompile.extendsFrom(testCompile)
+    contractTestRuntime.extendsFrom(testRuntime)
+
 }
 
 tasks.withType(JavaCompile) {
@@ -103,7 +115,8 @@ def versions = [
     logging            : '5.1.5',
     pitest             : '1.5.2',
     gradlePitest       : '1.3.0',
-    sonarPitest        : '0.5'
+    sonarPitest        : '0.5',
+    pact_version       : '4.1.7'
 ]
 
 configurations.all {
@@ -202,10 +215,20 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
+    //pact
+    contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+    contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
+    contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
+    contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
+    contractTestCompile sourceSets.main.runtimeClasspath
+    contractTestCompile sourceSets.test.runtimeClasspath
 }
 
 dependencyCheck {
-    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+    // Specifies if the build should be failed if    a CVSS score above a specified level is identified.
     // range of 0-10 fails the build, anything greater and it doesn't fail the build
     failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 11 : 0
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
@@ -357,3 +380,18 @@ task smoke(type: Test) {
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
+task contractTest(type: Test) {
+    logger.lifecycle("Runnning contract Tests")
+    useJUnitPlatform()
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+
+}
+
+task runProviderPactVerification(type: Test) {
+    logger.lifecycle("Runs pact Tests")
+    testClassesDirs = sourceSets.contractTest.output.classesDirs
+    classpath = sourceSets.contractTest.runtimeClasspath
+}
+
+runProviderPactVerification.finalizedBy pactVerify
