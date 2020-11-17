@@ -1,15 +1,12 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.http.ContentType
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Test
-import org.junit.runner.RunWith
 
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assume.assumeTrue
 
-@RunWith(SpringIntegrationSerenityRunner.class)
-class UpdateDocumentIT  extends BaseIT {
+class UpdateDocumentIT extends BaseIT {
 
     @Test
     void "UD1 update TTL for a Document"() {
@@ -21,10 +18,10 @@ class UpdateDocumentIT  extends BaseIT {
             .body([ttl: "3000-10-31T10:10:10+0000"])
             .contentType(ContentType.JSON)
             .expect()
-                .statusCode(200)
-                .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
+            .statusCode(200)
+            .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
             .when()
-                .patch(documentUrl)
+            .patch(documentUrl)
 
     }
 
@@ -38,9 +35,9 @@ class UpdateDocumentIT  extends BaseIT {
             .body([ttl: "3000-10-31T10:10:10+0000"])
             .contentType(ContentType.JSON)
             .expect()
-                .statusCode(403)
+            .statusCode(403)
             .when()
-                .patch(documentUrl)
+            .patch(documentUrl)
 
     }
 
@@ -118,7 +115,7 @@ class UpdateDocumentIT  extends BaseIT {
 
         givenRequest(CITIZEN)
             .body([
-                ttl: "3000-10-31T10:10:10+0000",
+                ttl      : "3000-10-31T10:10:10+0000",
                 documents: [
                     [id: documentId, metadata: [metakey: "metavalue"]],
                     [id: documentId2, metadata: [metakey2: "metavalue2"]]
@@ -142,7 +139,7 @@ class UpdateDocumentIT  extends BaseIT {
 
         givenRequest(CITIZEN)
             .body([
-                ttl: "3000-10-31T10:10:10+0000",
+                ttl      : "3000-10-31T10:10:10+0000",
                 documents: [
                     [documentId: documentId, metadata: [metakey: "metavalue"]],
                     [documentId: documentId2, metadata: [metakey2: "metavalue2"]]
@@ -157,7 +154,6 @@ class UpdateDocumentIT  extends BaseIT {
     }
 
 
-
     @Test
     void "UD8 partial bulk update request success"() {
         assumeTrue(toggleTtlEnabled)
@@ -168,7 +164,7 @@ class UpdateDocumentIT  extends BaseIT {
 
         givenRequest(CITIZEN)
             .body([
-                ttl: "3000-10-31T10:10:10+0000",
+                ttl      : "3000-10-31T10:10:10+0000",
                 documents: [
                     [documentId: documentId, metadata: [metakey: "metavalue"]],
                     [documentId: uuid, metadata: [metakey2: "metavalue2"]]

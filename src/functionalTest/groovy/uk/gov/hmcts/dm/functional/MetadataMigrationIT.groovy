@@ -1,23 +1,20 @@
 package uk.gov.hmcts.dm.functional
 
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
-import net.thucydides.core.annotations.Pending
 
+import net.thucydides.core.annotations.Pending
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 
-import static org.hamcrest.Matchers.*
+import static org.hamcrest.Matchers.is
+import static org.junit.Assert.assertThat
 import static org.junit.Assume.assumeTrue
-import static org.junit.Assert.assertThat;
 
-
-@RunWith(SpringIntegrationSerenityRunner.class)
 class MetadataMigrationIT extends BaseIT {
 
     @Test
-    @Pending // To remove once metadataMigrationEnabled toggle is enabled
+    @Pending
+    // To remove once metadataMigrationEnabled toggle is enabled
     void "As a Shashank I want to process a CSV of metadata changes"() {
         assumeTrue(metadataMigrationEnabled)
         def document1Url = createDocumentAndGetUrlAs(CITIZEN)
@@ -53,7 +50,8 @@ class MetadataMigrationIT extends BaseIT {
 
 
     @Test
-    @Pending // To remove once metadataMigrationEnabled toggle is enabled
+    @Pending
+    // To remove once metadataMigrationEnabled toggle is enabled
     void "As a Shashank  I want metadata changes applied to only Matching records from CSV"() {
         assumeTrue(metadataMigrationEnabled)
 
@@ -107,7 +105,8 @@ class MetadataMigrationIT extends BaseIT {
     }
 
     @Test
-    @Pending // To remove once metadataMigrationEnabled toggle is enabled
+    @Pending
+    // To remove once metadataMigrationEnabled toggle is enabled
     void "As a As authenticated user  I want to process a CSV file which has missing metadata for one Case"() {
         assumeTrue(metadataMigrationEnabled)
 
@@ -131,14 +130,15 @@ class MetadataMigrationIT extends BaseIT {
         def caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get('metadata.case_type_id')
         def jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get('metadata.jurisdiction')
 
-        assertThat(caseId1,is(""))
-        assertThat(caseTypeId1,is(""))
-        assertThat(jurisdiction1,is(""))
+        assertThat(caseId1, is(""))
+        assertThat(caseTypeId1, is(""))
+        assertThat(jurisdiction1, is(""))
 
     }
 
     @Test
-    @Pending // To remove once metadataMigrationEnabled toggle is enabled
+    @Pending
+    // To remove once metadataMigrationEnabled toggle is enabled
     void "As a As authenticated user I  want to process a CSV file which has missing metadata for one Case and valid metadata for Another"() {
         assumeTrue(metadataMigrationEnabled)
 
@@ -168,18 +168,19 @@ class MetadataMigrationIT extends BaseIT {
         def caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get('metadata.case_type_id')
         def jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get('metadata.jurisdiction')
 
-        assertThat(caseId1,is(""))
-        assertThat(caseTypeId1,is(""))
-        assertThat(jurisdiction1,is(""))
+        assertThat(caseId1, is(""))
+        assertThat(caseTypeId1, is(""))
+        assertThat(jurisdiction1, is(""))
 
-        assertThat(caseId2,is("2"))
-        assertThat(caseTypeId2,is("AAT"))
-        assertThat(jurisdiction2,is("AUTOTEST2"))
+        assertThat(caseId2, is("2"))
+        assertThat(caseTypeId2, is("AAT"))
+        assertThat(jurisdiction2, is("AUTOTEST2"))
     }
 
 
     @Test
-    @Pending // To remove once metadataMigrationEnabled toggle is enabled
+    @Pending
+    // To remove once metadataMigrationEnabled toggle is enabled
     void "As a As authenticated user I want to process a CSV file which has random documentId generated and metadata should not be updated"() {
         assumeTrue(metadataMigrationEnabled)
 
@@ -210,7 +211,7 @@ class MetadataMigrationIT extends BaseIT {
     }
 
 
-      def postCsvFileAndTriggerSpringBatchJob(file) {
+    def postCsvFileAndTriggerSpringBatchJob(file) {
         givenRequest(CITIZEN)
             .multiPart("files", file, "text/csv")
             .multiPart("classification", Classifications.PUBLIC as String)

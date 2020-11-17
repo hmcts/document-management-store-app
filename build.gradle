@@ -111,6 +111,7 @@ def versions = [
     powermock          : '1.7.4',
     serenity           : '2.3.5',
     serenityreporter   : '2.3.5',
+    serenityRestAssured: '2.3.4',
     springBoot         :  springBoot.class.package.implementationVersion,
     logging            : '5.1.5',
     pitest             : '1.5.2',
@@ -206,7 +207,7 @@ dependencies {
     testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
 
-    testCompile (group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity) {
+    testCompile (group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured) {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
     }
     testCompile (group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity) {

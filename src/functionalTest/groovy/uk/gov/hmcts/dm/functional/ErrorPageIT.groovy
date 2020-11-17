@@ -1,9 +1,7 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.http.ContentType
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
@@ -12,7 +10,6 @@ import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
-@RunWith(SpringIntegrationSerenityRunner.class)
 class ErrorPageIT extends BaseIT {
 
     @Test
@@ -22,10 +19,10 @@ class ErrorPageIT extends BaseIT {
 
         givenUnauthenticatedRequest()
             .expect()
-                .contentType(ContentType.JSON)
-                .statusCode(403)
+            .contentType(ContentType.JSON)
+            .statusCode(403)
             .when()
-                .get(documentUrl)
+            .get(documentUrl)
 
     }
 
@@ -35,10 +32,10 @@ class ErrorPageIT extends BaseIT {
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
-                .contentType(ContentType.JSON)
-                .statusCode(404)
+            .contentType(ContentType.JSON)
+            .statusCode(404)
             .when()
-                .get('documents/XXX')
+            .get('documents/XXX')
 
     }
 
@@ -48,10 +45,10 @@ class ErrorPageIT extends BaseIT {
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
-                .contentType(ContentType.JSON)
-                .statusCode(405)
+            .contentType(ContentType.JSON)
+            .statusCode(405)
             .when()
-                .get('documents/')
+            .get('documents/')
     }
 
     @Test
@@ -59,10 +56,10 @@ class ErrorPageIT extends BaseIT {
 
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
-        .expect()
+            .expect()
             .contentType(ContentType.JSON)
             .statusCode(415)
-        .when()
+            .when()
             .post('documents/')
     }
 
@@ -72,10 +69,10 @@ class ErrorPageIT extends BaseIT {
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .multiPart("file", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
-        .expect()
+            .expect()
             .contentType(ContentType.JSON)
             .statusCode(422)
-        .when()
+            .when()
             .post('documents/')
     }
 
@@ -87,10 +84,10 @@ class ErrorPageIT extends BaseIT {
         givenRequest(CITIZEN_2)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-        .expect()
+            .expect()
             .contentType(ContentType.JSON)
             .statusCode(403)
-        .when()
+            .when()
             .post(url)
     }
 

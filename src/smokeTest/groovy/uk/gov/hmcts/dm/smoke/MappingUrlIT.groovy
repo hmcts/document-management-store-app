@@ -2,16 +2,19 @@ package uk.gov.hmcts.dm.smoke
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import net.thucydides.core.annotations.Pending
+import net.thucydides.core.annotations.WithTag
+import net.thucydides.core.annotations.WithTags
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.test.context.junit4.SpringRunner
 
 import static org.junit.Assert.assertTrue
 
-@RunWith(SpringRunner.class)
+@RunWith(SpringIntegrationSerenityRunner.class)
+@WithTags(@WithTag("testType:Smoke"))
 class MappingUrlIT extends BaseIT {
 
     @Value('${toggle.metadatasearchendpoint}')

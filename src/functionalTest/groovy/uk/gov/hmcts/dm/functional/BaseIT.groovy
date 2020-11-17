@@ -1,9 +1,12 @@
 package uk.gov.hmcts.dm.functional
 
-import io.restassured.RestAssured
+
 import io.restassured.response.Response
 import net.jcip.annotations.NotThreadSafe
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
+import net.serenitybdd.rest.SerenityRest
+import net.thucydides.core.annotations.WithTag
+import net.thucydides.core.annotations.WithTags
 import org.junit.Assert
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,13 +20,12 @@ import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import javax.annotation.PostConstruct
 
-import static io.restassured.RestAssured.expect
-import static io.restassured.RestAssured.given
 import static org.hamcrest.Matchers.equalTo
 
 @NotThreadSafe
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest(classes = FunctionalTestContextConfiguration)
+@WithTags(@WithTag("testType:Functional"))
 abstract class BaseIT {
 
     @Autowired
@@ -88,7 +90,6 @@ abstract class BaseIT {
     final String EXCEL = 'xlsx.xlsx'
 
 
-
     final String WORD_OLD = 'doc.doc'
     final String EXCEL_OLD = 'xls.xls'
     final String POWER_POINT_OLD = 'ppt.ppt'
@@ -117,30 +118,29 @@ abstract class BaseIT {
     final String ILLEGAL_NAME_FILE = 'uploadFile~@$!.jpg'
     final String ILLEGAL_NAME_FILE1 = 'uploadFile~`\';][{}!@£$%^&()}{_-.jpg'
     final String ILLEGAL_NAME_FILE2 = 'uploadFile9 @_-.jpg'
-    final String VALID_CHAR_FILE1= 'uploadFile 9.txt'
+    final String VALID_CHAR_FILE1 = 'uploadFile 9.txt'
 
-    final String EXE_AS_PDF= 'exe_as_pdf.pdf'
+    final String EXE_AS_PDF = 'exe_as_pdf.pdf'
     final String SVG_AS_PDF = 'svg_as_pdf.pdf'
     final String XML_AS_PDF = 'xml_as_pdf.pdf'
 
-    final String EXE_AS_PNG= 'exe_as_png.png'
+    final String EXE_AS_PNG = 'exe_as_png.png'
     final String SVG_AS_PNG = 'svg_as_png.png'
     final String XML_AS_PNG = 'xml_as_png.png'
 
     @PostConstruct
     void init() {
-        RestAssured.baseURI = dmStoreBaseUri
-        RestAssured.useRelaxedHTTPSValidation()
+        SerenityRest.useRelaxedHTTPSValidation()
     }
 
     def givenUnauthenticatedRequest() {
-        def request = given().log().all()
+        def request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
         request
     }
 
     def givenRequest(username = null, userRoles = null) {
 
-        def request = given().log().all()
+        def request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
 
         if (username) {
             request = request.header("serviceauthorization", serviceToken())
@@ -156,7 +156,7 @@ abstract class BaseIT {
     }
 
     def givenS2SRequest() {
-        given().log().all()
+        SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
             .header("serviceauthorization", serviceToken())
             .header("cache-control", "no-cache")
     }
@@ -187,10 +187,10 @@ abstract class BaseIT {
         authTokenProvider.findServiceToken()
     }
 
-    def createDocument(username,  filename = null, classification = null, roles = null, metadata = null) {
+    def createDocument(username, filename = null, classification = null, roles = null, metadata = null) {
         def request = givenRequest(username)
-                        .multiPart("files", file( filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-                        .multiPart("classification", classification ?: "PUBLIC")
+            .multiPart("files", file(filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("classification", classification ?: "PUBLIC")
 
         roles?.each { role ->
             request.multiPart("roles", role)
@@ -205,9 +205,9 @@ abstract class BaseIT {
 
         request
             .expect()
-                .statusCode(200)
+            .statusCode(200)
             .when()
-                .post("/documents")
+            .post("/documents")
     }
 
     def createDocumentAndGetUrlAs(username, filename = null, classification = null, roles = null, metadata = null) {
@@ -219,18 +219,18 @@ abstract class BaseIT {
         givenRequest(username).get(documentUrl).andReturn()
     }
 
-    def createDocumentAndGetBinaryUrlAs(username,  filename = null, classification = null, roles = null) {
+    def createDocumentAndGetBinaryUrlAs(username, filename = null, classification = null, roles = null) {
         createDocument(username, filename, classification, roles)
             .path("_embedded.documents[0]._links.binary.href")
     }
 
     def createDocumentContentVersion(documentUrl, username, filename = null) {
         givenRequest(username)
-            .multiPart("file", file( filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("file", file(filename ?: ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-                .statusCode(201)
+            .statusCode(201)
             .when()
-                .post(documentUrl)
+            .post(documentUrl)
     }
 
     def createDocumentContentVersionAndGetUrlAs(documentUrl, username, filename = null) {
