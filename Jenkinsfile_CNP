@@ -1,4 +1,5 @@
 #!groovy
+import uk.gov.hmcts.contino.AppPipelineDsl
 
 properties([
     [
@@ -39,6 +40,9 @@ def vaultOverrides = [
 ]
 
 withPipeline(type , product, component) {
+
+    env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
+
     enableDbMigration('ccd')
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
@@ -49,7 +53,6 @@ withPipeline(type , product, component) {
     onMaster {
         env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
         env.S2S_URL = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
-        env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
 
         after('test') {
             sh '''
