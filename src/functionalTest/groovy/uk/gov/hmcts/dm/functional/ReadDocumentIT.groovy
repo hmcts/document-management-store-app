@@ -104,6 +104,19 @@ class ReadDocumentIT extends BaseIT {
     }
 
     @Test
+    void "As authenticated user who is not an owner and has case worker and other roles  I can read not owned documents"() {
+
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN
+
+        givenRequest(CASE_WORKER, [CUSTOM_USER_ROLE, CASE_WORKER_ROLE_PROBATE])
+            .expect()
+            .statusCode(200)
+            .when()
+            .get(documentUrl)
+
+    }
+
+    @Test
     void "R8 As authenticated user GET document xxx where xxx is not UUID"() {
 
         givenRequest(CITIZEN)
@@ -143,59 +156,6 @@ class ReadDocumentIT extends BaseIT {
             .get('documents/' + UUID.randomUUID())
 
     }
-
-//    @Test
-//    void "R12 As unauthenticated user GET document that exists with jwt parameter appended to the document URL"() {
-//
-//        def documentUrl = createDocumentAndGetUrlAs CITIZEN
-//
-//        def jwt = authToken CITIZEN
-//
-//        def response = givenRequest()
-//            .param("jwt", jwt)
-//            .redirects().follow(false)
-//            .expect()
-//                .statusCode(302)
-//            .when()
-//                .get(documentUrl).andReturn()
-//
-//        def authToken = response.cookie('__auth-token')
-//        def newLocation = response.header('Location')
-//
-//        givenRequest()
-//            .header('Authorization', authToken)
-//            .expect()
-//                .statusCode(200)
-//            .when()
-//                .get(newLocation)
-//
-//    }
-
-
-//    @Test
-//    void "R13 As unauthenticated user GET document that does not exists with jwt parameter appended to the document URL"() {
-//
-//        def jwt = authToken CITIZEN
-//
-//        def response = givenRequest()
-//                .param("jwt", jwt)
-//                .redirects().follow(false)
-//                .expect()
-//                .statusCode(302)
-//                .when()
-//                .get('/documents/xxx').andReturn()
-//
-//        def authToken = response.cookie('__auth-token')
-//        def newLocation = response.header('Location')
-//
-//        givenRequest()
-//                .header('Authorization', authToken)
-//                .expect()
-//                .statusCode(404)
-//                .when()
-//                .get(newLocation)
-//
-//    }
 
     @Test
     void "R14 As authenticated user with a specific role I can access a document if its CLASSIFICATION is restricted and roles match"() {
