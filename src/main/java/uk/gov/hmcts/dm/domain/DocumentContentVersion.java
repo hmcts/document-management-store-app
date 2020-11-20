@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.dm.service.SecurityUtilService.sanitizedSetFrom;
 
