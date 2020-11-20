@@ -39,4 +39,4 @@ enable_thumbnail                    = "true"
 // Addtional
 ////////////////////////////////////////////////
 max_file_size_in_mb        = "500"
-managed_identity_object_id = "d73db849-aff7-4812-a3d4-c1b8be5cacd3"
+
