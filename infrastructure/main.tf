@@ -29,7 +29,7 @@ locals {
 
   sharedAppServicePlan       = "${var.shared_product}-${var.env}"
   sharedASPResourceGroup     = "${var.shared_product}-shared-${var.env}"
-  managed_identity_object_id = var.managed_identity_object_id
+
 }
 
 module "app" {
