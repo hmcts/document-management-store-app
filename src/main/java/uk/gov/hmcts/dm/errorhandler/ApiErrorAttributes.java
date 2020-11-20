@@ -26,13 +26,11 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
 
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
-        return getErrorAttributes(webRequest, this.globalIncludeStackTrace);
-    }
 
-    @Override
-    public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {
-
-        Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, true);
+        Map<String, Object> errorAttributes = super.getErrorAttributes(
+            webRequest,
+            ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE)
+        );
 
         List<FieldError> errors = (List<FieldError>)errorAttributes.remove("errors");
 

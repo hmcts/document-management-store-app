@@ -2,11 +2,11 @@ package uk.gov.hmcts.dm.security;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
@@ -35,7 +35,7 @@ public class MultipartFileWhiteListValidatorTest {
             new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
-        Mockito.when(fileContentVerifier.verifyContentType(Matchers.any())).thenReturn(true);
+        Mockito.when(fileContentVerifier.verifyContentType(ArgumentMatchers.any())).thenReturn(true);
 
         assertTrue(multipartFileListWhiteListValidator.isValid(files, null));
     }
@@ -46,7 +46,7 @@ public class MultipartFileWhiteListValidatorTest {
             new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
-        Mockito.when(fileContentVerifier.verifyContentType(Matchers.any())).thenReturn(false);
+        Mockito.when(fileContentVerifier.verifyContentType(ArgumentMatchers.any())).thenReturn(false);
 
         assertFalse(multipartFileListWhiteListValidator.isValid(files, null));
     }

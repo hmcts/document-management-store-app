@@ -28,9 +28,9 @@ import static java.util.UUID.randomUUID;
 import static org.apache.commons.io.IOUtils.copy;
 import static org.apache.tika.io.IOUtils.toInputStream;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
