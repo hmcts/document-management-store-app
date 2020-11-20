@@ -90,7 +90,7 @@ public class RestActions {
 
     public ResultActions postDocuments(String urlTemplate, List<MultipartFile> files, Classifications classification, List<String> roles) {
 
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.fileUpload(urlTemplate);
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(urlTemplate);
 
         builder.param("classification", classification.toString());
 
@@ -104,7 +104,7 @@ public class RestActions {
 
     public ResultActions postDocument(String urlTemplate, MultipartFile file) {
         return translateException(() -> mvc.perform(
-                    MockMvcRequestBuilders.fileUpload(urlTemplate).file((MockMultipartFile)file)
+                    MockMvcRequestBuilders.multipart(urlTemplate).file((MockMultipartFile)file)
                         .headers(httpHeaders)
                 ));
 
@@ -113,7 +113,7 @@ public class RestActions {
     public ResultActions postDocumentVersion(String urlTemplate, MockMultipartFile file) {
 
         MockMultipartHttpServletRequestBuilder builder =
-                MockMvcRequestBuilders.fileUpload(urlTemplate);
+                MockMvcRequestBuilders.multipart(urlTemplate);
 
 
         builder.with(request -> {

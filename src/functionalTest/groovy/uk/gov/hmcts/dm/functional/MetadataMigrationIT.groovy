@@ -9,7 +9,7 @@ import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.is
-import static org.junit.Assert.assertThat
+import static org.hamcrest.MatcherAssert.assertThat
 import static org.junit.Assume.assumeTrue
 
 class MetadataMigrationIT extends BaseIT {
