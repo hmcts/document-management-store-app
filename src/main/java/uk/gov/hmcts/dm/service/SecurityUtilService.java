@@ -10,6 +10,7 @@ import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.Arrays;
 
 @Transactional
 @Service
@@ -27,7 +28,10 @@ public class SecurityUtilService {
     public String[] getUserRoles() {
         HttpServletRequest request = getCurrentRequest();
         return request != null && request.getHeader(USER_ROLES_HEADER) != null
-            ? request.getHeader(USER_ROLES_HEADER).split(",") : null;
+            ? Arrays.stream(request.getHeader(USER_ROLES_HEADER).split(","))
+                    .map(String::trim)
+                    .toArray(String[]::new)
+            : null;
     }
 
     public String getCurrentlyAuthenticatedServiceName() {

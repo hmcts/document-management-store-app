@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @NoArgsConstructor
@@ -161,7 +162,9 @@ public class DocumentContentVersion implements RolesAware {
     }
 
     public Set<String> getRoles() {
-        return getStoredDocument() != null ? getStoredDocument().getRoles() : null;
+        return getStoredDocument() != null
+            ? getStoredDocument().getRoles().stream().map(String::trim).collect(Collectors.toSet())
+            : null;
     }
 
     public Classifications getClassification() {
