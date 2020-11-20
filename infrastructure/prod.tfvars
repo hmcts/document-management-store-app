@@ -39,4 +39,4 @@ enable_testing                      = "false"
 // Addtional
 ////////////////////////////////////////////////
 max_file_size_in_mb        = "100"
-managed_identity_object_id = "34ad8470-8a52-44ec-bd89-35f6b8d57444"
+
