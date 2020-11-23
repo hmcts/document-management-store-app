@@ -11,7 +11,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
@@ -34,10 +34,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.Sets.newHashSet;
-import static java.util.Collections.singletonList;
+import static java.util.Collections.singletonList;`
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static uk.gov.hmcts.dm.componenttests.TestUtil.*;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;

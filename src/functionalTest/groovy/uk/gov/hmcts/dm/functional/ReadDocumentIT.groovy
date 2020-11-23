@@ -160,8 +160,6 @@ class ReadDocumentIT extends BaseIT {
     @Test
     void "R14 As authenticated user with a specific role I can access a document if its CLASSIFICATION is restricted and roles match"() {
 
-        //createUser(CITIZEN_2, 'caseworker')
-
         def documentUrl = createDocumentAndGetUrlAs CITIZEN, ATTACHMENT_9_JPG, 'RESTRICTED', ['caseworker']
 
         givenRequest(CITIZEN_2, ['caseworker'])
@@ -355,10 +353,6 @@ class ReadDocumentIT extends BaseIT {
 
     @Test
     void "R27 As a citizen if I upload a document to API Store then I should be able to access it using API Gateway"() {
-
-//        createUser CITIZEN
-//        def token = authToken CITIZEN
-//        def userid = userId token
 
         def documentUrl = createDocumentAndGetBinaryUrlAs CITIZEN
 
