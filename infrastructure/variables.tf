@@ -166,6 +166,3 @@ variable "asp_rg" {
   default     = "use_shared"
 }
 
-variable "managed_identity_object_id" {
-  default = ""
-}
