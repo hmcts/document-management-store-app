@@ -247,7 +247,7 @@ public class DomainPermissionEvaluatorTests {
         storedFile.setClassification(Classifications.RESTRICTED);
 
 
-        Assert.assertFalse(domainPermissionEvaluator
+        Assert.assertTrue(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.READ,
@@ -264,7 +264,7 @@ public class DomainPermissionEvaluatorTests {
         storedFile.setClassification(Classifications.RESTRICTED);
 
 
-        Assert.assertFalse(domainPermissionEvaluator
+        Assert.assertTrue(domainPermissionEvaluator
             .hasPermission(
                 storedFile,
                 Permissions.READ,

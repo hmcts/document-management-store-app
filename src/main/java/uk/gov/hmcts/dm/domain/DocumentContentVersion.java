@@ -16,24 +16,14 @@ import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 import uk.gov.hmcts.dm.utils.StringUtils;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
+import static uk.gov.hmcts.dm.service.SecurityUtilService.sanitizedSetFrom;
 
 @Entity
 @NoArgsConstructor
@@ -162,13 +152,10 @@ public class DocumentContentVersion implements RolesAware {
     }
 
     public Set<String> getRoles() {
-        return getStoredDocument() != null
-            ? getStoredDocument().getRoles().stream().map(String::trim).collect(Collectors.toSet())
-            : null;
+        return getStoredDocument() != null ? sanitizedSetFrom(getStoredDocument().getRoles()) : null;
     }
 
     public Classifications getClassification() {
         return getStoredDocument() != null ? getStoredDocument().getClassification() : null;
     }
-
 }
