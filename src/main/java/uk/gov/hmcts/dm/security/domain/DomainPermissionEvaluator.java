@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static uk.gov.hmcts.dm.service.SecurityUtilService.sanitizedSetFrom;
+
 @Component
 public class DomainPermissionEvaluator {
 
@@ -38,6 +40,9 @@ public class DomainPermissionEvaluator {
             result = true;
         }
 
+        HashSet<String> authenticatedUserRolesSet = authenticatedUserRoles == null ? new HashSet<>()
+            : sanitizedSetFrom(authenticatedUserRoles);
+
         if (!result && permission == Permissions.READ && creatorAware instanceof RolesAware) {
             RolesAware rolesAware = (RolesAware) creatorAware;
             if (rolesAware.getRoles() != null
@@ -46,28 +51,24 @@ public class DomainPermissionEvaluator {
                 && (Classifications.RESTRICTED.equals(rolesAware.getClassification())
                 || Classifications.PUBLIC.equals(rolesAware.getClassification()))
                 ) {
-                HashSet<String> authenticatedUserRolesSet = new HashSet<>(authenticatedUserRoles);
-                Set<String> documentRoles = rolesAware.getRoles();
+                Set<String> documentRoles = sanitizedSetFrom(rolesAware.getRoles());
                 log.info("User with roles {} accessing document that accepts roles {}", authenticatedUserRoles, documentRoles);
 
-                authenticatedUserRolesSet.retainAll(documentRoles);
-                if (authenticatedUserRolesSet.size() > 0) {
+                documentRoles.retainAll(authenticatedUserRolesSet);
+                if (documentRoles.size() > 0) {
                     result = true;
                 }
             }
         }
 
         if (!result && permission == Permissions.READ) {
-            boolean hasCaseworkerRole = !new HashSet<>(authenticatedUserRoles).stream()
+            boolean hasCaseworkerRole = !authenticatedUserRolesSet.stream()
                 .filter(role -> role.startsWith(CASE_WORKER_PREFIX))
                 .collect(Collectors.toList())
                 .isEmpty();
 
             result = hasCaseworkerRole;
         }
-
         return result;
-
     }
-
 }
