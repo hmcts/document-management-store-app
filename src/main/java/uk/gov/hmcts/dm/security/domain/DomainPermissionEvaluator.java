@@ -40,7 +40,8 @@ public class DomainPermissionEvaluator {
             result = true;
         }
 
-        HashSet<String> authenticatedUserRolesSet = sanitizedSetFrom(authenticatedUserRoles);
+        HashSet<String> authenticatedUserRolesSet = authenticatedUserRoles == null ? new HashSet<>()
+            : sanitizedSetFrom(authenticatedUserRoles);
 
         if (!result && permission == Permissions.READ && creatorAware instanceof RolesAware) {
             RolesAware rolesAware = (RolesAware) creatorAware;
