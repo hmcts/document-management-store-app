@@ -353,20 +353,46 @@ task printVersion {
         print project.version
     }
 }
+task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
+    doFirst(){
+        printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
+    }
 
-task functional(type: Test) {
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    forkEvery = 10
+
+    exclude "uk/gov/hmcts/dm/functional/nightly/pipeline/**"
+
     group = 'Delivery pipeline'
     description = 'Executes functional tests'
+
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
-    include "uk/gov/hmcts/dm/functional/**"
+
     failFast = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+
+    finalizedBy aggregate
 }
 
-// Serenity Single page Reports
-functional.finalizedBy(aggregate)
+task nightlyFunctional(type: Test, description: 'Runs the Nightly Only Functional tests.', group: 'Verification') {
+    doFirst(){
+        printf("::::::::::  Running  nightlyFunctional ::::::::::")
+    }
+
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    forkEvery = 10
+
+    include "uk/gov/hmcts/dm/functional/nightly/pipeline/**"
+
+    setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
+    setClasspath(sourceSets.functionalTest.runtimeClasspath)
+
+    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+
+    finalizedBy aggregate
+}
 
 serenity {
     reports = ["single-page-html"]

@@ -52,14 +52,27 @@ withNightlyPipeline(type, product, component) {
     env.S2S_URL  = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
 
-    overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
-    enableMutationTest()
+    overrideVaultEnvironments(vaultOverrides)
+
+    after('DependencyCheckNightly') {
+        stage('NightlyFunctional') {
+            println("~~~~~~~~~~~~~~~~~  Starting Nightly Only Functional :aat ~~~~~~~~~~")
+            sh("./gradlew --no-daemon --init-script init.gradle nightlyFunctional")
+            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+            steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+
+        }
+    }
+    after('fullFunctionalTest') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+    }
 
     enableFullFunctionalTest()
+    enableMutationTest()
     enableSecurityScan()
 
     enableSlackNotifications('#em-dev-chat')
-
 
 }
