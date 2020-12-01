@@ -1,10 +1,11 @@
-package uk.gov.hmcts.dm.functional
+package uk.gov.hmcts.dm.functional.nightly.pipeline
 
 import io.restassured.response.Response
 import net.thucydides.core.annotations.Pending
 import org.junit.Assert
 import org.junit.Test
 import org.springframework.http.MediaType
+import uk.gov.hmcts.dm.functional.BaseIT
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
