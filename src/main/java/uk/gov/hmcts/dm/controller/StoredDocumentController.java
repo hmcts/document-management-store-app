@@ -12,11 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -34,7 +30,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
 @RequestMapping(path = "/documents")
@@ -117,17 +112,10 @@ public class StoredDocumentController {
                     format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
                 try {
-                    if (isBlank(documentContentVersion.getContentUri())) {
-                        response.setHeader("data-source", "Postgres");
-                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
-                            documentContentVersion,
-                            response.getOutputStream());
-                    } else {
-                        response.setHeader("data-source", "contentURI");
-                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                            documentContentVersion,
-                            response.getOutputStream());
-                    }
+                    response.setHeader("data-source", "contentURI");
+                    auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                        documentContentVersion,
+                        response.getOutputStream());
 
                 } catch (IOException e) {
                     return ResponseEntity

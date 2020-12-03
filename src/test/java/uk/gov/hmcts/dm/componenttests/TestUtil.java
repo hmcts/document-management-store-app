@@ -5,12 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -22,16 +20,6 @@ import java.util.stream.Stream;
 public class TestUtil {
 
     public static final String BLOB_DATA = "data";
-
-    public static final DocumentContent DOCUMENT_CONTENT;
-
-    static {
-        try {
-            DOCUMENT_CONTENT = new DocumentContent(new SerialBlob(BLOB_DATA.getBytes(StandardCharsets.UTF_8)));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static final MockMultipartFile TEST_FILE;
 
@@ -78,7 +66,7 @@ public class TestUtil {
         .size(4L)
         .contentUri("someUri")
         .storedDocument(StoredDocument.builder().id(RANDOM_UUID).folder(Folder.builder().id(RANDOM_UUID).build()).build())
-        .documentContent(DOCUMENT_CONTENT).build();
+        .build();
 
     public static final Folder folder = Folder.builder()
         .id(RANDOM_UUID)

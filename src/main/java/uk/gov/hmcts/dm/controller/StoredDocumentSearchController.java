@@ -48,7 +48,9 @@ public class StoredDocumentSearchController {
         Pageable pageable,
         PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
 
-        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByMetadata(metadataSearchCommand, pageable).map(StoredDocumentHalResource::new);
+        Page<StoredDocumentHalResource> page =
+            searchService.findStoredDocumentsByMetadata(metadataSearchCommand, pageable)
+            .map(StoredDocumentHalResource::new);
 
         return ResponseEntity
                 .ok()
@@ -67,7 +69,9 @@ public class StoredDocumentSearchController {
             Pageable pageable,
             PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
 
-        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByCreator(securityUtilService.getUserId(), pageable).map(StoredDocumentHalResource::new);
+        Page<StoredDocumentHalResource> page =
+            searchService.findStoredDocumentsByCreator(securityUtilService.getUserId(), pageable)
+            .map(StoredDocumentHalResource::new);
 
         return ResponseEntity
                 .ok()

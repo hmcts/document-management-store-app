@@ -5,13 +5,10 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,8 +22,6 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
     @Autowired
     private StoredDocumentController controller;
 
-    final DocumentContent documentContent;
-
     final UUID id = UUID.randomUUID();
 
     final DocumentContentVersion documentContentVersion;
@@ -34,13 +29,12 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
     final StoredDocument storedDocument;
 
     public StoredDocumentControllerNoDeleteTests() throws SQLException {
-        documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8)));
         documentContentVersion = DocumentContentVersion.builder()
             .id(id)
             .mimeType("text/plain")
             .originalDocumentName("filename.txt")
             .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
-            .documentContent(documentContent).build();
+            .build();
         storedDocument = StoredDocument.builder().id(id)
             .folder(Folder.builder().id(id).build()).documentContentVersions(
                 Stream.of(documentContentVersion)

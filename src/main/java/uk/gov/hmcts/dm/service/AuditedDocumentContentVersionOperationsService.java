@@ -31,13 +31,6 @@ public class AuditedDocumentContentVersionOperationsService {
     private AuditEntryService auditEntryService;
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
-    public void readDocumentContentVersionBinary(@NotNull DocumentContentVersion documentContentVersion,
-                                                 @NotNull OutputStream outputStream) {
-        documentContentVersionService.streamDocumentContentVersion(documentContentVersion, outputStream);
-        auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
-    }
-
-    @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
     public void readDocumentContentVersionBinaryFromBlobStore(DocumentContentVersion documentContentVersion,
                                                   OutputStream outputStream) {
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);

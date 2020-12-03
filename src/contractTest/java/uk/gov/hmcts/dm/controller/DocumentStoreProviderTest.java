@@ -80,8 +80,7 @@ public class DocumentStoreProviderTest {
                 "text/plain",
                 "hello".getBytes(
                     StandardCharsets.UTF_8)),
-            "user",
-            false);
+            "user");
 
         documentContentVersion.setCreatedBy("userId");
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
