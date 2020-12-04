@@ -4,13 +4,18 @@ import groovy.json.JsonOutput
 import io.restassured.http.ContentType
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.Matchers
+import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 
 class SearchDocumentIT extends BaseIT {
+
+    @Rule
+    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     void "S1 As authenticated user I can search for document using specific metadata property"() {
