@@ -2,9 +2,11 @@ package uk.gov.hmcts.dm.functional
 
 
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.equalTo
 
@@ -17,6 +19,9 @@ class ReadContentVersionIT extends BaseIT {
     String documentVersionUrl
 
     String documentVersionBinaryUrl
+
+    @Rule
+    public RetryRule retryRule = new RetryRule(3);
 
     @Before
     public void setup() throws Exception {
