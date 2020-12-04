@@ -3,9 +3,11 @@ package uk.gov.hmcts.dm.functional
 import io.restassured.response.Response
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.CoreMatchers.containsString
 import static org.hamcrest.CoreMatchers.not
@@ -15,6 +17,9 @@ import static org.junit.Assume.assumeTrue
 class DeleteDocumentIT extends BaseIT {
     private citizenDocumentUrl
     private caseWorkerDocumentUrl
+
+    @Rule
+    public RetryRule retryRule = new RetryRule(3);
 
     @Before
     void setup() throws Exception {

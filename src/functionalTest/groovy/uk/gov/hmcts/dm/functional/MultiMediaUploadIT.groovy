@@ -2,14 +2,19 @@ package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
 import net.thucydides.core.annotations.Pending
+import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
+import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
 class MultiMediaUploadIT extends BaseIT {
+
+    @Rule
+    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     void "MV1 (R1) As authenticated user I upload  multi media files"() {
