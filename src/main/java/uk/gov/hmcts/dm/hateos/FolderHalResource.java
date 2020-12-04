@@ -4,16 +4,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.hateoas.Resources;
-import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.core.Relation;
 import uk.gov.hmcts.dm.controller.FolderController;
 import uk.gov.hmcts.dm.domain.Folder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Data
 @NoArgsConstructor
@@ -34,11 +35,11 @@ public class FolderHalResource extends HalResource {
     public FolderHalResource(Folder folder) {
         BeanUtils.copyProperties(folder, this);
         if (folder.getStoredDocuments() != null) {
-            Resources<StoredDocumentHalResource> itemResources =
-                    new Resources<>(folder.getStoredDocuments()
+            CollectionModel<StoredDocumentHalResource> itemResources =
+                    CollectionModel.of(new ArrayList<>(folder.getStoredDocuments()
                             .stream()
                             .map(StoredDocumentHalResource::new)
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toList())));
             embedResource("items", itemResources);
         }
         add(linkTo(methodOn(FolderController.class).get(folder.getId())).withSelfRel());

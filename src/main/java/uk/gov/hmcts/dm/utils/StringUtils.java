@@ -2,7 +2,8 @@ package uk.gov.hmcts.dm.utils;
 
 public class StringUtils {
 
-    private StringUtils(){}
+    private StringUtils() {
+    }
 
     public static final String sanitiseFileName(String originalDocumentName) {
         return originalDocumentName == null ? null :

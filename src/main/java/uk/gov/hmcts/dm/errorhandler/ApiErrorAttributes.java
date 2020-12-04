@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
@@ -22,6 +23,11 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
 
     @Autowired
     private ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
+
+    @Override
+    public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+        return getErrorAttributes(webRequest, this.globalIncludeStackTrace);
+    }
 
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, boolean includeStackTrace) {

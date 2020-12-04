@@ -1,14 +1,17 @@
 #!groovy
 
 properties([
-    // H allow predefined but random minute see https://en.wikipedia.org/wiki/Cron#Non-standard_characters
-    pipelineTriggers([cron('H 05 * * *')]),
+    [
+        $class: 'GithubProjectProperty',
+        displayName: 'Document Management Store API',
+        projectUrlStr: 'https://github.com/hmcts/document-management-store-app'
+    ],
+    pipelineTriggers([cron('H 21 * * *')]), // scheduling to trigger jenkins job.
     parameters([
-        booleanParam(
-            name: 'RUN_MUTATION',
-            defaultValue: true,
-            description: 'Run pitest mutation tests (duration approx. 1 hour)'
-        )
+        string(name: 'URL_TO_TEST', defaultValue: 'http://dm-store-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
+        string(name: 'SecurityRules',
+            defaultValue: 'http://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
+            description: 'The URL you want to run these tests against'),
     ]),
 ])
 
@@ -36,29 +39,40 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     ]
 }
 
+
+def vaultOverrides = [
+    'preview' : 'aat',
+    'spreview': 'saat'
+]
+
 withNightlyPipeline(type, product, component) {
-    enableSlackNotifications('#ccd-nightly-builds')
-    enableDbMigration('ccd')
+
+    // Vars for Kubernetes
+    env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+    env.S2S_URL  = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
+
     loadVaultSecrets(secrets)
+    overrideVaultEnvironments(vaultOverrides)
 
-    if (params.RUN_MUTATION) {
-        enableMutationTest()
+    after('DependencyCheckNightly') {
+        stage('NightlyFunctional') {
+            println("~~~~~~~~~~~~~~~~~  Starting Nightly Only Functional :aat ~~~~~~~~~~")
+            sh("./gradlew --no-daemon --init-script init.gradle nightlyFunctional")
+            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+            steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+
+        }
+    }
+    after('fullFunctionalTest') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
     }
 
-    after('checkout') {
-        echo '${product}-${component} out'
-        sh '''
-mkdir -p application/src/main/resources/META-INF
-echo "allprojects { task printVersionInit { doLast { println project.version } } }" > init.gradle
+    enableFullFunctionalTest()
+    enableMutationTest()
+    enableSecurityScan()
 
-tee application/src/main/resources/META-INF/build-info.properties <<EOF 2>/dev/null
-build.version=$(./gradlew -q printVersion)
-build.number=${BUILD_NUMBER}
-build.commit=$(git rev-parse HEAD)
-build.date=$(date)
-EOF
-
-'''
-    }
+    enableSlackNotifications('#em-dev-chat')
 
 }

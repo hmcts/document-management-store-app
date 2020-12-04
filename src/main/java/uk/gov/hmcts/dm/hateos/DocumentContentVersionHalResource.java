@@ -3,7 +3,7 @@ package uk.gov.hmcts.dm.hateos;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.beans.BeanUtils;
-import org.springframework.hateoas.core.Relation;
+import org.springframework.hateoas.server.core.Relation;
 import uk.gov.hmcts.dm.controller.DocumentContentVersionController;
 import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
@@ -11,8 +11,8 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.util.Date;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
