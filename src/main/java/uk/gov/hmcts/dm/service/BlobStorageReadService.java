@@ -65,9 +65,9 @@ public class BlobStorageReadService {
 
         Long length = documentContentVersion.getSize();
 
-        if (!rangeHeader.matches("^bytes=\\d*-\\d*(,\\d*-\\d*)*$")) {
-            throw new InvalidRangeRequestException(response, length);
-        }
+//        if (!rangeHeader.matches("^bytes=\\d*-\\d*(,\\d*-\\d*)*$")) {
+//            throw new InvalidRangeRequestException(response, length);
+//        }
 
         response.setBufferSize(DEFAULT_BUFFER_SIZE);
 
