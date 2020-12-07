@@ -67,7 +67,7 @@ public class BlobStorageReadService {
 
         Long length = documentContentVersion.getSize();
 
-        String patternString = "^bytes=\\d*-\\d*(,\\d*-\\d*)*$";
+        String patternString = "^bytes=\\d*-\\d*";
 
         Pattern pattern = Pattern.compile(patternString);
 
