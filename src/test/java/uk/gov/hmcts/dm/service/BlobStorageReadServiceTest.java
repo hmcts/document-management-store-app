@@ -5,16 +5,15 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import uk.gov.hmcts.dm.componenttests.TestUtil;
-import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import uk.gov.hmcts.dm.componenttests.TestUtil;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class BlobStorageReadServiceTest {
@@ -68,7 +69,6 @@ public class BlobStorageReadServiceTest {
         verify(blob).download(response.getOutputStream());
     }
 
-    @Ignore
     @Test(expected = InvalidRangeRequestException.class)
     public void loadsRangedBlobInvalidRangeHeaderStart() throws IOException {
 
@@ -78,7 +78,6 @@ public class BlobStorageReadServiceTest {
 
     }
 
-    @Ignore
     @Test(expected = InvalidRangeRequestException.class)
     public void loadsRangedBlobInvalidRangeHeaderStartGreaterThanEnd() throws IOException {
 

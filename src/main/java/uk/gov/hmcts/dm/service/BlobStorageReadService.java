@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -65,9 +67,15 @@ public class BlobStorageReadService {
 
         Long length = documentContentVersion.getSize();
 
-//        if (!rangeHeader.matches("^bytes=\\d*-\\d*(,\\d*-\\d*)*$")) {
-//            throw new InvalidRangeRequestException(response, length);
-//        }
+        String patternString = "^bytes=\\d*-\\d*(,\\d*-\\d*)*$";
+
+        Pattern pattern = Pattern.compile(patternString);
+
+        Matcher matcher = pattern.matcher(rangeHeader);
+
+        if (!matcher.matches()) {
+            throw new InvalidRangeRequestException(response, length);
+        }
 
         response.setBufferSize(DEFAULT_BUFFER_SIZE);
 
