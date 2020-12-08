@@ -1,12 +1,17 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.http.ContentType
+import org.junit.Rule
 import org.junit.Test
+import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.equalTo
 import static org.junit.Assume.assumeTrue
 
 class UpdateDocumentIT extends BaseIT {
+
+    @Rule
+    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     void "UD1 update TTL for a Document"() {

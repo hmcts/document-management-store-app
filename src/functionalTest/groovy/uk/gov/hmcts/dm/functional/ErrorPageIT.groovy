@@ -1,16 +1,21 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.http.ContentType
+import org.junit.Rule
 import org.junit.Test
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
+import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
 class ErrorPageIT extends BaseIT {
+
+    @Rule
+    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     void "EP1 As an unauthenticated web user trying to access a document, receive JSON error page with 403"() {
