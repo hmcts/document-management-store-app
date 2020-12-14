@@ -13,6 +13,8 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.*;
+
 @Component
 public class ApiErrorAttributes extends DefaultErrorAttributes {
 
@@ -27,10 +29,9 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
 
-        Map<String, Object> errorAttributes = super.getErrorAttributes(
-            webRequest,
-            ErrorAttributeOptions.of(ErrorAttributeOptions.Include.STACK_TRACE)
-        );
+        options = options.including(MESSAGE, BINDING_ERRORS, STACK_TRACE, EXCEPTION);
+
+        Map<String, Object> errorAttributes = super.getErrorAttributes(webRequest, options);
 
         List<FieldError> errors = (List<FieldError>)errorAttributes.remove("errors");
 
