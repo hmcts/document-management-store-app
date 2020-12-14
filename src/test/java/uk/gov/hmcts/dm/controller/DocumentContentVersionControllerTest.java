@@ -10,9 +10,6 @@ import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -41,15 +38,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
             Stream.of(documentContentVersion)
                 .collect(Collectors.toList())
         ).build();
-
-    private static SerialBlob serialBlob() {
-        try {
-            return new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8));
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     @Test
     public void testAddDocumentVersion() throws Exception {
