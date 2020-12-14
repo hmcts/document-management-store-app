@@ -167,23 +167,6 @@ class ErrorPageIT extends BaseIT {
             .post('documents/')
     }
 
-//    @Test
-//    void "EP37 As an unauthenticated api user trying to access a document with accept JSON, receive JSON error"() {
-//
-//        def documentUrl = createDocumentAndGetUrlAs CITIZEN
-//
-//        def path1 = givenRequest()
-//            .accept(ContentType.JSON)
-//            .expect()
-//            .contentType(ContentType.JSON)
-////            .body(containsString())
-//            .statusCode(403)
-//            .when()
-//            .get(documentUrl).path(".")
-//
-//        System.out.println(path)
-//    }
-
     @Test
     void "EP12 As an authenticated user, when I post a SVG document I should get JSON response"() {
 
