@@ -21,11 +21,14 @@ import java.sql.Blob;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 public class ImageThumbnailCreatorTest {
 
@@ -143,7 +146,7 @@ public class ImageThumbnailCreatorTest {
         final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
-        verifyNoInteractions(blobStorageReadService);
+        verifyZeroInteractions(blobStorageReadService);
     }
 
     @Test
