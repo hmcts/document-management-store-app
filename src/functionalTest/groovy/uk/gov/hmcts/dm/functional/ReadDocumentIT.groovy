@@ -108,7 +108,7 @@ class ReadDocumentIT extends BaseIT {
 
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-        givenRequest(CASE_WORKER, [CUSTOM_USER_ROLE, CASE_WORKER_ROLE_PROBATE])
+        givenSpacedRolesRequest(CASE_WORKER, [CUSTOM_USER_ROLE, CASE_WORKER_ROLE_PROBATE])
             .expect()
             .statusCode(200)
             .when()
