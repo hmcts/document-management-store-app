@@ -35,7 +35,7 @@ Additionally, the max request content length (including file sizes) need to be c
 Azure) via *maxAllowedContentLength* property for request filter in **web.config** (config file within source
 repository).
 
-## Quickstart
+## Setup
 ```bash
 # Get the connection string for Azure Blob Store and put it in place of getOneFromPortalAzure in application.yaml
 # Do not commit it!!!
@@ -48,14 +48,19 @@ azure:
 # Cloning repo and running though docker
 git clone https://github.com/hmcts/document-management-store-app.git
 cd document-management-store-app/
-./buildrundm-docker.sh
-```
 
-```bash
-# Run this script to aquire IDAM credentials required for DM API.
-./idam.sh
-```
+az login
+az acr login --name hmctspublic && az acr login --name hmctsprivate
 
+docker-compose -f docker-compose-dev.yml pull
+docker-compose -f docker-compose-dev.yml up -d
+
+# Setup DB
+./gradlew migratePostgresDatabase
+
+# Run application
+./gradlew bootRun
+```
 ### Integration
 There is currently a Java Client available here:
 https://github.com/hmcts/document-management-client
