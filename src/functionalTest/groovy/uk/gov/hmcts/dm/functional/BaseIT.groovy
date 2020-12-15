@@ -203,6 +203,23 @@ abstract class BaseIT {
         request
     }
 
+    def givenSpacedRolesRequest(username = null, userRoles = null) {
+
+        def request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
+
+        if (username) {
+            request = request.header("serviceauthorization", serviceToken())
+            if (username) {
+                request = request.header("user-id", username)
+            }
+            if (userRoles) {
+                request = request.header("user-roles", userRoles.join(', '))
+            }
+        }
+
+        request
+    }
+
     def givenS2SRequest() {
         SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
             .header("serviceauthorization", serviceToken())
