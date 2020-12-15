@@ -8,7 +8,9 @@
         HMCTS PMD rule set
     </description>
 
-    <rule ref="category/java/errorprone.xml"/>
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="BeanMembersShouldSerialize"/>
+    </rule>
     <rule ref="category/java/codestyle.xml">
         <exclude name="ConfusingTernary"/>
         <exclude name="TooManyStaticImports"/>
