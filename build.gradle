@@ -129,7 +129,7 @@ configurations.all {
             if (details.requested.group in ['org.apache.tomcat.embed']) {
                 details.useVersion '9.0.40'
             }
-            if (details.requested.group in ['com.google.guava']) {
+            if (details.requested.name in ['guava']) {
                 details.useVersion '30.1-jre'
             }
         }
