@@ -211,7 +211,7 @@ dependencies {
     testCompile (group: 'io.rest-assured', name :'rest-assured', version:'3.3.0') {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
     }
-    testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
+    testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
 
