@@ -113,7 +113,7 @@ public class StoredDocumentController {
     public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletRequest request, HttpServletResponse response) {
 
         for (String header : Collections.list(request.getHeaderNames())) {
-            log.debug("Request: {}, {}", header, request.getHeader(header));
+            log.info("Request: {}, {}", header, request.getHeader(header));
         }
 
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
@@ -152,10 +152,10 @@ public class StoredDocumentController {
                         .body(e);
                 }
 
-                log.debug("Response: Content-Length, {}", response.getHeader(HttpHeaders.CONTENT_LENGTH));
-                log.debug("Response: Content-Type, {}", response.getHeader(HttpHeaders.CONTENT_TYPE));
-                log.debug("Response: Content-Range, {}", response.getHeader(HttpHeaders.CONTENT_RANGE));
-                log.debug("Response: Accept-Ranges, {}", response.getHeader(HttpHeaders.ACCEPT_RANGES));
+                log.info("Response: Content-Length, {}", response.getHeader(HttpHeaders.CONTENT_LENGTH));
+                log.info("Response: Content-Type, {}", response.getHeader(HttpHeaders.CONTENT_TYPE));
+                log.info("Response: Content-Range, {}", response.getHeader(HttpHeaders.CONTENT_RANGE));
+                log.info("Response: Accept-Ranges, {}", response.getHeader(HttpHeaders.ACCEPT_RANGES));
 
                 return ResponseEntity.ok().build();
 
