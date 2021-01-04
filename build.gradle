@@ -127,7 +127,10 @@ configurations.all {
     resolutionStrategy {
         eachDependency { DependencyResolveDetails details ->
             if (details.requested.group in ['org.apache.tomcat.embed']) {
-                details.useVersion '9.0.37'
+                details.useVersion '9.0.40'
+            }
+            if (details.requested.name in ['guava']) {
+                details.useVersion '30.1-jre'
             }
         }
     }
@@ -138,7 +141,9 @@ dependencies {
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.24.1'
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.0-M8'
-
+    compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.40'
+    compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
+    
     compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
@@ -149,7 +154,7 @@ dependencies {
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '5.2.3.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.2'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
@@ -206,7 +211,7 @@ dependencies {
     testCompile (group: 'io.rest-assured', name :'rest-assured', version:'3.3.0') {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
     }
-    testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.1.5'
+    testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
 
