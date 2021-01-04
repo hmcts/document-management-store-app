@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'org.owasp.dependencycheck' version '6.0.2'
+    id 'org.owasp.dependencycheck' version '6.0.4'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'se.patrikerdes.use-latest-versions' version '0.2.13'
