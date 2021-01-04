@@ -4,7 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -42,8 +43,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @RestController
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")
-@Slf4j
 public class StoredDocumentController {
+
+    private static final Logger log = LoggerFactory.getLogger(StoredDocumentController.class);
 
     @Autowired
     private DocumentContentVersionService documentContentVersionService;
