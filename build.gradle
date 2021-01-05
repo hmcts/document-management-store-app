@@ -194,7 +194,7 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.5.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE'
 
-    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
+    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.5.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
         exclude(module: 'commons-logging')
     }
