@@ -18,7 +18,7 @@ plugins {
     id 'checkstyle'
     id 'pmd'
     id 'idea'
-    id 'io.franzbecker.gradle-lombok' version '3.3.0'
+    id 'io.franzbecker.gradle-lombok' version '4.0.0'
     id "info.solidsoft.pitest" version '1.5.2'
     id 'au.com.dius.pact' version '4.1.0'
 
@@ -140,7 +140,7 @@ dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.9.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.24.1'
-    compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.0-M8'
+    compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.0'
     compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.40'
     compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
     
@@ -177,8 +177,8 @@ dependencies {
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.14.0"
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.14.0"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.19.1"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.19.1"
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
@@ -194,7 +194,7 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.5.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE'
 
-    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.4.0'
+    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.5.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
         exclude(module: 'commons-logging')
     }
