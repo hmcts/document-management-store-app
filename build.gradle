@@ -150,8 +150,6 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
 
-    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
-
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
     compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.2'
