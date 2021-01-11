@@ -426,6 +426,7 @@ task contractTest(type: Test) {
 
 task runProviderPactVerification(type: Test) {
     logger.lifecycle("Runs pact Tests")
+    System.setProperty("pact.verifier.publishResults", "true");
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
 }
