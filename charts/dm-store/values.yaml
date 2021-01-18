@@ -6,6 +6,7 @@ java:
     service:
       port: 5432
   image: 'hmctspublic.azurecr.io/dm/store:latest'
+  ingressHost: dm-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   readinessDelay: 40
   readinessTimeout: 5
   readinessPeriod: 15
