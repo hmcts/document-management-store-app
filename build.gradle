@@ -172,7 +172,7 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'liquibase-core', version: '3.8.1'
 
     compile group: 'io.swagger', name: 'swagger-core', version: '1.6.1'
-    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
+    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.2'
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
     compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.20.0"
