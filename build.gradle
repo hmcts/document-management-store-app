@@ -150,8 +150,6 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
 
-    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
-
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
     compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.2'
@@ -177,8 +175,8 @@ dependencies {
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.19.1"
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.19.1"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.20.0"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.20.0"
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
@@ -186,7 +184,7 @@ dependencies {
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
     }
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
-    compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.0.4"){
+    compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.1.0"){
         exclude group: 'org.springframework.cloud' , module : 'spring-cloud-context'
         exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
     }
@@ -207,7 +205,7 @@ dependencies {
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.5'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.5'
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
-    testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.2'
+    testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.0'
     testCompile (group: 'io.rest-assured', name :'rest-assured', version:'3.3.0') {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
     }
