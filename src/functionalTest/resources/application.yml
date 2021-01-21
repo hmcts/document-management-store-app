@@ -3,6 +3,7 @@ base-urls:
     idam-s2s: ${S2S_URL:http://localhost:4502}
     s2s-token: ${S2S_TOKEN:AAAAAAAAAAAAAAAA}
     dm-store: ${TEST_URL:http://localhost:4603}
+    large-docs: ${TEST_URL:https://www.dropbox.com/s}
 
 toggle:
     metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:true}
@@ -13,3 +14,37 @@ toggle:
     thumbnail: ${ENABLE_THUMBNAIL:true}
     includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
     metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
+
+large-docs-ids:
+    mp4-32mb: ${MP4_32MB:zru4odt6szjuk18/32MB_Video.mp4?dl=1}
+    mp4-52mb: ${MP4_52MB:84t2z2zjzhhrmt5/52MB_Video.mp4?dl=1}
+    mp4-111mb: ${MP4_111MB:vg5fj4tbm0o23z9/111MB_Video.mp4?dl=1}
+    mp4-147mb: ${MP4_147MB:jbyfliq90benxln/147MB_Video.mp4?dl=1}
+    pdf-10mb: ${PDF_10MB:y0gm0fumzjwr64a/10MB.pdf?dl=1}
+
+large-docs:
+    metadata:
+        b1507f8e-13a6-4b99-9f9a-c47cfd41bfe8:
+            documentName: 10MB
+            extension: pdf
+            size: 10674409
+
+        418f9454-e4ed-4718-96e0-b3914555094b:
+            documentName: 147MB_Video
+            extension: mp4
+            size: 147439363
+
+        528516aa-33a5-461b-88b2-92e399960148:
+            documentName: 32MB_Video
+            extension: mp4
+            size: 32785231
+
+        50f9dd86-1615-461d-bca8-e437103dd734:
+            documentName: 111MB_Video
+            extension: mp4
+            size: 111022382
+
+        e58a9fa5-4f6f-438f-b44a-8c0877e945d0:
+            documentName: 52MB_Video
+            extension: mp4
+            size: 52254796
