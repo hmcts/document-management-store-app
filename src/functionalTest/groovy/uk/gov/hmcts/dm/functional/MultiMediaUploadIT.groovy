@@ -17,11 +17,15 @@ class MultiMediaUploadIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    void "MV1 (R1) As authenticated user I upload  multi media files"() {
-        uploadWhitelistedFileThenDownload("video_test.mp4", "video/mp4")
-        uploadWhitelistedFileThenDownload("27_MB_video_mp4.mp4", "video/mp4")
-        uploadWhitelistedFileThenDownload("115MB_video_mp4.mp4", "video/mp4")
-        uploadWhitelistedFileThenDownload("audio_test.mp3", "audio/mpeg")
+    void "MV1 (R1) As authenticated user I upload large multi media files"() {
+        uploadWhitelistedLargeFileThenDownload(video32mbId, "video/mp4")
+        uploadWhitelistedLargeFileThenDownload(video111mbId, "video/mp4")
+    }
+
+    @Test
+    void "MV1 (R1) As authenticated user I upload multi media files"() {
+        uploadWhitelistedSmallFileThenDownload("video_test.mp4", "video/mp4")
+        uploadWhitelistedSmallFileThenDownload("audio_test.mp3", "audio/mpeg")
     }
 
     @Test
@@ -48,9 +52,10 @@ class MultiMediaUploadIT extends BaseIT {
 
     }
 
-    private uploadWhitelistedFileThenDownload(String filename, String mimeType) {
+    private uploadWhitelistedLargeFileThenDownload(String doc, String mimeType) {
+        File file = largeFile(doc)
         Response response = givenRequest(CITIZEN)
-            .multiPart("files", file(filename), mimeType)
+            .multiPart("files", file, mimeType)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -58,7 +63,7 @@ class MultiMediaUploadIT extends BaseIT {
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
 
-            .body("_embedded.documents[0].originalDocumentName", equalTo(filename))
+            .body("_embedded.documents[0].originalDocumentName", equalTo(file.getName()))
             .body("_embedded.documents[0].mimeType", equalTo(mimeType))
             .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
@@ -73,18 +78,62 @@ class MultiMediaUploadIT extends BaseIT {
             .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(filename))
+            .body("originalDocumentName", equalTo(file.getName()))
             .body("classification", equalTo(Classifications.PUBLIC as String))
             .body("roles[0]", equalTo("caseworker"))
             .body("roles[1]", equalTo("citizen"))
             .when()
             .get(documentUrl1)
 
-        assertByteArrayEquality filename, givenRequest(CITIZEN)
+        assertLargeDocByteArrayEquality file, givenRequest(CITIZEN)
             .expect()
             .statusCode(200)
             .contentType(containsString(mimeType))
-            .header("OriginalFileName", filename)
+            .header("OriginalFileName", file.getName())
+            .when()
+            .get(documentContentUrl1)
+            .asByteArray()
+
+        file.delete()
+    }
+
+    private uploadWhitelistedSmallFileThenDownload(String fileName, String mimeType) {
+        Response response = givenRequest(CITIZEN)
+            .multiPart("files", file(fileName), mimeType)
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect().log().all()
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+
+            .body("_embedded.documents[0].originalDocumentName", equalTo(fileName))
+            .body("_embedded.documents[0].mimeType", equalTo(mimeType))
+            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
+            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
+            .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
+            .when()
+            .post("/documents")
+
+        String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
+        String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href")
+
+        givenRequest(CITIZEN)
+            .expect()
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
+            .body("originalDocumentName", equalTo(fileName))
+            .body("classification", equalTo(Classifications.PUBLIC as String))
+            .body("roles[0]", equalTo("caseworker"))
+            .body("roles[1]", equalTo("citizen"))
+            .when()
+            .get(documentUrl1)
+
+        assertByteArrayEquality fileName, givenRequest(CITIZEN)
+            .expect()
+            .statusCode(200)
+            .contentType(containsString(mimeType))
+            .header("OriginalFileName", fileName)
             .when()
             .get(documentContentUrl1)
             .asByteArray()
