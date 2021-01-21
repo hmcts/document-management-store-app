@@ -18,7 +18,7 @@ class MultiMediaUploadIT extends BaseIT {
 
     @Test
     void "MV1 (R1) As authenticated user I upload large multi media files"() {
-        uploadWhitelistedLargeFileThenDownload(video32mbId, "video/mp4")
+        uploadWhitelistedLargeFileThenDownload(video52mbId, "video/mp4")
         uploadWhitelistedLargeFileThenDownload(video111mbId, "video/mp4")
     }
 

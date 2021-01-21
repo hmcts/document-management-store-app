@@ -51,12 +51,6 @@ abstract class BaseIT {
     @Value('${large-docs-ids.mp4-52mb}')
     String video52mbId
 
-    @Value('${large-docs-ids.mp4-32mb}')
-    String video32mbId
-
-    @Value('${large-docs-ids.pdf-10mb}')
-    String pdf10mbId
-
     @Value('${toggle.ttl}')
     boolean toggleTtlEnabled
 

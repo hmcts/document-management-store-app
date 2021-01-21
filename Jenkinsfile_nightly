@@ -51,7 +51,7 @@ withNightlyPipeline(type, product, component) {
     env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
     env.S2S_URL  = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
-    env.MP4_32MB = "528516aa-33a5-461b-88b2-92e399960148"
+    env.MP4_52MB = "e58a9fa5-4f6f-438f-b44a-8c0877e945d0"
     env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734"
 
     loadVaultSecrets(secrets)
