@@ -21,12 +21,12 @@ large-docs-ids:
 
 large-docs:
     metadata:
-        ${MP4_111MB}:
+        50f9dd86-1615-461d-bca8-e437103dd734:
             documentName: 111MB_Video
             extension: mp4
             size: 111022382
 
-        ${MP4_52MB}:
+        e58a9fa5-4f6f-438f-b44a-8c0877e945d0:
             documentName: 52MB_Video
             extension: mp4
             size: 52254796
