@@ -32,6 +32,7 @@ java:
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 1000
     ENABLE_METADATA_MIGRATION: 'true'
     STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
+    ENABLE_TTL: 'false'
   postgresql:
     enabled: true
 blobstorage:
