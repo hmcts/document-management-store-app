@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'org.owasp.dependencycheck' version '6.0.2'
+    id 'uk.gov.hmcts.java' version '0.12.3'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'se.patrikerdes.use-latest-versions' version '0.2.15'
@@ -241,14 +241,7 @@ dependencies {
 }
 
 dependencyCheck {
-    // Specifies if the build should be failed if    a CVSS score above a specified level is identified.
-    // range of 0-10 fails the build, anything greater and it doesn't fail the build
-    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 11 : 0
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
-    analyzers {
-        // Disable scanning of .NET related binaries
-        assemblyEnabled = false
-    }
 }
 
 checkstyle {
