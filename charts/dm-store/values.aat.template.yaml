@@ -7,3 +7,4 @@ java:
     TASK_ENV: documentTaskLock-aat-staging
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 5000
     DOCUMENT_TASK_MILLISECONDS: 5000
+    ENABLE_TTL: 'false'
