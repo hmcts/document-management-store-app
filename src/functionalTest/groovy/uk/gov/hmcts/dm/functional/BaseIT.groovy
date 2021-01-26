@@ -21,8 +21,6 @@ import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import javax.annotation.PostConstruct
 
 import static java.io.File.createTempFile
-import static org.apache.commons.io.FilenameUtils.getBaseName
-import static org.apache.commons.io.FilenameUtils.getExtension
 import static org.hamcrest.Matchers.equalTo
 
 @NotThreadSafe
@@ -45,17 +43,11 @@ abstract class BaseIT {
     @Value('${base-urls.large-docs}')
     String largeDocsBaseUri
 
-    @Value('${large-docs.metadata.mp4-111mb.id}')
+    @Value('${large-docs-ids.mp4-111mb}')
     String video111mbId
 
-    @Value('${large-docs.metadata.mp4-52mb.id}')
+    @Value('${large-docs-ids.mp4-52mb}')
     String video52mbId
-
-    @Value('${large-docs-ids.mp4-32mb}')
-    String video32mbId
-
-    @Value('${large-docs-ids.pdf-10mb}')
-    String pdf10mbId
 
     @Value('${toggle.ttl}')
     boolean toggleTtlEnabled
