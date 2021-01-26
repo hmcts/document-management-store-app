@@ -431,3 +431,4 @@ task runProviderPactVerification(type: Test) {
 }
 
 runProviderPactVerification.finalizedBy pactVerify
+
