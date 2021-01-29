@@ -3,6 +3,7 @@ base-urls:
     idam-s2s: ${S2S_URL:http://localhost:4502}
     s2s-token: ${S2S_TOKEN:AAAAAAAAAAAAAAAA}
     dm-store: ${TEST_URL:http://localhost:4603}
+    large-docs: ${TEST_URL:https://www.dropbox.com/s}
 
 toggle:
     metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:true}
@@ -13,3 +14,17 @@ toggle:
     thumbnail: ${ENABLE_THUMBNAIL:true}
     includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
     metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
+
+large-docs:
+    metadata:
+        mp4-52mb:
+            id: ${MP4_52MB:84t2z2zjzhhrmt5/52MB_Video.mp4?dl=1}
+            documentName: 111MB_Video
+            extension: mp4
+            size: 111022382
+
+        mp4-111mb:
+            id: ${MP4_111MB:vg5fj4tbm0o23z9/111MB_Video.mp4?dl=1}
+            documentName: 52MB_Video
+            extension: mp4
+            size: 52254796
