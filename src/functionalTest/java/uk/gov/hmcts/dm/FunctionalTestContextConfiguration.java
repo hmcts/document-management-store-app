@@ -1,12 +1,14 @@
 package uk.gov.hmcts.dm;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.test.context.TestPropertySource;
 
 @Configuration
 @ComponentScan("uk.gov.hmcts.dm.functional")
-@PropertySource("classpath:application.yml")
+@TestPropertySource({"classpath:application.yml"})
+@EnableConfigurationProperties
 public class FunctionalTestContextConfiguration {
 
 }
