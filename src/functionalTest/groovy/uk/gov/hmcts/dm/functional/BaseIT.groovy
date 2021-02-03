@@ -20,6 +20,7 @@ import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 
 import javax.annotation.PostConstruct
 
+import static java.io.File.createTempFile
 import static org.hamcrest.Matchers.equalTo
 
 @NotThreadSafe
@@ -31,10 +32,22 @@ abstract class BaseIT {
     @Autowired
     AuthTokenProvider authTokenProvider
 
+    @Autowired
+    DocumentMetadataPropertiesConfig metadataPropertiesConfig
+
     FileUtils fileUtils = new FileUtils()
 
     @Value('${base-urls.dm-store}')
     String dmStoreBaseUri
+
+    @Value('${base-urls.large-docs}')
+    String largeDocsBaseUri
+
+    @Value('${large-docs.metadata.mp4-111mb.id}')
+    String video111mbId
+
+    @Value('${large-docs.metadata.mp4-52mb.id}')
+    String video52mbId
 
     @Value('${toggle.ttl}')
     boolean toggleTtlEnabled
@@ -155,6 +168,23 @@ abstract class BaseIT {
         request
     }
 
+    def givenLargeFileRequest(username = null, userRoles = null) {
+
+        def request = SerenityRest.given().baseUri(largeDocsBaseUri).log().all()
+
+        if (username) {
+            request = request.header("serviceauthorization", serviceToken())
+            if (username) {
+                request = request.header("user-id", username)
+            }
+            if (userRoles) {
+                request = request.header("user-roles", userRoles.join(','))
+            }
+        }
+
+        request
+    }
+
     def givenRangeRequest(long start = 0L, long end = 1023L, username = null, userRoles = null) {
         givenRequest(username, userRoles)
             .header("Range", "bytes=" + start + "-" + end);
@@ -177,6 +207,23 @@ abstract class BaseIT {
             e.printStackTrace()
             throw e
         }
+    }
+
+    File largeFile(String doc, String metadataKey) {
+        InputStream inputStream =
+            givenLargeFileRequest(CITIZEN, [CASE_WORKER_ROLE_PROBATE])
+                .get(doc)
+                .getBody()
+                .asInputStream()
+
+        def metadata = metadataPropertiesConfig.getMetadata().get(metadataKey)
+        def name = metadata.getDocumentName()
+        def extension = metadata.getExtension()
+        File tmpFile = createTempFile(name, "." + extension)
+        tmpFile.withOutputStream { stream ->
+            stream.write(inputStream.readAllBytes())
+        }
+        return tmpFile
     }
 
     def authToken(username) {
@@ -269,6 +316,10 @@ abstract class BaseIT {
 
     void assertByteArrayEquality(String fileName, byte[] response) {
         Assert.assertTrue(Arrays.equals(file(fileName).bytes, response))
+    }
+
+    void assertLargeDocByteArrayEquality(File file, byte[] response) {
+        Assert.assertTrue(Arrays.equals(file.bytes, response))
     }
 
 }
