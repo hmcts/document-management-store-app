@@ -234,7 +234,7 @@ dependencies {
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
     contractTestCompile sourceSets.main.runtimeClasspath
     contractTestCompile sourceSets.test.runtimeClasspath
