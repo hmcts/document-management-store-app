@@ -239,4 +239,38 @@ public class DomainPermissionEvaluatorTests {
             ));
     }
 
+    @Test
+    public void testDocumentRolesWithLeadingSpaceCharacter() {
+        StoredDocument storedFile = new StoredDocument();
+        storedFile.setCreatedBy("nobody");
+        storedFile.setRoles(Arrays.asList(new String[] { " valid-role" }).stream().collect(Collectors.toSet()));
+        storedFile.setClassification(Classifications.RESTRICTED);
+
+
+        Assert.assertTrue(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                MRS_CASE_WORKER,
+                Arrays.asList(" valid-role", "x")
+            ));
+    }
+
+    @Test
+    public void testUserRolesWithLeadingSpaceCharacter() {
+        StoredDocument storedFile = new StoredDocument();
+        storedFile.setCreatedBy("nobody");
+        storedFile.setRoles(Arrays.asList(new String[] { "valid-role" }).stream().collect(Collectors.toSet()));
+        storedFile.setClassification(Classifications.RESTRICTED);
+
+
+        Assert.assertTrue(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                MRS_CASE_WORKER,
+                Arrays.asList(" valid-role", "x")
+            ));
+    }
+
 }

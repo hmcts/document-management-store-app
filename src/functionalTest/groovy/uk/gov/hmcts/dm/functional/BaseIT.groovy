@@ -64,6 +64,7 @@ abstract class BaseIT {
     String CASE_WORKER = 'test3@test.com'
 
     String CASE_WORKER_ROLE_PROBATE = 'caseworker-probate'
+    String CUSTOM_USER_ROLE = 'custom-user-role'
     String CASE_WORKER_ROLE_CMC = 'caseworker-cmc'
     String CASE_WORKER_ROLE_SSCS = 'caseworker-sscs'
     String CASE_WORKER_ROLE_DIVORCE = 'caseworker-divorce'
@@ -168,9 +169,10 @@ abstract class BaseIT {
         request
     }
 
-    def givenLargeFileRequest(username = null, userRoles = null) {
 
-        def request = SerenityRest.given().baseUri(largeDocsBaseUri).log().all()
+    def givenSpacedRolesRequest(username = null, userRoles = null) {
+
+        def request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
 
         if (username) {
             request = request.header("serviceauthorization", serviceToken())
@@ -178,7 +180,7 @@ abstract class BaseIT {
                 request = request.header("user-id", username)
             }
             if (userRoles) {
-                request = request.header("user-roles", userRoles.join(','))
+                request = request.header("user-roles", userRoles.join(', '))
             }
         }
 
