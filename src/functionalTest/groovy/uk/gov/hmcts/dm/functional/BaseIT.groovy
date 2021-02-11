@@ -169,7 +169,6 @@ abstract class BaseIT {
         request
     }
 
-
     def givenSpacedRolesRequest(username = null, userRoles = null) {
 
         def request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
