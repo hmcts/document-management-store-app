@@ -12,7 +12,7 @@ Document Management is a backend service to store and retrieve documents.
 
 It uses:
 
-* Java8
+* Java
 * Spring boot
 * Junit, Mockito and SpringBootTest and Powermockito
 * Gradle
