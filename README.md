@@ -55,8 +55,6 @@ az acr login --name hmctspublic && az acr login --name hmctsprivate
 docker-compose -f docker-compose-dev.yml pull
 docker-compose -f docker-compose-dev.yml up -d
 
-# Setup DB
-./gradlew migratePostgresDatabase
 
 # Run application
 ./gradlew bootRun
