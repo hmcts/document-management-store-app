@@ -51,19 +51,12 @@ withNightlyPipeline(type, product, component) {
     env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
     env.S2S_URL  = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
+    env.MP4_52MB = "e58a9fa5-4f6f-438f-b44a-8c0877e945d0/binary"
+    env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
 
     loadVaultSecrets(secrets)
     overrideVaultEnvironments(vaultOverrides)
 
-    after('DependencyCheckNightly') {
-        stage('NightlyFunctional') {
-            println("~~~~~~~~~~~~~~~~~  Starting Nightly Only Functional :aat ~~~~~~~~~~")
-            sh("./gradlew --no-daemon --init-script init.gradle nightlyFunctional")
-            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-            steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-
-        }
-    }
     after('fullFunctionalTest') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
