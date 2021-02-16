@@ -25,8 +25,6 @@ import java.util.UUID;
 
 import static uk.gov.hmcts.dm.service.SecurityUtilService.sanitizedSetFrom;
 
-import static uk.gov.hmcts.dm.service.SecurityUtilService.sanitizedSetFrom;
-
 @Entity
 @NoArgsConstructor
 @Builder
