@@ -211,7 +211,7 @@ dependencies {
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
-    
+
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.5.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
         exclude(module: 'commons-logging')
@@ -267,7 +267,7 @@ dependencies {
 }
 
 dependencyCheck {
-    suppressionFile = 'config/owasp/dependency-check-suppressions.xml'    
+    suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
 }
 
 checkstyle {
@@ -392,8 +392,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     forkEvery = 10
 
-    exclude "uk/gov/hmcts/dm/functional/nightly/pipeline/**"
-
     group = 'Delivery pipeline'
     description = 'Executes functional tests'
 
@@ -401,24 +399,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
     failFast = true
-
-    environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-
-    finalizedBy aggregate
-}
-
-task nightlyFunctional(type: Test, description: 'Runs the Nightly Only Functional tests.', group: 'Verification') {
-    doFirst(){
-        printf("::::::::::  Running  nightlyFunctional ::::::::::")
-    }
-
-    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-    forkEvery = 10
-
-    include "uk/gov/hmcts/dm/functional/nightly/pipeline/**"
-
-    setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
-    setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
