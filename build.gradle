@@ -120,8 +120,7 @@ def versions = [
     gradlePitest       : '1.3.0',
     sonarPitest        : '0.5',
     pact_version       : '4.1.7',
-    emTestHelper       : '1.18.1',
-    netty              : '4.1.59.Final'
+    emTestHelper       : '1.18.1'
 ]
 
 configurations.all {
@@ -217,20 +216,6 @@ dependencies {
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
-
-    implementation group: 'io.netty', name: 'netty-handler', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-buffer', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-transport', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-common', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-codec-http', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-codec', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-transport-native-epoll', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-resolver', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-codec-http2', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-transport-native-unix-common', version: versions.netty
-    implementation group: 'io.netty', name: 'netty-codec-socks', version:  versions.netty
-    implementation group: 'io.netty', name: 'netty-handler-proxy', version:  versions.netty
-
 
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.5.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
