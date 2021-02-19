@@ -136,6 +136,28 @@ configurations.all {
     }
 }
 
+dependencyManagement {
+    dependencies {
+
+        //CVE-2021-21290
+        dependencySet(group: 'io.netty', version: '4.1.59.Final') {
+            entry 'netty-buffer'
+            entry 'netty-codec'
+            entry 'netty-common'
+            entry 'netty-handler'
+            entry 'netty-resolver'
+            entry 'netty-transport'
+            entry 'netty-codec-http'
+            entry 'netty-codec-http2'
+            entry 'netty-transport-native-epoll'
+            entry 'netty-transport-native-kqueue'
+            entry 'netty-transport-native-unix-common'
+            entry 'netty-codec-socks'
+            entry 'netty-handler-proxy'
+        }
+    }
+}
+
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
