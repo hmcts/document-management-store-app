@@ -1,14 +1,14 @@
 buildscript {
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.12")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.3.12")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.13")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.3.13")
     }
 }
 
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.4'
+    id 'uk.gov.hmcts.java' version '0.12.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'se.patrikerdes.use-latest-versions' version '0.2.15'
@@ -114,8 +114,8 @@ def versions = [
     junit              : '5.5.1',
     junitPlatform      : '1.5.1',
     powermock          : '1.7.4',
-    serenity           : '2.3.12',
-    serenityreporter   : '2.3.12',
+    serenity           : '2.3.13',
+    serenityreporter   : '2.3.13',
     serenityRestAssured: '2.3.4',
     springBoot         :  springBoot.class.package.implementationVersion,
     logging            : '5.1.5',
@@ -148,6 +148,23 @@ dependencyManagement {
         // align with jupiter
         dependencySet(group: 'org.mockito', version: versions.mockitoJupiter) {
             entry 'mockito-core'
+        }
+
+        //CVE-2021-21290
+        dependencySet(group: 'io.netty', version: '4.1.59.Final') {
+            entry 'netty-buffer'
+            entry 'netty-codec'
+            entry 'netty-common'
+            entry 'netty-handler'
+            entry 'netty-resolver'
+            entry 'netty-transport'
+            entry 'netty-codec-http'
+            entry 'netty-codec-http2'
+            entry 'netty-transport-native-epoll'
+            entry 'netty-transport-native-kqueue'
+            entry 'netty-transport-native-unix-common'
+            entry 'netty-codec-socks'
+            entry 'netty-handler-proxy'
         }
     }
 }
@@ -219,7 +236,7 @@ dependencies {
 
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit', version: versions.jsonUnit
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: versions.jsonUnit
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.2.1.RELEASE'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.4.5'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
@@ -259,9 +276,9 @@ dependencies {
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.6.3")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.3")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
     contractTestCompile sourceSets.main.runtimeClasspath
     contractTestCompile sourceSets.test.runtimeClasspath
 }
