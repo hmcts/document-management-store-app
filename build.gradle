@@ -319,7 +319,9 @@ jacocoTestReport {
 
     reports {
         xml.enabled = true
-        csv.enabled = true
+        csv.enabled = false
+
+        xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 
     afterEvaluate {
@@ -359,7 +361,7 @@ pitest {
 
 project.tasks['sonarqube'].group = "Verification"
 
-project.tasks['sonarqube'].dependsOn jacocoTestReport
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 
 sonarqube {
     properties {
@@ -388,6 +390,11 @@ task printVersion {
         print project.version
     }
 }
+
+test {
+    useJUnitPlatform()
+}
+
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
     doFirst(){
         printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
@@ -424,7 +431,6 @@ task smoke(type: Test) {
 }
 task contractTest(type: Test) {
     logger.lifecycle("Runnning contract Tests")
-    useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
 
