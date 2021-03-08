@@ -19,7 +19,7 @@ plugins {
     id 'pmd'
     id 'idea'
     id 'io.franzbecker.gradle-lombok' version '4.0.0'
-    id "info.solidsoft.pitest" version '1.5.2'
+    id "info.solidsoft.pitest" version '1.6.0'
     id 'au.com.dius.pact' version '4.1.8'
 
 }
