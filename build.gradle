@@ -130,7 +130,7 @@ configurations.all {
     resolutionStrategy {
         eachDependency { DependencyResolveDetails details ->
             if (details.requested.group in ['org.apache.tomcat.embed']) {
-                details.useVersion '9.0.40'
+                details.useVersion '9.0.43'
             }
             if (details.requested.name in ['guava']) {
                 details.useVersion '30.1-jre'
@@ -165,6 +165,14 @@ dependencyManagement {
             entry 'netty-transport-native-unix-common'
             entry 'netty-codec-socks'
             entry 'netty-handler-proxy'
+        }
+
+        //CVE-2021-22112
+        dependencySet(group: 'org.springframework.security', version: '5.3.8.RELEASE') {
+            entry 'spring-security-config'
+            entry 'spring-security-core'
+            entry 'spring-security-crypto'
+            entry 'spring-security-web'
         }
     }
 }
@@ -332,7 +340,9 @@ jacocoTestReport {
 
     reports {
         xml.enabled = true
-        csv.enabled = true
+        csv.enabled = false
+
+        xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 
     afterEvaluate {
@@ -372,7 +382,7 @@ pitest {
 
 project.tasks['sonarqube'].group = "Verification"
 
-project.tasks['sonarqube'].dependsOn jacocoTestReport
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 
 sonarqube {
     properties {
@@ -401,6 +411,11 @@ task printVersion {
         print project.version
     }
 }
+
+test {
+    useJUnitPlatform()
+}
+
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
     doFirst(){
         printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
@@ -438,7 +453,6 @@ task smoke(type: Test) {
 
 task contractTest(type: Test) {
     logger.lifecycle("Runnning contract Tests")
-    useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
 
