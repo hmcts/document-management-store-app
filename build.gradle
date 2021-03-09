@@ -127,7 +127,7 @@ configurations.all {
     resolutionStrategy {
         eachDependency { DependencyResolveDetails details ->
             if (details.requested.group in ['org.apache.tomcat.embed']) {
-                details.useVersion '9.0.40'
+                details.useVersion '9.0.43'
             }
             if (details.requested.name in ['guava']) {
                 details.useVersion '30.1-jre'
