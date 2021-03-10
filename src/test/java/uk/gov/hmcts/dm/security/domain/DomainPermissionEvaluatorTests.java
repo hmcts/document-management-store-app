@@ -3,7 +3,7 @@ package uk.gov.hmcts.dm.security.domain;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.Permissions;
@@ -236,6 +236,40 @@ public class DomainPermissionEvaluatorTests {
                 Permissions.READ,
                 MRS_CASE_WORKER,
                 Arrays.asList("allowingrole", "x")
+            ));
+    }
+
+    @Test
+    public void testDocumentRolesWithLeadingSpaceCharacter() {
+        StoredDocument storedFile = new StoredDocument();
+        storedFile.setCreatedBy("nobody");
+        storedFile.setRoles(Arrays.asList(new String[] { " valid-role" }).stream().collect(Collectors.toSet()));
+        storedFile.setClassification(Classifications.RESTRICTED);
+
+
+        Assert.assertTrue(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                MRS_CASE_WORKER,
+                Arrays.asList(" valid-role", "x")
+            ));
+    }
+
+    @Test
+    public void testUserRolesWithLeadingSpaceCharacter() {
+        StoredDocument storedFile = new StoredDocument();
+        storedFile.setCreatedBy("nobody");
+        storedFile.setRoles(Arrays.asList(new String[] { "valid-role" }).stream().collect(Collectors.toSet()));
+        storedFile.setClassification(Classifications.RESTRICTED);
+
+
+        Assert.assertTrue(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                MRS_CASE_WORKER,
+                Arrays.asList(" valid-role", "x")
             ));
     }
 
