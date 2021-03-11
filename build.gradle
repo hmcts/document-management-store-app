@@ -111,7 +111,7 @@ def versions = [
     postgresql         : '42.2.14',
     jackson            : '2.11.3',
     mockitoJupiter     : '3.0.0',
-    junit              : '5.5.1',
+    junit              : '5.3.2',
     junitPlatform      : '1.5.1',
     powermock          : '1.7.4',
     serenity           : '2.3.5',
@@ -251,8 +251,7 @@ dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
-    testCompile group: 'org.junit.platform', name: 'junit-platform-commons', version: versions.junitPlatform
-    testCompile group: 'org.junit.platform', name: 'junit-platform-engine', version: versions.junitPlatform
+    
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: versions.mockitoJupiter
 
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
