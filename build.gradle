@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.13")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.3.13")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.5")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.3.5")
     }
 }
 
@@ -114,8 +114,8 @@ def versions = [
     junit              : '5.5.1',
     junitPlatform      : '1.5.1',
     powermock          : '1.7.4',
-    serenity           : '2.3.13',
-    serenityreporter   : '2.3.13',
+    serenity           : '2.3.5',
+    serenityreporter   : '2.3.5',
     serenityRestAssured: '2.3.4',
     springBoot         :  springBoot.class.package.implementationVersion,
     logging            : '5.1.5',
@@ -281,9 +281,9 @@ dependencies {
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.6.3")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.3")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.2")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.3.2')
     contractTestCompile sourceSets.main.runtimeClasspath
     contractTestCompile sourceSets.test.runtimeClasspath
 }
@@ -444,6 +444,7 @@ task smoke(type: Test) {
 
 task contractTest(type: Test) {
     logger.lifecycle("Runnning contract Tests")
+    useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
 
