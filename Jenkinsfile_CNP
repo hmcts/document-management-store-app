@@ -65,9 +65,6 @@ withPipeline(type , product, component) {
         enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
     }
 
-    after('test') {
-      junit '**/test-results/**/*.xml'
-    }
     onPR {
         env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
         env.ENABLE_METADATA_MIGRATION = true

@@ -345,6 +345,12 @@ jacocoTestReport {
 
         xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
+
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: coverageExclusionList)
+        })
+    }
 }
 
 pitest {
