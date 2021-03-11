@@ -2,7 +2,7 @@ package uk.gov.hmcts.dm.config.batch;
 
 import com.azure.storage.blob.BlobContainerClient;
 import net.javacrumbs.shedlock.core.LockProvider;
-import net.javacrumbs.shedlock.core.SchedulerLock;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.batch.core.Job;

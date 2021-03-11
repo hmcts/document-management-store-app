@@ -8,27 +8,25 @@
         HMCTS PMD rule set
     </description>
 
-    <rule ref="rulesets/java/basic.xml"/>
-    <rule ref="rulesets/java/braces.xml"/>
-    <rule ref="rulesets/java/design.xml">
-        <exclude name="UseUtilityClass"/>
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="BeanMembersShouldSerialize"/>
+    </rule>
+    <rule ref="category/java/codestyle.xml">
         <exclude name="ConfusingTernary"/>
-    </rule>
-    <rule ref="rulesets/java/empty.xml"/>
-    <rule ref="rulesets/java/imports.xml">
         <exclude name="TooManyStaticImports"/>
-    </rule>
-    <rule ref="rulesets/java/optimizations.xml">
         <exclude name="MethodArgumentCouldBeFinal"/>
         <exclude name="LocalVariableCouldBeFinal"/>
+        <exclude name="LongVariable"/>
     </rule>
-    <rule ref="rulesets/java/typeresolution.xml"/>
-    <rule ref="rulesets/java/typeresolution.xml/SignatureDeclareThrowsException">
+    <rule ref="category/java/design.xml">
+        <exclude name="UseUtilityClass"/>
+    </rule>
+    <rule ref="category/java/design.xml/SignatureDeclareThrowsException">
         <properties>
             <property name="IgnoreJUnitCompletely" value="true"/>
         </properties>
     </rule>
-    <rule ref="rulesets/java/unnecessary.xml"/>
-    <rule ref="rulesets/java/unusedcode.xml"/>
+    <rule ref="category/java/bestpractices.xml"/>
+    <rule ref="category/java/performance.xml"/>
 
 </ruleset>

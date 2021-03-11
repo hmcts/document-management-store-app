@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.doAnswer;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
@@ -68,7 +68,7 @@ public class VersionTest extends End2EndTestBase {
     @Test
     public void should_upload_a_second_version_of_a_document() throws Exception {
 
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
                 .file(FILE_V1)
                 .param("classification", Classifications.PRIVATE.toString())
                 .headers(headers))
@@ -76,7 +76,7 @@ public class VersionTest extends End2EndTestBase {
 
         final String url = getSelfUrlFromResponse(response);
 
-        mvc.perform(fileUpload(url)
+        mvc.perform(multipart(url)
                 .file(FILE_V2)
                 .with(VersionTest::setMethodToPost)
                 .headers(headers))

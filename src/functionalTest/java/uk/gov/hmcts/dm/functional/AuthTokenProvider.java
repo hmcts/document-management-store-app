@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
