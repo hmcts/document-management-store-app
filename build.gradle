@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
-        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.5")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.3.5")
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.13")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.3.13")
     }
 }
 
@@ -114,8 +114,8 @@ def versions = [
     junit              : '5.3.2',
     junitPlatform      : '1.5.1',
     powermock          : '1.7.4',
-    serenity           : '2.3.5',
-    serenityreporter   : '2.3.5',
+    serenity           : '2.3.13',
+    serenityreporter   : '2.3.13',
     serenityRestAssured: '2.3.4',
     springBoot         :  springBoot.class.package.implementationVersion,
     logging            : '5.1.5',
