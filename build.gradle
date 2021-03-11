@@ -326,12 +326,6 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/controller/WelcomeController.java'
 ]
 
-//(jacocoTestReport | jacocoTestCoverageVerification)
-jacoco {
-    toolVersion = '0.8.2' // jacocoMavenPluginVersion
-    reportsDir = file("$buildDir/reports/jacoco")
-}
-
 jacocoTestReport {
     executionData(test)
 
