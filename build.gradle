@@ -432,6 +432,7 @@ task smoke(type: Test) {
 }
 task contractTest(type: Test) {
     logger.lifecycle("Runnning contract Tests")
+    useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
 
