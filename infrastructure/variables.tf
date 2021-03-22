@@ -145,6 +145,10 @@ variable "enable_azure_media_service" {
   default = false
 }
 
+variable "sku_name" {
+  default = "GP_Gen5_2"
+}
+
 ////////////////////////////////////////////////
 // Addtional
 ////////////////////////////////////////////////
