@@ -181,8 +181,10 @@ dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.25'
-    compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.0'
-    compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.0.0'
+
+    compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.4'
+    compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.0.4'
+
     compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
@@ -442,6 +444,7 @@ task smoke(type: Test) {
 
 task contractTest(type: Test) {
     logger.lifecycle("Runnning contract Tests")
+    useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
 
