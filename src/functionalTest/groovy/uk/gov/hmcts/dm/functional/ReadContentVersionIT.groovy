@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.functional
 
-
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -9,6 +8,7 @@ import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.equalTo
+import static org.hamcrest.Matchers.is
 
 class ReadContentVersionIT extends BaseIT {
 
@@ -126,4 +126,40 @@ class ReadContentVersionIT extends BaseIT {
             .asByteArray()
     }
 
+    @Test
+    void "RCV10 As a creator when i read non existent version by URL"() {
+        final String nonExistentVersionId = UUID.randomUUID().toString();
+        final String newDocumentVersionUrl = documentVersionUrl.replace(documentVersionUrl.substring(documentVersionUrl.lastIndexOf("/") + 1), nonExistentVersionId);
+
+        givenRequest(CITIZEN)
+            .when()
+            .get(newDocumentVersionUrl)
+            .then()
+            .assertThat()
+            .statusCode(is(404))
+            .body("error", equalTo(String.format("DocumentContentVersion with ID: %s could not be found", nonExistentVersionId)))
+            .body("exception", equalTo("uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException"))
+            .log()
+            .all()
+    }
+
+    @Test
+    void "RCV11 As a creator when i read non existent version binary by URL"() {
+        final String nonExistentVersionId = UUID.randomUUID().toString();
+        def versionsStr = "versions"
+        def url = documentVersionBinaryUrl.substring(0, (documentVersionBinaryUrl.indexOf(versionsStr) + versionsStr.length()))
+        def binaryPath = "/%s/binary"
+        def newDocumentVersionBinaryUrl = url + String.format(binaryPath, nonExistentVersionId)
+
+        givenRequest(CITIZEN)
+            .when()
+            .get(newDocumentVersionBinaryUrl)
+            .then()
+            .assertThat()
+            .statusCode(is(404))
+            .body("error", equalTo(String.format("DocumentContentVersion with ID: %s could not be found", nonExistentVersionId)))
+            .body("exception", equalTo("uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException"))
+            .log()
+            .all()
+    }
 }
