@@ -121,7 +121,8 @@ module "db" {
   subscription    = var.subscription
   postgresql_user = var.postgresql_user
   database_name   = var.database_name
-  sku_name        = "GP_Gen5_2"
+  sku_name        = var.sku_name
+  sku_capacity    = var.sku_capacity
   sku_tier        = "GeneralPurpose"
   storage_mb      = var.database_storage_mb
   common_tags     = var.common_tags
