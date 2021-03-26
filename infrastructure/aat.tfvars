@@ -41,3 +41,8 @@ enable_azure_media_service          = true
 ////////////////////////////////////////////////
 max_file_size_in_mb        = "100"
 
+// DB
+sku_name = "GP_Gen5_4"
+sku_capacity = "4"
+
+
