@@ -140,7 +140,7 @@ dependencyManagement {
     dependencies {
 
         //CVE-2021-21290
-        dependencySet(group: 'io.netty', version: '4.1.59.Final') {
+        dependencySet(group: 'io.netty', version: '4.1.60.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-common'
@@ -168,7 +168,7 @@ dependencyManagement {
 
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
-    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.23'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.25'
 
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.0'
