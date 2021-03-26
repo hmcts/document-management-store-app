@@ -49,6 +49,7 @@ withPipeline(type , product, component) {
     disableLegacyDeployment()
     enableAksStagingDeployment()
     enableSlackNotifications('#em-dev-chat')
+    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
 
     onMaster {
         env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
@@ -62,7 +63,6 @@ withPipeline(type , product, component) {
             sh ./publish-swagger-docs.sh
              '''
         }
-        enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
     }
 
     onPR {
