@@ -368,4 +368,19 @@ class ReadDocumentIT extends BaseIT {
             .when()
             .get(documentUrl)
     }
+
+    @Test
+    void "R28 As authenticated user when get non existing document binary and see 404"() {
+
+        String binaryUrl = createDocumentAndGetBinaryUrlAs CITIZEN
+        def documentStr = "documents/"
+        def nonExistentId = UUID.randomUUID().toString()
+        binaryUrl = binaryUrl.replace(binaryUrl.substring(binaryUrl.indexOf(documentStr) + documentStr.length(), binaryUrl.lastIndexOf("/")), nonExistentId)
+
+        givenRequest(CITIZEN)
+            .expect()
+            .statusCode(404)
+            .when()
+            .get(binaryUrl)
+    }
 }
