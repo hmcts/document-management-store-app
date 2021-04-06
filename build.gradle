@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.6'
+    id 'uk.gov.hmcts.java' version '0.12.8'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'se.patrikerdes.use-latest-versions' version '0.2.15'
@@ -163,13 +163,29 @@ dependencyManagement {
             entry 'spring-security-crypto'
             entry 'spring-security-web'
         }
+
+        //CVE-2020-5421
+        dependencySet(group: 'org.springframework', version: '5.2.9.RELEASE') {
+            entry 'spring-aop'
+            entry 'spring-aspects'
+            entry 'spring-beans'
+            entry 'spring-context'
+            entry 'spring-core'
+            entry 'spring-expression'
+            entry 'spring-jcl'
+            entry 'spring-jdbc'
+            entry 'spring-orm'
+            entry 'spring-tx'
+            entry 'spring-web'
+            entry 'spring-webmvc'
+        }
     }
 }
 
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.23'
-    compile group: 'org.apache.tika', name: 'tika-core', version: '1.25'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '1.26'
 
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.0'
     compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.0.0'
@@ -223,7 +239,10 @@ dependencies {
     }
 
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.5.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE'
+    compile (group: 'org.springframework.cloud',
+        name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE') {
+        exclude group: 'org.webjars', module: 'jquery'
+    }
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
