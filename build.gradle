@@ -163,6 +163,22 @@ dependencyManagement {
             entry 'spring-security-crypto'
             entry 'spring-security-web'
         }
+
+        //CVE-2020-5421
+        dependencySet(group: 'org.springframework', version: '5.2.9.RELEASE') {
+            entry 'spring-aop'
+            entry 'spring-aspects'
+            entry 'spring-beans'
+            entry 'spring-context'
+            entry 'spring-core'
+            entry 'spring-expression'
+            entry 'spring-jcl'
+            entry 'spring-jdbc'
+            entry 'spring-orm'
+            entry 'spring-tx'
+            entry 'spring-web'
+            entry 'spring-webmvc'
+        }
     }
 }
 
@@ -223,7 +239,10 @@ dependencies {
     }
 
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.5.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE'
+    compile (group: 'org.springframework.cloud',
+        name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE') {
+        exclude group: 'org.webjars', module: 'jquery'
+    }
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
