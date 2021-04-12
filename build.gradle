@@ -165,7 +165,7 @@ dependencyManagement {
         }
 
         //CVE-2020-5421
-        dependencySet(group: 'org.springframework', version: '5.2.9.RELEASE') {
+        dependencySet(group: 'org.springframework', version: '5.3.5') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
