@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.5'
+    id 'uk.gov.hmcts.java' version '0.12.8'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'se.patrikerdes.use-latest-versions' version '0.2.15'
@@ -151,7 +151,7 @@ dependencyManagement {
         }
 
         //CVE-2021-21290
-        dependencySet(group: 'io.netty', version: '4.1.59.Final') {
+        dependencySet(group: 'io.netty', version: '4.1.63.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-common'
@@ -174,16 +174,35 @@ dependencyManagement {
             entry 'spring-security-crypto'
             entry 'spring-security-web'
         }
+
+        //CVE-2020-5421
+        dependencySet(group: 'org.springframework', version: '5.2.9.RELEASE') {
+            entry 'spring-aop'
+            entry 'spring-aspects'
+            entry 'spring-beans'
+            entry 'spring-context'
+            entry 'spring-core'
+            entry 'spring-expression'
+            entry 'spring-jcl'
+            entry 'spring-jdbc'
+            entry 'spring-orm'
+            entry 'spring-tx'
+            entry 'spring-web'
+            entry 'spring-webmvc'
+        }
     }
 }
 
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
-    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.21'
-    compile group: 'org.apache.tika', name: 'tika-core', version: '1.25'
-    compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.0'
-    compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.0.0'
-    compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.23'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '1.26'
+
+
+    compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.4'
+    compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.0.4'
+
+    compile group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
 
     compile group: 'commons-io', name: 'commons-io', version: '2.8.0'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
@@ -193,7 +212,7 @@ dependencies {
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.2'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.5'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
@@ -208,7 +227,7 @@ dependencies {
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.27.Final'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.30.Final'
 
     compile group: 'uk.gov.hmcts.reform', name: 'liquibase-core', version: '3.8.1'
 
@@ -217,8 +236,8 @@ dependencies {
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.21.0"
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.21.0"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.23.0"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.23.0"
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
@@ -232,7 +251,10 @@ dependencies {
     }
 
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.5.RELEASE'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE'
+    compile (group: 'org.springframework.cloud',
+        name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.1.5.RELEASE') {
+        exclude group: 'org.webjars', module: 'jquery'
+    }
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
@@ -279,9 +301,9 @@ dependencies {
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.6.3")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.3")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.1')
     contractTestCompile sourceSets.main.runtimeClasspath
     contractTestCompile sourceSets.test.runtimeClasspath
 }
@@ -300,7 +322,6 @@ checkstyle {
 pmd {
     toolVersion = "6.29.0"
     ignoreFailures = true
-    sourceSets = [sourceSets.main]
     reportsDir = file("$project.buildDir/reports/pmd")
     ruleSetFiles = files("config/pmd/ruleset.xml")
 }
@@ -323,6 +344,12 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/service/FileSizeVerifier.java',
     '**uk/gov/hmcts/dm/controller/WelcomeController.java'
 ]
+
+//(jacocoTestReport | jacocoTestCoverageVerification)
+jacoco {
+    toolVersion = '0.8.2' // jacocoMavenPluginVersion
+    reportsDir = file("$buildDir/reports/jacoco")
+}
 
 jacocoTestReport {
     executionData(test)
@@ -439,19 +466,19 @@ task smoke(type: Test) {
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
-
-task contractTest(type: Test) {
-    logger.lifecycle("Runnning contract Tests")
-    testClassesDirs = sourceSets.contractTest.output.classesDirs
-    classpath = sourceSets.contractTest.runtimeClasspath
-
+project.ext {
+    pactVersion = getCheckedOutGitCommitHash()
+}
+def getCheckedOutGitCommitHash() {
+    'git rev-parse --verify --short HEAD'.execute().text.trim()
 }
 
 task runProviderPactVerification(type: Test) {
-    logger.lifecycle("Runs pact Tests")
+    logger.lifecycle("Runnning contract Tests")
+    useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
+    systemProperty 'pact.verifier.publishResults', System.getProperty('pact.verifier.publishResults')
 }
 
 runProviderPactVerification.finalizedBy pactVerify
-

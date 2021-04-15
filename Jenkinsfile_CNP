@@ -49,6 +49,7 @@ withPipeline(type , product, component) {
     disableLegacyDeployment()
     enableAksStagingDeployment()
     enableSlackNotifications('#em-dev-chat')
+    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
 
     onMaster {
         env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
@@ -62,7 +63,6 @@ withPipeline(type , product, component) {
             sh ./publish-swagger-docs.sh
              '''
         }
-        enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
     }
 
     onPR {
@@ -73,12 +73,157 @@ withPipeline(type , product, component) {
         env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
     }
 
-    after('functionalTest:preview') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-    }
+    after('test') {
 
-    after('functionalTest:aat') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-    }
+               publishHTML target: [
+                  allowMissing         : true,
+                  alwaysLinkToLastBuild: true,
+                  keepAll              : true,
+                  reportDir            : "build/reports/checkstyle",
+                  reportFiles          : "main.html",
+                  reportName           : "DM-Store Checkstyle Main Report"
+              ]
 
+              publishHTML target: [
+                  allowMissing         : true,
+                  alwaysLinkToLastBuild: true,
+                  keepAll              : true,
+                  reportDir            : "build/reports/checkstyle",
+                  reportFiles          : "test.html",
+                  reportName           : "DM-Store Checkstyle Test Report"
+              ]
+
+             publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/checkstyle",
+                    reportFiles          : "functionalTest.html",
+                    reportName           : "DM-Store Checkstyle AAT Report"
+             ]
+
+             publishHTML target: [
+                     allowMissing         : true,
+                     alwaysLinkToLastBuild: true,
+                     keepAll              : true,
+                     reportDir            : "build/reports/checkstyle",
+                     reportFiles          : "contractTest.html",
+                     reportName           : "DM-Store Checkstyle PACT Report"
+             ]
+
+             publishHTML target: [
+                      allowMissing         : true,
+                      alwaysLinkToLastBuild: true,
+                      keepAll              : true,
+                      reportDir            : "build/reports/pmd",
+                      reportFiles          : "main.html",
+                      reportName           : "DM-Store PMD Main Report"
+             ]
+
+             publishHTML target: [
+                      allowMissing         : true,
+                      alwaysLinkToLastBuild: true,
+                      keepAll              : true,
+                      reportDir            : "build/reports/pmd",
+                      reportFiles          : "test.html",
+                      reportName           : "DM-Store PMD Test Report"
+             ]
+
+             publishHTML target: [
+                       allowMissing         : true,
+                       alwaysLinkToLastBuild: true,
+                       keepAll              : true,
+                       reportDir            : "build/reports/pmd",
+                       reportFiles          : "functionalTest.html",
+                       reportName           : "DM-Store PMD AAT Report"
+             ]
+
+            publishHTML target: [
+                     allowMissing         : true,
+                     alwaysLinkToLastBuild: true,
+                     keepAll              : true,
+                     reportDir            : "build/reports/pmd",
+                     reportFiles          : "contractTest.html",
+                     reportName           : "DM-Store PMD PACT Report"
+            ]
+
+             publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/test",
+                    reportFiles          : "index.html",
+                    reportName           : "DM-Store Unit Tests Report"
+             ]
+        }
+
+        after('smoketest:preview') {
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/smoke",
+                    reportFiles          : "index.html",
+                    reportName           : "DM-Store Smoke Test Report"
+            ]
+        }
+
+        after('smoketest:aat') {
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/smoke",
+                    reportFiles          : "index.html",
+                    reportName           : "DM-Store Smoke Test Report"
+            ]
+        }
+
+        after('functionalTest:preview') {
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/functional",
+                    reportFiles          : "index.html",
+                    reportName           : "DM-Store Functional Test Report"
+            ]
+            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        }
+
+        after('functionalTest:aat') {
+            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/functional",
+                    reportFiles          : "index.html",
+                    reportName           : "DM-Store Functional Test Report"
+            ]
+
+           steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        }
+
+        after('pactconsumerVerification:preview') {
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/contract",
+                    reportFiles          : "index.html",
+                    reportName           : "DM-Store Contract Test Report"
+            ]
+        }
+
+        after('pactconsumerVerification:aat') {
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/contract",
+                    reportFiles          : "index.html",
+                    reportName           : "DM-Store Contract Test Report"
+            ]
+        }
 }

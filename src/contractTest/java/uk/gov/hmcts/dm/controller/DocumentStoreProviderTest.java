@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.controller;
 
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
+import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
@@ -17,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -31,19 +33,21 @@ import java.util.UUID;
 
 import static org.mockito.Mockito.when;
 
-
 @Provider("em_dm_store")
 @PactBroker(scheme = "${PACT_BROKER_SCHEME:http}",
     host = "${PACT_BROKER_URL:localhost}",
     port = "${PACT_BROKER_PORT:80}",
-    consumerVersionSelectors = {@VersionSelector(tag = "${PACT_BRANCH_NAME:Dev}")})
+    consumerVersionSelectors = {@VersionSelector(tag = "master")})
 @WebMvcTest({StoredDocumentController.class, StoredDocumentDeleteController.class})
+@IgnoreNoPactsToVerify
 @AutoConfigureMockMvc(addFilters = false)
+@ExtendWith(SpringExtension.class)
 @Import(StoreDocumentControllerTestConfiguration.class)
 public class DocumentStoreProviderTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
+
 
     @MockBean
     private RequestAuthorizer<Service> serviceRequestAuthorizer;
@@ -62,14 +66,17 @@ public class DocumentStoreProviderTest {
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {
-        context.verifyInteraction();
+        if (context != null) {
+            context.verifyInteraction();
+        }
     }
 
     @BeforeEach
     void before(PactVerificationContext context) {
         System.getProperties().setProperty("pact.verifier.publishResults", "true");
-        context.setTarget(new MockMvcTestTarget(mockMvc));
-
+        if (context != null) {
+            context.setTarget(new MockMvcTestTarget(mockMvc));
+        }
     }
 
     @State({"I have existing document"})
