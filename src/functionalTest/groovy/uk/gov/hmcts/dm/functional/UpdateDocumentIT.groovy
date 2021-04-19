@@ -127,8 +127,8 @@ class UpdateDocumentIT extends BaseIT {
                 ]
             ])
             .contentType(ContentType.JSON)
-            .expect()
-            .statusCode(500)
+            .expect().log().all()
+            .statusCode(500)//FIXME should be 400
             .when()
             .patch("/documents")
     }
@@ -152,6 +152,7 @@ class UpdateDocumentIT extends BaseIT {
             ])
             .contentType(ContentType.JSON)
             .expect()
+            .log().all()
             .statusCode(200)
             .body("result", equalTo("Success"))
             .when()
@@ -176,10 +177,28 @@ class UpdateDocumentIT extends BaseIT {
                 ]
             ])
             .contentType(ContentType.JSON)
-            .expect()
-            .statusCode(500)
+            .expect().log().all()
+            .statusCode(500)//FIXME should be 404
             .body("error", equalTo("Document with ID: " + uuid + " could not be found"))
             .when()
             .patch("/documents")
+    }
+
+    @Test
+    void "UD9 partial update TTL for a non existent document"() {
+        assumeTrue(toggleTtlEnabled)
+
+        String documentUrl = createDocumentAndGetUrlAs CITIZEN
+        String documentId = documentUrl.split("/").last()
+        String nonExistentId = UUID.randomUUID().toString()
+        documentUrl = documentUrl.replace(documentId, nonExistentId)
+
+        givenRequest(CITIZEN)
+            .body([ttl: "3000-10-31T10:10:10+0000"])
+            .contentType(ContentType.JSON)
+            .expect().log().all()
+            .statusCode(404)
+            .when()
+            .patch(documentUrl)
     }
 }
