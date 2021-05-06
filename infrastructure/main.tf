@@ -210,3 +210,20 @@ resource "azurerm_key_vault_secret" "secondary_connection_string" {
   value        = data.azurerm_key_vault_secret.dm_store_storageaccount_secondary_connection_string.value
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
+
+data "azurerm_key_vault" "shared_key_vault" {
+  name                = "rpa-${var.env}"
+  resource_group_name = "rpa-${var.env}"
+}
+
+# Load AppInsights key from rpa vault
+data "azurerm_key_vault_secret" "app_insights_key" {
+  name      = "AppInsightsInstrumentationKey"
+  key_vault_id = data.azurerm_key_vault.shared_key_vault.id
+}
+
+resource "azurerm_key_vault_secret" "local_app_insights_key" {
+  name         = "AppInsightsInstrumentationKey"
+  value        = data.azurerm_key_vault_secret.app_insights_key.value
+  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
+}
