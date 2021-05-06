@@ -21,7 +21,7 @@ java:
     dm:
       resourceGroup: dm-shared
       secrets:
-        - AppInsightsInstrumentationKey
+        - RpaAppInsightsInstrumentationKey
         - dm-store-storage-account-primary-connection-string
         - dm-store-storage-account-secondary-connection-string
         - store-POSTGRES-PASS
