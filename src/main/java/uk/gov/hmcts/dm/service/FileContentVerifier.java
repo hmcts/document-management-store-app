@@ -41,8 +41,9 @@ public class FileContentVerifier {
 
         String fileNameExtension = getOriginalFileNameExtension(multipartFile);
         if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
+            String fileNameExt = fileNameExtension.replaceAll("[\n\r\t]", "_");
             log.info(
-                String.format("Warning. The extension of uploaded file is not white-listed: %s", fileNameExtension));
+                String.format("Warning. The extension of uploaded file is not white-listed: %s", fileNameExt));
             return false;
         }
 
