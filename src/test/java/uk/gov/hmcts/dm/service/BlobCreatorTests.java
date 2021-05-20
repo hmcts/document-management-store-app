@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
 import org.hibernate.Session;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class BlobCreatorTests extends ComponentTestBase {
         blobCreator.createBlob(TestUtil.TEST_FILE);
     }
 
+    @Ignore
     @Test
     public void testCreateBlob() {
         Session s = mock(Session.class);
