@@ -2,11 +2,6 @@ java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 60
-  keyVaults:
-    dm:
-      resourceGroup: dm-shared
-      secrets:
-        - dm-store-storage-account-primary-connection-string
   secrets:
     BLOB_ACCOUNT_NAME:
       secretRef: storage-secret-{{ .Release.Name }}

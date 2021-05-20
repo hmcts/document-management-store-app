@@ -112,42 +112,6 @@ withPipeline(type , product, component) {
              ]
 
              publishHTML target: [
-                      allowMissing         : true,
-                      alwaysLinkToLastBuild: true,
-                      keepAll              : true,
-                      reportDir            : "build/reports/pmd",
-                      reportFiles          : "main.html",
-                      reportName           : "DM-Store PMD Main Report"
-             ]
-
-             publishHTML target: [
-                      allowMissing         : true,
-                      alwaysLinkToLastBuild: true,
-                      keepAll              : true,
-                      reportDir            : "build/reports/pmd",
-                      reportFiles          : "test.html",
-                      reportName           : "DM-Store PMD Test Report"
-             ]
-
-             publishHTML target: [
-                       allowMissing         : true,
-                       alwaysLinkToLastBuild: true,
-                       keepAll              : true,
-                       reportDir            : "build/reports/pmd",
-                       reportFiles          : "functionalTest.html",
-                       reportName           : "DM-Store PMD AAT Report"
-             ]
-
-            publishHTML target: [
-                     allowMissing         : true,
-                     alwaysLinkToLastBuild: true,
-                     keepAll              : true,
-                     reportDir            : "build/reports/pmd",
-                     reportFiles          : "contractTest.html",
-                     reportName           : "DM-Store PMD PACT Report"
-            ]
-
-             publishHTML target: [
                     allowMissing         : true,
                     alwaysLinkToLastBuild: true,
                     keepAll              : true,
