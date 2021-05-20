@@ -50,7 +50,7 @@ public class FolderControllerTests extends ComponentTestBase {
             .post("/folders/", TestUtil.TEST_FOLDER).andExpect(status().isOk());
     }
 
-
+    @Ignore
     @Test
     public void postDocuments() throws Exception {
         given(this.folderService.findById(TestUtil.RANDOM_UUID))
@@ -63,6 +63,7 @@ public class FolderControllerTests extends ComponentTestBase {
             .andExpect(status().is(204));
     }
 
+    @Ignore
     @Test
     public void postDocumentsToFolderThatDoesNotExist() throws Exception {
         given(this.folderService.findById(TestUtil.RANDOM_UUID))

@@ -118,6 +118,32 @@ def versions = [
     emTestHelper       : '1.18.1'
 ]
 
+dependencyManagement {
+    dependencies {
+        // Do not change - START
+        // Changing below will break Serenity Report generation
+        dependencySet(group: 'junit', version: '4.13') {
+            entry 'junit'
+        }
+
+        dependencySet(group: 'org.junit.jupiter', version: '5.6.3') {
+            entry 'junit-jupiter'
+            entry 'junit-jupiter-api'
+            entry 'junit-jupiter-params'
+        }
+
+        dependencySet(group: 'org.junit.vintage', version: '5.6.2') {
+            entry 'junit-vintage-engine'
+        }
+
+        dependencySet(group: 'net.bytebuddy', version: '1.10.14') {
+            entry 'byte-buddy'
+            entry 'byte-buddy-agent'
+        }
+        // Do not change - END
+    }
+}
+
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.23'
@@ -187,7 +213,7 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
-    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
+    
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
     testCompile (group: 'io.rest-assured', name :'rest-assured', version:'3.3.0') {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
@@ -205,7 +231,7 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
-
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.2'
     functionalTestCompile group: 'uk.gov.hmcts.reform', name: 'em-test-helper', version: versions.emTestHelper
 
     //pact
@@ -213,9 +239,9 @@ dependencies {
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.1")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.1")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.1')
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.6.3")
+    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.6.3")
+    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.6.3')
     contractTestCompile sourceSets.main.runtimeClasspath
     contractTestCompile sourceSets.test.runtimeClasspath
 }
