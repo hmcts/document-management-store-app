@@ -21,11 +21,12 @@ java:
     dm:
       resourceGroup: dm-shared
       secrets:
-        - RpaAppInsightsInstrumentationKey
-        - dm-store-storage-account-primary-connection-string
-        - dm-store-storage-account-secondary-connection-string
-        - store-POSTGRES-PASS
-
+        - name: RpaAppInsightsInstrumentationKey
+          alias: azure.application-insights.instrumentation-key
+        - name: dm-store-storage-account-primary-connection-string
+          alias: azure.storage.connection-string
+        - name: store-POSTGRES-PASS
+          alias: spring.datasource.password
   environment:
     # db
     SPRING_DATASOURCE_URL: jdbc:postgresql://dm-store-postgres-db-{{ .Values.global.environment }}.postgres.database.azure.com:5432/evidence?ssl=disable

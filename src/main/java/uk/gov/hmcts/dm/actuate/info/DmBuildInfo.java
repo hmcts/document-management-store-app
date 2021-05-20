@@ -7,10 +7,12 @@ import org.springframework.boot.actuate.info.InfoContributor;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 @Component
@@ -43,7 +45,15 @@ public class DmBuildInfo implements InfoContributor {
         Properties prop = new Properties();
         URL buildInfoUrl = (versionPath == null) ? null : this.getClass().getClassLoader().getResource(versionPath);
         if (buildInfoUrl != null) {
-            prop.load(this.getClass().getClassLoader().getResourceAsStream(versionPath));
+            InputStream inputStream = null;
+            try {
+                inputStream = this.getClass().getClassLoader().getResourceAsStream(versionPath);
+                prop.load(inputStream);
+            } finally {
+                if (Objects.nonNull(inputStream)) {
+                    inputStream.close();
+                }
+            }
         }
 
         this.environment = environment;
