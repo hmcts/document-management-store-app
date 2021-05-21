@@ -99,8 +99,6 @@ repositories {
 def versions = [
     ehcache            : '3.9.3',
     jacocoMavenPlugin  : '0.8.2',
-    jsonUnit           : '2.25.0',
-    JUnitParams        : '1.1.1',
     lombok             : '1.18.20',
     liquibase          : '3.8.1',
     postgresql         : '42.2.20',
@@ -201,23 +199,17 @@ dependencies {
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.2'
-    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.5.0'
+    
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
         exclude(module: 'commons-logging')
     }
-
-    testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit', version: versions.jsonUnit
-    testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: versions.jsonUnit
+    
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.0'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
     testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
-    
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
-    testCompile (group: 'io.rest-assured', name :'rest-assured', version:'3.3.0') {
-        exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
-    }
     testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
     testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
