@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.Pending
 import net.thucydides.core.annotations.WithTag
 import net.thucydides.core.annotations.WithTags
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Value
@@ -15,6 +16,7 @@ import static org.junit.Assert.assertTrue
 
 @RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags(@WithTag("testType:Smoke"))
+@Ignore
 class MappingUrlIT extends BaseIT {
 
     @Value('${toggle.metadatasearchendpoint}')
