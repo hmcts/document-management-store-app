@@ -3,19 +3,26 @@ package uk.gov.hmcts.dm.controller;
 import net.thucydides.core.annotations.Pending;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.security.Classifications;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class FolderControllerTests extends ComponentTestBase {
+
+    private List<MultipartFile> files = Arrays.asList(
+        new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
+        new MockMultipartFile("files", "filename.txt", "text/plain", "hello2".getBytes(StandardCharsets.UTF_8)));
 
     @Test
     public void testGetSuccess() throws Exception {
@@ -50,7 +57,6 @@ public class FolderControllerTests extends ComponentTestBase {
             .post("/folders/", TestUtil.TEST_FOLDER).andExpect(status().isOk());
     }
 
-    @Ignore
     @Test
     public void postDocuments() throws Exception {
         given(this.folderService.findById(TestUtil.RANDOM_UUID))
@@ -59,11 +65,10 @@ public class FolderControllerTests extends ComponentTestBase {
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents", Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()), Classifications.PUBLIC, null)
+            .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents", files, Classifications.PUBLIC, null)
             .andExpect(status().is(204));
     }
 
-    @Ignore
     @Test
     public void postDocumentsToFolderThatDoesNotExist() throws Exception {
         given(this.folderService.findById(TestUtil.RANDOM_UUID))
@@ -72,7 +77,7 @@ public class FolderControllerTests extends ComponentTestBase {
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents", Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList()), Classifications.PUBLIC, null)
+            .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents", files, Classifications.PUBLIC, null)
             .andExpect(status().isNotFound());
     }
 
