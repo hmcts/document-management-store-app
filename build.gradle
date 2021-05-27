@@ -157,7 +157,7 @@ dependencyManagement {
         }
 
         //CVE-2021-22112
-        dependencySet(group: 'org.springframework.security', version: '5.3.8.RELEASE') {
+        dependencySet(group: 'org.springframework.security', version: '5.4.4') {
             entry 'spring-security-config'
             entry 'spring-security-core'
             entry 'spring-security-crypto'
@@ -186,7 +186,7 @@ dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.23'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.26'
-    
+
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.5'
     compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.0.5'
 
@@ -254,7 +254,7 @@ dependencies {
 
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit', version: versions.jsonUnit
     testCompile group: 'net.javacrumbs.json-unit', name: 'json-unit-fluent', version: versions.jsonUnit
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.4.5'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.4.4'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
