@@ -1,7 +1,7 @@
 {
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET":"ignore",
-    "10054_Cookie Without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
     "10010_Cookie No HttpOnly Flag_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
-    "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
+    "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
+    "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
 }
