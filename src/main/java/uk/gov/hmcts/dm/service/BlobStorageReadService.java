@@ -41,7 +41,7 @@ public class BlobStorageReadService {
     public void loadBlob(DocumentContentVersion documentContentVersion,
                          HttpServletRequest request,
                          HttpServletResponse response) throws IOException {
-        if (request.getHeader(HttpHeaders.RANGE) == null) {
+        if (request.getHeader(HttpHeaders.RANGE.toLowerCase()) == null) {
             loadFullBlob(documentContentVersion, response.getOutputStream());
         } else {
             loadPartialBlob(documentContentVersion, request, response);
@@ -62,7 +62,7 @@ public class BlobStorageReadService {
 
         log.debug("Range header provided {}", documentContentVersion.getId());
 
-        String rangeHeader = request.getHeader(HttpHeaders.RANGE);
+        String rangeHeader = request.getHeader(HttpHeaders.RANGE.toLowerCase());
         log.debug("Range requested: {}", rangeHeader);
 
         Long length = documentContentVersion.getSize();
@@ -122,9 +122,9 @@ public class BlobStorageReadService {
             throw new InvalidRangeRequestException(response, length);
         }
 
-        long rangeByteCount = (end - start) + 2;
+        long rangeByteCount = (end - start) + 1;
         response.setHeader(HttpHeaders.CONTENT_RANGE, "bytes " + start + "-" + end + "/" + length);
-        response.setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(rangeByteCount - 1));
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, String.valueOf(rangeByteCount));
 
         return new BlobRange(start, rangeByteCount);
     }
