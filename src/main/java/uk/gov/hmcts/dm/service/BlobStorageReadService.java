@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Enumeration;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,6 +42,19 @@ public class BlobStorageReadService {
     public void loadBlob(DocumentContentVersion documentContentVersion,
                          HttpServletRequest request,
                          HttpServletResponse response) throws IOException {
+        Enumeration<String> headerNames = request.getHeaderNames();
+
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+
+            Enumeration<String> headerValues = request.getHeaders(headerName);
+            while (headerValues.hasMoreElements()) {
+                String headerValue = headerValues.nextElement();
+                log.info("HeaderName , Values: {} , {}", headerName, headerValue);
+            }
+
+        }
+
         if (request.getHeader(HttpHeaders.RANGE.toLowerCase()) == null) {
             loadFullBlob(documentContentVersion, response.getOutputStream());
         } else {
