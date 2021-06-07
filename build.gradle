@@ -247,7 +247,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     compile group: 'org.apache.httpcomponents', name: 'fluent-hc', version: '4.5.13'
 
-    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.5.0'
+    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.6.0'
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
         exclude(module: 'commons-logging')
     }
