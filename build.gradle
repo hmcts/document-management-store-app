@@ -164,8 +164,8 @@ dependencyManagement {
             entry 'spring-security-web'
         }
 
-        //CVE-2020-5421
-        dependencySet(group: 'org.springframework', version: '5.2.9.RELEASE') {
+        //CVE-2021-22118
+        dependencySet(group: 'org.springframework', version: '5.2.15.RELEASE') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
@@ -200,7 +200,7 @@ dependencies {
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.5'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.7'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
