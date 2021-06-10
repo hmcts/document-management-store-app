@@ -200,7 +200,7 @@ dependencies {
 
     compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.7'
+    compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.8'
     compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
