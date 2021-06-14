@@ -184,7 +184,7 @@ dependencyManagement {
 
 dependencies {
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
-    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.23'
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
     compile group: 'org.apache.tika', name: 'tika-core', version: '1.26'
 
     compile group: 'org.apache.tomcat', name: 'tomcat-annotations-api', version: '10.0.5'
