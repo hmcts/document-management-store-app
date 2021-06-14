@@ -96,7 +96,7 @@ tasks.withType(JavaCompile) {
 //}
 
 repositories {
-    maven { url "https://dl.bintray.com/hmcts/hmcts-maven" }
+    maven { url "https://jitpack.io" }
     jcenter()
     mavenLocal()
 }
@@ -120,7 +120,7 @@ def versions = [
     gradlePitest       : '1.3.0',
     sonarPitest        : '0.5',
     pact_version       : '4.1.7',
-    emTestHelper       : '1.18.1'
+    emTestHelper       : '1.18.2'
 ]
 
 configurations.all {
@@ -217,7 +217,7 @@ dependencies {
 
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.30.Final'
 
-    compile group: 'uk.gov.hmcts.reform', name: 'liquibase-core', version: '3.8.1'
+    compile group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
 
     compile group: 'io.swagger', name: 'swagger-core', version: '1.6.1'
     compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
@@ -278,7 +278,7 @@ dependencies {
     testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
-    functionalTestCompile group: 'uk.gov.hmcts.reform', name: 'em-test-helper', version: versions.emTestHelper
+    functionalTestCompile group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
     //pact
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
