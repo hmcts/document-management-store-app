@@ -22,4 +22,12 @@ public class StringUtilsTests {
 
     }
 
+    @Test
+    public void convertValidLog() {
+        String dangerousLogStr = "this %0d is \r an %0a apple \n .";
+        String safeLogStr = "this  is  an  apple  .";
+        Assert.assertNotEquals(dangerousLogStr, safeLogStr);
+        Assert.assertEquals(safeLogStr, StringUtils.convertValidLogString(dangerousLogStr));
+    }
+
 }
