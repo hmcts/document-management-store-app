@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.config.batch;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -56,7 +57,8 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
     }
 
     private void processItem(BlobClient client) {
-        List<DocumentUpdate> updates = getCsvFile(client)
+        BufferedReader bufferedReader = getCsvFile(client);
+        List<DocumentUpdate> updates = bufferedReader
             .lines()
             .skip(1)
             .map(line -> createDocumentUpdate(line.split(",")))
@@ -64,6 +66,7 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
 
         documentService.updateItems(new UpdateDocumentsCommand(null, updates));
         client.delete();
+        IOUtils.closeQuietly(bufferedReader);
     }
 
     private DocumentUpdate createDocumentUpdate(String[] cells) {

@@ -51,7 +51,7 @@ public class DomainPermissionEvaluator {
                 || Classifications.PUBLIC.equals(rolesAware.getClassification()))
                 ) {
                 Set<String> documentRoles = sanitizedSetFrom(rolesAware.getRoles());
-                log.info("User with roles {} accessing document that accepts roles {}", authenticatedUserRoles, documentRoles);
+                log.info("User with roles {} accessing document that accepts roles {}", authenticatedUserRolesSet, documentRoles);
 
                 documentRoles.retainAll(authenticatedUserRolesSet);
                 if (documentRoles.size() > 0) {

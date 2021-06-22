@@ -1,12 +1,17 @@
 package uk.gov.hmcts.dm.dialect;
 
+import org.apache.commons.io.IOUtils;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.sql.*;
+import java.sql.Blob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 
 public class ByteWrappingBlobType implements UserType {
 
@@ -48,25 +53,31 @@ public class ByteWrappingBlobType implements UserType {
 
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session) {
+        InputStream io = null;
         try {
             Blob b = (Blob) value;
-            st.setBinaryStream(index, b.getBinaryStream(), b.length());
+            io = b.getBinaryStream();
+            st.setBinaryStream(index, io, b.length());
         } catch (SQLException e) {
             throw new HibernateException("Could not nullSafeSet", e);
+        } finally {
+            IOUtils.closeQuietly(io);
         }
-
     }
 
     @Override
     public Object deepCopy(Object value)  {
+        InputStream io = null;
         if (value != null) {
             try {
                 Blob blob = (Blob) value;
-                return new PassThroughBlob(blob.getBinaryStream(), blob.length());
+                io = blob.getBinaryStream();
+                return new PassThroughBlob(io, blob.length());
             } catch (SQLException e) {
                 throw new HibernateException("Could not deepCopy", e);
+            } finally {
+                IOUtils.closeQuietly(io);
             }
-
         }
         return null;
     }
