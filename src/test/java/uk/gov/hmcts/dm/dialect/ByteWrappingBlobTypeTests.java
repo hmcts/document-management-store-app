@@ -100,7 +100,7 @@ public class ByteWrappingBlobTypeTests {
 
     @Test(expected = HibernateException.class)
     public void testNullSafeSetThrowsExcpetion() throws SQLException {
-        Mockito.when(blob.getBinaryStream()).thenThrow( new SQLException());
+        Mockito.when(blob.getBinaryStream()).thenThrow(new SQLException());
         type.nullSafeSet(preparedStatement, blob, 1, null);
     }
 
