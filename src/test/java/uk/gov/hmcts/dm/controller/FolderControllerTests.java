@@ -1,12 +1,16 @@
 package uk.gov.hmcts.dm.controller;
 
 import net.thucydides.core.annotations.Pending;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.web.bind.WebDataBinder;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.security.Classifications;
+import uk.gov.hmcts.dm.service.Constants;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -102,4 +106,13 @@ public class FolderControllerTests extends ComponentTestBase {
             .delete("/folders/" + TestUtil.RANDOM_UUID).andExpect(status().isNotFound());
     }
 
+    @Test
+    public void testInitBinder() {
+
+        WebDataBinder webDataBinder = new WebDataBinder(null);
+
+        Assert.assertNull(webDataBinder.getDisallowedFields());
+        new FolderController().initBinder(webDataBinder);
+        Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
+    }
 }
