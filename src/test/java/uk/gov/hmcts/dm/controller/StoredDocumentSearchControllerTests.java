@@ -1,12 +1,15 @@
 package uk.gov.hmcts.dm.controller;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.WebDataBinder;
 import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.service.Constants;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,6 +63,16 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .post("/documents/filter", searchCommand)
             .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testInitBinder() {
+
+        WebDataBinder webDataBinder = new WebDataBinder(null);
+
+        Assert.assertNull(webDataBinder.getDisallowedFields());
+        new StoredDocumentSearchController().initBinder(webDataBinder);
+        Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 
 }
