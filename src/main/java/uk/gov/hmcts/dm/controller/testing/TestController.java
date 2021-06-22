@@ -35,7 +35,7 @@ public class TestController {
     }
 
     @GetMapping("/azure-storage-binary-exists/{id}")
-    public ResponseEntity<Boolean> get(@PathVariable UUID id) throws Exception {
+    public ResponseEntity<Boolean> get(@PathVariable UUID id) {
         return ResponseEntity.ok(blobStorageReadService.doesBinaryExist(id));
     }
 

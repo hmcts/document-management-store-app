@@ -110,6 +110,9 @@ def versions = [
     liquibase          : '3.8.1',
     postgresql         : '42.2.14',
     jackson            : '2.11.3',
+    mockitoJupiter     : '3.0.0',
+    junit              : '5.6.3',
+    junitPlatform      : '1.5.1',
     powermock          : '1.7.4',
     serenity           : '2.3.13',
     serenityreporter   : '2.3.13',
@@ -138,7 +141,15 @@ configurations.all {
 }
 
 dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-starter-parent:${versions.springBoot}"
+    }
+
     dependencies {
+        // align with jupiter
+        dependencySet(group: 'org.mockito', version: versions.mockitoJupiter) {
+            entry 'mockito-core'
+        }
 
         //CVE-2021-21290
         dependencySet(group: 'io.netty', version: '4.1.63.Final') {
@@ -258,8 +269,12 @@ dependencies {
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.4.4'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
-    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.junit
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: versions.junit
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: versions.junit
+    
+    testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: versions.mockitoJupiter
+
     testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: versions.JUnitParams
     testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.0'
     testCompile (group: 'io.rest-assured', name :'rest-assured', version:'3.3.0') {
@@ -329,6 +344,7 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java',
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
     '**uk/gov/hmcts/dm/service/FileSizeVerifier.java',
+    '**uk/gov/hmcts/dm/service/BlobStorageReadService.java',
     '**uk/gov/hmcts/dm/controller/WelcomeController.java'
 ]
 
@@ -448,8 +464,6 @@ task smoke(type: Test) {
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
-
-
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
 }

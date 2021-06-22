@@ -11,6 +11,9 @@ import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.security.Classifications;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -39,7 +42,7 @@ public class VersionTest extends End2EndTestBase {
 
     @Override
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         doAnswer(invocation -> {
             try (final InputStream inputStream = FILE_V1.getInputStream();
                  final OutputStream out = invocation.getArgument(1)
@@ -56,7 +59,10 @@ public class VersionTest extends End2EndTestBase {
             }
         })
             .when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
+            .loadBlob(
+                Mockito.any(DocumentContentVersion.class),
+                Mockito.any(HttpServletRequest.class),
+                Mockito.any(HttpServletResponse.class));
     }
 
     @Test
