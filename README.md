@@ -64,8 +64,8 @@ There is currently a Java Client available here:
 https://github.com/hmcts/document-management-client
 
 ### Swagger UI
-To view our REST API go to {HOST}:{PORT}/swagger-ui.html
-> http://localhost:8080/swagger-ui.html
+To view our REST API go to {HOST}:{PORT}/swagger-ui/
+> http://localhost:4603/swagger-ui/
 
 ### API Endpoints
 A list of our endpoints can be found here
