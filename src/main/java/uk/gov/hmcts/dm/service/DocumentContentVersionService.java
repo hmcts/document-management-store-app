@@ -11,6 +11,7 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import javax.validation.constraints.NotNull;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,10 +34,14 @@ public class DocumentContentVersionService {
         if (documentContentVersion.getDocumentContent() == null || documentContentVersion.getDocumentContent().getData() == null) {
             throw new CantReadDocumentContentVersionBinaryException("File content is null", documentContentVersion);
         }
+        InputStream io = null;
         try {
-            IOUtils.copy(documentContentVersion.getDocumentContent().getData().getBinaryStream(), outputStream);
+            io = documentContentVersion.getDocumentContent().getData().getBinaryStream();
+            IOUtils.copy(io, outputStream);
         } catch (Exception e) {
             throw new CantReadDocumentContentVersionBinaryException(e, documentContentVersion);
+        } finally {
+            IOUtils.closeQuietly(io);
         }
     }
 
