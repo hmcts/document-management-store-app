@@ -227,7 +227,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
     
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.0'
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.1'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
