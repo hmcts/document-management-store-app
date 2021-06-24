@@ -121,7 +121,7 @@ dependencyManagement {
     dependencies {
         // Do not change - START
         // Changing below will break Serenity Report generation
-        dependencySet(group: 'junit', version: '4.13') {
+        dependencySet(group: 'junit', version: '4.13.2') {
             entry 'junit'
         }
 
