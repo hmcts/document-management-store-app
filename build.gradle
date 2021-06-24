@@ -157,6 +157,11 @@ dependencyManagement {
             entry 'spring-web'
             entry 'spring-webmvc'
         }
+
+        // Fix for migratePostgresDatabase task failure
+        dependencySet(group: 'org.liquibase', version: '3.8.2') {
+            entry 'liquibase-core'
+        }
     }
 }
 
