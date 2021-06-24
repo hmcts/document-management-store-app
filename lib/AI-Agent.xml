@@ -87,9 +87,6 @@
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.BlobCreator">
-            <Method name="createBlob" reportCaughtExceptions="true"/>
-        </Class>
         <Class name="uk.gov.hmcts.dm.service.BlobStorageReadService">
             <Method name="loadBlob" reportCaughtExceptions="true"/>
         </Class>

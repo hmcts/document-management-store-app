@@ -68,23 +68,25 @@ class MappingUrlIT extends BaseIT {
 
     @Test
     void "toggle_deleteenabled toggle Mappings"() {
-        assertTrue allEndpoints.any { it == '{DELETE /documents/{documentId}}' } == deleteenabled
+        assertTrue allEndpoints.any { it == '{DELETE [/documents/{documentId}]}' } == deleteenabled
     }
 
     @Test
     void "toggle_ttl toggle Mappings"() {
-        assertTrue allEndpoints.any { it == '{PATCH /documents/{documentId}, consumes [application/json]}' } == ttl
+        assertTrue allEndpoints.any { it == '{PATCH [/documents/{documentId}], consumes [application/json]}' } == ttl
     }
 
     @Test
     void "toggle_thumbnail toggle Mappings"() {
-        assertTrue allEndpoints.any { it == '{GET /documents/{documentId}/thumbnail}' } == thumbnail
-        assertTrue allEndpoints.any { it == '{GET /documents/{documentId}/versions/{versionId}/thumbnail}' } == thumbnail
+        assertTrue allEndpoints.any { it == '{GET [/documents/{documentId}/thumbnail]}' } == thumbnail
+        assertTrue allEndpoints.any { it == '{GET [/documents/{documentId}/versions/{versionId}/thumbnail]}' } ==
+            thumbnail
     }
 
     @Test
     void "toggle_testing toggle Testing"() {
-        assertTrue "Testing endpoint should be enabled: ${testing}",  allEndpoints.any { it == '{GET /testing/azure-storage-binary-exists/{id}}' } == testing
+        assertTrue "Testing endpoint should be enabled: ${testing}",
+            allEndpoints.any { it == '{GET [/testing/azure-storage-binary-exists/{id}]}' } == testing
     }
 
 }
