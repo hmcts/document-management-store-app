@@ -164,7 +164,7 @@ dependencyManagement {
         }
 
         //CVE-2021-27568
-        dependencySet(group: 'net.minidev', version: '2.3.1') {
+        dependencySet(group: 'net.minidev', version: '2.4.7') {
             entry 'json-smart'
         }
     }
