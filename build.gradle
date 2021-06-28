@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.11'
+    id 'uk.gov.hmcts.java' version '0.12.12'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.4.5'
     id 'com.github.ben-manes.versions' version '0.39.0'
@@ -164,7 +164,7 @@ dependencyManagement {
         }
 
         //CVE-2021-27568
-        dependencySet(group: 'net.minidev', version: '2.3.1') {
+        dependencySet(group: 'net.minidev', version: '2.4.7') {
             entry 'json-smart'
         }
     }
