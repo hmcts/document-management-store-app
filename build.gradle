@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.9'
+    id 'uk.gov.hmcts.java' version '0.12.11'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.4.5'
     id 'com.github.ben-manes.versions' version '0.39.0'
@@ -161,6 +161,11 @@ dependencyManagement {
         // Fix for migratePostgresDatabase task failure
         dependencySet(group: 'org.liquibase', version: '3.8.2') {
             entry 'liquibase-core'
+        }
+
+        //CVE-2021-27568
+        dependencySet(group: 'net.minidev', version: '2.4.7') {
+            entry 'json-smart'
         }
     }
 }
