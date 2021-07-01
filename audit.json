@@ -20,6 +20,7 @@
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents_POST":"ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId/thumbnail_GET":"ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents_PATCH":"ignore",
+    "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/auditEntries_GET": "ignore",
     "10010_Cookie No HttpOnly Flag_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_GET":"ignore",
