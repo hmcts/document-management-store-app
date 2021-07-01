@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
@@ -18,6 +19,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentUpdateException;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.Constants;
 
 import java.util.UUID;
 
@@ -29,6 +31,11 @@ import static java.util.AbstractMap.SimpleEntry;
 @Api("Endpoint for Update of Documents")
 @ConditionalOnProperty("toggle.ttl")
 public class StoredDocumentUpdateController {
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields(Constants.IS_ADMIN);
+    }
 
     @Autowired
     private AuditedStoredDocumentOperationsService documentService;
