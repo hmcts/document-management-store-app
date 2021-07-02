@@ -3,10 +3,9 @@ package uk.gov.hmcts.dm.config.batch;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.StopWatch;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -31,10 +30,9 @@ import java.util.stream.Collectors;
  * it and then update all the documents with the metadata in the file. After the update has been completed the file
  * is removed from the blob container.
  */
+@Slf4j
 @AllArgsConstructor
 public class UpdateDocumentMetaDataTasklet implements Tasklet {
-
-    private static final Logger log = LoggerFactory.getLogger(UpdateDocumentMetaDataTasklet.class);
 
     private final BlobContainerClient blobClient;
     private final StoredDocumentService documentService;
