@@ -189,5 +189,8 @@
         <Class name="uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter">
             <Method name="doFilter" reportCaughtExceptions="true"/>
         </Class>
+        <Class name="uk.gov.hmcts.dm.config.batch.UpdateDocumentMetaDataTasklet">
+            <Method name="execute" reportCaughtExceptions="true"/>
+        </Class>
     </Instrumentation>
 </ApplicationInsightsAgent>
