@@ -76,11 +76,11 @@ auth:
       client:
         baseUrl: ${IDAM_S2S_BASE_URI:http://localhost:4502}
 
-#logging:
-#  level:
-#    org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
-#    org.springframework.batch: ${LOG_LEVEL_SPRING_BATCH:DEBUG}
-#    uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
+logging:
+  level:
+    org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
+    org.springframework.batch: ${LOG_LEVEL_SPRING_BATCH:DEBUG}
+    uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
 
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
