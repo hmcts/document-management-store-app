@@ -41,12 +41,14 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+
+        log.debug("==== execute started ====");
         blobClient.listBlobs()
             .stream()
             .parallel()
             .map(blobItem -> blobClient.getBlobClient(blobItem.getName()))
             .forEach(this::processItem);
-
+        log.debug("==== execute ended ====");
         return RepeatStatus.FINISHED;
     }
 
@@ -68,6 +70,7 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
 
     private void processItem(BlobClient client) {
 
+        log.debug("==== processItem started ====");
         StopWatch stopwatch = new StopWatch();
         stopwatch.start();
 
@@ -77,8 +80,11 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
             .skip(1)
             .map(line -> createDocumentUpdate(line.split(",")))
             .collect(Collectors.toList());
+        log.debug("==== file processed ====");
 
         documentService.updateItems(new UpdateDocumentsCommand(null, updates));
+
+        log.debug("==== DB updated ====");
 
         stopwatch.stop();
         long timeElapsed = stopwatch.getTime();
