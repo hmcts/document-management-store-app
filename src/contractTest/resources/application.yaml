@@ -46,7 +46,7 @@ spring:
 
   batch:
     job:
-      enabled: ${ENABLE_TTL:true}
+      enabled: ${ENABLE_TTL:false}
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
     initialize-schema: always
@@ -179,7 +179,7 @@ toggle:
   documentandmetadatauploadendpoint: ${ENABLE_DOCUMENT_AND_METADATA_UPLOAD:true}
   folderendpoint: ${ENABLE_FOLDER_API:true}
   deleteenabled: ${ENABLE_DELETE:true}
-  ttl: ${ENABLE_TTL:true}
+  ttl: ${ENABLE_TTL:false}
   thumbnail: ${ENABLE_THUMBNAIL:true}
   testing: ${ENABLE_TESTING:true}
   metadatamigration: ${ENABLE_METADATA_MIGRATION:true}
