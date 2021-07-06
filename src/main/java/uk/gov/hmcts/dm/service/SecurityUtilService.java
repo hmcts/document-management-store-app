@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import uk.gov.hmcts.dm.utils.StringUtils;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,10 +48,7 @@ public class SecurityUtilService {
     }
 
     public static HashSet<String> sanitizedSetFrom(Collection<String> collection) {
-        return collection.stream()
-            .map(String::trim)
-            .map(StringUtils::convertValidLogString)
-            .collect(Collectors.toCollection(HashSet::new));
+        return collection.stream().map(String::trim).collect(Collectors.toCollection(HashSet::new));
     }
 
     private HttpServletRequest getCurrentRequest() {
