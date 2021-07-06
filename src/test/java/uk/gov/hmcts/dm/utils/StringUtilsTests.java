@@ -3,6 +3,10 @@ package uk.gov.hmcts.dm.utils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 public class StringUtilsTests {
 
     @Test
@@ -22,4 +26,25 @@ public class StringUtilsTests {
 
     }
 
+    @Test
+    public void convertValidLog() {
+        String dangerousLogStr = "this %0d is \r an %0a apple \n .";
+        String safeLogStr = "this  is  an  apple  .";
+        Assert.assertNotEquals(dangerousLogStr, safeLogStr);
+        Assert.assertEquals(safeLogStr, StringUtils.convertValidLogString(dangerousLogStr));
+    }
+
+    @Test
+    public void convertValidLogNonEmptyList() {
+
+        String dangerousLogStr = "this %0d is \r an %0a apple \n .";
+        String dangerousLogStr2 = "this %0d is \r an %0a mango \n .";
+        String safeLogStr = "this  is  an  apple  .";
+        Set<String> initialSet = new HashSet<>(Arrays.asList(dangerousLogStr, dangerousLogStr2));
+
+        Set<String> sanitisedSet = StringUtils.convertValidLogStrings(initialSet);
+
+        Assert.assertEquals(initialSet.size(), sanitisedSet.size());
+        Assert.assertEquals(safeLogStr, sanitisedSet.stream().findFirst().get());
+    }
 }
