@@ -1,7 +1,10 @@
 package uk.gov.hmcts.dm.controller;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -10,10 +13,12 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
+import uk.gov.hmcts.dm.service.Constants;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -26,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class DocumentContentVersionControllerTest extends ComponentTestBase {
+
+    @Mock
+    private WebDataBinder binder;
 
     private final UUID id = UUID.randomUUID();
 
@@ -215,6 +223,16 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/binary")
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testInitBinder() {
+
+        WebDataBinder webDataBinder = new WebDataBinder(null);
+
+        Assert.assertNull(webDataBinder.getDisallowedFields());
+        new DocumentContentVersionController().initBinder(webDataBinder);
+        Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 
 }

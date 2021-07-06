@@ -3,6 +3,10 @@ package uk.gov.hmcts.dm.config.batch;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.time.StopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -11,7 +15,12 @@ import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -25,17 +34,21 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UpdateDocumentMetaDataTasklet implements Tasklet {
 
+    private static final Logger log = LoggerFactory.getLogger(UpdateDocumentMetaDataTasklet.class);
+
     private final BlobContainerClient blobClient;
     private final StoredDocumentService documentService;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
+
+        log.debug("==== execute started ====");
         blobClient.listBlobs()
             .stream()
             .parallel()
             .map(blobItem -> blobClient.getBlobClient(blobItem.getName()))
             .forEach(this::processItem);
-
+        log.debug("==== execute ended ====");
         return RepeatStatus.FINISHED;
     }
 
@@ -56,23 +69,40 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
     }
 
     private void processItem(BlobClient client) {
-        List<DocumentUpdate> updates = getCsvFile(client)
+
+        log.debug("==== processItem started ====");
+        StopWatch stopwatch = new StopWatch();
+        stopwatch.start();
+
+        BufferedReader bufferedReader = getCsvFile(client);
+        List<DocumentUpdate> updates = bufferedReader
             .lines()
             .skip(1)
             .map(line -> createDocumentUpdate(line.split(",")))
             .collect(Collectors.toList());
+        log.debug("==== file processed ====");
 
         documentService.updateItems(new UpdateDocumentsCommand(null, updates));
+
+        log.debug("==== DB updated ====");
+
+        stopwatch.stop();
+        long timeElapsed = stopwatch.getTime();
+
+        log.debug("Time taken to update {} documents is  : {} milliseconds from csv file with name {} ", updates.size(),
+            timeElapsed, client.getBlobName());
+
         client.delete();
+        IOUtils.closeQuietly(bufferedReader);
     }
 
     private DocumentUpdate createDocumentUpdate(String[] cells) {
-        final UUID documentId = UUID.fromString(cells[4]);
+        final UUID documentId = UUID.fromString(cells[3]);
         final HashMap<String, String> metadata = new HashMap<>();
 
-        metadata.put("case_id", cells[1]);
-        metadata.put("case_type_id", cells[2]);
-        metadata.put("jurisdiction", cells[3]);
+        metadata.put("case_id", cells[0]);
+        metadata.put("case_type_id", cells[1]);
+        metadata.put("jurisdiction", cells[2]);
 
         return new DocumentUpdate(documentId, metadata);
     }
