@@ -4,6 +4,8 @@ api:
 spring:
   application:
     name: dm-store
+  config:
+    import: "optional:configtree:/mnt/secrets/dm/"
   data:
     rest:
       detection-strategy: annotated

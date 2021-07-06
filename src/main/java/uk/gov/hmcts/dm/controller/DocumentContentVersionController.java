@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,7 @@ import uk.gov.hmcts.dm.exception.ValidationErrorException;
 import uk.gov.hmcts.dm.hateos.DocumentContentVersionHalResource;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
@@ -41,6 +44,12 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
     path = "/documents/{documentId}")
 @Api("Endpoint for Document Content Version")
 public class DocumentContentVersionController {
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+
+        binder.setDisallowedFields(Constants.IS_ADMIN);
+    }
 
     @Autowired
     private DocumentContentVersionService documentContentVersionService;

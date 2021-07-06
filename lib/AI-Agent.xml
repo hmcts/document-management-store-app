@@ -87,9 +87,6 @@
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
             <Method name="createAndSaveEntry" reportCaughtExceptions="true"/>
         </Class>
-        <Class name="uk.gov.hmcts.dm.service.BlobCreator">
-            <Method name="createBlob" reportCaughtExceptions="true"/>
-        </Class>
         <Class name="uk.gov.hmcts.dm.service.BlobStorageReadService">
             <Method name="loadBlob" reportCaughtExceptions="true"/>
         </Class>
@@ -191,6 +188,9 @@
         </Class>
         <Class name="uk.gov.hmcts.reform.logging.filters.RequestStatusLoggingFilter">
             <Method name="doFilter" reportCaughtExceptions="true"/>
+        </Class>
+        <Class name="uk.gov.hmcts.dm.config.batch.UpdateDocumentMetaDataTasklet">
+            <Method name="execute" reportCaughtExceptions="true"/>
         </Class>
     </Instrumentation>
 </ApplicationInsightsAgent>

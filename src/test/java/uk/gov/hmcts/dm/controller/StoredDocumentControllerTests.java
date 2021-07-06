@@ -1,8 +1,10 @@
 package uk.gov.hmcts.dm.controller;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
@@ -11,9 +13,11 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
+import uk.gov.hmcts.dm.service.Constants;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -237,6 +241,16 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .get("/documents/123456")
             .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testInitBinder() {
+
+        WebDataBinder webDataBinder = new WebDataBinder(null);
+
+        Assert.assertNull(webDataBinder.getDisallowedFields());
+        new StoredDocumentController().initBinder(webDataBinder);
+        Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 
 }
