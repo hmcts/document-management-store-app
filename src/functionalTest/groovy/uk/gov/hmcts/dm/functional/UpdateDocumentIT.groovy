@@ -111,7 +111,6 @@ class UpdateDocumentIT extends BaseIT {
 
     @Test
     void "UD6 invalid bulk update request"() {
-        assumeTrue(toggleTtlEnabled)
 
         def documentUrl = createDocumentAndGetUrlAs(CITIZEN)
         def documentUrl2 = createDocumentAndGetUrlAs(CITIZEN)
@@ -135,7 +134,6 @@ class UpdateDocumentIT extends BaseIT {
 
     @Test
     void "UD7 valid bulk update request"() {
-        assumeTrue(toggleTtlEnabled)
 
         def documentUrl = createDocumentAndGetUrlAs(CITIZEN)
         def documentUrl2 = createDocumentAndGetUrlAs(CITIZEN)
@@ -162,7 +160,6 @@ class UpdateDocumentIT extends BaseIT {
 
     @Test
     void "UD8 partial bulk update request success"() {
-        assumeTrue(toggleTtlEnabled)
 
         def documentUrl = createDocumentAndGetUrlAs(CITIZEN)
         def documentId = documentUrl.split("/").last()
