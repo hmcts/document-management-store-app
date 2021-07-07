@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.Permissions;
+import uk.gov.hmcts.dm.utils.StringUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -51,7 +52,9 @@ public class DomainPermissionEvaluator {
                 || Classifications.PUBLIC.equals(rolesAware.getClassification()))
                 ) {
                 Set<String> documentRoles = sanitizedSetFrom(rolesAware.getRoles());
-                log.info("User with roles {} accessing document that accepts roles {}", authenticatedUserRolesSet, documentRoles);
+                log.info("User with roles {} accessing document that accepts roles {}",
+                    StringUtils.convertValidLogStrings(authenticatedUserRolesSet),
+                    StringUtils.convertValidLogStrings(documentRoles));
 
                 documentRoles.retainAll(authenticatedUserRolesSet);
                 if (documentRoles.size() > 0) {
