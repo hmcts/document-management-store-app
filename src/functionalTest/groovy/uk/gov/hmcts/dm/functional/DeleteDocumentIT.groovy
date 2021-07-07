@@ -12,7 +12,6 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.CoreMatchers.containsString
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.equalTo
-import static org.junit.Assume.assumeTrue
 
 class DeleteDocumentIT extends BaseIT {
     private citizenDocumentUrl
@@ -139,85 +138,75 @@ class DeleteDocumentIT extends BaseIT {
 
     @Test
     void "D8 As an owner of the document I could not get the TTL info once, I have done the soft delete"() {
-        assumeTrue(toggleTtlEnabled)
+        if (toggleTtlEnabled) {
 
-        Response response = CreateAUserforTTL CASE_WORKER
+            Response response = CreateAUserforTTL CASE_WORKER
 
-        String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
-        String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href")
+            String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
+            String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href")
 
-        givenRequest(CASE_WORKER)
-            .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("ttl", "2018-01-31T10:10:10+0000")
-            .expect().log().all()
-            .statusCode(201)
-            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
-            .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
-            .when()
-            .post(documentUrl1)
+            givenRequest(CASE_WORKER)
+                .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+                .multiPart("ttl", "2018-01-31T10:10:10+0000")
+                .expect().log().all()
+                .statusCode(201)
+                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
+                .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
+                .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+                .when()
+                .post(documentUrl1)
 
-        givenRequest(CASE_WORKER)
-            .expect().log().all()
-            .statusCode(200)
-            .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
-            .when()
-            .get(documentUrl1)
+            givenRequest(CASE_WORKER)
+                .expect().log().all()
+                .statusCode(200)
+                .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
+                .when()
+                .get(documentUrl1)
 
-        givenRequest(CASE_WORKER)
-            .expect().log().all()
-            .statusCode(204)
-            .body(not(containsString("ttl:")))
-            .when()
-            .delete(documentUrl1)
+            givenRequest(CASE_WORKER)
+                .expect().log().all()
+                .statusCode(204)
+                .body(not(containsString("ttl:")))
+                .when()
+                .delete(documentUrl1)
 
-//        givenRequest(CASE_WORKER)
-//            .expect().log().all()
-//            .statusCode(404)
-//
-//            .when()
-//            .get(documentUrl1)
+        }
     }
 
     @Test
     void "D9 As an owner of the document I could not get the TTL info once, I have done the hard delete"() {
-        assumeTrue(toggleTtlEnabled)
+        if (toggleTtlEnabled) {
 
-        Response response = CreateAUserforTTL CASE_WORKER
+            Response response = CreateAUserforTTL CASE_WORKER
 
-        String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
+            String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
 
-        givenRequest(CASE_WORKER)
-            .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("ttl", "2018-01-31T10:10:10+0000")
-            .expect().log().all()
-            .statusCode(201)
-            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
-            .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
-            .when()
-            .post(documentUrl1)
+            givenRequest(CASE_WORKER)
+                .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+                .multiPart("ttl", "2018-01-31T10:10:10+0000")
+                .expect().log().all()
+                .statusCode(201)
+                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
+                .body("originalDocumentName", equalTo(ATTACHMENT_9_JPG))
+                .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+                .when()
+                .post(documentUrl1)
 
-        givenRequest(CASE_WORKER)
-            .expect().log().all()
-            .statusCode(200)
-            .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
-            .when()
-            .get(documentUrl1)
+            givenRequest(CASE_WORKER)
+                .expect().log().all()
+                .statusCode(200)
+                .body("ttl", equalTo("2018-10-31T10:10:10+0000"))
+                .when()
+                .get(documentUrl1)
 
-        givenRequest(CASE_WORKER)
-            .expect().log().all()
-            .statusCode(204)
-            .body(not(containsString("ttl:")))
-            .when()
-            .delete(documentUrl1 + "?permanent=true")
+            givenRequest(CASE_WORKER)
+                .expect().log().all()
+                .statusCode(204)
+                .body(not(containsString("ttl:")))
+                .when()
+                .delete(documentUrl1 + "?permanent=true")
 
-//        givenRequest(CASE_WORKER)
-//            .expect().log().all()
-//            .statusCode(404)
-//            .body(not(containsString("ttl:")))
-//            .when()
-//            .get(documentUrl1)
+        }
     }
 
 }
