@@ -16,7 +16,6 @@ import java.time.Duration
 import java.time.LocalDateTime
 
 import static org.hamcrest.Matchers.*
-import static org.junit.Assume.assumeTrue
 
 class CreateDocumentIT extends BaseIT {
 
@@ -259,69 +258,69 @@ class CreateDocumentIT extends BaseIT {
 
     @Test
     void "CD11 (R1) As authenticated when i upload a file only first TTL will be taken into consideration"() {
-        assumeTrue(toggleTtlEnabled)
-
-        givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
-            .multiPart("ttl", "2018-10-31T10:10:10+0000")
-            .multiPart("ttl", "2018-01-31T10:10:10+0000")
-            .expect().log().all()
-            .statusCode(200)
-            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
-            .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
-            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
-            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
-            .when()
-            .post("/documents")
+        if (toggleTtlEnabled) {
+            givenRequest(CITIZEN)
+                .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+                .multiPart("classification", Classifications.PUBLIC as String)
+                .multiPart("roles", "citizen")
+                .multiPart("roles", "caseworker")
+                .multiPart("ttl", "2018-10-31T10:10:10+0000")
+                .multiPart("ttl", "2018-01-31T10:10:10+0000")
+                .expect().log().all()
+                .statusCode(200)
+                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+                .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
+                .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+                .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
+                .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
+                .body("_embedded.documents[0].ttl", equalTo("2018-10-31T10:10:10+0000"))
+                .when()
+                .post("/documents")
+        }
     }
 
     @Test
     @Pending  //Fixme frequent nightly build failure
     void "CD12 (R1) As a user, when i upload a file with a TTL, file will be removed by background process once TTL is complete"() {
-        assumeTrue(toggleTtlEnabled)
+        if (toggleTtlEnabled) {
+            def url = givenRequest(CITIZEN)
+                .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+                .multiPart("classification", Classifications.PUBLIC as String)
+                .multiPart("roles", "citizen")
+                .multiPart("roles", "caseworker")
+                .multiPart("ttl", "2018-01-31T10:10:10+0000")
+                .expect().log().all()
+                .statusCode(200)
+                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+                .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
+                .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+                .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
+                .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
+                .when()
+                .post("/documents")
+                .path("_embedded.documents[0]._links.self.href")
 
-        def url = givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("classification", Classifications.PUBLIC as String)
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
-            .multiPart("ttl", "2018-01-31T10:10:10+0000")
-            .expect().log().all()
-            .statusCode(200)
-            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
-            .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
-            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
-            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .when()
-            .post("/documents")
-            .path("_embedded.documents[0]._links.self.href")
+            def statusCode = null
+            def start = LocalDateTime.now()
 
-        def statusCode = null
-        def start = LocalDateTime.now()
+            while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 600)) {
 
-        while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).seconds < 600)) {
+                statusCode = givenRequest(CITIZEN)
+                    .expect()
+                    .statusCode(isOneOf(404, 200))
+                    .when()
+                    .get(url)
+                    .statusCode()
 
-            statusCode = givenRequest(CITIZEN)
+                sleep(1000)
+            }
+
+            givenRequest(CITIZEN)
                 .expect()
-                .statusCode(isOneOf(404, 200))
+                .statusCode(404)
                 .when()
                 .get(url)
-                .statusCode()
-
-            sleep(1000)
         }
-
-        givenRequest(CITIZEN)
-            .expect()
-            .statusCode(404)
-            .when()
-            .get(url)
     }
 
     @Test

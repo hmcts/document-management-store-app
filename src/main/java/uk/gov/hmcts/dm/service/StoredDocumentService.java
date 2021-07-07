@@ -141,7 +141,9 @@ public class StoredDocumentService {
     @Transactional
     public void updateItems(UpdateDocumentsCommand command) {
         for (DocumentUpdate update : command.documents) {
-            findOne(update.documentId).ifPresent(d -> updateStoredDocument(d, d.getTtl(), update.metadata));
+            if (Objects.nonNull(update)) {
+                findOne(update.documentId).ifPresent(d -> updateStoredDocument(d, d.getTtl(), update.metadata));
+            }
         }
     }
 
