@@ -97,13 +97,20 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
     }
 
     private DocumentUpdate createDocumentUpdate(String[] cells) {
-        final UUID documentId = UUID.fromString(cells[3]);
-        final HashMap<String, String> metadata = new HashMap<>();
+        try {
+            final UUID documentId = UUID.fromString(cells[3]);
+            final HashMap<String, String> metadata = new HashMap<>();
 
-        metadata.put("case_id", cells[0]);
-        metadata.put("case_type_id", cells[1]);
-        metadata.put("jurisdiction", cells[2]);
+            metadata.put("case_id", cells[0]);
+            metadata.put("case_type_id", cells[1]);
+            metadata.put("jurisdiction", cells[2]);
 
-        return new DocumentUpdate(documentId, metadata);
+            return new DocumentUpdate(documentId, metadata);
+        } catch (IllegalArgumentException e) {
+            log.error("case_id : {} , case_type_id : {} , jurisdiction {} , uuid : {} ", cells[0], cells[1], cells[2],
+                cells[3]);
+            return null;
+        }
+
     }
 }
