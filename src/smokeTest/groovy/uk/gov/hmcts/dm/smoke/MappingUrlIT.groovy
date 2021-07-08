@@ -72,11 +72,6 @@ class MappingUrlIT extends BaseIT {
     }
 
     @Test
-    void "toggle_ttl toggle Mappings"() {
-        assertTrue allEndpoints.any { it == '{PATCH [/documents/{documentId}], consumes [application/json]}' } == ttl
-    }
-
-    @Test
     void "toggle_thumbnail toggle Mappings"() {
         assertTrue allEndpoints.any { it == '{GET [/documents/{documentId}/thumbnail]}' } == thumbnail
         assertTrue allEndpoints.any { it == '{GET [/documents/{documentId}/versions/{versionId}/thumbnail]}' } ==
