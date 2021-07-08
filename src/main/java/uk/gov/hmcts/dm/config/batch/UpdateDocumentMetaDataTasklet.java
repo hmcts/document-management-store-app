@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UpdateDocumentMetaDataTasklet implements Tasklet {
 
+    private static final UUID DUMMY_UUID = UUID.randomUUID();
+
     private static final Logger log = LoggerFactory.getLogger(UpdateDocumentMetaDataTasklet.class);
 
     private final BlobContainerClient blobClient;
@@ -109,7 +111,14 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
         } catch (IllegalArgumentException e) {
             log.error("case_id : {} , case_type_id : {} , jurisdiction {} , uuid : {} ", cells[0], cells[1], cells[2],
                 cells[3]);
-            return null;
+
+            final HashMap<String, String> metadata = new HashMap<>();
+
+            metadata.put("case_id", cells[0]);
+            metadata.put("case_type_id", cells[1]);
+            metadata.put("jurisdiction", cells[2]);
+
+            return new DocumentUpdate(DUMMY_UUID, metadata);
         }
 
     }
