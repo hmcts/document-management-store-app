@@ -29,7 +29,6 @@ import static java.util.AbstractMap.SimpleEntry;
 @RequestMapping(
     path = "/documents")
 @Api("Endpoint for Update of Documents")
-@ConditionalOnProperty("toggle.ttl")
 public class StoredDocumentUpdateController {
 
     @InitBinder
@@ -40,6 +39,7 @@ public class StoredDocumentUpdateController {
     @Autowired
     private AuditedStoredDocumentOperationsService documentService;
 
+    @ConditionalOnProperty("toggle.ttl")
     @PatchMapping(value = "/{documentId}",
         consumes = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation("Updates document instance (ex. ttl)")
