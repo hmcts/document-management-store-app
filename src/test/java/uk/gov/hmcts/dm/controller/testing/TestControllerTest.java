@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ import static org.mockito.BDDMockito.given;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobStorageException.class})
+@PowerMockIgnore({"javax.net.ssl.*", "com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class TestControllerTest {
 
     private BlobStorageReadService blobStorageReadService;
