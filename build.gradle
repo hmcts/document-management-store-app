@@ -217,6 +217,8 @@ dependencies {
     compile (group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4') {
         exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
     }
+    compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
+    compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
     
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.8.RELEASE'
