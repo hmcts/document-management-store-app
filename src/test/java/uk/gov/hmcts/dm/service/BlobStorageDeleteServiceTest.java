@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobStorageException.class})
-@PowerMockIgnore({"javax.net.ssl.*"})
+@PowerMockIgnore({"javax.net.ssl.*", "com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class BlobStorageDeleteServiceTest {
 
     private BlobStorageDeleteService blobStorageDeleteService;
