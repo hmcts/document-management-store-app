@@ -48,6 +48,11 @@ java:
     ENABLE_THUMBNAIL: 'true'
     ENABLE_METADATA_MIGRATION: 'false'
 
+    LOG_OUTPUT: single
+    ROOT_LOGGING_LEVEL: INFO
+    LOG_LEVEL_SPRING_WEB: INFO
+    LOG_LEVEL_SPRING_BATCH: INFO
+    LOG_LEVEL_DM: INFO
 
     # Document Storage
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: dm-store-docstore-{{ .Values.global.environment }}
