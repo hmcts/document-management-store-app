@@ -94,7 +94,7 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
         log.debug("Time taken to update {} documents is  : {} milliseconds from csv file with name {} ", updates.size(),
             timeElapsed, client.getBlobName());
 
-//        client.delete();
+        client.delete();
         IOUtils.closeQuietly(bufferedReader);
     }
 
