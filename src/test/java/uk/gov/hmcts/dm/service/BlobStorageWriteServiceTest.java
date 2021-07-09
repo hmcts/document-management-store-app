@@ -36,7 +36,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobProperties.class})
-@PowerMockIgnore({"javax.net.ssl.*"})
+@PowerMockIgnore({"javax.net.ssl.*","com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 public class BlobStorageWriteServiceTest {
 
     private BlobStorageWriteService blobStorageWriteService;
