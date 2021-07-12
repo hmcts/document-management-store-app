@@ -221,7 +221,7 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
     
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.8.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.9.RELEASE'
     compile (group: 'org.springframework.cloud',
         name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.2.8.RELEASE') {
         exclude group: 'org.webjars', module: 'jquery'
