@@ -61,7 +61,7 @@ java:
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 3600000
     #Below File size limits are in MB
     MAX_MEDIA_FILE_SIZE: 500
-    MAX_NON_MEDIA_FILE_SIZE: 300
+    MAX_NON_MEDIA_FILE_SIZE: 1024
 
 blobstorage:
   resourceGroup: dm-store-aks

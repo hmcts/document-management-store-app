@@ -166,7 +166,7 @@ dm:
     whitelist: ${DM_MEDIAFILE_WHITELIST:audio/mpeg,video/mp4}
     sizelimit: ${MAX_MEDIA_FILE_SIZE:500}
   nonmediafile:
-    sizelimit: ${MAX_NON_MEDIA_FILE_SIZE:300}
+    sizelimit: ${MAX_NON_MEDIA_FILE_SIZE:1024}
 
 thumbnail:
   imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
