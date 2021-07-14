@@ -256,6 +256,8 @@ dependencies {
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.2'
     functionalTestCompile group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
+    testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
+    
     //pact
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
@@ -417,6 +419,11 @@ task smoke(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
+task fortifyScan(type: JavaExec)  {
+    main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+    classpath += sourceSets.test.runtimeClasspath
+    jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
+}
 
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
