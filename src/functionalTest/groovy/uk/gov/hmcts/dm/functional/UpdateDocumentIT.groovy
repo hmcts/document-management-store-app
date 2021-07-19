@@ -14,96 +14,91 @@ class UpdateDocumentIT extends BaseIT {
 
     @Test
     void "UD1 update TTL for a Document"() {
-        if (toggleTtlEnabled) {
-            def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-            givenRequest(CITIZEN)
-                .body([ttl: "3000-10-31T10:10:10+0000"])
-                .contentType(ContentType.JSON)
-                .expect()
-                .statusCode(200)
-                .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
-                .when()
-                .patch(documentUrl)
-        }
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN
+
+        givenRequest(CITIZEN)
+            .body([ttl: "3000-10-31T10:10:10+0000"])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(200)
+            .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
+            .when()
+            .patch(documentUrl)
     }
 
     @Test
     void "UD2 fail to update TTL for a Document that I don't own"() {
-        if (toggleTtlEnabled) {
-            def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-            givenRequest(CITIZEN_2)
-                .body([ttl: "3000-10-31T10:10:10+0000"])
-                .contentType(ContentType.JSON)
-                .expect()
-                .statusCode(403)
-                .when()
-                .patch(documentUrl)
-        }
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN
+
+        givenRequest(CITIZEN_2)
+            .body([ttl: "3000-10-31T10:10:10+0000"])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(403)
+            .when()
+            .patch(documentUrl)
     }
 
     @Test
     void "UD3 fail to update TTL for a Document by a caseworker"() {
-        if (toggleTtlEnabled) {
-            def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-            givenRequest(CASE_WORKER)
-                .body([ttl: "3000-10-31T10:10:10+0000"])
-                .contentType(ContentType.JSON)
-                .expect()
-                .statusCode(403)
-                .when()
-                .patch(documentUrl)
-        }
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN
+
+        givenRequest(CASE_WORKER)
+            .body([ttl: "3000-10-31T10:10:10+0000"])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(403)
+            .when()
+            .patch(documentUrl)
     }
 
     @Test
     void "UD4 when updating a ttl the last ttl will be taken into consideration (if more than one are in a body)"() {
-        if (toggleTtlEnabled) {
-            def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-            givenRequest(CITIZEN)
-                .body([ttl: "3000-10-31T10:10:10+0000"])
-                .body([ttl: "3000-01-31T10:10:10+0000"])
-                .contentType(ContentType.JSON)
-                .expect()
-                .statusCode(200)
-                .body("ttl", equalTo("3000-01-31T10:10:10+0000"))
-                .when()
-                .patch(documentUrl)
-        }
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN
+
+        givenRequest(CITIZEN)
+            .body([ttl: "3000-10-31T10:10:10+0000"])
+            .body([ttl: "3000-01-31T10:10:10+0000"])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(200)
+            .body("ttl", equalTo("3000-01-31T10:10:10+0000"))
+            .when()
+            .patch(documentUrl)
     }
 
     @Test
     void "UD5 TTL will stay intact if a patch request is made without a new TTL in the body"() {
-        if (toggleTtlEnabled) {
-            def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-            givenRequest(CITIZEN)
-                .body([ttl: "3000-10-31T10:10:10+0000"])
-                .contentType(ContentType.JSON)
-                .expect()
-                .statusCode(200)
-                .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
-                .when()
-                .patch(documentUrl)
+        def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
-            givenRequest(CITIZEN)
-                .contentType(ContentType.JSON)
-                .expect()
-                .statusCode(400)
-                .body("ttl", equalTo(null))
-                .when()
-                .patch(documentUrl)
+        givenRequest(CITIZEN)
+            .body([ttl: "3000-10-31T10:10:10+0000"])
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(200)
+            .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
+            .when()
+            .patch(documentUrl)
 
-            givenRequest(CITIZEN)
-                .expect()
-                .statusCode(200)
-                .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
-                .when()
-                .get(documentUrl)
-        }
+        givenRequest(CITIZEN)
+            .contentType(ContentType.JSON)
+            .expect()
+            .statusCode(400)
+            .body("ttl", equalTo(null))
+            .when()
+            .patch(documentUrl)
+
+        givenRequest(CITIZEN)
+            .expect()
+            .statusCode(200)
+            .body("ttl", equalTo("3000-10-31T10:10:10+0000"))
+            .when()
+            .get(documentUrl)
     }
 
     @Test
@@ -177,19 +172,18 @@ class UpdateDocumentIT extends BaseIT {
 
     @Test
     void "UD9 partial update TTL for a non existent document"() {
-        if (toggleTtlEnabled) {
-            String documentUrl = createDocumentAndGetUrlAs CITIZEN
-            String documentId = documentUrl.split("/").last()
-            String nonExistentId = UUID.randomUUID().toString()
-            documentUrl = documentUrl.replace(documentId, nonExistentId)
 
-            givenRequest(CITIZEN)
-                .body([ttl: "3000-10-31T10:10:10+0000"])
-                .contentType(ContentType.JSON)
-                .expect().log().all()
-                .statusCode(404)
-                .when()
-                .patch(documentUrl)
-        }
+        String documentUrl = createDocumentAndGetUrlAs CITIZEN
+        String documentId = documentUrl.split("/").last()
+        String nonExistentId = UUID.randomUUID().toString()
+        documentUrl = documentUrl.replace(documentId, nonExistentId)
+
+        givenRequest(CITIZEN)
+            .body([ttl: "3000-10-31T10:10:10+0000"])
+            .contentType(ContentType.JSON)
+            .expect().log().all()
+            .statusCode(404)
+            .when()
+            .patch(documentUrl)
     }
 }
