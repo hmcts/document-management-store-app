@@ -45,7 +45,13 @@ spring:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
-
+    hikari:
+      maximumPoolSize: ${MAX_POOL_SIZE:48}
+      minimumIdle: ${MINIMUM_IDLE:10}
+      poolName: DmStoreHikariCP
+      maxLifetime: ${MAX_LIFETIME:90000}
+      connectionTimeout: ${CONNECTION_TIMEOUT:10000}
+      keepAliveTime: ${KEEP_ALIVE_TIME:60000}
   batch:
     job:
       enabled: ${ENABLE_TTL:false}
