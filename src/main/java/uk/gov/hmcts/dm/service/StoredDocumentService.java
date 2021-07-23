@@ -142,7 +142,7 @@ public class StoredDocumentService {
     public void updateItems(UpdateDocumentsCommand command) {
         for (DocumentUpdate update : command.documents) {
             if (Objects.nonNull(update)) {
-                findOne(update.documentId).ifPresent(d -> updateStoredDocument(d, d.getTtl(), update.metadata));
+                findOne(update.documentId).ifPresent(d -> updateMigratedStoredDocument(d, update.metadata));
             }
         }
     }
@@ -195,6 +195,33 @@ public class StoredDocumentService {
         }
 
         storedDocument.setTtl(ttl);
+        storedDocument.setLastModifiedBy(securityUtilService.getUserId());
+        save(storedDocument);
+    }
+
+
+    public void updateMigratedStoredDocument(
+        @NonNull StoredDocument storedDocument,
+        Map<String, String> metadata
+    ) {
+        if (storedDocument.isDeleted()) {
+            return;
+        }
+
+        if (Objects.nonNull(metadata)) {
+            if (storedDocument.getMetadata().isEmpty() || toggleConfiguration.isOverridemetadata()) {
+                storedDocument.getMetadata().putAll(metadata);
+            } else {
+                //Don't override existing value for key. Instead add only new key/value to the Metadata
+                Map<String, String> newMetaData = metadata.entrySet().stream()
+                    .filter(entry -> !storedDocument.getMetadata().containsKey(entry.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                storedDocument.getMetadata().putAll(newMetaData);
+            }
+        } else {
+            return;
+        }
+
         storedDocument.setLastModifiedBy(securityUtilService.getUserId());
         save(storedDocument);
     }

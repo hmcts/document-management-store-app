@@ -32,7 +32,7 @@ import java.util.Date;
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
 @Configuration
-@ConditionalOnProperty("toggle.metadata-migration")
+@ConditionalOnProperty("toggle.metadatamigration")
 public class MetadataMigrationConfiguration {
 
     @Autowired
