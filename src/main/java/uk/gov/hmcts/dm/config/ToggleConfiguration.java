@@ -14,5 +14,6 @@ public class ToggleConfiguration {
     private boolean folderendpoint;
     private boolean includeidamhealth;
     private boolean ttl;
+    private boolean overridemetadata;
 
 }
