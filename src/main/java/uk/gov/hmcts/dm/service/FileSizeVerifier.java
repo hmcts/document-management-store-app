@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.service;
 import org.apache.tika.Tika;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TikaCoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +44,7 @@ public class FileSizeVerifier {
 
             Metadata metadata = new Metadata();
             if (multipartFile.getOriginalFilename() != null) {
-                metadata.add(Metadata.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
+                metadata.add(TikaCoreProperties.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
                 metadata.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
             }
             String detected = tika.detect(tikaInputStream, metadata);
