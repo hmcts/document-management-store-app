@@ -26,9 +26,9 @@ import java.util.UUID;
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
 import static org.apache.commons.io.IOUtils.copy;
-import static org.apache.tika.io.IOUtils.toInputStream;
-import static org.hamcrest.core.Is.is;
+import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -52,6 +52,7 @@ public class BlobStorageWriteServiceTest {
     @Mock
     private DocumentContentVersionRepository documentContentVersionRepository;
     private static final String MOCK_DATA = "mock data";
+    private static final String UTF8 = "UTF8";
 
     @Before
     public void setUp() throws Exception {
@@ -63,7 +64,7 @@ public class BlobStorageWriteServiceTest {
         given(blobClient.getBlockBlobClient()).willReturn(blob);
 
         blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer, documentContentVersionRepository);
-        try (final InputStream inputStream = toInputStream(MOCK_DATA)) {
+        try (final InputStream inputStream = toInputStream(MOCK_DATA, UTF8)) {
             given(file.getInputStream()).willReturn(inputStream);
         }
     }
@@ -76,7 +77,7 @@ public class BlobStorageWriteServiceTest {
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
 
         doAnswer(invocation -> {
-            try (final InputStream inputStream = toInputStream(MOCK_DATA);
+            try (final InputStream inputStream = toInputStream(MOCK_DATA, UTF8);
                  final OutputStream outputStream = invocation.getArgument(0)
             ) {
                 return copy(inputStream, outputStream);
