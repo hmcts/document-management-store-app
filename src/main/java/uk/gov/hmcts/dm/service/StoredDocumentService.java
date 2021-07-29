@@ -2,6 +2,8 @@ package uk.gov.hmcts.dm.service;
 
 import lombok.NonNull;
 import org.hibernate.HibernateException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,11 +26,19 @@ import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class StoredDocumentService {
+
+    private static final Logger log = LoggerFactory.getLogger(StoredDocumentService.class);
 
     @Autowired
     private FolderRepository folderRepository;
@@ -141,8 +151,8 @@ public class StoredDocumentService {
     @Transactional
     public void updateItems(UpdateDocumentsCommand command) {
         for (DocumentUpdate update : command.documents) {
-            if (Objects.nonNull(update)) {
-                findOne(update.documentId).ifPresent(d -> updateStoredDocument(d, d.getTtl(), update.metadata));
+            if (Objects.nonNull(update) && Objects.nonNull(update.metadata)) {
+                findOne(update.documentId).ifPresent(d -> updateMigratedStoredDocument(d, update.metadata));
             }
         }
     }
@@ -195,6 +205,39 @@ public class StoredDocumentService {
         }
 
         storedDocument.setTtl(ttl);
+        storedDocument.setLastModifiedBy(securityUtilService.getUserId());
+        save(storedDocument);
+    }
+
+
+    public void updateMigratedStoredDocument(
+        @NonNull StoredDocument storedDocument,
+        Map<String, String> metadata
+    ) {
+        if (storedDocument.isDeleted() || Objects.isNull(metadata)) {
+            return;
+        }
+
+        if (storedDocument.getMetadata().isEmpty() || toggleConfiguration.isOverridemetadata()) {
+            storedDocument.getMetadata().putAll(metadata);
+        } else {
+            //Don't override existing value for key. Instead add only new key/value to the Metadata
+//            Map<String, String> newMetaData = metadata.entrySet().stream()
+//                .filter(entry -> !storedDocument.getMetadata().containsKey(entry.getKey()))
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            Map<String, String> newMetaData = new HashMap<>();
+            metadata.forEach((key, val) -> {
+                if (!storedDocument.getMetadata().containsKey(key)) {
+                    newMetaData.put(key, val);
+                } else {
+                    log.info("Docuemnt Id with : {} has existing value for : {} as : {}. And new value is : "
+                            + "{}.", storedDocument.getId(), key,
+                        storedDocument.getMetadata().get(key), val);
+                }
+            });
+            storedDocument.getMetadata().putAll(newMetaData);
+        }
+
         storedDocument.setLastModifiedBy(securityUtilService.getUserId());
         save(storedDocument);
     }

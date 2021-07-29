@@ -415,6 +415,69 @@ public class StoredDocumentServiceTests {
         storedDocumentService.updateStoredDocument(new StoredDocument(), null);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testUpdateMigratedStoredDocumentNullStoredDocument() {
+        storedDocumentService.updateMigratedStoredDocument(null, null);
+    }
+
+    @Test
+    public void testUpdateMigratedStoredDocumentIsDeleted() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setDeleted(true);
+        storedDocumentService.updateMigratedStoredDocument(storedDocument, null);
+        verify(storedDocumentRepository, times(0)).save(any());
+    }
+
+    @Test
+    public void testUpdateMigratedStoredDocumentNullMetadata() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setDeleted(false);
+        storedDocumentService.updateMigratedStoredDocument(storedDocument, null);
+        verify(storedDocumentRepository, times(0)).save(any());
+    }
+
+    @Test
+    public void testUpdateItemsOverrideTrue() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
+        storedDocument.setMetadata(Maps.newHashMap("Key1", "Value1"));
+
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
+        when(toggleConfiguration.isOverridemetadata()).thenReturn(true);
+
+        Map newMetadata = new HashMap();
+        newMetadata.put("Key1", "UpdatedValue");
+        newMetadata.put("Key2", "Value2");
+        DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), newMetadata);
+        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, singletonList(update));
+
+        storedDocumentService.updateItems(command);
+
+        assertEquals("UpdatedValue", storedDocument.getMetadata().get("Key1"));
+        assertEquals("Value2", storedDocument.getMetadata().get("Key2"));
+    }
+
+    @Test
+    public void testUpdateItemsOverrideFalse() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
+        storedDocument.setMetadata(Maps.newHashMap("Key1", "Value1"));
+
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
+        when(toggleConfiguration.isOverridemetadata()).thenReturn(false);
+
+        Map newMetadata = new HashMap();
+        newMetadata.put("Key1", "UpdatedValue");
+        newMetadata.put("Key2", "Value2");
+        DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), newMetadata);
+        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, singletonList(update));
+
+        storedDocumentService.updateItems(command);
+
+        assertEquals("Value1", storedDocument.getMetadata().get("Key1"));
+        assertEquals("Value2", storedDocument.getMetadata().get("Key2"));
+    }
+
     private void setupStorageOptions(Boolean azureEnabled, Boolean postgresEnabled) {
         when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(azureEnabled);
         when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(postgresEnabled);

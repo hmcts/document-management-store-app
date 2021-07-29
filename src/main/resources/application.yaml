@@ -182,6 +182,6 @@ toggle:
   thumbnail: ${ENABLE_THUMBNAIL:true}
   testing: ${ENABLE_TESTING:true}
   metadatamigration: ${ENABLE_METADATA_MIGRATION:true}
-
+  overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
 task:
   env: ${TASK_ENV:documentTaskLock-local}
