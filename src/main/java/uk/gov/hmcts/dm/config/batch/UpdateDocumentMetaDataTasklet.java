@@ -44,13 +44,13 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
 
-        log.debug("==== execute started ====");
+        log.info("==== execute started ====");
         blobClient.listBlobs()
             .stream()
             .parallel()
             .map(blobItem -> blobClient.getBlobClient(blobItem.getName()))
             .forEach(this::processItem);
-        log.debug("==== execute ended ====");
+        log.info("==== execute ended ====");
         return RepeatStatus.FINISHED;
     }
 
@@ -72,7 +72,7 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
 
     private void processItem(BlobClient client) {
 
-        log.debug("==== processItem started ====");
+        log.info(" processItem started for : {} ", client.getBlobName());
         StopWatch stopwatch = new StopWatch();
         stopwatch.start();
 
@@ -82,16 +82,16 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
             .skip(1)
             .map(line -> createDocumentUpdate(line.split(",")))
             .collect(Collectors.toList());
-        log.debug("==== file processed ====");
+        log.info(" {} file processed ", client.getBlobName());
 
         documentService.updateItems(new UpdateDocumentsCommand(null, updates));
 
-        log.debug("==== DB updated ====");
+        log.info(" DB updated for : {}",client.getBlobName());
 
         stopwatch.stop();
         long timeElapsed = stopwatch.getTime();
 
-        log.debug("Time taken to update {} documents is  : {} milliseconds from csv file with name {} ", updates.size(),
+        log.info("Time taken to update {} documents is  : {} milliseconds from csv file with name {} ", updates.size(),
             timeElapsed, client.getBlobName());
 
         client.delete();
