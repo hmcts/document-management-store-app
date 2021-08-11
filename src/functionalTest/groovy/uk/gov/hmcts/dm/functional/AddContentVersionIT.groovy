@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.springframework.http.MediaType
@@ -170,6 +171,7 @@ class AddContentVersionIT extends BaseIT {
 
     }
 
+    @Ignore
     @Test
     void "ACV10 As an authenticated user and the owner I should not be able to upload exes"() {
 
