@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
 import net.thucydides.core.annotations.Pending
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.dm.functional.utilities.Classifications
@@ -37,6 +38,7 @@ class MultiMediaUploadIT extends BaseIT {
 
     }
 
+    @Ignore
     @Test
     void "MV1 (R1) As authenticated user I cannot upload not whitelisted multi media files"() {
         uploadNotWhitelistedFileThenDownload("video_test.mov", "video/quicktime")
