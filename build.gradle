@@ -192,7 +192,7 @@ dependencies {
     
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
-    compile group: 'org.apache.tika', name: 'tika-core', version: '2.0.0'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
 
     compile group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
 
