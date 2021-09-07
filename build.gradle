@@ -180,7 +180,7 @@ dependencyManagement {
         }
 
         //CVE-2021-28170
-        dependencySet(group: 'org.glassfish', version: '4.0.0') {
+        dependencySet(group: 'org.glassfish', version: '4.0.2') {
             entry 'jakarta.el'
         }
     }
