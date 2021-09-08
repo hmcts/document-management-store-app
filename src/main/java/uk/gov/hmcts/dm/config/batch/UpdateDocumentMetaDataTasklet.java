@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -45,11 +46,14 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
 
         log.info("==== execute started ====");
-        blobClient.listBlobs()
+        Optional<BlobClient>  blob = blobClient.listBlobs()
             .stream()
-            .parallel()
             .map(blobItem -> blobClient.getBlobClient(blobItem.getName()))
-            .forEach(this::processItem);
+            .findAny();
+
+        if (blob.isPresent()) {
+            processItem(blob.get());
+        }
         log.info("==== execute ended ====");
         return RepeatStatus.FINISHED;
     }
