@@ -424,6 +424,7 @@ class CreateDocumentIT extends BaseIT {
 
 
     @Test
+    @Pending
     void "CD18 As a user I should not be able to upload an exe if its renamed to png"() {
         givenRequest(CITIZEN)
             .multiPart("files", file(EXE_AS_PNG), MediaType.IMAGE_PNG_VALUE)
