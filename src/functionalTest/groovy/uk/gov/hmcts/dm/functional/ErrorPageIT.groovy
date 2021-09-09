@@ -197,7 +197,7 @@ class ErrorPageIT extends BaseIT {
             .post("/documents")
     }
 
-    @Test
+    /* @Test
     void "EP14 As an authenticated user, when I post a EXE document I should get JSON response"() {
 
         givenRequest(CITIZEN)
@@ -211,5 +211,6 @@ class ErrorPageIT extends BaseIT {
             .when()
             .post("/documents")
     }
+    */
 
 }
