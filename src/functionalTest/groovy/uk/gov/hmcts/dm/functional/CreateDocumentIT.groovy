@@ -216,6 +216,7 @@ class CreateDocumentIT extends BaseIT {
 
 
     @Test
+    @Pending
     void "CD8 As authenticated user I can not upload files of different format if not on the whitelist (exe)"() {
         givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
