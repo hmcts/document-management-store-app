@@ -169,7 +169,7 @@ dependencyManagement {
         }
 
         //CVE-2021-33037
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.48') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.0.11') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
         }
@@ -187,8 +187,8 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.48'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.48'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.0.11'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '10.0.11'
     
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
