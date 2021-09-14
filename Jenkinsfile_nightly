@@ -56,17 +56,17 @@ withNightlyPipeline(type, product, component) {
 
     loadVaultSecrets(secrets)
     overrideVaultEnvironments(vaultOverrides)
-    /*enableFortifyScan('dm-aat')*/
+    enableFortifyScan('dm-aat')
     after('fullFunctionalTest') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
     }
 
     enableFullFunctionalTest()
-    /*enableMutationTest()
+    enableMutationTest()
     enableSecurityScan()
 
-    enableSlackNotifications('#em-dev-chat')*/
+    enableSlackNotifications('#em-dev-chat')
     after('fortify-scan') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
     }
