@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.functional
 import io.restassured.http.ContentType
 import org.junit.Rule
 import org.junit.Test
+import org.junit.Ignore
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
@@ -197,6 +198,7 @@ class ErrorPageIT extends BaseIT {
             .post("/documents")
     }
 
+    @Ignore
     @Test
     void "EP14 As an authenticated user, when I post a EXE document I should get JSON response"() {
 
