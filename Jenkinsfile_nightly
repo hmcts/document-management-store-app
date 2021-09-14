@@ -63,7 +63,7 @@ withNightlyPipeline(type, product, component) {
     }
 
     enableFullFunctionalTest()
-    enableMutationTest()
+    /*enableMutationTest()*/
     enableSecurityScan()
 
     enableSlackNotifications('#em-dev-chat')
