@@ -63,10 +63,10 @@ withNightlyPipeline(type, product, component) {
     }
 
     enableFullFunctionalTest()
-    /*enableMutationTest()*/
+    /*enableMutationTest()
     enableSecurityScan()
 
-    enableSlackNotifications('#em-dev-chat')
+    enableSlackNotifications('#em-dev-chat')*/
     after('fortify-scan') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
     }
