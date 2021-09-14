@@ -30,6 +30,7 @@
     "10010_Cookie No HttpOnly Flag_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_PATCH":"ignore",
     "10010_Cookie No HttpOnly Flag_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId_GET":"ignore",
     "10010_Cookie No HttpOnly Flag_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions_POST":"ignore",
+    "10010_Cookie No HttpOnly Flag_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId?permanent=false_DELETE":"ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_GET":"ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/_GET":"ignore",
@@ -43,6 +44,7 @@
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_POST":"ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId_GET":"ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions_POST":"ignore",
+    "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId?permanent=false_DELETE":"ignore",
     "10038_Content Security Policy (CSP) Header Not Set_http://dm-store-aat.service.core-compute-aat.internal/folders/id/documents_POST":"ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
     "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal/documents_PATCH":"ignore",
@@ -58,6 +60,7 @@
     "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_POST":"ignore",
     "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId_GET":"ignore",
     "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions_POST":"ignore",
+    "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId?permanent=false_DELETE":"ignore",
     "100001_Unexpected Content-Type was returned_http://dm-store-aat.service.core-compute-aat.internal/folders_POST":"ignore",
     "100001_Unexpected Content-Type was returned_http://dm-store-aat.service.core-compute-aat.internal/folders/id_DELETE":"ignore",
     "100001_Unexpected Content-Type was returned_http://dm-store-aat.service.core-compute-aat.internal/folders/id/documents_POST":"ignore",
@@ -83,5 +86,6 @@
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/binary_GET":"ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_PATCH":"ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions_POST":"ignore",
+    "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId?permanent=false_DELETE":"ignore" ,
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId_GET":"ignore"
 }
