@@ -408,7 +408,7 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
         printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
     }
 
-    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    maxParallelForks = 1 /*Runtime.runtime.availableProcessors().intdiv(2) ?: 1*/
     forkEvery = 10
 
     group = 'Delivery pipeline'
