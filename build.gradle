@@ -141,7 +141,7 @@ dependencyManagement {
         }
 
         // Do not change - END
-        
+
         //CVE-2021-22118
         dependencySet(group: 'org.springframework', version: '5.3.7') {
             entry 'spring-aop'
@@ -189,7 +189,7 @@ dependencyManagement {
 dependencies {
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.48'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.48'
-    
+
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
     compile group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
@@ -239,7 +239,7 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
     compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
-    
+
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.8.RELEASE'
     compile (group: 'org.springframework.cloud',
         name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.2.8.RELEASE') {
@@ -248,11 +248,11 @@ dependencies {
 
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.2'
-    
+
     testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
         exclude(module: 'commons-logging')
     }
-    
+
     testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.0'
 
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
@@ -276,7 +276,7 @@ dependencies {
     functionalTestCompile group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
     testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
-    
+
     //pact
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
@@ -418,6 +418,7 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
     failFast = true
+    ignoreFailures = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
