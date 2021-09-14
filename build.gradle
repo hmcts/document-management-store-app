@@ -408,7 +408,7 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
         printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
     }
 
-    maxParallelForks = 1 /*Runtime.runtime.availableProcessors().intdiv(2) ?: 1*/
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     forkEvery = 10
 
     group = 'Delivery pipeline'
@@ -418,7 +418,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
     failFast = true
-    ignoreFailures = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
