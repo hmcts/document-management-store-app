@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
 import net.thucydides.core.annotations.Pending
+import org.junit.Ignore
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -214,7 +215,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
     }
 
-
+    @Ignore
     @Test
     void "CD8 As authenticated user I can not upload files of different format if not on the whitelist (exe)"() {
         givenRequest(CITIZEN)
@@ -422,7 +423,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
     }
 
-
+    @Ignore
     @Test
     void "CD18 As a user I should not be able to upload an exe if its renamed to png"() {
         givenRequest(CITIZEN)
