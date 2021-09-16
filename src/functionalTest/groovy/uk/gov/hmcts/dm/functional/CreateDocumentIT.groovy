@@ -423,7 +423,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
     }
 
-    /*@Ignore*/
+    @Ignore
     @Test
     void "CD18 As a user I should not be able to upload an exe if its renamed to png"() {
         givenRequest(CITIZEN)
