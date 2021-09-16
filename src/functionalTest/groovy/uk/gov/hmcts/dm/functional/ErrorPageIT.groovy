@@ -75,7 +75,7 @@ class ErrorPageIT extends BaseIT {
 
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
-            .multiPart("file", file(ATTACHMENT_4_PDF), MediaType.ALL_VALUE)
+            .multiPart("file", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
             .expect()
             .contentType(ContentType.JSON)
             .statusCode(422)
@@ -199,7 +199,7 @@ class ErrorPageIT extends BaseIT {
             .post("/documents")
     }
 
-    @Ignore
+    /*@Ignore*/
     @Test
     void "EP14 As an authenticated user, when I post a EXE document I should get JSON response"() {
 
