@@ -220,7 +220,7 @@ class CreateDocumentIT extends BaseIT {
     void "CD8 As authenticated user I can not upload files of different format if not on the whitelist (exe)"() {
         givenRequest(CITIZEN)
             .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.APPLICATION_PDF_VALUE)
-            .multiPart("files", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
+            .multiPart("files", file(ATTACHMENT_4_PDF), MediaType.ALL_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
             .expect()
             .statusCode(422)
@@ -427,7 +427,7 @@ class CreateDocumentIT extends BaseIT {
     @Test
     void "CD18 As a user I should not be able to upload an exe if its renamed to png"() {
         givenRequest(CITIZEN)
-            .multiPart("files", file(EXE_AS_PNG), MediaType.IMAGE_PNG_VALUE)
+            .multiPart("files", file(SVG_AS_PNG), MediaType.IMAGE_PNG_VALUE)
             .multiPart("classification", Classifications.PRIVATE as String)
             .expect()
             .statusCode(422)
