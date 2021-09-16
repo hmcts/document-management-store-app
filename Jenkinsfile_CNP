@@ -192,4 +192,6 @@ withPipeline(type , product, component) {
                     reportName           : "DM-Store Contract Test Report"
             ]
         }
+
+    syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
 }
