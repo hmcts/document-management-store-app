@@ -215,7 +215,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
     }
 
-    /*@Ignore*/
+    @Ignore
     @Test
     void "CD8 As authenticated user I can not upload files of different format if not on the whitelist (exe)"() {
         givenRequest(CITIZEN)
