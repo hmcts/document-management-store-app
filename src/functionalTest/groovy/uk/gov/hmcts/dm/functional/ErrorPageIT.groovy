@@ -69,7 +69,7 @@ class ErrorPageIT extends BaseIT {
             .post('documents/')
     }
 
-    @Ignore
+    /*@Ignore*/
     @Test
     void "EP5 As an authenticated user trying to post bad attachment, receive JSON error page with 415"() {
 
