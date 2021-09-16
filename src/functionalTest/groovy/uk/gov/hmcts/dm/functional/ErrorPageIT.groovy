@@ -199,12 +199,12 @@ class ErrorPageIT extends BaseIT {
             .post("/documents")
     }
 
-    /*@Ignore*/
+    @Ignore
     @Test
     void "EP14 As an authenticated user, when I post a EXE document I should get JSON response"() {
 
         givenRequest(CITIZEN)
-            .multiPart("files", file(ATTACHMENT_4_PDF), V1MimeTypes.ALL_VALUE)
+            .multiPart("files", file(BAD_ATTACHMENT_1), V1MimeTypes.ALL_VALUE)
             .multiPart("classification", Classifications.PUBLIC as String)
             .multiPart("roles", "citizen")
             .expect().log().all()
