@@ -125,7 +125,7 @@ dependencyManagement {
             entry 'junit'
         }
 
-        dependencySet(group: 'org.junit.jupiter', version: '5.7.1') {
+        dependencySet(group: 'org.junit.jupiter', version: '5.8.1') {
             entry 'junit-jupiter'
             entry 'junit-jupiter-api'
             entry 'junit-jupiter-params'
@@ -282,7 +282,7 @@ dependencies {
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.8.1")
     contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.1')
     contractTestCompile sourceSets.main.runtimeClasspath
