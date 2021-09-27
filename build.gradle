@@ -16,7 +16,7 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'io.franzbecker.gradle-lombok' version '4.0.0'
-    id "info.solidsoft.pitest" version '1.5.2'
+    id "info.solidsoft.pitest" version '1.7.0'
     id 'au.com.dius.pact' version '4.1.8'
 
 }
