@@ -50,7 +50,7 @@ public class PdfThumbnailCreatorTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
 
         when(contentVersion.getDocumentContent()).thenReturn(documentContent);
         when(documentContent.getData()).thenReturn(blob);
