@@ -70,7 +70,7 @@ withNightlyPipeline(type, product, component) {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
     }
 
-    after('test') {
+    after('fullFunctionalTest') {
 
         publishHTML target: [
             allowMissing         : true,
