@@ -3,7 +3,7 @@ package uk.gov.hmcts.dm.security.domain;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.Permissions;
@@ -11,7 +11,7 @@ import uk.gov.hmcts.dm.security.Permissions;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class DomainPermissionEvaluatorTests {
 
     private static final String MRS_CASE_WORKER = "Mrs Case Worker";
