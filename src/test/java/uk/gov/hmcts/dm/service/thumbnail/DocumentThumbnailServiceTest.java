@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -31,7 +31,7 @@ public class DocumentThumbnailServiceTest {
 
     @Before
     public void setUp() {
-        initMocks(this);
+        openMocks(this);
         underTest = new DocumentThumbnailService(new HashMap(), unsupportedThumbnailService);
         documentContentVersion = new DocumentContentVersion();
         documentContentVersion.setMimeType("ngitb");
