@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.http.ContentType
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.springframework.http.MediaType
@@ -12,6 +13,7 @@ import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
+@Ignore
 class ErrorPageIT extends BaseIT {
 
     @Rule
