@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -21,7 +21,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class AuditedDocumentContentVersionOperationsServiceTests {
 
     @Mock
