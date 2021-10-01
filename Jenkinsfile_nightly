@@ -116,5 +116,8 @@ withNightlyPipeline(type, product, component) {
             reportFiles          : "index.html",
             reportName           : "DM-Store Unit Tests Report"
         ]
+
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
     }
 }
