@@ -3,7 +3,7 @@ package uk.gov.hmcts.dm.service.thumbnail;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.io.InputStream;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class UnsupportedThumbnailCreatorTest {
 
     @Test

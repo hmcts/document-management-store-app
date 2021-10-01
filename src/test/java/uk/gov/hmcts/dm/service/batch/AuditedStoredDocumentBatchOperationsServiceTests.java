@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditEntryService;
@@ -14,7 +14,7 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class AuditedStoredDocumentBatchOperationsServiceTests {
 
     @Mock

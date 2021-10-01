@@ -5,11 +5,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -20,7 +20,7 @@ import java.util.List;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class SearchServiceTests {
 
     @Mock
