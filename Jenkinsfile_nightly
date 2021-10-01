@@ -8,11 +8,10 @@ properties([
     ],
     pipelineTriggers([cron('H 21 * * *')]), // scheduling to trigger jenkins job.
     parameters([
-        string(name: 'URL_TO_TEST', defaultValue: 'http://dm-store-aat.service.core-compute-aat.internal', description: 'The URL you want to run these tests against'),
         string(name: 'SecurityRules',
             defaultValue: 'http://raw.githubusercontent.com/hmcts/security-test-rules/master/conf/security-rules.conf',
             description: 'The URL you want to run these tests against'),
-    ]),
+    ])
 ])
 
 @Library("Infrastructure")
@@ -69,5 +68,53 @@ withNightlyPipeline(type, product, component) {
     enableSlackNotifications('#em-dev-chat')
     after('fortify-scan') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+    }
+
+    after('test') {
+
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/checkstyle",
+            reportFiles          : "main.html",
+            reportName           : "DM-Store Checkstyle Main Report"
+        ]
+
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/checkstyle",
+            reportFiles          : "test.html",
+            reportName           : "DM-Store Checkstyle Test Report"
+        ]
+
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/checkstyle",
+            reportFiles          : "functionalTest.html",
+            reportName           : "DM-Store Checkstyle AAT Report"
+        ]
+
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/checkstyle",
+            reportFiles          : "contractTest.html",
+            reportName           : "DM-Store Checkstyle PACT Report"
+        ]
+
+        publishHTML target: [
+            allowMissing         : true,
+            alwaysLinkToLastBuild: true,
+            keepAll              : true,
+            reportDir            : "build/reports/tests/test",
+            reportFiles          : "index.html",
+            reportName           : "DM-Store Unit Tests Report"
+        ]
     }
 }
