@@ -5,9 +5,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
-import uk.gov.hmcts.dm.domain.*;
+import uk.gov.hmcts.dm.domain.AuditActions;
+import uk.gov.hmcts.dm.domain.DocumentContentVersion;
+import uk.gov.hmcts.dm.domain.DocumentContentVersionAuditEntry;
+import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
 
@@ -15,9 +19,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringRunner.class)
 public class AuditEntryServiceTests {
 
     @Mock
