@@ -70,6 +70,9 @@ withNightlyPipeline(type, product, component) {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
     }
 
+    before('fullFunctionalTest') {
+        junit '**/test-results/**/*.xml'
+    }
     after('fullFunctionalTest') {
 
         publishHTML target: [
