@@ -57,10 +57,13 @@ withNightlyPipeline(type, product, component) {
     overrideVaultEnvironments(vaultOverrides)
     enableFortifyScan('dm-aat')
     enableFullFunctionalTest()
+    after('test') {
+        steps.junit '**/test-results/**/*.xml'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+    }
     after('fullFunctionalTest') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/test-results/**/*'
     }
 //    enableMutationTest()
 //    enableSecurityScan()
