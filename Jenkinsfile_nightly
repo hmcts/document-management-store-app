@@ -56,13 +56,17 @@ withNightlyPipeline(type, product, component) {
     loadVaultSecrets(secrets)
     overrideVaultEnvironments(vaultOverrides)
     enableFortifyScan('dm-aat')
-
+    enableFullFunctionalTest()
+    after('fullFunctionalTest') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/test-results/**/*'
+    }
 //    enableMutationTest()
 //    enableSecurityScan()
 
     enableSlackNotifications('#em-dev-chat')
     after('fortify-scan') {
-        junit 'application/build/test-results/test/**/*.xml'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
     }
 }
