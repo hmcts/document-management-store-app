@@ -56,69 +56,12 @@ withNightlyPipeline(type, product, component) {
     loadVaultSecrets(secrets)
     overrideVaultEnvironments(vaultOverrides)
     enableFortifyScan('dm-aat')
-//    after('fullFunctionalTest') {
-//        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-//        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-//    }
 
-    enableFullFunctionalTest()
 //    enableMutationTest()
 //    enableSecurityScan()
 
     enableSlackNotifications('#em-dev-chat')
     after('fortify-scan') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
-    }
-
-    after('fullFunctionalTest') {
-
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/checkstyle",
-            reportFiles          : "main.html",
-            reportName           : "DM-Store Checkstyle Main Report"
-        ]
-
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/checkstyle",
-            reportFiles          : "test.html",
-            reportName           : "DM-Store Checkstyle Test Report"
-        ]
-
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/checkstyle",
-            reportFiles          : "functionalTest.html",
-            reportName           : "DM-Store Checkstyle AAT Report"
-        ]
-
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/checkstyle",
-            reportFiles          : "contractTest.html",
-            reportName           : "DM-Store Checkstyle PACT Report"
-        ]
-
-        publishHTML target: [
-            allowMissing         : true,
-            alwaysLinkToLastBuild: true,
-            keepAll              : true,
-            reportDir            : "build/reports/tests/test",
-            reportFiles          : "index.html",
-            reportName           : "DM-Store Unit Tests Report"
-        ]
-
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/test-results/**/*.xml'
     }
 }
