@@ -58,7 +58,7 @@ withNightlyPipeline(type, product, component) {
     enableFortifyScan('dm-aat')
     enableFullFunctionalTest()
     after('test') {
-        steps.junit '**/test-results/**/*.xml'
+        steps.junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
     }
     after('fullFunctionalTest') {
