@@ -62,6 +62,7 @@ withNightlyPipeline(type, product, component) {
 
     enableSlackNotifications('#em-dev-chat')
     after('fortify-scan') {
+        junit 'application/build/test-results/test/**/*.xml'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
     }
 }
