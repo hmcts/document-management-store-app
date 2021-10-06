@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
+@Ignore
 class MultiMediaUploadIT extends BaseIT {
 
     @Rule

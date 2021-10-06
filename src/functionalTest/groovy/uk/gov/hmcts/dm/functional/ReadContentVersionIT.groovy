@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.functional
 
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.springframework.http.MediaType
@@ -10,6 +11,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 
+@Ignore
 class ReadContentVersionIT extends BaseIT {
 
     String documentUrl

@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional
 
 import net.thucydides.core.annotations.Pending
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.dm.functional.utilities.Classifications
@@ -10,6 +11,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.Matchers.is
 
+@Ignore
 class MetadataMigrationIT extends BaseIT {
 
     @Rule

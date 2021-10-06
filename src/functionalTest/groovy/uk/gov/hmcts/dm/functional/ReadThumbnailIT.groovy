@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional
 
 
 import org.junit.Assert
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.dm.functional.utilities.Classifications
@@ -12,6 +13,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
+@Ignore
 class ReadThumbnailIT extends BaseIT {
 
     @Rule
