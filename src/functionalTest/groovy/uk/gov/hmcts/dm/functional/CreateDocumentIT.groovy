@@ -5,8 +5,8 @@ import net.thucydides.core.annotations.Pending
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Disabled
 import org.springframework.http.MediaType
+import uk.gov.hmcts.dm.functional.BaseIT
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
@@ -17,7 +17,6 @@ import java.time.LocalDateTime
 
 import static org.hamcrest.Matchers.*
 
-@Disabled
 class CreateDocumentIT extends BaseIT {
 
     @Rule
