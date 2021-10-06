@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.functional
 import io.restassured.response.Response
 import org.junit.Assert
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.springframework.http.MediaType
@@ -13,6 +14,7 @@ import static org.hamcrest.CoreMatchers.containsString
 import static org.hamcrest.CoreMatchers.not
 import static org.hamcrest.Matchers.equalTo
 
+@Ignore
 class DeleteDocumentIT extends BaseIT {
     private citizenDocumentUrl
     private caseWorkerDocumentUrl

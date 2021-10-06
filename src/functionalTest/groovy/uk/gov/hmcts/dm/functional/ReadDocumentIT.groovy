@@ -1,11 +1,13 @@
 package uk.gov.hmcts.dm.functional
 
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.equalTo
 
+@Ignore
 class ReadDocumentIT extends BaseIT {
 
     @Rule
