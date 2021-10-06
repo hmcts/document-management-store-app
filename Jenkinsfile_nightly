@@ -54,13 +54,9 @@ withNightlyPipeline(type, product, component) {
     env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
 
     loadVaultSecrets(secrets)
-    //overrideVaultEnvironments(vaultOverrides)
+    overrideVaultEnvironments(vaultOverrides)
     enableFullFunctionalTest()
 
-    after('fullFunctionalTest') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-    }
     //enableFortifyScan('dm-aat')
 
     //enableMutationTest()
