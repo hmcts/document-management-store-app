@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.functional
 
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Disabled
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
@@ -11,7 +11,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 
-@Ignore
+@Disabled
 class ReadContentVersionIT extends BaseIT {
 
     String documentUrl

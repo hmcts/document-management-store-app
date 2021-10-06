@@ -1,14 +1,14 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.http.ContentType
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Disabled
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.equalTo
 
-@Ignore
+@Disabled
 class UpdateDocumentIT extends BaseIT {
 
     @Rule
