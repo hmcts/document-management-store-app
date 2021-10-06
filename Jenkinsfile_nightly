@@ -55,10 +55,7 @@ withNightlyPipeline(type, product, component) {
 
     loadVaultSecrets(secrets)
     //overrideVaultEnvironments(vaultOverrides)
-    before('fullFunctionalTest') {
-        env.test_environment = 'aat'
-    }
-    enableFullFunctionalTest(60)
+    enableFullFunctionalTest()
 
     after('fullFunctionalTest') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
