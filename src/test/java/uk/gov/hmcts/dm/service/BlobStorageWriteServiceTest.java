@@ -3,7 +3,6 @@ package uk.gov.hmcts.dm.service;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.models.BlobProperties;
-import com.azure.storage.blob.specialized.BlobOutputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,6 +28,7 @@ import static org.apache.commons.io.IOUtils.copy;
 import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
@@ -90,35 +90,7 @@ public class BlobStorageWriteServiceTest {
             file);
 
         assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
-        verify(blob).upload(file.getInputStream(), documentContentVersion.getSize());
-    }
-
-    @Test
-    public void uploadLargeDocument() throws Exception {
-        final StoredDocument storedDocument = createStoredDocument();
-        final DocumentContentVersion documentContentVersion = PowerMockito.mock(DocumentContentVersion.class);
-        given(documentContentVersion.getSize()).willReturn((long) 256 * 1024 * 1024);
-        given(documentContentVersion.getId()).willReturn(storedDocument.getDocumentContentVersions().get(0).getId());
-
-        String azureProvidedUri = "someuri";
-        given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
-        doAnswer(invocation -> {
-            try (final InputStream inputStream = file.getInputStream();
-                 final OutputStream outputStream = invocation.getArgument(0)
-            ) {
-                return copy(inputStream, outputStream);
-            }
-        }).when(blob).download(any(OutputStream.class));
-
-        BlobOutputStream outputStream = PowerMockito.mock(BlobOutputStream.class);
-        given(blob.getBlobOutputStream()).willReturn(outputStream);
-
-        // upload
-        blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
-            documentContentVersion,
-            file);
-
-        verify(blob).getBlobOutputStream();
+        verify(blob).upload(any(), eq(documentContentVersion.getSize()));
     }
 
     private StoredDocument createStoredDocument() {

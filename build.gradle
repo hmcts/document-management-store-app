@@ -71,13 +71,13 @@ sourceSets {
 }
 
 configurations {
-    functionalTestCompile.extendsFrom(testCompile)
+    functionalTestImplementation.extendsFrom(testImplementation)
     functionalTestRuntime.extendsFrom(testRuntime)
-    smokeTestCompile.extendsFrom(testCompile)
+    smokeTestCompile.extendsFrom(testImplementation)
     smokeTestRuntime.extendsFrom(testRuntime)
-    contractTestCompile.extendsFrom(testCompile)
-    contractTestRuntime.extendsFrom(testRuntime)
-    functionalTestCompile.extendsFrom(testCompile)
+    contractTestImplementation.extendsFrom(testImplementation)
+    contractTestRuntimeOnly.extendsFrom(testRuntime)
+    functionalTestImplementation.extendsFrom(testImplementation)
     functionalTestRuntime.extendsFrom(testRuntime)
 
 }
@@ -91,9 +91,9 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
-    maven { url "https://jitpack.io" }
-    jcenter()
     mavenLocal()
+    mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 def versions = [
@@ -113,8 +113,10 @@ def versions = [
     gradlePitest       : '1.3.0',
     sonarPitest        : '0.5',
     pact_version       : '4.1.7',
-    emTestHelper       : '1.18.2',
-    springfoxSwagger   : '3.0.0'
+    emTestHelper       : '1.20.3',
+    shedlock           : '4.28.0',
+    springfoxSwagger   : '3.0.0',
+    swagger            : '1.6.3'
 ]
 
 dependencyManagement {
@@ -141,7 +143,7 @@ dependencyManagement {
         }
 
         // Do not change - END
-        
+
         //CVE-2021-22118
         dependencySet(group: 'org.springframework', version: '5.3.7') {
             entry 'spring-aop'
@@ -189,104 +191,96 @@ dependencyManagement {
 dependencies {
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.48'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.48'
-    
-    compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
-    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
-    compile group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
 
-    compile group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.0'
+    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
 
-    compile group: 'commons-io', name: 'commons-io', version: '2.11.0'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
+    implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
 
-    compile group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
 
-    compile group: 'org.springframework', name: 'spring-context-support', version: '5.3.8'
-    compile group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
-    compile (group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot) {
+    implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
+
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.8'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
+    implementation (group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot) {
         exclude group: "org.hibernate", module: "hibernate-core"
     }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest', version: versions.springBoot
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest', version: versions.springBoot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: versions.springBoot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: versions.springBoot
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
 
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.5.7.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.5.7.Final'
 
-    compile group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
+    implementation group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
 
-    compile group: 'io.swagger', name: 'swagger-core', version: '1.6.3'
-    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.3'
+    implementation group: 'io.swagger', name: 'swagger-core', version: versions.swagger
+    implementation group: 'io.swagger', name: 'swagger-annotations', version: versions.swagger
 
-    compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
+    implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.28.0"
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.28.0"
+    implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
+    implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
-    compile (group: 'uk.gov.hmcts.reform.auth', name: 'auth-checker-lib', version: '2.1.4') {
-        exclude group: 'uk.gov.hmcts.reform', module: 'java-logging-spring'
+    implementation (group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5') {
+        exclude group: 'com.github.hmcts', module: 'java-logging-spring'
     }
-    compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.logging
-    compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: versions.logging
-    compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.logging
-    
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.8.RELEASE'
-    compile (group: 'org.springframework.cloud',
-        name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: '2.2.8.RELEASE') {
-        exclude group: 'org.webjars', module: 'jquery'
-    }
+    implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.2'
-    
-    testCompile(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.2'
+
+    testImplementation(group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot) {
         exclude(module: 'commons-logging')
     }
-    
-    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.0'
 
-    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-    testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
-    testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
-    testCompile group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
-    testCompile group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
-    testCompile group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
-    testCompile group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.0'
 
-    testCompile (group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured) {
+    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
+    testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
+    testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
+    testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
+    testImplementation group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
+    testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
+
+    testImplementation (group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured) {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
     }
-    testCompile (group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity) {
+    testImplementation (group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity) {
         exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
     }
-    testCompile group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
-    testCompile group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
-    testCompile group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
     testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.2'
-    functionalTestCompile group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
+    functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
-    testCompile 'com.github.hmcts:fortify-client:1.2.0:all'
-    
+    testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
+
     //pact
-    contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
-    contractTestCompile group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
-    contractTestCompile group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
-    contractTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestCompile("org.junit.jupiter:junit-jupiter-api:5.7.1")
-    contractTestRuntime("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
+    contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.1')
-    contractTestCompile sourceSets.main.runtimeClasspath
-    contractTestCompile sourceSets.test.runtimeClasspath
+    contractTestImplementation sourceSets.main.runtimeClasspath
+    contractTestImplementation sourceSets.test.runtimeClasspath
 
     implementation group: 'io.springfox', name: 'springfox-boot-starter', version: versions.springfoxSwagger
 }
@@ -299,7 +293,7 @@ checkstyle {
     maxWarnings = 0
     toolVersion = '8.34'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
-    configDir = new File(rootDir, 'config/checkstyle')
+    getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
 
 def coverageExclusionList = [
@@ -324,7 +318,7 @@ def coverageExclusionList = [
 //(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
     toolVersion = '0.8.2' // jacocoMavenPluginVersion
-    reportsDir = file("$buildDir/reports/jacoco")
+    reportsDirectory = file("$buildDir/reports/jacoco")
 }
 
 jacocoTestReport {

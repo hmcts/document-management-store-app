@@ -20,11 +20,15 @@ import java.sql.Blob;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.same;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 public class PdfThumbnailCreatorTest {
@@ -107,7 +111,7 @@ public class PdfThumbnailCreatorTest {
         final InputStream thumbnail = pdfThumbnailService.getThumbnail(contentVersion);
 
         assertThat(thumbnail, is(notNullValue()));
-        verifyZeroInteractions(blobStorageReadService);
+        verifyNoInteractions(blobStorageReadService);
     }
 
     @Test
@@ -115,7 +119,8 @@ public class PdfThumbnailCreatorTest {
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
         when(contentVersion.getDocumentContent()).thenReturn(null);
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE);
-        Mockito.doAnswer(invocation -> {
+        assertNotNull(file);
+        doAnswer(invocation -> {
             final OutputStream out = invocation.getArgument(1);
             IOUtils.copy(file, out);
             out.close();

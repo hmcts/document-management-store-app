@@ -18,8 +18,8 @@ import static org.springframework.http.MediaType.IMAGE_GIF_VALUE;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static uk.gov.hmcts.dm.endtoend.Helper.getThumbnailUrlFromResponse;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
@@ -47,7 +47,7 @@ public class ThumbnailTest extends End2EndTestBase {
     @Test
     public void should_upload_a_txt_and_retrieve_a_unsupported_thumbnail() throws Exception {
 
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(txtFile)
             .param("classification", PRIVATE.toString())
             .headers(headers))
@@ -64,7 +64,7 @@ public class ThumbnailTest extends End2EndTestBase {
     public void should_upload_a_pdf_and_retrieve_a_supported_pdf_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(pdfFile);
 
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(pdfFile)
             .param("classification", PRIVATE.toString())
             .headers(headers))
@@ -81,7 +81,7 @@ public class ThumbnailTest extends End2EndTestBase {
     public void should_upload_a_jpg_and_retrieve_a_supported_image_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(jpgFile);
 
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(jpgFile)
             .param("classification", PRIVATE.toString())
             .headers(headers))
@@ -99,7 +99,7 @@ public class ThumbnailTest extends End2EndTestBase {
     public void should_upload_a_png_and_retrieve_a_supported_image_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(pngFile);
 
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(pngFile)
             .param("classification", PRIVATE.toString())
             .headers(headers))
@@ -117,7 +117,7 @@ public class ThumbnailTest extends End2EndTestBase {
     public void should_upload_a_gif_and_retrieve_a_supported_image_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(gifFile);
 
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(gifFile)
             .param("classification", PRIVATE.toString())
             .headers(headers))
@@ -135,7 +135,7 @@ public class ThumbnailTest extends End2EndTestBase {
     public void should_upload_a_gif_ani_and_retrieve_a_supported_image_thumbnail() throws Exception {
         readFromAzureBlobStorageWillReturn(gifAniFile);
 
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(gifAniFile)
             .param("classification", PRIVATE.toString())
             .headers(headers))

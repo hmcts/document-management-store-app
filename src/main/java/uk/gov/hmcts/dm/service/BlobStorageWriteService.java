@@ -1,10 +1,9 @@
 package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.specialized.BlobOutputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
+import java.io.BufferedInputStream;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,10 +48,10 @@ public class BlobStorageWriteService {
                   documentContentVersion.getId());
 
         try (
-            final InputStream inputStream = multiPartFile.getInputStream()
+            final InputStream inputStream = new BufferedInputStream(multiPartFile.getInputStream())
         ) {
             BlockBlobClient blob = getCloudFile(documentContentVersion.getId());
-            uploadDocument(blob, inputStream, documentContentVersion.getSize());
+            blob.upload(inputStream, documentContentVersion.getSize());
 
             documentContentVersion.setContentUri(blob.getBlobUrl());
             log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}",
@@ -72,19 +71,4 @@ public class BlobStorageWriteService {
         return cloudBlobContainer.getBlobClient(uuid.toString()).getBlockBlobClient();
     }
 
-    /**
-     * The Azure Blob API expects a different call for files over 256mb. See:
-     * <p>
-     * https://github.com/Azure/azure-sdk-for-java/issues/6005
-     * </p>
-     */
-    private void uploadDocument(BlockBlobClient blob, InputStream inputStream, long length) throws IOException {
-        if (length < 256 * 1024 * 1024) {
-            blob.upload(inputStream, length);
-        } else {
-            BlobOutputStream blobOutputStream = blob.getBlobOutputStream();
-            IOUtils.copy(inputStream, blobOutputStream);
-            blobOutputStream.close();
-        }
-    }
 }
