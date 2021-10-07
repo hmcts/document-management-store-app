@@ -173,6 +173,16 @@ dependencyManagement {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
         }
+
+        //CVE-2021-22119
+        dependencySet(group: 'org.springframework.security', version: '5.4.7') {
+            entry 'spring-security-core'
+        }
+
+        //CVE-2021-28170
+        dependencySet(group: 'org.glassfish', version: '4.0.2') {
+            entry 'jakarta.el'
+        }
     }
 }
 
@@ -182,7 +192,7 @@ dependencies {
     
     compile group: 'com.azure', name: 'azure-storage-blob', version: '12.6.0'
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
-    compile group: 'org.apache.tika', name: 'tika-core', version: '2.0.0'
+    compile group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
 
     compile group: 'com.google.guava', name: 'guava', version: '30.1.1-jre'
 
@@ -209,7 +219,7 @@ dependencies {
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
-    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.5.3.Final'
+    compile group: 'org.hibernate', name: 'hibernate-core', version: '5.5.7.Final'
 
     compile group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
 
@@ -218,8 +228,8 @@ dependencies {
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.25.0"
-    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.25.0"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-spring", version:"4.27.0"
+    compile group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version:"4.27.0"
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 

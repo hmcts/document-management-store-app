@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.functional
 
-
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Disabled
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.dm.functional.utilities.V1MimeTypes
@@ -12,6 +12,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
+@Disabled
 class ReadThumbnailIT extends BaseIT {
 
     @Rule

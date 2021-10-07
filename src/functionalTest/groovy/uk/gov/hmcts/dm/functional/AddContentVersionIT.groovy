@@ -1,14 +1,17 @@
 package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Disabled
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.equalTo
 
+@Disabled
 class AddContentVersionIT extends BaseIT {
 
     @Rule
@@ -170,6 +173,7 @@ class AddContentVersionIT extends BaseIT {
 
     }
 
+    @Ignore
     @Test
     void "ACV10 As an authenticated user and the owner I should not be able to upload exes"() {
 

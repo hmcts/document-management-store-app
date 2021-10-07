@@ -2,8 +2,10 @@ package uk.gov.hmcts.dm.functional
 
 import io.restassured.response.Response
 import net.thucydides.core.annotations.Pending
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Disabled
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
@@ -11,6 +13,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.Matchers.containsString
 import static org.hamcrest.Matchers.equalTo
 
+@Disabled
 class MultiMediaUploadIT extends BaseIT {
 
     @Rule
@@ -37,6 +40,7 @@ class MultiMediaUploadIT extends BaseIT {
 
     }
 
+    @Ignore
     @Test
     void "MV1 (R1) As authenticated user I cannot upload not whitelisted multi media files"() {
         uploadNotWhitelistedFileThenDownload("video_test.mov", "video/quicktime")

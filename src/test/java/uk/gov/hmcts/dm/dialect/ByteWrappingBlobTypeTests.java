@@ -32,7 +32,7 @@ public class ByteWrappingBlobTypeTests {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test

@@ -4,12 +4,14 @@ import net.thucydides.core.annotations.Pending
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
+import org.junit.jupiter.api.Disabled
 import uk.gov.hmcts.dm.functional.utilities.Classifications
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.MatcherAssert.assertThat
 import static org.hamcrest.Matchers.is
 
+@Disabled
 class MetadataMigrationIT extends BaseIT {
 
     @Rule
