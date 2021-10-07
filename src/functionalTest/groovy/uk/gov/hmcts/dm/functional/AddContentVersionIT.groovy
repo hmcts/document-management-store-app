@@ -171,8 +171,8 @@ class AddContentVersionIT extends BaseIT {
 
     }
 
-    @Ignore
     @Test
+    @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
     void "ACV10 As an authenticated user and the owner I should not be able to upload exes"() {
 
         def documentURL = createDocumentAndGetUrlAs CITIZEN
