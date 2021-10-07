@@ -37,49 +37,38 @@ sourceSets {
         java {
             compileClasspath += main.output
             runtimeClasspath += main.output
-            srcDir file('src/functionalTest/java')
         }
         groovy {
             compileClasspath += main.output + test.output
             runtimeClasspath += main.output + test.output
-            srcDir('src/functionalTest/groovy')
         }
-        resources.srcDir file('src/functionalTest/resources')
     }
 
     smokeTest {
         java {
             compileClasspath += main.output
             runtimeClasspath += main.output
-            srcDir file('src/smokeTest/java')
         }
         groovy {
             compileClasspath += main.output + test.output
             runtimeClasspath += main.output + test.output
-            srcDir('src/smokeTest/groovy')
         }
-        resources.srcDir file('src/smokeTest/resources')
     }
     contractTest {
         java {
             compileClasspath += main.output
             runtimeClasspath += main.output
-            srcDir file('src/contractTest/java')
         }
-        resources.srcDir file('src/contractTest/resources')
     }
 }
 
 configurations {
     functionalTestImplementation.extendsFrom(testImplementation)
-    functionalTestRuntime.extendsFrom(testRuntime)
-    smokeTestCompile.extendsFrom(testImplementation)
-    smokeTestRuntime.extendsFrom(testRuntime)
+    functionalTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+    smokeTestImplementation.extendsFrom(testImplementation)
+    smokeTestRuntimeOnly.extendsFrom(testRuntimeOnly)
     contractTestImplementation.extendsFrom(testImplementation)
-    contractTestRuntimeOnly.extendsFrom(testRuntime)
-    functionalTestImplementation.extendsFrom(testImplementation)
-    functionalTestRuntime.extendsFrom(testRuntime)
-
+    contractTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
 
 tasks.withType(JavaCompile) {
@@ -233,7 +222,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+    implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
     implementation (group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5') {
         exclude group: 'com.github.hmcts', module: 'java-logging-spring'
@@ -278,7 +267,6 @@ dependencies {
     contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
     contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
-    contractTestImplementation('org.junit.jupiter:junit-jupiter-api:5.7.1')
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
@@ -325,10 +313,10 @@ jacocoTestReport {
     executionData(test)
 
     reports {
-        xml.enabled = true
-        csv.enabled = false
+        xml.required = true
+        csv.required = false
 
-        xml.destination file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        xml.outputLocation = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
     }
 
 }
@@ -422,6 +410,13 @@ serenity {
     reports = ["single-page-html"]
 }
 
+processContractTestResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+processFunctionalTestResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
 task smoke(type: Test) {
     group = 'Delivery pipeline'
     description = 'Executes non-destructive smoke tests'
@@ -441,7 +436,8 @@ task fortifyScan(type: JavaExec)  {
 project.ext {
     pactVersion = getCheckedOutGitCommitHash()
 }
-def getCheckedOutGitCommitHash() {
+
+static def getCheckedOutGitCommitHash() {
     'git rev-parse --verify --short HEAD'.execute().text.trim()
 }
 
