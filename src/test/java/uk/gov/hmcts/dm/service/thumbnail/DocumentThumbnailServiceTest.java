@@ -32,7 +32,7 @@ public class DocumentThumbnailServiceTest {
     @Before
     public void setUp() {
         openMocks(this);
-        underTest = new DocumentThumbnailService(new HashMap(), unsupportedThumbnailService);
+        underTest = new DocumentThumbnailService(new HashMap<>(), unsupportedThumbnailService);
         documentContentVersion = new DocumentContentVersion();
         documentContentVersion.setMimeType("ngitb");
     }

@@ -17,7 +17,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +77,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
         UploadDocumentsCommand documentsCommand = new UploadDocumentsCommand();
         documentsCommand.setFiles(multipartFiles);
         documentsCommand.setClassification(Classifications.PRIVATE);
-        documentsCommand.setRoles(Arrays.asList("role1"));
+        documentsCommand.setRoles(List.of("role1"));
 
         List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
         when(storedDocumentService.saveItems(documentsCommand)).thenReturn(storedDocuments);

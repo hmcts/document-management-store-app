@@ -11,8 +11,8 @@ import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,11 +22,11 @@ import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 @Slf4j
 public class UploadDocumentTest extends End2EndTestBase {
 
-    private HttpHeaders headers = Helper.getHeaders();
+    private final HttpHeaders headers = Helper.getHeaders();
 
     @Test
     public void should_upload_a_document() throws Exception {
-        mvc.perform(fileUpload("/documents")
+        mvc.perform(multipart("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
             .headers(headers))
@@ -42,7 +42,7 @@ public class UploadDocumentTest extends End2EndTestBase {
 
     @Test
     public void should_upload_and_retrieve_a_document() throws Exception {
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
             .headers(headers))
@@ -57,7 +57,7 @@ public class UploadDocumentTest extends End2EndTestBase {
 
     @Test
     public void should_upload_and_delete_a_document() throws Exception {
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
             .headers(headers))
@@ -76,7 +76,7 @@ public class UploadDocumentTest extends End2EndTestBase {
 
     @Test
     public void should_upload_and_hard_delete_a_document() throws Exception {
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
                 .file(FILE)
                 .param("classification", Classifications.PRIVATE.toString())
                 .headers(headers))

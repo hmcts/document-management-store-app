@@ -12,10 +12,10 @@ import java.io.IOException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
@@ -81,7 +81,7 @@ public class AuditTest extends End2EndTestBase {
     }
 
     private String uploadFileAndReturnSelfUrl() throws Exception {
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
                 .file(FILE)
                 .param("classification", Classifications.PRIVATE.toString())
                 .headers(headers))

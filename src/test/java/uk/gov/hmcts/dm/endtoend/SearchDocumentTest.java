@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,7 +23,7 @@ public class SearchDocumentTest extends End2EndTestBase {
 
     @Test
     public void deleted_doc_should_not_appear_in_search() throws Exception {
-        final MockHttpServletResponse response = mvc.perform(fileUpload("/documents")
+        final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
             .headers(headers))

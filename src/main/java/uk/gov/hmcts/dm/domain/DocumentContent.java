@@ -17,13 +17,11 @@ import java.util.Date;
 
 /**
  * Make checkstyles happy with a javadoc summary.
- * @deprecated To be removed when we will migrate to AzureBlobStore.
  */
 @Entity
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @TypeDef(name = "BlobDataUserType", typeClass = ByteWrappingBlobType.class)
-@Deprecated
 public class DocumentContent {
 
     @Id

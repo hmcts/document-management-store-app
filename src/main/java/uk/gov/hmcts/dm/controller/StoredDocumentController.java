@@ -86,7 +86,7 @@ public class StoredDocumentController {
             return ResponseEntity
                     .ok()
                     .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
-                    .body(new StoredDocumentHalResourceCollection(storedDocuments));
+                    .body(StoredDocumentHalResourceCollection.of(storedDocuments));
         }
     }
 
