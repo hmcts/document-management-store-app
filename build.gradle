@@ -224,7 +224,7 @@ dependencies {
     compile group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
 
     compile group: 'io.swagger', name: 'swagger-core', version: '1.6.1'
-    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.1'
+    compile group: 'io.swagger', name: 'swagger-annotations', version: '1.6.3'
 
     compile group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
