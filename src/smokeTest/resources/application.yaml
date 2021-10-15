@@ -1,0 +1,12 @@
+management:
+  endpoint:
+    health:
+      show-details: "always"
+  endpoints:
+    web:
+      base-path: '/'
+      exposure:
+        include:
+          - health
+          - info
+          - mappings
