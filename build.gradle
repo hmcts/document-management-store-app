@@ -125,7 +125,7 @@ dependencyManagement {
             entry 'junit-vintage-engine'
         }
 
-        dependencySet(group: 'net.bytebuddy', version: '1.10.14') {
+        dependencySet(group: 'net.bytebuddy', version: '1.11.20') {
             entry 'byte-buddy'
             entry 'byte-buddy-agent'
         }
@@ -133,7 +133,7 @@ dependencyManagement {
         // Do not change - END
 
         //CVE-2021-22118
-        dependencySet(group: 'org.springframework', version: '5.3.7') {
+        dependencySet(group: 'org.springframework', version: '5.3.10') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
@@ -235,7 +235,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.0'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.2'
 
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
