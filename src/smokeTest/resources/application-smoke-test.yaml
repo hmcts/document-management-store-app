@@ -1,3 +1,15 @@
+management:
+  endpoint:
+    health:
+      show-details: "always"
+  endpoints:
+    web:
+      base-path: '/'
+      exposure:
+        include:
+          - health
+          - info
+
 base-urls.idam-user=${IDAM_API_URL:http://localhost:4501}
 base-urls.idam-s2s=${S2S_URL:http://localhost:4502}
 base-urls.dm-store=${TEST_URL:http://localhost:4603}
