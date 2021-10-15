@@ -1,4 +1,4 @@
-management.endpoints.web.exposure.include=health,info,mappings
+management.endpoints.web.exposure.include=*
 
 base-urls.idam-user=${IDAM_API_URL:http://localhost:4501}
 base-urls.idam-s2s=${S2S_URL:http://localhost:4502}
