@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 
 @Configuration
-@PropertySource("classpath:application-smoke-test.yaml")
+@PropertySource("classpath:application-smoke-test.properties")
 @ComponentScan("uk.gov.hmcts.dm.smoke")
 class SmokeTestContextConfiguration {
 }
