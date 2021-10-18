@@ -195,7 +195,7 @@ dependencies {
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.8'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.11'
     implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
