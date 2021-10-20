@@ -532,4 +532,26 @@ class CreateDocumentIT extends BaseIT {
             .when()
             .post("/documents")
     }
+
+    @Test
+    void "CD26 As a user, I should be able to upload a file with a TTL"() {
+
+        def url = givenRequest(CITIZEN)
+            .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("classification", Classifications.PUBLIC as String)
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .multiPart("ttl", "2021-01-31T10:10:10+0000")
+            .expect().log().all()
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+            .body("_embedded.documents[0].originalDocumentName", equalTo(ATTACHMENT_9_JPG))
+            .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+            .body("_embedded.documents[0].classification", equalTo(Classifications.PUBLIC as String))
+            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
+            .body("_embedded.documents[0].ttl", equalTo("2021-01-31T10:10:10+0000"))
+            .when()
+            .post("/documents")
+            .path("_embedded.documents[0]._links.self.href")
+    }
 }
