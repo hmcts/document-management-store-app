@@ -159,12 +159,6 @@ dependencyManagement {
             entry 'json-smart'
         }
 
-        //CVE-2021-33037
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.48') {
-            entry 'tomcat-embed-core'
-            entry 'tomcat-embed-websocket'
-        }
-
         //CVE-2021-22119
         dependencySet(group: 'org.springframework.security', version: '5.5.2') {
             entry 'spring-security-core'
@@ -178,8 +172,8 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.48'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.48'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.54'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.54'
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.0'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
