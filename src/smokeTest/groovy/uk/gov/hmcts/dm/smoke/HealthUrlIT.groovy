@@ -13,7 +13,7 @@ import static org.hamcrest.Matchers.equalTo
 @WithTags(@WithTag("testType:Smoke"))
 class HealthUrlIT extends BaseIT {
 
-    @Ignore("Revisit this")
+    @Ignore("Failing while upgrading spring boot. Revisit this.")
     @Test
     void "Check health"() {
         givenUnauthenticatedRequest()
