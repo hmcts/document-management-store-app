@@ -192,14 +192,6 @@ dependencyManagement {
 
 dependencies {
 
-    def withoutStuff = {
-        exclude group: 'com.vaadin.external.google', module: 'android-json'
-        exclude group: 'com.sun.xml.bind', module: 'jaxb-osgi'
-        exclude group: 'com.github.hmcts.java-logging', module: 'logging-spring'
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
-        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-test'
-    }
-
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.54'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.54'
 
@@ -449,7 +441,7 @@ task smoke(type: Test) {
 }
 
 task fortifyScan(type: JavaExec)  {
-    main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+    mainClass.set("uk.gov.hmcts.fortifyclient.FortifyClientMainApp")
     classpath += sourceSets.test.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
 }
