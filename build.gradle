@@ -262,8 +262,6 @@ dependencies {
 
 
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
-    //testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity, withoutStuff
-    //testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
 
