@@ -170,7 +170,7 @@ dependencyManagement {
         }
 
         //CVE-2021-37136, CVE-2021-37137
-        dependencySet(group: 'org.glassfish', version: '4.1.69.Final') {
+        dependencySet(group: 'io.netty', version: '4.1.69.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-codec-dns'
