@@ -71,6 +71,10 @@ configurations {
     contractTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
 
+configurations.all {
+    exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+}
+
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-parameters' << '-Xlint:deprecation'
 }
@@ -162,6 +166,9 @@ dependencyManagement {
         //CVE-2021-22119
         dependencySet(group: 'org.springframework.security', version: '5.5.2') {
             entry 'spring-security-core'
+            entry 'spring-security-config'
+            entry 'spring-security-crypto'
+            entry 'spring-security-web'
         }
 
         //CVE-2021-28170
