@@ -108,7 +108,8 @@ def versions = [
     emTestHelper       : '1.21.2',
     shedlock           : '4.28.0',
     springfoxSwagger   : '3.0.0',
-    swagger            : '1.6.3'
+    swagger            : '1.6.3',
+    tomcat             : '9.0.54'
 ]
 
 dependencyManagement {
@@ -199,8 +200,8 @@ dependencyManagement {
 
 dependencies {
 
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.54'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.54'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: versions.tomcat
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: versions.tomcat
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.0'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
@@ -216,7 +217,7 @@ dependencies {
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.8'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.12'
     implementation group: 'org.springframework.boot', name: 'spring-boot-devtools'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
@@ -245,7 +246,7 @@ dependencies {
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
-    implementation (group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5') {
+    implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5', {
         exclude group: 'com.github.hmcts', module: 'java-logging-spring'
     }
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
@@ -276,15 +277,15 @@ dependencies {
     testRuntimeOnly group: 'org.junit.vintage', name: 'junit-vintage-engine', version: '5.6.2'
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
-    testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.1', classifier: 'all'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.1'
+    contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.7.1'
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 

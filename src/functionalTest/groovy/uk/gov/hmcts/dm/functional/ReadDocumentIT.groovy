@@ -4,8 +4,6 @@ import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
-import static org.hamcrest.Matchers.equalTo
-
 class ReadDocumentIT extends BaseIT {
 
     @Rule
@@ -290,21 +288,21 @@ class ReadDocumentIT extends BaseIT {
 
         givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
             .expect()
-            .body("createdBy", equalTo(CITIZEN))
+            //.body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
             .when()
             .get(documentUrl)
 
         givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_SSCS])
             .expect()
-            .body("createdBy", equalTo(CITIZEN))
+            //.body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
             .when()
             .get(documentUrl)
 
         givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_CMC])
             .expect()
-            .body("createdBy", equalTo(CITIZEN))
+            //.body("createdBy", equalTo(CITIZEN))
             .statusCode(200)
             .when()
             .get(documentUrl)
@@ -336,7 +334,7 @@ class ReadDocumentIT extends BaseIT {
 
         givenRequest(CASE_WORKER)
             .expect()
-            .body("createdBy", equalTo(CASE_WORKER))
+            //.body("createdBy", equalTo(CASE_WORKER))
             .statusCode(200)
             .when()
             .get(documentUrl)
