@@ -175,26 +175,6 @@ dependencyManagement {
         dependencySet(group: 'org.glassfish', version: '4.0.2') {
             entry 'jakarta.el'
         }
-
-        //CVE-2021-37136, CVE-2021-37137
-        dependencySet(group: 'io.netty', version: '4.1.69.Final') {
-            entry 'netty-buffer'
-            entry 'netty-codec'
-            entry 'netty-codec-dns'
-            entry 'netty-codec-http'
-            entry 'netty-codec-http2'
-            entry 'netty-codec-socks'
-            entry 'netty-common'
-            entry 'netty-handler'
-            entry 'netty-handler-proxy'
-            entry 'netty-resolver'
-            entry 'netty-resolver-dns'
-            entry 'netty-resolver-dns-native-macos'
-            entry 'netty-transport'
-            entry 'netty-transport-native-epoll'
-            entry 'netty-transport-native-kqueue'
-            entry 'netty-transport-native-unix-common'
-        }
     }
 }
 
