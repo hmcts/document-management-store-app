@@ -17,7 +17,7 @@ plugins {
     id 'checkstyle'
     id 'io.franzbecker.gradle-lombok' version '5.0.0'
     id "info.solidsoft.pitest" version '1.5.2'
-    id 'au.com.dius.pact' version '4.1.8'
+    id 'au.com.dius.pact' version '4.2.14'
 
 }
 
@@ -113,29 +113,17 @@ def versions = [
 
 dependencyManagement {
     dependencies {
-        // Do not change - START
-        // Changing below will break Serenity Report generation
-//        dependencySet(group: 'junit', version: '4.13') {
-//            entry 'junit'
-//        }
-//
         dependencySet(group: 'org.junit.jupiter', version: '5.7.1') {
             entry 'junit-jupiter'
             entry 'junit-jupiter-api'
             entry 'junit-jupiter-params'
         }
-//
-//        dependencySet(group: 'org.junit.vintage', version: '5.6.2') {
-//            entry 'junit-vintage-engine'
-//        }
 
         dependencySet(group: 'net.bytebuddy', version: '1.11.21') {
             entry 'byte-buddy'
             entry 'byte-buddy-agent'
             entry 'byte-buddy-dep'
         }
-
-        // Do not change - END
 
         //CVE-2021-22118
         dependencySet(group: 'org.springframework', version: '5.3.12') {
@@ -224,7 +212,7 @@ dependencies {
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
-    implementation (group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5') {
+    implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5', {
         exclude group: 'com.github.hmcts', module: 'java-logging-spring'
     }
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
@@ -243,7 +231,6 @@ dependencies {
     testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
-    //testImplementation group: 'org.codehaus.groovy', name :'groovy-all', version:'2.4.17'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
 
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
@@ -254,15 +241,15 @@ dependencies {
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: '5.7.1'
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
-    testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.0', classifier: 'all'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
-    contractTestRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+    contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.1'
+    contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version :'5.7.1'
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
@@ -424,7 +411,7 @@ task smoke(type: Test) {
 }
 
 task fortifyScan(type: JavaExec)  {
-    main = "uk.gov.hmcts.fortifyclient.FortifyClientMainApp"
+    mainClass.set("uk.gov.hmcts.fortifyclient.FortifyClientMainApp")
     classpath += sourceSets.test.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
 }
