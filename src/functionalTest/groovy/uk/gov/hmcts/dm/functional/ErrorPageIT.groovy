@@ -127,7 +127,6 @@ class ErrorPageIT extends BaseIT {
             .get(documentUrl)
     }
 
-    @Ignore("Revisit as previous test EP8 seems same as EP9")
     @Test
     void "EP9 As an unauthenticated api user trying to access a document with document accept header, receive JSON error"() {
 
@@ -135,9 +134,9 @@ class ErrorPageIT extends BaseIT {
 
         givenUnauthenticatedRequest()
             .expect()
+            .statusCode(403)
             .contentType(ContentType.JSON)
             .body(not(containsString("<!DOCTYPE html>")))
-            .statusCode(403)
             .when()
             .get(documentUrl)
     }
