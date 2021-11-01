@@ -46,6 +46,7 @@ module "db" {
   sku_tier        = "GeneralPurpose"
   storage_mb      = var.database_storage_mb
   common_tags     = var.common_tags
+  postgresql_version = "9.6"
 }
 
 module "azure-media-services" {
