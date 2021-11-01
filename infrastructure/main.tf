@@ -26,26 +26,26 @@ locals {
   nonPreviewVaultName = "${var.shared_product}-${var.env}"
   vaultName           = (var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName
 
-  sharedAppServicePlan       = "${var.shared_product}-${var.env}"
-  sharedASPResourceGroup     = "${var.shared_product}-shared-${var.env}"
+  sharedAppServicePlan   = "${var.shared_product}-${var.env}"
+  sharedASPResourceGroup = "${var.shared_product}-shared-${var.env}"
 
 }
 
 module "db" {
-  source          = "git@github.com:hmcts/cnp-module-postgres?ref=master"
-  product         = var.product
-  component       = var.component
-  name            = "${local.app_full_name}-postgres-db"
-  location        = var.location
-  env             = var.env
-  subscription    = var.subscription
-  postgresql_user = var.postgresql_user
-  database_name   = var.database_name
-  sku_name        = var.sku_name
-  sku_capacity    = var.sku_capacity
-  sku_tier        = "GeneralPurpose"
-  storage_mb      = var.database_storage_mb
-  common_tags     = var.common_tags
+  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
+  product            = var.product
+  component          = var.component
+  name               = "${local.app_full_name}-postgres-db"
+  location           = var.location
+  env                = var.env
+  subscription       = var.subscription
+  postgresql_user    = var.postgresql_user
+  database_name      = var.database_name
+  sku_name           = var.sku_name
+  sku_capacity       = var.sku_capacity
+  sku_tier           = "GeneralPurpose"
+  storage_mb         = var.database_storage_mb
+  common_tags        = var.common_tags
   postgresql_version = "9.6"
 }
 
@@ -139,7 +139,7 @@ data "azurerm_key_vault" "shared_key_vault" {
 
 # Load AppInsights key from rpa vault
 data "azurerm_key_vault_secret" "app_insights_key" {
-  name      = "AppInsightsInstrumentationKey"
+  name         = "AppInsightsInstrumentationKey"
   key_vault_id = data.azurerm_key_vault.shared_key_vault.id
 }
 
