@@ -1,79 +1,79 @@
-variable "product" {}
+variable product {}
 
-variable "raw_product" {
+variable raw_product {
   default = "dm" // jenkins-library overrides product for PRs and adds e.g. pr-118-dm
 }
 
-variable "shared_product" {
+variable shared_product {
   default = "ccd"
 }
 
-variable "component" {}
+variable component {}
 
-variable "team_name" {
+variable team_name {
   default = "evidence"
 }
 
-variable "app_language" {
+variable app_language {
   default = "java"
 }
 
-variable "location" {
+variable location {
   default = "UK South"
 }
 
-variable "env" {}
+variable env {}
 
-variable "subscription" {}
+variable subscription {}
 
-variable "ilbIp" {}
+variable ilbIp {}
 
-variable "tenant_id" {}
+variable tenant_id {}
 
-variable "jenkins_AAD_objectId" {
+variable jenkins_AAD_objectId {
   description = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
 }
 
-variable "deployment_namespace" {}
+variable deployment_namespace {}
 
 ////////////////////////////////////////////////
 //Addtional Vars ///////////////////////////////
 ////////////////////////////////////////////////
-variable "capacity" {
+variable capacity {
   default = "1"
 }
 
-variable "java_opts" {
+variable java_opts {
   default = ""
 }
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
-variable "idam_api_url" {
+variable idam_api_url {
   default = "http://betaDevBccidamAppLB.reform.hmcts.net:80"
 }
 
-variable "s2s_url" {
+variable s2s_url {
   default = "rpe-service-auth-provider"
 }
 
-variable "dm_store_app_url" {
+variable dm_store_app_url {
   default = "dm-store"
 }
 
-variable "em_anno_app_url" {
+variable em_anno_app_url {
   default = "em-anno"
 }
 
-variable "postgresql_user" {
+variable postgresql_user {
   default = "evidence"
 }
 
-variable "database_name" {
+variable database_name {
   default = "evidence"
 }
 
-variable "database_storage_mb" {
+variable database_storage_mb {
   default     = "51200"
   description = "'storage_mb' size for the PaaS database (Note: can't be resized currently)"
 }
@@ -82,95 +82,94 @@ variable "database_storage_mb" {
 // Logging
 ////////////////////////////////////////////////
 
-variable "json_console_pretty_print" {
+variable json_console_pretty_print {
   default = "false"
 }
 
-variable "log_output" {
+variable log_output {
   default = "single"
 }
 
-variable "root_logging_level" {
+variable root_logging_level {
   default = "INFO"
 }
 
-variable "log_level_spring_web" {
+variable log_level_spring_web {
   default = "INFO"
 }
 
-variable "log_level_dm" {
+variable log_level_dm {
   default = "INFO"
 }
 
-variable "show_sql" {
+variable show_sql {
   default = "true"
 }
 
 ////////////////////////////////////////////////
 // Toggle Features
 ////////////////////////////////////////////////
-variable "enable_idam_healthcheck" {
+variable enable_idam_healthcheck {
   default = "false"
 }
 
-variable "enable_metadata_search" {
+variable enable_metadata_search {
   default = "true"
 }
 
-variable "enable_document_and_metadata_upload" {
+variable enable_document_and_metadata_upload {
   default = "true"
 }
 
-variable "enable_folder_api" {
+variable enable_folder_api {
   default = "true"
 }
 
-variable "enable_delete" {
+variable enable_delete {
   default = "true"
 }
 
-variable "enable_ttl" {
+variable enable_ttl {
   default = "false"
 }
 
-variable "enable_thumbnail" {
+variable enable_thumbnail {
   default = "true"
 }
 
-variable "enable_testing" {
+variable enable_testing {
   default = "true"
 }
 
-variable "enable_azure_media_service" {
+variable enable_azure_media_service {
   default = false
 }
 
-variable "sku_name" {
+variable sku_name {
   default = "GP_Gen5_2"
 }
 
-variable "sku_capacity" {
+variable sku_capacity {
   default = "2"
 }
 
 ////////////////////////////////////////////////
 // Addtional
 ////////////////////////////////////////////////
-variable "max_file_size_in_mb" {
+variable max_file_size_in_mb {
   default = "100"
 }
 
-variable "common_tags" {
+variable common_tags {
   type = map(string)
 }
 
-variable "asp_name" {
+variable asp_name {
   description = "App Service Plan (ASP) to use for the webapp, 'use_shared' to make use of the shared ASP"
   default     = "use_shared"
 }
 
-variable "asp_rg" {
+variable asp_rg {
   description = "App Service Plan (ASP) resource group for 'asp_name', 'use_shared' to make use of the shared resource group"
   default     = "use_shared"
 }
-
