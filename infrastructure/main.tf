@@ -27,12 +27,6 @@ locals {
   vaultName           = (var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = "${local.app_full_name}-${var.env}"
-  location = var.location
-  tags = var.common_tags
-}
-
 module "db" {
   source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
   product            = var.product
