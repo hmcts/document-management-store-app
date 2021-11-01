@@ -25,10 +25,6 @@ locals {
   previewVaultName    = "${var.shared_product}-aat"
   nonPreviewVaultName = "${var.shared_product}-${var.env}"
   vaultName           = (var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName
-
-  sharedAppServicePlan   = "${var.shared_product}-${var.env}"
-  sharedASPResourceGroup = "${var.shared_product}-shared-${var.env}"
-
 }
 
 resource "azurerm_resource_group" "rg" {
