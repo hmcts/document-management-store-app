@@ -5,9 +5,6 @@ capacity = "2"
 asp_name = "dm-store-prod"
 asp_rg   = "dm-store-prod"
 
-// Database
-database_storage_mb = "133120"
-
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
@@ -40,3 +37,7 @@ enable_testing                      = "false"
 ////////////////////////////////////////////////
 max_file_size_in_mb        = "100"
 
+// DB
+sku_name = "GP_Gen5_4"
+sku_capacity = "4"
+database_storage_mb = "148480"
