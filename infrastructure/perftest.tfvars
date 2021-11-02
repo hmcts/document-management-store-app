@@ -5,9 +5,6 @@ capacity = "2"
 asp_name = "dm-store-perftest"
 asp_rg   = "dm-store-perftest"
 
-// Database
-database_storage_mb = "509952"
-
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
@@ -39,3 +36,7 @@ enable_thumbnail                    = "true"
 ////////////////////////////////////////////////
 max_file_size_in_mb        = "500"
 
+// DB
+sku_name = "GP_Gen5_4"
+sku_capacity = "4"
+database_storage_mb = "512000"
