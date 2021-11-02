@@ -138,7 +138,7 @@ dependencyManagement {
         // Do not change - END
 
         //CVE-2021-22118
-        dependencySet(group: 'org.springframework', version: '5.3.7') {
+        dependencySet(group: 'org.springframework', version: '5.3.12') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
