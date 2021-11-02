@@ -1,5 +1,5 @@
 output "idam_api_url" {
-  value = "${var.idam_api_url}"
+  value = var.idam_api_url
 }
 
 output "s2s_url" {
@@ -15,35 +15,35 @@ output "em_anno_app_url" {
 }
 
 output "enable_idam_health_check" {
-  value = "${var.enable_idam_healthcheck}"
+  value = var.enable_idam_healthcheck
 }
 
 output "enable_metadata_search" {
-  value = "${var.enable_metadata_search}"
+  value = var.enable_metadata_search
 }
 
 output "enable_document_and_metadata_upload" {
-  value = "${var.enable_document_and_metadata_upload}"
+  value = var.enable_document_and_metadata_upload
 }
 
 output "enable_folder_api" {
-  value = "${var.enable_folder_api}"
+  value = var.enable_folder_api
 }
 
 output "enable_delete" {
-  value = "${var.enable_delete}"
+  value = var.enable_delete
 }
 
 output "enable_ttl" {
-  value = "${var.enable_ttl}"
+  value = var.enable_ttl
 }
 
 output "enable_thumbnail" {
-  value = "${var.enable_thumbnail}"
+  value = var.enable_thumbnail
 }
 
 output "enable_testing" {
-  value = "${var.enable_testing}"
+  value = var.enable_testing
 }
 
 
