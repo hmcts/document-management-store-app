@@ -138,7 +138,7 @@ dependencyManagement {
         // Do not change - END
 
         //CVE-2021-22118
-        dependencySet(group: 'org.springframework', version: '5.3.12') {
+        dependencySet(group: 'org.springframework', version: '5.3.7') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
@@ -175,12 +175,6 @@ dependencyManagement {
         dependencySet(group: 'org.glassfish', version: '4.0.2') {
             entry 'jakarta.el'
         }
-
-        //CVE-2021-22047
-        dependencySet(group: 'org.springframework.data', version: '3.5.6') {
-            entry 'spring-data-rest-core'
-            entry 'spring-data-rest-webmvc'
-        }
     }
 }
 
@@ -202,7 +196,7 @@ dependencies {
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.12'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.8'
     implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: versions.springBoot
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot

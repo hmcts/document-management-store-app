@@ -4,5 +4,8 @@
         <!-- Netty dependency can be updated only after updating SpringBoot version -->
         <cve>CVE-2021-37136</cve>
         <cve>CVE-2021-37137</cve>
+        <!-- springframework and springframework.data - review when upgrading boot-->
+        <cve>CVE-2021-22096</cve>
+        <cve>CVE-2021-22047</cve>
     </suppress>
 </suppressions>
