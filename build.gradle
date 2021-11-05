@@ -386,7 +386,7 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
-    finalizedBy aggregate
+    //finalizedBy aggregate
 }
 
 serenity {
