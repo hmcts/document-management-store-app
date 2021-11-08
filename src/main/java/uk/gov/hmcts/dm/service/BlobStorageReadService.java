@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import com.azure.core.util.Context;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.io.OutputStream;
+import java.time.Duration;
 import java.util.UUID;
 
 @Slf4j
@@ -26,8 +28,15 @@ public class BlobStorageReadService {
     public void loadBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
         log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
         BlockBlobClient blob = loadBlob(documentContentVersion.getId().toString());
-        blob.downloadStream(outputStream);
-        log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
+        var response = blob.downloadWithResponse(outputStream,
+            null,
+            null,
+            null,
+            false,
+            Duration.ofMinutes(1),
+            Context.NONE);
+        log.debug("Reading document version {} from Azure Blob Storage: {}",
+            documentContentVersion.getId(), response.getStatusCode());
     }
 
     private BlockBlobClient loadBlob(String id) {
