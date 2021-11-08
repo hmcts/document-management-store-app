@@ -18,20 +18,17 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
-import static org.apache.commons.io.IOUtils.copy;
 import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
 @RunWith(PowerMockRunner.class)
@@ -75,14 +72,6 @@ public class BlobStorageWriteServiceTest {
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         String azureProvidedUri = "someuri";
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
-
-        doAnswer(invocation -> {
-            try (final InputStream inputStream = toInputStream(MOCK_DATA, UTF8);
-                 final OutputStream outputStream = invocation.getArgument(0)
-            ) {
-                return copy(inputStream, outputStream);
-            }
-        }).when(blob).downloadStream(any(OutputStream.class));
 
         // upload
         blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
