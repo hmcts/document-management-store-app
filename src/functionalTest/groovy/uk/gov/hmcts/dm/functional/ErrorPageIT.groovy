@@ -127,6 +127,7 @@ class ErrorPageIT extends BaseIT {
             .get(documentUrl)
     }
 
+    @Ignore("revisit this as EP8 same test")
     @Test
     void "EP9 As an unauthenticated api user trying to access a document with document accept header, receive JSON error"() {
 
