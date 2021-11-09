@@ -1,7 +1,9 @@
 package uk.gov.hmcts.dm.config.batch;
 
+import com.azure.core.http.rest.PagedIterable;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.BlobItem;
 import com.azure.storage.blob.sas.BlobContainerSasPermission;
 import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
 import com.azure.storage.common.sas.SasProtocol;
@@ -58,10 +60,10 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
             .setProtocol(SasProtocol.HTTPS_ONLY);
 
         blobClient.generateSas(blobServiceSasSignatureValues);
-        log.info("==== execute started ====");
+        PagedIterable<BlobItem> blobItems = blobClient.listBlobs();
+        log.info("==== execute started ===={}", blobItems.stream().count());
         Optional<BlobClient>  blob = blobClient.listBlobs()
             .stream()
-            .peek(blobItem -> log.info("BlobNanme {}", blobItem.getName()))
             .map(blobItem -> blobClient.getBlobClient(blobItem.getName()))
             .findAny();
 
