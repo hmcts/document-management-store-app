@@ -1,12 +1,7 @@
 package uk.gov.hmcts.dm.config.batch;
 
-import com.azure.core.http.rest.PagedIterable;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.models.BlobItem;
-import com.azure.storage.blob.sas.BlobContainerSasPermission;
-import com.azure.storage.blob.sas.BlobServiceSasSignatureValues;
-import com.azure.storage.common.sas.SasProtocol;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.StopWatch;
@@ -26,7 +21,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -51,17 +45,7 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
 
-        BlobContainerSasPermission blobContainerSasPermission = new BlobContainerSasPermission()
-            .setReadPermission(true)
-            .setWritePermission(true)
-            .setListPermission(true);
-        BlobServiceSasSignatureValues blobServiceSasSignatureValues =
-            new BlobServiceSasSignatureValues(OffsetDateTime.now().plusDays(1), blobContainerSasPermission)
-            .setProtocol(SasProtocol.HTTPS_ONLY);
-
-        blobClient.generateSas(blobServiceSasSignatureValues);
-        PagedIterable<BlobItem> blobItems = blobClient.listBlobs();
-        log.info("==== execute started ===={}", blobItems.stream().count());
+        log.info("==== execute started ====");
         Optional<BlobClient>  blob = blobClient.listBlobs()
             .stream()
             .map(blobItem -> blobClient.getBlobClient(blobItem.getName()))
