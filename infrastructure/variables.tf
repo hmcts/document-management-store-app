@@ -73,6 +73,14 @@ variable database_name {
   default = "evidence"
 }
 
+variable postgresql_user_v11 {
+  default = "evidence"
+}
+
+variable database_name_v11 {
+  default = "evidence"
+}
+
 variable database_storage_mb {
   default     = "51200"
   description = "'storage_mb' size for the PaaS database (Note: can't be resized currently)"
