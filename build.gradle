@@ -106,7 +106,7 @@ def versions = [
     sonarPitest        : '0.5',
     pact_version       : '4.1.7',
     emTestHelper       : '1.21.2',
-    shedlock           : '4.28.0',
+    shedlock           : '4.29.0',
     springfoxSwagger   : '3.0.0',
     swagger            : '1.6.3'
 ]
