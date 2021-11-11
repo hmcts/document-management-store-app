@@ -182,7 +182,7 @@ toggle:
   ttl: ${ENABLE_TTL:false}
   thumbnail: ${ENABLE_THUMBNAIL:true}
   testing: ${ENABLE_TESTING:true}
-  metadatamigration: ${ENABLE_METADATA_MIGRATION:true}
+  metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
 
 task:
   env: ${TASK_ENV:documentTaskLock-local}

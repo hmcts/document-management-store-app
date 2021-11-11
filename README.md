@@ -87,4 +87,3 @@ For Executing the contract provider test  execute
 ```./gradlew contractTest```
 For Publishing the verification results to broker execute
 ```./gradlew runProviderPactVerification```
-Checking PR build
