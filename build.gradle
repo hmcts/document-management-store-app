@@ -387,12 +387,6 @@ test {
 }
 
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
-    doFirst(){
-        printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
-    }
-
-    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-    forkEvery = 10
 
     group = 'Delivery pipeline'
     description = 'Executes functional tests'
