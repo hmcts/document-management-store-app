@@ -82,7 +82,7 @@ public class BlobStorageWriteServiceTest {
             ) {
                 return copy(inputStream, outputStream);
             }
-        }).when(blob).downloadStream(any(OutputStream.class));
+        }).when(blob).download(any(OutputStream.class));
 
         // upload
         blobStorageWriteService.uploadDocumentContentVersion(storedDocument,

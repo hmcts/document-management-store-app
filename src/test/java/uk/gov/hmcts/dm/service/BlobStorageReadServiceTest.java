@@ -49,7 +49,7 @@ public class BlobStorageReadServiceTest {
     public void loadsBlob() {
         blobStorageReadService.loadBlob(documentContentVersion, outputStream);
 
-        verify(blob).downloadStream(outputStream);
+        verify(blob).download(outputStream);
     }
 
     @Test
