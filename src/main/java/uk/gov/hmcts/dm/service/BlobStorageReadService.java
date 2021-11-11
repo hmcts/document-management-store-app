@@ -26,7 +26,7 @@ public class BlobStorageReadService {
     public void loadBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
         log.debug("Reading document version {} from Azure Blob Storage...", documentContentVersion.getId());
         BlockBlobClient blob = loadBlob(documentContentVersion.getId().toString());
-        blob.download(outputStream);
+        blob.downloadStream(outputStream);
         log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
     }
 
