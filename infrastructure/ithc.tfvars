@@ -1,10 +1,5 @@
 java_opts = ""
 
-// Webapp
-capacity = "2"
-asp_name = "dm-store-ithc"
-asp_rg   = "dm-store-ithc"
-
 // Database
 database_storage_mb = "509952"
 
