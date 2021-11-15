@@ -25,7 +25,7 @@ java:
     ENABLE_DB_MIGRATE: 'true'
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(BLOB_ACCOUNT_NAME);AccountKey=$(BLOB_ACCESS_KEY);EndpointSuffix=core.windows.net"
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 1000
-    ENABLE_METADATA_MIGRATION: 'true'
+    ENABLE_METADATA_MIGRATION: 'false'
     STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
   postgresql:
     enabled: true
