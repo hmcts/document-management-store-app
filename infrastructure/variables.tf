@@ -1,4 +1,6 @@
-variable product {}
+variable product {
+  default = "dm"
+}
 
 variable raw_product {
   default = "dm" // jenkins-library overrides product for PRs and adds e.g. pr-118-dm
@@ -8,7 +10,9 @@ variable shared_product {
   default = "ccd"
 }
 
-variable component {}
+variable component {
+  default = "store"
+}
 
 variable team_name {
   default = "evidence"
@@ -22,19 +26,25 @@ variable location {
   default = "UK South"
 }
 
-variable env {}
+variable env {
+  default = ""
+}
 
-variable subscription {}
+variable subscription {
+  default = ""
+}
 
-variable ilbIp {}
+variable ilbIp {
+  default = ""
+}
 
-variable tenant_id {}
+variable tenant_id {
+  default = ""
+}
 
 variable jenkins_AAD_objectId {
   description = "(Required) The Azure AD object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies."
 }
-
-variable deployment_namespace {}
 
 ////////////////////////////////////////////////
 //Addtional Vars ///////////////////////////////
@@ -70,6 +80,14 @@ variable postgresql_user {
 }
 
 variable database_name {
+  default = "evidence"
+}
+
+variable postgresql_user_v11 {
+  default = "evidence"
+}
+
+variable database_name_v11 {
   default = "evidence"
 }
 
@@ -162,14 +180,4 @@ variable max_file_size_in_mb {
 
 variable common_tags {
   type = map(string)
-}
-
-variable asp_name {
-  description = "App Service Plan (ASP) to use for the webapp, 'use_shared' to make use of the shared ASP"
-  default     = "use_shared"
-}
-
-variable asp_rg {
-  description = "App Service Plan (ASP) resource group for 'asp_name', 'use_shared' to make use of the shared resource group"
-  default     = "use_shared"
 }
