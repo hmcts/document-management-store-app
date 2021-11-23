@@ -77,6 +77,7 @@ class SearchDocumentIT extends BaseIT {
             .post('/documents/filter')
     }
 
+    @Ignore
     @Test
     void "S4 As a authenticated user I can search using special characters"() {
         givenRequest(CITIZEN)
