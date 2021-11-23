@@ -4,6 +4,7 @@ import groovy.json.JsonOutput
 import io.restassured.http.ContentType
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.Matchers
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
@@ -63,6 +64,7 @@ class SearchDocumentIT extends BaseIT {
             .post('/documents/filter')
     }
 
+    @Ignore
     @Test
     void "S4 As authenticated user I receive no records when searched item could not be found"() {
         givenRequest(CITIZEN)
