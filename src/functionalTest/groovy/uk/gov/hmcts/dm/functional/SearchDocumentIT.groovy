@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 
+@Ignore
 class SearchDocumentIT extends BaseIT {
 
     @Rule
@@ -64,7 +65,6 @@ class SearchDocumentIT extends BaseIT {
             .post('/documents/filter')
     }
 
-    @Ignore
     @Test
     void "S4 As authenticated user I receive no records when searched item could not be found"() {
         givenRequest(CITIZEN)
@@ -77,7 +77,6 @@ class SearchDocumentIT extends BaseIT {
             .post('/documents/filter')
     }
 
-    @Ignore
     @Test
     void "S4 As a authenticated user I can search using special characters"() {
         givenRequest(CITIZEN)
