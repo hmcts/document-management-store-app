@@ -63,8 +63,8 @@ withNightlyPipeline(type, product, component) {
 //    }
 
     enableFullFunctionalTest()
-//    enableMutationTest()
-//    enableSecurityScan()
+    enableMutationTest()
+    enableSecurityScan()
 
     enableSlackNotifications('#em-dev-chat')
     after('fortify-scan') {
