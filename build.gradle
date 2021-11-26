@@ -387,12 +387,12 @@ test {
 }
 
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
-    doFirst(){
-        printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
-    }
+//    doFirst(){
+//        printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
+//    }
 
-    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-    forkEvery = 10
+//    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+//    forkEvery = 10
 
     group = 'Delivery pipeline'
     description = 'Executes functional tests'
@@ -400,7 +400,7 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
-    failFast = true
+//    failFast = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
