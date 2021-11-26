@@ -4,7 +4,6 @@ import groovy.json.JsonOutput
 import io.restassured.http.ContentType
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.Matchers
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
@@ -13,7 +12,6 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.Matchers.is
 
-@Ignore
 class SearchDocumentIT extends BaseIT {
 
     @Rule
@@ -78,7 +76,7 @@ class SearchDocumentIT extends BaseIT {
     }
 
     @Test
-    void "S4 As a authenticated user I can search using special characters"() {
+    void "S5 As a authenticated user I can search using special characters"() {
         givenRequest(CITIZEN)
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson([name: 'case', value: '!"£$%%^&*()<>:@~[];\'#,./ÄÖÜẞ▒¶§■¾±≡µÞÌ█ð╬¤╠┼▓®¿ØÆ']))
