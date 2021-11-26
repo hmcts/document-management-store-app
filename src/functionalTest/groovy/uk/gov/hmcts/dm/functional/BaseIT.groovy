@@ -1,8 +1,6 @@
 package uk.gov.hmcts.dm.functional
 
-
 import io.restassured.response.Response
-import net.jcip.annotations.NotThreadSafe
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner
 import net.serenitybdd.rest.SerenityRest
 import net.thucydides.core.annotations.WithTag
@@ -23,7 +21,6 @@ import javax.annotation.PostConstruct
 import static java.io.File.createTempFile
 import static org.hamcrest.Matchers.equalTo
 
-@NotThreadSafe
 @RunWith(SpringIntegrationSerenityRunner.class)
 @SpringBootTest(classes = FunctionalTestContextConfiguration)
 @WithTags(@WithTag("testType:Functional"))
