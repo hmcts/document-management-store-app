@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.15'
+    id 'uk.gov.hmcts.java' version '0.12.16'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.5.5'
     id 'com.github.ben-manes.versions' version '0.39.0'
@@ -126,7 +126,7 @@ dependencyManagement {
         }
 
         //CVE-2021-22118
-        dependencySet(group: 'org.springframework', version: '5.3.12') {
+        dependencySet(group: 'org.springframework', version: '5.3.13') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
@@ -170,7 +170,7 @@ dependencies {
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.54'
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.54'
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.1'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.2'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
 
