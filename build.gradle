@@ -126,7 +126,7 @@ dependencyManagement {
             entry 'junit-jupiter-params'
         }
 
-        dependencySet(group: 'org.junit.vintage', version: '5.6.2') {
+        dependencySet(group: 'org.junit.vintage', version: '5.8.2') {
             entry 'junit-vintage-engine'
         }
 
@@ -256,7 +256,7 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
-    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.6.2'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.8.2'
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
     testImplementation 'com.github.hmcts:fortify-client:1.2.0:all'
