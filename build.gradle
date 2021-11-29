@@ -119,7 +119,7 @@ dependencyManagement {
             entry 'junit-jupiter-params'
         }
 
-        dependencySet(group: 'net.bytebuddy', version: '1.11.21') {
+        dependencySet(group: 'net.bytebuddy', version: '1.12.2') {
             entry 'byte-buddy'
             entry 'byte-buddy-agent'
             entry 'byte-buddy-dep'
