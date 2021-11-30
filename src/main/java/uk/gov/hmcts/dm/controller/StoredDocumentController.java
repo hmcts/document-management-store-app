@@ -38,7 +38,7 @@ import java.util.UUID;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-@SuppressWarnings("squid:S2629")
+@SuppressWarnings({"squid:S2629", "squid:S1452"})
 @RestController
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")
@@ -147,9 +147,7 @@ public class StoredDocumentController {
                             documentContentVersion.getMimeType()));
                         logger.info(String.format("Size for documentId : %s is : %s ", documentId.toString(),
                             documentContentVersion.getSize().toString()));
-                        headers.forEach((key, value) -> {
-                            logger.info(String.format("Header %s = %s", key, value));
-                        });
+                        headers.forEach((key, value) -> logger.info(String.format("Header %s = %s", key, value)));
                         logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
                     }
                     return ResponseEntity
