@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -143,7 +144,7 @@ public class StoredDocumentController {
                     return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(e);
-                } catch (Exception e) {
+                } catch (UncheckedIOException e) {
                     if (Objects.nonNull(headers)) {
                         logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
                         logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
