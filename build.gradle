@@ -1,7 +1,7 @@
 buildscript {
     dependencies {
         classpath("net.serenity-bdd:serenity-gradle-plugin:2.6.0")
-        classpath("net.serenity-bdd:serenity-single-page-report:2.6.0")
+        classpath("net.serenity-bdd:serenity-single-page-report:3.1.1")
     }
 }
 
@@ -283,7 +283,8 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java',
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
     '**uk/gov/hmcts/dm/service/FileSizeVerifier.java',
-    '**uk/gov/hmcts/dm/controller/WelcomeController.java'
+    '**uk/gov/hmcts/dm/controller/WelcomeController.java',
+    '**uk/gov/hmcts/dm/controller/StoredDocumentController.java'
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
