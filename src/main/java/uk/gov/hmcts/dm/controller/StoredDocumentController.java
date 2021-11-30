@@ -143,6 +143,10 @@ public class StoredDocumentController {
                 } catch (IOException e) {
                     if (Objects.nonNull(headers)) {
                         logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
+                        logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
+                            documentContentVersion.getMimeType()));
+                        logger.info(String.format("Size for documentId : %s is : %s ", documentId.toString(),
+                            documentContentVersion.getSize().toString()));
                         headers.forEach((key, value) -> {
                             logger.info(String.format("Header %s = %s", key, value));
                         });
