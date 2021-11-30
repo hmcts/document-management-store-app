@@ -226,7 +226,7 @@ dependencies {
 
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.0'
 
-    testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    testImplementation group: 'com.h2database', name: 'h2', version: '2.0.202'
     testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
     testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
