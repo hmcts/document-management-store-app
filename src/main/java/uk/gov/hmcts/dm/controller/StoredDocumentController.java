@@ -27,13 +27,11 @@ import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -117,7 +115,8 @@ public class StoredDocumentController {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
     public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response,
-                                       @RequestHeader Map<String, String> headers) {
+                                       @RequestHeader Map<String, String> headers,
+                                       HttpServletRequest httpServletRequest) {
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
 
@@ -149,6 +148,15 @@ public class StoredDocumentController {
                             documentContentVersion.getSize().toString()));
                         headers.forEach((key, value) -> logger.info(String.format("Header %s = %s", key, value)));
                         logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
+                    } else {
+                        logger.info(String.format("Header is null for documentId : %s ", documentId.toString()));
+                        if (Objects.nonNull(httpServletRequest)) {
+                            Iterator<String> stringIterator = httpServletRequest.getHeaderNames().asIterator();
+                            while (stringIterator.hasNext()) {
+                                logger.info(String.format("HeaderNames for documentId : %s  is %s ",
+                                    documentId.toString(), stringIterator.next()));
+                            }
+                        }
                     }
                     return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
