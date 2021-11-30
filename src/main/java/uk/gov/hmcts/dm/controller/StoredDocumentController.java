@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.*;
 
 import static java.lang.String.format;
@@ -140,13 +141,19 @@ public class StoredDocumentController {
                     }
 
                 } catch (IOException e) {
+                    return ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(e);
+                } catch (UncheckedIOException e) {
                     if (Objects.nonNull(headers)) {
                         logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
                         logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
                             documentContentVersion.getMimeType()));
                         logger.info(String.format("Size for documentId : %s is : %s ", documentId.toString(),
                             documentContentVersion.getSize().toString()));
-                        headers.forEach((key, value) -> logger.info(String.format("Header %s = %s", key, value)));
+                        headers.forEach((key, value) ->
+                            logger.info(String.format("documentId : %s has Request Header %s = %s",
+                                documentId.toString(), key, value)));
                         logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
                     } else {
                         logger.info(String.format("Header is null for documentId : %s ", documentId.toString()));
