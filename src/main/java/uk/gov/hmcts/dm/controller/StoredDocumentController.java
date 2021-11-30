@@ -4,6 +4,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
@@ -13,12 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -34,15 +31,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@SuppressWarnings({"squid:S2629", "squid:S1452"})
 @RestController
 @RequestMapping(path = "/documents")
 @Api("Endpoint for Stored Document Management")
 public class StoredDocumentController {
+
+    private final Logger logger = LoggerFactory.getLogger(StoredDocumentController.class);
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -114,7 +116,8 @@ public class StoredDocumentController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response) {
+    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response,
+                                       @RequestHeader Map<String, String> headers) {
         return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
             .map(documentContentVersion -> {
 
@@ -138,6 +141,15 @@ public class StoredDocumentController {
                     }
 
                 } catch (IOException e) {
+                    if (Objects.nonNull(headers)) {
+                        logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
+                        logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
+                            documentContentVersion.getMimeType()));
+                        logger.info(String.format("Size for documentId : %s is : %s ", documentId.toString(),
+                            documentContentVersion.getSize().toString()));
+                        headers.forEach((key, value) -> logger.info(String.format("Header %s = %s", key, value)));
+                        logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
+                    }
                     return ResponseEntity
                         .status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(e);
