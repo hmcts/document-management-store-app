@@ -34,4 +34,20 @@ public class SmokeTest {
 
         Assert.assertEquals(MESSAGE, response);
     }
+
+    @Test
+    public void testHealthUrlEndpoint() {
+        SerenityRest.useRelaxedHTTPSValidation();
+
+        String response = SerenityRest
+            .given()
+            .baseUri(testUrl)
+            .get("/health")
+            .then()
+            .statusCode(200)
+            .extract()
+            .body().jsonPath().getString("status");
+
+        Assert.assertEquals("UP", response);
+    }
 }

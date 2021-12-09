@@ -84,7 +84,7 @@ resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-DM" {
   name         = "${var.component}-POSTGRES-PASS"
-  value        = module.db.postgresql_password
+  value        = module.db-v11.postgresql_password
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 

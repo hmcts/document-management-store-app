@@ -25,8 +25,8 @@ class ErrorPageIT extends BaseIT {
 
         givenUnauthenticatedRequest()
             .expect()
-            .contentType(ContentType.JSON)
             .statusCode(403)
+            .contentType(ContentType.JSON)
             .when()
             .get(documentUrl)
 
@@ -38,8 +38,8 @@ class ErrorPageIT extends BaseIT {
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
-            .contentType(ContentType.JSON)
             .statusCode(404)
+            .contentType(ContentType.JSON)
             .when()
             .get('documents/XXX')
 
@@ -51,8 +51,8 @@ class ErrorPageIT extends BaseIT {
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
-            .contentType(ContentType.JSON)
             .statusCode(405)
+            .contentType(ContentType.JSON)
             .when()
             .get('documents/')
     }
@@ -63,8 +63,8 @@ class ErrorPageIT extends BaseIT {
         givenRequest(CITIZEN)
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
-            .contentType(ContentType.JSON)
             .statusCode(415)
+            .contentType(ContentType.JSON)
             .when()
             .post('documents/')
     }
@@ -77,8 +77,8 @@ class ErrorPageIT extends BaseIT {
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .multiPart("file", file(BAD_ATTACHMENT_1), MediaType.ALL_VALUE)
             .expect()
-            .contentType(ContentType.JSON)
             .statusCode(422)
+            .contentType(ContentType.JSON)
             .when()
             .post('documents/')
     }
@@ -92,8 +92,8 @@ class ErrorPageIT extends BaseIT {
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-            .contentType(ContentType.JSON)
             .statusCode(403)
+            .contentType(ContentType.JSON)
             .when()
             .post(url)
     }
@@ -106,9 +106,9 @@ class ErrorPageIT extends BaseIT {
         givenUnauthenticatedRequest()
             .accept(ContentType.JSON)
             .expect()
+            .statusCode(403)
             .contentType(ContentType.JSON)
             .body(not(containsString("<!DOCTYPE html>")))
-            .statusCode(403)
             .when()
             .get(documentUrl)
     }
@@ -120,9 +120,9 @@ class ErrorPageIT extends BaseIT {
 
         givenUnauthenticatedRequest()
             .expect()
+            .statusCode(403)
             .contentType(ContentType.JSON)
             .body(not(containsString("<!DOCTYPE html>")))
-            .statusCode(403)
             .when()
             .get(documentUrl)
     }
@@ -134,9 +134,9 @@ class ErrorPageIT extends BaseIT {
 
         givenUnauthenticatedRequest()
             .expect()
+            .statusCode(403)
             .contentType(ContentType.JSON)
             .body(not(containsString("<!DOCTYPE html>")))
-            .statusCode(403)
             .when()
             .get(documentUrl)
     }
@@ -150,8 +150,8 @@ class ErrorPageIT extends BaseIT {
             .accept(ContentType.JSON)
             .multiPart("file", file(ATTACHMENT_18), MediaType.APPLICATION_XML_VALUE)
             .expect()
-            .contentType(ContentType.JSON)
             .statusCode(422)
+            .contentType(ContentType.JSON)
             .when()
             .post(url)
     }
@@ -163,8 +163,8 @@ class ErrorPageIT extends BaseIT {
             .accept(ContentType.XML)
             .multiPart("file", file(ATTACHMENT_18), MediaType.APPLICATION_XML_VALUE)
             .expect()
-            .body(not(containsString("<!DOCTYPE html>")))
             .statusCode(422)
+            .body(not(containsString("<!DOCTYPE html>")))
             .when()
             .post('documents/')
     }

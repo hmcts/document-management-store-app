@@ -289,25 +289,28 @@ class ReadDocumentIT extends BaseIT {
         def documentUrl = createDocumentAndGetUrlAs CITIZEN
 
         givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
-            .expect()
-            .body("createdBy", equalTo(CITIZEN))
+            .expect().log().all()
             .statusCode(200)
+            .body("createdBy", equalTo(CITIZEN))
             .when()
             .get(documentUrl)
+            .thenReturn()
 
         givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_SSCS])
-            .expect()
-            .body("createdBy", equalTo(CITIZEN))
+            .expect().log().all()
             .statusCode(200)
+            .body("createdBy", equalTo(CITIZEN))
             .when()
             .get(documentUrl)
+            .thenReturn()
 
         givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_CMC])
-            .expect()
-            .body("createdBy", equalTo(CITIZEN))
+            .expect().log().all()
             .statusCode(200)
+            .body("createdBy", equalTo(CITIZEN))
             .when()
             .get(documentUrl)
+            .thenReturn()
     }
 
     @Test
@@ -336,10 +339,11 @@ class ReadDocumentIT extends BaseIT {
 
         givenRequest(CASE_WORKER)
             .expect()
+            .statusCode(200).log().all()
             .body("createdBy", equalTo(CASE_WORKER))
-            .statusCode(200)
             .when()
             .get(documentUrl)
+            .thenReturn()
 
 
         String userNameFromResponse = givenRequest(CASE_WORKER, [CASE_WORKER_ROLE_PROBATE])
