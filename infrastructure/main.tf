@@ -27,24 +27,6 @@ locals {
   vaultName           = (var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName
 }
 
-module "db" {
-  source             = "git@github.com:hmcts/cnp-module-postgres?ref=master"
-  product            = var.product
-  component          = var.component
-  name               = "${local.app_full_name}-postgres-db"
-  location           = var.location
-  env                = var.env
-  subscription       = var.subscription
-  postgresql_user    = var.postgresql_user
-  database_name      = var.database_name
-  sku_name           = var.sku_name
-  sku_capacity       = var.sku_capacity
-  sku_tier           = "GeneralPurpose"
-  storage_mb         = var.database_storage_mb
-  common_tags        = var.common_tags
-  postgresql_version = "9.6"
-}
-
 module "azure-media-services" {
   source      = "git@github.com:hmcts/cnp-module-azure-media-services"
   location    = var.location
@@ -70,40 +52,10 @@ data "azurerm_key_vault" "dm_shared_vault" {
   resource_group_name = "dm-shared-${var.env}"
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name         = "${var.component}-POSTGRES-USER"
-  value        = module.db.user_name
-  key_vault_id = data.azurerm_key_vault.ccd_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
-  name         = "${var.component}-POSTGRES-PASS"
-  value        = module.db.postgresql_password
-  key_vault_id = data.azurerm_key_vault.ccd_shared_vault.id
-}
-
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-DM" {
   name         = "${var.component}-POSTGRES-PASS"
   value        = module.db-v11.postgresql_password
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
-  name         = "${var.component}-POSTGRES-HOST"
-  value        = module.db.host_name
-  key_vault_id = data.azurerm_key_vault.ccd_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
-  name         = "${var.component}-POSTGRES-PORT"
-  value        = module.db.postgresql_listen_port
-  key_vault_id = data.azurerm_key_vault.ccd_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
-  name         = "${var.component}-POSTGRES-DATABASE"
-  value        = module.db.postgresql_database
-  key_vault_id = data.azurerm_key_vault.ccd_shared_vault.id
 }
 
 data "azurerm_key_vault_secret" "dm_store_storageaccount_primary_connection_string" {
