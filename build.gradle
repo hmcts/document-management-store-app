@@ -108,7 +108,8 @@ def versions = [
     emTestHelper       : '1.21.2',
     shedlock           : '4.29.0',
     springfoxSwagger   : '3.0.0',
-    swagger            : '1.6.3'
+    swagger            : '1.6.3',
+    log4JVersion       : '2.15.0'
 ]
 
 dependencyManagement {
@@ -163,6 +164,12 @@ dependencyManagement {
         dependencySet(group: 'org.glassfish', version: '4.0.2') {
             entry 'jakarta.el'
         }
+
+        dependencySet(group: 'org.apache.logging.log4j', version: versions.log4JVersion) {
+            entry 'log4j-api'
+            entry 'log4j-to-slf4j'
+        }
+
     }
 }
 
