@@ -122,32 +122,26 @@ module "db-v11" {
   subscription       = var.subscription
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER-V11" {
-  name = "${var.component}-POSTGRES-USER-V11"
+resource "azurerm_key_vault_secret" "POSTGRES-USER" {
+  name = "${var.component}-POSTGRES-USER"
   value = module.db-v11.user_name
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-PASS-V11" {
-  name = "${var.component}-POSTGRES-PASS-V11"
-  value = module.db-v11.postgresql_password
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-HOST-V11" {
-  name = "${var.component}-POSTGRES-HOST-V11"
+resource "azurerm_key_vault_secret" "POSTGRES-HOST" {
+  name = "${var.component}-POSTGRES-HOST"
   value = module.db-v11.host_name
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-PORT-V11" {
-  name = "${var.component}-POSTGRES-PORT-V11"
+resource "azurerm_key_vault_secret" "POSTGRES-PORT" {
+  name = "${var.component}-POSTGRES-PORT"
   value = module.db-v11.postgresql_listen_port
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-DATABASE-V11" {
-  name = "${var.component}-POSTGRES-DATABASE-V11"
+resource "azurerm_key_vault_secret" "POSTGRES-DATABASE" {
+  name = "${var.component}-POSTGRES-DATABASE"
   value = module.db-v11.postgresql_database
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
