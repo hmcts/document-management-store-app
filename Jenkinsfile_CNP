@@ -49,7 +49,7 @@ withPipeline(type , product, component) {
     disableLegacyDeployment()
     enableAksStagingDeployment()
     enableSlackNotifications('#em-dev-chat')
-//    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
+    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
 
     onMaster {
         env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
