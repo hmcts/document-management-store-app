@@ -64,7 +64,7 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
 
             Thread loadThread = new Thread(() -> {
                 try {
-                    blobStorageReadService.loadBlob(documentContentVersion, out);
+                    blobStorageReadService.loadFullBlob(documentContentVersion, out);
                     // Await end of image buffering to terminate thread.
                     latch.await();
                 } catch (InterruptedException e) {

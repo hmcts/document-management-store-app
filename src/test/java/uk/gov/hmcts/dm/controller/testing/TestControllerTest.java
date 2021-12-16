@@ -2,22 +2,16 @@ package uk.gov.hmcts.dm.controller.testing;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
-import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,16 +20,12 @@ import java.util.UUID;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobStorageException.class})
-@PowerMockIgnore({"javax.net.ssl.*", "com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
+@ExtendWith(MockitoExtension.class)
 public class TestControllerTest {
 
     private BlobStorageReadService blobStorageReadService;
-
-    private BlobStorageWriteService blobStorageWriteService;
 
     private BlobContainerClient cloudBlobContainer;
 
@@ -47,34 +37,34 @@ public class TestControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
-        blob = PowerMockito.mock(BlockBlobClient.class);
-        blobClient = PowerMockito.mock(BlobClient.class);
-        blobStorageReadService = PowerMockito.mock(BlobStorageReadService.class);
+        blobStorageReadService = Mockito.mock(BlobStorageReadService.class);
+        cloudBlobContainer = Mockito.mock(BlobContainerClient.class);
+        blobClient = Mockito.mock(BlobClient.class);
+        blob = Mockito.mock(BlockBlobClient.class);
 
-        given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
-        given(blobClient.getBlockBlobClient()).willReturn(blob);
+        when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
+        when(blobClient.getBlockBlobClient()).thenReturn(blob);
 
         testController = new TestController(blobStorageReadService, cloudBlobContainer);
     }
 
     @Test
-    public void getTrue() throws Exception {
-        BDDMockito.given(blobStorageReadService.doesBinaryExist(Mockito.any())).willReturn(true);
+    public void getTrue() {
+        when(blobStorageReadService.doesBinaryExist(any())).thenReturn(true);
         ResponseEntity<Boolean> responseEntity = testController.get(UUID.randomUUID());
-        assertTrue(responseEntity.getBody().booleanValue());
+        assertTrue(responseEntity.getBody());
     }
 
     @Test
-    public void getFalse() throws Exception {
-        BDDMockito.given(blobStorageReadService.doesBinaryExist(Mockito.any())).willReturn(false);
+    public void getFalse() {
+        when(blobStorageReadService.doesBinaryExist(any())).thenReturn(false);
         ResponseEntity<Boolean> responseEntity = testController.get(UUID.randomUUID());
-        assertFalse(responseEntity.getBody().booleanValue());
+        assertFalse(responseEntity.getBody());
     }
 
     @Test
     public void uploadCsv() throws Exception {
-        MultipartFile file = PowerMockito.mock(MultipartFile.class);
+        MultipartFile file = Mockito.mock(MultipartFile.class);
         List<MultipartFile> files = Collections.singletonList(file);
         UploadDocumentsCommand command = new UploadDocumentsCommand();
         command.setFiles(files);

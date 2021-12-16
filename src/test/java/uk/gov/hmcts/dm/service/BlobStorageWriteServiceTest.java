@@ -2,16 +2,13 @@ package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.models.BlobProperties;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -30,19 +27,17 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobProperties.class})
-@PowerMockIgnore({"javax.net.ssl.*","com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
+@ExtendWith(MockitoExtension.class)
 public class BlobStorageWriteServiceTest {
 
     private BlobStorageWriteService blobStorageWriteService;
 
+    @Mock
     private BlobContainerClient cloudBlobContainer;
 
+    @Mock
     private BlobClient blobClient;
 
     @Mock
@@ -56,9 +51,11 @@ public class BlobStorageWriteServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
-        blob = PowerMockito.mock(BlockBlobClient.class);
-        blobClient = PowerMockito.mock(BlobClient.class);
+        cloudBlobContainer = Mockito.mock(BlobContainerClient.class);
+        blobClient = Mockito.mock(BlobClient.class);
+        file = Mockito.mock(MultipartFile.class);
+        blob = Mockito.mock(BlockBlobClient.class);
+        documentContentVersionRepository = Mockito.mock(DocumentContentVersionRepository.class);
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);

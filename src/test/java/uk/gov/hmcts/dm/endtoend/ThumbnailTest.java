@@ -8,6 +8,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -163,7 +165,19 @@ public class ThumbnailTest extends End2EndTestBase {
         return new MockMultipartFile("files", file,mimeType, f);
     }
 
-    private void readFromAzureBlobStorageWillReturn(MockMultipartFile file) {
+    private void readFromAzureBlobStorageWillReturn(MockMultipartFile file) throws IOException {
+
+        Mockito.doAnswer(invocation -> {
+            HttpServletResponse r = invocation.getArgument(2);
+            try (final InputStream inputStream = file.getInputStream();
+                 final OutputStream out = r.getOutputStream()
+            ) {
+                IOUtils.copy(inputStream, out);
+                return null;
+            }
+        }).when(blobStorageReadService)
+            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
+
         Mockito.doAnswer(invocation -> {
             try (final InputStream inputStream = file.getInputStream();
                  final OutputStream out = invocation.getArgument(1)
@@ -172,6 +186,6 @@ public class ThumbnailTest extends End2EndTestBase {
                 return null;
             }
         }).when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
+            .loadFullBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(OutputStream.class));
     }
 }
