@@ -62,9 +62,9 @@ withNightlyPipeline(type, product, component) {
 //        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
 //    }
 //
-//    enableFullFunctionalTest()
-//    enableMutationTest()
-//    enableSecurityScan()
+    enableFullFunctionalTest()
+    enableMutationTest()
+    enableSecurityScan()
 
     enableSlackNotifications('#em-dev-chat')
     after('fortify-scan') {
