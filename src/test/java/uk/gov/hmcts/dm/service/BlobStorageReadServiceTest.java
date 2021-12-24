@@ -21,6 +21,8 @@ import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -64,6 +66,22 @@ public class BlobStorageReadServiceTest {
 
     @Test
     public void loadsBlob() throws IOException {
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
+        verify(blockBlobClient).download(response.getOutputStream());
+    }
+
+    @Test
+    public void loadsBlobWhileMissingRangeAttribute() throws IOException {
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
+        verify(blockBlobClient).download(response.getOutputStream());
+    }
+
+    @Test
+    public void loadsBlobWithHeaderNames() throws IOException {
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        when(request.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("Content")));
+        when(request.getHeaders("Content")).thenReturn(Collections.enumeration(Arrays.asList("ContentValue")));
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
         verify(blockBlobClient).download(response.getOutputStream());
     }
