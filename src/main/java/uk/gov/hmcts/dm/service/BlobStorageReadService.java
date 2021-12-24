@@ -4,7 +4,8 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.models.BlobRange;
 import com.azure.storage.blob.models.DownloadRetryOptions;
 import com.azure.storage.blob.specialized.BlockBlobClient;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,24 +20,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Slf4j
 @Service
 @Transactional
 public class BlobStorageReadService {
 
+    private final Logger logger = LoggerFactory.getLogger(BlobStorageReadService.class);
+
     private BlobContainerClient cloudBlobContainer;
     private static final int DEFAULT_BUFFER_SIZE = 20480; // ..bytes = 20KB.
 
-    @Autowired
     private ToggleConfiguration toggleConfiguration;
 
     @Autowired
-    public BlobStorageReadService(BlobContainerClient cloudBlobContainer) {
+    public BlobStorageReadService(BlobContainerClient cloudBlobContainer, ToggleConfiguration toggleConfiguration) {
         this.cloudBlobContainer = cloudBlobContainer;
+        this.toggleConfiguration = toggleConfiguration;
     }
 
     /**
@@ -47,14 +50,16 @@ public class BlobStorageReadService {
                          HttpServletResponse response) throws IOException {
         if (toggleConfiguration.isChunking()) {
             Enumeration<String> headerNames = request.getHeaderNames();
-            while (headerNames.hasMoreElements()) {
-                String headerName = headerNames.nextElement();
+            if (Objects.nonNull(headerNames)) {
+                while (headerNames.hasMoreElements()) {
+                    String headerName = headerNames.nextElement();
 
-                Enumeration<String> headerValues = request.getHeaders(headerName);
-                while (headerValues.hasMoreElements()) {
-                    String headerValue = headerValues.nextElement();
-                    log.debug("HeaderName : {} , Values:  , {} for docId : {} ", headerName, headerValue,
-                        documentContentVersion.getId());
+                    Enumeration<String> headerValues = request.getHeaders(headerName);
+                    while (headerValues.hasMoreElements()) {
+                        String headerValue = headerValues.nextElement();
+                        logger.debug("HeaderName : {} , Values:  , {} for docId : {} ", headerName, headerValue,
+                            documentContentVersion.getId());
+                    }
                 }
             }
             if (request.getHeader(HttpHeaders.RANGE.toLowerCase()) == null) {
@@ -68,21 +73,21 @@ public class BlobStorageReadService {
     }
 
     public void loadFullBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
-        log.debug("No Range header provided; returning entire document {}", documentContentVersion.getId());
+        logger.debug("No Range header provided; returning entire document {}", documentContentVersion.getId());
 
         blockBlobClient(documentContentVersion.getId().toString()).download(outputStream);
 
-        log.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
+        logger.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
     }
 
     private void loadPartialBlob(DocumentContentVersion documentContentVersion,
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws IOException {
 
-        log.debug("Range header provided {}", documentContentVersion.getId());
+        logger.debug("Range header provided {}", documentContentVersion.getId());
 
         String rangeHeader = request.getHeader(HttpHeaders.RANGE.toLowerCase());
-        log.debug("Range requested: {}", rangeHeader);
+        logger.debug("Range requested: {}", rangeHeader);
 
         Long length = documentContentVersion.getSize();
 
@@ -112,7 +117,7 @@ public class BlobStorageReadService {
 
         response.setStatus(HttpStatus.PARTIAL_CONTENT.value());
 
-        log.debug("Processing blob range: {}", b.toString());
+        logger.debug("Processing blob range: {}", b.toString());
         blockBlobClient(documentContentVersion.getId().toString())
             .downloadWithResponse(
                 response.getOutputStream(),

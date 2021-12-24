@@ -5,15 +5,16 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 
@@ -24,15 +25,15 @@ import java.io.IOException;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@Ignore
 @ExtendWith(MockitoExtension.class)
 public class BlobStorageReadServiceTest {
 
     private BlobStorageReadService blobStorageReadService;
+
     private DocumentContentVersion documentContentVersion;
 
     @Mock
-    private BlockBlobClient blob;
+    private BlockBlobClient blockBlobClient;
 
     @Mock
     private BlobContainerClient cloudBlobContainer;
@@ -46,33 +47,32 @@ public class BlobStorageReadServiceTest {
     @Mock
     private HttpServletResponse response;
 
+    @Mock
+    private ToggleConfiguration toggleConfiguration;
+
     @Before
     public void setUp() throws IOException {
 
-        blobStorageReadService = Mockito.mock(BlobStorageReadService.class);
-        cloudBlobContainer = Mockito.mock(BlobContainerClient.class);
-        blobClient = Mockito.mock(BlobClient.class);
-        blob = Mockito.mock(BlockBlobClient.class);
-        request = Mockito.mock(HttpServletRequest.class);
-        response = Mockito.mock(HttpServletResponse.class);
+        MockitoAnnotations.openMocks(this);
 
         when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
-        when(blobClient.getBlockBlobClient()).thenReturn(blob);
+        when(blobClient.getBlockBlobClient()).thenReturn(blockBlobClient);
 
         documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
-        blobStorageReadService = new BlobStorageReadService(cloudBlobContainer);
+        blobStorageReadService = new BlobStorageReadService(cloudBlobContainer, toggleConfiguration);
     }
 
     @Test
     public void loadsBlob() throws IOException {
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
-        verify(blob).download(response.getOutputStream());
+        verify(blockBlobClient).download(response.getOutputStream());
     }
 
     @Test(expected = InvalidRangeRequestException.class)
     public void loadsRangedBlobInvalidRangeHeaderStart() throws IOException {
 
-        when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=A-Z");
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=A-Z");
 
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
@@ -81,7 +81,8 @@ public class BlobStorageReadServiceTest {
     @Test(expected = InvalidRangeRequestException.class)
     public void loadsRangedBlobInvalidRangeHeaderStartGreaterThanEnd() throws IOException {
 
-        when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=1023-0");
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=1023-0");
 
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
@@ -90,7 +91,8 @@ public class BlobStorageReadServiceTest {
     @Test
     public void loadsRangedBlobTooLargeRangeHeader() throws IOException {
 
-        when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=0-1023");
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=0-1023");
 
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
@@ -103,7 +105,8 @@ public class BlobStorageReadServiceTest {
     @Test
     public void loadsRangedBlobInvalidRangeHeader() throws IOException {
 
-        when(request.getHeader(HttpHeaders.RANGE)).thenReturn("bytes=0-2");
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=0-2");
 
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
@@ -114,7 +117,7 @@ public class BlobStorageReadServiceTest {
 
     @Test
     public void doesBinaryExist() {
-        given(blob.exists()).willReturn(true);
+        given(blockBlobClient.exists()).willReturn(true);
         Assert.assertTrue(blobStorageReadService.doesBinaryExist(documentContentVersion.getId()));
     }
 
