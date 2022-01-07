@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -115,65 +116,65 @@ public class StoredDocumentController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<?> getBinary(@PathVariable UUID documentId, HttpServletResponse response,
-                                       @RequestHeader Map<String, String> headers,
-                                       HttpServletRequest httpServletRequest) {
-        return documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId)
-            .map(documentContentVersion -> {
+    public ResponseEntity<Void> getBinary(@PathVariable UUID documentId,
+                                          HttpServletResponse response,
+                                          @RequestHeader Map<String, String> headers,
+                                          HttpServletRequest httpServletRequest) {
+        var documentContentVersion =
+            documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(
+                    documentId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-                response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-                response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-                response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-                response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-                    format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
+        response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+        response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+            format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
-                try {
-                    if (isBlank(documentContentVersion.getContentUri())) {
-                        response.setHeader("data-source", "Postgres");
-                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
-                            documentContentVersion,
-                            response.getOutputStream());
-                    } else {
-                        response.setHeader("data-source", "contentURI");
-                        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                            documentContentVersion,
-                            response.getOutputStream());
+        try {
+            if (isBlank(documentContentVersion.getContentUri())) {
+                response.setHeader("data-source", "Postgres");
+                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
+                    documentContentVersion,
+                    response.getOutputStream());
+            } else {
+                response.setHeader("data-source", "contentURI");
+                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                    documentContentVersion,
+                    response.getOutputStream());
+            }
+
+        } catch (UncheckedIOException | IOException e) {
+            logger.info("IOException streaming response", e);
+            if (Objects.nonNull(headers)) {
+                logger.info(
+                    String.format("Headers for documentId : %s starts", documentId.toString()));
+                logger.info(
+                    String.format("ContentType for documentId : %s is : %s ", documentId,
+                        documentContentVersion.getMimeType()));
+                logger.info(
+                    String.format("Size for documentId : %s is : %s ", documentId,
+                        documentContentVersion.getSize().toString()));
+                headers.forEach((key, value) ->
+                    logger.info(String.format("documentId : %s has Request Header %s = %s",
+                        documentId, key, value)));
+                logger.info(
+                    String.format("Headers for documentId : %s ends", documentId));
+            } else {
+                logger.info(
+                    String.format("Header is null for documentId : %s ", documentId.toString()));
+                if (Objects.nonNull(httpServletRequest)) {
+                    Iterator<String> stringIterator =
+                        httpServletRequest.getHeaderNames().asIterator();
+                    while (stringIterator.hasNext()) {
+                        logger.info(String.format("HeaderNames for documentId : %s  is %s ",
+                            documentId, stringIterator.next()));
                     }
-
-                } catch (IOException e) {
-                    return ResponseEntity
-                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(e);
-                } catch (UncheckedIOException e) {
-                    if (Objects.nonNull(headers)) {
-                        logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
-                        logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
-                            documentContentVersion.getMimeType()));
-                        logger.info(String.format("Size for documentId : %s is : %s ", documentId.toString(),
-                            documentContentVersion.getSize().toString()));
-                        headers.forEach((key, value) ->
-                            logger.info(String.format("documentId : %s has Request Header %s = %s",
-                                documentId.toString(), key, value)));
-                        logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
-                    } else {
-                        logger.info(String.format("Header is null for documentId : %s ", documentId.toString()));
-                        if (Objects.nonNull(httpServletRequest)) {
-                            Iterator<String> stringIterator = httpServletRequest.getHeaderNames().asIterator();
-                            while (stringIterator.hasNext()) {
-                                logger.info(String.format("HeaderNames for documentId : %s  is %s ",
-                                    documentId.toString(), stringIterator.next()));
-                            }
-                        }
-                    }
-                    return ResponseEntity
-                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(e);
                 }
-
-                return ResponseEntity.ok().build();
-
-            })
-            .orElse(ResponseEntity.notFound().build());
+            }
+        }
+        return ResponseEntity.ok().build();
     }
+
 }
 
