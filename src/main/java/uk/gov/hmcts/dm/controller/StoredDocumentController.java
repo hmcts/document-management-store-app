@@ -116,8 +116,7 @@ public class StoredDocumentController {
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Returns contents of a file")
     })
-    public ResponseEntity<Void> getBinary(@PathVariable UUID documentId,
-                                          HttpServletResponse response,
+    public ResponseEntity<Void> getBinary(@PathVariable UUID documentId, HttpServletResponse response,
                                           @RequestHeader Map<String, String> headers,
                                           HttpServletRequest httpServletRequest) {
         var documentContentVersion =
@@ -143,38 +142,30 @@ public class StoredDocumentController {
                     documentContentVersion,
                     response.getOutputStream());
             }
-
         } catch (UncheckedIOException | IOException e) {
             logger.info("IOException streaming response", e);
             if (Objects.nonNull(headers)) {
-                logger.info(
-                    String.format("Headers for documentId : %s starts", documentId.toString()));
-                logger.info(
-                    String.format("ContentType for documentId : %s is : %s ", documentId,
+                logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
+                logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
                         documentContentVersion.getMimeType()));
-                logger.info(
-                    String.format("Size for documentId : %s is : %s ", documentId,
+                logger.info(String.format("Size for documentId : %s is : %s ", documentId.toString(),
                         documentContentVersion.getSize().toString()));
                 headers.forEach((key, value) ->
                     logger.info(String.format("documentId : %s has Request Header %s = %s",
-                        documentId, key, value)));
-                logger.info(
-                    String.format("Headers for documentId : %s ends", documentId));
+                        documentId.toString(), key, value)));
+                logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
             } else {
-                logger.info(
-                    String.format("Header is null for documentId : %s ", documentId.toString()));
+                logger.info(String.format("Header is null for documentId : %s ", documentId.toString()));
                 if (Objects.nonNull(httpServletRequest)) {
-                    Iterator<String> stringIterator =
-                        httpServletRequest.getHeaderNames().asIterator();
+                    Iterator<String> stringIterator = httpServletRequest.getHeaderNames().asIterator();
                     while (stringIterator.hasNext()) {
                         logger.info(String.format("HeaderNames for documentId : %s  is %s ",
-                            documentId, stringIterator.next()));
+                            documentId.toString(), stringIterator.next()));
                     }
                 }
             }
         }
         return ResponseEntity.ok().build();
     }
-
 }
 
