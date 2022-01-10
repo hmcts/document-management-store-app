@@ -143,7 +143,7 @@ public class StoredDocumentController {
                     response.getOutputStream());
             }
         } catch (UncheckedIOException | IOException e) {
-            logger.info("IOException streaming response", e);
+            logger.warn("IOException streaming response", e);
             if (Objects.nonNull(headers)) {
                 logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
                 logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
