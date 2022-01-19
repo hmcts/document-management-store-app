@@ -8,10 +8,10 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.16'
+    id 'uk.gov.hmcts.java' version '0.12.17'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.5.5'
-    id 'com.github.ben-manes.versions' version '0.39.0'
+    id 'com.github.ben-manes.versions' version '0.41.0'
     id 'org.sonarqube' version '3.3'
     id 'jacoco'
     id 'checkstyle'
@@ -109,7 +109,7 @@ def versions = [
     shedlock           : '4.29.0',
     springfoxSwagger   : '3.0.0',
     swagger            : '1.6.3',
-    log4JVersion       : '2.16.0'
+    log4JVersion       : '2.17.0'
 ]
 
 dependencyManagement {
@@ -120,14 +120,14 @@ dependencyManagement {
             entry 'junit-jupiter-params'
         }
 
-        dependencySet(group: 'net.bytebuddy', version: '1.12.3') {
+        dependencySet(group: 'net.bytebuddy', version: '1.12.6') {
             entry 'byte-buddy'
             entry 'byte-buddy-agent'
             entry 'byte-buddy-dep'
         }
 
         //CVE-2021-22118
-        dependencySet(group: 'org.springframework', version: '5.3.13') {
+        dependencySet(group: 'org.springframework', version: '5.3.14') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
@@ -178,8 +178,8 @@ dependencies {
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.54'
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.2'
-    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.24'
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.1.0'
+    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.25'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.2.1'
 
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
 
@@ -205,7 +205,7 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
-    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.2.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.3.Final'
 
     implementation group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
 

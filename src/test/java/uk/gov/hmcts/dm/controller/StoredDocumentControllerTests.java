@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
@@ -17,10 +16,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.service.Constants;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -192,30 +188,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
             .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testGetBinaryIoException() throws Exception {
-
-        okDocumentContentVersion.setCreatedBy("userId");
-        okDocumentContentVersion.setContentUri("something");
-
-        when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
-            Optional.of(okDocumentContentVersion)
-        );
-
-        doThrow(IOException.class)
-            .when(this.auditedDocumentContentVersionOperationsService)
-            .readDocumentContentVersionBinaryFromBlobStore(
-                Mockito.any(DocumentContentVersion.class),
-                Mockito.any(HttpServletRequest.class),
-                Mockito.any(HttpServletResponse.class));
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/binary")
-            .andExpect(status().isInternalServerError());
     }
 
     @Test
