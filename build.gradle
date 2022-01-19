@@ -8,7 +8,7 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.17'
+    id 'uk.gov.hmcts.java' version '0.12.18'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.5.5'
     id 'com.github.ben-manes.versions' version '0.41.0'
