@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.endtoend;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -11,6 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
+@Ignore
 public class PermissionTest extends End2EndTestBase {
 
     private HttpHeaders headersUser = Helper.getHeaders("user");

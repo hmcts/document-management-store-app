@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.endtoend;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
@@ -13,17 +14,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
-import static org.springframework.http.MediaType.IMAGE_GIF_VALUE;
-import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
-import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static uk.gov.hmcts.dm.endtoend.Helper.getThumbnailUrlFromResponse;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
+@Ignore
 public class ThumbnailTest extends End2EndTestBase {
 
     private final HttpHeaders headers = Helper.getHeaders();
