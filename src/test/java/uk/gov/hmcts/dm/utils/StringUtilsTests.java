@@ -27,6 +27,25 @@ public class StringUtilsTests {
     }
 
     @Test
+    public void testSanitiseUserRoles() {
+
+        String sanitised = StringUtils.sanitiseUserRoles(null);
+        Assert.assertEquals(null, sanitised);
+
+        sanitised = StringUtils.sanitiseUserRoles("±!@£$%^&*()_+}{|\"':?><~abc");
+        Assert.assertEquals("_+abc", sanitised);
+
+        sanitised = StringUtils.sanitiseUserRoles("marriage-certificate.png");
+        Assert.assertEquals("marriage-certificate.png", sanitised);
+
+        sanitised = StringUtils.sanitiseUserRoles("marriage-certificate<script>alert(1)</script>.png");
+        Assert.assertEquals("marriage-certificatescriptalert1script.png", sanitised);
+
+        sanitised = StringUtils.sanitiseUserRoles("22caseworker,caseworker-sscs01");
+        Assert.assertEquals("22caseworker,caseworker-sscs01", sanitised);
+    }
+
+    @Test
     public void convertValidLog() {
         String dangerousLogStr = "this %0d is \r an %0a apple \n .";
         String safeLogStr = "this  is  an  apple  .";
