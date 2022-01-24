@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.endtoend;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.hmcts.dm.endtoend.Helper.getThumbnailUrlFromResponse;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
-@Ignore
 public class ThumbnailTest extends End2EndTestBase {
 
     private final HttpHeaders headers = Helper.getHeaders();
