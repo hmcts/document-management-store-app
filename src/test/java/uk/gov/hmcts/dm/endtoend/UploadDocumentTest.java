@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -12,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.hmcts.dm.endtoend.Helper.getBinaryUrlFromResponse;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
-@Ignore
 public class UploadDocumentTest extends End2EndTestBase {
 
     private final HttpHeaders headers = Helper.getHeaders();
