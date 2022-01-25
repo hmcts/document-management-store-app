@@ -20,16 +20,11 @@ import java.sql.Blob;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ImageThumbnailCreatorTest {
 
@@ -137,17 +132,6 @@ public class ImageThumbnailCreatorTest {
             return;
         }
         fail();
-    }
-
-    @Test
-    public void shouldBuildThumbnailFromPostgres() throws Exception {
-        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
-        when(blob.getBinaryStream()).thenReturn(file);
-
-        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
-
-        assertThat(thumbnail, is(notNullValue()));
-        verifyNoInteractions(blobStorageReadService);
     }
 
     @Test
