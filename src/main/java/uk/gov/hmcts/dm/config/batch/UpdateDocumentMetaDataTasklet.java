@@ -80,26 +80,30 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
         StopWatch stopwatch = new StopWatch();
         stopwatch.start();
 
-        BufferedReader bufferedReader = getCsvFile(client);
-        List<DocumentUpdate> updates = bufferedReader
-            .lines()
-            .skip(1)
-            .map(line -> createDocumentUpdate(line.split(",")))
-            .collect(Collectors.toList());
-        log.info(" {} file processed ", client.getBlobName());
+        BufferedReader bufferedReader = null;
+        try {
+            bufferedReader = getCsvFile(client);
+            List<DocumentUpdate> updates = bufferedReader
+                .lines()
+                .skip(1)
+                .map(line -> createDocumentUpdate(line.split(",")))
+                .collect(Collectors.toList());
+            log.info(" {} file processed ", client.getBlobName());
 
-        documentService.updateItems(new UpdateDocumentsCommand(null, updates));
+            documentService.updateItems(new UpdateDocumentsCommand(null, updates));
 
-        log.info(" DB updated for : {}",client.getBlobName());
+            log.info(" DB updated for : {}",client.getBlobName());
 
-        stopwatch.stop();
-        long timeElapsed = stopwatch.getTime();
+            stopwatch.stop();
+            long timeElapsed = stopwatch.getTime();
 
-        log.info("Time taken to update {} documents is  : {} milliseconds from csv file with name {} ", updates.size(),
-            timeElapsed, client.getBlobName());
+            log.info("Time taken to update {} documents is  : {} milliseconds from csv file with name {} ", updates.size(),
+                timeElapsed, client.getBlobName());
 
-        client.delete();
-        IOUtils.closeQuietly(bufferedReader);
+            client.delete();
+        } finally {
+            IOUtils.closeQuietly(bufferedReader);
+        }
     }
 
     private DocumentUpdate createDocumentUpdate(String[] cells) {
