@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
@@ -18,47 +17,25 @@ import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
-import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.repository.DocumentContentRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
-import java.sql.Blob;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
+import static org.mockito.Mockito.*;
+import static uk.gov.hmcts.dm.componenttests.TestUtil.*;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
 @RunWith(SpringRunner.class)
@@ -71,9 +48,6 @@ public class StoredDocumentServiceTests {
     private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    private DocumentContentRepository documentContentRepository;
-
-    @Mock
     private ToggleConfiguration toggleConfiguration;
 
     @Mock
@@ -84,9 +58,6 @@ public class StoredDocumentServiceTests {
 
     @Mock
     private SecurityUtilService securityUtilService;
-
-    @Mock
-    private AzureStorageConfiguration azureStorageConfiguration;
 
     @Mock
     private BlobStorageDeleteService blobStorageDeleteService;
@@ -199,20 +170,7 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testSaveItems() {
-        List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TEST_FILE));
-
-        final DocumentContentVersion latestVersion = documents.get(0).getDocumentContentVersions().get(0);
-
-        assertEquals(1, documents.size());
-        assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
-        assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
-        verifyNoMoreInteractions(blobStorageWriteService);
-    }
-
-    @Test
     public void testSaveItemsToAzure() {
-        setupStorageOptions(true, false);
         List<StoredDocument> documents = storedDocumentService.saveItems(singletonList(TEST_FILE));
 
         assertEquals(1, documents.size());
@@ -225,31 +183,8 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testAddStoredDocumentVersion() {
-
-        setupStorageOptions(false, true);
-        StoredDocument storedDocument = new StoredDocument();
-
-        DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
-            storedDocument, TEST_FILE);
-
-        assertThat(storedDocument.getDocumentContentVersions().size(), equalTo(1));
-
-        assertThat(documentContentVersion, notNullValue());
-
-        final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().get(0);
-        assertThat(latestVersion.getMimeType(), equalTo(TEST_FILE.getContentType()));
-        assertThat(latestVersion.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
-
-        ArgumentCaptor<DocumentContentVersion> captor = ArgumentCaptor.forClass(DocumentContentVersion.class);
-        verify(documentContentVersionRepository).save(captor.capture());
-        assertThat(captor.getValue(), is(documentContentVersion));
-    }
-
-    @Test
     public void testAddStoredDocumentVersionWhenAzureBlobStoreEnabled() {
 
-        setupStorageOptions(true, false);
         StoredDocument storedDocument = new StoredDocument();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
@@ -278,29 +213,11 @@ public class StoredDocumentServiceTests {
     }
 
     @Test
-    public void testHardDelete() {
-        DocumentContent documentContent = new DocumentContent(mock(Blob.class));
-        StoredDocument storedDocumentWithContent = StoredDocument.builder()
-            .documentContentVersions(ImmutableList.of(DocumentContentVersion.builder()
-                .documentContent(documentContent)
-                .build()))
-            .build();
-
-        storedDocumentService.deleteDocument(storedDocumentWithContent, true);
-
-        assertThat(storedDocumentWithContent.getMostRecentDocumentContentVersion().getDocumentContent(), nullValue());
-        verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
-        verify(documentContentRepository).delete(documentContent);
-    }
-
-    @Test
     public void testHardDeleteAzureBlobEnabled() {
         StoredDocument storedDocumentWithContent = StoredDocument.builder()
             .documentContentVersions(ImmutableList.of(DocumentContentVersion.builder()
                 .build()))
             .build();
-
-        when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(true);
 
         storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
@@ -311,48 +228,21 @@ public class StoredDocumentServiceTests {
 
     @Test
     public void testHardDeleteWithManyVersions() {
-        DocumentContentVersion contentVersion = DocumentContentVersion.builder()
-            .documentContent(new DocumentContent(mock(Blob.class)))
-            .build();
 
-        DocumentContentVersion secondContentVersion = DocumentContentVersion.builder()
-            .documentContent(new DocumentContent(mock(Blob.class)))
-            .build();
-
-        StoredDocument storedDocumentWithContent = StoredDocument.builder()
-            .documentContentVersions(Arrays.asList(contentVersion, secondContentVersion))
-            .build();
+        StoredDocument storedDocumentWithContent = STORED_DOCUMENT;
+        storedDocumentService.addStoredDocumentVersion(STORED_DOCUMENT, TEST_FILE);
 
         storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
         storedDocumentWithContent.getDocumentContentVersions().forEach(documentContentVersion -> {
-            assertThat(documentContentVersion.getDocumentContent(), nullValue());
+            verify(blobStorageDeleteService).deleteDocumentContentVersion(documentContentVersion);
         });
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
-        verify(documentContentRepository, times(2)).delete(Mockito.any(DocumentContent.class));
     }
 
     @Test
-    public void testSaveItemsToBucket() {
+    public void testSaveItemsToBucketToBlobStore() {
         Folder folder = new Folder();
-
-        storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
-
-        assertThat(folder.getStoredDocuments().size(), equalTo(1));
-
-        final DocumentContentVersion latestVersionInFolder = folder.getStoredDocuments().get(0).getDocumentContentVersions().get(0);
-
-        assertThat(latestVersionInFolder.getMimeType(), equalTo(TEST_FILE.getContentType()));
-        assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
-        verify(securityUtilService).getUserId();
-        verify(folderRepository).save(folder);
-        verifyNoMoreInteractions(blobStorageWriteService);
-    }
-
-    @Test
-    public void testSaveItemsToBucketToBlobStore() throws Exception {
-        Folder folder = new Folder();
-        setupStorageOptions(true, false);
         storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
 
         assertThat(folder.getStoredDocuments().size(), equalTo(1));
@@ -494,10 +384,5 @@ public class StoredDocumentServiceTests {
 
         assertEquals("Value1", storedDocument.getMetadata().get("Key1"));
         assertEquals("Value2", storedDocument.getMetadata().get("Key2"));
-    }
-
-    private void setupStorageOptions(Boolean azureEnabled, Boolean postgresEnabled) {
-        when(azureStorageConfiguration.isAzureBlobStoreEnabled()).thenReturn(azureEnabled);
-        when(azureStorageConfiguration.isPostgresBlobStorageEnabled()).thenReturn(postgresEnabled);
     }
 }
