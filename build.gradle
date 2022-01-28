@@ -109,7 +109,8 @@ def versions = [
     shedlock           : '4.29.0',
     springfoxSwagger   : '3.0.0',
     swagger            : '1.6.3',
-    log4JVersion       : '2.17.0'
+    log4JVersion       : '2.17.0',
+    hibernate          : '5.6.3.Final'
 ]
 
 dependencyManagement {
@@ -205,7 +206,8 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
-    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.3.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: versions.hibernate
+    implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
 
     implementation group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
 
