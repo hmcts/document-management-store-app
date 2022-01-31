@@ -175,7 +175,7 @@ dependencyManagement {
 
 dependencies {
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.54'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.54'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '10.0.16'
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.3'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.25'
@@ -248,7 +248,7 @@ dependencies {
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: '5.7.1'
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.0', classifier: 'all'
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.2', classifier: 'all'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
