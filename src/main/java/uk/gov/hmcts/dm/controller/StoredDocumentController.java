@@ -36,7 +36,6 @@ import java.io.UncheckedIOException;
 import java.util.*;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @SuppressWarnings({"squid:S2629", "squid:S1452"})
 @RestController
@@ -131,17 +130,10 @@ public class StoredDocumentController {
             format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
         try {
-            if (isBlank(documentContentVersion.getContentUri())) {
-                response.setHeader("data-source", "Postgres");
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
-                    documentContentVersion,
-                    response.getOutputStream());
-            } else {
-                response.setHeader("data-source", "contentURI");
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                    documentContentVersion,
-                    response.getOutputStream());
-            }
+            response.setHeader("data-source", "contentURI");
+            auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                documentContentVersion,
+                response.getOutputStream());
         } catch (UncheckedIOException | IOException e) {
             logger.warn("IOException streaming response", e);
             if (Objects.nonNull(headers)) {

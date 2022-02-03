@@ -11,12 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentVersionCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -25,19 +20,13 @@ import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.exception.ValidationErrorException;
 import uk.gov.hmcts.dm.hateos.DocumentContentVersionHalResource;
-import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
-import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
-import uk.gov.hmcts.dm.service.Constants;
-import uk.gov.hmcts.dm.service.DocumentContentVersionService;
-import uk.gov.hmcts.dm.service.StoredDocumentService;
+import uk.gov.hmcts.dm.service.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
 @RequestMapping(
@@ -147,15 +136,10 @@ public class DocumentContentVersionController {
             String.format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
 
         try {
-            if (isBlank(documentContentVersion.getContentUri())) {
-                response.setHeader("data-source", "Postgres");
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion, response.getOutputStream());
-            } else {
-                response.setHeader("data-source", "contentURI");
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                    documentContentVersion,
-                    response.getOutputStream());
-            }
+            response.setHeader("data-source", "contentURI");
+            auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                documentContentVersion,
+                response.getOutputStream());
             response.flushBuffer();
 
         } catch (IOException e) {

@@ -8,14 +8,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.service.Constants;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -32,9 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class StoredDocumentControllerTests extends ComponentTestBase {
 
-    private final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(
-        StandardCharsets.UTF_8)));
-
     private final UUID id = UUID.randomUUID();
 
     private final DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
@@ -43,7 +38,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
-        .documentContent(documentContent).build();
+        .build();
 
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .folder(Folder.builder().id(id).build()).documentContentVersions(
@@ -64,24 +59,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .get("/documents/" + id)
             .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testGetDocumentBinary() throws Exception {
-        when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
-            .thenReturn(Optional.of(documentContentVersion));
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/binary")
-            .andExpect(status().isOk())
-            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
-            .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString()))
-            .andExpect(header().string("OriginalFileName", documentContentVersion.getOriginalDocumentName()))
-            .andExpect(header().string("data-source", "Postgres"))
-            .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION,
-                format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName())));
     }
 
     @Test
@@ -168,8 +145,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                                                                                                          "text/plain",
                                                                                                          "hello".getBytes(
                                                                                                              StandardCharsets.UTF_8)),
-                                                                                   "user",
-                                                                                   false);
+                                                                                   "user");
 
         documentContentVersion.setCreatedBy("userId");
 
