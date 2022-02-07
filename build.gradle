@@ -93,7 +93,6 @@ def versions = [
     ehcache            : '3.9.3',
     jacocoMavenPlugin  : '0.8.2',
     lombok             : '1.18.20',
-    liquibase          : '3.8.1',
     postgresql         : '42.2.20',
     jackson            : '2.12.3',
     powermock          : '1.7.4',
