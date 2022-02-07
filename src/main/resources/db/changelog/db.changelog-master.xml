@@ -19,5 +19,5 @@
     <include relativeToChangelogFile="true" file="./db.changelog-diff-RDM-4841-add_indexes.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-EM-2390-shedlock.xml"/>
     <include relativeToChangelogFile="true" file="./db.changelog-diff-EM-2542-clean-batch-tables.xml"/>
-    <include relativeToChangelogFile="true" file="./db.changelog-diff-20220128-1655.xml"/>
+
 </databaseChangeLog>

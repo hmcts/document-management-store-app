@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -54,6 +56,18 @@ public class DocumentContentVersion implements RolesAware {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 
+    /**
+     * We will use {@link DocumentContentVersion#contentUri} instead.
+     //     * @deprecated To be removed when we will migrate to AzureBlobStore.
+     */
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
+    @Getter
+    @Setter
+    @JoinColumn(name = "document_content_version_id")
+    @LazyToOne(LazyToOneOption.NO_PROXY)
+//    @Deprecated
+    private DocumentContent documentContent;
+
     @ManyToOne
     @Getter
     @Setter
@@ -90,6 +104,7 @@ public class DocumentContentVersion implements RolesAware {
                                   String createdBy,
                                   String createdByService,
                                   Date createdOn,
+                                  DocumentContent documentContent,
                                   StoredDocument storedDocument,
                                   Long size,
                                   String contentUri,
