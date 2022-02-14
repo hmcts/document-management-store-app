@@ -7,5 +7,7 @@
         <!-- springframework and springframework.data - review when upgrading boot-->
         <cve>CVE-2021-22096</cve>
         <cve>CVE-2021-22047</cve>
+        <!-- suppress CVE-2021-43797, even though io.netty should fix it -->
+        <cve>CVE-2021-43797</cve>
     </suppress>
 </suppressions>
