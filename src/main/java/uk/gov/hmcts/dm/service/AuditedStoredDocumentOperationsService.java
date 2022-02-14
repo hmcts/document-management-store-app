@@ -11,6 +11,7 @@ import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
+import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
 
 import java.util.*;
 
@@ -94,4 +95,20 @@ public class AuditedStoredDocumentOperationsService {
             auditEntryService.createAndSaveEntry(storedDocument, AuditActions.DELETED);
         }
     }
+
+    public CaseDocumentsDeletionResults deleteCaseStoredDocuments(List<StoredDocument> storedDocuments) {
+
+        int count = 0;
+        CaseDocumentsDeletionResults caseDocumentsDeletionResults = new CaseDocumentsDeletionResults();
+        caseDocumentsDeletionResults.setCaseDocumentsFound(storedDocuments.size());
+        caseDocumentsDeletionResults.setMarkedForDeletion(count);
+
+        for (StoredDocument storedDocument : storedDocuments) {
+            deleteStoredDocument(storedDocument.getId(), Constants.FALSE);
+            caseDocumentsDeletionResults.setMarkedForDeletion(++count);
+        }
+
+        return caseDocumentsDeletionResults;
+    }
+
 }
