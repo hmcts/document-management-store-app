@@ -183,6 +183,11 @@ dependencyManagement {
             entry 'netty-transport-native-epoll'
             entry 'netty-transport-native-kqueue'
             entry 'netty-transport-native-unix-common'
+            entry 'netty-codec-dns'
+            entry 'netty-codec-socks'
+            entry 'netty-handler-proxy'
+            entry 'netty-resolver-dns'
+            entry 'netty-resolver-dns-native-macos'
         }
 
         //CVE-2021-42550
