@@ -126,7 +126,7 @@ dependencyManagement {
             entry 'byte-buddy-dep'
         }
 
-        //CVE-2021-22118
+        //CVE-2021-22118, CVE-2021-22060
         dependencySet(group: 'org.springframework', version: '5.3.14') {
             entry 'spring-aop'
             entry 'spring-aspects'
@@ -170,12 +170,33 @@ dependencyManagement {
             entry 'log4j-to-slf4j'
         }
 
+        //CVE-2021-43797
+        dependencySet(group: 'io.netty', version: '4.1.74.Final') {
+            entry 'netty-buffer'
+            entry 'netty-codec'
+            entry 'netty-codec-http'
+            entry 'netty-codec-http2'
+            entry 'netty-common'
+            entry 'netty-handler'
+            entry 'netty-resolver'
+            entry 'netty-transport'
+            entry 'netty-transport-native-epoll'
+            entry 'netty-transport-native-kqueue'
+            entry 'netty-transport-native-unix-common'
+        }
+
+        //CVE-2021-42550
+        dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
+            entry 'logback-classic'
+            entry 'logback-core'
+        }
+
     }
 }
 
 dependencies {
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.54'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.54'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.58'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.58'
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.3'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.25'
@@ -191,7 +212,7 @@ dependencies {
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.8'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.14'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
