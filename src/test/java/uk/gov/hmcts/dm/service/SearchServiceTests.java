@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
+import uk.gov.hmcts.dm.commandobject.DeleteCaseDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -56,6 +57,28 @@ public class SearchServiceTests {
         searchService.findStoredDocumentsByMetadata(null, null);
     }
 
+    @Test
+    public void testSearchCaseRef() {
+
+        DeleteCaseDocumentsCommand searchCommand = new DeleteCaseDocumentsCommand("theCase");
+
+        List<StoredDocument> mockedDocuments = Arrays.asList(
+            new StoredDocument(),
+            new StoredDocument(),
+            new StoredDocument());
+
+        when(this.storedDocumentRepository.findAllByCaseRef(any())).thenReturn(mockedDocuments);
+
+        List<StoredDocument> documents = searchService.findStoredDocumentsByCaseRef(searchCommand);
+
+        Assert.assertEquals(mockedDocuments, documents);
+
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testSearchCaseRefNullArg() {
+        searchService.findStoredDocumentsByCaseRef(null);
+    }
 
     @Test
     public void testSearchByCreator() {
