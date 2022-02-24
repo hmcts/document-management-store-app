@@ -197,6 +197,11 @@ dependencyManagement {
             entry 'logback-core'
         }
 
+        //CVE-2021-22047
+        dependencySet(group: 'org.springframework.data', version: '3.6.2') {
+            entry 'spring-data-rest-core'
+            entry 'spring-data-rest-webmvc'
+        }
     }
 }
 
