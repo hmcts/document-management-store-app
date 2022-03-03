@@ -9,14 +9,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.service.Constants;
 
-import javax.sql.rowset.serial.SerialBlob;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -26,14 +24,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StoredDocumentControllerTests extends ComponentTestBase {
-
-    private final DocumentContent documentContent = new DocumentContent(new SerialBlob("some xml".getBytes(
-        StandardCharsets.UTF_8)));
 
     private final UUID id = UUID.randomUUID();
 
@@ -43,22 +39,13 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
-        .documentContent(documentContent).build();
+        .build();
 
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .folder(Folder.builder().id(id).build()).documentContentVersions(
             Stream.of(documentContentVersion)
                 .collect(Collectors.toList())
         ).build();
-
-    private final DocumentContentVersion okDocumentContentVersion = new DocumentContentVersion(new StoredDocument(),
-        new MockMultipartFile("files",
-            "filename.txt",
-            "text/plain",
-            "hello".getBytes(
-                StandardCharsets.UTF_8)),
-        "user",
-        false);
 
     public StoredDocumentControllerTests() throws Exception {
     }
@@ -158,11 +145,18 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetBinary() throws Exception {
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
+                                                                                   new MockMultipartFile("files",
+                                                                                                         "filename.txt",
+                                                                                                         "text/plain",
+                                                                                                         "hello".getBytes(
+                                                                                                             StandardCharsets.UTF_8)),
+                                                                                   "user");
 
-        okDocumentContentVersion.setCreatedBy("userId");
+        documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
-            Optional.of(okDocumentContentVersion)
+            Optional.of(documentContentVersion)
         );
 
         restActions

@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
@@ -17,20 +16,14 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Blob;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ImageThumbnailCreatorTest {
 
@@ -46,12 +39,6 @@ public class ImageThumbnailCreatorTest {
     private DocumentContentVersion contentVersion;
 
     @Mock
-    private DocumentContent documentContent;
-
-    @Mock
-    private Blob blob;
-
-    @Mock
     private BlobStorageReadService blobStorageReadService;
 
     @InjectMocks
@@ -60,9 +47,6 @@ public class ImageThumbnailCreatorTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-
-        when(contentVersion.getDocumentContent()).thenReturn(documentContent);
-        when(documentContent.getData()).thenReturn(blob);
     }
 
     @Test
@@ -141,21 +125,9 @@ public class ImageThumbnailCreatorTest {
     }
 
     @Test
-    public void shouldBuildThumbnailFromPostgres() throws Exception {
-        InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
-        when(blob.getBinaryStream()).thenReturn(file);
-
-        final InputStream thumbnail = imageResizeService.getThumbnail(contentVersion);
-
-        assertThat(thumbnail, is(notNullValue()));
-        verifyNoInteractions(blobStorageReadService);
-    }
-
-    @Test
     public void shouldBuildThumbnailFromAzure() throws IOException {
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
-        when(contentVersion.getDocumentContent()).thenReturn(null);
         assertNotNull(file);
         doAnswer(invocation -> {
             final OutputStream out = invocation.getArgument(1);

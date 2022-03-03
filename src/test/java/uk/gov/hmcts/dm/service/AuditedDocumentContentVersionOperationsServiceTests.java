@@ -16,13 +16,10 @@ import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 public class AuditedDocumentContentVersionOperationsServiceTests {
@@ -39,21 +36,8 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     @Mock
     private DocumentThumbnailService documentThumbnailService;
 
-    @Mock
-    private OutputStream outputStream;
-
     @InjectMocks
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
-
-    @Test
-    public void testReadFileContentVersionBinary() {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(documentContentVersion, outputStream);
-
-        verify(documentContentVersionService, times(1)).streamDocumentContentVersion(documentContentVersion, outputStream);
-        verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
-    }
 
     @Test
     public void testReadFileContentVersionBinaryFromBlobStore() throws IOException {

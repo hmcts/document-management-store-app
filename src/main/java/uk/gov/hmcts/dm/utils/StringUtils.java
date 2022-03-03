@@ -16,6 +16,11 @@ public class StringUtils {
                 originalDocumentName.replaceAll("[^a-zA-Z0-9\\.\\-_+ ]","");
     }
 
+    public static final String sanitiseUserRoles(String userRoles) {
+        return userRoles == null ? null :
+            userRoles.replaceAll("[^a-zA-Z0-9\\.\\-_+, ]","");
+    }
+
     public static Set<String> convertValidLogStrings(Set<String> logs) {
         return logs.stream()
             .map(StringUtils:: convertValidLogString)

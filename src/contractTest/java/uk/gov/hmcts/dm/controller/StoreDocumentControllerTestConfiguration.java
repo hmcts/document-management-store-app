@@ -28,9 +28,6 @@ public class StoreDocumentControllerTestConfiguration {
     private DocumentContentVersionRepository documentContentVersionRepository;
 
     @MockBean
-    private DocumentContentRepository documentContentRepository;
-
-    @MockBean
     private AzureStorageConfiguration azureStorageConfiguration;
 
     @MockBean

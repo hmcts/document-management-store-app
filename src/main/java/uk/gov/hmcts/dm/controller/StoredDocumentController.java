@@ -37,7 +37,6 @@ import java.io.UncheckedIOException;
 import java.util.*;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @SuppressWarnings({"squid:S2629", "squid:S1452"})
 @RestController
@@ -122,7 +121,7 @@ public class StoredDocumentController {
     })
     public ResponseEntity<Void> getBinary(@PathVariable UUID documentId, HttpServletResponse response,
                                           @RequestHeader Map<String, String> headers,
-                                          HttpServletRequest request) {
+                                          HttpServletRequest httpServletRequest) {
         var documentContentVersion =
             documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(
                     documentId)
@@ -135,23 +134,15 @@ public class StoredDocumentController {
             response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
                 format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
-
-            if (isBlank(documentContentVersion.getContentUri())) {
-                response.setHeader("data-source", "Postgres");
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinary(
-                    documentContentVersion,
-                    response.getOutputStream());
-            } else {
-                response.setHeader("data-source", "contentURI");
-                if (toggleConfiguration.isChunking()) {
-                    response.setHeader("Accept-Ranges", "bytes");
-                    response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
-                }
-                auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                    documentContentVersion,
-                    request,
-                    response);
+            response.setHeader("data-source", "contentURI");
+            if (toggleConfiguration.isChunking()) {
+                response.setHeader("Accept-Ranges", "bytes");
+                response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
             }
+            auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+                documentContentVersion,
+                httpServletRequest,
+                response);
         } catch (UncheckedIOException | IOException e) {
             if (toggleConfiguration.isChunking()) {
                 response.reset();
@@ -169,8 +160,8 @@ public class StoredDocumentController {
                 logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
             } else {
                 logger.info(String.format("Header is null for documentId : %s ", documentId.toString()));
-                if (Objects.nonNull(request)) {
-                    Iterator<String> stringIterator = request.getHeaderNames().asIterator();
+                if (Objects.nonNull(httpServletRequest)) {
+                    Iterator<String> stringIterator = httpServletRequest.getHeaderNames().asIterator();
                     while (stringIterator.hasNext()) {
                         logger.info(String.format("HeaderNames for documentId : %s  is %s ",
                             documentId.toString(), stringIterator.next()));

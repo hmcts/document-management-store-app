@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Optional;
 
 @Configuration
 public class AzureStorageConfiguration {
@@ -22,12 +21,6 @@ public class AzureStorageConfiguration {
 
     @Value("${azure.storage.blob-container-reference}")
     private String containerReference;
-
-    @Value("${azure.storage.enabled}")
-    private Boolean azureBlobStorageEnabled;
-
-    @Value("${postgres.storage.enabled}")
-    private Boolean postgresStorageEnabled;
 
     private static final Logger log = LoggerFactory.getLogger(AzureStorageConfiguration.class);
 
@@ -53,14 +46,6 @@ public class AzureStorageConfiguration {
         } catch (BlobStorageException e) {
             return client;
         }
-    }
-
-    public Boolean isAzureBlobStoreEnabled() {
-        return Optional.ofNullable(azureBlobStorageEnabled).orElse(false);
-    }
-
-    public Boolean isPostgresBlobStorageEnabled() {
-        return Optional.ofNullable(postgresStorageEnabled).orElse(true);
     }
 
 }

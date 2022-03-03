@@ -6,19 +6,11 @@ import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.sql.SQLException;
+import java.io.*;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailCreator {
 
@@ -33,13 +25,7 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
     @Override
     public InputStream getThumbnail(DocumentContentVersion documentContentVersion) {
         try {
-            BufferedImage bufferedImage;
-            if (isBlank(documentContentVersion.getContentUri())) {
-                bufferedImage = getImgFromPostgres(documentContentVersion);
-            } else {
-                bufferedImage = getImgFromAzureBlobStore(documentContentVersion);
-            }
-
+            BufferedImage bufferedImage = getImgFromAzureBlobStore(documentContentVersion);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(bufferedImage, ThumbnailFormats.JPG.toString().toLowerCase(Locale.UK), os);
             return new ByteArrayInputStream(os.toByteArray());
@@ -49,11 +35,6 @@ public abstract class AbstractFileSpecificThumbnailCreator implements ThumbnailC
     }
 
     abstract BufferedImage getImg(InputStream inputStream);
-
-    private BufferedImage getImgFromPostgres(DocumentContentVersion documentContentVersion) throws SQLException {
-        InputStream inputStream = documentContentVersion.getDocumentContent().getData().getBinaryStream();
-        return getImg(inputStream);
-    }
 
     private BufferedImage getImgFromAzureBlobStore(DocumentContentVersion documentContentVersion) throws IOException {
         // Pipe blob store output into thumbnail creator input

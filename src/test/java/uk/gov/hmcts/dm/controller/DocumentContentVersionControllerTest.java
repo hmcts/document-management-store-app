@@ -8,16 +8,12 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.Constants;
 
-import javax.sql.rowset.serial.SerialBlob;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,22 +39,13 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
         .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
-        .documentContent(new DocumentContent(serialBlob())).build();
+        .build();
 
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .folder(Folder.builder().id(id).build()).documentContentVersions(
             Stream.of(documentContentVersion)
                 .collect(Collectors.toList())
         ).build();
-
-    private static SerialBlob serialBlob() {
-        try {
-            return new SerialBlob("some xml".getBytes(StandardCharsets.UTF_8));
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     @Test
     public void testAddDocumentVersion() throws Exception {
@@ -130,23 +117,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
             .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id)
             .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testGetDocumentVersionBinary() throws Exception {
-        when(this.documentContentVersionService.findById(id))
-            .thenReturn(Optional.of(documentContentVersion));
-
-        restActions
-            .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/versions/" + id + "/binary")
-            .andExpect(status().isOk())
-            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/plain"))
-            .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, "1"))
-            .andExpect(header().string("OriginalFileName", "filename.txt"))
-            .andExpect(header().string("data-source", "Postgres"))
-            .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "fileName=\"filename.txt\""));
     }
 
     @Test

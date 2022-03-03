@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.UUID;
 
 @Service
@@ -32,13 +31,6 @@ public class AuditedDocumentContentVersionOperationsService {
 
     @Autowired
     private AuditEntryService auditEntryService;
-
-    @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
-    public void readDocumentContentVersionBinary(@NotNull DocumentContentVersion documentContentVersion,
-                                                 @NotNull OutputStream outputStream) {
-        documentContentVersionService.streamDocumentContentVersion(documentContentVersion, outputStream);
-        auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
-    }
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
     public void readDocumentContentVersionBinaryFromBlobStore(DocumentContentVersion documentContentVersion,

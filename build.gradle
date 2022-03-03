@@ -8,10 +8,10 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.17'
+    id 'uk.gov.hmcts.java' version '0.12.18'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.5.5'
-    id 'com.github.ben-manes.versions' version '0.41.0'
+    id 'com.github.ben-manes.versions' version '0.42.0'
     id 'org.sonarqube' version '3.3'
     id 'jacoco'
     id 'checkstyle'
@@ -93,7 +93,6 @@ def versions = [
     ehcache            : '3.9.3',
     jacocoMavenPlugin  : '0.8.2',
     lombok             : '1.18.20',
-    liquibase          : '3.8.1',
     postgresql         : '42.2.20',
     jackson            : '2.12.3',
     powermock          : '1.7.4',
@@ -109,7 +108,9 @@ def versions = [
     shedlock           : '4.29.0',
     springfoxSwagger   : '3.0.0',
     swagger            : '1.6.3',
-    log4JVersion       : '2.17.0'
+    log4JVersion       : '2.17.0',
+    hibernate          : '5.6.3.Final',
+    tomcat             : '9.0.58'
 ]
 
 dependencyManagement {
@@ -126,8 +127,8 @@ dependencyManagement {
             entry 'byte-buddy-dep'
         }
 
-        //CVE-2021-22118
-        dependencySet(group: 'org.springframework', version: '5.3.14') {
+        //CVE-2021-22118, CVE-2021-22060
+        dependencySet(group: 'org.springframework', version: '5.3.15') {
             entry 'spring-aop'
             entry 'spring-aspects'
             entry 'spring-beans'
@@ -153,7 +154,7 @@ dependencyManagement {
         }
 
         //CVE-2021-22119
-        dependencySet(group: 'org.springframework.security', version: '5.5.2') {
+        dependencySet(group: 'org.springframework.security', version: '5.6.1') {
             entry 'spring-security-core'
             entry 'spring-security-config'
             entry 'spring-security-crypto'
@@ -170,14 +171,45 @@ dependencyManagement {
             entry 'log4j-to-slf4j'
         }
 
+        //CVE-2021-43797
+        dependencySet(group: 'io.netty', version: '4.1.74.Final') {
+            entry 'netty-buffer'
+            entry 'netty-codec'
+            entry 'netty-codec-http'
+            entry 'netty-codec-http2'
+            entry 'netty-common'
+            entry 'netty-handler'
+            entry 'netty-resolver'
+            entry 'netty-transport'
+            entry 'netty-transport-native-epoll'
+            entry 'netty-transport-native-kqueue'
+            entry 'netty-transport-native-unix-common'
+            entry 'netty-codec-dns'
+            entry 'netty-codec-socks'
+            entry 'netty-handler-proxy'
+            entry 'netty-resolver-dns'
+            entry 'netty-resolver-dns-native-macos'
+        }
+
+        //CVE-2021-42550
+        dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
+            entry 'logback-classic'
+            entry 'logback-core'
+        }
+
+        //CVE-2021-22047
+        dependencySet(group: 'org.springframework.data', version: '3.6.2') {
+            entry 'spring-data-rest-core'
+            entry 'spring-data-rest-webmvc'
+        }
     }
 }
 
 dependencies {
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '9.0.54'
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: '9.0.54'
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: versions.tomcat
+    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: versions.tomcat
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.2'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.3'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.25'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.2.1'
 
@@ -191,7 +223,7 @@ dependencies {
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.8'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.14'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
@@ -205,7 +237,8 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
-    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.6.3.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: versions.hibernate
+    implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
 
     implementation group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
 
@@ -248,7 +281,7 @@ dependencies {
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: '5.7.1'
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.0', classifier: 'all'
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.2', classifier: 'all'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
