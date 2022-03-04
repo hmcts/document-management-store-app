@@ -87,5 +87,7 @@
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_PATCH":"ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions_POST":"ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId?permanent=false_DELETE":"ignore" ,
-    "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId_GET":"ignore"
+    "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId_GET":"ignore",
+    "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/thumbnail_GET": "ignore",
+    "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/thumbnail_GET": "ignore"
 }
