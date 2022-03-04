@@ -161,9 +161,9 @@ dm:
     whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv,.mp3,.mp4}
   mediafile:
     whitelist: ${DM_MEDIAFILE_WHITELIST:audio/mpeg,video/mp4}
-    sizelimit: ${MAX_MEDIA_FILE_SIZE:500}
-  nonmediafile:
-    sizelimit: ${MAX_NON_MEDIA_FILE_SIZE:1024}
+#    sizelimit: ${MAX_MEDIA_FILE_SIZE:500}
+#  nonmediafile:
+#    sizelimit: ${MAX_NON_MEDIA_FILE_SIZE:1024}
 
 thumbnail:
     imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
