@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
@@ -36,9 +35,6 @@ public class PdfThumbnailCreatorTest {
     private DocumentContentVersion contentVersion;
 
     @Mock
-    private DocumentContent documentContent;
-
-    @Mock
     private Blob blob;
 
     @Mock
@@ -50,9 +46,6 @@ public class PdfThumbnailCreatorTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-
-        when(contentVersion.getDocumentContent()).thenReturn(documentContent);
-        when(documentContent.getData()).thenReturn(blob);
     }
 
     @Test
@@ -101,7 +94,6 @@ public class PdfThumbnailCreatorTest {
     @Test
     public void shouldBuildThumbnailFromAzure() {
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
-        when(contentVersion.getDocumentContent()).thenReturn(null);
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE);
         assertNotNull(file);
         doAnswer(invocation -> {

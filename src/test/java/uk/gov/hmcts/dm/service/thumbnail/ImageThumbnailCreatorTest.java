@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import uk.gov.hmcts.dm.domain.DocumentContent;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
@@ -16,7 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Blob;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -40,12 +38,6 @@ public class ImageThumbnailCreatorTest {
     private DocumentContentVersion contentVersion;
 
     @Mock
-    private DocumentContent documentContent;
-
-    @Mock
-    private Blob blob;
-
-    @Mock
     private BlobStorageReadService blobStorageReadService;
 
     @InjectMocks
@@ -54,9 +46,6 @@ public class ImageThumbnailCreatorTest {
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-
-        when(contentVersion.getDocumentContent()).thenReturn(documentContent);
-        when(documentContent.getData()).thenReturn(blob);
     }
 
     @Test
@@ -138,7 +127,6 @@ public class ImageThumbnailCreatorTest {
     public void shouldBuildThumbnailFromAzure() {
         InputStream file = getClass().getClassLoader().getResourceAsStream(EXAMPLE_JPG_FILE);
         when(contentVersion.getContentUri()).thenReturn(CONTENT_URI);
-        when(contentVersion.getDocumentContent()).thenReturn(null);
         assertNotNull(file);
         doAnswer(invocation -> {
             final OutputStream out = invocation.getArgument(1);

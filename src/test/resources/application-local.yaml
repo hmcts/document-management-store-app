@@ -17,10 +17,6 @@ azure:
   storage:
     enabled: false
 
-postgres:
-  storage:
-    enabled: true
-
 logging:
   level:
     org.springframework.web: DEBUG

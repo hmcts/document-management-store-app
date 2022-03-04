@@ -94,10 +94,6 @@ azure:
       enabled: true
       metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
 
-postgres:
-  storage:
-    enabled: false
-
 app-insights:
   dev-mode: off
   request-component: on
