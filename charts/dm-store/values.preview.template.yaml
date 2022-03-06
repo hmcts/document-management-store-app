@@ -31,3 +31,9 @@ java:
     enabled: true
 blobstorage:
   enabled: true
+  resourceGroup: dm-store-aks
+  teamName: "EM"
+  location: uksouth
+  setup:
+    containers:
+      - dm-docstore
