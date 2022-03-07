@@ -192,7 +192,7 @@ dependencyManagement {
         }
 
         //CVE-2021-42550
-        dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
+        dependencySet(group: 'ch.qos.logback', version: '1.2.11') {
             entry 'logback-classic'
             entry 'logback-core'
         }
@@ -422,8 +422,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
 
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
-
-    failFast = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
