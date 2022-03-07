@@ -144,7 +144,7 @@ dependencyManagement {
         }
 
         // Fix for migratePostgresDatabase task failure
-        dependencySet(group: 'org.liquibase', version: '3.8.2') {
+        dependencySet(group: 'org.liquibase', version: '4.8.0') {
             entry 'liquibase-core'
         }
 
@@ -422,8 +422,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
 
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
-
-    failFast = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
