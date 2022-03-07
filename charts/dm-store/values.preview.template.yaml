@@ -2,16 +2,22 @@ java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 60
-#  secrets:
-#    BLOB_ACCOUNT_NAME:
-#      secretRef: storage-secret-{{ .Release.Name }}
-#      key: storageAccountName
-#    BLOB_ACCESS_KEY:
-#      secretRef: storage-secret-{{ .Release.Name }}
-#      key: accessKey
-#    BLOB_SERVICE_ENDPOINT:
-#      secretRef: storage-secret-{{ .Release.Name }}
-#      key: primaryBlobServiceEndPoint
+  secrets:
+    BLOB_ACCOUNT_NAME:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: storageAccountName
+    BLOB_ACCESS_KEY:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: accessKey
+    BLOB_SERVICE_ENDPOINT:
+      secretRef: storage-secret-{{ .Release.Name }}
+      key: primaryBlobServiceEndPoint
+  keyVaults:
+    dm:
+      resourceGroup: dm-shared
+      secrets:
+        - name: RpaAppInsightsInstrumentationKey
+          alias: azure.application-insights.instrumentation-key
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
@@ -23,11 +29,11 @@ java:
     REFORM_ENVIRONMENT: preview
     PACKAGES_ENVIRONMENT: preview
     ENABLE_DB_MIGRATE: 'true'
-#    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(BLOB_ACCOUNT_NAME);AccountKey=$(BLOB_ACCESS_KEY);EndpointSuffix=core.windows.net"
+    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(BLOB_ACCOUNT_NAME);AccountKey=$(BLOB_ACCESS_KEY);EndpointSuffix=core.windows.net"
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 1000
     ENABLE_METADATA_MIGRATION: 'false'
-#    STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
+    STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
   postgresql:
     enabled: true
-#blobstorage:
-#  enabled: true
+blobstorage:
+  enabled: true
