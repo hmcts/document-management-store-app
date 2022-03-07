@@ -14,6 +14,12 @@ java:
     BLOB_SERVICE_ENDPOINT:
       secretRef: storage-secret-{{ .Release.Name }}
       key: primaryBlobServiceEndPoint
+  keyVaults:
+    dm: # Need to override only to get rid of the BlobStorage URL/details mapping.
+      resourceGroup: dm-shared
+      secrets:
+        - name: RpaAppInsightsInstrumentationKey
+          alias: azure.application-insights.instrumentation-key
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
