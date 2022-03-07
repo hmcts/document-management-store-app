@@ -423,8 +423,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
-    failFast = true
-
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
     //finalizedBy aggregate
