@@ -10,10 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
@@ -28,27 +25,25 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({BlobContainerClient.class, BlockBlobClient.class, BlobStorageException.class})
-@PowerMockIgnore({"javax.net.ssl.*", "com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
+@RunWith(SpringRunner.class)
 public class BlobStorageDeleteServiceTest {
 
     private BlobStorageDeleteService blobStorageDeleteService;
 
+    @Mock
     private BlobContainerClient cloudBlobContainer;
 
+    @Mock
     private BlobClient blobClient;
 
     @Mock
     private BlockBlobClient blob;
+
     @Mock
     private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Before
     public void setUp() {
-        cloudBlobContainer = PowerMockito.mock(BlobContainerClient.class);
-        blob = PowerMockito.mock(BlockBlobClient.class);
-        blobClient = PowerMockito.mock(BlobClient.class);
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
@@ -57,7 +52,7 @@ public class BlobStorageDeleteServiceTest {
     }
 
     @Test
-    public void deleteDocumentContentVersion() throws Exception {
+    public void deleteDocumentContentVersion() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
@@ -67,7 +62,7 @@ public class BlobStorageDeleteServiceTest {
     }
 
     @Test
-    public void deleteDocumentContentVersionDoesNotExist() throws Exception {
+    public void deleteDocumentContentVersionDoesNotExist() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         documentContentVersion.setContentUri("x");
@@ -83,7 +78,7 @@ public class BlobStorageDeleteServiceTest {
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         documentContentVersion.setContentUri("x");
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(PowerMockito.mock(BlobStorageException.class));
+            .thenThrow(BlobStorageException.class);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         assertNotNull(documentContentVersion.getContentUri());
     }

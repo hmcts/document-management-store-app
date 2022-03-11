@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
-import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
 import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.SearchService;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
@@ -30,7 +29,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(
         path = "/documents")
-@Api("Search Documents")
+@Tag(name = "StoredDocumentSearch Service", description = "Endpoint for Searching Documents")
 @ConditionalOnProperty("toggle.metadatasearchendpoint")
 public class StoredDocumentSearchController {
 
@@ -46,10 +45,10 @@ public class StoredDocumentSearchController {
     private SecurityUtilService securityUtilService;
 
     @PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation("Search stored documents using metadata.")
+    @Operation(summary = "Search stored documents using metadata.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns search results", response = StoredDocumentHalResourceCollection.class),
-        @ApiResponse(code = 400, message = "Error when search criteria not specified")
+        @ApiResponse(responseCode = "200", description = "Returns search results"),
+        @ApiResponse(responseCode = "400", description = "Error when search criteria not specified")
     })
     public ResponseEntity<Object> search(
         @Valid @RequestBody MetadataSearchCommand metadataSearchCommand,
@@ -66,10 +65,10 @@ public class StoredDocumentSearchController {
 
 
     @PostMapping(value = "/owned")
-    @ApiOperation("Search stored documents by ownership.")
+    @Operation(summary = "Search stored documents by ownership.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Returns search results", response = StoredDocumentHalResourceCollection.class),
-            @ApiResponse(code = 400, message = "Error when search criteria not specified")
+            @ApiResponse(responseCode = "200", description = "Returns search results"),
+            @ApiResponse(responseCode = "400", description = "Error when search criteria not specified")
     })
     public ResponseEntity<Object> searchOwned(
             Pageable pageable,

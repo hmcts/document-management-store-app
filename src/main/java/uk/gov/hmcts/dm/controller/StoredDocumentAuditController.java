@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/documents")
-@Api("Endpoint for Audit entities.")
+@Tag(name = "StoredDocumentAudit Service", description = "Endpoint for Audit entities")
 public class StoredDocumentAuditController {
 
     @Autowired
@@ -33,9 +33,9 @@ public class StoredDocumentAuditController {
     private StoredDocumentRepository storedDocumentRepository;
 
     @GetMapping("{documentId}/auditEntries")
-    @ApiOperation("Retrieves audits related to a Stored Document.")
+    @Operation(summary = "Retrieves audits related to a Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = StoredDocumentAuditEntryHalResource.class)
+        @ApiResponse(responseCode = "200", description = "Success")
     })
     public ResponseEntity<CollectionModel<StoredDocumentAuditEntryHalResource>> findAudits(@PathVariable UUID documentId) {
         return storedDocumentRepository
