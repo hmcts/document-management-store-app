@@ -36,7 +36,6 @@ spring:
           batch_versioned_data: true
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true # To resolve PACT PR build issue
 
   liquibase:
     enabled: ${ENABLE_DB_MIGRATE:true}
