@@ -10,8 +10,8 @@ public class SwaggerConfiguration {
     public OpenAPI api() {
         return new OpenAPI()
             .info(
-                new Info().title("Document Assembly API")
-                    .description("download, upload")
+                new Info().title("Document Management Store API")
+                    .description("API to upload and download Documents, retrieve metadata associated with the Documents.")
                     .version("2-beta")
             );
     }
