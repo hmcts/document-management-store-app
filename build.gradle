@@ -197,6 +197,11 @@ dependencyManagement {
             entry 'logback-core'
         }
 
+        //CVE-2021-22047
+        dependencySet(group: 'org.springframework.data', version: '3.6.2') {
+            entry 'spring-data-rest-core'
+            entry 'spring-data-rest-webmvc'
+        }
     }
 }
 
@@ -204,7 +209,7 @@ dependencies {
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: versions.tomcat
     implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: versions.tomcat
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.14.3'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.15.0'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.25'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.2.1'
 
@@ -417,8 +422,6 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
 
     setTestClassesDirs(sourceSets.functionalTest.output.classesDirs)
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
-
-    failFast = true
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 
