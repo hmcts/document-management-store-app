@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-
+    <suppress>
+        <!--Need to resolve Liquibase issue before updating the library-->
+        <cve>CVE-2022-0839</cve>
+    </suppress>
 </suppressions>
