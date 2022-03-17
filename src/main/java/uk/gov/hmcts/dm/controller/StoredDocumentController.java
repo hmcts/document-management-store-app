@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
@@ -33,14 +39,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 import static java.lang.String.format;
 
 @SuppressWarnings({"squid:S2629", "squid:S1452"})
 @RestController
 @RequestMapping(path = "/documents")
-@Api("Endpoint for Stored Document Management")
+@Tag(name = "StoredDocument Service", description = "Endpoint for Stored Document Management")
 public class StoredDocumentController {
 
     private final Logger logger = LoggerFactory.getLogger(StoredDocumentController.class);
@@ -71,9 +81,9 @@ public class StoredDocumentController {
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation("Creates a list of Stored Documents by uploading a list of binary/text files.")
+    @Operation(summary = "Creates a list of Stored Documents by uploading a list of binary/text files.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = StoredDocumentHalResourceCollection.class)
+        @ApiResponse(responseCode = "200", description = "Success")
     })
     public ResponseEntity<Object> createFrom(
             @Valid UploadDocumentsCommand uploadDocumentsCommand,
@@ -92,9 +102,9 @@ public class StoredDocumentController {
     }
 
     @GetMapping(value = "{documentId}")
-    @ApiOperation("Retrieves JSON representation of a Stored Document.")
+    @Operation(summary = "Retrieves JSON representation of a Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = StoredDocumentHalResource.class)
+        @ApiResponse(responseCode = "200", description = "Success")
     })
     public ResponseEntity<Object> getMetaData(@PathVariable UUID documentId) {
 
@@ -111,9 +121,9 @@ public class StoredDocumentController {
     }
 
     @GetMapping(value = "{documentId}/binary")
-    @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
+    @Operation(summary = "Streams contents of the most recent Document Content Version associated with the Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns contents of a file")
+        @ApiResponse(responseCode = "200", description = "Returns contents of a file")
     })
     public ResponseEntity<Void> getBinary(@PathVariable UUID documentId, HttpServletResponse response,
                                           @RequestHeader Map<String, String> headers,

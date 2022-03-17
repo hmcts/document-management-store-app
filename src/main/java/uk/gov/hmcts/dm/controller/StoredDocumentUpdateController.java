@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ import static java.util.AbstractMap.SimpleEntry;
 @RestController
 @RequestMapping(
     path = "/documents")
-@Api("Endpoint for Update of Documents")
+@Tag(name = "StoredDocumentUpdate Service", description = "Endpoint for Updating Documents")
 public class StoredDocumentUpdateController {
 
     @InitBinder
@@ -45,9 +45,9 @@ public class StoredDocumentUpdateController {
 
     @PatchMapping(value = "/{documentId}",
         consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation("Updates document instance (ex. ttl)")
+    @Operation(summary = "Updates document instance (ex. ttl)")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns representation of the new state",  response = StoredDocumentHalResource.class)
+        @ApiResponse(responseCode = "200", description = "Returns representation of the new state")
     })
     @Transactional
     public ResponseEntity<Object> updateDocument(@PathVariable UUID documentId,
@@ -63,10 +63,10 @@ public class StoredDocumentUpdateController {
     }
 
     @PatchMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ApiOperation("Bulk update of document TTL and metadata")
+    @Operation(summary = "Bulk update of document TTL and metadata")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Update completed",  response = StoredDocumentHalResource.class),
-        @ApiResponse(code = 400, message = "Bad request")
+        @ApiResponse(responseCode = "200", description = "Update completed"),
+        @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @Transactional
     public ResponseEntity<Object> updateDocuments(@RequestBody UpdateDocumentsCommand updateDocumentsCommand) {
