@@ -113,7 +113,7 @@ dependencyManagement {
     dependencies {
 
         // Fix for migratePostgresDatabase task failure
-        dependencySet(group: 'org.liquibase', version: '3.8.2') {
+        dependencySet(group: 'org.liquibase', version: '4.9.0') {
             entry 'liquibase-core'
         }
 
