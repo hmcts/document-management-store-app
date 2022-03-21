@@ -10,7 +10,7 @@ plugins {
     id 'groovy'
     id 'uk.gov.hmcts.java' version '0.12.18'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '2.5.5'
+    id 'org.springframework.boot' version '2.6.4'
     id 'com.github.ben-manes.versions' version '0.42.0'
     id 'org.sonarqube' version '3.3'
     id 'jacoco'
@@ -92,10 +92,9 @@ repositories {
 def versions = [
     ehcache            : '3.9.3',
     jacocoMavenPlugin  : '0.8.2',
-    lombok             : '1.18.20',
+    lombok             : '1.18.22',
     postgresql         : '42.2.20',
-    jackson            : '2.12.3',
-    powermock          : '1.7.4',
+    jackson            : '2.13.2',
     serenity           : '2.6.0',
     serenityreporter   : '2.6.0',
     serenityRestAssured: '2.6.0',
@@ -105,43 +104,13 @@ def versions = [
     sonarPitest        : '0.5',
     pact_version       : '4.1.7',
     emTestHelper       : '1.21.2',
-    shedlock           : '4.29.0',
-    springfoxSwagger   : '3.0.0',
-    swagger            : '1.6.3',
-    log4JVersion       : '2.17.0',
+    shedlock           : '4.33.0',
     hibernate          : '5.6.3.Final',
-    tomcat             : '9.0.58'
+    jupiter            : '5.8.2'
 ]
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.junit.jupiter', version: '5.7.1') {
-            entry 'junit-jupiter'
-            entry 'junit-jupiter-api'
-            entry 'junit-jupiter-params'
-        }
-
-        dependencySet(group: 'net.bytebuddy', version: '1.12.6') {
-            entry 'byte-buddy'
-            entry 'byte-buddy-agent'
-            entry 'byte-buddy-dep'
-        }
-
-        //CVE-2021-22118, CVE-2021-22060
-        dependencySet(group: 'org.springframework', version: '5.3.15') {
-            entry 'spring-aop'
-            entry 'spring-aspects'
-            entry 'spring-beans'
-            entry 'spring-context'
-            entry 'spring-core'
-            entry 'spring-expression'
-            entry 'spring-jcl'
-            entry 'spring-jdbc'
-            entry 'spring-orm'
-            entry 'spring-tx'
-            entry 'spring-web'
-            entry 'spring-webmvc'
-        }
 
         // Fix for migratePostgresDatabase task failure
         dependencySet(group: 'org.liquibase', version: '3.8.2') {
@@ -153,22 +122,9 @@ dependencyManagement {
             entry 'json-smart'
         }
 
-        //CVE-2021-22119
-        dependencySet(group: 'org.springframework.security', version: '5.6.1') {
-            entry 'spring-security-core'
-            entry 'spring-security-config'
-            entry 'spring-security-crypto'
-            entry 'spring-security-web'
-        }
-
         //CVE-2021-28170
         dependencySet(group: 'org.glassfish', version: '4.0.2') {
             entry 'jakarta.el'
-        }
-
-        dependencySet(group: 'org.apache.logging.log4j', version: versions.log4JVersion) {
-            entry 'log4j-api'
-            entry 'log4j-to-slf4j'
         }
 
         //CVE-2021-43797
@@ -191,12 +147,6 @@ dependencyManagement {
             entry 'netty-resolver-dns-native-macos'
         }
 
-        //CVE-2021-42550
-        dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
-            entry 'logback-classic'
-            entry 'logback-core'
-        }
-
         //CVE-2021-22047
         dependencySet(group: 'org.springframework.data', version: '3.6.2') {
             entry 'spring-data-rest-core'
@@ -206,12 +156,10 @@ dependencyManagement {
 }
 
 dependencies {
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: versions.tomcat
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-websocket', version: versions.tomcat
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.15.0'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.25'
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.2.1'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.3.0'
 
     implementation group: 'com.google.guava', name: 'guava', version: '31.0.1-jre'
 
@@ -242,9 +190,6 @@ dependencies {
 
     implementation group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
 
-    implementation group: 'io.swagger', name: 'swagger-core', version: versions.swagger
-    implementation group: 'io.swagger', name: 'swagger-annotations', version: versions.swagger
-
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
@@ -258,27 +203,26 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.0.4'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.1'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
     }
 
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.5.0'
-
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
+    testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
-    testImplementation group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.9'
-    testImplementation group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.9'
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '3.0.1'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
-
+    testImplementation 'org.mockito:mockito-inline:4.4.0'
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
     testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
-    testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: '5.7.1'
+    testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: versions.jupiter
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.2', classifier: 'all'
@@ -288,12 +232,12 @@ dependencies {
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.1'
-    contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version :'5.7.1'
+    contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
+    contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version : versions.jupiter
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
-    implementation group: 'io.springfox', name: 'springfox-boot-starter', version: versions.springfoxSwagger
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.6'
 }
 
 dependencyCheck {

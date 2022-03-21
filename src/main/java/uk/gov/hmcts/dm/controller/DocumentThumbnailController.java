@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.Resource;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(
     path = "/documents")
-@Api("Endpoint for Stored Document Thumbnails")
+@Tag(name = "DocumentThumbnail Service", description = "Endpoint for Stored Document Thumbnails")
 @ConditionalOnProperty("toggle.thumbnail")
 public class DocumentThumbnailController {
 
@@ -33,9 +33,9 @@ public class DocumentThumbnailController {
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @GetMapping(value = "{documentId}/thumbnail")
-    @ApiOperation("Streams contents of the most recent Document Content Version associated with the Stored Document.")
+    @Operation(summary = "Streams contents of the most recent Document Content Version associated with the Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns thumbnail of a file")
+        @ApiResponse(responseCode = "200", description = "Returns thumbnail of a file")
     })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID documentId) {
@@ -50,9 +50,9 @@ public class DocumentThumbnailController {
 
 
     @GetMapping(value = "{documentId}/versions/{versionId}/thumbnail")
-    @ApiOperation("Streams a specific version of the content of a Stored Document.")
+    @Operation(summary = "Streams a specific version of the content of a Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns contents of a document version")
+        @ApiResponse(responseCode = "200", description = "Returns contents of a document version")
     })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(

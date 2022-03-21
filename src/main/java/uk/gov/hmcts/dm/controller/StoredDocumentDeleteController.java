@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,7 +31,7 @@ import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsCondi
 @Slf4j
 @RequestMapping(
     path = "/documents/")
-@Api("Endpoint for Deletion of Documents")
+@Tag(name = "StoredDocumentDelete Service", description = "Endpoint for Deletion of Documents")
 @ConditionalOnProperty("toggle.deleteenabled")
 public class StoredDocumentDeleteController {
 
@@ -42,9 +42,9 @@ public class StoredDocumentDeleteController {
     private SearchService searchService;
 
     @DeleteMapping(value = "{documentId}")
-    @ApiOperation("Deletes a Stored Document.")
+    @Operation(summary = "Deletes a Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 204, message = "No Content returned"),
+        @ApiResponse(responseCode = "204", description = "No Content returned"),
     })
     public ResponseEntity<Object> deleteDocument(@PathVariable
                                                         UUID documentId,
@@ -58,20 +58,15 @@ public class StoredDocumentDeleteController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @ApiOperation(
-        value = "Marks case documents as soft deleted.",
-        notes = "This operation marks documents related to a specific case as soft deleted"
-    )
+    @Operation(
+        summary = "Marks case documents as soft deleted.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200,
-            message = "Case documents deletion results",
-            response = CaseDocumentsDeletionResults.class),
-        @ApiResponse(code = 400,
-            message = "Bad Request",
-            response = CaseDocumentsDeletionResults.class),
-        @ApiResponse(code = 403,
-            message = "Forbidden",
-            response = CaseDocumentsDeletionResults.class)
+        @ApiResponse(responseCode = "200",
+            description = "Case documents deletion results"),
+        @ApiResponse(responseCode = "400",
+            description = "Bad Request"),
+        @ApiResponse(responseCode = "403",
+            description = "Forbidden")
     })
     @PostMapping(
         path = "/delete",
