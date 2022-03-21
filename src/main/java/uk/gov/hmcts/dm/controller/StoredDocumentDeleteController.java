@@ -24,7 +24,6 @@ import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsAreNotEmpty;
 import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsConditions;
 
@@ -72,9 +71,6 @@ public class StoredDocumentDeleteController {
             response = CaseDocumentsDeletionResults.class),
         @ApiResponse(code = 403,
             message = "Forbidden",
-            response = CaseDocumentsDeletionResults.class),
-        @ApiResponse(code = 500,
-            message = "Internal Server Error",
             response = CaseDocumentsDeletionResults.class)
     })
     @PostMapping(
@@ -101,12 +97,6 @@ public class StoredDocumentDeleteController {
                 invalidRequestException
             );
             return new ResponseEntity<>(null, BAD_REQUEST);
-        } catch (final Exception exception) {
-            log.error("deleteCaseDocuments API call failed due to error - {}",
-                exception.getMessage(),
-                exception
-            );
-            return new ResponseEntity<>(null, INTERNAL_SERVER_ERROR);
         }
     }
 

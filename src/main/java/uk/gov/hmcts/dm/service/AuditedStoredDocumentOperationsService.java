@@ -104,8 +104,11 @@ public class AuditedStoredDocumentOperationsService {
         caseDocumentsDeletionResults.setMarkedForDeletion(count);
 
         for (StoredDocument storedDocument : storedDocuments) {
-            deleteStoredDocument(storedDocument.getId(), Constants.FALSE);
-            caseDocumentsDeletionResults.setMarkedForDeletion(++count);
+            Optional<StoredDocument> foundDocument = storedDocumentService.findOne(storedDocument.getId());
+            if (foundDocument.isPresent()) {
+                deleteStoredDocument(storedDocument.getId(), Constants.FALSE);
+                caseDocumentsDeletionResults.setMarkedForDeletion(++count);
+            }
         }
 
         return caseDocumentsDeletionResults;
