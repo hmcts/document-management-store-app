@@ -105,17 +105,12 @@ def versions = [
     pact_version       : '4.1.7',
     emTestHelper       : '1.21.2',
     shedlock           : '4.33.0',
-    hibernate          : '5.6.3.Final',
+    hibernate          : '5.6.5.Final',
     jupiter            : '5.8.2'
 ]
 
 dependencyManagement {
     dependencies {
-
-        // Fix for migratePostgresDatabase task failure
-        dependencySet(group: 'org.liquibase', version: '3.8.2') {
-            entry 'liquibase-core'
-        }
 
         //CVE-2021-27568
         dependencySet(group: 'net.minidev', version: '2.4.7') {
@@ -188,7 +183,7 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
 
-    implementation group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
+    implementation group: 'org.liquibase', name: 'liquibase-core', version: '4.8.0'
 
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
