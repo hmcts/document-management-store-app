@@ -11,7 +11,7 @@ def liquibaseversions = [
 ]
 
 dependencies {
-    implementation group: 'org.liquibase', name: 'liquibase-core', version: liquibaseversions.liquibase
+    implementation group: 'com.github.hmcts.liquibase', name: 'liquibase-core', version: '3.8.2'
     liquibase group: 'org.liquibase.ext', name: 'liquibase-hibernate5', version: liquibaseversions.liquibase
     liquibase group: 'org.hibernate', name: 'hibernate-envers', version: liquibaseversions.hibernate
     liquibaseRuntime group: 'org.liquibase', name: 'liquibase-core', version: liquibaseversions.liquibase
