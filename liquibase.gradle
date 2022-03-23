@@ -1,14 +1,26 @@
 
 configurations {
     liquibase
+    liquibaseRuntime
 }
 
+def liquibaseversions = [
+    liquibase          : '4.8.0',
+    hibernate          : '5.6.5.Final',
+    postgresql         : '42.2.20'
+]
+
 dependencies {
-    liquibase (group: 'org.liquibase.ext', name: 'liquibase-hibernate5', version: 3.8) {
-        exclude group: "org.hibernate", module: "hibernate-core"
-        exclude group: "org.hibernate", module: "hibernate-envers"
-    }
-    liquibase group: 'org.hibernate', name: 'hibernate-envers', version: '5.4.18.Final'
+    implementation group: 'org.liquibase', name: 'liquibase-core', version: liquibaseversions.liquibase
+    liquibase group: 'org.liquibase.ext', name: 'liquibase-hibernate5', version: liquibaseversions.liquibase
+    liquibase group: 'org.hibernate', name: 'hibernate-envers', version: liquibaseversions.hibernate
+    liquibaseRuntime group: 'org.liquibase', name: 'liquibase-core', version: liquibaseversions.liquibase
+    liquibaseRuntime group: 'org.liquibase.ext', name: 'liquibase-hibernate5', version: liquibaseversions.liquibase
+    liquibaseRuntime sourceSets.main.compileClasspath
+    liquibaseRuntime sourceSets.main.output
+    liquibaseRuntime group: 'org.liquibase', name: 'liquibase-groovy-dsl', version: '3.0.2'
+    liquibaseRuntime group: 'org.postgresql', name: 'postgresql', version: liquibaseversions.postgresql
+    liquibaseRuntime group: 'com.h2database', name: 'h2'
 }
 
 //loading properties file.
@@ -21,12 +33,19 @@ task liquibaseDiffChangelog(type: JavaExec) {
     classpath sourceSets.main.runtimeClasspath
     classpath configurations.liquibase
     main = "liquibase.integration.commandline.Main"
+    systemProperty "liquibase.useDbLock", true
+    def urlString = project.hasProperty("dburl") ? "jdbc:postgresql://$dburl" : liquibaseProps.getProperty('url')
+    def user = project.hasProperty("flyway.user") ? "${rootProject.properties['flyway.user']}" : liquibaseProps.getProperty('username')
+    def password = project.hasProperty("flyway.password") ? "${rootProject.properties['flyway.password']}" : liquibaseProps.getProperty('password')
+
+    dependsOn 'clean'
+    dependsOn 'compileJava'
 
     args "--changeLogFile=" + "$projectDir/src/main/resources/db/changelog/db.changelog-diff-" + buildTimestamp() + ".xml"
-    args "--referenceUrl=hibernate:spring:uk.gov.hmcts.dm.domain?dialect=org.hibernate.dialect.PostgreSQL94Dialect"
-    args "--username=" + liquibaseProps.getProperty('username')
-    args "--password=" + liquibaseProps.getProperty('password')
-    args "--url=" + liquibaseProps.getProperty('url')
+    args "--referenceUrl=hibernate:spring:uk.gov.hmcts.dm.domain?dialect=org.hibernate.dialect.PostgreSQLDialect"
+    args "--username=$user"
+    args "--password=$password"
+    args "--url=$urlString"
     args "--driver=" + liquibaseProps.getProperty('driver')
     args "diffChangeLog"
 }
