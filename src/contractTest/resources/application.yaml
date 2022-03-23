@@ -37,7 +37,7 @@ spring:
     allow-circular-references: true # To resolve PACT PR build issue
 
   liquibase:
-    enabled: ${ENABLE_DB_MIGRATE:false}
+    enabled: ${ENABLE_DB_MIGRATE:true}
     change-log: classpath:/db/changelog/db.changelog-master.xml
 
   datasource:

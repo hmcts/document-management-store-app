@@ -112,6 +112,11 @@ def versions = [
 dependencyManagement {
     dependencies {
 
+        // Fix for migratePostgresDatabase task failure
+        dependencySet(group: 'org.liquibase', version: '3.8.2') {
+            entry 'liquibase-core'
+        }
+
         //CVE-2021-27568
         dependencySet(group: 'net.minidev', version: '2.4.7') {
             entry 'json-smart'
