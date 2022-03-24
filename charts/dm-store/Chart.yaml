@@ -8,7 +8,7 @@ maintainers:
     email: EvidenceManagement@HMCTS.NET
 dependencies:
   - name: java
-    version: 3.7.4
+    version: 3.7.6
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
   - name: blobstorage
     version: 0.2.1
