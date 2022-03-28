@@ -166,7 +166,8 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.1'
+    implementation group: 'com.fasterxml.jackson', name: 'jackson-bom', version: versions.jackson, ext: 'pom'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
