@@ -3,7 +3,6 @@ package uk.gov.hmcts.dm.functional
 import groovy.json.JsonOutput
 import io.restassured.http.ContentType
 import org.apache.commons.lang3.RandomStringUtils
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.springframework.http.MediaType;
