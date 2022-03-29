@@ -148,7 +148,7 @@ dependencyManagement {
         }
 
         //CVE-2021-22047
-        dependencySet(group: 'org.springframework.data', version: '3.6.2') {
+        dependencySet(group: 'org.springframework.data', version: '3.6.3') {
             entry 'spring-data-rest-core'
             entry 'spring-data-rest-webmvc'
         }
