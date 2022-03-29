@@ -10,7 +10,6 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule
 
 import static org.hamcrest.Matchers.equalTo
 
-
 class DeleteDocumentsIT extends BaseIT {
 
     @Rule
