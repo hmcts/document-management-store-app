@@ -93,7 +93,7 @@ def versions = [
     ehcache            : '3.9.3',
     jacocoMavenPlugin  : '0.8.2',
     lombok             : '1.18.22',
-    postgresql         : '42.2.20',
+    postgresql         : '42.3.3',
     jackson            : '2.13.2',
     serenity           : '2.6.0',
     serenityreporter   : '2.6.0',
