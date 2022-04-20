@@ -148,9 +148,19 @@ dependencyManagement {
         }
 
         //CVE-2021-22047
-        dependencySet(group: 'org.springframework.data', version: '3.6.3') {
+        dependencySet(group: 'org.springframework.data', version: '3.6.4') {
             entry 'spring-data-rest-core'
             entry 'spring-data-rest-webmvc'
+        }
+
+        //CVE-2013-4152, CVE-2013-7315, CVE-2014-0054
+        dependencySet(group: 'org.springframework.retry', version: '1.3.3') {
+            entry 'spring-retry'
+        }
+
+        //CVE-2013-4152, CVE-2013-7315, CVE-2014-0054
+        dependencySet(group: 'org.springframework.hateoas', version: '1.4.2') {
+            entry 'spring-hateoas'
         }
     }
 }
