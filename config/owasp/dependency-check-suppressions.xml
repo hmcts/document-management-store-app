@@ -4,4 +4,11 @@
         <!--Need to resolve Liquibase issue before updating the library-->
         <cve>CVE-2022-0839</cve>
     </suppress>
+    <suppress>
+        <!--Awaiting updated library version with fix for below CVE's-->
+        <cve>CVE-2013-4152</cve>
+        <cve>CVE-2013-7315</cve>
+        <cve>CVE-2014-0054</cve>
+        <cve>CVE-2016-1000027</cve>
+    </suppress>
 </suppressions>
