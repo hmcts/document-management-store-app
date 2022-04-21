@@ -73,6 +73,7 @@ configurations {
 
 configurations.all {
     exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+    exclude group: 'org.springframework.retry', module: 'spring-retry'
 }
 
 tasks.withType(JavaCompile) {
