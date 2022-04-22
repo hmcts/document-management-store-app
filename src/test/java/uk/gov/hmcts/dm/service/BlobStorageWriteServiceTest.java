@@ -5,10 +5,9 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -29,7 +28,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(SpringRunner.class)
 public class BlobStorageWriteServiceTest {
 
     private BlobStorageWriteService blobStorageWriteService;
@@ -51,11 +50,6 @@ public class BlobStorageWriteServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        cloudBlobContainer = Mockito.mock(BlobContainerClient.class);
-        blobClient = Mockito.mock(BlobClient.class);
-        file = Mockito.mock(MultipartFile.class);
-        blob = Mockito.mock(BlockBlobClient.class);
-        documentContentVersionRepository = Mockito.mock(DocumentContentVersionRepository.class);
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);

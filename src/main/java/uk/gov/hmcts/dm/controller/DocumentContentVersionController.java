@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentVersionCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -20,7 +25,11 @@ import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.exception.ValidationErrorException;
 import uk.gov.hmcts.dm.hateos.DocumentContentVersionHalResource;
-import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.Constants;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +41,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(
     path = "/documents/{documentId}")
-@Api("Endpoint for Document Content Version")
+@Tag(name = "DocumentContentVersion Service", description = "Endpoint for Document Content Version")
 public class DocumentContentVersionController {
 
     @InitBinder
@@ -55,9 +64,9 @@ public class DocumentContentVersionController {
 
     // Please do not remove "" mapping. API is already consumed and might break backwards compatibility.
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value = "Adds a Document Content Version and associates it with a given Stored Document.")
+    @Operation(summary = "Adds a Document Content Version and associates it with a given Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "JSON representation of a document version", response = DocumentContentVersionHalResource.class)
+        @ApiResponse(responseCode = "201", description = "JSON representation of a document version")
     })
     public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
@@ -66,9 +75,9 @@ public class DocumentContentVersionController {
     }
 
     @PostMapping(value = "/versions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ApiOperation(value = "Adds a Document Content Version and associates it with a given Stored Document.")
+    @Operation(summary = "Adds a Document Content Version and associates it with a given Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 201, message = "JSON representation of a document version", response = DocumentContentVersionHalResource.class)
+        @ApiResponse(responseCode = "201", description = "JSON representation of a document version")
     })
     public ResponseEntity<Object> addDocumentContentVersion(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
@@ -95,9 +104,9 @@ public class DocumentContentVersionController {
     }
 
     @GetMapping(value = "/versions/{versionId}")
-    @ApiOperation("Returns a specific version of the content of a Stored Document.")
+    @Operation(summary = "Returns a specific version of the content of a Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "JSON representation of a document version", response = DocumentContentVersionHalResource.class)
+        @ApiResponse(responseCode = "200", description = "JSON representation of a document version")
     })
     public ResponseEntity<Object> getDocumentContentVersionDocument(
         @PathVariable UUID documentId,
@@ -114,9 +123,9 @@ public class DocumentContentVersionController {
     }
 
     @GetMapping(value = "/versions/{versionId}/binary")
-    @ApiOperation("Streams a specific version of the content of a Stored Document.")
+    @Operation(summary = "Streams a specific version of the content of a Stored Document.")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Returns contents of a document version")
+        @ApiResponse(responseCode = "200", description = "Returns contents of a document version")
     })
     public ResponseEntity<Object> getDocumentContentVersionDocumentBinary(
         @PathVariable UUID documentId,

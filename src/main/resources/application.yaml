@@ -184,3 +184,7 @@ toggle:
   chunking: ${ENABLE_CHUNKING:false}
 task:
   env: ${TASK_ENV:documentTaskLock-local}
+
+springdoc:
+  packagesToScan: uk.gov.hmcts.dm.controller
+  pathsToMatch: /**

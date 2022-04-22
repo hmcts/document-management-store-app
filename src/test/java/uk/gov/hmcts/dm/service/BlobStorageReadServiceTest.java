@@ -6,13 +6,12 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -21,13 +20,14 @@ import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(SpringRunner.class)
 public class BlobStorageReadServiceTest {
 
     private BlobStorageReadService blobStorageReadService;
@@ -52,10 +52,12 @@ public class BlobStorageReadServiceTest {
     @Mock
     private ToggleConfiguration toggleConfiguration;
 
-    @Before
-    public void setUp() throws IOException {
+    private OutputStream outputStream;
 
-        MockitoAnnotations.openMocks(this);
+    @Before
+
+    public void setUp() throws IOException {
+        outputStream = mock(OutputStream.class);
 
         when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.getBlockBlobClient()).thenReturn(blockBlobClient);

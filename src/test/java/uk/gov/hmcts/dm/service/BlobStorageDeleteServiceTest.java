@@ -8,10 +8,9 @@ import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
@@ -26,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(SpringRunner.class)
 public class BlobStorageDeleteServiceTest {
 
     private BlobStorageDeleteService blobStorageDeleteService;
@@ -39,15 +38,12 @@ public class BlobStorageDeleteServiceTest {
 
     @Mock
     private BlockBlobClient blob;
+
     @Mock
     private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Before
     public void setUp() {
-        cloudBlobContainer = Mockito.mock(BlobContainerClient.class);
-        blobClient = Mockito.mock(BlobClient.class);
-        blob = Mockito.mock(BlockBlobClient.class);
-        documentContentVersionRepository = Mockito.mock(DocumentContentVersionRepository.class);
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
@@ -56,7 +52,7 @@ public class BlobStorageDeleteServiceTest {
     }
 
     @Test
-    public void deleteDocumentContentVersion() throws Exception {
+    public void deleteDocumentContentVersion() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
@@ -66,7 +62,7 @@ public class BlobStorageDeleteServiceTest {
     }
 
     @Test
-    public void deleteDocumentContentVersionDoesNotExist() throws Exception {
+    public void deleteDocumentContentVersionDoesNotExist() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         documentContentVersion.setContentUri("x");
@@ -82,7 +78,7 @@ public class BlobStorageDeleteServiceTest {
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         documentContentVersion.setContentUri("x");
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(Mockito.mock(BlobStorageException.class));
+            .thenThrow(BlobStorageException.class);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         assertNotNull(documentContentVersion.getContentUri());
     }
