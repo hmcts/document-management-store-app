@@ -11,5 +11,6 @@
         <cve>CVE-2014-0054</cve>
         <cve>CVE-2016-1000027</cve>
         <cve>CVE-2022-22965</cve>
+        <cve>CVE-2022-22968</cve>
     </suppress>
 </suppressions>
