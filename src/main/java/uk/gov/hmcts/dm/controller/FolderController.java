@@ -1,6 +1,11 @@
 package uk.gov.hmcts.dm.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -48,7 +53,15 @@ public class FolderController {
     private StoredDocumentService storedDocumentService;
 
     @PostMapping("")
-    @Operation(summary = "Create a Folder.")
+    @Operation(summary = "Create a Folder.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
+    })
     public ResponseEntity<FolderHalResource> post(@RequestBody FolderHalResource folderHalResource) {
         Folder folder = new Folder();
         folderService.save(folder);
@@ -56,7 +69,17 @@ public class FolderController {
     }
 
     @PostMapping(value = "/{id}/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Adds a list of Stored Documents to a Folder (Stored Documents are created from uploaded Documents)")
+    @Operation(summary = "Adds a list of Stored Documents to a Folder (Stored Documents are created from "
+        + "uploaded Documents)",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Folder not found"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
+    })
     public ResponseEntity<Object> addDocuments(@PathVariable UUID id, @RequestParam List<MultipartFile> files) {
 
         return folderService.findById(id)
@@ -69,7 +92,16 @@ public class FolderController {
     }
 
     @GetMapping("{id}")
-    @Operation(summary = "Retrieves JSON representation of a Folder.")
+    @Operation(summary = "Retrieves JSON representation of a Folder.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Folder not found"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
+    })
     public ResponseEntity<?> get(@PathVariable UUID id) {
         return folderService
             .findById(id)
@@ -79,7 +111,11 @@ public class FolderController {
     }
 
     @DeleteMapping("{id}")
-    @Operation(summary = "Deletes a Folder.")
+    @Operation(summary = "Deletes a Folder.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     public ResponseEntity<Object> delete(@PathVariable UUID id) {
         return ResponseEntity.status(405).build();
     }

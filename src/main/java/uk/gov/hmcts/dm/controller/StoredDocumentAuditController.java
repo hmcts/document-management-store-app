@@ -1,6 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,9 +36,14 @@ public class StoredDocumentAuditController {
     private StoredDocumentRepository storedDocumentRepository;
 
     @GetMapping("{documentId}/auditEntries")
-    @Operation(summary = "Retrieves audits related to a Stored Document.")
+    @Operation(summary = "Retrieves audits related to a Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Success")
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<CollectionModel<StoredDocumentAuditEntryHalResource>> findAudits(@PathVariable UUID documentId) {
         return storedDocumentRepository

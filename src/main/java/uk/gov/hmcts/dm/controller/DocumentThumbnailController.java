@@ -1,6 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,9 +36,15 @@ public class DocumentThumbnailController {
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @GetMapping(value = "{documentId}/thumbnail")
-    @Operation(summary = "Streams contents of the most recent Document Content Version associated with the Stored Document.")
+    @Operation(summary = "Streams contents of the most recent Document Content Version associated with the"
+        + "Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Returns thumbnail of a file")
+        @ApiResponse(responseCode = "200", description = "Returns thumbnail of a file"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getPreviewThumbnail(@PathVariable UUID documentId) {
@@ -50,9 +59,14 @@ public class DocumentThumbnailController {
 
 
     @GetMapping(value = "{documentId}/versions/{versionId}/thumbnail")
-    @Operation(summary = "Streams a specific version of the content of a Stored Document.")
+    @Operation(summary = "Streams a specific version of the content of a Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Returns contents of a document version")
+        @ApiResponse(responseCode = "200", description = "Returns contents of a document version"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     @Transactional(readOnly = true)
     public ResponseEntity<Resource> getDocumentContentVersionDocumentPreviewThumbnail(

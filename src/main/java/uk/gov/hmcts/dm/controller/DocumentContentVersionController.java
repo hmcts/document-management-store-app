@@ -1,6 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,9 +66,14 @@ public class DocumentContentVersionController {
 
     // Please do not remove "" mapping. API is already consumed and might break backwards compatibility.
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Adds a Document Content Version and associates it with a given Stored Document.")
+    @Operation(summary = "Adds a Document Content Version and associates it with a given Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "JSON representation of a document version")
+        @ApiResponse(responseCode = "201", description = "JSON representation of a document version"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
@@ -74,9 +82,14 @@ public class DocumentContentVersionController {
     }
 
     @PostMapping(value = "/versions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Adds a Document Content Version and associates it with a given Stored Document.")
+    @Operation(summary = "Adds a Document Content Version and associates it with a given Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "JSON representation of a document version")
+        @ApiResponse(responseCode = "201", description = "JSON representation of a document version"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> addDocumentContentVersion(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
@@ -103,9 +116,14 @@ public class DocumentContentVersionController {
     }
 
     @GetMapping(value = "/versions/{versionId}")
-    @Operation(summary = "Returns a specific version of the content of a Stored Document.")
+    @Operation(summary = "Returns a specific version of the content of a Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "JSON representation of a document version")
+        @ApiResponse(responseCode = "200", description = "JSON representation of a document version"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> getDocumentContentVersionDocument(
         @PathVariable UUID documentId,
@@ -122,9 +140,14 @@ public class DocumentContentVersionController {
     }
 
     @GetMapping(value = "/versions/{versionId}/binary")
-    @Operation(summary = "Streams a specific version of the content of a Stored Document.")
+    @Operation(summary = "Streams a specific version of the content of a Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Returns contents of a document version")
+        @ApiResponse(responseCode = "200", description = "Returns contents of a document version"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> getDocumentContentVersionDocumentBinary(
         @PathVariable UUID documentId,

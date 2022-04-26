@@ -65,7 +65,7 @@ https://github.com/hmcts/document-management-client
 
 ### Swagger UI
 To view our REST API go to {HOST}:{PORT}/swagger-ui/
-> http://localhost:4603/swagger-ui/
+> http://localhost:4603/swagger-ui/index.html
 
 ### API Endpoints
 A list of our endpoints can be found here
