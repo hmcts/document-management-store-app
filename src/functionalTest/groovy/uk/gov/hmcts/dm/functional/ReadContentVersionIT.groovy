@@ -22,7 +22,7 @@ class ReadContentVersionIT extends BaseIT {
     String documentVersionBinaryUrl
 
     @Rule
-    public RetryRule retryRule = new RetryRule(1);
+    public RetryRule retryRule = new RetryRule(3);
 
     @Before
     public void setup() throws Exception {
