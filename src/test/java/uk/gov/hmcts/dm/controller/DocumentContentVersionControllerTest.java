@@ -133,7 +133,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
             .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/plain"))
             .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, "1"))
             .andExpect(header().string("OriginalFileName", "filename.txt"))
-            .andExpect(header().string("data-source", "contentURI"))
             .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION, "fileName=\"filename.txt\""));
     }
 

@@ -49,6 +49,7 @@ java:
     ENABLE_THUMBNAIL: 'true'
     ENABLE_METADATA_MIGRATION: 'false'
     ENABLE_OVERRIDE_METADATA: 'false'
+    ENABLE_CHUNKING: 'false'
 
     LOG_OUTPUT: single
     ROOT_LOGGING_LEVEL: INFO

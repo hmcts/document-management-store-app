@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
@@ -70,6 +71,9 @@ public class StoredDocumentController {
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     private MethodParameter uploadDocumentsCommandMethodParameter;
+
+    @Autowired
+    private ToggleConfiguration toggleConfiguration;
 
     @PostConstruct
     void init() throws NoSuchMethodException {
@@ -133,18 +137,26 @@ public class StoredDocumentController {
                     documentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-        response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-            format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
-
         try {
+            response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+            // Set Default content size for whole document
+            response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+            response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
             response.setHeader("data-source", "contentURI");
+            if (toggleConfiguration.isChunking()) {
+                response.setHeader("Accept-Ranges", "bytes");
+                response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
+            }
             auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                 documentContentVersion,
-                response.getOutputStream());
+                httpServletRequest,
+                response);
         } catch (UncheckedIOException | IOException e) {
+            if (toggleConfiguration.isChunking()) {
+                response.reset();
+            }
             logger.warn("IOException streaming response", e);
             if (Objects.nonNull(headers)) {
                 logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
@@ -166,6 +178,16 @@ public class StoredDocumentController {
                     }
                 }
             }
+        }
+        if (toggleConfiguration.isChunking()) {
+            logger.debug("DocumentId : {} has Response: Content-Length, {}", documentId,
+                response.getHeader(HttpHeaders.CONTENT_LENGTH));
+            logger.debug("DocumentId : {} has Response: Content-Type, {}", documentId,
+                response.getHeader(HttpHeaders.CONTENT_TYPE));
+            logger.debug("DocumentId : {} has Response: Content-Range, {}", documentId,
+                response.getHeader(HttpHeaders.CONTENT_RANGE));
+            logger.debug("DocumentId : {} has Response: Accept-Ranges, {}", documentId,
+                response.getHeader(HttpHeaders.ACCEPT_RANGES));
         }
         return ResponseEntity.ok().build();
     }

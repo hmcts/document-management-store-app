@@ -181,6 +181,7 @@ toggle:
   testing: ${ENABLE_TESTING:true}
   metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
   overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
+  chunking: ${ENABLE_CHUNKING:false}
 task:
   env: ${TASK_ENV:documentTaskLock-local}
 
