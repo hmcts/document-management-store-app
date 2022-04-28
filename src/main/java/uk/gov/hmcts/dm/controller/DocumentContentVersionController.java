@@ -31,6 +31,7 @@ import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -129,6 +130,7 @@ public class DocumentContentVersionController {
     public ResponseEntity<Object> getDocumentContentVersionDocumentBinary(
         @PathVariable UUID documentId,
         @PathVariable UUID versionId,
+        HttpServletRequest request,
         HttpServletResponse response) {
 
         DocumentContentVersion documentContentVersion = documentContentVersionService.findById(versionId)
@@ -147,8 +149,8 @@ public class DocumentContentVersionController {
         try {
             response.setHeader("data-source", "contentURI");
             auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
-                documentContentVersion,
-                response.getOutputStream());
+                documentContentVersion, request,
+                response);
             response.flushBuffer();
 
         } catch (IOException e) {

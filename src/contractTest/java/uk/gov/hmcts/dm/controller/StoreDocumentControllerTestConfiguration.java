@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +48,7 @@ public class StoreDocumentControllerTestConfiguration {
     @MockBean
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    @Autowired
+    @MockBean
     public ToggleConfiguration toggleConfiguration;
 
     @Bean

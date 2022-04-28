@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
@@ -65,9 +66,15 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetDocumentBinaryFromBlobStore() throws Exception {
-        documentContentVersion.setContentUri("someUri");
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
             .thenReturn(Optional.of(documentContentVersion));
+
+        ResultActions result = restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .get("/documents/" + id + "/binary");
+
+        String headerValue = header().toString();
 
         restActions
             .withAuthorizedUser("userId")
@@ -77,7 +84,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
             .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString()))
             .andExpect(header().string("OriginalFileName", documentContentVersion.getOriginalDocumentName()))
-            .andExpect(header().string("data-source", "contentURI"))
             .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION,
                 format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName())));
     }
