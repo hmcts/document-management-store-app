@@ -16,7 +16,8 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.service.Constants;
 
-import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -186,7 +187,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         doThrow(UncheckedIOException.class).when(auditedDocumentContentVersionOperationsService)
                 .readDocumentContentVersionBinaryFromBlobStore(Mockito.any(DocumentContentVersion.class),
-                Mockito.any(ServletOutputStream.class));
+                    Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
 
         restActions
             .withAuthorizedUser("userId")
