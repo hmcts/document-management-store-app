@@ -44,10 +44,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 import static java.lang.String.format;
@@ -189,26 +187,16 @@ public class StoredDocumentController {
                 response.reset();
             }
             logger.warn("IOException streaming response", e);
-            if (Objects.nonNull(headers)) {
-                logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
-                logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
-                        documentContentVersion.getMimeType()));
-                logger.info(String.format("Size for documentId : %s is : %s ", documentId.toString(),
-                        documentContentVersion.getSize().toString()));
-                headers.forEach((key, value) ->
-                    logger.info(String.format("documentId : %s has Request Header %s = %s",
-                        documentId.toString(), key, value)));
-                logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
-            } else {
-                logger.info(String.format("Header is null for documentId : %s ", documentId.toString()));
-                if (Objects.nonNull(httpServletRequest)) {
-                    Iterator<String> stringIterator = httpServletRequest.getHeaderNames().asIterator();
-                    while (stringIterator.hasNext()) {
-                        logger.info(String.format("HeaderNames for documentId : %s  is %s ",
-                            documentId.toString(), stringIterator.next()));
-                    }
-                }
-            }
+
+            logger.info(String.format("Headers for documentId : %s starts", documentId));
+            logger.info(String.format("ContentType for documentId : %s is : %s ", documentId,
+                    documentContentVersion.getMimeType()));
+            logger.info(String.format("Size for documentId : %s is : %s ", documentId,
+                    documentContentVersion.getSize()));
+            headers.forEach((key, value) ->
+                logger.info(String.format("documentId : %s has Request Header %s = %s",
+                    documentId.toString(), key, value)));
+            logger.info(String.format("Headers for documentId : %s ends", documentId));
         }
         if (toggleConfiguration.isChunking()) {
             logger.debug("DocumentId : {} has Response: Content-Length, {}", documentId,

@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.ResultActions;
@@ -15,6 +16,9 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.service.Constants;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -24,8 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -158,6 +161,33 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
             Optional.of(documentContentVersion)
         );
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .get("/documents/" + id + "/binary")
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetBinaryException() throws Exception {
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
+            new MockMultipartFile("files",
+                "filename.txt",
+                "text/plain",
+                "hello".getBytes(
+                    StandardCharsets.UTF_8)),
+            "user");
+
+        documentContentVersion.setCreatedBy("userId");
+
+        when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
+            Optional.of(documentContentVersion)
+        );
+
+        doThrow(UncheckedIOException.class).when(auditedDocumentContentVersionOperationsService)
+                .readDocumentContentVersionBinaryFromBlobStore(Mockito.any(DocumentContentVersion.class),
+                    Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
 
         restActions
             .withAuthorizedUser("userId")

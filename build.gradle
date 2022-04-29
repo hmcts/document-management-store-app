@@ -250,23 +250,20 @@ checkstyle {
 }
 
 def coverageExclusionList = [
-    '**uk/gov/hmcts/dm/domain/',
     '**uk/gov/hmcts/dm/DmApp.java',
     '**uk/gov/hmcts/dm/hateos/*',
     '**uk/gov/hmcts/dm/exception/*',
     '**uk/gov/hmcts/dm/domain/*',
     '**uk/gov/hmcts/dm/commandobject/*',
-    '**uk/gov/hmcts/dm/hibernate/*',
     '**uk/gov/hmcts/dm/config/**/*',
     '**uk/gov/hmcts/dm/errorhandler/*',
     '**uk/gov/hmcts/dm/repository/RepositoryFinder.java',
-    '**uk/gov/hmcts/dm/service/batch/CustomItemWriter.java',
     '**uk/gov/hmcts/dm/appinsights/*',
     '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java',
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
-    '**uk/gov/hmcts/dm/service/FileSizeVerifier.java',
     '**uk/gov/hmcts/dm/controller/WelcomeController.java',
-    '**uk/gov/hmcts/dm/controller/StoredDocumentController.java'
+    '**uk/gov/hmcts/dm/service/Constants.java',
+    '**uk/gov/hmcts/dm/service/DocumentContentVersionModel.java'
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
