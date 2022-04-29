@@ -1,6 +1,10 @@
 package uk.gov.hmcts.dm.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -85,9 +89,17 @@ public class StoredDocumentController {
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Creates a list of Stored Documents by uploading a list of binary/text files.")
+    @Operation(summary = "Creates a list of Stored Documents by uploading a list of binary/text files.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Success")
+        @ApiResponse(responseCode = "200", description = "Success",
+            content = @Content(schema = @Schema(implementation = StoredDocumentHalResourceCollection.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input"),
+        @ApiResponse(responseCode = "405", description = "Validation exception"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> createFrom(
             @Valid UploadDocumentsCommand uploadDocumentsCommand,
@@ -106,9 +118,15 @@ public class StoredDocumentController {
     }
 
     @GetMapping(value = "{documentId}")
-    @Operation(summary = "Retrieves JSON representation of a Stored Document.")
+    @Operation(summary = "Retrieves JSON representation of a Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Success")
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Document not found"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> getMetaData(@PathVariable UUID documentId) {
 
@@ -125,9 +143,22 @@ public class StoredDocumentController {
     }
 
     @GetMapping(value = "{documentId}/binary")
-    @Operation(summary = "Streams contents of the most recent Document Content Version associated with the Stored Document.")
+    @Operation(summary = "Streams contents of the most recent Document Content Version associated with"
+        + "the Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-roles", description = "User Roles", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "classification", description = "Classification", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Returns contents of a file")
+        @ApiResponse(responseCode = "200", description = "Returns contents of a file"),
+        @ApiResponse(responseCode = "404", description = "Document not found"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Void> getBinary(@PathVariable UUID documentId, HttpServletResponse response,
                                           @RequestHeader Map<String, String> headers,
