@@ -21,8 +21,8 @@ import java.util.UUID;
 @Service
 public class BlobStorageWriteService {
 
-    private final BlobContainerClient cloudBlobContainer;
-    private final DocumentContentVersionRepository documentContentVersionRepository;
+    private BlobContainerClient cloudBlobContainer;
+    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
     public BlobStorageWriteService(BlobContainerClient cloudBlobContainer,

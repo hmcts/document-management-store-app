@@ -1,6 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,10 +48,15 @@ public class StoredDocumentSearchController {
     private SecurityUtilService securityUtilService;
 
     @PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Search stored documents using metadata.")
+    @Operation(summary = "Search stored documents using metadata.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Returns search results"),
-        @ApiResponse(responseCode = "400", description = "Error when search criteria not specified")
+        @ApiResponse(responseCode = "400", description = "Error when search criteria not specified"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> search(
         @Valid @RequestBody MetadataSearchCommand metadataSearchCommand,
@@ -65,10 +73,15 @@ public class StoredDocumentSearchController {
 
 
     @PostMapping(value = "/owned")
-    @Operation(summary = "Search stored documents by ownership.")
+    @Operation(summary = "Search stored documents by ownership.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Returns search results"),
-            @ApiResponse(responseCode = "400", description = "Error when search criteria not specified")
+            @ApiResponse(responseCode = "400", description = "Error when search criteria not specified"),
+            @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> searchOwned(
             Pageable pageable,

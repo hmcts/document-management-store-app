@@ -2,8 +2,10 @@ package uk.gov.hmcts.dm.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
@@ -14,6 +16,9 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.service.Constants;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -23,8 +28,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -63,9 +67,15 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetDocumentBinaryFromBlobStore() throws Exception {
-        documentContentVersion.setContentUri("someUri");
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
             .thenReturn(Optional.of(documentContentVersion));
+
+        ResultActions result = restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .get("/documents/" + id + "/binary");
+
+        String headerValue = header().toString();
 
         restActions
             .withAuthorizedUser("userId")
@@ -75,7 +85,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
             .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString()))
             .andExpect(header().string("OriginalFileName", documentContentVersion.getOriginalDocumentName()))
-            .andExpect(header().string("data-source", "contentURI"))
             .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION,
                 format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName())));
     }
@@ -152,6 +161,33 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
             Optional.of(documentContentVersion)
         );
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .get("/documents/" + id + "/binary")
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetBinaryException() throws Exception {
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
+            new MockMultipartFile("files",
+                "filename.txt",
+                "text/plain",
+                "hello".getBytes(
+                    StandardCharsets.UTF_8)),
+            "user");
+
+        documentContentVersion.setCreatedBy("userId");
+
+        when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
+            Optional.of(documentContentVersion)
+        );
+
+        doThrow(UncheckedIOException.class).when(auditedDocumentContentVersionOperationsService)
+                .readDocumentContentVersionBinaryFromBlobStore(Mockito.any(DocumentContentVersion.class),
+                    Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
 
         restActions
             .withAuthorizedUser("userId")

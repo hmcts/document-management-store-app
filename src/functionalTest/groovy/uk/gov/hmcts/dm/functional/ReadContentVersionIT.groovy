@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.functional
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import uk.gov.hmcts.dm.functional.utilities.V1MediaTypes
 import uk.gov.hmcts.reform.em.test.retry.RetryRule
@@ -162,4 +163,14 @@ class ReadContentVersionIT extends BaseIT {
             .log()
             .all()
     }
+
+    @Test
+    void "RCV12 As a divorce case-worker I can read content version binary by URL using HTTP Range Headers"() {
+        givenRangeRequest(0L, 99L, CASE_WORKER, [CASE_WORKER_ROLE_DIVORCE])
+            .expect()
+            .statusCode(206)
+            .header(HttpHeaders.CONTENT_LENGTH, "100")
+            .header(HttpHeaders.RANGE, "0-99/45972")
+    }
+
 }

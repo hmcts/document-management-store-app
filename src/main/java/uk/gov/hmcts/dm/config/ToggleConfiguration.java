@@ -15,5 +15,5 @@ public class ToggleConfiguration {
     private boolean includeidamhealth;
     private boolean ttl;
     private boolean overridemetadata;
-
+    private boolean chunking;
 }

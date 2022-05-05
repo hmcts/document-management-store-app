@@ -203,6 +203,11 @@ abstract class BaseIT {
         request
     }
 
+    def givenRangeRequest(long start = 0L, long end = 1023L, username = null, userRoles = null) {
+        givenRequest(username, userRoles)
+            .header("Range", "bytes=" + start + "-" + end);
+    }
+
     def givenS2SRequest() {
         SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
             .header("serviceauthorization", serviceToken())

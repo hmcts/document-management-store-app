@@ -1,6 +1,10 @@
 package uk.gov.hmcts.dm.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
@@ -39,10 +44,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UncheckedIOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 import static java.lang.String.format;
@@ -71,6 +74,9 @@ public class StoredDocumentController {
 
     private MethodParameter uploadDocumentsCommandMethodParameter;
 
+    @Autowired
+    private ToggleConfiguration toggleConfiguration;
+
     @PostConstruct
     void init() throws NoSuchMethodException {
         uploadDocumentsCommandMethodParameter = new MethodParameter(
@@ -81,9 +87,17 @@ public class StoredDocumentController {
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Creates a list of Stored Documents by uploading a list of binary/text files.")
+    @Operation(summary = "Creates a list of Stored Documents by uploading a list of binary/text files.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Success")
+        @ApiResponse(responseCode = "200", description = "Success",
+            content = @Content(schema = @Schema(implementation = StoredDocumentHalResourceCollection.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input"),
+        @ApiResponse(responseCode = "405", description = "Validation exception"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> createFrom(
             @Valid UploadDocumentsCommand uploadDocumentsCommand,
@@ -102,9 +116,15 @@ public class StoredDocumentController {
     }
 
     @GetMapping(value = "{documentId}")
-    @Operation(summary = "Retrieves JSON representation of a Stored Document.")
+    @Operation(summary = "Retrieves JSON representation of a Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Success")
+        @ApiResponse(responseCode = "200", description = "Success"),
+        @ApiResponse(responseCode = "404", description = "Document not found"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> getMetaData(@PathVariable UUID documentId) {
 
@@ -121,9 +141,22 @@ public class StoredDocumentController {
     }
 
     @GetMapping(value = "{documentId}/binary")
-    @Operation(summary = "Streams contents of the most recent Document Content Version associated with the Stored Document.")
+    @Operation(summary = "Streams contents of the most recent Document Content Version associated with"
+        + "the Stored Document.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-roles", description = "User Roles", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "classification", description = "Classification", required = true,
+                schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Returns contents of a file")
+        @ApiResponse(responseCode = "200", description = "Returns contents of a file"),
+        @ApiResponse(responseCode = "404", description = "Document not found"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Void> getBinary(@PathVariable UUID documentId, HttpServletResponse response,
                                           @RequestHeader Map<String, String> headers,
@@ -133,39 +166,47 @@ public class StoredDocumentController {
                     documentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
-        response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
-        response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
-        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
-            format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
-
         try {
+            response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
+            // Set Default content size for whole document
+            response.setHeader(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString());
+            response.setHeader("OriginalFileName", documentContentVersion.getOriginalDocumentName());
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName()));
             response.setHeader("data-source", "contentURI");
+            if (toggleConfiguration.isChunking()) {
+                response.setHeader("Accept-Ranges", "bytes");
+                response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES);
+            }
             auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                 documentContentVersion,
-                response.getOutputStream());
+                httpServletRequest,
+                response);
         } catch (UncheckedIOException | IOException e) {
-            logger.warn("IOException streaming response", e);
-            if (Objects.nonNull(headers)) {
-                logger.info(String.format("Headers for documentId : %s starts", documentId.toString()));
-                logger.info(String.format("ContentType for documentId : %s is : %s ", documentId.toString(),
-                        documentContentVersion.getMimeType()));
-                logger.info(String.format("Size for documentId : %s is : %s ", documentId.toString(),
-                        documentContentVersion.getSize().toString()));
-                headers.forEach((key, value) ->
-                    logger.info(String.format("documentId : %s has Request Header %s = %s",
-                        documentId.toString(), key, value)));
-                logger.info(String.format("Headers for documentId : %s ends", documentId.toString()));
-            } else {
-                logger.info(String.format("Header is null for documentId : %s ", documentId.toString()));
-                if (Objects.nonNull(httpServletRequest)) {
-                    Iterator<String> stringIterator = httpServletRequest.getHeaderNames().asIterator();
-                    while (stringIterator.hasNext()) {
-                        logger.info(String.format("HeaderNames for documentId : %s  is %s ",
-                            documentId.toString(), stringIterator.next()));
-                    }
-                }
+            if (toggleConfiguration.isChunking()) {
+                response.reset();
             }
+            logger.warn("IOException streaming response", e);
+
+            logger.info(String.format("Headers for documentId : %s starts", documentId));
+            logger.info(String.format("ContentType for documentId : %s is : %s ", documentId,
+                    documentContentVersion.getMimeType()));
+            logger.info(String.format("Size for documentId : %s is : %s ", documentId,
+                    documentContentVersion.getSize()));
+            headers.forEach((key, value) ->
+                logger.info(String.format("documentId : %s has Request Header %s = %s",
+                    documentId.toString(), key, value)));
+            logger.info(String.format("Headers for documentId : %s ends", documentId));
+        }
+        if (toggleConfiguration.isChunking()) {
+            logger.debug("DocumentId : {} has Response: Content-Length, {}", documentId,
+                response.getHeader(HttpHeaders.CONTENT_LENGTH));
+            logger.debug("DocumentId : {} has Response: Content-Type, {}", documentId,
+                response.getHeader(HttpHeaders.CONTENT_TYPE));
+            logger.debug("DocumentId : {} has Response: Content-Range, {}", documentId,
+                response.getHeader(HttpHeaders.CONTENT_RANGE));
+            logger.debug("DocumentId : {} has Response: Accept-Ranges, {}", documentId,
+                response.getHeader(HttpHeaders.ACCEPT_RANGES));
         }
         return ResponseEntity.ok().build();
     }
