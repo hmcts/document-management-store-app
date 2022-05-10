@@ -7,20 +7,31 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import uk.gov.hmcts.dm.commandobject.DeleteCaseDocumentsCommand;
+import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.InvalidRequestException;
+import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.SearchService;
 
+import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsAreNotEmpty;
+import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsConditions;
+
 @RestController
+@Slf4j
 @RequestMapping(
     path = "/documents/")
 @Tag(name = "StoredDocumentDelete Service", description = "Endpoint for Deletion of Documents")
@@ -30,6 +41,8 @@ public class StoredDocumentDeleteController {
     @Autowired
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
+    @Autowired
+    private SearchService searchService;
 
     @DeleteMapping(value = "{documentId}")
     @Operation(summary = "Deletes a Stored Document.",
@@ -53,6 +66,41 @@ public class StoredDocumentDeleteController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @Operation(
+        summary = "Marks case documents as soft deleted.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",
+            description = "Case documents deletion results"),
+        @ApiResponse(responseCode = "400",
+            description = "Bad Request"),
+        @ApiResponse(responseCode = "403",
+            description = "Forbidden")
+    })
+    @PostMapping(
+        path = "/delete",
+        produces = MediaType.APPLICATION_JSON_VALUE,
+        consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseBody
+    public ResponseEntity<CaseDocumentsDeletionResults> deleteCaseDocuments(
+        @Valid @RequestBody DeleteCaseDocumentsCommand deleteCaseDocumentsCommand) {
+
+        try {
+            verifyRequestParamsAreNotEmpty(deleteCaseDocumentsCommand);
+            verifyRequestParamsConditions(deleteCaseDocumentsCommand);
+
+            List<StoredDocument> storedDocuments = searchService.findStoredDocumentsByCaseRef(deleteCaseDocumentsCommand);
+            CaseDocumentsDeletionResults caseDocumentsDeletionResults = auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocuments);
+
+            return new ResponseEntity<>(caseDocumentsDeletionResults, OK);
+
+        } catch (final InvalidRequestException invalidRequestException) {
+            log.error("deleteCaseDocuments API call failed due to error - {}",
+                invalidRequestException.getMessage(),
+                invalidRequestException
+            );
+            return new ResponseEntity<>(null, BAD_REQUEST);
+        }
+    }
+
 }
-
-

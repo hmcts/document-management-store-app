@@ -15,6 +15,7 @@ import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
+import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.Date;
@@ -25,6 +26,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -187,5 +189,30 @@ public class AuditedStoredDocumentOperationsServiceTests {
         when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.empty());
         auditedStoredDocumentOperationsService.updateDocument(storedDocument.getId(), metadata, newTtl);
     }
+
+    @Test
+    public void testDeleteCaseStoredDocumentsShouldMarkAllDocumentsForDeletion() {
+        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
+        when(storedDocumentService.findOne(storedDocuments.get(0).getId())).thenReturn(Optional.of(storedDocuments.get(0)));
+
+        CaseDocumentsDeletionResults caseDocumentsDeletionResults =
+            auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocuments);
+
+        assertThat(caseDocumentsDeletionResults.getCaseDocumentsFound().equals(storedDocuments.size()));
+        assertThat(caseDocumentsDeletionResults.getMarkedForDeletion().equals(storedDocuments.size()));
+    }
+
+    @Test
+    public void testDeleteCaseStoredDocumentsShouldNotMarkAllDocumentsForDeletion() {
+        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
+        when(storedDocumentService.findOne(storedDocuments.get(0).getId())).thenReturn(Optional.empty());
+
+        CaseDocumentsDeletionResults caseDocumentsDeletionResults =
+            auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocuments);
+
+        assertThat(caseDocumentsDeletionResults.getCaseDocumentsFound().equals(storedDocuments.size()));
+        assertThat(caseDocumentsDeletionResults.getMarkedForDeletion().equals(0));
+    }
+
 }
 

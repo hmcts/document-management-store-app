@@ -24,6 +24,7 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.SearchService;
 import uk.gov.hmcts.reform.auth.checker.core.RequestAuthorizer;
 import uk.gov.hmcts.reform.auth.checker.core.service.Service;
 
@@ -60,6 +61,9 @@ public class DocumentStoreProviderTest {
 
     @MockBean
     protected DocumentContentVersionService documentContentVersionService;
+
+    @MockBean
+    private SearchService searchService;
 
     private final UUID id = UUID.fromString("5c3c3906-2b51-468e-8cbb-a4002eded075");
 
