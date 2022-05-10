@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,6 +20,7 @@ import java.util.*;
 @Entity
 @Builder
 @EntityListeners(AuditingEntityListener.class)
+@ToString
 public class StoredDocument implements RolesAware {
 
     @Id

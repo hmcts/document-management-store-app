@@ -126,14 +126,18 @@ public class StoredDocumentController {
         @ApiResponse(responseCode = "404", description = "Document not found"),
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
-    public ResponseEntity<Object> getMetaData(@PathVariable UUID documentId) {
+    public ResponseEntity<Object> getMetaData(@PathVariable UUID documentId,
+                                              @RequestHeader Map<String, String> headers) {
 
+        headers.forEach((key, value) ->
+            logger.debug(String.format("DocId : %s has Request Header %s = %s",
+                documentId.toString(), key, value)));
         StoredDocument storedDocument = auditedStoredDocumentOperationsService.readStoredDocument(documentId);
 
         if (storedDocument == null) {
             return ResponseEntity.notFound().build();
         }
-
+        logger.debug("DocumentId : {} has Response: {}", storedDocument.getId(), storedDocument);
         return ResponseEntity
                 .ok()
                 .contentType(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE)
