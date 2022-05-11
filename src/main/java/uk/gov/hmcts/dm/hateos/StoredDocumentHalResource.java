@@ -64,7 +64,7 @@ public class StoredDocumentHalResource extends HalResource {
             BeanUtils.copyProperties(mostRecentDocumentContentVersion, this);
         }
 
-        add(linkTo(methodOn(StoredDocumentController.class).getMetaData(storedDocument.getId())).withSelfRel());
+        add(linkTo(methodOn(StoredDocumentController.class).getMetaData(storedDocument.getId(), null)).withSelfRel());
 
         if (mostRecentDocumentContentVersion != null) {
             add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId(), null, null, null))
