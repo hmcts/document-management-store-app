@@ -3,7 +3,7 @@
   "labels": ["dependencies"],
   "helm-requirements":
   {
-    "fileMatch": ["\\Chart.yaml$"],
+    "fileMatch": ["\\Chart.yaml|requirements.yaml$"],
     "aliases": {
       "hmctspublic": "https://hmctspublic.azurecr.io/helm/v1/repo/"
     }
