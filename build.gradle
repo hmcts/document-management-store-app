@@ -157,7 +157,7 @@ dependencyManagement {
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.16.0'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.16.1'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.26'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.4.0'
 
