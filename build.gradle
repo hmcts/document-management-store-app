@@ -148,7 +148,7 @@ dependencyManagement {
         }
 
         //CVE-2021-22047
-        dependencySet(group: 'org.springframework.data', version: '3.6.4') {
+        dependencySet(group: 'org.springframework.data', version: '3.7.0') {
             entry 'spring-data-rest-core'
             entry 'spring-data-rest-webmvc'
         }
@@ -157,7 +157,7 @@ dependencyManagement {
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.16.0'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.16.1'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.26'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.4.0'
 
@@ -166,7 +166,7 @@ dependencies {
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.3'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
@@ -349,12 +349,12 @@ test {
 }
 
 task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
-    doFirst(){
-        printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
-    }
-
-    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
-    forkEvery = 10
+//    doFirst(){
+//        printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
+//    }
+//
+//    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+//    forkEvery = 10
 
     group = 'Delivery pipeline'
     description = 'Executes functional tests'
