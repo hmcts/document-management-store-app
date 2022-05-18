@@ -138,13 +138,16 @@ dependencyManagement {
             entry 'netty-resolver'
             entry 'netty-transport'
             entry 'netty-transport-native-epoll'
+            entry 'netty-transport-classes-epoll'
             entry 'netty-transport-native-kqueue'
+            entry 'netty-transport-classes-kqueue'
             entry 'netty-transport-native-unix-common'
             entry 'netty-codec-dns'
             entry 'netty-codec-socks'
             entry 'netty-handler-proxy'
             entry 'netty-resolver-dns'
             entry 'netty-resolver-dns-native-macos'
+            entry 'netty-resolver-dns-classes-macos'
         }
 
         //CVE-2021-22047
