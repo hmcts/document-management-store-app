@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentUpdateException;
+import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.Constants;
@@ -37,6 +40,8 @@ import static java.util.AbstractMap.SimpleEntry;
     path = "/documents")
 @Tag(name = "StoredDocumentUpdate Service", description = "Endpoint for Updating Documents")
 public class StoredDocumentUpdateController {
+
+    private final Logger logger = LoggerFactory.getLogger(StoredDocumentUpdateController.class);
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -88,6 +93,10 @@ public class StoredDocumentUpdateController {
             for (DocumentUpdate d : updateDocumentsCommand.documents) {
                 documentService.updateDocument(d.documentId, d.metadata, updateDocumentsCommand.ttl);
             }
+        } catch (StoredDocumentNotFoundException exception) {
+            //We need to do to make sure we return 404 status and not 500.
+            logger.error(exception.getMessage());
+            throw exception;
         } catch (Exception e) {
             throw new DocumentUpdateException(e.getMessage());
         }
