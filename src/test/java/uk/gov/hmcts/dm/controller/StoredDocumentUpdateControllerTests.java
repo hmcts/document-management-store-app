@@ -18,6 +18,8 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
     private final UUID id = UUID.randomUUID();
 
+    private final StoredDocumentNotFoundException storedDocumentNotFoundException = new StoredDocumentNotFoundException(id);
+
     @Test
     public void testUpdateDocument() throws Exception {
 
@@ -56,12 +58,14 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testBulkUpdateException() throws Exception {
+    public void testBulkUpdateStoredDocumentNotFoundException() throws Exception {
 
         Date ttl = new Date();
-//        when(auditedStoredDocumentOperationsService.updateDocument(eq(id), any(), eq(ttl)))
-//            .thenThrow(new StoredDocumentNotFoundException(id));
-//        when(storedDocumentService.findOne(eq(id))).thenThrow(new StoredDocumentNotFoundException(id));
+
+        doThrow(storedDocumentNotFoundException).when(this.auditedStoredDocumentOperationsService)
+            .updateDocument(any(UUID.class),
+                any(), any(Date.class));
+
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")

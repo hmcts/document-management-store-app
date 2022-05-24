@@ -39,6 +39,7 @@ import static java.util.AbstractMap.SimpleEntry;
 @RequestMapping(
     path = "/documents")
 @Tag(name = "StoredDocumentUpdate Service", description = "Endpoint for Updating Documents")
+@SuppressWarnings({"squid:S2139"})
 public class StoredDocumentUpdateController {
 
     private final Logger logger = LoggerFactory.getLogger(StoredDocumentUpdateController.class);
