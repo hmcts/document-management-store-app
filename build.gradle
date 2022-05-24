@@ -174,7 +174,7 @@ dependencies {
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.19'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.20'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
@@ -265,6 +265,7 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java',
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
     '**uk/gov/hmcts/dm/controller/WelcomeController.java',
+    '**uk/gov/hmcts/dm/controller/StoredDocumentUpdateController.java',
     '**uk/gov/hmcts/dm/service/Constants.java',
     '**uk/gov/hmcts/dm/service/DocumentContentVersionModel.java'
 ]

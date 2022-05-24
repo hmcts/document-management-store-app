@@ -164,7 +164,7 @@ class UpdateDocumentIT extends BaseIT {
         ])
             .contentType(ContentType.JSON)
             .expect().log().all()
-            .statusCode(500)//FIXME should be 404
+            .statusCode(404)
             .body("error", equalTo("Document with ID: " + uuid + " could not be found"))
             .when()
             .patch("/documents")
