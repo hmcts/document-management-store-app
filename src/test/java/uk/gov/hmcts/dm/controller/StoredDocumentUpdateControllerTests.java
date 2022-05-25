@@ -6,18 +6,19 @@ import org.junit.Test;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 
 import java.util.Date;
 import java.util.UUID;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
     private final UUID id = UUID.randomUUID();
+
+    private final StoredDocumentNotFoundException storedDocumentNotFoundException = new StoredDocumentNotFoundException(id);
 
     @Test
     public void testUpdateDocument() throws Exception {
@@ -53,6 +54,31 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
                 )
             ))
             .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void testBulkUpdateStoredDocumentNotFoundException() throws Exception {
+
+        Date ttl = new Date();
+
+        doThrow(storedDocumentNotFoundException).when(this.auditedStoredDocumentOperationsService)
+            .updateDocument(any(UUID.class),
+                any(), any(Date.class));
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .patch("/documents", ImmutableMap.of(
+                "ttl", ttl,
+                "documents", Lists.newArrayList(
+                    ImmutableMap.of(
+                        "documentId", UUID.randomUUID(),
+                        "metadata", ImmutableMap.of("key2", "value2")
+                    )
+                )
+            ))
+            .andExpect(status().isNotFound());
 
     }
 
