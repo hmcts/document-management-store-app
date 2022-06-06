@@ -72,8 +72,7 @@ configurations {
 }
 
 configurations.all {
-    exclude group: 'org.bouncycastle',             module: 'bcprov-jdk15on'
-    exclude group: 'org.springframework.security', module: 'spring-security-rsa'
+    exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
 }
 
 tasks.withType(JavaCompile) {
