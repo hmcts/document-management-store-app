@@ -3,21 +3,32 @@ package uk.gov.hmcts.dm.security.domain;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.Permissions;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class DomainPermissionEvaluatorTests {
 
     private static final String MRS_CASE_WORKER = "Mrs Case Worker";
     private static final String MR_A = "Mr A";
+    private static final String CCD_CASE_DISPOSER = "ccd_case_disposer";
+    private static final String CASE_DOCUMENT_ACCESS_API = "ccd_case_document_am_api";
 
-    private final DomainPermissionEvaluator domainPermissionEvaluator = new DomainPermissionEvaluator();
+    @Mock
+    SecurityUtilService securityUtilService;
+
+    @InjectMocks
+    DomainPermissionEvaluator domainPermissionEvaluator;
 
     @Test
     public void testAsCreatorIAmGrantedAllPermissions() {
@@ -64,6 +75,7 @@ public class DomainPermissionEvaluatorTests {
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy(MR_A);
 
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn(CASE_DOCUMENT_ACCESS_API);
 
         Assert.assertTrue(domainPermissionEvaluator
             .hasPermission(
@@ -102,6 +114,7 @@ public class DomainPermissionEvaluatorTests {
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy(MR_A);
 
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn(CASE_DOCUMENT_ACCESS_API);
 
         Assert.assertTrue(domainPermissionEvaluator
             .hasPermission(
@@ -134,12 +147,57 @@ public class DomainPermissionEvaluatorTests {
     }
 
     @Test
+    public void testAsCcdCaseDisposerIHaveDeletePermission() {
+        String notCaseWorkerCredentials = MRS_CASE_WORKER;
+
+        StoredDocument storedFile = new StoredDocument();
+        storedFile.setCreatedBy(MR_A);
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn(CCD_CASE_DISPOSER);
+
+        Assert.assertFalse(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x")
+            ));
+        Assert.assertFalse(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.UPDATE,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x")
+            ));
+        Assert.assertFalse(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.CREATE,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x")
+            ));
+        Assert.assertTrue(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.DELETE,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x")
+            ));
+        Assert.assertFalse(domainPermissionEvaluator
+            .hasPermission(
+                storedFile,
+                Permissions.READ,
+                notCaseWorkerCredentials,
+                Arrays.asList("a", "x")
+            ));
+    }
+
+    @Test
     public void testAsNotCreatorAndNotTestWorkerIdontHavePermissions() {
         String notCaseWorkerCredentials = MRS_CASE_WORKER;
 
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy(MR_A);
-
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn(CASE_DOCUMENT_ACCESS_API);
 
         Assert.assertFalse(domainPermissionEvaluator
             .hasPermission(

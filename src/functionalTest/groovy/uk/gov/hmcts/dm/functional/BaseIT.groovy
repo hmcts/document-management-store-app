@@ -169,6 +169,15 @@ abstract class BaseIT {
         request
     }
 
+    def givenCcdCaseDisposerRequest() {
+
+        def request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all()
+        request = request.header("serviceauthorization",
+            authTokenProvider.findCcdCaseDisposerServiceToken())
+
+        request
+    }
+
     def givenLargeFileRequest(username = null, userRoles = null) {
 
         def request = SerenityRest.given().baseUri(largeDocsBaseUri).log().all()
@@ -255,6 +264,10 @@ abstract class BaseIT {
 
     def serviceToken() {
         authTokenProvider.findServiceToken()
+    }
+
+    def ccdCaseDisposerServiceToken() {
+        authTokenProvider.findCcdCaseDisposerServiceToken()
     }
 
     def createDocument(username, filename = null, classification = null, roles = null, metadata = null) {
