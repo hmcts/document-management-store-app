@@ -37,5 +37,8 @@ java:
     STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
   postgresql:
     enabled: true
+    auth:
+      username: evidence
+      password: evidence
 blobstorage:
   enabled: true
