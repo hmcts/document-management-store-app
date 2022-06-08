@@ -209,4 +209,34 @@ class DeleteDocumentIT extends BaseIT {
         }
     }
 
+    @Test
+    void "D10 Ccd Case Disposer can delete document created by caseworker"() {
+        givenCcdCaseDisposerRequest()
+            .expect()
+            .statusCode(204)
+            .when()
+            .delete(caseWorkerDocumentUrl)
+
+        givenRequest(CASE_WORKER)
+            .expect()
+            .statusCode(404)
+            .when()
+            .get(caseWorkerDocumentUrl)
+    }
+
+    @Test
+    void "D11 Ccd Case Disposer can delete document created by citizen"() {
+        givenCcdCaseDisposerRequest()
+            .expect()
+            .statusCode(204)
+            .when()
+            .delete(citizenDocumentUrl)
+
+        givenRequest(CITIZEN)
+            .expect()
+            .statusCode(404)
+            .when()
+            .get(citizenDocumentUrl)
+    }
+
 }

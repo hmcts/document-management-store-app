@@ -24,14 +24,17 @@ public class AuthTokenProvider {
     private final String idamS2SBaseUri;
     private final String idamUserBaseUrl;
     private final String s2sSecret;
+    private final String ccdCaseDisposerS2sSecret;
 
     @Autowired
     public AuthTokenProvider(@Value("${base-urls.idam-s2s}") String idamS2SBaseUri,
                              @Value("${base-urls.idam-user}") String idamUserBaseUri,
-                             @Value("${base-urls.s2s-token}") String s2sSecret) {
+                             @Value("${base-urls.s2s-token}") String s2sSecret,
+                             @Value("${base-urls.ccd-case-disposer-s2s-token}") String ccdCaseDisposerS2sSecret) {
         this.idamS2SBaseUri = idamS2SBaseUri;
         this.idamUserBaseUrl = idamUserBaseUri;
         this.s2sSecret = s2sSecret;
+        this.ccdCaseDisposerS2sSecret = ccdCaseDisposerS2sSecret;
         System.out.println("IDAM User URL - " + idamUserBaseUri);
         System.out.println("IDAM S2S URL - " + idamS2SBaseUri);
     }
@@ -62,6 +65,28 @@ public class AuthTokenProvider {
         Map<String, Object> params = ImmutableMap.of(
             "microservice", "em_gw",
             "oneTimePassword", new GoogleAuthenticator().getTotpPassword(this.s2sSecret)
+        );
+
+        Response response = RestAssured
+            .given()
+            .relaxedHTTPSValidation()
+            .baseUri(this.idamS2SBaseUri)
+            .header(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .body(params)
+            .post("/lease")
+            .andReturn();
+
+        assertThat(response.getStatusCode(), CoreMatchers.equalTo(200));
+
+        return "Bearer " + response
+            .getBody()
+            .print();
+    }
+
+    public String findCcdCaseDisposerServiceToken() {
+        Map<String, Object> params = ImmutableMap.of(
+            "microservice", "ccd_case_disposer",
+            "oneTimePassword", new GoogleAuthenticator().getTotpPassword(this.ccdCaseDisposerS2sSecret)
         );
 
         Response response = RestAssured
