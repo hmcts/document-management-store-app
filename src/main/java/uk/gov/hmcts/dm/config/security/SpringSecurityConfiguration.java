@@ -1,12 +1,14 @@
 package uk.gov.hmcts.dm.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
 import uk.gov.hmcts.reform.auth.checker.core.RequestAuthorizer;
 import uk.gov.hmcts.reform.auth.checker.core.service.Service;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.AuthCheckerServiceOnlyFilter;
@@ -17,7 +19,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SpringSecurityConfiguration {
 
     @Autowired
     private RequestAuthorizer<Service> serviceRequestAuthorizer;
@@ -27,9 +29,11 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private AuthCheckerServiceOnlyFilter serviceOnlyFilter;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        serviceOnlyFilter.setAuthenticationManager(authenticationManager());
+    @Autowired
+    UserDetailsService userDetailsService;
+
+    @Bean
+    protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.headers().cacheControl().disable();
 
@@ -43,12 +47,14 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .logout().disable()
             .authorizeRequests()
             .anyRequest().authenticated();
+        return http.build();
     }
 
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring()
-            .antMatchers("/swagger-ui.html",
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) ->
+            web.ignoring().antMatchers(
+            "/swagger-ui.html",
                 "/swagger-ui/**",
                 "/swagger-resources/**",
                 "/v3/**",
