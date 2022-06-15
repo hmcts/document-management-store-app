@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * This tasklet periodically checks for CSV files in the hmctsmetadata blob container. If it finds one it will download
+ * This tasklet periodically checks for CSV files in the orphandocuments blob container. If it finds one it will download
  * it and then delete all the documents found with the UUID provided in the file. After the deletion has been completed the file
  * is removed from the blob container.
  */
@@ -46,7 +46,7 @@ public class OrphanDocumentDeletionTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
 
-        log.info("==== Deletion started ====");
+        log.info("==== Deletion of Orphan Documents started ====");
         Optional<BlobClient>  blob = blobClient.listBlobs()
             .stream()
             .map(blobItem -> blobClient.getBlobClient(blobItem.getName()))
@@ -55,7 +55,7 @@ public class OrphanDocumentDeletionTasklet implements Tasklet {
         if (blob.isPresent()) {
             processItem(blob.get());
         }
-        log.info("==== Deletion ended ====");
+        log.info("==== Deletion of Orphan Documents ended ====");
         return RepeatStatus.FINISHED;
     }
 
@@ -77,7 +77,7 @@ public class OrphanDocumentDeletionTasklet implements Tasklet {
 
     private void processItem(BlobClient client) {
 
-        log.info(" processItem started for : {} ", client.getBlobName());
+        log.info("processItem of Orphan Documents started for : {} ", client.getBlobName());
         StopWatch stopwatch = new StopWatch();
         stopwatch.start();
 
@@ -99,17 +99,16 @@ public class OrphanDocumentDeletionTasklet implements Tasklet {
                 if (storedDocument.isPresent()) {
                     auditedStoredDocumentBatchOperationsService.hardDeleteStoredDocument(storedDocument.get());
                 } else {
-                    missingDocIds.add(docId);
+                    log.error("Document with Id: {} not found.",docId);
                 }
             }
-            //TODO - create folder and keep the missing Ids file in it. If this exists.
 
-            log.info(" DB updated for : {}",client.getBlobName());
+            log.info("DB updated for Orphan Documents: {}",client.getBlobName());
 
             stopwatch.stop();
             long timeElapsed = stopwatch.getTime();
 
-            log.info("Time taken to delete {} documents is  : {} milliseconds from csv file with name {} ", documentIds.size(),
+            log.info("Time taken to delete {} Orphan Documents is  : {} milliseconds from csv file with name {} ", documentIds.size(),
                 timeElapsed, client.getBlobName());
 
             client.delete();
@@ -122,7 +121,7 @@ public class OrphanDocumentDeletionTasklet implements Tasklet {
         try {
             return UUID.fromString(cells[0]);
         } catch (IllegalArgumentException e) {
-            log.error("Document UUID : {} ", cells[0]);
+            log.error("Can not read Document UUID : {} ", cells[0]);
             return DUMMY_UUID;
         }
     }

@@ -24,6 +24,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
+import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService;
 
 import javax.sql.DataSource;
 import java.util.Date;
@@ -54,6 +55,9 @@ public class OrphanDocumentDeletionBatchConfig {
     @Autowired
     private StoredDocumentService storedDocumentService;
 
+    @Autowired
+    private AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
+
     @Scheduled(cron = "${spring.batch.orphanFileDeletionCronJobSchedule}")
     @SchedulerLock(name = "${task.env}-orphanDocumentDeletion")
     public void scheduleDocumentMetaDataUpdate() throws JobParametersInvalidException,
@@ -74,7 +78,8 @@ public class OrphanDocumentDeletionBatchConfig {
     public Job orphanDocumentDeletionJob() {
         return jobBuilderFactory.get("orphanDocumentDeletionJob")
             .flow(stepBuilderFactory.get("orphanDocumentDeletionJob")
-                .tasklet(new UpdateDocumentMetaDataTasklet(blobClient, storedDocumentService))
+                .tasklet(new OrphanDocumentDeletionTasklet(blobClient, storedDocumentService,
+                    auditedStoredDocumentBatchOperationsService))
                 .build()).build().build();
     }
 }
