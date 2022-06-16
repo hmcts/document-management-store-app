@@ -106,7 +106,8 @@ public class AuditedStoredDocumentOperationsService {
         for (StoredDocument storedDocument : storedDocuments) {
             Optional<StoredDocument> foundDocument = storedDocumentService.findOne(storedDocument.getId());
             if (foundDocument.isPresent()) {
-                deleteStoredDocument(storedDocument.getId(), Constants.FALSE);
+                storedDocument.setTtl(new Date());
+                deleteStoredDocument(storedDocument, Constants.FALSE);
                 caseDocumentsDeletionResults.setMarkedForDeletion(++count);
             }
         }

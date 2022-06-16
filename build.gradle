@@ -73,6 +73,8 @@ configurations {
 
 configurations.all {
     exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
+    exclude group: 'org.springframework.security', module: 'spring-security-rsa'
 }
 
 tasks.withType(JavaCompile) {
@@ -106,7 +108,8 @@ def versions = [
     emTestHelper       : '1.21.2',
     shedlock           : '4.33.0',
     hibernate          : '5.6.5.Final',
-    jupiter            : '5.8.2'
+    jupiter            : '5.8.2',
+    springSecurity     : '5.7.1'
 ]
 
 dependencyManagement {
@@ -181,7 +184,6 @@ dependencies {
         exclude group: "org.hibernate", module: "hibernate-core"
     }
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
@@ -205,6 +207,10 @@ dependencies {
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.2'
+
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
