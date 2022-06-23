@@ -86,7 +86,6 @@ public class OrphanDocumentDeletionTasklet implements Tasklet {
             bufferedReader = getCsvFile(client);
             List<UUID> documentIds = bufferedReader
                 .lines()
-                .skip(1)
                 .map(line -> getDocumentId(line.split(",")))
                 .collect(Collectors.toList());
             log.info(" {} file processed ", client.getBlobName());
