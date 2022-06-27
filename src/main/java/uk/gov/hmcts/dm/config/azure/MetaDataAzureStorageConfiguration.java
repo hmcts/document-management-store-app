@@ -22,20 +22,24 @@ public class MetaDataAzureStorageConfiguration {
     private String connectionString;
 
     @Value("${azure.storage.metadata-blob-container-reference}")
-    private String containerReference;
+    private String metadataContainerName;
+
+    @Value("${azure.storage.orphandocument-blob-container-reference}")
+    private String orphanDocumentContainerName;
+
+    private static final String AZURE_STORAGE_EMULATOR_AZURITE =  "azure-storage-emulator-azurite";
 
     @Bean(name = "metadata-storage")
     @ConditionalOnProperty(
         value = "toggle.metadatamigration",
         havingValue = "true")
     BlobContainerClient cloudBlobContainer() throws UnknownHostException {
-        final String blobAddress = connectionString.contains("azure-storage-emulator-azurite")
-            ? connectionString.replace(
-                "azure-storage-emulator-azurite",
-                InetAddress.getByName("azure-storage-emulator-azurite").getHostAddress())
+        final String blobAddress = connectionString.contains(AZURE_STORAGE_EMULATOR_AZURITE)
+            ? connectionString.replace(AZURE_STORAGE_EMULATOR_AZURITE,
+                InetAddress.getByName(AZURE_STORAGE_EMULATOR_AZURITE).getHostAddress())
             : connectionString;
 
-        final BlobContainerClient client = getClient(blobAddress);
+        final BlobContainerClient client = getClient(blobAddress, metadataContainerName);
 
         try {
             client.create();
@@ -45,11 +49,31 @@ public class MetaDataAzureStorageConfiguration {
         }
     }
 
-    BlobContainerClient getClient(String blobAddress) {
+    BlobContainerClient getClient(String blobAddress, String containerName) {
         return new BlobContainerClientBuilder()
             .connectionString(blobAddress)
-            .containerName(containerReference)
+            .containerName(containerName)
             .buildClient();
+    }
+
+    @Bean(name = "orphandocument-storage")
+    @ConditionalOnProperty(
+        value = "toggle.orphandocumentdeletion",
+        havingValue = "true")
+    BlobContainerClient orphanFileCloudBlobContainer() throws UnknownHostException {
+        final String blobAddress = connectionString.contains(AZURE_STORAGE_EMULATOR_AZURITE)
+            ? connectionString.replace(AZURE_STORAGE_EMULATOR_AZURITE,
+            InetAddress.getByName(AZURE_STORAGE_EMULATOR_AZURITE).getHostAddress())
+            : connectionString;
+
+        final BlobContainerClient client = getClient(blobAddress, orphanDocumentContainerName);
+
+        try {
+            client.create();
+            return client;
+        } catch (BlobStorageException e) {
+            return client;
+        }
     }
 
 }

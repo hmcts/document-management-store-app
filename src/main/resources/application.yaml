@@ -58,6 +58,7 @@ spring:
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
+    orphanFileDeletionCronJobSchedule: ${ORPHAN_FILE_DELETION_CRONJOB_SCHEDULE:0 15 22 * * ?}
 
 server:
   port: ${SERVER_PORT:4603}
@@ -93,6 +94,7 @@ azure:
       blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
       enabled: true
       metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
+      orphandocument-blob-container-reference: ${STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME:orphandocuments}
 
 app-insights:
   dev-mode: off
@@ -182,6 +184,7 @@ toggle:
   metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
   overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
   chunking: ${ENABLE_CHUNKING:false}
+  orphandocumentdeletion: ${ENABLE_ORPHAN_DOCUMENT_DELETION:false}
 task:
   env: ${TASK_ENV:documentTaskLock-local}
 
