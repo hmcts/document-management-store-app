@@ -55,6 +55,8 @@ az acr login --name hmctspublic && az acr login --name hmctsprivate
 docker-compose -f docker-compose-dev.yml pull
 docker-compose -f docker-compose-dev.yml up -d
 
+#Run below script to create the Batch related tables for local set up ONLY
+./bin/create-batch-related-tables-postresql.sh
 
 # Run application
 ./gradlew bootRun
