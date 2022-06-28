@@ -11,6 +11,6 @@ dependencies:
     version: 3.7.8
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
   - name: blobstorage
-    version: 0.2.1
+    version: 0.3.0
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
     condition: blobstorage.enabled
