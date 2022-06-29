@@ -38,5 +38,8 @@ java:
     STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME: orphandocumentdeletion{{ .Release.Name }}
   postgresql:
     enabled: true
+    auth:
+      username: evidence
+      password: evidence
 blobstorage:
   enabled: true
