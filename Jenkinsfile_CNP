@@ -194,5 +194,5 @@ withPipeline(type , product, component) {
             ]
         }
 
-    syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
+//    syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
 }
