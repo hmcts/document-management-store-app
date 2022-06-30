@@ -19,5 +19,6 @@
             Awaiting fix as updating to latest available version hasn't resolved this Medium vulnerability.
         </notes>
         <cve>CVE-2022-22976</cve>
+        <cve>CVE-2022-34305</cve>
     </suppress>
 </suppressions>
