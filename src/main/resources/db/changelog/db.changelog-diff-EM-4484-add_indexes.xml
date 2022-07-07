@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="EM-4484-documentmetadata" author="yogesh (manual)">
+        <createIndex indexName="documentmetadata_name_idx" tableName="documentmetadata">
+            <column name="name"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="EM-4484-auditentry-1" author="yogesh (manual)">
+        <createIndex indexName="auditentry_documentcontentversion_idx" tableName="auditentry">
+            <column name="documentcontentversion_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="EM-4484-auditentry-2" author="yogesh (manual)">
+        <createIndex indexName="auditentry_storeddocument_idx" tableName="auditentry">
+            <column name="storeddocument_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
