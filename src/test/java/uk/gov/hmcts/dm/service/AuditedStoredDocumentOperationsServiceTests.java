@@ -192,27 +192,13 @@ public class AuditedStoredDocumentOperationsServiceTests {
 
     @Test
     public void testDeleteCaseStoredDocumentsShouldMarkAllDocumentsForDeletion() {
-        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
-        when(storedDocumentService.findOne(storedDocuments.get(0).getId())).thenReturn(Optional.of(storedDocuments.get(0)));
+        final List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
 
-        CaseDocumentsDeletionResults caseDocumentsDeletionResults =
+        final CaseDocumentsDeletionResults caseDocumentsDeletionResults =
             auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocuments);
 
         assertThat(caseDocumentsDeletionResults.getCaseDocumentsFound().equals(storedDocuments.size()));
         assertThat(caseDocumentsDeletionResults.getMarkedForDeletion().equals(storedDocuments.size()));
     }
-
-    @Test
-    public void testDeleteCaseStoredDocumentsShouldNotMarkAllDocumentsForDeletion() {
-        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
-        when(storedDocumentService.findOne(storedDocuments.get(0).getId())).thenReturn(Optional.empty());
-
-        CaseDocumentsDeletionResults caseDocumentsDeletionResults =
-            auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocuments);
-
-        assertThat(caseDocumentsDeletionResults.getCaseDocumentsFound().equals(storedDocuments.size()));
-        assertThat(caseDocumentsDeletionResults.getMarkedForDeletion().equals(0));
-    }
-
 }
 
