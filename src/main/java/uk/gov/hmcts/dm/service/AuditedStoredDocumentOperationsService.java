@@ -14,6 +14,9 @@ import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static uk.gov.hmcts.dm.service.Constants.*;
 
 @Transactional
 @Service
@@ -96,22 +99,19 @@ public class AuditedStoredDocumentOperationsService {
         }
     }
 
-    public CaseDocumentsDeletionResults deleteCaseStoredDocuments(List<StoredDocument> storedDocuments) {
+    public CaseDocumentsDeletionResults deleteCaseStoredDocuments(final List<StoredDocument> storedDocuments) {
 
-        int count = 0;
-        CaseDocumentsDeletionResults caseDocumentsDeletionResults = new CaseDocumentsDeletionResults();
+        final AtomicInteger documentsMarkedForDeletion = new AtomicInteger(0);
+
+        final CaseDocumentsDeletionResults caseDocumentsDeletionResults = new CaseDocumentsDeletionResults();
         caseDocumentsDeletionResults.setCaseDocumentsFound(storedDocuments.size());
-        caseDocumentsDeletionResults.setMarkedForDeletion(count);
+        caseDocumentsDeletionResults.setMarkedForDeletion(documentsMarkedForDeletion.get());
 
-        for (StoredDocument storedDocument : storedDocuments) {
-            Optional<StoredDocument> foundDocument = storedDocumentService.findOne(storedDocument.getId());
-            if (foundDocument.isPresent()) {
-                storedDocument.setTtl(new Date());
-                deleteStoredDocument(storedDocument, Constants.FALSE);
-                caseDocumentsDeletionResults.setMarkedForDeletion(++count);
-            }
-        }
-
+        storedDocuments.forEach(storedDocument -> {
+            storedDocument.setTtl(new Date());
+            deleteStoredDocument(storedDocument, FALSE);
+            caseDocumentsDeletionResults.setMarkedForDeletion(documentsMarkedForDeletion.incrementAndGet());
+        });
         return caseDocumentsDeletionResults;
     }
 
