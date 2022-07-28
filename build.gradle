@@ -8,9 +8,9 @@ buildscript {
 plugins {
     id 'application'
     id 'groovy'
-    id 'uk.gov.hmcts.java' version '0.12.23'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '2.7.0'
+    id 'uk.gov.hmcts.java' version '0.12.28'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'org.springframework.boot' version '2.7.2'
     id 'com.github.ben-manes.versions' version '0.42.0'
     id 'org.sonarqube' version '3.3'
     id 'jacoco'
@@ -164,7 +164,7 @@ dependencyManagement {
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.16.1'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.18.0'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.26'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.4.1'
 
