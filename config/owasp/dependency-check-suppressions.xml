@@ -5,6 +5,10 @@
         <cve>CVE-2022-0839</cve>
     </suppress>
     <suppress>
+        <!--Need to resolve Liquibase issue before updating the library-->
+        <cve>CVE-2022-31197</cve>
+    </suppress>
+    <suppress>
         <notes>
             Awaiting fix as updating to latest available version hasn't resolved this.
         </notes>
