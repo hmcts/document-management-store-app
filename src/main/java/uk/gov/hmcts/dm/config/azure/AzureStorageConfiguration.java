@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.config.azure;
 
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
-import com.azure.storage.blob.BlobServiceVersion;
 import com.azure.storage.blob.models.BlobStorageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,6 @@ public class AzureStorageConfiguration {
 
         final BlobContainerClient client = new BlobContainerClientBuilder()
             .connectionString(blobAddress)
-            .serviceVersion(BlobServiceVersion.V2021_06_08)
             .containerName(containerReference)
             .buildClient();
 
