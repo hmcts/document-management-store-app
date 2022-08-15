@@ -18,12 +18,12 @@ plugins {
     id 'io.franzbecker.gradle-lombok' version '5.0.0'
     id "info.solidsoft.pitest" version '1.5.2'
     id 'au.com.dius.pact' version '4.2.14'
+    id 'org.flywaydb.flyway' version '8.5.13'
 
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply from: 'liquibase.gradle'
 apply plugin: 'net.serenity-bdd.aggregator'
 
 group = 'uk.gov.hmcts.dm'
@@ -75,7 +75,6 @@ configurations.all {
     exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
-    exclude group: 'org.liquibase', module: 'liquibase-core'
 }
 
 tasks.withType(JavaCompile) {
@@ -115,11 +114,6 @@ def versions = [
 
 dependencyManagement {
     dependencies {
-
-        // Fix for migratePostgresDatabase task failure
-        dependencySet(group: 'org.liquibase', version: '3.8.2') {
-            entry 'liquibase-core'
-        }
 
         //CVE-2021-27568
         dependencySet(group: 'net.minidev', version: '2.4.7') {
@@ -201,6 +195,8 @@ dependencies {
 
     implementation group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.5.13'
+
     implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5', {
         exclude group: 'com.github.hmcts', module: 'java-logging-spring'
     }
@@ -273,7 +269,9 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
     '**uk/gov/hmcts/dm/controller/WelcomeController.java',
     '**uk/gov/hmcts/dm/service/Constants.java',
-    '**uk/gov/hmcts/dm/service/DocumentContentVersionModel.java'
+    '**uk/gov/hmcts/dm/service/DocumentContentVersionModel.java',
+    '**uk/gov/hmcts/reform/dm/data/migration/PendingMigrationScriptException*',
+    '**uk/gov/hmcts/reform/dm/data/migration/FlywayNoOpStrategy*'
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
@@ -421,3 +419,18 @@ task runProviderPactVerification(type: Test) {
 }
 
 runProviderPactVerification.finalizedBy pactVerify
+
+flyway {
+    url = System.getenv('FLYWAY_URL')
+    user = System.getenv('FLYWAY_USER')
+    password = System.getenv('FLYWAY_PASSWORD')
+    baselineOnMigrate = true
+    baselineVersion = '1'
+}
+
+task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+    baselineOnMigrate = true
+    if (project.hasProperty("dburl")) {
+        url = "jdbc:postgresql://${dburl}"
+    }
+}

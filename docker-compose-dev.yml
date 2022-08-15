@@ -41,6 +41,33 @@ services:
             MICROSERVICEKEYS_CCD_CASE_DISPOSER: BBBBBBBBBBBBBBBB
             TESTING_SUPPORT_ENABLED: "true"
 
+    service-auth-provider-app:
+        image: hmctspublic.azurecr.io/rpe/service-auth-provider:latest
+        environment:
+            - microserviceKeys_em_gw=AAAAAAAAAAAAAAAA
+            - microserviceKeys_em_ccd_orchestrator=AAAAAAAAAAAAAAAA
+            - microserviceKeys_em_stitching_api=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_case_document_am_api=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_gw=AAAAAAAAAAAAAAAA
+            - microserviceKeys_xui_webapp=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_data=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_definition=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_admin=AAAAAAAAAAAAAAAA
+            - microserviceKeys_fpl_case_service=AAAAAAAAAAAAAAAA
+            - microserviceKeys_am_role_assignment_service=AAAAAAAAAAAAAAAA
+            - JSON_CONSOLE_PRETTY_PRINT=false
+            - REFORM_SERVICE_TYPE=java
+            - REFORM_SERVICE_NAME=service-auth-provider-app
+            - REFORM_TEAM=rpe
+            - REFORM_ENVIRONMENT=docker
+            - PACKAGES_ENVIRONMENT=docker
+            - PACKAGES_PROJECT=rpe
+            - PACKAGES_NAME=service-auth-provider-app
+            - PACKAGES_VERSION=unkown
+            - TESTING_SUPPORT_ENABLED=true
+        ports:
+            - 8489:8489
+
 volumes:
     pacts:
     ccd-docker-azure-blob-data:
