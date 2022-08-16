@@ -287,7 +287,7 @@ abstract class BaseIT {
         }
 
         request
-            .expect()
+            .expect().log().all()
             .statusCode(200)
             .when()
             .post("/documents")
