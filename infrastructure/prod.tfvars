@@ -35,4 +35,4 @@ max_file_size_in_mb        = "100"
 // DB
 sku_name = "GP_Gen5_4"
 sku_capacity = "4"
-database_storage_mb = "148480"
+database_storage_mb = "512000"
