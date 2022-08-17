@@ -518,7 +518,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
     }
 
-    @Test
+    /*@Test
     void "CD25 As authenticated user I can upload with x-forward headers"() {
         def forwardedHost = "ccd-gateway.service.internal";
         givenRequest(CITIZEN)
@@ -531,7 +531,7 @@ class CreateDocumentIT extends BaseIT {
             .body("_embedded.documents[0]._links.binary.href", not(containsString(forwardedHost)))
             .when()
             .post("/documents")
-    }
+    }*/
 
     @Test
     void "CD26 As a user, I should be able to upload a file with a TTL"() {
