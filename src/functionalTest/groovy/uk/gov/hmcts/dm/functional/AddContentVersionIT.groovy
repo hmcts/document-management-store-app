@@ -203,7 +203,9 @@ class AddContentVersionIT extends BaseIT {
 
             Response response = CreateAUserforTTL CASE_WORKER
 
-            String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
+            String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"))
+
+            documentUrl1 = replaceHttp(documentUrl1)
 
             givenRequest(CASE_WORKER)
                 .multiPart("file", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
