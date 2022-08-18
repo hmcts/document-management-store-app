@@ -270,8 +270,8 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/controller/WelcomeController.java',
     '**uk/gov/hmcts/dm/service/Constants.java',
     '**uk/gov/hmcts/dm/service/DocumentContentVersionModel.java',
-    '**uk/gov/hmcts/reform/dm/data/migration/PendingMigrationScriptException*',
-    '**uk/gov/hmcts/reform/dm/data/migration/FlywayNoOpStrategy*'
+    '**uk/gov/hmcts/dm/data/migration/PendingMigrationScriptException*',
+    '**uk/gov/hmcts/dm/data/migration/FlywayNoOpStrategy*'
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
