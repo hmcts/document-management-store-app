@@ -91,8 +91,8 @@ class CreateDocumentIT extends BaseIT {
             .when()
             .post("/documents")
 
-        String documentUrl1 = response.path("_embedded.documents[0]._links.self.href")
-        String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href")
+        String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"))
+        String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"))
         String document1Size = response.path("_embedded.documents[0].size")
 
         givenRequest(CITIZEN)
@@ -341,7 +341,7 @@ class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .andReturn()
 
-        def tiffUrl = response.path("_embedded.documents[0]._links.thumbnail.href")
+        def tiffUrl = replaceHttp(response.path("_embedded.documents[0]._links.thumbnail.href"))
 
         def tiffByteArray = givenRequest(CITIZEN)
             .get(tiffUrl).asByteArray()

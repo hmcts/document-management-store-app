@@ -55,6 +55,9 @@ abstract class BaseIT {
     @Value('${toggle.metadatamigration}')
     boolean metadataMigrationEnabled
 
+    @Value('${toggle.secureurl}')
+    boolean secureurl
+
     final String PASSWORD = '123'
 
     String CITIZEN = 'test12@test.com'
@@ -294,8 +297,9 @@ abstract class BaseIT {
     }
 
     def createDocumentAndGetUrlAs(username, filename = null, classification = null, roles = null, metadata = null) {
-        createDocument(username, filename, classification, roles, metadata)
+        def url = createDocument(username, filename, classification, roles, metadata)
             .path("_embedded.documents[0]._links.self.href")
+        replaceHttp(url)
     }
 
     def fetchDocumentMetaDataAs(username, documentUrl) {
@@ -303,8 +307,9 @@ abstract class BaseIT {
     }
 
     def createDocumentAndGetBinaryUrlAs(username, filename = null, classification = null, roles = null) {
-        createDocument(username, filename, classification, roles)
+        def url = createDocument(username, filename, classification, roles)
             .path("_embedded.documents[0]._links.binary.href")
+        replaceHttp(url)
     }
 
     def createDocumentContentVersion(documentUrl, username, filename = null) {
@@ -317,11 +322,13 @@ abstract class BaseIT {
     }
 
     def createDocumentContentVersionAndGetUrlAs(documentUrl, username, filename = null) {
-        createDocumentContentVersion(documentUrl, username, filename).path('_links.self.href')
+        def url = createDocumentContentVersion(documentUrl, username, filename).path('_links.self.href')
+        replaceHttp(url)
     }
 
     def createDocumentContentVersionAndGetBinaryUrlAs(documentUrl, username, filename = null) {
-        createDocumentContentVersion(documentUrl, username, filename).path('_links.binary.href')
+        def url = createDocumentContentVersion(documentUrl, username, filename).path('_links.binary.href')
+        replaceHttp(url)
     }
 
     def CreateAUserforTTL(username) {
@@ -353,4 +360,12 @@ abstract class BaseIT {
         Assert.assertTrue(Arrays.equals(file.bytes, response))
     }
 
+    def replaceHttp(String url) {
+        if (secureurl) {
+            url.replace('http','https')
+        } else {
+            url
+        }
+
+    }
 }

@@ -28,8 +28,8 @@ class ReadContentVersionIT extends BaseIT {
     public void setup() throws Exception {
         documentUrl = createDocumentAndGetUrlAs CITIZEN
         documentVersion = createDocumentContentVersion documentUrl, CITIZEN, ATTACHMENT_9_JPG
-        documentVersionUrl = documentVersion.path('_links.self.href')
-        documentVersionBinaryUrl = documentVersion.path('_links.binary.href')
+        documentVersionUrl = replaceHttp(documentVersion.path('_links.self.href'))
+        documentVersionBinaryUrl = replaceHttp(documentVersion.path('_links.binary.href'))
     }
 
     @Test
