@@ -20,27 +20,6 @@ services:
         volumes:
             - ccd-docker-azure-blob-data:/opt/azurite/folder
 
-    service-auth-provider-api:
-        image: hmcts/service-auth-provider-app
-        healthcheck:
-            interval: 10s
-            timeout: 10s
-            retries: 10
-        ports:
-            - 4502:8080
-        environment:
-            SERVER_PORT: 8080
-            MICROSERVICEKEYS_CCD_DATA: "${IDAM_KEY_CCD_DATA_STORE}"
-            MICROSERVICEKEYS_CCD_GW: "${IDAM_KEY_CCD_GATEWAY}"
-            MICROSERVICEKEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
-            MICROSERVICEKEYS_CCD_ADMIN: "${IDAM_KEY_CCD_ADMIN}"
-            MICROSERVICEKEYS_FPL_CASE_SERVICE: "${IDAM_KEY_FPL_CASE_SERVICE}"
-            MICROSERVICEKEYS_EM_STITCHING_API: AAAAAAAAAAAAAAAA
-            MICROSERVICEKEYS_EM_CCD_ORCHESTRATOR: AAAAAAAAAAAAAAAA
-            MICROSERVICEKEYS_EM_GW: AAAAAAAAAAAAAAAA
-            MICROSERVICEKEYS_CCD_CASE_DISPOSER: BBBBBBBBBBBBBBBB
-            TESTING_SUPPORT_ENABLED: "true"
-
     service-auth-provider-app:
         image: hmctspublic.azurecr.io/rpe/service-auth-provider:latest
         environment:
@@ -66,7 +45,7 @@ services:
             - PACKAGES_VERSION=unkown
             - TESTING_SUPPORT_ENABLED=true
         ports:
-            - 8489:8489
+            - 4502:4502
 
 volumes:
     pacts:

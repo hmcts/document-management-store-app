@@ -37,7 +37,7 @@ java:
     IDAM_USER_BASE_URI: 'https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net'
     IDAM_S2S_BASE_URI: 'http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal'
 
-    ENABLE_DB_MIGRATE: 'false'
+    RUN_DB_MIGRATION_ON_STARTUP: 'false'
 
     # Toggles
     ENABLE_IDAM_HEALTH_CHECK: 'false'
