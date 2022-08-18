@@ -33,6 +33,8 @@ class AddContentVersionIT extends BaseIT {
 
         def newVersionUrl = response.getHeader 'Location'
 
+        newVersionUrl = replaceHttp(newVersionUrl)
+
         givenRequest(CITIZEN)
             .expect()
             .statusCode(200)
@@ -140,6 +142,8 @@ class AddContentVersionIT extends BaseIT {
 
         def newVersionUrl = response.getHeader 'Location'
 
+        newVersionUrl = replaceHttp(newVersionUrl)
+
         givenRequest(CITIZEN)
             .expect()
             .statusCode(200)
@@ -163,6 +167,8 @@ class AddContentVersionIT extends BaseIT {
             .thenReturn()
 
         def newVersionUrl = response.getHeader 'Location'
+
+        newVersionUrl = replaceHttp(newVersionUrl)
 
         givenRequest(CITIZEN)
             .expect()

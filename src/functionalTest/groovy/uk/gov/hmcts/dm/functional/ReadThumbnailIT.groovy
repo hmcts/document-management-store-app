@@ -101,6 +101,8 @@ class ReadThumbnailIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._embedded.allDocumentVersions._embedded.documentVersions[0]._links.thumbnail.href")
 
+        url = replaceHttp(url)
+
         givenUnauthenticatedRequest()
             .when()
             .get(url)
@@ -128,6 +130,8 @@ class ReadThumbnailIT extends BaseIT {
             .when()
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href")
+
+        url = replaceHttp(url)
 
         givenUnauthenticatedRequest()
             .when()
