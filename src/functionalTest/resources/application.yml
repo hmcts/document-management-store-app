@@ -27,7 +27,7 @@ toggle:
     thumbnail: ${ENABLE_THUMBNAIL:true}
     includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
     metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
-
+    secureurl: ${ENABLE_SECURE_URL:false}
 large-docs:
     metadata:
         mp4-52mb:
