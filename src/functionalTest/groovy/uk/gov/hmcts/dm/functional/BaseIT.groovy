@@ -55,6 +55,9 @@ abstract class BaseIT {
     @Value('${toggle.metadatamigration}')
     boolean metadataMigrationEnabled
 
+    @Value('${toggle.secureurl}')
+    boolean secureurl
+
     final String PASSWORD = '123'
 
     String CITIZEN = 'test12@test.com'
@@ -358,6 +361,11 @@ abstract class BaseIT {
     }
 
     def replaceHttp(String url) {
-        url.replace('http','https')
+        if (secureurl) {
+            url.replace('http','https')
+        } else {
+            url
+        }
+
     }
 }
