@@ -20,15 +20,15 @@ public class ReadThumbnailIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void RT1__As_an_authenticated_when_i_upload_a_Tiff_I_get_an_icon_in_return() throws IOException {
-        Response response = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_25_TIFF()), V1MimeTypes.IMAGE_TIF_VALUE)
+    public void rt1AsAnAuthenticatedWhenIUploadATiffIGetAnIconInReturn() throws IOException {
+        Response response = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment25Tiff()), V1MimeTypes.IMAGE_TIF_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getATTACHMENT_25_TIFF()))
+            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment25Tiff()))
             .body("_embedded.documents[0].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
             .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
@@ -38,7 +38,7 @@ public class ReadThumbnailIT extends BaseIT {
 
         String tiffUrl = response.path("_embedded.documents[0]._links.thumbnail.href");
 
-        byte[] tiffByteArray = givenRequest(getCITIZEN())
+        byte[] tiffByteArray = givenRequest(getCitizen())
             .get(tiffUrl)
             .asByteArray();
 
@@ -48,15 +48,15 @@ public class ReadThumbnailIT extends BaseIT {
     }
 
     @Test
-    public void RT2__As_an_authenticated_user_when_I_upload_a_bmp__I_can_get_the_thumbnail_of_that_bmp() {
-        String url = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_26_BMP()), V1MimeTypes.IMAGE_BMP_VALUE)
+    public void rt2AsAnAuthenticatedUserWhenIUploadABmpICanGetTheThumbnailOfThatBmp() {
+        String url = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment26Bmp()), V1MimeTypes.IMAGE_BMP_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_26_BMP()))
+            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment26Bmp()))
             .body("_embedded.documents[0].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
             .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._links.thumbnail.href", Matchers.containsString("thumbnail"))
@@ -64,21 +64,21 @@ public class ReadThumbnailIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href");
 
-        Assert.assertNotNull(givenRequest(getCITIZEN())
+        Assert.assertNotNull(givenRequest(getCitizen())
             .get(url)
             .asByteArray());
     }
 
     @Test
-    public void RT3__As_an_authenticated_user_when_I_upload_a_bmp__I_can_get_the_version_of_thumbnail_of_that_bmp() {
-        String url = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_26_BMP()), V1MimeTypes.IMAGE_BMP_VALUE)
+    public void rt3AsAnAuthenticatedUserWhenIUploadABmpICanGetTheVersionOfThumbnailOfThatBmp() {
+        String url = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment26Bmp()), V1MimeTypes.IMAGE_BMP_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_26_BMP()))
+            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment26Bmp()))
             .body("_embedded.documents[0].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
             .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._embedded.allDocumentVersions._embedded.documentVersions[0]._links.thumbnail.href",
@@ -87,17 +87,17 @@ public class ReadThumbnailIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._embedded.allDocumentVersions._embedded.documentVersions[0]._links.thumbnail.href");
 
-        Assert.assertNotNull(givenRequest(getCITIZEN()).get(url).asByteArray());
+        Assert.assertNotNull(givenRequest(getCitizen()).get(url).asByteArray());
     }
 
     @Test
-    public void RT4__As_an_unauthenticated_user_I_can_not_get_the_version_of_thumbnail_of_that_bmp() {
-        String url = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_26_BMP()), V1MimeTypes.IMAGE_BMP_VALUE)
+    public void rt4AsAnUnauthenticatedUserICanNotGetTheVersionOfThumbnailOfThatBmp() {
+        String url = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment26Bmp()), V1MimeTypes.IMAGE_BMP_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen").expect().log().all().statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_26_BMP()))
+            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment26Bmp()))
             .body("_embedded.documents[0].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
             .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._embedded.allDocumentVersions._embedded.documentVersions[0]._links.thumbnail.href",
@@ -117,15 +117,15 @@ public class ReadThumbnailIT extends BaseIT {
     }
 
     @Test
-    public void RT5__As_unauthenticated_user_I_can_not_get_the_thumbnail_of_a_bmp() {
-        String url = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_26_BMP()), V1MimeTypes.IMAGE_BMP_VALUE)
+    public void rt5AsUnauthenticatedUserICanNotGetTheThumbnailOfABmp() {
+        String url = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment26Bmp()), V1MimeTypes.IMAGE_BMP_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_26_BMP()))
+            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment26Bmp()))
             .body("_embedded.documents[0].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
             .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._links.thumbnail.href", Matchers.containsString("thumbnail"))
@@ -144,17 +144,17 @@ public class ReadThumbnailIT extends BaseIT {
     }
 
     @Test
-    public void RT6__As_an_authenticated_user__I_can_not_find_the_thumbnail_of_non_existent_bmp() {
-        String url = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_26_BMP()), V1MimeTypes.IMAGE_BMP_VALUE)
+    public void rt6AsAnAuthenticatedUserICanNotFindTheThumbnailOfNonExistentBmp() {
+        String url = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment26Bmp()), V1MimeTypes.IMAGE_BMP_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getATTACHMENT_26_BMP()))
+            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment26Bmp()))
             .body("_embedded.documents[0].mimeType", equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
-            .body("_embedded.documents[0].classification", equalTo( String.valueOf(Classifications.PUBLIC)))
+            .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
             .when()
             .post("/documents")
@@ -166,11 +166,11 @@ public class ReadThumbnailIT extends BaseIT {
 
         String nonExistentId = UUID.randomUUID().toString();
 
-        String nonExistentIdURL = url.replace(documentId, nonExistentId);
+        String nonExistentIdUrl = url.replace(documentId, nonExistentId);
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .when()
-            .get(nonExistentIdURL)
+            .get(nonExistentIdUrl)
             .then()
             .assertThat()
             .statusCode(404)
@@ -178,15 +178,15 @@ public class ReadThumbnailIT extends BaseIT {
     }
 
     @Test
-    public void RT7__As_an_authenticated_user__I_can_not_find_the_version_of_thumbnail_of_non_existent_bmp() {
-        String url = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_26_BMP()), V1MimeTypes.IMAGE_BMP_VALUE)
+    public void rt7AsAnAuthenticatedUserICanNotFindTheVersionOfThumbnailOfNonExistentBmp() {
+        String url = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment26Bmp()), V1MimeTypes.IMAGE_BMP_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_26_BMP()))
+            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment26Bmp()))
             .body("_embedded.documents[0].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
             .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._embedded.allDocumentVersions._embedded.documentVersions[0]._links.thumbnail.href",
@@ -198,11 +198,11 @@ public class ReadThumbnailIT extends BaseIT {
         String versionsStr = "versions/";
         String versionId = url.substring(url.indexOf(versionsStr) + versionsStr.length(), url.lastIndexOf("/"));
         String nonExistentVersionId = UUID.randomUUID().toString();
-        String nonExistentVersionIdURL = url.replace(versionId, nonExistentVersionId);
+        String nonExistentVersionIdUrl = url.replace(versionId, nonExistentVersionId);
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .when()
-            .get(nonExistentVersionIdURL)
+            .get(nonExistentVersionIdUrl)
             .then()
             .assertThat()
             .statusCode(404)

@@ -23,54 +23,54 @@ public class CreateDocumentIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void CD1__R1__As_authenticated_user_upload_7_files_with_correct_classification_and_some_roles_set() throws IOException {
-        Response response = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_7_PNG()), MediaType.IMAGE_PNG_VALUE)
-            .multiPart("files", file(getATTACHMENT_8_TIF()), V1MimeTypes.IMAGE_TIF_VALUE)
-            .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("files", file(getATTACHMENT_4_PDF()), MediaType.APPLICATION_PDF_VALUE)
-            .multiPart("files", file(getATTACHMENT_25_TIFF()), V1MimeTypes.IMAGE_TIF_VALUE)
-            .multiPart("files", file(getATTACHMENT_26_BMP()), V1MimeTypes.IMAGE_BMP_VALUE)
-            .multiPart("files", file(getATTACHMENT_27_JPEG()), V1MimeTypes.IMAGE_JPEG_VALUE)
-            .multiPart("files", file(getWORD()), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-            .multiPart("files", file(getWORD_TEMPLATE()), "application/vnd.openxmlformats-officedocument.wordprocessingml.template")
-            .multiPart("files", file(getEXCEL()), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            .multiPart("files", file(getEXCEL_TEMPLATE()), "application/vnd.openxmlformats-officedocument.spreadsheetml.template")
-            .multiPart("files", file(getPOWER_POINT()), "application/vnd.openxmlformats-officedocument.presentationml.presentation")
-            .multiPart("files", file(getPOWER_POINT_TEMPLATE()), "application/vnd.openxmlformats-officedocument.presentationml.template")
-            .multiPart("files", file(getPOWER_POINT_SLIDE_SHOW()), "application/vnd.openxmlformats-officedocument.presentationml.slideshow")
-            .multiPart("files", file(getWORD_OLD()), "application/msword")
-            .multiPart("files", file(getEXCEL_OLD()), "application/vnd.ms-excel")
-            .multiPart("files", file(getPOWER_POINT_OLD()), "application/vnd.ms-powerpoint")
-            .multiPart("files", file(getTEXT_ATTACHMENT_1()), "text/plain")
+    public void cd1R1AsAuthenticatedUserUpload7FilesWithCorrectClassificationAndSomeRolesSet() throws IOException {
+        Response response = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment7Png()), MediaType.IMAGE_PNG_VALUE)
+            .multiPart("files", file(getAttachment8Tif()), V1MimeTypes.IMAGE_TIF_VALUE)
+            .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(getAttachment4Pdf()), MediaType.APPLICATION_PDF_VALUE)
+            .multiPart("files", file(getAttachment25Tiff()), V1MimeTypes.IMAGE_TIF_VALUE)
+            .multiPart("files", file(getAttachment26Bmp()), V1MimeTypes.IMAGE_BMP_VALUE)
+            .multiPart("files", file(getAttachment27Jpeg()), V1MimeTypes.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(getWord()), "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+            .multiPart("files", file(getWordTemplate()), "application/vnd.openxmlformats-officedocument.wordprocessingml.template")
+            .multiPart("files", file(getExcel()), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            .multiPart("files", file(getExcelTemplate()), "application/vnd.openxmlformats-officedocument.spreadsheetml.template")
+            .multiPart("files", file(getPowerPoint()), "application/vnd.openxmlformats-officedocument.presentationml.presentation")
+            .multiPart("files", file(getPowerPointTemplate()), "application/vnd.openxmlformats-officedocument.presentationml.template")
+            .multiPart("files", file(getPowerPointSlideShow()), "application/vnd.openxmlformats-officedocument.presentationml.slideshow")
+            .multiPart("files", file(getWordOld()), "application/msword")
+            .multiPart("files", file(getExcelOld()), "application/vnd.ms-excel")
+            .multiPart("files", file(getPowerPointOld()), "application/vnd.ms-powerpoint")
+            .multiPart("files", file(getTextAttachment1()), "text/plain")
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen").multiPart("roles", "caseworker")
             .multiPart("ttl", "2018-10-31T10:10:10+0000")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_7_PNG()))
+            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment7Png()))
             .body("_embedded.documents[0].mimeType", Matchers.equalTo(MediaType.IMAGE_PNG_VALUE))
             .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0].roles[0]", Matchers.equalTo("caseworker"))
             .body("_embedded.documents[0].roles[1]", Matchers.equalTo("citizen"))
-            .body("_embedded.documents[1].originalDocumentName", Matchers.equalTo(getATTACHMENT_8_TIF()))
+            .body("_embedded.documents[1].originalDocumentName", Matchers.equalTo(getAttachment8Tif()))
             .body("_embedded.documents[1].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
             .body("_embedded.documents[1].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[1].roles[0]", Matchers.equalTo("caseworker"))
             .body("_embedded.documents[1].roles[1]", Matchers.equalTo("citizen"))
-            .body("_embedded.documents[2].originalDocumentName", Matchers.equalTo(getATTACHMENT_9_JPG()))
+            .body("_embedded.documents[2].originalDocumentName", Matchers.equalTo(getAttachment9Jpg()))
             .body("_embedded.documents[2].mimeType", Matchers.equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[2].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[2].roles[0]", Matchers.equalTo("caseworker"))
             .body("_embedded.documents[2].roles[1]", Matchers.equalTo("citizen"))
-            .body("_embedded.documents[3].originalDocumentName", Matchers.equalTo(getATTACHMENT_4_PDF()))
+            .body("_embedded.documents[3].originalDocumentName", Matchers.equalTo(getAttachment4Pdf()))
             .body("_embedded.documents[3].mimeType", Matchers.equalTo(MediaType.APPLICATION_PDF_VALUE))
-            .body("_embedded.documents[4].originalDocumentName", Matchers.equalTo(getATTACHMENT_25_TIFF()))
+            .body("_embedded.documents[4].originalDocumentName", Matchers.equalTo(getAttachment25Tiff()))
             .body("_embedded.documents[4].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
-            .body("_embedded.documents[5].originalDocumentName", Matchers.equalTo(getATTACHMENT_26_BMP()))
+            .body("_embedded.documents[5].originalDocumentName", Matchers.equalTo(getAttachment26Bmp()))
             .body("_embedded.documents[5].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_BMP_VALUE))
-            .body("_embedded.documents[6].originalDocumentName", Matchers.equalTo(getATTACHMENT_27_JPEG()))
+            .body("_embedded.documents[6].originalDocumentName", Matchers.equalTo(getAttachment27Jpeg()))
             .body("_embedded.documents[6].mimeType", Matchers.equalTo(V1MimeTypes.IMAGE_JPEG_VALUE))
             .when()
             .post("/documents");
@@ -79,33 +79,33 @@ public class CreateDocumentIT extends BaseIT {
         String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href");
         Integer document1Size = response.path("_embedded.documents[0].size");
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", Matchers.equalTo(getATTACHMENT_7_PNG()))
+            .body("originalDocumentName", Matchers.equalTo(getAttachment7Png()))
             .body("classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("roles[0]", Matchers.equalTo("caseworker"))
             .body("roles[1]", Matchers.equalTo("citizen"))
             .when()
             .get(documentUrl1);
 
-        assertByteArrayEquality(getATTACHMENT_7_PNG(),
-            givenRequest(getCITIZEN())
+        assertByteArrayEquality(getAttachment7Png(),
+            givenRequest(getCitizen())
                 .expect()
                 .statusCode(200)
                 .contentType(Matchers.equalTo(MediaType.IMAGE_PNG_VALUE))
-                .header("OriginalFileName", getATTACHMENT_7_PNG())
+                .header("OriginalFileName", getAttachment7Png())
                 .when()
                 .get(documentContentUrl1)
                 .asByteArray());
     }
 
     @Test
-    public void CD2_As_unauthenticated_user_I_fail__403__to_upload_files() {
+    public void cd2AsUnauthenticatedUserIFail403ToUploadFiles() {
         givenUnauthenticatedRequest()
-            .multiPart("files", file(getATTACHMENT_7_PNG()), MediaType.TEXT_PLAIN_VALUE)
-            .multiPart("files", file(getATTACHMENT_7_PNG()), MediaType.TEXT_PLAIN_VALUE)
+            .multiPart("files", file(getAttachment7Png()), MediaType.TEXT_PLAIN_VALUE)
+            .multiPart("files", file(getAttachment7Png()), MediaType.TEXT_PLAIN_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
@@ -116,9 +116,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD3_As_authenticated_user_I_fail_to_upload_a_file_without_classification() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+    public void cd3AsAuthenticatedUserIFailToUploadAFileWithoutClassification() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
             .expect()
@@ -129,9 +129,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD4_As_authenticated_user_I_fail_to_upload_files_with_incorrect_classification() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+    public void cd4AsAuthenticatedUserIFailToUploadFilesWithIncorrectClassification() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", "XYZ")
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -143,8 +143,8 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD5_As_authenticated_user_I_failed_when_I_tried_to_make_a_post_request_without_any_file() {
-        givenRequest(getCITIZEN())
+    public void cd5AsAuthenticatedUserIFailedWhenITriedToMakeAPostRequestWithoutAnyFile() {
+        givenRequest(getCitizen())
             .multiPart("classification", Classifications.RESTRICTED)
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -156,11 +156,11 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD6_As_authenticated_user_I_upload_file_with_name_containing_illegal_characters() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getILLEGAL_NAME_FILE()), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("files", file(getILLEGAL_NAME_FILE1()), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("files", file(getILLEGAL_NAME_FILE2()), MediaType.IMAGE_JPEG_VALUE)
+    public void cd6AsAuthenticatedUserIUploadFileWithNameContainingIllegalCharacters() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getIllegalNameFile()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(getIllegalNameFile1()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(getIllegalNameFile2()), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -178,18 +178,18 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD7_As_authenticated_user_I_can_upload_files_of_different_format() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("files", file(getATTACHMENT_4_PDF()), MediaType.APPLICATION_PDF_VALUE)
+    public void cd7AsAuthenticatedUserICanUploadFilesOfDifferentFormat() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(getAttachment4Pdf()), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PRIVATE))
             .expect()
             .statusCode(200).contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_9_JPG()))
+            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment9Jpg()))
             .body("_embedded.documents[0].mimeType", Matchers.equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PRIVATE)))
             .body("_embedded.documents[0].roles", Matchers.equalTo(null))
-            .body("_embedded.documents[1].originalDocumentName", Matchers.equalTo(getATTACHMENT_4_PDF()))
+            .body("_embedded.documents[1].originalDocumentName", Matchers.equalTo(getAttachment4Pdf()))
             .body("_embedded.documents[1].mimeType", Matchers.equalTo(MediaType.APPLICATION_PDF_VALUE))
             .body("_embedded.documents[1].classification", Matchers.equalTo(String.valueOf(Classifications.PRIVATE)))
             .body("_embedded.documents[1].roles", Matchers.equalTo(null))
@@ -199,10 +199,10 @@ public class CreateDocumentIT extends BaseIT {
 
     @Test
     @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
-    public void CD8_As_authenticated_user_I_can_not_upload_files_of_different_format_if_not_on_the_whitelist__exe_() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_4_PDF()), MediaType.APPLICATION_PDF_VALUE)
-            .multiPart("files", file(getBAD_ATTACHMENT_1()), MediaType.ALL_VALUE)
+    public void cd8AsAuthenticatedUserICanNotUploadFilesOfDifferentFormatIfNotOnTheWhitelistExe() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment4Pdf()), MediaType.APPLICATION_PDF_VALUE)
+            .multiPart("files", file(getBadAttachment1()), MediaType.ALL_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PRIVATE))
             .expect()
             .statusCode(422)
@@ -212,9 +212,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD9_As_authenticated_user_I_cannot_upload_xml_file() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_18()), MediaType.APPLICATION_XML_VALUE)
+    public void cd9AsAuthenticatedUserICannotUploadXmlFile() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment18()), MediaType.APPLICATION_XML_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
@@ -226,9 +226,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD10_As_authenticated_user_I_cannot_upload_svg_file() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_10()), V1MimeTypes.IMAGE_SVG_VALUE)
+    public void cd10AsAuthenticatedUserICannotUploadSvgFile() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment10()), V1MimeTypes.IMAGE_SVG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
@@ -240,10 +240,10 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD11__R1__As_authenticated_when_i_upload_a_file_only_first_TTL_will_be_taken_into_consideration() {
+    public void cd11R1AsAuthenticatedWhenIUploadAFileOnlyFirstTtlWillBeTakenIntoConsideration() {
         if (getToggleTtlEnabled()) {
-            givenRequest(getCITIZEN())
-                .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+            givenRequest(getCitizen())
+                .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
                 .multiPart("classification", String.valueOf(Classifications.PUBLIC))
                 .multiPart("roles", "citizen").multiPart("roles", "caseworker")
                 .multiPart("ttl", "2018-10-31T10:10:10+0000")
@@ -251,7 +251,7 @@ public class CreateDocumentIT extends BaseIT {
                 .expect().log().all()
                 .statusCode(200)
                 .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-                .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_9_JPG()))
+                .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment9Jpg()))
                 .body("_embedded.documents[0].mimeType", Matchers.equalTo(MediaType.IMAGE_JPEG_VALUE))
                 .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
                 .body("_embedded.documents[0].roles[0]", Matchers.equalTo("caseworker"))
@@ -264,17 +264,17 @@ public class CreateDocumentIT extends BaseIT {
 
     @Test
     @Pending
-    public void CD12__R1__As_a_user__when_i_upload_a_file_with_a_TTL__file_will_be_removed_by_background_process_once_TTL_is_complete() throws InterruptedException {
+    public void cd12R1AsAUserWhenIUploadAFileWithATtlFileWillBeRemovedByBackgroundProcessOnceTtlIsComplete() throws InterruptedException {
         if (getToggleTtlEnabled()) {
-            String url = givenRequest(getCITIZEN())
-                .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+            String url = givenRequest(getCitizen())
+                .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
                 .multiPart("classification", String.valueOf(Classifications.PUBLIC))
                 .multiPart("roles", "citizen").multiPart("roles", "caseworker")
                 .multiPart("ttl", "2018-01-31T10:10:10+0000")
                 .expect().log().all()
                 .statusCode(200)
                 .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-                .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getATTACHMENT_9_JPG()))
+                .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(getAttachment9Jpg()))
                 .body("_embedded.documents[0].mimeType", Matchers.equalTo(MediaType.IMAGE_JPEG_VALUE))
                 .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
                 .body("_embedded.documents[0].roles[0]", Matchers.equalTo("caseworker"))
@@ -287,7 +287,7 @@ public class CreateDocumentIT extends BaseIT {
 
             while (statusCode != 404 && (Duration.between(start, LocalDateTime.now()).getSeconds() < 600)) {
 
-                statusCode = givenRequest(getCITIZEN())
+                statusCode = givenRequest(getCitizen())
                     .expect()
                     .statusCode(Matchers.is(oneOf(404, 200)))
                     .when()
@@ -295,7 +295,7 @@ public class CreateDocumentIT extends BaseIT {
                     .statusCode();
                 Thread.sleep(1000);
             }
-            givenRequest(getCITIZEN())
+            givenRequest(getCitizen())
                 .expect()
                 .statusCode(404)
                 .when()
@@ -305,15 +305,15 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD13__R1__As_authenticated_when_i_upload_a_Tiff_I_get_an_icon_in_return() throws IOException {
-        Response response = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_25_TIFF()), V1MimeTypes.IMAGE_TIF_VALUE)
+    public void cd13R1AsAuthenticatedWhenIUploadATiffIGetAnIconInReturn() throws IOException {
+        Response response = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment25Tiff()), V1MimeTypes.IMAGE_TIF_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getATTACHMENT_25_TIFF()))
+            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment25Tiff()))
             .body("_embedded.documents[0].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
             .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
@@ -323,7 +323,7 @@ public class CreateDocumentIT extends BaseIT {
 
         String tiffUrl = response.path("_embedded.documents[0]._links.thumbnail.href");
 
-        byte[] tiffByteArray = givenRequest(getCITIZEN())
+        byte[] tiffByteArray = givenRequest(getCitizen())
             .get(tiffUrl).asByteArray();
 
         byte[] file = Files.readAllBytes(file("ThumbnailNPad.jpg").toPath());
@@ -333,15 +333,15 @@ public class CreateDocumentIT extends BaseIT {
 
     @Test
     @Pending
-    public void CD14__R1__As_authenticated_user_when_i_upload_a_JPEG__it_gets_a_thumbnail() throws IOException {
-        String url = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+    public void cd14R1AsAuthenticatedUserWhenIUploadAJpegItGetsAThumbnail() throws IOException {
+        String url = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getATTACHMENT_9_JPG()))
+            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment9Jpg()))
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
@@ -349,7 +349,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href");
 
-        byte[] downloadedFileByteArray = givenRequest(getCITIZEN())
+        byte[] downloadedFileByteArray = givenRequest(getCitizen())
             .get(url).asByteArray();
 
         byte[] file = Files.readAllBytes(file("ThumbnailJPG.jpg").toPath());
@@ -359,15 +359,15 @@ public class CreateDocumentIT extends BaseIT {
 
     @Test
     @Pending
-    public void CD15__R1__As_authenticated_user_when_I_upload_a_pdf__I_can_get_the_thumbnail_of_that_pdf() throws IOException {
-        String url = givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_4_PDF()), MediaType.APPLICATION_PDF_VALUE)
+    public void cd15R1AsAuthenticatedUserWhenIUploadAPdfICanGetTheThumbnailOfThatPdf() throws IOException {
+        String url = givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment4Pdf()), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getATTACHMENT_4_PDF()))
+            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment4Pdf()))
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
             .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
@@ -375,13 +375,13 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href");
 
-        assertByteArrayEquality(getTHUMBNAIL_PDF(), givenRequest(getCITIZEN()).get(url).asByteArray());
+        assertByteArrayEquality(getThumbnailPdf(), givenRequest(getCitizen()).get(url).asByteArray());
     }
 
     @Test
-    public void CD16_As_a_user_I_should_not_be_able_to_upload_an_svg_if_its_renamed_to_pdf() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getSVG_AS_PDF()), MediaType.APPLICATION_PDF_VALUE)
+    public void cd16AsAUserIShouldNotBeAbleToUploadAnSvgIfItsRenamedToPdf() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getSvgAsPdf()), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PRIVATE))
             .expect()
             .statusCode(422)
@@ -391,9 +391,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD17_As_a_user_I_should_not_be_able_to_upload_an_xml_if_its_renamed_to_pdf() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getXML_AS_PDF()), MediaType.APPLICATION_PDF_VALUE)
+    public void cd17AsAUserIShouldNotBeAbleToUploadAnXmlIfItsRenamedToPdf() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getXmlAsPdf()), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PRIVATE))
             .expect()
             .statusCode(422)
@@ -404,9 +404,9 @@ public class CreateDocumentIT extends BaseIT {
 
     @Test
     @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
-    public void CD18_As_a_user_I_should_not_be_able_to_upload_an_exe_if_its_renamed_to_png() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getEXE_AS_PNG()), MediaType.IMAGE_PNG_VALUE)
+    public void cd18AsAUserIShouldNotBeAbleToUploadAnExeIfItsRenamedToPng() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getExeAsPng()), MediaType.IMAGE_PNG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PRIVATE))
             .expect()
             .statusCode(422)
@@ -416,9 +416,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD19_As_a_user_I_should_not_be_able_to_upload_an_svg_if_its_renamed_to_png() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getSVG_AS_PNG()), MediaType.IMAGE_PNG_VALUE)
+    public void cd19AsAUserIShouldNotBeAbleToUploadAnSvgIfItsRenamedToPng() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getSvgAsPng()), MediaType.IMAGE_PNG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PRIVATE))
             .expect()
             .statusCode(422)
@@ -428,9 +428,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD20_As_a_user_I_should_not_be_able_to_upload_an_xml_if_its_renamed_to_png() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getXML_AS_PNG()), MediaType.IMAGE_PNG_VALUE)
+    public void cd20AsAUserIShouldNotBeAbleToUploadAnXmlIfItsRenamedToPng() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getXmlAsPng()), MediaType.IMAGE_PNG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PRIVATE))
             .expect()
             .statusCode(422)
@@ -440,10 +440,10 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD21__R1__As_authenticated_user_I_should_not_be_able_to_upload_gif() {
+    public void cd21R1AsAuthenticatedUserIShouldNotBeAbleToUploadGif() {
 
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_6_GIF()), V1MimeTypes.IMAGE_GIF_VALUE)
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment6Gif()), V1MimeTypes.IMAGE_GIF_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
@@ -454,9 +454,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD22_As_authenticated_user_I_cannot_upload_macro_enabled_word() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getWORD_MACRO_ENABLED()), "application/vnd.ms-word.document.macroEnabled.12")
+    public void cd22AsAuthenticatedUserICannotUploadMacroEnabledWord() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getWordMacroEnabled()), "application/vnd.ms-word.document.macroEnabled.12")
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
@@ -468,9 +468,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD23_As_authenticated_user_I_cannot_upload_macro_enabled_excel() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getEXCEL_TEMPLATE_MACRO_ENABLED()), "application/vnd.ms-excel.template.macroEnabled.12")
+    public void cd23AsAuthenticatedUserICannotUploadMacroEnabledExcel() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getExcelTemplateMacroEnabled()), "application/vnd.ms-excel.template.macroEnabled.12")
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
@@ -482,9 +482,9 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD24_As_authenticated_user_I_cannot_upload_macro_enabled_power_point() {
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getPOWER_POINT_SLIDE_SHOW_MACRO_ENABLED()), "application/vnd.ms-powerpoint.presentation.macroEnabled.12")
+    public void cd24AsAuthenticatedUserICannotUploadMacroEnabledPowerPoint() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getPowerPointSlideShowMacroEnabled()), "application/vnd.ms-powerpoint.presentation.macroEnabled.12")
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
@@ -496,11 +496,11 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD25_As_authenticated_user_I_can_upload_with_x_forward_headers() {
+    public void cd25AsAuthenticatedUserICanUploadWithXForwardHeaders() {
         String forwardedHost = "ccd-gateway.service.internal";
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .header("x-forwarded-host", forwardedHost)
-            .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PRIVATE))
             .expect()
             .statusCode(200)
@@ -511,10 +511,10 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void CD26_As_a_user__I_should_be_able_to_upload_a_file_with_a_TTL() {
+    public void cd26AsAUserIShouldBeAbleToUploadAFileWithATtl() {
 
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
@@ -522,7 +522,7 @@ public class CreateDocumentIT extends BaseIT {
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getATTACHMENT_9_JPG()))
+            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment9Jpg()))
             .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))

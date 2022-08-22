@@ -15,13 +15,13 @@ public class UpdateDocumentIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void UD1_update_TTL_for_a_Document() {
+    public void ud1UpdateTtlForADocument() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("ttl", "3000-10-31T10:10:10+0000");
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .body(map)
             .contentType(ContentType.JSON)
             .expect()
@@ -32,13 +32,13 @@ public class UpdateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void UD2_fail_to_update_TTL_for_a_Document_that_I_don_t_own() {
+    public void ud2FailToUpdateTtlForADocumentThatIDonTOwn() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("ttl", "3000-10-31T10:10:10+0000");
-        givenRequest(getCITIZEN_2())
+        givenRequest(getCitizen2())
             .body(map)
             .contentType(ContentType.JSON)
             .expect()
@@ -48,13 +48,13 @@ public class UpdateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void UD3_fail_to_update_TTL_for_a_Document_by_a_caseworker() {
+    public void ud3FailToUpdateTtlForADocumentByACaseworker() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("ttl", "3000-10-31T10:10:10+0000");
-        givenRequest(getCASE_WORKER())
+        givenRequest(getCaseWorker())
             .body(map)
             .contentType(ContentType.JSON)
             .expect()
@@ -64,15 +64,15 @@ public class UpdateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void UD4_when_updating_a_ttl_the_last_ttl_will_be_taken_into_consideration__if_more_than_one_are_in_a_body_() {
+    public void ud4WhenUpdatingATtlTheLastTtlWillBeTakenIntoConsiderationIfMoreThanOneAreInABody() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("ttl", "3000-10-31T10:10:10+0000");
         LinkedHashMap<String, String> map1 = new LinkedHashMap<>(1);
         map1.put("ttl", "3000-01-31T10:10:10+0000");
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .body(map)
             .body(map1)
             .contentType(ContentType.JSON)
@@ -84,13 +84,13 @@ public class UpdateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void UD5_TTL_will_stay_intact_if_a_patch_request_is_made_without_a_new_TTL_in_the_body() {
+    public void ud5TtlWillStayIntactIfAPatchRequestIsMadeWithoutANewTtlInTheBody() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("ttl", "3000-10-31T10:10:10+0000");
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .body(map)
             .contentType(ContentType.JSON)
             .expect()
@@ -99,7 +99,7 @@ public class UpdateDocumentIT extends BaseIT {
             .when()
             .patch(documentUrl);
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .contentType(ContentType.JSON)
             .expect()
             .statusCode(400)
@@ -107,7 +107,7 @@ public class UpdateDocumentIT extends BaseIT {
             .when()
             .patch(documentUrl);
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .body("ttl", Matchers.equalTo("3000-10-31T10:10:10+0000"))
@@ -116,15 +116,15 @@ public class UpdateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void UD6_invalid_bulk_update_request() {
-        String document1Url = createDocumentAndGetUrlAs(getCITIZEN());
+    public void ud6InvalidBulkUpdateRequest() {
+        String document1Url = createDocumentAndGetUrlAs(getCitizen());
         String[] split = document1Url
             .split("/");
         String documentId = split[split.length - 1];
-        String document2Url = createDocumentAndGetUrlAs(getCITIZEN());
+        String document2Url = createDocumentAndGetUrlAs(getCitizen());
         split = document2Url
             .split("/");
-        String documentId2 = split[split.length - 1];
+        final String documentId2 = split[split.length - 1];
 
 
         LinkedHashMap<String, Serializable> map = new LinkedHashMap<>(2);
@@ -140,7 +140,7 @@ public class UpdateDocumentIT extends BaseIT {
         map4.put("metakey2", "metavalue2");
         map3.put("metadata", map4);
         map.put("documents", new ArrayList<>(Arrays.asList(map1, map3)));
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .body(map)
             .contentType(ContentType.JSON)
             .expect().log().all()
@@ -150,15 +150,15 @@ public class UpdateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void UD7_valid_bulk_update_request() {
-        String document1Url = createDocumentAndGetUrlAs(getCITIZEN());
+    public void ud7ValidBulkUpdateRequest() {
+        String document1Url = createDocumentAndGetUrlAs(getCitizen());
         String[] split = document1Url
             .split("/");
         String documentId = split[split.length - 1];
-        String document2Url = createDocumentAndGetUrlAs(getCITIZEN());
+        String document2Url = createDocumentAndGetUrlAs(getCitizen());
         split = document2Url
             .split("/");
-        String documentId2 = split[split.length - 1];
+        final String documentId2 = split[split.length - 1];
 
         LinkedHashMap<String, Serializable> map = new LinkedHashMap<>(2);
         map.put("ttl", "3000-10-31T10:10:10+0000");
@@ -173,7 +173,7 @@ public class UpdateDocumentIT extends BaseIT {
         map4.put("metakey2", "metavalue2");
         map3.put("metadata", map4);
         map.put("documents", new ArrayList<>(Arrays.asList(map1, map3)));
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .body(map)
             .contentType(ContentType.JSON)
             .expect().log().all()
@@ -184,12 +184,12 @@ public class UpdateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void UD8_partial_bulk_update_request_success() {
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+    public void ud8PartialBulkUpdateRequestSuccess() {
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
         String[] split = documentUrl
             .split("/");
         String documentId = split[split.length - 1];
-        UUID uuid = UUID.randomUUID();
+        final UUID uuid = UUID.randomUUID();
 
         LinkedHashMap<String, Serializable> map = new LinkedHashMap<>(2);
         map.put("ttl", "3000-10-31T10:10:10+0000");
@@ -204,7 +204,7 @@ public class UpdateDocumentIT extends BaseIT {
         map4.put("metakey2", "metavalue2");
         map3.put("metadata", map4);
         map.put("documents", new ArrayList<>(List.of(map1, map3)));
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .body(map)
             .contentType(ContentType.JSON)
             .expect().log().all()
@@ -215,9 +215,9 @@ public class UpdateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void UD9_partial_update_TTL_for_a_non_existent_document() {
+    public void ud9PartialUpdateTtlForANonExistentDocument() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
         String[] split = documentUrl
             .split("/");
         String documentId = split[split.length - 1];
@@ -226,7 +226,7 @@ public class UpdateDocumentIT extends BaseIT {
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("ttl", "3000-10-31T10:10:10+0000");
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .body(map)
             .contentType(ContentType.JSON)
             .expect().log().all()

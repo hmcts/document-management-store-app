@@ -17,28 +17,28 @@ public class SearchDocumentIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void S1_As_authenticated_user_I_can_search_for_document_using_specific_metadata_property() {
+    public void s1AsAuthenticatedUserICanSearchForDocumentUsingSpecificMetadataProperty() {
 
-        String caseNo1 = RandomStringUtils.randomAlphabetic(50);
-        String caseNo2 = RandomStringUtils.randomAlphabetic(50);
+        final String caseNo1 = RandomStringUtils.randomAlphabetic(50);
+        final String caseNo2 = RandomStringUtils.randomAlphabetic(50);
 
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("case", caseNo1);
-        createDocument(getCITIZEN(), null, null, Collections.emptyList(), map);
+        createDocument(getCitizen(), null, null, Collections.emptyList(), map);
         LinkedHashMap<String, String> map1 = new LinkedHashMap<>(1);
         map1.put("case", caseNo1);
-        createDocument(getCITIZEN(), null, null, Collections.emptyList(), map1);
+        createDocument(getCitizen(), null, null, Collections.emptyList(), map1);
         LinkedHashMap<String, String> map2 = new LinkedHashMap<>(1);
         map2.put("case", caseNo1);
-        createDocument(getCITIZEN(), null, null, Collections.emptyList(), map2);
+        createDocument(getCitizen(), null, null, Collections.emptyList(), map2);
         LinkedHashMap<String, String> map3 = new LinkedHashMap<>(1);
         map3.put("case", caseNo2);
-        createDocument(getCITIZEN(), null, null, Collections.emptyList(), map3);
+        createDocument(getCitizen(), null, null, Collections.emptyList(), map3);
 
         LinkedHashMap<String, String> map4 = new LinkedHashMap<>(2);
         map4.put("name", "case");
         map4.put("value", caseNo1);
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson(map4))
             .expect()
@@ -51,10 +51,10 @@ public class SearchDocumentIT extends BaseIT {
     }
 
     @Test
-    public void S2_As_authenticated_user_I_receive_error_for_incorrectly_posted_search_criteria() {
+    public void s2AsAuthenticatedUserIReceiveErrorForIncorrectlyPostedSearchCriteria() {
         LinkedHashMap<String, String> map = new LinkedHashMap<>(1);
         map.put("name", "case");
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson(map))
             .expect().log().all()
@@ -64,7 +64,7 @@ public class SearchDocumentIT extends BaseIT {
     }
 
     @Test
-    public void S3_As_unauthenticated_user_I_am_forbidden_to_invoke_search() {
+    public void s3AsUnauthenticatedUserIAmForbiddenToInvokeSearch() {
         LinkedHashMap<String, String> map = new LinkedHashMap<>(2);
         map.put("name", "case");
         map.put("value", "123");
@@ -78,11 +78,11 @@ public class SearchDocumentIT extends BaseIT {
     }
 
     @Test
-    public void S4_As_authenticated_user_I_receive_no_records_when_searched_item_could_not_be_found() {
+    public void s4AsAuthenticatedUserIReceiveNoRecordsWhenSearchedItemCouldNotBeFound() {
         LinkedHashMap<String, String> map = new LinkedHashMap<>(2);
         map.put("name", "case");
         map.put("value", "123");
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson(map))
             .expect().log().all()
@@ -93,11 +93,11 @@ public class SearchDocumentIT extends BaseIT {
     }
 
     @Test
-    public void S4_As_a_authenticated_user_I_can_search_using_special_characters() {
+    public void s4AsAAuthenticatedUserICanSearchUsingSpecialCharacters() {
         LinkedHashMap<String, String> map = new LinkedHashMap<>(2);
         map.put("name", "case");
         map.put("value", "!\"£$%%^&*()<>:@~[];'#,./ÄÖÜẞ▒¶§■¾±≡µÞÌ█ð╬¤╠┼▓®¿ØÆ");
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson(map))
             .expect().log().all()

@@ -18,33 +18,33 @@ public class AddContentVersionIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void ACV1_As_authenticated_user_who_is_an_owner_POST_a_new_version_of_the_content_to_an_existing_document_then_expect_201() {
+    public void acv1AsAuthenticatedUserWhoIsAnOwnerPostANewVersionOfTheContentToAnExistingDocumentThenExpect201() {
 
-        String documentURL = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
-        Response response = givenRequest(getCITIZEN())
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+        Response response = givenRequest(getCitizen())
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect().log().all()
             .statusCode(201)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(getATTACHMENT_9_JPG()))
+            .body("originalDocumentName", equalTo(getAttachment9Jpg()))
             .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .when()
-            .post(documentURL)
+            .post(documentUrl)
             .thenReturn();
 
 
         String newVersionUrl = response.getHeader("Location");
 
-        givenRequest(getCITIZEN()).expect().statusCode(200).when().get(newVersionUrl);
+        givenRequest(getCitizen()).expect().statusCode(200).when().get(newVersionUrl);
 
     }
 
     @Test
-    public void ACV2_As_authenticated_user_POST_a_new_version_of_the_content_to_a_not_existing_document() {
+    public void acv2AsAuthenticatedUserPostANewVersionOfTheContentToANotExistingDocument() {
 
-        givenRequest(getCITIZEN())
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+        givenRequest(getCitizen())
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
             .statusCode(404)
             .when()
@@ -53,10 +53,10 @@ public class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void ACV3_As_unauthenticated_user_POST_a_new_version_of_the_content_to_a_not_existing_document() {
+    public void acv3AsUnauthenticatedUserPostANewVersionOfTheContentToANotExistingDocument() {
 
         givenUnauthenticatedRequest()
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
             .statusCode(403)
             .when()
@@ -65,12 +65,12 @@ public class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void ACV4_As_unauthenticated_user_POST_a_new_version_of_the_content_to_an_existing_document() {
+    public void acv4AsUnauthenticatedUserPostANewVersionOfTheContentToAnExistingDocument() {
 
-        String url = createDocumentAndGetUrlAs(getCITIZEN());
+        String url = createDocumentAndGetUrlAs(getCitizen());
 
         givenUnauthenticatedRequest()
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
             .statusCode(403)
             .when()
@@ -78,12 +78,12 @@ public class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void ACV5_As_authenticated_user_who_is_an_not_an_owner__POST_a_new_version_of_the_content_to_an_existing_document() {
+    public void acv5AsAuthenticatedUserWhoIsAnNotAnOwnerPostANewVersionOfTheContentToAnExistingDocument() {
 
-        String url = createDocumentAndGetUrlAs(getCITIZEN());
+        String url = createDocumentAndGetUrlAs(getCitizen());
 
-        givenRequest(getCITIZEN_2())
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+        givenRequest(getCitizen2())
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
             .statusCode(403)
             .when()
@@ -92,12 +92,12 @@ public class AddContentVersionIT extends BaseIT {
 
     @Test
     @Ignore("exe seems to be blocked somewhere causing this test to fail in CI")
-    public void ACV6_As_authenticated_user_who_is_not_an_owner_and_is_a_case_worker() {
+    public void acv6AsAuthenticatedUserWhoIsNotAnOwnerAndIsACaseWorker() {
 
-        String url = createDocumentAndGetUrlAs(getCITIZEN());
+        String url = createDocumentAndGetUrlAs(getCitizen());
 
-        givenRequest(getCASE_WORKER())
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+        givenRequest(getCaseWorker())
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
             .statusCode(403)
             .when()
@@ -105,10 +105,10 @@ public class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void ACV7_As_authenticated_user_who_is_a_case_worker_POST_a_new_version_of_the_content_to_a_not_existing_document_and_expect_404() {
+    public void acv7AsAuthenticatedUserWhoIsACaseWorkerPostANewVersionOfTheContentToANotExistingDocumentAndExpect404() {
 
-        givenRequest(getCASE_WORKER())
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+        givenRequest(getCaseWorker())
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
             .statusCode(404)
             .when()
@@ -117,25 +117,25 @@ public class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void ACV8_As_an_authenticated_user_and_the_owner_I_should_not_be_able_to_upload_multiple_new_content_versions_then_expect_201() {
+    public void acv8AsAnAuthenticatedUserAndTheOwnerIShouldNotBeAbleToUploadMultipleNewContentVersionsThenExpect201() {
 
-        String documentURL = createDocumentAndGetUrlAs(getCITIZEN());
-        Response response = givenRequest(getCITIZEN())
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("file", file(getATTACHMENT_4_PDF()), MediaType.APPLICATION_PDF_VALUE)
-            .multiPart("file", file(getATTACHMENT_3()), MediaType.TEXT_PLAIN_VALUE)
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
+        Response response = givenRequest(getCitizen())
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("file", file(getAttachment4Pdf()), MediaType.APPLICATION_PDF_VALUE)
+            .multiPart("file", file(getAttachment3()), MediaType.TEXT_PLAIN_VALUE)
             .expect().log().all()
             .statusCode(201)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(getATTACHMENT_9_JPG()))
+            .body("originalDocumentName", equalTo(getAttachment9Jpg()))
             .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .when()
-            .post(documentURL)
+            .post(documentUrl)
             .thenReturn();
 
         String newVersionUrl = response.getHeader("Location");
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .when()
@@ -143,23 +143,23 @@ public class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void ACV9_As_an_authenticated_user_and_the_owner_I_should_be_able_to_upload_new_version_of_different_format() {
+    public void acv9AsAnAuthenticatedUserAndTheOwnerIShouldBeAbleToUploadNewVersionOfDifferentFormat() {
 
-        String documentURL = createDocumentAndGetUrlAs(getCITIZEN());
-        Response response = givenRequest(getCITIZEN())
-            .multiPart("file", file(getATTACHMENT_4_PDF()), MediaType.APPLICATION_PDF_VALUE)
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
+        Response response = givenRequest(getCitizen())
+            .multiPart("file", file(getAttachment4Pdf()), MediaType.APPLICATION_PDF_VALUE)
             .expect().log().all()
             .statusCode(201)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(getATTACHMENT_4_PDF()))
+            .body("originalDocumentName", equalTo(getAttachment4Pdf()))
             .body("mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
             .when()
-            .post(documentURL)
+            .post(documentUrl)
             .thenReturn();
 
         String newVersionUrl = response.getHeader("Location");
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .when()
@@ -169,49 +169,49 @@ public class AddContentVersionIT extends BaseIT {
 
     @Test
     @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
-    public void ACV10_As_an_authenticated_user_and_the_owner_I_should_not_be_able_to_upload_exes() {
+    public void acv10AsAnAuthenticatedUserAndTheOwnerIShouldNotBeAbleToUploadExes() {
 
-        String documentURL = createDocumentAndGetUrlAs(getCITIZEN());
-        givenRequest(getCITIZEN())
-            .multiPart("file", file(getBAD_ATTACHMENT_1()), MediaType.ALL_VALUE)
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
+        givenRequest(getCitizen())
+            .multiPart("file", file(getBadAttachment1()), MediaType.ALL_VALUE)
             .expect().log().all()
             .statusCode(422)
             .when()
-            .post(documentURL);
+            .post(documentUrl);
     }
 
     @Test
-    public void ACV11_As_an_authenticated_user_and_the_owner_I_should_not_be_able_to_upload_zip() {
+    public void acv11AsAnAuthenticatedUserAndTheOwnerIShouldNotBeAbleToUploadZip() {
 
-        String documentURL = createDocumentAndGetUrlAs(getCITIZEN());
-        givenRequest(getCITIZEN())
-            .multiPart("file", file(getBAD_ATTACHMENT_2()), MediaType.ALL_VALUE)
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
+        givenRequest(getCitizen())
+            .multiPart("file", file(getBadAttachment2()), MediaType.ALL_VALUE)
             .expect().log().all()
             .statusCode(422)
             .when()
-            .post(documentURL);
+            .post(documentUrl);
     }
 
     @Test
-    public void ACV12_As_an_owner_I_cannot_update_the_TTL_while_adding_a_version_to_the_document() {
+    public void acv12AsAnOwnerICannotUpdateTheTtlWhileAddingAVersionToTheDocument() {
         if (getToggleTtlEnabled()) {
 
-            Response response = createAUserForTTL(getCASE_WORKER());
+            Response response = createAUserForTtl(getCaseWorker());
 
             String documentUrl1 = response.path("_embedded.documents[0]._links.self.href");
 
-            givenRequest(getCASE_WORKER())
-                .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+            givenRequest(getCaseWorker())
+                .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
                 .multiPart("ttl", "2018-01-31T10:10:10+0000")
                 .expect().log().all()
                 .statusCode(201)
                 .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-                .body("originalDocumentName", Matchers.equalTo(getATTACHMENT_9_JPG()))
+                .body("originalDocumentName", Matchers.equalTo(getAttachment9Jpg()))
                 .body("mimeType", Matchers.equalTo(MediaType.IMAGE_JPEG_VALUE))
                 .when()
                 .post(documentUrl1);
 
-            givenRequest(getCASE_WORKER())
+            givenRequest(getCaseWorker())
                 .expect().log().all()
                 .statusCode(200)
                 .body("ttl", Matchers.equalTo("2018-10-31T10:10:10+0000"))

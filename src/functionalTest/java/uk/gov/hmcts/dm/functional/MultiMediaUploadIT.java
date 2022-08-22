@@ -19,20 +19,20 @@ public class MultiMediaUploadIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void MV1__R1__As_authenticated_user_I_upload_large_multi_media_files() throws IOException {
+    public void mv1R1AsAuthenticatedUserIUploadLargeMultiMediaFiles() throws IOException {
         uploadWhitelistedLargeFileThenDownload(getVideo52mbId(), "mp4-52mb", "video/mp4");
         uploadWhitelistedLargeFileThenDownload(getVideo111mbId(), "mp4-111mb", "video/mp4");
     }
 
     @Test
-    public void MV1__R1__As_authenticated_user_I_upload_multi_media_files() throws IOException {
+    public void mv1R1AsAuthenticatedUserIUploadMultiMediaFiles() throws IOException {
         uploadWhitelistedSmallFileThenDownload("video_test.mp4", "video/mp4");
         uploadWhitelistedSmallFileThenDownload("audio_test.mp3", "audio/mpeg");
     }
 
     @Test
     @Pending
-    public void MV1__R1__As_authenticated_user_I_should_not_be_able_to_upload_files_that_exceed_permitted_sizes() {
+    public void mv1R1AsAuthenticatedUserIShouldNotBeAbleToUploadFilesThatExceedPermittedSizes() {
         uploadingFileThrowsValidationSizeErrorMessage("516MB_video_mp4.mp4", "video/mp4");
         uploadingFileThrowsValidationSizeErrorMessage("367MB_word.doc", "application/msword");
 
@@ -40,7 +40,7 @@ public class MultiMediaUploadIT extends BaseIT {
 
     @Ignore
     @Test
-    public void MV1__R1__As_authenticated_user_I_cannot_upload_not_whitelisted_multi_media_files() {
+    public void mv1R1AsAuthenticatedUserICannotUploadNotWhitelistedMultiMediaFiles() {
         uploadNotWhitelistedFileThenDownload("video_test.mov", "video/quicktime");
         uploadNotWhitelistedFileThenDownload("video_test.avi", "video/x-msvideo");
         uploadNotWhitelistedFileThenDownload("video_test.mpg", "video/mpeg");
@@ -56,7 +56,7 @@ public class MultiMediaUploadIT extends BaseIT {
 
     private boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType) throws IOException {
         File file = largeFile(doc, metadataKey);
-        Response response = givenRequest(getCITIZEN())
+        Response response = givenRequest(getCitizen())
             .multiPart("files", file, mimeType)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
@@ -76,7 +76,7 @@ public class MultiMediaUploadIT extends BaseIT {
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href");
         String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href");
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
@@ -87,7 +87,7 @@ public class MultiMediaUploadIT extends BaseIT {
             .when()
             .get(documentUrl1);
 
-        assertLargeDocByteArrayEquality( file, givenRequest(getCITIZEN())
+        assertLargeDocByteArrayEquality(file, givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .contentType(containsString(mimeType))
@@ -100,7 +100,7 @@ public class MultiMediaUploadIT extends BaseIT {
     }
 
     private void uploadWhitelistedSmallFileThenDownload(String fileName, String mimeType) throws IOException {
-        Response response = givenRequest(getCITIZEN())
+        Response response = givenRequest(getCitizen())
             .multiPart("files", file(fileName), mimeType)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
@@ -120,7 +120,7 @@ public class MultiMediaUploadIT extends BaseIT {
         String documentUrl1 = response.path("_embedded.documents[0]._links.self.href");
         String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href");
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
@@ -132,7 +132,7 @@ public class MultiMediaUploadIT extends BaseIT {
             .get(documentUrl1);
 
         assertByteArrayEquality(fileName,
-            givenRequest(getCITIZEN())
+            givenRequest(getCitizen())
                 .expect()
                 .statusCode(200)
                 .contentType(containsString(mimeType))
@@ -143,7 +143,7 @@ public class MultiMediaUploadIT extends BaseIT {
     }
 
     private void uploadNotWhitelistedFileThenDownload(String filename, String mimeType) {
-        Response response = givenRequest(getCITIZEN())
+        Response response = givenRequest(getCitizen())
             .multiPart("files", file(filename), mimeType)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
@@ -156,7 +156,7 @@ public class MultiMediaUploadIT extends BaseIT {
     }
 
     private void uploadingFileThrowsValidationSizeErrorMessage(String filename, String mimeType) {
-        Response response = givenRequest(getCITIZEN())
+        Response response = givenRequest(getCitizen())
             .multiPart("files", file(filename), mimeType)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")

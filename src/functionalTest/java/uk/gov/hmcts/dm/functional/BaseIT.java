@@ -46,74 +46,74 @@ public abstract class BaseIT {
     private boolean toggleTtlEnabled;
     @Value("${toggle.metadatamigration}")
     private boolean metadataMigrationEnabled;
-    private final String PASSWORD = "123";
-    private final String CITIZEN = "test12@test.com";
-    private String CITIZEN_2 = "test2@test.com";
-    private String CASE_WORKER = "test3@test.com";
-    private String CASE_WORKER_ROLE_PROBATE = "caseworker-probate";
-    private String CUSTOM_USER_ROLE = "custom-user-role";
-    private String CASE_WORKER_ROLE_CMC = "caseworker-cmc";
-    private String CASE_WORKER_ROLE_SSCS = "caseworker-sscs";
-    private String CASE_WORKER_ROLE_DIVORCE = "caseworker-divorce";
-    private final String NOBODY = null;
-    private final String FILES_FOLDER = "files/";
-    private final String TEXT_ATTACHMENT_1 = "Attachment1.txt";
-    private final String ATTACHMENT_2 = "Attachment2.txt";
-    private final String ATTACHMENT_3 = "Attachment3.txt";
-    private final String ATTACHMENT_4_PDF = "1MB.PDF";
-    private final String ATTACHMENT_5 = "Attachment1.csv";
-    private final String ATTACHMENT_6_GIF = "marbles.gif";
-    private final String ATTACHMENT_7_PNG = "png.png";
-    private final String ATTACHMENT_8_TIF = "tif.tif";
-    private final String ATTACHMENT_9_JPG = "jpg.jpg";
-    private final String ATTACHMENT_10 = "svg.svg";
-    private final String ATTACHMENT_11 = "rtf.rtf";
-    private final String ATTACHMENT_15 = "odt.odt";
-    private final String ATTACHMENT_16 = "ods.ods";
-    private final String ATTACHMENT_17 = "odp.odp";
-    private final String ATTACHMENT_18 = "xml.xml";
-    private final String ATTACHMENT_19 = "wav.wav";
-    private final String ATTACHMENT_20 = "mid.mid";
-    private final String ATTACHMENT_21 = "mp3.mp3";
-    private final String ATTACHMENT_22 = "webm.webm";
-    private final String ATTACHMENT_23 = "ogg.ogg";
-    private final String ATTACHMENT_24 = "mp4.mp4";
-    private final String ATTACHMENT_25_TIFF = "tiff.tiff";
-    private final String ATTACHMENT_26_BMP = "bmp.bmp";
-    private final String ATTACHMENT_27_JPEG = "jpeg.jpeg";
-    private final String WORD = "docx.docx";
-    private final String WORD_MACRO_ENABLED_AS_REGULAR = "docmHidden.docx";
-    private final String POWER_POINT = "pptx.pptx";
-    private final String EXCEL = "xlsx.xlsx";
-    private final String WORD_OLD = "doc.doc";
-    private final String EXCEL_OLD = "xls.xls";
-    private final String POWER_POINT_OLD = "ppt.ppt";
-    private final String WORD_TEMPLATE = "dotx.dotx";
-    private final String WORD_MACRO_ENABLED = "docm.docm";
-    private final String WORD_TEMPLATE_MACRO_ENABLED = "dotm.dotm";
-    private final String EXCEL_TEMPLATE = "xltx.xltx";
-    private final String EXCEL_MACRO_ENABLED = "xlsm.xlsm";
-    private final String EXCEL_TEMPLATE_MACRO_ENABLED = "xltm.xltm";
-    private final String POWER_POINT_MACRO_ENABLED = "pptm.pptm";
-    private final String POWER_POINT_TEMPLATE = "potx.potx";
-    private final String POWER_POINT_TEMPLATE_MACRO_ENABLED = "potm.potm";
-    private final String POWER_POINT_SLIDE_SHOW = "ppsx.ppsx";
-    private final String POWER_POINT_SLIDE_SHOW_MACRO_ENABLED = "ppsm.ppsm";
-    private final String THUMBNAIL_PDF = "thumbnailPDF.jpg";
-    private final String THUMBNAIL_BMP = "thumbnailBMP.jpg";
-    private final String THUMBNAIL_GIF = "thumbnailGIF.jpg";
-    private final String BAD_ATTACHMENT_1 = "1MB.exe";
-    private final String BAD_ATTACHMENT_2 = "Attachment3.zip";
-    private final String ILLEGAL_NAME_FILE = "uploadFile~@$!.jpg";
-    private final String ILLEGAL_NAME_FILE1 = "uploadFile~`';][{}!@£$%^&()}{_-.jpg";
-    private final String ILLEGAL_NAME_FILE2 = "uploadFile9 @_-.jpg";
-    private final String VALID_CHAR_FILE1 = "uploadFile 9.txt";
-    private final String EXE_AS_PDF = "exe_as_pdf.pdf";
-    private final String SVG_AS_PDF = "svg_as_pdf.pdf";
-    private final String XML_AS_PDF = "xml_as_pdf.pdf";
-    private final String EXE_AS_PNG = "exe_as_png.png";
-    private final String SVG_AS_PNG = "svg_as_png.png";
-    private final String XML_AS_PNG = "xml_as_png.png";
+    private final String password = "123";
+    private final String citizen = "test12@test.com";
+    private String citizen2 = "test2@test.com";
+    private String caseWorker = "test3@test.com";
+    private String caseWorkerRoleProbate = "caseworker-probate";
+    private String customUserRole = "custom-user-role";
+    private String caseWorkerRoleCmc = "caseworker-cmc";
+    private String caseWorkerRoleSscs = "caseworker-sscs";
+    private String caseWorkerRoleDivorce = "caseworker-divorce";
+    private final String nobody = null;
+    private final String filesFolder = "files/";
+    private final String textAttachment1 = "Attachment1.txt";
+    private final String attachment2 = "Attachment2.txt";
+    private final String attachment3 = "Attachment3.txt";
+    private final String attachment4Pdf = "1MB.PDF";
+    private final String attachment5 = "Attachment1.csv";
+    private final String attachment6Gif = "marbles.gif";
+    private final String attachment7Png = "png.png";
+    private final String attachment8Tif = "tif.tif";
+    private final String attachment9Jpg = "jpg.jpg";
+    private final String attachment10 = "svg.svg";
+    private final String attachment11 = "rtf.rtf";
+    private final String attachment15 = "odt.odt";
+    private final String attachment16 = "ods.ods";
+    private final String attachment17 = "odp.odp";
+    private final String attachment18 = "xml.xml";
+    private final String attachment19 = "wav.wav";
+    private final String attachment20 = "mid.mid";
+    private final String attachment21 = "mp3.mp3";
+    private final String attachment22 = "webm.webm";
+    private final String attachment23 = "ogg.ogg";
+    private final String attachment24 = "mp4.mp4";
+    private final String attachment25Tiff = "tiff.tiff";
+    private final String attachment26Bmp = "bmp.bmp";
+    private final String attachment27Jpeg = "jpeg.jpeg";
+    private final String word = "docx.docx";
+    private final String wordMacroEnabledAsRegular = "docmHidden.docx";
+    private final String powerPoint = "pptx.pptx";
+    private final String excel = "xlsx.xlsx";
+    private final String wordOld = "doc.doc";
+    private final String excelOld = "xls.xls";
+    private final String powerPointOld = "ppt.ppt";
+    private final String wordTemplate = "dotx.dotx";
+    private final String wordMacroEnabled = "docm.docm";
+    private final String wordTemplateMacroEnabled = "dotm.dotm";
+    private final String excelTemplate = "xltx.xltx";
+    private final String excelMacroEnabled = "xlsm.xlsm";
+    private final String excelTemplateMacroEnabled = "xltm.xltm";
+    private final String powerPointMacroEnabled = "pptm.pptm";
+    private final String powerPointTemplate = "potx.potx";
+    private final String powerPointTemplateMacroEnabled = "potm.potm";
+    private final String powerPointSlideShow = "ppsx.ppsx";
+    private final String powerPointSlideShowMacroEnabled = "ppsm.ppsm";
+    private final String thumbnailPdf = "thumbnailPDF.jpg";
+    private final String thumbnailBmp = "thumbnailBMP.jpg";
+    private final String thumbnailGif = "thumbnailGIF.jpg";
+    private final String badAttachment1 = "1MB.exe";
+    private final String badAttachment2 = "Attachment3.zip";
+    private final String illegalNameFile = "uploadFile~@$!.jpg";
+    private final String illegalNameFile1 = "uploadFile~`';][{}!@£$%^&()}{_-.jpg";
+    private final String illegalNameFile2 = "uploadFile9 @_-.jpg";
+    private final String validCharFile1 = "uploadFile 9.txt";
+    private final String exeAsPdf = "exe_as_pdf.pdf";
+    private final String svgAsPdf = "svg_as_pdf.pdf";
+    private final String xmlAsPdf = "xml_as_pdf.pdf";
+    private final String exeAsPng = "exe_as_png.png";
+    private final String svgAsPng = "svg_as_png.png";
+    private final String xmlAsPng = "xml_as_png.png";
 
     @PostConstruct
     public void init() {
@@ -228,7 +228,7 @@ public abstract class BaseIT {
 
     public File file(Object fileName) {
         try {
-            return fileUtils.getResourceFile(FILES_FOLDER + fileName);
+            return fileUtils.getResourceFile(filesFolder + fileName);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
@@ -244,12 +244,12 @@ public abstract class BaseIT {
         String extension = metadata.getExtension();
         File tmpFile = File.createTempFile(name, "." + extension);
 
-        try(
+        try (
             OutputStream outputStream = new FileOutputStream(tmpFile);
-            final InputStream inputStream = givenLargeFileRequest(CITIZEN, new ArrayList<>(List.of(CASE_WORKER_ROLE_PROBATE)))
-            .get(doc)
-            .getBody()
-            .asInputStream()) {
+            final InputStream inputStream = givenLargeFileRequest(citizen, new ArrayList<>(List.of(caseWorkerRoleProbate)))
+                .get(doc)
+                .getBody()
+                .asInputStream()) {
             outputStream.write(inputStream.readAllBytes());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -258,7 +258,7 @@ public abstract class BaseIT {
     }
 
     public String authToken(Object username) {
-        return authTokenProvider.getTokens((String) username, PASSWORD).getUserToken();
+        return authTokenProvider.getTokens((String) username, password).getUserToken();
     }
 
     public String userId(String token) {
@@ -276,7 +276,7 @@ public abstract class BaseIT {
     public Response createDocument(String username, String filename, String classification, List<String> roles,
                                    Map<String, String> metadata) {
         RequestSpecification request = givenRequest(username)
-            .multiPart("files", file(filename != null ? filename : ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(filename != null ? filename : attachment9Jpg), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", classification != null ? classification : "PUBLIC");
 
         for (String role : roles) {
@@ -350,7 +350,7 @@ public abstract class BaseIT {
 
     public Response createDocumentContentVersion(String documentUrl, String username, String filename) {
         return givenRequest(username)
-            .multiPart("file", file(filename != null ? filename : ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("file", file(filename != null ? filename : attachment9Jpg), MediaType.IMAGE_JPEG_VALUE)
             .expect()
             .statusCode(201)
             .when()
@@ -377,16 +377,16 @@ public abstract class BaseIT {
         return createDocumentContentVersionAndGetBinaryUrlAs(documentUrl, username, null);
     }
 
-    public Response createAUserForTTL(String username) {
+    public Response createAUserForTtl(String username) {
         return givenRequest(username)
-            .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("files", file(attachment9Jpg), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
             .multiPart("ttl", "2018-10-31T10:10:10+0000")
             .expect().log().all().statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(ATTACHMENT_9_JPG))
+            .body("_embedded.documents[0].originalDocumentName", Matchers.equalTo(attachment9Jpg))
             .body("_embedded.documents[0].mimeType", Matchers.equalTo(MediaType.IMAGE_JPEG_VALUE))
             .body("_embedded.documents[0].classification", Matchers.equalTo(String.valueOf(Classifications.PUBLIC)))
             .body("_embedded.documents[0].roles[0]", Matchers.equalTo("caseworker"))
@@ -482,299 +482,299 @@ public abstract class BaseIT {
         this.metadataMigrationEnabled = metadataMigrationEnabled;
     }
 
-    public String getCITIZEN() {
-        return CITIZEN;
+    public String getCitizen() {
+        return citizen;
     }
 
-    public String getCITIZEN_2() {
-        return CITIZEN_2;
+    public String getCitizen2() {
+        return citizen2;
     }
 
-    public void setCITIZEN_2(String CITIZEN_2) {
-        this.CITIZEN_2 = CITIZEN_2;
+    public void setCitizen2(String citizen2) {
+        this.citizen2 = citizen2;
     }
 
-    public String getCASE_WORKER() {
-        return CASE_WORKER;
+    public String getCaseWorker() {
+        return caseWorker;
     }
 
-    public void setCASE_WORKER(String CASE_WORKER) {
-        this.CASE_WORKER = CASE_WORKER;
+    public void setCaseWorker(String caseWorker) {
+        this.caseWorker = caseWorker;
     }
 
-    public String getCASE_WORKER_ROLE_PROBATE() {
-        return CASE_WORKER_ROLE_PROBATE;
+    public String getCaseWorkerRoleProbate() {
+        return caseWorkerRoleProbate;
     }
 
-    public void setCASE_WORKER_ROLE_PROBATE(String CASE_WORKER_ROLE_PROBATE) {
-        this.CASE_WORKER_ROLE_PROBATE = CASE_WORKER_ROLE_PROBATE;
+    public void setCaseWorkerRoleProbate(String caseWorkerRoleProbate) {
+        this.caseWorkerRoleProbate = caseWorkerRoleProbate;
     }
 
-    public String getCUSTOM_USER_ROLE() {
-        return CUSTOM_USER_ROLE;
+    public String getCustomUserRole() {
+        return customUserRole;
     }
 
-    public void setCUSTOM_USER_ROLE(String CUSTOM_USER_ROLE) {
-        this.CUSTOM_USER_ROLE = CUSTOM_USER_ROLE;
+    public void setCustomUserRole(String customUserRole) {
+        this.customUserRole = customUserRole;
     }
 
-    public String getCASE_WORKER_ROLE_CMC() {
-        return CASE_WORKER_ROLE_CMC;
+    public String getCaseWorkerRoleCmc() {
+        return caseWorkerRoleCmc;
     }
 
-    public void setCASE_WORKER_ROLE_CMC(String CASE_WORKER_ROLE_CMC) {
-        this.CASE_WORKER_ROLE_CMC = CASE_WORKER_ROLE_CMC;
+    public void setCaseWorkerRoleCmc(String caseWorkerRoleCmc) {
+        this.caseWorkerRoleCmc = caseWorkerRoleCmc;
     }
 
-    public String getCASE_WORKER_ROLE_SSCS() {
-        return CASE_WORKER_ROLE_SSCS;
+    public String getCaseWorkerRoleSscs() {
+        return caseWorkerRoleSscs;
     }
 
-    public void setCASE_WORKER_ROLE_SSCS(String CASE_WORKER_ROLE_SSCS) {
-        this.CASE_WORKER_ROLE_SSCS = CASE_WORKER_ROLE_SSCS;
+    public void setCaseWorkerRoleSscs(String caseWorkerRoleSscs) {
+        this.caseWorkerRoleSscs = caseWorkerRoleSscs;
     }
 
-    public String getCASE_WORKER_ROLE_DIVORCE() {
-        return CASE_WORKER_ROLE_DIVORCE;
+    public String getCaseWorkerRoleDivorce() {
+        return caseWorkerRoleDivorce;
     }
 
-    public void setCASE_WORKER_ROLE_DIVORCE(String CASE_WORKER_ROLE_DIVORCE) {
-        this.CASE_WORKER_ROLE_DIVORCE = CASE_WORKER_ROLE_DIVORCE;
+    public void setCaseWorkerRoleDivorce(String caseWorkerRoleDivorce) {
+        this.caseWorkerRoleDivorce = caseWorkerRoleDivorce;
     }
 
-    public final String getNOBODY() {
-        return NOBODY;
+    public final String getNobody() {
+        return nobody;
     }
 
-    public final String getFILES_FOLDER() {
-        return FILES_FOLDER;
+    public final String getFilesFolder() {
+        return filesFolder;
     }
 
-    public final String getTEXT_ATTACHMENT_1() {
-        return TEXT_ATTACHMENT_1;
+    public final String getTextAttachment1() {
+        return textAttachment1;
     }
 
-    public final String getATTACHMENT_2() {
-        return ATTACHMENT_2;
+    public final String getAttachment2() {
+        return attachment2;
     }
 
-    public final String getATTACHMENT_3() {
-        return ATTACHMENT_3;
+    public final String getAttachment3() {
+        return attachment3;
     }
 
-    public final String getATTACHMENT_4_PDF() {
-        return ATTACHMENT_4_PDF;
+    public final String getAttachment4Pdf() {
+        return attachment4Pdf;
     }
 
-    public final String getATTACHMENT_5() {
-        return ATTACHMENT_5;
+    public final String getAttachment5() {
+        return attachment5;
     }
 
-    public final String getATTACHMENT_6_GIF() {
-        return ATTACHMENT_6_GIF;
+    public final String getAttachment6Gif() {
+        return attachment6Gif;
     }
 
-    public final String getATTACHMENT_7_PNG() {
-        return ATTACHMENT_7_PNG;
+    public final String getAttachment7Png() {
+        return attachment7Png;
     }
 
-    public final String getATTACHMENT_8_TIF() {
-        return ATTACHMENT_8_TIF;
+    public final String getAttachment8Tif() {
+        return attachment8Tif;
     }
 
-    public final String getATTACHMENT_9_JPG() {
-        return ATTACHMENT_9_JPG;
+    public final String getAttachment9Jpg() {
+        return attachment9Jpg;
     }
 
-    public final String getATTACHMENT_10() {
-        return ATTACHMENT_10;
+    public final String getAttachment10() {
+        return attachment10;
     }
 
-    public final String getATTACHMENT_11() {
-        return ATTACHMENT_11;
+    public final String getAttachment11() {
+        return attachment11;
     }
 
-    public final String getATTACHMENT_15() {
-        return ATTACHMENT_15;
+    public final String getAttachment15() {
+        return attachment15;
     }
 
-    public final String getATTACHMENT_16() {
-        return ATTACHMENT_16;
+    public final String getAttachment16() {
+        return attachment16;
     }
 
-    public final String getATTACHMENT_17() {
-        return ATTACHMENT_17;
+    public final String getAttachment17() {
+        return attachment17;
     }
 
-    public final String getATTACHMENT_18() {
-        return ATTACHMENT_18;
+    public final String getAttachment18() {
+        return attachment18;
     }
 
-    public final String getATTACHMENT_19() {
-        return ATTACHMENT_19;
+    public final String getAttachment19() {
+        return attachment19;
     }
 
-    public final String getATTACHMENT_20() {
-        return ATTACHMENT_20;
+    public final String getAttachment20() {
+        return attachment20;
     }
 
-    public final String getATTACHMENT_21() {
-        return ATTACHMENT_21;
+    public final String getAttachment21() {
+        return attachment21;
     }
 
-    public final String getATTACHMENT_22() {
-        return ATTACHMENT_22;
+    public final String getAttachment22() {
+        return attachment22;
     }
 
-    public final String getATTACHMENT_23() {
-        return ATTACHMENT_23;
+    public final String getAttachment23() {
+        return attachment23;
     }
 
-    public final String getATTACHMENT_24() {
-        return ATTACHMENT_24;
+    public final String getAttachment24() {
+        return attachment24;
     }
 
-    public final String getATTACHMENT_25_TIFF() {
-        return ATTACHMENT_25_TIFF;
+    public final String getAttachment25Tiff() {
+        return attachment25Tiff;
     }
 
-    public final String getATTACHMENT_26_BMP() {
-        return ATTACHMENT_26_BMP;
+    public final String getAttachment26Bmp() {
+        return attachment26Bmp;
     }
 
-    public final String getATTACHMENT_27_JPEG() {
-        return ATTACHMENT_27_JPEG;
+    public final String getAttachment27Jpeg() {
+        return attachment27Jpeg;
     }
 
-    public final String getWORD() {
-        return WORD;
+    public final String getWord() {
+        return word;
     }
 
-    public final String getWORD_MACRO_ENABLED_AS_REGULAR() {
-        return WORD_MACRO_ENABLED_AS_REGULAR;
+    public final String getWordMacroEnabledAsRegular() {
+        return wordMacroEnabledAsRegular;
     }
 
-    public final String getPOWER_POINT() {
-        return POWER_POINT;
+    public final String getPowerPoint() {
+        return powerPoint;
     }
 
-    public final String getEXCEL() {
-        return EXCEL;
+    public final String getExcel() {
+        return excel;
     }
 
-    public final String getWORD_OLD() {
-        return WORD_OLD;
+    public final String getWordOld() {
+        return wordOld;
     }
 
-    public final String getEXCEL_OLD() {
-        return EXCEL_OLD;
+    public final String getExcelOld() {
+        return excelOld;
     }
 
-    public final String getPOWER_POINT_OLD() {
-        return POWER_POINT_OLD;
+    public final String getPowerPointOld() {
+        return powerPointOld;
     }
 
-    public final String getWORD_TEMPLATE() {
-        return WORD_TEMPLATE;
+    public final String getWordTemplate() {
+        return wordTemplate;
     }
 
-    public final String getWORD_MACRO_ENABLED() {
-        return WORD_MACRO_ENABLED;
+    public final String getWordMacroEnabled() {
+        return wordMacroEnabled;
     }
 
-    public final String getWORD_TEMPLATE_MACRO_ENABLED() {
-        return WORD_TEMPLATE_MACRO_ENABLED;
+    public final String getWordTemplateMacroEnabled() {
+        return wordTemplateMacroEnabled;
     }
 
-    public final String getEXCEL_TEMPLATE() {
-        return EXCEL_TEMPLATE;
+    public final String getExcelTemplate() {
+        return excelTemplate;
     }
 
-    public final String getEXCEL_MACRO_ENABLED() {
-        return EXCEL_MACRO_ENABLED;
+    public final String getExcelMacroEnabled() {
+        return excelMacroEnabled;
     }
 
-    public final String getEXCEL_TEMPLATE_MACRO_ENABLED() {
-        return EXCEL_TEMPLATE_MACRO_ENABLED;
+    public final String getExcelTemplateMacroEnabled() {
+        return excelTemplateMacroEnabled;
     }
 
-    public final String getPOWER_POINT_MACRO_ENABLED() {
-        return POWER_POINT_MACRO_ENABLED;
+    public final String getPowerPointMacroEnabled() {
+        return powerPointMacroEnabled;
     }
 
-    public final String getPOWER_POINT_TEMPLATE() {
-        return POWER_POINT_TEMPLATE;
+    public final String getPowerPointTemplate() {
+        return powerPointTemplate;
     }
 
-    public final String getPOWER_POINT_TEMPLATE_MACRO_ENABLED() {
-        return POWER_POINT_TEMPLATE_MACRO_ENABLED;
+    public final String getPowerPointTemplateMacroEnabled() {
+        return powerPointTemplateMacroEnabled;
     }
 
-    public final String getPOWER_POINT_SLIDE_SHOW() {
-        return POWER_POINT_SLIDE_SHOW;
+    public final String getPowerPointSlideShow() {
+        return powerPointSlideShow;
     }
 
-    public final String getPOWER_POINT_SLIDE_SHOW_MACRO_ENABLED() {
-        return POWER_POINT_SLIDE_SHOW_MACRO_ENABLED;
+    public final String getPowerPointSlideShowMacroEnabled() {
+        return powerPointSlideShowMacroEnabled;
     }
 
-    public final String getTHUMBNAIL_PDF() {
-        return THUMBNAIL_PDF;
+    public final String getThumbnailPdf() {
+        return thumbnailPdf;
     }
 
-    public final String getTHUMBNAIL_BMP() {
-        return THUMBNAIL_BMP;
+    public final String getThumbnailBmp() {
+        return thumbnailBmp;
     }
 
-    public final String getTHUMBNAIL_GIF() {
-        return THUMBNAIL_GIF;
+    public final String getThumbnailGif() {
+        return thumbnailGif;
     }
 
-    public final String getBAD_ATTACHMENT_1() {
-        return BAD_ATTACHMENT_1;
+    public final String getBadAttachment1() {
+        return badAttachment1;
     }
 
-    public final String getBAD_ATTACHMENT_2() {
-        return BAD_ATTACHMENT_2;
+    public final String getBadAttachment2() {
+        return badAttachment2;
     }
 
-    public final String getILLEGAL_NAME_FILE() {
-        return ILLEGAL_NAME_FILE;
+    public final String getIllegalNameFile() {
+        return illegalNameFile;
     }
 
-    public final String getILLEGAL_NAME_FILE1() {
-        return ILLEGAL_NAME_FILE1;
+    public final String getIllegalNameFile1() {
+        return illegalNameFile1;
     }
 
-    public final String getILLEGAL_NAME_FILE2() {
-        return ILLEGAL_NAME_FILE2;
+    public final String getIllegalNameFile2() {
+        return illegalNameFile2;
     }
 
-    public final String getVALID_CHAR_FILE1() {
-        return VALID_CHAR_FILE1;
+    public final String getValidCharFile1() {
+        return validCharFile1;
     }
 
-    public final String getEXE_AS_PDF() {
-        return EXE_AS_PDF;
+    public final String getExeAsPdf() {
+        return exeAsPdf;
     }
 
-    public final String getSVG_AS_PDF() {
-        return SVG_AS_PDF;
+    public final String getSvgAsPdf() {
+        return svgAsPdf;
     }
 
-    public final String getXML_AS_PDF() {
-        return XML_AS_PDF;
+    public final String getXmlAsPdf() {
+        return xmlAsPdf;
     }
 
-    public final String getEXE_AS_PNG() {
-        return EXE_AS_PNG;
+    public final String getExeAsPng() {
+        return exeAsPng;
     }
 
-    public final String getSVG_AS_PNG() {
-        return SVG_AS_PNG;
+    public final String getSvgAsPng() {
+        return svgAsPng;
     }
 
-    public final String getXML_AS_PNG() {
-        return XML_AS_PNG;
+    public final String getXmlAsPng() {
+        return xmlAsPng;
     }
 }

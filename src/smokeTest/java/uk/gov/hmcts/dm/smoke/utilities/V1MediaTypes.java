@@ -1,4 +1,4 @@
-package uk.gov.hmcts.dm.functional;
+package uk.gov.hmcts.dm.smoke.utilities;
 
 public final class V1MediaTypes {
     private V1MediaTypes() {

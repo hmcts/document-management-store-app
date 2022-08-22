@@ -1,4 +1,4 @@
-package uk.gov.hmcts.dm.functional;
+package uk.gov.hmcts.dm.smoke.utilities;
 
 import java.io.File;
 import java.net.URLDecoder;

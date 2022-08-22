@@ -28,29 +28,29 @@ public class ReadContentVersionIT extends BaseIT {
 
     @Before
     public void setup() {
-        documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
-        documentVersion = createDocumentContentVersion(documentUrl, getCITIZEN(), getATTACHMENT_9_JPG());
+        documentUrl = createDocumentAndGetUrlAs(getCitizen());
+        documentVersion = createDocumentContentVersion(documentUrl, getCitizen(), getAttachment9Jpg());
         documentVersionUrl = ((Response) documentVersion).path("_links.self.href");
         documentVersionBinaryUrl = ((Response) documentVersion).path("_links.binary.href");
     }
 
     @Test
-    public void RCV1_As_creator_I_read_content_version_by_URL() {
+    public void rcv1AsCreatorIReadContentVersionByUrl() {
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(getATTACHMENT_9_JPG()))
+            .body("originalDocumentName", equalTo(getAttachment9Jpg()))
             .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
             .when()
             .get(documentVersionUrl);
     }
 
     @Test
-    public void RCV2_As_creator_I_read_content_version_binary_by_URL() throws IOException {
+    public void rcv2AsCreatorIReadContentVersionBinaryByUrl() throws IOException {
 
-        assertByteArrayEquality (getATTACHMENT_9_JPG(), givenRequest(getCITIZEN())
+        assertByteArrayEquality(getAttachment9Jpg(), givenRequest(getCitizen())
             .expect()
             .statusCode(200)
             .contentType(MediaType.IMAGE_JPEG_VALUE)
@@ -60,9 +60,9 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV3_As_not_owner_and_not_a_case_worker_I_read_content_version_by_URL_but_I_am_denied_access() {
+    public void rcv3AsNotOwnerAndNotACaseWorkerIReadContentVersionByUrlButIAmDeniedAccess() {
 
-        givenRequest(getCITIZEN_2())
+        givenRequest(getCitizen2())
             .expect()
             .statusCode(403)
             .when()
@@ -70,9 +70,9 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV4_As_not_owner_and_not_a_case_worker_I_read_content_version_binary_by_URL_but_I_am_denied_access() {
+    public void rcv4AsNotOwnerAndNotACaseWorkerIReadContentVersionBinaryByUrlButIAmDeniedAccess() {
 
-        givenRequest(getCITIZEN_2())
+        givenRequest(getCitizen2())
             .expect()
             .statusCode(403)
             .when()
@@ -80,10 +80,10 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV6_As_a_probate_case_worker_I_read_content_version_binary_by_URL() throws IOException {
+    public void rcv6AsAProbateCaseWorkerIReadContentVersionBinaryByUrl() throws IOException {
 
-        assertByteArrayEquality(getATTACHMENT_9_JPG(),
-            givenRequest(getCASE_WORKER(), new ArrayList<>(List.of(getCASE_WORKER_ROLE_PROBATE())))
+        assertByteArrayEquality(getAttachment9Jpg(),
+            givenRequest(getCaseWorker(), new ArrayList<>(List.of(getCaseWorkerRoleProbate())))
                 .expect()
                 .statusCode(200)
                 .when()
@@ -93,10 +93,10 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV7_As_a_cmc_case_worker_I_can_read_content_version_binary_by_URL() throws IOException {
+    public void rcv7AsACmcCaseWorkerICanReadContentVersionBinaryByUrl() throws IOException {
 
-        assertByteArrayEquality(getATTACHMENT_9_JPG(),
-            givenRequest(getCASE_WORKER(), new ArrayList<>(List.of(getCASE_WORKER_ROLE_CMC())))
+        assertByteArrayEquality(getAttachment9Jpg(),
+            givenRequest(getCaseWorker(), new ArrayList<>(List.of(getCaseWorkerRoleCmc())))
                 .expect()
                 .statusCode(200)
                 .when()
@@ -105,10 +105,10 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV8_As_a_sscs_case_worker_I_can_read_content_version_binary_by_URL() throws IOException {
+    public void rcv8AsASscsCaseWorkerICanReadContentVersionBinaryByUrl() throws IOException {
 
-        assertByteArrayEquality(getATTACHMENT_9_JPG(),
-            givenRequest(getCASE_WORKER(), new ArrayList<>(List.of(getCASE_WORKER_ROLE_SSCS())))
+        assertByteArrayEquality(getAttachment9Jpg(),
+            givenRequest(getCaseWorker(), new ArrayList<>(List.of(getCaseWorkerRoleSscs())))
                 .expect()
                 .statusCode(200)
                 .when()
@@ -117,10 +117,10 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV9_As_a_divorce_case_worker_I_can_read_content_version_binary_by_URL() throws IOException {
+    public void rcv9AsADivorceCaseWorkerICanReadContentVersionBinaryByUrl() throws IOException {
 
-        assertByteArrayEquality(getATTACHMENT_9_JPG(),
-            givenRequest(getCASE_WORKER(), new ArrayList<>(List.of(getCASE_WORKER_ROLE_DIVORCE())))
+        assertByteArrayEquality(getAttachment9Jpg(),
+            givenRequest(getCaseWorker(), new ArrayList<>(List.of(getCaseWorkerRoleDivorce())))
                 .expect().statusCode(200)
                 .when()
                 .get(documentVersionBinaryUrl)
@@ -128,11 +128,11 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV10_As_a_creator_when_i_read_non_existent_version_by_URL() {
+    public void rcv10AsACreatorWhenIReadNonExistentVersionByUrl() {
         final String nonExistentVersionId = UUID.randomUUID().toString();
         final String newDocumentVersionUrl = documentVersionUrl.replace(documentVersionUrl.substring(documentVersionUrl.lastIndexOf("/") + 1), nonExistentVersionId);
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .when()
             .get(newDocumentVersionUrl)
             .then()
@@ -145,14 +145,14 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV11_As_a_creator_when_i_read_non_existent_version_binary_by_URL() {
+    public void rcv11AsACreatorWhenIReadNonExistentVersionBinaryByUrl() {
         final String nonExistentVersionId = UUID.randomUUID().toString();
         String versionsStr = "versions";
         String url = documentVersionBinaryUrl.substring(0, (documentVersionBinaryUrl.indexOf(versionsStr) + versionsStr.length()));
         String binaryPath = "/%s/binary";
         String newDocumentVersionBinaryUrl = url + String.format(binaryPath, nonExistentVersionId);
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .when()
             .get(newDocumentVersionBinaryUrl)
             .then()
@@ -165,8 +165,8 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    public void RCV12_As_a_divorce_case_worker_I_can_read_content_version_binary_by_URL_using_HTTP_Range_Headers() {
-        givenRangeRequest(0L, 99L, getCASE_WORKER(), new ArrayList<>(List.of(getCASE_WORKER_ROLE_DIVORCE())))
+    public void rcv12AsADivorceCaseWorkerICanReadContentVersionBinaryByUrlUsingHttpRangeHeaders() {
+        givenRangeRequest(0L, 99L, getCaseWorker(), new ArrayList<>(List.of(getCaseWorkerRoleDivorce())))
             .expect()
             .statusCode(206)
             .header(HttpHeaders.CONTENT_LENGTH, "100")

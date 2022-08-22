@@ -21,13 +21,13 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void As_a_Citizen_I_want_to_process_a_CSV_of_metadata_changes() throws IOException, InterruptedException {
+    public void asACitizenIWantToProcessACsvOfMetadataChanges() throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
-            String document1Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url
                 .split("/");
             String document1Id = split[split.length - 1];
-            String document2Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document2Url = createDocumentAndGetUrlAs(getCitizen());
             split = document2Url
                 .split("/");
             String document2Id = split[split.length - 1];
@@ -37,18 +37,18 @@ public class MetadataMigrationIT extends BaseIT {
                 + ",http://dm-store:8080/documents/" + document2Id + ",2020-03-02 11:10:56.615,2020-03-02 11:10:56.622,f";
 
             File file = File.createTempFile("migration", ".csv");
-            try (FileWriter fileWriter = new FileWriter(file)){
+            try (FileWriter fileWriter = new FileWriter(file)) {
                 fileWriter.write(body);
             }
 
             postCsvFileAndTriggerSpringBatchJob(file);
 
-            Response metadata1 = fetchDocumentMetaDataAs(getCITIZEN(), document1Url);
+            Response metadata1 = fetchDocumentMetaDataAs(getCitizen(), document1Url);
             Object caseId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
 
-            Response metadata2 = fetchDocumentMetaDataAs(getCITIZEN(), document2Url);
+            Response metadata2 = fetchDocumentMetaDataAs(getCitizen(), document2Url);
             Object caseId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
@@ -65,18 +65,18 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void As_a_Citizen__I_want_metadata_changes_applied_to_only_Matching_records_from_CSV() throws IOException, InterruptedException {
+    public void asACitizenIWantMetadataChangesAppliedToOnlyMatchingRecordsFromCsv() throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
-            String document1Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url
                 .split("/");
             String document1Id = split[split.length - 1];
-            String document2Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document2Url = createDocumentAndGetUrlAs(getCitizen());
             split = document2Url
                 .split("/");
             String document2Id = split[split.length - 1];
             // Document3 created but not enriched via CSV
-            String document3Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document3Url = createDocumentAndGetUrlAs(getCitizen());
             split = document3Url
                 .split("/");
             String document3Id = split[split.length - 1];
@@ -84,27 +84,27 @@ public class MetadataMigrationIT extends BaseIT {
             // only 2 records are in the CSV , 3rd one is not Present  and should not be Enriched by Metadata Migration.
             String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,case_created_date,case_last_modified_date,migrated\n"
                 + "1,1,AAT,AUTOTEST1," + document1Id + ",http://dm-store:8080/documents/" + document1Id
-                + ",2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f\n" + "2,2,AAT,AUTOTEST1," + document2Id +
-                ",http://dm-store:8080/documents/" + document2Id + ",2020-03-02 11:10:56.615,2020-03-02 11:10:56.622,f";
+                + ",2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f\n" + "2,2,AAT,AUTOTEST1," + document2Id
+                + ",http://dm-store:8080/documents/" + document2Id + ",2020-03-02 11:10:56.615,2020-03-02 11:10:56.622,f";
 
             File file = File.createTempFile("migration", ".csv");
-            try (FileWriter fileWriter = new FileWriter(file)){
+            try (FileWriter fileWriter = new FileWriter(file)) {
                 fileWriter.write(body);
             }
 
             postCsvFileAndTriggerSpringBatchJob(file);
 
-            Response metadata1 = fetchDocumentMetaDataAs(getCITIZEN(), document1Url);
+            Response metadata1 = fetchDocumentMetaDataAs(getCitizen(), document1Url);
             Object caseId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
 
-            Response metadata2 = fetchDocumentMetaDataAs(getCITIZEN(), document2Url);
+            Response metadata2 = fetchDocumentMetaDataAs(getCitizen(), document2Url);
             Object caseId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
 
-            Response metadata3 = fetchDocumentMetaDataAs(getCITIZEN(), document3Url);
+            Response metadata3 = fetchDocumentMetaDataAs(getCitizen(), document3Url);
             Object caseId3 = metadata3.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId3 = metadata3.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction3 = metadata3.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
@@ -127,13 +127,13 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void As_a_As_authenticated_user__I_want_to_process_a_CSV_file_which_has_missing_metadata_for_one_Case() throws IOException, InterruptedException {
+    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasMissingMetadataForOneCase() throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
-            String document1Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url
                 .split("/");
             String document1Id = split[split.length - 1];
-            String document2Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document2Url = createDocumentAndGetUrlAs(getCitizen());
             split = document2Url
                 .split("/");
             String document2Id = split[split.length - 1];
@@ -143,13 +143,13 @@ public class MetadataMigrationIT extends BaseIT {
                 + ",,,," + document1Id + ",http://dm-store:8080/documents/" + document1Id + ",2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f";
 
             File file = File.createTempFile("migration", ".csv");
-            try (FileWriter fileWriter = new FileWriter(file)){
+            try (FileWriter fileWriter = new FileWriter(file)) {
                 fileWriter.write(body);
             }
 
             postCsvFileAndTriggerSpringBatchJob(file);
 
-            Response metadata1 = fetchDocumentMetaDataAs(getCITIZEN(), document1Url);
+            Response metadata1 = fetchDocumentMetaDataAs(getCitizen(), document1Url);
             Object caseId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
@@ -163,13 +163,13 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void As_a_As_authenticated_user_I__want_to_process_a_CSV_file_which_has_missing_metadata_for_one_Case_and_valid_metadata_for_Another() throws IOException, InterruptedException {
+    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasMissingMetadataForOneCaseAndValidMetadataForAnother() throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
-            String document1Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url
                 .split("/");
             String document1Id = split[split.length - 1];
-            String document2Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document2Url = createDocumentAndGetUrlAs(getCitizen());
             split = document2Url
                 .split("/");
             String document2Id = split[split.length - 1];
@@ -180,18 +180,18 @@ public class MetadataMigrationIT extends BaseIT {
                 + "2,2,AAT,AUTOTEST2," + document2Id + ",http://dm-store:8080/documents/" + document2Id + ",2020-03-02 11:10:56.615,2020-03-02 11:10:56.622,f";
 
             File file = File.createTempFile("migration", ".csv");
-            try (FileWriter fileWriter = new FileWriter(file)){
+            try (FileWriter fileWriter = new FileWriter(file)) {
                 fileWriter.write(body);
             }
 
             postCsvFileAndTriggerSpringBatchJob(file);
 
-            Response metadata1 = fetchDocumentMetaDataAs(getCITIZEN(), document1Url);
+            Response metadata1 = fetchDocumentMetaDataAs(getCitizen(), document1Url);
             Object caseId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
 
-            Response metadata2 = fetchDocumentMetaDataAs(getCITIZEN(), document2Url);
+            Response metadata2 = fetchDocumentMetaDataAs(getCitizen(), document2Url);
             Object caseId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
@@ -209,13 +209,13 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void As_a_As_authenticated_user_I_want_to_process_a_CSV_file_which_has_random_documentId_generated_and_metadata_should_not_be_updated() throws IOException, InterruptedException {
+    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasRandomDocumentidGeneratedAndMetadataShouldNotBeUpdated() throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
-            String document1Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url
                 .split("/");
             String document1Id = split[split.length - 1];
-            String document2Url = createDocumentAndGetUrlAs(getCITIZEN());
+            String document2Url = createDocumentAndGetUrlAs(getCitizen());
             split = document2Url
                 .split("/");
             String document2Id = split[split.length - 1];
@@ -225,13 +225,13 @@ public class MetadataMigrationIT extends BaseIT {
             String body = "1,1,AAT,AUTOTEST1,randomDocumentId,http://dm-store:8080/documents/randomDocumentId,2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f";
 
             File file = File.createTempFile("migration", ".csv");
-            try (FileWriter fileWriter = new FileWriter(file)){
+            try (FileWriter fileWriter = new FileWriter(file)) {
                 fileWriter.write(body);
             }
 
             postCsvFileAndTriggerSpringBatchJob(file);
 
-            Response metadata1 = fetchDocumentMetaDataAs(getCITIZEN(), document1Url);
+            Response metadata1 = fetchDocumentMetaDataAs(getCitizen(), document1Url);
             Object caseId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
@@ -244,7 +244,7 @@ public class MetadataMigrationIT extends BaseIT {
     }
 
     public void postCsvFileAndTriggerSpringBatchJob(File file) throws InterruptedException {
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .multiPart("files", file, "text/csv")
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")

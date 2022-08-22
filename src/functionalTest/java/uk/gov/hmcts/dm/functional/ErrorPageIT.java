@@ -17,9 +17,9 @@ public class ErrorPageIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void EP1_As_an_unauthenticated_web_user_trying_to_access_a_document__receive_JSON_error_page_with_403() {
+    public void ep1AsAnUnauthenticatedWebUserTryingToAccessADocumentReceiveJsonErrorPageWith403() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         givenUnauthenticatedRequest()
             .expect()
@@ -30,9 +30,9 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP2_As_an_authenticated_user_trying_to_access_an_unknown_document__receive_JSON_error_page_with_404() {
+    public void ep2AsAnAuthenticatedUserTryingToAccessAnUnknownDocumentReceiveJsonErrorPageWith404() {
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
             .statusCode(404)
@@ -42,9 +42,9 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP3_As_an_authenticated_user_trying_to_access_document_dir__receive_JSON_error_page_with_405() {
+    public void ep3AsAnAuthenticatedUserTryingToAccessDocumentDirReceiveJsonErrorPageWith405() {
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
             .statusCode(405)
@@ -54,9 +54,9 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP4_As_an_authenticated_user_trying_to_post_no_document__receive_JSON_error_page_with_415() {
+    public void ep4AsAnAuthenticatedUserTryingToPostNoDocumentReceiveJsonErrorPageWith415() {
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
             .expect()
             .statusCode(415)
@@ -67,11 +67,11 @@ public class ErrorPageIT extends BaseIT {
 
     @Test
     @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
-    public void EP5_As_an_authenticated_user_trying_to_post_bad_attachment__receive_JSON_error_page_with_415() {
+    public void ep5AsAnAuthenticatedUserTryingToPostBadAttachmentReceiveJsonErrorPageWith415() {
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
-            .multiPart("file", file(getBAD_ATTACHMENT_1()), MediaType.ALL_VALUE)
+            .multiPart("file", file(getBadAttachment1()), MediaType.ALL_VALUE)
             .expect()
             .statusCode(422)
             .contentType(ContentType.JSON)
@@ -80,13 +80,13 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP6_As_an_authenticated_user_but_not_the_owner_of_the_file__post_the_newer_version_of_the_file__receive_JSON_error_page_with_403() {
+    public void ep6AsAnAuthenticatedUserButNotTheOwnerOfTheFilePostTheNewerVersionOfTheFileReceiveJsonErrorPageWith403() {
 
-        String url = createDocumentAndGetUrlAs(getCITIZEN());
+        String url = createDocumentAndGetUrlAs(getCitizen());
 
-        givenRequest(getCITIZEN_2())
+        givenRequest(getCitizen2())
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json,application/json;charset=UTF-8")
-            .multiPart("file", file(getATTACHMENT_9_JPG()), MediaType.IMAGE_JPEG_VALUE)
+            .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
             .statusCode(403)
             .contentType(ContentType.JSON)
@@ -95,9 +95,9 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP7_As_an_unauthenticated_api_user_trying_to_access_a_document_with_accept_JSON__receive_JSON_error() {
+    public void ep7AsAnUnauthenticatedApiUserTryingToAccessADocumentWithAcceptJsonReceiveJsonError() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         givenUnauthenticatedRequest()
             .accept(ContentType.JSON)
@@ -110,23 +110,9 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP8_As_an_unauthenticated_api_user_trying_to_access_a_document_with_no_accept_header__receive_JSON_error() {
+    public void ep8AsAnUnauthenticatedApiUserTryingToAccessADocumentWithNoAcceptHeaderReceiveJsonError() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
-
-        givenUnauthenticatedRequest()
-            .expect()
-            .statusCode(403)
-            .contentType(ContentType.JSON)
-            .body(not(containsString("<!DOCTYPE html>")))
-            .when()
-            .get(documentUrl);
-    }
-
-    @Test
-    public void EP9_As_an_unauthenticated_api_user_trying_to_access_a_document_with_document_accept_header__receive_JSON_error() {
-
-        String documentUrl = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         givenUnauthenticatedRequest()
             .expect()
@@ -138,13 +124,27 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP10_As_an_authenticated_user_but_not_the_owner_of_the_file__post_the_newer_version_of_the_file__receive_JSON_error_page_with_403() {
+    public void ep9AsAnUnauthenticatedApiUserTryingToAccessADocumentWithDocumentAcceptHeaderReceiveJsonError() {
 
-        String url = createDocumentAndGetUrlAs(getCITIZEN());
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
-        givenRequest(getCITIZEN())
+        givenUnauthenticatedRequest()
+            .expect()
+            .statusCode(403)
+            .contentType(ContentType.JSON)
+            .body(not(containsString("<!DOCTYPE html>")))
+            .when()
+            .get(documentUrl);
+    }
+
+    @Test
+    public void ep10AsAnAuthenticatedUserButNotTheOwnerOfTheFilePostTheNewerVersionOfTheFileReceiveJsonErrorPageWith403() {
+
+        String url = createDocumentAndGetUrlAs(getCitizen());
+
+        givenRequest(getCitizen())
             .accept(ContentType.JSON)
-            .multiPart("file", file(getATTACHMENT_18()), MediaType.APPLICATION_XML_VALUE)
+            .multiPart("file", file(getAttachment18()), MediaType.APPLICATION_XML_VALUE)
             .expect()
             .statusCode(422)
             .contentType(ContentType.JSON)
@@ -153,11 +153,11 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP11_As_an_authenticated_web_user_trying_to_post_no_document__receive_JSON_error_page_with_422() {
+    public void ep11AsAnAuthenticatedWebUserTryingToPostNoDocumentReceiveJsonErrorPageWith422() {
 
-        givenRequest(getCITIZEN())
+        givenRequest(getCitizen())
             .accept(ContentType.XML)
-            .multiPart("file", file(getATTACHMENT_18()), MediaType.APPLICATION_XML_VALUE)
+            .multiPart("file", file(getAttachment18()), MediaType.APPLICATION_XML_VALUE)
             .expect()
             .statusCode(422)
             .body(not(containsString("<!DOCTYPE html>")))
@@ -166,10 +166,10 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP12_As_an_authenticated_user__when_I_post_a_SVG_document_I_should_get_JSON_response() {
+    public void ep12AsAnAuthenticatedUserWhenIPostASvgDocumentIShouldGetJsonResponse() {
 
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_10()), V1MimeTypes.IMAGE_SVG_VALUE)
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment10()), V1MimeTypes.IMAGE_SVG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
@@ -181,10 +181,10 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void EP13_As_an_authenticated_user__when_I_post_a_XML_document_I_should_get_JSON_response() {
+    public void ep13AsAnAuthenticatedUserWhenIPostAXmlDocumentIShouldGetJsonResponse() {
 
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getATTACHMENT_18()), V1MimeTypes.APPLICATION_XML_VALUE)
+        givenRequest(getCitizen())
+            .multiPart("files", file(getAttachment18()), V1MimeTypes.APPLICATION_XML_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
@@ -197,10 +197,10 @@ public class ErrorPageIT extends BaseIT {
 
     @Test
     @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
-    public void EP14_As_an_authenticated_user__when_I_post_a_EXE_document_I_should_get_JSON_response() {
+    public void ep14AsAnAuthenticatedUserWhenIPostAExeDocumentIShouldGetJsonResponse() {
 
-        givenRequest(getCITIZEN())
-            .multiPart("files", file(getBAD_ATTACHMENT_1()), V1MimeTypes.ALL_VALUE)
+        givenRequest(getCitizen())
+            .multiPart("files", file(getBadAttachment1()), V1MimeTypes.ALL_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .expect().log().all()
