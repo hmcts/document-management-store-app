@@ -36,6 +36,8 @@ public class AddContentVersionIT extends BaseIT {
 
         String newVersionUrl = response.getHeader("Location");
 
+        newVersionUrl = replaceHttp(newVersionUrl);
+
         givenRequest(getCitizen()).expect().statusCode(200).when().get(newVersionUrl);
 
     }
@@ -134,6 +136,7 @@ public class AddContentVersionIT extends BaseIT {
             .thenReturn();
 
         String newVersionUrl = response.getHeader("Location");
+        newVersionUrl = replaceHttp(newVersionUrl);
 
         givenRequest(getCitizen())
             .expect()
@@ -158,6 +161,7 @@ public class AddContentVersionIT extends BaseIT {
             .thenReturn();
 
         String newVersionUrl = response.getHeader("Location");
+        newVersionUrl = replaceHttp(newVersionUrl);
 
         givenRequest(getCitizen())
             .expect()
@@ -198,7 +202,7 @@ public class AddContentVersionIT extends BaseIT {
 
             Response response = createAUserForTtl(getCaseWorker());
 
-            String documentUrl1 = response.path("_embedded.documents[0]._links.self.href");
+            String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
 
             givenRequest(getCaseWorker())
                 .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)

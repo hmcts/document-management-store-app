@@ -30,8 +30,8 @@ public class ReadContentVersionIT extends BaseIT {
     public void setup() {
         documentUrl = createDocumentAndGetUrlAs(getCitizen());
         documentVersion = createDocumentContentVersion(documentUrl, getCitizen(), getAttachment9Jpg());
-        documentVersionUrl = ((Response) documentVersion).path("_links.self.href");
-        documentVersionBinaryUrl = ((Response) documentVersion).path("_links.binary.href");
+        documentVersionUrl = replaceHttp(((Response) documentVersion).path("_links.self.href"));
+        documentVersionBinaryUrl = replaceHttp(((Response) documentVersion).path("_links.binary.href"));
     }
 
     @Test

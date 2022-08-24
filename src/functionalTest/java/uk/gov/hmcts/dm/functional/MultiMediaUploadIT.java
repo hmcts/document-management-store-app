@@ -73,8 +73,8 @@ public class MultiMediaUploadIT extends BaseIT {
             .when()
             .post("/documents");
 
-        String documentUrl1 = response.path("_embedded.documents[0]._links.self.href");
-        String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href");
+        String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
+        String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
 
         givenRequest(getCitizen())
             .expect()
@@ -117,8 +117,8 @@ public class MultiMediaUploadIT extends BaseIT {
             .when()
             .post("/documents");
 
-        String documentUrl1 = response.path("_embedded.documents[0]._links.self.href");
-        String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href");
+        String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
+        String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
 
         givenRequest(getCitizen())
             .expect()

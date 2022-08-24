@@ -75,8 +75,8 @@ public class CreateDocumentIT extends BaseIT {
             .when()
             .post("/documents");
 
-        String documentUrl1 = response.path("_embedded.documents[0]._links.self.href");
-        String documentContentUrl1 = response.path("_embedded.documents[0]._links.binary.href");
+        String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
+        String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
         Integer document1Size = response.path("_embedded.documents[0].size");
 
         givenRequest(getCitizen())
@@ -321,7 +321,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .andReturn();
 
-        String tiffUrl = response.path("_embedded.documents[0]._links.thumbnail.href");
+        String tiffUrl = replaceHttp(response.path("_embedded.documents[0]._links.thumbnail.href"));
 
         byte[] tiffByteArray = givenRequest(getCitizen())
             .get(tiffUrl).asByteArray();

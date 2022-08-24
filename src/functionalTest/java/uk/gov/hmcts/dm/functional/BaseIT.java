@@ -46,6 +46,10 @@ public abstract class BaseIT {
     private boolean toggleTtlEnabled;
     @Value("${toggle.metadatamigration}")
     private boolean metadataMigrationEnabled;
+
+    @Value("${toggle.secureurl}")
+    private boolean secureurl;
+
     private final String password = "123";
     private final String citizen = "test12@test.com";
     private String citizen2 = "test2@test.com";
@@ -309,7 +313,9 @@ public abstract class BaseIT {
     }
 
     public String createDocumentAndGetUrlAs(String username, String filename, String classification, List<String> roles, Map<String, String> metadata) {
-        return createDocument(username, filename, classification, roles, metadata).path("_embedded.documents[0]._links.self.href");
+        String documentUrl =  createDocument(username, filename, classification, roles, metadata)
+            .path("_embedded.documents[0]._links.self.href");
+        return replaceHttp(documentUrl);
     }
 
     public String createDocumentAndGetUrlAs(String username, String filename, String classification, List<String> roles) {
@@ -333,7 +339,9 @@ public abstract class BaseIT {
     }
 
     public String createDocumentAndGetBinaryUrlAs(String username, String filename, String classification, List<String> roles) {
-        return createDocument(username, filename, classification, roles).path("_embedded.documents[0]._links.binary.href");
+        String url = createDocument(username, filename, classification, roles)
+            .path("_embedded.documents[0]._links.binary.href");
+        return replaceHttp(url);
     }
 
     public String createDocumentAndGetBinaryUrlAs(String username, String filename, String classification) {
@@ -362,7 +370,7 @@ public abstract class BaseIT {
     }
 
     public String createDocumentContentVersionAndGetUrlAs(String documentUrl, String username, String filename) {
-        return createDocumentContentVersion(documentUrl, username, filename).path("_links.self.href");
+        return replaceHttp(createDocumentContentVersion(documentUrl, username, filename).path("_links.self.href"));
     }
 
     public String createDocumentContentVersionAndGetUrlAs(String documentUrl, String username) {
@@ -370,7 +378,7 @@ public abstract class BaseIT {
     }
 
     public String createDocumentContentVersionAndGetBinaryUrlAs(String documentUrl, String username, String filename) {
-        return createDocumentContentVersion(documentUrl, username, filename).path("_links.binary.href");
+        return replaceHttp(createDocumentContentVersion(documentUrl, username, filename).path("_links.binary.href"));
     }
 
     public String createDocumentContentVersionAndGetBinaryUrlAs(String documentUrl, String username) {
@@ -392,6 +400,13 @@ public abstract class BaseIT {
             .body("_embedded.documents[0].roles[0]", Matchers.equalTo("caseworker"))
             .body("_embedded.documents[0].ttl", Matchers.equalTo("2018-10-31T10:10:10+0000"))
             .when().post("/documents");
+    }
+
+    protected String replaceHttp(String url) {
+        if (secureurl) {
+            return url.replace("http","https");
+        }
+        return url;
     }
 
     public void assertByteArrayEquality(String fileName, byte[] response) throws IOException {

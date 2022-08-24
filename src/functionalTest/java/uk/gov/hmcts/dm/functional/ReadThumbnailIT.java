@@ -36,7 +36,7 @@ public class ReadThumbnailIT extends BaseIT {
             .post("/documents")
             .andReturn();
 
-        String tiffUrl = response.path("_embedded.documents[0]._links.thumbnail.href");
+        String tiffUrl = replaceHttp(response.path("_embedded.documents[0]._links.thumbnail.href"));
 
         byte[] tiffByteArray = givenRequest(getCitizen())
             .get(tiffUrl)
@@ -106,6 +106,8 @@ public class ReadThumbnailIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._embedded.allDocumentVersions._embedded.documentVersions[0]._links.thumbnail.href");
 
+        url = replaceHttp(url);
+
         givenUnauthenticatedRequest()
             .when()
             .get(url)
@@ -132,6 +134,8 @@ public class ReadThumbnailIT extends BaseIT {
             .when()
             .post("/documents")
             .path("_embedded.documents[0]._links.thumbnail.href");
+
+        url = replaceHttp(url);
 
         givenUnauthenticatedRequest()
             .when()
