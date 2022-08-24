@@ -39,7 +39,7 @@ public class StoredDocumentDeleteControllerTest {
         final List<StoredDocument> storedDocumentList = List.of(mock(StoredDocument.class));
         final CaseDocumentsDeletionResults caseDocumentsDeletionResults = new CaseDocumentsDeletionResults(1, 1);
 
-        when(searchService.findStoredDocumentsByCaseRef(deleteCaseDocumentsCommand)).thenReturn(storedDocumentList);
+        when(searchService.findStoredDocumentsIdsByCaseRef(deleteCaseDocumentsCommand)).thenReturn(storedDocumentList);
         when(auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocumentList)).thenReturn(caseDocumentsDeletionResults);
 
         final ResponseEntity<CaseDocumentsDeletionResults> caseDocumentsDeletionResultsResponseEntity =

@@ -28,7 +28,7 @@ public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
 
         when(
             this.searchService
-                .findStoredDocumentsByCaseRef(eq(deleteCaseDocumentsCommand)))
+                .findStoredDocumentsIdsByCaseRef(eq(deleteCaseDocumentsCommand)))
             .thenReturn(storedDocuments);
 
         when(

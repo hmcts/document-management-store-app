@@ -89,7 +89,7 @@ public class StoredDocumentDeleteController {
             verifyRequestParamsAreNotEmpty(deleteCaseDocumentsCommand);
             verifyRequestParamsConditions(deleteCaseDocumentsCommand);
 
-            List<StoredDocument> storedDocuments = searchService.findStoredDocumentsByCaseRef(deleteCaseDocumentsCommand);
+            List<StoredDocument> storedDocuments = searchService.findStoredDocumentsIdsByCaseRef(deleteCaseDocumentsCommand);
             CaseDocumentsDeletionResults caseDocumentsDeletionResults = auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocuments);
 
             return new ResponseEntity<>(caseDocumentsDeletionResults, OK);
