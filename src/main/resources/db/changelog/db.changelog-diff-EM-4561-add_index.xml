@@ -1,0 +1,17 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="EM-4561-documentmetadata" author="yogesh (manual)">
+        <preConditions onFail="MARK_RAN" onFailMessage="This index already exists and will not be created."
+                       onError="MARK_RAN" onErrorMessage="This index already exists and will not be created." >
+            <not>
+                <indexExists tableName="documentmetadata" indexName="documentmetadata_value_idx" columnNames="value"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="documentmetadata_value_idx" tableName="documentmetadata">
+            <column name="value"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
