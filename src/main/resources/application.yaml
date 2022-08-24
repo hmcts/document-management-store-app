@@ -42,7 +42,7 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.xml
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
+    url: jdbc:postgresql://${SPRING_DATASOURCE_HOST:localhost}:${SPRING_DATASOURCE_PORT:5432}/${SPRING_DATASOURCE_NAME:evidence}${SPRING_DATASOURCE_OPTIONS:?ssl=disable}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
     hikari:
