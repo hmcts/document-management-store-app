@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "dm-store"
+  annotations:
+    # This must match folder-name/job-name in Jenkins.
+    jenkins.io/job-full-name: cft:HMCTS_d_to_i/document-management-store-app
+    github.com/project-slug: hmcts/document-management-store-app
+  tags:
+    - java
+  links:
+    - url: https://hmcts-reform.slack.com/app_redirect?channel=em-dev-chat
+      title: "#em-dev-chat on Slack"
+      icon: chat
+spec:
+  type: service
+  lifecycle: production
+  owner: dcd_em
