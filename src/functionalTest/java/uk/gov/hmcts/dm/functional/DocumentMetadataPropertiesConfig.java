@@ -20,7 +20,7 @@ public class DocumentMetadataPropertiesConfig {
         this.metadata = metadata;
     }
 
-    private static class DocumentMetadata {
+    protected static class DocumentMetadata {
         private String documentName;
         private String extension;
         private long size;
