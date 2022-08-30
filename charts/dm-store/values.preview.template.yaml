@@ -24,9 +24,10 @@ java:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-    SPRING_DATASOURCE_URL: jdbc:postgresql://{{ .Release.Name }}-{{ .Values.postgresql.nameOverride}}:5432/postgres?ssl=disable
-    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.postgresqlUsername}}"
-    SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
+    SPRING_DATASOURCE_HOST: "{{ .Release.Name }}-postgresql"
+    SPRING_DATASOURCE_NAME: "{{ .Values.postgresql.auth.database}}"
+    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.auth.username}}"
+    SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.auth.password}}"
     # logging vars & healthcheck
     REFORM_ENVIRONMENT: preview
     PACKAGES_ENVIRONMENT: preview
@@ -39,8 +40,5 @@ java:
     STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME: orphandocumentdeletion{{ .Release.Name }}
   postgresql:
     enabled: true
-    auth:
-      username: evidence
-      password: evidence
 blobstorage:
   enabled: true
