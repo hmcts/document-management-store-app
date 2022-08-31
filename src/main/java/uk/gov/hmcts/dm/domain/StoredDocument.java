@@ -14,8 +14,28 @@ import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 
-import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Builder
@@ -105,6 +125,10 @@ public class StoredDocument implements RolesAware {
 
     public StoredDocument() {
         documentContentVersions = new ArrayList<>();
+    }
+
+    public StoredDocument(UUID id) {
+        setId(id);
     }
 
     public StoredDocument(UUID id, String createdBy, String createdByService, String lastModifiedBy, String lastModifiedByService,
