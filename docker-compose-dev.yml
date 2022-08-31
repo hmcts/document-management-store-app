@@ -20,26 +20,32 @@ services:
         volumes:
             - ccd-docker-azure-blob-data:/opt/azurite/folder
 
-    service-auth-provider-api:
-        image: hmcts/service-auth-provider-app
-        healthcheck:
-            interval: 10s
-            timeout: 10s
-            retries: 10
-        ports:
-            - 4502:8080
+    service-auth-provider-app:
+        image: hmctspublic.azurecr.io/rpe/service-auth-provider:latest
         environment:
-            SERVER_PORT: 8080
-            MICROSERVICEKEYS_CCD_DATA: "${IDAM_KEY_CCD_DATA_STORE}"
-            MICROSERVICEKEYS_CCD_GW: "${IDAM_KEY_CCD_GATEWAY}"
-            MICROSERVICEKEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
-            MICROSERVICEKEYS_CCD_ADMIN: "${IDAM_KEY_CCD_ADMIN}"
-            MICROSERVICEKEYS_FPL_CASE_SERVICE: "${IDAM_KEY_FPL_CASE_SERVICE}"
-            MICROSERVICEKEYS_EM_STITCHING_API: AAAAAAAAAAAAAAAA
-            MICROSERVICEKEYS_EM_CCD_ORCHESTRATOR: AAAAAAAAAAAAAAAA
-            MICROSERVICEKEYS_EM_GW: AAAAAAAAAAAAAAAA
-            MICROSERVICEKEYS_CCD_CASE_DISPOSER: BBBBBBBBBBBBBBBB
-            TESTING_SUPPORT_ENABLED: "true"
+            - microserviceKeys_em_gw=AAAAAAAAAAAAAAAA
+            - microserviceKeys_em_ccd_orchestrator=AAAAAAAAAAAAAAAA
+            - microserviceKeys_em_stitching_api=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_case_document_am_api=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_gw=AAAAAAAAAAAAAAAA
+            - microserviceKeys_xui_webapp=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_data=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_definition=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_admin=AAAAAAAAAAAAAAAA
+            - microserviceKeys_fpl_case_service=AAAAAAAAAAAAAAAA
+            - microserviceKeys_am_role_assignment_service=AAAAAAAAAAAAAAAA
+            - JSON_CONSOLE_PRETTY_PRINT=false
+            - REFORM_SERVICE_TYPE=java
+            - REFORM_SERVICE_NAME=service-auth-provider-app
+            - REFORM_TEAM=rpe
+            - REFORM_ENVIRONMENT=docker
+            - PACKAGES_ENVIRONMENT=docker
+            - PACKAGES_PROJECT=rpe
+            - PACKAGES_NAME=service-auth-provider-app
+            - PACKAGES_VERSION=unkown
+            - TESTING_SUPPORT_ENABLED=true
+        ports:
+            - 4502:4502
 
 volumes:
     pacts:

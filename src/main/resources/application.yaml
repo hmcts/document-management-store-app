@@ -37,10 +37,6 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-  liquibase:
-    enabled: ${ENABLE_DB_MIGRATE:true}
-    change-log: classpath:/db/changelog/db.changelog-master.xml
-
   datasource:
     url: jdbc:postgresql://${SPRING_DATASOURCE_HOST:localhost}:${SPRING_DATASOURCE_PORT:5432}/${SPRING_DATASOURCE_NAME:evidence}${SPRING_DATASOURCE_OPTIONS:?ssl=disable}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
@@ -191,3 +187,8 @@ task:
 springdoc:
   packagesToScan: uk.gov.hmcts.dm.controller
   pathsToMatch: /**
+
+dbMigration:
+  # When true, the app will run DB migration on startup.
+  # Otherwise, it will just check if all migrations have been applied (and fail to start if not).
+  runOnStartup: ${RUN_DB_MIGRATION_ON_STARTUP:true}
