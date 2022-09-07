@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 10
+    ignore: # For below libraries, ignore all updates. As updating these independently results in broken reports.
+      - dependency-name: net.serenity-bdd:serenity-single-page-report
+      - dependency-name: net.serenity-bdd:serenity-gradle-plugin
+      - dependency-name: net.serenity-bdd:serenity-rest-assured
+      - dependency-name: net.serenity-bdd:serenity-core
+      - dependency-name: net.serenity-bdd:serenity-junit
+      - dependency-name: net.serenity-bdd:serenity-spring
+      - dependency-name: au.com.dius.pact
+      - dependency-name: info.solidsoft.pitest
