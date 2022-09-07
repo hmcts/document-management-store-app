@@ -17,7 +17,7 @@ plugins {
     id 'io.franzbecker.gradle-lombok' version '5.0.0'
     id "info.solidsoft.pitest" version '1.5.2'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '8.5.13'
+    id 'org.flywaydb.flyway' version '9.2.2'
 
 }
 
