@@ -7,7 +7,7 @@ buildscript {
 
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.28'
+    id 'uk.gov.hmcts.java' version '0.12.29'
     id 'io.spring.dependency-management' version '1.0.12.RELEASE'
     id 'org.springframework.boot' version '2.7.2'
     id 'com.github.ben-manes.versions' version '0.42.0'
@@ -17,7 +17,7 @@ plugins {
     id 'io.franzbecker.gradle-lombok' version '5.0.0'
     id "info.solidsoft.pitest" version '1.5.2'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '8.5.13'
+    id 'org.flywaydb.flyway' version '9.2.3'
 
 }
 
