@@ -1,0 +1,52 @@
+version: 1.0-preview-1
+steps:
+  - id: pull-base-image-amd64
+    cmd: docker pull --platform linux/amd64 hmctspublic.azurecr.io/base/java:11-distroless && docker tag hmctspublic.azurecr.io/base/java:11-distroless hmctspublic.azurecr.io/base/java/linux/amd64:11-distroless
+    when: ["-"]
+    keep: true
+
+  - id: runtime-amd64
+    build: >
+      -t {{.Run.Registry}}/{{CI_IMAGE_TAG}}-amd64
+      --build-arg PLATFORM=/linux/amd64
+      --platform linux/amd64
+      .
+    when:
+      - pull-base-image-amd64
+    keep: true
+
+  - id: pull-base-image-arm64
+    cmd: docker pull --platform linux/arm64 hmctspublic.azurecr.io/base/java:11-distroless && docker tag hmctspublic.azurecr.io/base/java:11-distroless hmctspublic.azurecr.io/base/java/linux/arm64:11-distroless
+    when:
+      - pull-base-image-amd64
+    keep: true
+
+  - id: runtime-arm64
+    build: >
+      -t {{.Run.Registry}}/{{CI_IMAGE_TAG}}-arm64
+      --build-arg PLATFORM=/linux/arm64
+      --platform linux/arm64/v8
+      .
+    when:
+      - pull-base-image-arm64
+    keep: true
+
+  - id: push-images
+    push:
+      - "{{.Run.Registry}}/{{CI_IMAGE_TAG}}-amd64"
+      - "{{.Run.Registry}}/{{CI_IMAGE_TAG}}-arm64"
+    when:
+      - runtime-amd64
+      - runtime-arm64
+
+  - id: manifest-create
+    cmd: docker manifest create {{.Run.Registry}}/{{CI_IMAGE_TAG}} {{.Run.Registry}}/{{CI_IMAGE_TAG}}-amd64 {{.Run.Registry}}/{{CI_IMAGE_TAG}}-arm64
+    when:
+      - push-images
+    keep: true
+
+  - id: manifest-push
+    cmd: docker manifest push --purge {{.Run.Registry}}/{{CI_IMAGE_TAG}}
+    when:
+      - manifest-create
+    keep: true

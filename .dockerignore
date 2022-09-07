@@ -5,5 +5,7 @@
 !application
 !functionalTests
 !smokeTests
+!acb.yaml
+!Dockerfile
 !build/libs/**
 !lib/**
