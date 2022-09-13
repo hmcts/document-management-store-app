@@ -36,10 +36,6 @@ spring:
     allow-bean-definition-overriding: true
     allow-circular-references: true # To resolve PACT PR build issue
 
-  liquibase:
-    enabled: ${ENABLE_DB_MIGRATE:true}
-    change-log: classpath:/db/changelog/db.changelog-master.xml
-
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}

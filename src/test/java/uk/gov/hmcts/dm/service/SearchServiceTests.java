@@ -17,7 +17,10 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
+import static java.util.UUID.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
@@ -62,22 +65,23 @@ public class SearchServiceTests {
 
         DeleteCaseDocumentsCommand searchCommand = new DeleteCaseDocumentsCommand("theCase");
 
-        List<StoredDocument> mockedDocuments = Arrays.asList(
-            new StoredDocument(),
-            new StoredDocument(),
-            new StoredDocument());
+        List<UUID> mockedDocuments = Arrays.asList(
+                randomUUID(),
+                randomUUID()
+        );
 
         when(this.storedDocumentRepository.findAllByCaseRef(any())).thenReturn(mockedDocuments);
 
-        List<StoredDocument> documents = searchService.findStoredDocumentsByCaseRef(searchCommand);
+        List<StoredDocument> documents = searchService.findStoredDocumentsIdsByCaseRef(searchCommand);
 
-        Assert.assertEquals(mockedDocuments, documents);
-
+        assertThat(mockedDocuments.size()).isEqualTo(documents.size());
+        assertThat(mockedDocuments.get(0)).isEqualTo(documents.get(0).getId());
+        assertThat(mockedDocuments.get(1)).isEqualTo(documents.get(1).getId());
     }
 
     @Test(expected = NullPointerException.class)
     public void testSearchCaseRefNullArg() {
-        searchService.findStoredDocumentsByCaseRef(null);
+        searchService.findStoredDocumentsIdsByCaseRef(null);
     }
 
     @Test

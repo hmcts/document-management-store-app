@@ -37,12 +37,8 @@ spring:
   main:
     allow-bean-definition-overriding: true
 
-  liquibase:
-    enabled: ${ENABLE_DB_MIGRATE:true}
-    change-log: classpath:/db/changelog/db.changelog-master.xml
-
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/evidence}
+    url: jdbc:postgresql://${SPRING_DATASOURCE_HOST:localhost}:${SPRING_DATASOURCE_PORT:5432}/${SPRING_DATASOURCE_NAME:evidence}${SPRING_DATASOURCE_OPTIONS:?ssl=disable}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
     hikari:
@@ -68,7 +64,7 @@ connection:
   upload-timeout-min: ${UPLOAD_TIMEOUT_MIN:60}
 
 authorization:
-  s2s-names-whitelist: ${S2S_NAMES_WHITELIST:divorce,ccd,em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,cmc_claim_store,em_npa_app,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals,xui_webapp,ccd_case_document_am_api,unspec_service,nfdiv_case_api,civil_service,wa_task_management_api,wa_task_configuration_api,adoption_web,adoption_cos_api,et_cos,ccd_case_disposer}
+  s2s-names-whitelist: ${S2S_NAMES_WHITELIST:divorce,ccd,em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,cmc_claim_store,em_npa_app,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals,xui_webapp,ccd_case_document_am_api,unspec_service,nfdiv_case_api,wa_task_management_api,wa_task_configuration_api,adoption_web,adoption_cos_api,et_cos,ccd_case_disposer,finrem_case_orchestration}
 
 auth:
   idam:
@@ -191,3 +187,8 @@ task:
 springdoc:
   packagesToScan: uk.gov.hmcts.dm.controller
   pathsToMatch: /**
+
+dbMigration:
+  # When true, the app will run DB migration on startup.
+  # Otherwise, it will just check if all migrations have been applied (and fail to start if not).
+  runOnStartup: ${RUN_DB_MIGRATION_ON_STARTUP:true}

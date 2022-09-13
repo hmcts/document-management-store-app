@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +12,12 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.util.List;
+import java.util.UUID;
+
+import static java.util.stream.Collectors.*;
 
 @Service
+@Slf4j
 public class SearchService {
 
     @Autowired
@@ -23,9 +28,18 @@ public class SearchService {
         return storedDocumentRepository.findAllByMetadata(metadataSearchCommand, pageable);
     }
 
-    public List<StoredDocument> findStoredDocumentsByCaseRef(
+    public List<StoredDocument> findStoredDocumentsIdsByCaseRef(
         @NonNull DeleteCaseDocumentsCommand deleteCaseDocumentsCommand) {
-        return storedDocumentRepository.findAllByCaseRef(deleteCaseDocumentsCommand);
+
+        final List<UUID> storedDocumentsIdsList =
+                storedDocumentRepository.findAllByCaseRef(deleteCaseDocumentsCommand.getCaseRef());
+
+        final List<StoredDocument> storedDocuments = storedDocumentsIdsList
+                .stream()
+                .map(StoredDocument::new)
+                .collect(toList());
+
+        return storedDocuments;
     }
 
     public Page<StoredDocument> findStoredDocumentsByCreator(@NonNull String creator, @NonNull Pageable pageable) {
