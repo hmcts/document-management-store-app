@@ -172,7 +172,7 @@ dependencies {
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.22'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.23'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
