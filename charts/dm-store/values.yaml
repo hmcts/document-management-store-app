@@ -21,6 +21,8 @@ java:
           alias: azure.storage.connection-string
         - name: store-POSTGRES-PASS
           alias: spring.datasource.password
+        - name: app-insights-connection-string
+          alias: app-insights-connection-string
   environment:
     # db
     SPRING_DATASOURCE_PORT: 5432

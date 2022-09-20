@@ -97,6 +97,17 @@ resource "azurerm_key_vault_secret" "local_app_insights_key" {
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
+data "azurerm_key_vault_secret" "app_insights_connection_string" {
+  name         = "app-insights-connection-string"
+  key_vault_id = data.azurerm_key_vault.shared_key_vault.id
+}
+
+resource "azurerm_key_vault_secret" "local_app_insights_connection_string" {
+  name         = "app-insights-connection-string"
+  value        = data.azurerm_key_vault_secret.app_insights_connection_string.value
+  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
+}
+
 data "azurerm_subnet" "postgres" {
   name                 = "core-infra-subnet-0-${var.env}"
   resource_group_name  = "core-infra-${var.env}"
