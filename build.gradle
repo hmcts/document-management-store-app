@@ -96,7 +96,6 @@ def versions = [
     serenityreporter   : '2.6.0',
     serenityRestAssured: '2.6.0',
     logging            : '5.1.7',
-    pitest             : '1.5.2',
     pact_version       : '4.1.7',
     emTestHelper       : '1.21.4',
     shedlock           : '4.33.0',
