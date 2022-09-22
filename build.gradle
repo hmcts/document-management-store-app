@@ -251,7 +251,7 @@ dependencyCheck {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '8.34'
+    toolVersion = '9.2.1'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
