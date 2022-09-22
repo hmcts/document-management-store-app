@@ -273,7 +273,7 @@ def coverageExclusionList = [
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
-    toolVersion = '0.8.2' // jacocoMavenPluginVersion
+    toolVersion = "0.8.8"
     reportsDirectory = file("$buildDir/reports/jacoco")
 }
 
