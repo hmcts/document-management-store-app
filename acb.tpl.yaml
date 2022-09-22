@@ -1,7 +1,7 @@
 version: 1.0-preview-1
 steps:
   - id: pull-base-image-amd64
-    cmd: docker pull --platform linux/amd64 hmctspublic.azurecr.io/base/java:11-distroless && docker tag hmctspublic.azurecr.io/base/java:11-distroless hmctspublic.azurecr.io/base/java/linux/amd64:11-distroless
+    cmd: docker pull --platform linux/amd64 hmctspublic.azurecr.io/base/java:17-distroless && docker tag hmctspublic.azurecr.io/base/java:17-distroless hmctspublic.azurecr.io/base/java/linux/amd64:17-distroless
     when: ["-"]
     keep: true
 
@@ -16,7 +16,7 @@ steps:
     keep: true
 
   - id: pull-base-image-arm64
-    cmd: docker pull --platform linux/arm64 hmctspublic.azurecr.io/base/java:11-distroless && docker tag hmctspublic.azurecr.io/base/java:11-distroless hmctspublic.azurecr.io/base/java/linux/arm64:11-distroless
+    cmd: docker pull --platform linux/arm64 hmctspublic.azurecr.io/base/java:17-distroless && docker tag hmctspublic.azurecr.io/base/java:17-distroless hmctspublic.azurecr.io/base/java/linux/arm64:17-distroless
     when:
       - pull-base-image-amd64
     keep: true
