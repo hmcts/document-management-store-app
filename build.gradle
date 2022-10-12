@@ -116,7 +116,7 @@ dependencyManagement {
         }
 
         //CVE-2021-43797
-        dependencySet(group: 'io.netty', version: '4.1.82.Final') {
+        dependencySet(group: 'io.netty', version: '4.1.84.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-codec-http'
