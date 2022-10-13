@@ -65,11 +65,11 @@ public class FileContentVerifier {
                 try {
                     PDDocument document = PDDocument.load(tikaInputStream.getFile());
                     if (document.isEncrypted()) {
-                        log.error("Warning. PDF file is encrypted");
+                        log.error("Warning. PDF file is encrypted, {}", multipartFile.getOriginalFilename());
                         return false;
                     }
                 } catch (InvalidPasswordException ex) {
-                    log.error("Warning. PDF file is password protected");
+                    log.error("Warning. PDF file is password protected, {}", multipartFile.getOriginalFilename());
                     return false;
                 }
             }
