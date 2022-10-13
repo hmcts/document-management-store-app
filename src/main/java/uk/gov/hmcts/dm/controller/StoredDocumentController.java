@@ -120,7 +120,14 @@ public class StoredDocumentController {
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
                 description = "Service Authorization (S2S Bearer token)", required = true,
-                schema = @Schema(type = "string"))})
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-roles", description = "User Roles", required = true,
+                schema = @Schema(type = "string"))
+        }
+    )
+
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "404", description = "Document not found"),
