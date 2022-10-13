@@ -226,7 +226,7 @@ dependencies {
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: versions.jupiter
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.2', classifier: 'all'
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.2.3', classifier: 'all'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
