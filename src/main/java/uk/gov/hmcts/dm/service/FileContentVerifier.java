@@ -1,6 +1,8 @@
 package uk.gov.hmcts.dm.service;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.apache.tika.Tika;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
@@ -55,10 +57,23 @@ public class FileContentVerifier {
             }
             String detected = tika.detect(tikaInputStream, metadata);
             if (mimeTypeList.stream().noneMatch(m -> m.equalsIgnoreCase(detected))) {
-                log.error(
-                    String.format("Warning. The mime-type of uploaded file is not white-listed: %s", detected));
+                log.error("Warning. The mime-type of uploaded file is not white-listed: {}", detected);
                 return false;
             }
+
+            if ("application/pdf".equalsIgnoreCase(detected)) {
+                try {
+                    PDDocument document = PDDocument.load(tikaInputStream.getFile());
+                    if (document.isEncrypted()) {
+                        log.error("Warning. PDF file is encrypted");
+                        return false;
+                    }
+                } catch (InvalidPasswordException ex) {
+                    log.error("Warning. PDF file is password protected");
+                    return false;
+                }
+            }
+
         } catch (IOException e) {
             log.error("Could not verify the file content type", e);
             return false;

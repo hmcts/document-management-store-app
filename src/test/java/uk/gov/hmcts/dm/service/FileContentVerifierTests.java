@@ -54,6 +54,17 @@ public class FileContentVerifierTests {
     }
 
     @Test
+    public void testPasswordProtectedFails() throws Exception {
+        MultipartFile file = new MockMultipartFile(
+            "files",
+            "PasswordProtected.pdf",
+            "application/pdf",
+            getClass().getClassLoader().getResourceAsStream("files/PasswordProtected.pdf")
+        );
+        boolean b = fileContentVerifier.verifyContentType(file);
+    }
+
+    @Test
     public void testInputException() throws Exception {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         Mockito.when(file.getContentType()).thenReturn("application/pdf");
@@ -63,7 +74,7 @@ public class FileContentVerifierTests {
     }
 
     @Test
-    public void testNull() throws Exception {
+    public void testNull() {
         assertFalse(fileContentVerifier.verifyContentType(null));
     }
 
