@@ -58,7 +58,11 @@ public class StoredDocumentUpdateController {
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
                 description = "Service Authorization (S2S Bearer token)", required = true,
-                schema = @Schema(type = "string"))})
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
+                schema = @Schema(type = "string"))
+        }
+    )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Returns representation of the new state"),
         @ApiResponse(responseCode = "403", description = "Access Denied")
@@ -81,7 +85,11 @@ public class StoredDocumentUpdateController {
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
                 description = "Service Authorization (S2S Bearer token)", required = true,
-                schema = @Schema(type = "string"))})
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
+                schema = @Schema(type = "string"))
+        }
+    )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Update completed"),
         @ApiResponse(responseCode = "400", description = "Bad request"),
