@@ -62,6 +62,19 @@ public class FileContentVerifierTests {
             getClass().getClassLoader().getResourceAsStream("files/PasswordProtected.pdf")
         );
         boolean b = fileContentVerifier.verifyContentType(file);
+        assertFalse(b);
+    }
+
+    @Test
+    public void testEncryptedFileFails() throws Exception {
+        MultipartFile file = new MockMultipartFile(
+            "files",
+            "PasswordProtected.pdf",
+            "application/pdf",
+            getClass().getClassLoader().getResourceAsStream("files/sample_encrypted.pdf")
+        );
+        boolean b = fileContentVerifier.verifyContentType(file);
+        assertFalse(b);
     }
 
     @Test

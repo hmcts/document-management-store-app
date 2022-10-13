@@ -30,6 +30,7 @@ public class FileContentVerifier {
     private static final String EMPTY_STRING = "";
 
     private static final Logger log = LoggerFactory.getLogger(FileContentVerifier.class);
+    private static final String PDF_MIME = "application/pdf";
 
     public FileContentVerifier(@Value("#{'${dm.multipart.whitelist}'.split(',')}") List<String> mimeTypeList,
                                @Value("#{'${dm.multipart.whitelist-ext}'.split(',')}") List<String> extensionsList) {
@@ -61,7 +62,7 @@ public class FileContentVerifier {
                 return false;
             }
 
-            if ("application/pdf".equalsIgnoreCase(detected)) {
+            if (PDF_MIME.equalsIgnoreCase(detected)) {
                 try {
                     PDDocument document = PDDocument.load(tikaInputStream.getFile());
                     if (document.isEncrypted()) {
