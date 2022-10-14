@@ -9,8 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
-import uk.gov.hmcts.reform.auth.checker.core.RequestAuthorizer;
-import uk.gov.hmcts.reform.auth.checker.core.service.Service;
 import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.AuthCheckerServiceOnlyFilter;
 
 import java.util.Optional;
@@ -22,7 +20,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SpringSecurityConfiguration {
 
     @Autowired
-    private RequestAuthorizer<Service> serviceRequestAuthorizer;
+    private DmServiceRequestAuthorizer serviceRequestAuthorizer;
 
     @Autowired
     private AuthenticationManager authenticationManager;
