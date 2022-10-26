@@ -1,3 +1,3 @@
 
-CREATE INDEX CONCURRENTLY IF NOT EXISTS storeddocument_delete_expired_docs
+CREATE INDEX CONCURRENTLY IF NOT EXISTS storeddocument_ttl_harddeleted
 ON storeddocument (ttl, harddeleted) WHERE TTL is not null;
