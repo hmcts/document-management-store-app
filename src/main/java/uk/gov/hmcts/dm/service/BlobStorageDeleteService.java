@@ -38,9 +38,10 @@ public class BlobStorageDeleteService {
         BlockBlobClient blob = cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
         try {
             Response res = blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
-            if (res.getStatusCode() != 202) {
-                log.info("Deleting document {} / version {} from Azure Blob Storage: Blob could not be found.",
-                    documentContentVersion.getId());
+            if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
+                log.info("Deleting document {} failed. Response status code {}",
+                    documentContentVersion.getId(),
+                    res.getStatusCode());
             } else {
                 documentContentVersionRepository.updateContentUriAndContentCheckSum(
                     documentContentVersion.getId(), null, null);

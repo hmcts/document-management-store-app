@@ -152,6 +152,7 @@ dependencyManagement {
         dependencySet(group: 'org.yaml', version: '1.33') {
             entry 'snakeyaml'
         }
+        // 1.2.11 cause java.lang.NullPointerException: Cannot read the array length because "throwableSuppressed" is null
         dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
             entry 'logback-core'
             entry 'logback-access'
