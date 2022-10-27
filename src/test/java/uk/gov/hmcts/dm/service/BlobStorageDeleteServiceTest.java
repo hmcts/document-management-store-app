@@ -82,8 +82,22 @@ public class BlobStorageDeleteServiceTest {
         when(blobStorageException.getStatusCode()).thenReturn(502);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenThrow(blobStorageException);
+        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         assertNotNull(documentContentVersion.getContentUri());
+    }
+
+    @Test
+    public void deleteDocumentContentVersionDoesNotExistWithException() {
+        final StoredDocument storedDocument = createStoredDocument();
+        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
+        var   blobStorageException =  mock(BlobStorageException.class);
+        when(blobStorageException.getStatusCode()).thenReturn(502);
+        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+            .thenThrow(blobStorageException);
+        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
+        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+        assertNull(documentContentVersion.getContentUri());
     }
 
     private StoredDocument createStoredDocument() {
