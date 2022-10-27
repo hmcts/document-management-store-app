@@ -2,8 +2,6 @@ package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.models.BlobStorageException;
-import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +16,8 @@ import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class BlobStorageDeleteServiceTest {
@@ -56,16 +49,7 @@ public class BlobStorageDeleteServiceTest {
     public void deleteDocumentContentVersionDoesNotExistWithException() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        var blobStorageException = mock(BlobStorageException.class);
-        when(blobStorageException.getStatusCode()).thenReturn(404);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(blobStorageException);
-        assertThat(documentContentVersion.getId()).isNotNull();
-        assertThat(blobStorageDeleteService.documentContentVersionRepository).isNotNull();
-        assertThat(blobStorageDeleteService.cloudBlobContainer).isNotNull();
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(documentContentVersionRepository, times(1))
-            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
     }
 
     private StoredDocument createStoredDocument() {
