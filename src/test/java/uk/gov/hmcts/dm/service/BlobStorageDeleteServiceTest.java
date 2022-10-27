@@ -60,7 +60,8 @@ public class BlobStorageDeleteServiceTest {
             .thenReturn(new BlobsDeleteResponse(null, 202, null, null, null));
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         verify(documentContentVersionRepository, times(1))
-            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);    }
+            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
+    }
 
     @Test
     public void delete_documentContentVersion_if_responseCode_404() {
