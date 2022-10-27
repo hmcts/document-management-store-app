@@ -23,6 +23,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -80,6 +82,7 @@ public class BlobStorageDeleteServiceTest {
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenThrow(BlobStorageException.class);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+        verify( blob, times(1)).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
         assertNotNull(documentContentVersion.getContentUri());
     }
 
