@@ -46,10 +46,9 @@ public class BlobStorageDeleteServiceTest {
 
     @BeforeEach
     public void setUp() {
+        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
-
-        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
     }
 
     @Test
@@ -84,19 +83,6 @@ public class BlobStorageDeleteServiceTest {
             .thenThrow(blobStorageException);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         verify(documentContentVersionRepository, never()).updateContentUriAndContentCheckSum(any(), any(), any());
-    }
-
-    @Test
-    public void delete_documentContentVersion_if_blob_does_not_exist() {
-        final StoredDocument storedDocument = createStoredDocument();
-        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        var blobStorageException = mock(BlobStorageException.class);
-        when(blobStorageException.getStatusCode()).thenReturn(404);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(blobStorageException);
-        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(documentContentVersionRepository, times(1))
-            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
     }
 
     private StoredDocument createStoredDocument() {
