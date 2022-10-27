@@ -49,7 +49,7 @@ public class BlobStorageDeleteServiceTest {
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
 
-        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
+        this.blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
     }
 
     @Test
@@ -82,8 +82,8 @@ public class BlobStorageDeleteServiceTest {
         when(blobStorageException.getStatusCode()).thenReturn(502);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenThrow(blobStorageException);
-        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
-        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+        this.blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
+        this.blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         assertNotNull(documentContentVersion.getContentUri());
     }
 
@@ -95,8 +95,8 @@ public class BlobStorageDeleteServiceTest {
         when(blobStorageException.getStatusCode()).thenReturn(502);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenThrow(blobStorageException);
-        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
-        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+        this.blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
+        this.blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         assertNull(documentContentVersion.getContentUri());
     }
 
