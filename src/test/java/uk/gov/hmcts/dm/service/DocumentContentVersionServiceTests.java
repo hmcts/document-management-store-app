@@ -1,8 +1,8 @@
 package uk.gov.hmcts.dm.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -24,13 +24,8 @@ public class DocumentContentVersionServiceTests {
     @Mock
     StoredDocumentRepository storedDocumentRepository;
 
-
+    @InjectMocks
     DocumentContentVersionService documentContentVersionService;
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        documentContentVersionService = new DocumentContentVersionService(documentContentVersionRepository, storedDocumentRepository);
-    }
 
     @Test
     public void testFindOne() {
