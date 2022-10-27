@@ -6,11 +6,11 @@ import com.azure.storage.blob.implementation.models.BlobsDeleteResponse;
 import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class BlobStorageDeleteServiceTest {
 
     private BlobStorageDeleteService blobStorageDeleteService;
@@ -44,7 +44,7 @@ public class BlobStorageDeleteServiceTest {
     @Mock
     private DocumentContentVersionRepository documentContentVersionRepository;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
