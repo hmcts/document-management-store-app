@@ -23,8 +23,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -77,31 +75,14 @@ public class BlobStorageDeleteServiceTest {
     }
 
     @Test
-    public void notDeleteDocumentContentVersionDoesNotExistWithException() {
-        final StoredDocument storedDocument = createStoredDocument();
-        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        documentContentVersion.setContentUri("x");
-        var blobStorageException = mock(BlobStorageException.class);
-        when(blobStorageException.getStatusCode()).thenReturn(409);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(blobStorageException);
-        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(documentContentVersionRepository, never()).updateContentUriAndContentCheckSum(any(), any(), any());
-        assertNotNull(documentContentVersion.getContentUri());
-    }
-
-    @Test
     public void deleteDocumentContentVersionDoesNotExistWithException() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         documentContentVersion.setContentUri("x");
-        var blobStorageException = mock(BlobStorageException.class);
-        when(blobStorageException.getStatusCode()).thenReturn(404);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(blobStorageException);
+            .thenThrow(BlobStorageException.class);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(documentContentVersionRepository, times(1))
-            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
+        verify(blob, times(1)).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
         assertNotNull(documentContentVersion.getContentUri());
     }
 
