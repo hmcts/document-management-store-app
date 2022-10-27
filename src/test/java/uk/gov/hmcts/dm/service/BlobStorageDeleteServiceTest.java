@@ -82,7 +82,7 @@ public class BlobStorageDeleteServiceTest {
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenThrow(BlobStorageException.class);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify( blob, times(1)).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+        verify(blob, times(1)).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
         assertNotNull(documentContentVersion.getContentUri());
     }
 
