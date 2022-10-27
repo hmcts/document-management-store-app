@@ -3,7 +3,6 @@ package uk.gov.hmcts.dm.service;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.implementation.models.BlobsDeleteResponse;
-import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
@@ -23,7 +22,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -69,19 +67,6 @@ public class BlobStorageDeleteServiceTest {
         documentContentVersion.setContentUri("x");
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenReturn(new BlobsDeleteResponse(null, 404, null, null, null));
-        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        assertNotNull(documentContentVersion.getContentUri());
-    }
-
-    @Test
-    public void deleteDocumentContentVersionDoesNotExistWithException() {
-        final StoredDocument storedDocument = createStoredDocument();
-        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        documentContentVersion.setContentUri("x");
-        var blobStorageException = mock(BlobStorageException.class);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(blobStorageException);
-        when(blobStorageException.getStatusCode()).thenReturn(404);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         assertNotNull(documentContentVersion.getContentUri());
     }
