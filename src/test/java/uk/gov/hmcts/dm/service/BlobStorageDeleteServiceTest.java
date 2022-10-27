@@ -75,6 +75,15 @@ public class BlobStorageDeleteServiceTest {
     }
 
     @Test
+    public void not_delete_documentContentVersion_if_responseCode_not_202_or_404() {
+        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+            .thenReturn(new BlobsDeleteResponse(null, 409, null, null, null));
+        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+        verify(documentContentVersionRepository, never())
+            .updateContentUriAndContentCheckSum(any(), any(), any());
+    }
+
+    @Test
     public void not_delete_DocumentContentVersion_if_blob_delete_fails_with_exception() {
         var blobStorageException = mock(BlobStorageException.class);
         when(blobStorageException.getStatusCode()).thenReturn(409);
