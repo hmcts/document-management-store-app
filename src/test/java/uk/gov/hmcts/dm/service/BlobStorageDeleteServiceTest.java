@@ -3,11 +3,13 @@ package uk.gov.hmcts.dm.service;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.implementation.models.BlobsDeleteResponse;
+import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -22,11 +24,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 public class BlobStorageDeleteServiceTest {
 
+    @InjectMocks
     private BlobStorageDeleteService blobStorageDeleteService;
 
     @Mock
@@ -43,11 +47,8 @@ public class BlobStorageDeleteServiceTest {
 
     @Before
     public void setUp() {
-
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
-
-        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
     }
 
     @Test
@@ -76,8 +77,10 @@ public class BlobStorageDeleteServiceTest {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         documentContentVersion.setContentUri("x");
+        var blobStorageException = mock(BlobStorageException.class);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenReturn(new BlobsDeleteResponse(null, 404, null, null, null));
+            .thenThrow(blobStorageException);
+        given(blobStorageException.getStatusCode()).willReturn(404);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         assertNotNull(documentContentVersion.getContentUri());
     }
