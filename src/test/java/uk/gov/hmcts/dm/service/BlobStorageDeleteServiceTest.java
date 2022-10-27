@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -83,6 +84,9 @@ public class BlobStorageDeleteServiceTest {
         when(blobStorageException.getStatusCode()).thenReturn(404);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenThrow(blobStorageException);
+        assertThat(documentContentVersion.getId()).isNotNull();
+        assertThat(blobStorageDeleteService.documentContentVersionRepository).isNotNull();
+        assertThat(blobStorageDeleteService.cloudBlobContainer).isNotNull();
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         verify(documentContentVersionRepository, times(1))
             .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
