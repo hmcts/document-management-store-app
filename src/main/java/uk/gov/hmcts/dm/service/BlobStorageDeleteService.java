@@ -46,9 +46,17 @@ public class BlobStorageDeleteService {
                     documentContentVersion.getId(), null, null);
             }
         } catch (BlobStorageException e) {
-            log.info(e.getServiceMessage());
-            log.info("Deleting document {} / version {} from Azure Blob Storage: Blob could not be found.",
-                documentContentVersion.getId());
+            if (e.getStatusCode() == 404) {
+                log.info("blob not found for deletion {}", documentContentVersion.getId());
+                documentContentVersionRepository.updateContentUriAndContentCheckSum(
+                    documentContentVersion.getId(), null, null);
+            }
+            log.info(
+                "Deleting document failed {} / status {} from Azure Blob Storage: Blob could not be found.",
+                documentContentVersion.getId(),
+                e.getStatusCode(),
+                e
+            );
         }
     }
 
