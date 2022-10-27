@@ -19,10 +19,12 @@ import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -44,7 +46,6 @@ public class BlobStorageDeleteServiceTest {
 
     @Before
     public void setUp() {
-
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
 
@@ -52,35 +53,49 @@ public class BlobStorageDeleteServiceTest {
     }
 
     @Test
-    public void deleteDocumentContentVersion() {
+    public void delete_documentContentVersion() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenReturn(new BlobsDeleteResponse(null, 202, null, null, null));
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        assertNull(documentContentVersion.getContentUri());
-    }
+        verify(documentContentVersionRepository, times(1))
+            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);    }
 
     @Test
-    public void deleteDocumentContentVersionDoesNotExist() {
+    public void delete_documentContentVersion_if_responseCode_404() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        documentContentVersion.setContentUri("x");
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenReturn(new BlobsDeleteResponse(null, 404, null, null, null));
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        assertNotNull(documentContentVersion.getContentUri());
+        verify(documentContentVersionRepository, times(1))
+            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
     }
 
     @Test
-    public void deleteDocumentContentVersionDoesNotExistWithException() {
+    public void not_delete_DocumentContentVersion_if_blob_delete_fails_with_exception() {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        documentContentVersion.setContentUri("x");
+        var blobStorageException = mock(BlobStorageException.class);
+        when(blobStorageException.getStatusCode()).thenReturn(409);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenThrow(BlobStorageException.class);
+            .thenThrow(blobStorageException);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        assertNotNull(documentContentVersion.getContentUri());
+        verify(documentContentVersionRepository, never()).updateContentUriAndContentCheckSum(any(), any(), any());
+    }
+
+    @Test
+    public void delete_documentContentVersion_if_blob_does_not_exist() {
+        final StoredDocument storedDocument = createStoredDocument();
+        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
+        var blobStorageException = mock(BlobStorageException.class);
+        when(blobStorageException.getStatusCode()).thenReturn(404);
+        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+            .thenThrow(blobStorageException);
+        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+        verify(documentContentVersionRepository, times(1))
+            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
     }
 
     private StoredDocument createStoredDocument() {
@@ -95,8 +110,10 @@ public class BlobStorageDeleteServiceTest {
         return storedDocument;
     }
 
-    private DocumentContentVersion buildDocumentContentVersion(UUID documentContentVersionUuid,
-                                                               StoredDocument storedDocument) {
+    private DocumentContentVersion buildDocumentContentVersion(
+        UUID documentContentVersionUuid,
+        StoredDocument storedDocument
+    ) {
         DocumentContentVersion doc = new DocumentContentVersion();
         doc.setId(documentContentVersionUuid);
         doc.setStoredDocument(storedDocument);
