@@ -71,6 +71,17 @@ public class BlobStorageDeleteServiceTest {
         assertNotNull(documentContentVersion.getContentUri());
     }
 
+    @Test
+    public void deleteDocumentContentVersionDoesNotExistWithException() {
+        final StoredDocument storedDocument = createStoredDocument();
+        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
+        documentContentVersion.setContentUri("x");
+        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+            .thenReturn(new BlobsDeleteResponse(null, 404, null, null, null));
+        blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+        assertNotNull(documentContentVersion.getContentUri());
+    }
+
     private StoredDocument createStoredDocument() {
         return createStoredDocument(randomUUID());
     }
