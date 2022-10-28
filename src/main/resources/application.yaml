@@ -51,6 +51,7 @@ spring:
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
     initialize-schema: always
     document-task-milliseconds: ${DOCUMENT_TASK_MILLISECONDS:60000}
+    deleteThreadCount:  ${DOCUMENT_TASK_THREAD_COUNT:10}
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}

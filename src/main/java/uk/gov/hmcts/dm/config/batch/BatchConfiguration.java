@@ -24,6 +24,7 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import javax.persistence.EntityManager;
@@ -31,6 +32,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 import java.util.Date;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableBatchProcessing
 @EnableScheduling
@@ -39,25 +41,28 @@ import java.util.Date;
 public class BatchConfiguration {
 
     @Autowired
-    public JobBuilderFactory jobBuilderFactory;
+    private JobBuilderFactory jobBuilderFactory;
 
     @Autowired
-    public StepBuilderFactory stepBuilderFactory;
+    private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    public EntityManagerFactory entityManagerFactory;
+    private EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    public JobLauncher jobLauncher;
+    private JobLauncher jobLauncher;
 
     @Autowired
-    public DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor;
+    private DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Value("${spring.batch.historicExecutionsRetentionMilliseconds}")
-    int historicExecutionsRetentionMilliseconds;
+    private int historicExecutionsRetentionMilliseconds;
+
+    @Value("${spring.batch.deleteThreadCount}")
+    private int deleteThreadCount;
 
     @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
@@ -108,9 +113,26 @@ public class BatchConfiguration {
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
-            .taskExecutor(new SimpleAsyncTaskExecutor("del_w_ttl"))
+            .taskExecutor(taskExecutor())
             .build();
 
+    }
+
+    private ThreadPoolTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setThreadNamePrefix("del_w_ttl");
+        taskExecutor.setCorePoolSize(deleteThreadCount);
+        taskExecutor.setMaxPoolSize(deleteThreadCount);
+        taskExecutor.setQueueCapacity(10);
+        taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy() {
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+                System.out.println("Delete execution rejected");
+                super.rejectedExecution(r, e);
+            }
+        });
+        taskExecutor.setDaemon(true);
+        taskExecutor.initialize();
+        return taskExecutor;
     }
 
     public Job clearHistoryData() {
@@ -127,7 +149,7 @@ public class BatchConfiguration {
         public Query createQuery() {
             return entityManager
                 .createQuery("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
-                            + "where d.hardDeleted = false AND d.ttl < current_timestamp()")
+                            + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED);
         }
