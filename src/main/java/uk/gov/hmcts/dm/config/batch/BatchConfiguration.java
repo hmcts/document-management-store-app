@@ -1,6 +1,8 @@
 package uk.gov.hmcts.dm.config.batch;
 
 import org.hibernate.LockOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -39,6 +41,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 @ConditionalOnProperty("toggle.ttl")
 public class BatchConfiguration {
 
+    private final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
+
     @Autowired
     private JobBuilderFactory jobBuilderFactory;
 
@@ -62,6 +66,9 @@ public class BatchConfiguration {
 
     @Value("${spring.batch.deleteThreadCount}")
     private int deleteThreadCount;
+
+    @Value("${spring.batch.deleteExecutorQueueCapacity}")
+    private int deleteExecutorQueueCapacity;
 
     @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
@@ -122,10 +129,10 @@ public class BatchConfiguration {
         taskExecutor.setThreadNamePrefix("del_w_ttl");
         taskExecutor.setCorePoolSize(deleteThreadCount);
         taskExecutor.setMaxPoolSize(deleteThreadCount);
-        taskExecutor.setQueueCapacity(10);
+        taskExecutor.setQueueCapacity(deleteExecutorQueueCapacity);
         taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy() {
             public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
-                System.out.println("Delete execution rejected");
+                log.info("Delete execution rejected");
                 super.rejectedExecution(r, e);
             }
         });
