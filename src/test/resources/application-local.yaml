@@ -1,17 +1,10 @@
 spring:
-  database:
-    driverClassName: org.h2.Driver
   datasource:
-    url: jdbc:h2:mem:test_mem
-#    url: jdbc:h2:build/h2_db/test;DB_CLOSE_ON_EXIT=FALSE
-    platform: h2
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:11:///localhost?stringtype=unspecified
   jpa:
-    database-platform: uk.gov.hmcts.dm.dialect.CustomH2Dialect
     hibernate:
       ddl-auto: create-drop
-    properties:
-      hiberante:
-        dialect: uk.gov.hmcts.dm.dialect.CustomH2Dialect
 
 azure:
   storage:
