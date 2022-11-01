@@ -535,7 +535,7 @@ public class CreateDocumentIT extends BaseIT {
     @Test
     public void cd27AsAuthenticatedUserICannotUploadEncryptedFile() {
         givenRequest(getCitizen())
-            .multiPart("files", file(getEncryptedFile()), MediaType.APPLICATION_XML_VALUE)
+            .multiPart("files", file(getEncryptedFile()), MediaType.APPLICATION_PDF_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
