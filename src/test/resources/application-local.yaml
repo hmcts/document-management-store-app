@@ -2,9 +2,6 @@ spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:postgresql:11:///localhost?stringtype=unspecified
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
 
 azure:
   storage:
