@@ -42,28 +42,36 @@ public class FileContentVerifier {
 
     public boolean verifyContentType(MultipartFile multipartFile) {
         if (multipartFile == null) {
+            log.error("Not multi part file");
             return false;
         }
 
         String fileNameExtension = getOriginalFileNameExtension(multipartFile);
         if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
-            log.info(
+            String sanitisedFileExtension = sanitiseLog(fileNameExtension);
+            log.error(
                 "Warning. The extension of uploaded file is not white-listed: fileNameExtension {}",
-                sanitiseLog(fileNameExtension)
+                sanitisedFileExtension
             );
             return false;
         }
-
+        String sanitisedFileName = null;
         try (InputStream inputStream = multipartFile.getInputStream();
              TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
             Metadata metadata = new Metadata();
+            sanitisedFileName = sanitiseLog(multipartFile.getOriginalFilename());
+
             if (multipartFile.getOriginalFilename() != null) {
                 metadata.add(TikaCoreProperties.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
                 metadata.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
             }
             String detected = tika.detect(tikaInputStream, metadata);
             if (mimeTypeList.stream().noneMatch(m -> m.equalsIgnoreCase(detected))) {
-                log.error("Warning. The mime-type of uploaded file is not white-listed: {}", detected);
+                log.error(
+                    "Warning. The mime-type of uploaded file is not white-listed: {} fileName: {}",
+                    detected,
+                    sanitisedFileName
+                );
                 return false;
             }
 
@@ -71,17 +79,17 @@ public class FileContentVerifier {
                 try {
                     PDDocument document = PDDocument.load(tikaInputStream.getFile());
                     if (document.isEncrypted()) {
-                        log.error("Warning. PDF file is encrypted");
+                        log.error("Warning. PDF file is encrypted, fileName {}", sanitisedFileName);
                         return false;
                     }
                 } catch (InvalidPasswordException ex) {
-                    log.error("Warning. PDF file is password protected");
+                    log.error("Warning. PDF file is password protected, fileName {} ", sanitisedFileName);
                     return false;
                 }
             }
 
         } catch (IOException e) {
-            log.error("Could not verify the file content type", e);
+            log.error("Could not verify the file content type, fileName {}", sanitisedFileName, e);
             return false;
         }
 

@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static uk.gov.hmcts.dm.utils.StringUtils.sanitiseLog;
+
 @Service
 public class FileSizeVerifier {
 
@@ -32,14 +34,16 @@ public class FileSizeVerifier {
 
     public boolean verifyFileSize(MultipartFile multipartFile) {
         if (multipartFile == null) {
+            log.error("Not multi part file");
             return false;
         }
 
         long mediaFileSizeInBytes = mediaFileSize * 1024 * 1024;
         long nonMediaFileSizeInBytes = nonMediaFileSize * 1024 * 1024;
-
+        String sanitisedFileName = null;
         try (InputStream inputStream = multipartFile.getInputStream();
              TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
+            sanitisedFileName = sanitiseLog(multipartFile.getOriginalFilename());
             long fileSizeInBytes = tikaInputStream.getLength();
 
             Metadata metadata = new Metadata();
@@ -48,19 +52,28 @@ public class FileSizeVerifier {
                 metadata.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
             }
             String detected = tika.detect(tikaInputStream, metadata);
+
             if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(detected))
                     && fileSizeInBytes > mediaFileSizeInBytes) {
                 log.error(
-                    String.format("Warning. The uploaded Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, mediaFileSize));
+                    "Warning. The uploaded Media file {} size {} is more than the allowed limit of : {} MB",
+                    sanitisedFileName,
+                    fileSizeInBytes,
+                    mediaFileSize
+                );
                 return false;
             } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(detected))
                     && fileSizeInBytes > nonMediaFileSizeInBytes) {
                 log.error(
-                    String.format("Warning. The uploaded Non-Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, nonMediaFileSize));
+                    "Warning. The uploaded Non-Media file {} size {} is more than the allowed limit of : {} MB",
+                    sanitisedFileName,
+                    fileSizeInBytes,
+                    nonMediaFileSize
+                );
                 return false;
             }
         } catch (IOException e) {
-            log.error("Could not verify the file content type", e);
+            log.error("Could not verify the file {} content type", sanitisedFileName, e);
             return false;
         }
 
