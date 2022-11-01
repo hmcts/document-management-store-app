@@ -219,7 +219,6 @@ dependencies {
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.7.4'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.17.5'
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
