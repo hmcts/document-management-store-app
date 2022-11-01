@@ -531,4 +531,18 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.self.href");
     }
+
+    @Test
+    public void cd27AsAuthenticatedUserICannotUploadEncryptedFile() {
+        givenRequest(getCitizen())
+            .multiPart("files", file(getEncryptedFile()), MediaType.APPLICATION_XML_VALUE)
+            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
+            .multiPart("roles", "caseworker")
+            .multiPart("roles", "citizen")
+            .expect()
+            .statusCode(422)
+            .body("error", Matchers.equalTo("Your upload contains a disallowed file type"))
+            .when()
+            .post("/documents");
+    }
 }
