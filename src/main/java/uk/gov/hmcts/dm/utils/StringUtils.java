@@ -37,4 +37,9 @@ public class StringUtils {
         }
         return encode;
     }
+
+    public static final String sanitiseLog(String log) {
+        return log == null ? null :
+            log.replaceAll("^a-zA-Z0-9]","*");
+    }
 }

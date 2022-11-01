@@ -18,6 +18,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
+import static uk.gov.hmcts.dm.utils.StringUtils.sanitiseLog;
+
 @Service
 public class FileContentVerifier {
 
@@ -47,7 +49,7 @@ public class FileContentVerifier {
         if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
             log.info(
                 "Warning. The extension of uploaded file is not white-listed: fileNameExtension {}",
-                fileNameExtension
+                sanitiseLog(fileNameExtension)
             );
             return false;
         }
