@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Service
+@SuppressWarnings({"squid:S2629"})
 public class FileContentVerifier {
 
     private final List<String> mimeTypeList;
