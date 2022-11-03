@@ -99,54 +99,11 @@ def versions = [
     shedlock           : '4.33.0',
     hibernate          : '5.6.5.Final',
     jupiter            : '5.8.2',
-    springSecurity     : '5.7.1'
+    springSecurity     : '5.7.5'
 ]
 
 dependencyManagement {
     dependencies {
-
-        //CVE-2021-27568
-        dependencySet(group: 'net.minidev', version: '2.4.8') {
-            entry 'json-smart'
-        }
-
-        //CVE-2021-28170
-        dependencySet(group: 'org.glassfish', version: '4.0.2') {
-            entry 'jakarta.el'
-        }
-
-        //CVE-2021-43797
-        dependencySet(group: 'io.netty', version: '4.1.84.Final') {
-            entry 'netty-buffer'
-            entry 'netty-codec'
-            entry 'netty-codec-http'
-            entry 'netty-codec-http2'
-            entry 'netty-common'
-            entry 'netty-handler'
-            entry 'netty-resolver'
-            entry 'netty-transport'
-            entry 'netty-transport-native-epoll'
-            entry 'netty-transport-classes-epoll'
-            entry 'netty-transport-native-kqueue'
-            entry 'netty-transport-classes-kqueue'
-            entry 'netty-transport-native-unix-common'
-            entry 'netty-codec-dns'
-            entry 'netty-codec-socks'
-            entry 'netty-handler-proxy'
-            entry 'netty-resolver-dns'
-            entry 'netty-resolver-dns-native-macos'
-            entry 'netty-resolver-dns-classes-macos'
-        }
-
-        //CVE-2021-22047
-        dependencySet(group: 'org.springframework.data', version: '3.7.5') {
-            entry 'spring-data-rest-core'
-            entry 'spring-data-rest-webmvc'
-        }
-
-        dependencySet(group: 'org.springframework.cloud', version: '3.1.4') {
-            entry 'spring-cloud-starter-openfeign'
-        }
 
         //CVE-2022-25857
         dependencySet(group: 'org.yaml', version: '1.33') {
@@ -157,6 +114,13 @@ dependencyManagement {
             entry 'logback-core'
             entry 'logback-access'
             entry 'logback-classic'
+        }
+
+        // CVE-2022-31692 - CVE-2022-31690
+        dependencySet(group: 'org.springframework.security', version: '5.7.5') {
+            entry 'spring-security-crypto'
+            entry 'spring-security-core'
+            entry 'spring-security-web'
         }
     }
 }
@@ -228,6 +192,8 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.4'
+
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: versions.jupiter
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
