@@ -49,7 +49,11 @@ public class StoredDocumentDeleteController {
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
                 description = "Service Authorization (S2S Bearer token)", required = true,
-                schema = @Schema(type = "string"))})
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
+                schema = @Schema(type = "string"))
+        }
+    )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "No Content returned"),
         @ApiResponse(responseCode = "403", description = "Access Denied")
@@ -67,7 +71,13 @@ public class StoredDocumentDeleteController {
     }
 
     @Operation(
-        summary = "Marks case documents as soft deleted.")
+        summary = "Marks case documents as soft deleted.",
+        parameters = {
+            @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
+                description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string"))
+        }
+    )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",
             description = "Case documents deletion results"),

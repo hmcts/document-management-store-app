@@ -71,6 +71,8 @@ public class DocumentContentVersionController {
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
                 description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
                 schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "JSON representation of a document version"),
@@ -87,6 +89,8 @@ public class DocumentContentVersionController {
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
                 description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
                 schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "JSON representation of a document version"),
@@ -121,6 +125,10 @@ public class DocumentContentVersionController {
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
                 description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-roles", description = "User Roles", required = true,
                 schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "JSON representation of a document version"),
@@ -145,6 +153,10 @@ public class DocumentContentVersionController {
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
                 description = "Service Authorization (S2S Bearer token)", required = true,
+                schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
+            schema = @Schema(type = "string")),
+            @Parameter(in = ParameterIn.HEADER, name = "user-roles", description = "User Roles", required = true,
                 schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Returns contents of a document version"),
