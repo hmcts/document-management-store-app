@@ -1,8 +1,8 @@
 package uk.gov.hmcts.dm.service;
 
+import com.azure.core.http.rest.Response;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.implementation.models.BlobsDeleteResponse;
 import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
@@ -47,6 +47,8 @@ public class BlobStorageDeleteServiceTest {
     final StoredDocument storedDocument = createStoredDocument();
     final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
 
+    private Response mockResponse = mock(Response.class);
+
 
     @Before
     public void setUp() {
@@ -58,8 +60,9 @@ public class BlobStorageDeleteServiceTest {
 
     @Test
     public void delete_documentContentVersion() {
+        when(mockResponse.getStatusCode()).thenReturn(202);
         given(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .willReturn(new BlobsDeleteResponse(null, 202, null, null, null));
+            .willReturn(mockResponse);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         verify(documentContentVersionRepository, times(1))
             .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
@@ -67,8 +70,9 @@ public class BlobStorageDeleteServiceTest {
 
     @Test
     public void delete_documentContentVersion_if_responseCode_404() {
+        when(mockResponse.getStatusCode()).thenReturn(404);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenReturn(new BlobsDeleteResponse(null, 404, null, null, null));
+            .thenReturn(mockResponse);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         verify(documentContentVersionRepository, times(1))
             .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
@@ -76,8 +80,9 @@ public class BlobStorageDeleteServiceTest {
 
     @Test
     public void not_delete_documentContentVersion_if_responseCode_not_202_or_404() {
+        when(mockResponse.getStatusCode()).thenReturn(409);
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenReturn(new BlobsDeleteResponse(null, 409, null, null, null));
+            .thenReturn(mockResponse);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         verify(documentContentVersionRepository, never())
             .updateContentUriAndContentCheckSum(any(), any(), any());
