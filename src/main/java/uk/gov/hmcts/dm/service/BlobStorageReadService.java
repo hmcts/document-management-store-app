@@ -75,7 +75,7 @@ public class BlobStorageReadService {
     public void loadFullBlob(DocumentContentVersion documentContentVersion, OutputStream outputStream) {
         logger.debug("No Range header provided; returning entire document {}", documentContentVersion.getId());
 
-        blockBlobClient(documentContentVersion.getId().toString()).download(outputStream);
+        blockBlobClient(documentContentVersion.getId().toString()).downloadStream(outputStream);
 
         logger.debug("Reading document version {} from Azure Blob Storage: OK", documentContentVersion.getId());
     }
@@ -119,7 +119,7 @@ public class BlobStorageReadService {
 
         logger.debug("Processing blob range: {}", b.toString());
         blockBlobClient(documentContentVersion.getId().toString())
-            .downloadWithResponse(
+            .downloadStreamWithResponse(
                 response.getOutputStream(),
                 b,
                 new DownloadRetryOptions().setMaxRetryRequests(5),
