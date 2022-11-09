@@ -69,14 +69,14 @@ public class BlobStorageReadServiceTest {
     @Test
     public void loadsBlob() throws IOException {
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
-        verify(blockBlobClient).download(response.getOutputStream());
+        verify(blockBlobClient).downloadStream(response.getOutputStream());
     }
 
     @Test
     public void loadsBlobWhileMissingRangeAttribute() throws IOException {
         when(toggleConfiguration.isChunking()).thenReturn(true);
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
-        verify(blockBlobClient).download(response.getOutputStream());
+        verify(blockBlobClient).downloadStream(response.getOutputStream());
     }
 
     @Test
@@ -85,7 +85,7 @@ public class BlobStorageReadServiceTest {
         when(request.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("Content")));
         when(request.getHeaders("Content")).thenReturn(Collections.enumeration(Arrays.asList("ContentValue")));
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
-        verify(blockBlobClient).download(response.getOutputStream());
+        verify(blockBlobClient).downloadStream(response.getOutputStream());
     }
 
     @Test(expected = InvalidRangeRequestException.class)
