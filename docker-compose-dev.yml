@@ -45,7 +45,7 @@ services:
             - PACKAGES_VERSION=unkown
             - TESTING_SUPPORT_ENABLED=true
         ports:
-            - 4502:4502
+            - 4502:8489
 
 volumes:
     pacts:
