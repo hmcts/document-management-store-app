@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,17 +198,16 @@ public class StoredDocumentController {
             if (toggleConfiguration.isChunking()) {
                 response.reset();
             }
-            logger.warn("IOException streaming response", e);
+            if (e instanceof ClientAbortException) {
+                logger.warn("IOException streaming error, broken pipe, peer closed connection {}", e.getMessage());
+            } else {
+                logger.warn("IOException streaming error, for  {} ",documentId, e);
+            }
 
-            logger.info(String.format("Headers for documentId : %s starts", documentId));
-            logger.info(String.format("ContentType for documentId : %s is : %s ", documentId,
-                    documentContentVersion.getMimeType()));
-            logger.info(String.format("Size for documentId : %s is : %s ", documentId,
-                    documentContentVersion.getSize()));
+            logger.debug("ContentType for documentId : {} is : {} ", documentId, documentContentVersion.getMimeType());
+            logger.debug("Size for documentId : {} is : {} ", documentId, documentContentVersion.getSize());
             headers.forEach((key, value) ->
-                logger.info(String.format("documentId : %s has Request Header %s = %s",
-                    documentId.toString(), key, value)));
-            logger.info(String.format("Headers for documentId : %s ends", documentId));
+                logger.debug("documentId : {} has Request Header {} = {}", documentId.toString(), key, value));
         }
         if (toggleConfiguration.isChunking()) {
             logger.debug("DocumentId : {} has Response: Content-Length, {}", documentId,
