@@ -198,7 +198,7 @@ public class StoredDocumentController {
             if (toggleConfiguration.isChunking()) {
                 response.reset();
             }
-            if (e instanceof ClientAbortException) {
+            if (e instanceof UncheckedIOException && ((UncheckedIOException) e).getCause() instanceof ClientAbortException) {
                 logger.warn("IOException streaming error, broken pipe, peer closed connection {}", e.getMessage());
             } else {
                 logger.warn("IOException streaming error, for  {} ",documentId, e);
