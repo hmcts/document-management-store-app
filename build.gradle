@@ -129,7 +129,7 @@ dependencies {
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.20.0'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.27'
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.5.0'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.6.0'
 
     implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 
@@ -170,7 +170,7 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.4'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
@@ -192,7 +192,7 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
-    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.4'
+    testImplementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.1.5'
 
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: versions.jupiter
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
