@@ -4,11 +4,12 @@ version: '3'
 services:
 
     dm-store-db:
-        build:
-            context: ./docker/database
-        image: hmcts/dm-store-db:latest
+        image: postgres
+        restart: always
         environment:
-            POSTGRES_HOST_AUTH_METHOD: trust
+            - POSTGRES_DB=evidence
+            - POSTGRES_USER=evidence
+            - POSTGRES_PASSWORD=evidence
         ports:
             - 5432:5432
 
@@ -45,7 +46,7 @@ services:
             - PACKAGES_VERSION=unkown
             - TESTING_SUPPORT_ENABLED=true
         ports:
-            - 4502:4502
+            - 4502:8489
 
 volumes:
     pacts:

@@ -21,7 +21,7 @@ spring:
     active: dev
   jpa:
     database: postgresql
-    show-sql: ${SHOW_SQL:true}
+    show-sql: ${SHOW_SQL:false}
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
