@@ -202,7 +202,7 @@ public class StoredDocumentController {
                 uncheckedIOException.getCause() instanceof ClientAbortException) {
                 logger.warn("IOException streaming error, broken pipe, peer closed connection {}", e.getMessage());
             } else {
-                logger.warn("IOException streaming error, for  {} ",documentId, e);
+                logger.warn("IOException streaming error, for  {} ", documentId, e);
             }
 
             logger.debug("ContentType for documentId : {} is : {} ", documentId, documentContentVersion.getMimeType());
