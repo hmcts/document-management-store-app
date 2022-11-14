@@ -8,8 +8,12 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
 import java.util.UUID;
 
-@JsonPropertyOrder({DocumentContentVersionModel.ATTRIBUTE_DOCUMENT_ID, DocumentContentVersionModel
-    .ATTRIBUTE_VERSION_ID, DocumentContentVersionModel.ATTRIBUTE_URI, DocumentContentVersionModel.ATTRIBUTE_CHECKSUM})
+@JsonPropertyOrder({
+    DocumentContentVersionModel.ATTRIBUTE_DOCUMENT_ID,
+    DocumentContentVersionModel.ATTRIBUTE_VERSION_ID,
+    DocumentContentVersionModel.ATTRIBUTE_URI,
+    DocumentContentVersionModel.ATTRIBUTE_CHECKSUM}
+)
 @NoArgsConstructor
 class DocumentContentVersionModel {
 
