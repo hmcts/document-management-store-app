@@ -17,7 +17,7 @@ plugins {
     id 'io.freefair.lombok' version '6.5.1'
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '9.6.0'
+    id 'org.flywaydb.flyway' version '9.7.0'
 }
 
 apply plugin: 'java'
