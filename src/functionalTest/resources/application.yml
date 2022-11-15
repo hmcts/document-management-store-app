@@ -41,3 +41,21 @@ large-docs:
             documentName: 52MB_Video
             extension: mp4
             size: 52254796
+
+        mp4-465mb:
+            id: ${MP4_465MB:test1.mp4}
+            documentName: 465MB_Video
+            extension: mp4
+            size: 260760
+
+        mp4-625mb:
+            id: ${MP4_625MB:test1.mp4}
+            documentName: 652MB_video_mp4
+            extension: mp4
+            size: 622250000
+
+azure:
+  storage:
+    connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:}
+    blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
+    leaseTime: ${BLOB_LEASE_TIME:15} #In seconds

@@ -14,18 +14,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import uk.gov.hmcts.dm.FunctionalTestContextConfiguration;
+import uk.gov.hmcts.dm.StorageTestConfiguration;
 import uk.gov.hmcts.dm.functional.DocumentMetadataPropertiesConfig.DocumentMetadata;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 
 
 @NotThreadSafe
 @RunWith(SpringIntegrationSerenityRunner.class)
-@SpringBootTest(classes = uk.gov.hmcts.dm.FunctionalTestContextConfiguration.class)
+@SpringBootTest(classes = {FunctionalTestContextConfiguration.class, StorageTestConfiguration.class})
 @WithTags(@WithTag("testType:Functional"))
 public abstract class BaseIT {
 
@@ -42,6 +50,10 @@ public abstract class BaseIT {
     private String video111mbId;
     @Value("${large-docs.metadata.mp4-52mb.id}")
     private String video52mbId;
+    @Value("${large-docs.metadata.mp4-465mb.id}")
+    private String video465mbId;
+    @Value("${large-docs.metadata.mp4-625mb.id}")
+    private String video625mbId;
     @Value("${toggle.ttl}")
     private boolean toggleTtlEnabled;
     @Value("${toggle.metadatamigration}")
@@ -159,7 +171,6 @@ public abstract class BaseIT {
     }
 
     public RequestSpecification givenLargeFileRequest(String username, List<String> userRoles) {
-
         RequestSpecification request = SerenityRest.given().baseUri(largeDocsBaseUri).log().all();
 
         if (username != null) {
@@ -250,6 +261,7 @@ public abstract class BaseIT {
 
         try (
             OutputStream outputStream = new FileOutputStream(tmpFile);
+
             final InputStream inputStream = givenLargeFileRequest(citizen, new ArrayList<>(List.of(caseWorkerRoleProbate)))
                 .get(doc)
                 .getBody()
@@ -409,6 +421,58 @@ public abstract class BaseIT {
         return url;
     }
 
+    protected boolean uploadWhitelistedLargeFileThenDownload(String doc,  String mimeType,
+                                                             BiFunction<String, String, File> fileProvider) throws IOException {
+        return uploadWhitelistedLargeFileThenDownload(doc, null, mimeType, fileProvider);
+    }
+
+
+        protected boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType,
+                                                           BiFunction<String, String, File> fileProvider) throws IOException {
+        File file = fileProvider.apply(doc, metadataKey);
+        Response response = givenRequest(getCitizen())
+                .multiPart("files", file, mimeType)
+                .multiPart("classification", String.valueOf(Classifications.PUBLIC))
+                .multiPart("roles", "citizen")
+                .multiPart("roles", "caseworker")
+                .expect().log().all()
+                .statusCode(200)
+                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+
+                .body("_embedded.documents[0].originalDocumentName", equalTo(file.getName()))
+                .body("_embedded.documents[0].mimeType", equalTo(mimeType))
+                .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
+                .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
+                .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
+                .when()
+                .post("/documents");
+
+        String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
+        String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
+
+        givenRequest(getCitizen())
+                .expect()
+                .statusCode(200)
+                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
+                .body("originalDocumentName", equalTo(file.getName()))
+                .body("classification", equalTo(String.valueOf(Classifications.PUBLIC)))
+                .body("roles[0]", equalTo("caseworker"))
+                .body("roles[1]", equalTo("citizen"))
+                .when()
+                .get(documentUrl1);
+
+        assertLargeDocByteArrayEquality(file, givenRequest(getCitizen())
+                .expect()
+                .statusCode(200)
+                .contentType(containsString(mimeType))
+                .header("OriginalFileName", file.getName())
+                .when()
+                .get(documentContentUrl1)
+                .asByteArray());
+
+        return file.delete();
+    }
+
     public void assertByteArrayEquality(String fileName, byte[] response) throws IOException {
         Assert.assertArrayEquals(Files.readAllBytes(file(fileName).toPath()), response);
     }
@@ -467,6 +531,14 @@ public abstract class BaseIT {
 
     public String getVideo52mbId() {
         return video52mbId;
+    }
+
+    public String getVideo465mbId() {
+        return video465mbId;
+    }
+
+    public String getVideo625mbId() {
+        return video625mbId;
     }
 
     public void setVideo52mbId(String video52mbId) {

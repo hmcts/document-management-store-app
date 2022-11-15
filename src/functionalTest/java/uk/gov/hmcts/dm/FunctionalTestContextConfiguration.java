@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.TestPropertySource;
 
 @Configuration
-@ComponentScan("uk.gov.hmcts.dm.functional")
+@ComponentScan(basePackages = {"uk.gov.hmcts.dm.functional", "uk.gov.hmcts.dm.blob"})
 @TestPropertySource({"classpath:application.yml"})
 @EnableConfigurationProperties
 public class FunctionalTestContextConfiguration {
