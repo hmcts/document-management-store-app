@@ -35,7 +35,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles() throws IOException{
+    public void uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles() throws IOException {
         uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(getVideo465mbId(), ".mp4", "video/mp4");
         uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(getVideo625mbId(), ".mp4", "video/mp4");
     }
@@ -55,7 +55,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
                 Files.write(path, fileContent);
                 File file = path.toFile();
                 uploadWhitelistedLargeFileThenDownload(fileName, mimeType,
-                        (doc, metadataKey) -> file);
+                    (doc, metadataKey) -> file);
             } catch (Exception e) {
                 log.error("Error in processing blob : {}", blobName, e);
                 fail(ExceptionUtils.getStackTrace(e));

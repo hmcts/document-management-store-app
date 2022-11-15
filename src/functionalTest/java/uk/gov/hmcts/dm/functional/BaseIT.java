@@ -427,7 +427,7 @@ public abstract class BaseIT {
     }
 
 
-        protected boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType,
+    protected boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType,
                                                            BiFunction<String, String, File> fileProvider) throws IOException {
         File file = fileProvider.apply(doc, metadataKey);
         Response response = givenRequest(getCitizen())

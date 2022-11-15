@@ -27,7 +27,7 @@ public class BlobInfo {
     }
 
     public void setBlobLeaseClient(BlobLeaseClient blobLeaseClient) {
-        this.blobLeaseClient= blobLeaseClient;
+        this.blobLeaseClient = blobLeaseClient;
     }
 
     public void releaseLease() {
