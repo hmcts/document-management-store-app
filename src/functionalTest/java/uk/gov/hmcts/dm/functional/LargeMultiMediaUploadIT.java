@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
@@ -20,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeNotNull;
 
@@ -35,6 +38,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
+    @Ignore
     public void uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles() throws IOException {
         uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(getVideo465mbId(), ".mp4", "video/mp4",
             (file, mimeType) -> {
@@ -74,5 +78,43 @@ public class LargeMultiMediaUploadIT extends BaseIT {
         } else {
             fail("File not found : " + fileName);
         }
+    }
+
+    @Test
+    public void uploadLargeFilesFromBlobStoreDmStoreFiles() {
+        streamBlobToUpload(getVideo465mbId(), "video/mp4");
+        streamBlobToUpload(getVideo625mbId(), "video/mp4");
+    }
+
+    private void streamBlobToUpload(String fileName,String mimeType) {
+        assumeNotNull(blobReader);
+        Optional<BlobInfo> mayBeBlobInfo = blobReader.retrieveBlobToProcess(fileName);
+        if (mayBeBlobInfo.isPresent()) {
+            var blobInfo = mayBeBlobInfo.get();
+            var blobClient = blobInfo.getBlobClient();
+            uploadWhitelistedLargeFile(blobClient.openInputStream(), fileName, mimeType);
+            blobInfo.releaseLease();
+        } else {
+            fail("File not found : " + fileName);
+        }
+    }
+
+    private void uploadWhitelistedLargeFile(InputStream inputStream, String fileName, String mimeType) {
+        givenRequest(getCitizen())
+            .multiPart("files", fileName, inputStream, mimeType)
+            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect().log().all()
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+
+            .body("_embedded.documents[0].originalDocumentName", equalTo(fileName))
+            .body("_embedded.documents[0].mimeType", equalTo(mimeType))
+            .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
+            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
+            .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
+            .when()
+            .post("/documents");
     }
 }
