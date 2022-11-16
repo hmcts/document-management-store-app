@@ -83,7 +83,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     @Test
     public void uploadLargeFilesFromBlobStoreDmStoreFiles() {
         streamBlobToUpload(getVideo465mbId(), "video/mp4");
-        streamBlobToUpload(getVideo625mbId(), "video/mp4");
+        //streamBlobToUpload(getVideo625mbId(), "video/mp4");
     }
 
     private void streamBlobToUpload(String fileName,String mimeType) {
