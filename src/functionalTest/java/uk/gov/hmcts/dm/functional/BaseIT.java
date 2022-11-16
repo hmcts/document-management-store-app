@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -421,15 +420,7 @@ public abstract class BaseIT {
         return url;
     }
 
-    protected boolean uploadWhitelistedLargeFileThenDownload(String doc,  String mimeType,
-                                                             BiFunction<String, String, File> fileProvider) throws IOException {
-        return uploadWhitelistedLargeFileThenDownload(doc, null, mimeType, fileProvider);
-    }
-
-
-    protected boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType,
-                                                           BiFunction<String, String, File> fileProvider) throws IOException {
-        File file = fileProvider.apply(doc, metadataKey);
+    protected boolean uploadWhitelistedLargeFileThenDownload(File file, String mimeType) throws IOException {
         Response response = givenRequest(getCitizen())
                 .multiPart("files", file, mimeType)
                 .multiPart("classification", String.valueOf(Classifications.PUBLIC))
@@ -471,6 +462,19 @@ public abstract class BaseIT {
                 .asByteArray());
 
         return file.delete();
+    }
+
+    protected void uploadingFileThrowsValidationSizeErrorMessage(File file, String mimeType) {
+        Response response = givenRequest(getCitizen())
+                .multiPart("files", file, mimeType)
+                .multiPart("classification", String.valueOf(Classifications.PUBLIC))
+                .multiPart("roles", "citizen")
+                .multiPart("roles", "caseworker")
+                .expect().log().all()
+                .statusCode(422)
+                .body("error", equalTo("Your upload file size is more than allowed limit."))
+                .when()
+                .post("/documents");
     }
 
     public void assertByteArrayEquality(String fileName, byte[] response) throws IOException {

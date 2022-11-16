@@ -18,8 +18,8 @@ import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeNotNull;
 
@@ -36,17 +36,25 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
     @Test
     public void uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles() throws IOException {
-        uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(getVideo465mbId(), ".mp4", "video/mp4");
-        uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(getVideo625mbId(), ".mp4", "video/mp4");
+        uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(getVideo465mbId(), ".mp4", "video/mp4",
+            (file, mimeType) -> {
+                try {
+                    uploadWhitelistedLargeFileThenDownload(file, mimeType);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(getVideo625mbId(), ".mp4", "video/mp4",
+                this::uploadingFileThrowsValidationSizeErrorMessage);
     }
 
-    private void uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(String fileName, String fileExtension, String mimeType) throws IOException {
+    private void uploadAndDownLoadLargeFilesFromBlobStoreDmStoreFiles(String fileName, String fileExtension, String mimeType,
+                                                                      BiConsumer<File, String> upload) throws IOException {
         assumeNotNull(blobReader);
         Optional<BlobInfo> mayBeBlobInfo = blobReader.retrieveBlobToProcess(fileName);
         if (mayBeBlobInfo.isPresent()) {
             var blobInfo = mayBeBlobInfo.get();
             var blobClient = blobInfo.getBlobClient();
-            String blobName = blobClient.getBlobName();
             Path path = Files.createTempFile(fileName, fileExtension, ATTRIBUTE);
             try (var blobInputStream = blobClient.openInputStream()) {
                 byte[] fileContent = blobInputStream.readAllBytes();
@@ -54,14 +62,17 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
                 Files.write(path, fileContent);
                 File file = path.toFile();
-                uploadWhitelistedLargeFileThenDownload(fileName, mimeType,
-                    (doc, metadataKey) -> file);
+                upload.accept(file, mimeType);
             } catch (Exception e) {
-                log.error("Error in processing blob : {}", blobName, e);
-                fail(ExceptionUtils.getStackTrace(e));
+                log.error("Error in processing file : {}", fileName, e);
+                fail(String.join(" : ",
+                        "Error in processing file",
+                        fileName,
+                        ExceptionUtils.getStackTrace(e))
+                );
             }
         } else {
-            assertTrue("File not found : " + fileName, mayBeBlobInfo.isPresent());
+            fail("File not found : " + fileName);
         }
     }
 }

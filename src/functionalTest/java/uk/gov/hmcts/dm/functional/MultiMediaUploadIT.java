@@ -21,20 +21,8 @@ public class MultiMediaUploadIT extends BaseIT {
 
     @Test
     public void mv1R1AsAuthenticatedUserIUploadLargeMultiMediaFiles() throws IOException {
-        uploadWhitelistedLargeFileThenDownload(getVideo52mbId(), "mp4-52mb", "video/mp4", (doc, metadataKey) -> {
-            try {
-                return largeFile(doc, metadataKey);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        uploadWhitelistedLargeFileThenDownload(getVideo111mbId(), "mp4-111mb", "video/mp4", (doc, metadataKey) -> {
-            try {
-                return largeFile(doc, metadataKey);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        uploadWhitelistedLargeFileThenDownload(largeFile(getVideo52mbId(), "mp4-52mb"),"video/mp4");
+        uploadWhitelistedLargeFileThenDownload(largeFile(getVideo111mbId(), "mp4-111mb"), "video/mp4");
     }
 
     @Test
@@ -46,8 +34,8 @@ public class MultiMediaUploadIT extends BaseIT {
     @Test
     @Pending
     public void mv1R1AsAuthenticatedUserIShouldNotBeAbleToUploadFilesThatExceedPermittedSizes() {
-        uploadingFileThrowsValidationSizeErrorMessage("516MB_video_mp4.mp4", "video/mp4");
-        uploadingFileThrowsValidationSizeErrorMessage("367MB_word.doc", "application/msword");
+        uploadingFileThrowsValidationSizeErrorMessage(file("516MB_video_mp4.mp4"), "video/mp4");
+        uploadingFileThrowsValidationSizeErrorMessage(file("367MB_word.doc"), "application/msword");
 
     }
 
@@ -121,19 +109,6 @@ public class MultiMediaUploadIT extends BaseIT {
             .expect().log().all()
             .statusCode(422)
             .body("error", equalTo("Your upload contains a disallowed file type"))
-            .when()
-            .post("/documents");
-    }
-
-    private void uploadingFileThrowsValidationSizeErrorMessage(String filename, String mimeType) {
-        Response response = givenRequest(getCitizen())
-            .multiPart("files", file(filename), mimeType)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
-            .expect().log().all()
-            .statusCode(422)
-            .body("error", equalTo("Your upload file size is more than allowed limit."))
             .when()
             .post("/documents");
     }
