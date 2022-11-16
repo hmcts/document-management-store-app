@@ -17,6 +17,7 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+@Ignore
 public class ReadContentVersionIT extends BaseIT {
 
     @Rule
@@ -129,7 +130,6 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
-    @Ignore
     public void rcv10AsACreatorWhenIReadNonExistentVersionByUrl() {
         final String nonExistentVersionId = UUID.randomUUID().toString();
         final String newDocumentVersionUrl = documentVersionUrl.replace(documentVersionUrl.substring(documentVersionUrl.lastIndexOf("/") + 1), nonExistentVersionId);
