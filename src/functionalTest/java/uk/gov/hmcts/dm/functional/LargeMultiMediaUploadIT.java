@@ -101,7 +101,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
     private void uploadWhitelistedLargeFile(InputStream inputStream, String fileName, String mimeType) {
         givenRequest(getCitizen())
-            .multiPart("files", fileName, inputStream, mimeType)
+            .multiPart("files", fileName, inputStream)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
