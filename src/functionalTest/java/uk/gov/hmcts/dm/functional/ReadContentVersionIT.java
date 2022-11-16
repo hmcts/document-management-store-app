@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional;
 
 import io.restassured.response.Response;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
@@ -128,6 +129,7 @@ public class ReadContentVersionIT extends BaseIT {
     }
 
     @Test
+    @Ignore
     public void rcv10AsACreatorWhenIReadNonExistentVersionByUrl() {
         final String nonExistentVersionId = UUID.randomUUID().toString();
         final String newDocumentVersionUrl = documentVersionUrl.replace(documentVersionUrl.substring(documentVersionUrl.lastIndexOf("/") + 1), nonExistentVersionId);

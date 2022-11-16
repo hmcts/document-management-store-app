@@ -20,12 +20,14 @@ public class MultiMediaUploadIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
+    @Ignore
     public void mv1R1AsAuthenticatedUserIUploadLargeMultiMediaFiles() throws IOException {
         uploadWhitelistedLargeFileThenDownload(largeFile(getVideo52mbId(), "mp4-52mb"),"video/mp4");
         uploadWhitelistedLargeFileThenDownload(largeFile(getVideo111mbId(), "mp4-111mb"), "video/mp4");
     }
 
     @Test
+    @Ignore
     public void mv1R1AsAuthenticatedUserIUploadMultiMediaFiles() throws IOException {
         uploadWhitelistedSmallFileThenDownload("video_test.mp4", "video/mp4");
         uploadWhitelistedSmallFileThenDownload("audio_test.mp3", "audio/mpeg");
