@@ -78,7 +78,7 @@ withPipeline(type , product, component) {
         env.MP4_52MB = "e58a9fa5-4f6f-438f-b44a-8c0877e945d0/binary"
         env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
         env.MP4_465MB = "test1.mp4"
-        env.MP4_625MB = "652MB_video_mp4.mp4"
+        env.MP4_625MB = "490MB_video_mp4.mp4"
     }
 
     after('test') {
