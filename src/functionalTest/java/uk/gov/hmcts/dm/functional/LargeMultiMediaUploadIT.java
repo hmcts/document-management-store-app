@@ -75,6 +75,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
             .multiPart("roles", "citizen")
             .multiPart("roles", "caseworker")
+            .relaxedHTTPSValidation()
             .expect().log().all()
             .statusCode(422)
             .body("error", equalTo("Your upload file size is more than allowed limit."))
