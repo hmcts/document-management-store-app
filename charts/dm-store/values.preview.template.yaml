@@ -1,7 +1,8 @@
 java:
-  devmemoryLimits: "2Gi"
-  devmemoryRequests: '2Gi'
-  cpuLimits: "1000m"
+  memoryRequests: "2Gi"
+  cpuRequests: "1000m"
+  memoryLimits: "4Gi"
+  cpuLimits: "2000m"
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 60
