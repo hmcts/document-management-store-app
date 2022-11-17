@@ -42,6 +42,12 @@ large-docs:
             extension: mp4
             size: 52254796
 
+        mp4-260kb:
+            id: ${MP4_260KB:test1.mp4}
+            documentName: test1
+            extension: mp4
+            size: 26076
+
         mp4-465mb:
             id: ${MP4_465MB:test1.mp4}
             documentName: 465MB_Video
@@ -53,6 +59,24 @@ large-docs:
             documentName: 652MB_video_mp4
             extension: mp4
             size: 622250000
+
+        pdf-1kb:
+            id: ${PDF_1KB:1KB.pdf}
+            documentName: 990MB
+            extension: pdf
+            size: 1000
+
+        pdf-990mb:
+            id: ${PDF_990MB:1KB.pdf}
+            documentName: 990MB
+            extension: pdf
+            size: 1038090240
+
+        pdf-1-2gb:
+            id: ${PDF_1_2GB:1KB.pdf}
+            documentName: 1.2GB
+            extension: pdf
+            size: 1283457024
 
 azure:
   storage:

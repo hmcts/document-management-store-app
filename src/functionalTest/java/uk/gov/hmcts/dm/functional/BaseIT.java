@@ -26,9 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
-
 
 @NotThreadSafe
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -49,10 +46,18 @@ public abstract class BaseIT {
     private String video111mbId;
     @Value("${large-docs.metadata.mp4-52mb.id}")
     private String video52mbId;
+    @Value("${large-docs.metadata.mp4-260kb.id}")
+    private String video260kbId;
     @Value("${large-docs.metadata.mp4-465mb.id}")
     private String video465mbId;
     @Value("${large-docs.metadata.mp4-625mb.id}")
     private String video625mbId;
+    @Value("${large-docs.metadata.pdf-1kb.id}")
+    private String pdf1kbId;
+    @Value("${large-docs.metadata.pdf-990mb.id}")
+    private String pdf990mbId;
+    @Value("${large-docs.metadata.pdf-1-2gb.id}")
+    private String pdf1point2gbId;
     @Value("${toggle.ttl}")
     private boolean toggleTtlEnabled;
     @Value("${toggle.metadatamigration}")
@@ -418,63 +423,6 @@ public abstract class BaseIT {
             return url.replace("http","https");
         }
         return url;
-    }
-
-    protected boolean uploadWhitelistedLargeFileThenDownload(File file, String mimeType) throws IOException {
-        Response response = givenRequest(getCitizen())
-                .multiPart("files", file, mimeType)
-                .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-                .multiPart("roles", "citizen")
-                .multiPart("roles", "caseworker")
-                .expect().log().all()
-                .statusCode(200)
-                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-
-                .body("_embedded.documents[0].originalDocumentName", equalTo(file.getName()))
-                .body("_embedded.documents[0].mimeType", equalTo(mimeType))
-                .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-                .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-                .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
-                .when()
-                .post("/documents");
-
-        String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
-        String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
-
-        givenRequest(getCitizen())
-                .expect()
-                .statusCode(200)
-                .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
-                .body("originalDocumentName", equalTo(file.getName()))
-                .body("classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-                .body("roles[0]", equalTo("caseworker"))
-                .body("roles[1]", equalTo("citizen"))
-                .when()
-                .get(documentUrl1);
-
-        assertLargeDocByteArrayEquality(file, givenRequest(getCitizen())
-                .expect()
-                .statusCode(200)
-                .contentType(containsString(mimeType))
-                .header("OriginalFileName", file.getName())
-                .when()
-                .get(documentContentUrl1)
-                .asByteArray());
-
-        return file.delete();
-    }
-
-    protected void uploadingFileThrowsValidationSizeErrorMessage(File file, String mimeType) {
-        Response response = givenRequest(getCitizen())
-                .multiPart("files", file, mimeType)
-                .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-                .multiPart("roles", "citizen")
-                .multiPart("roles", "caseworker")
-                .expect().log().all()
-                .statusCode(422)
-                .body("error", equalTo("Your upload file size is more than allowed limit."))
-                .when()
-                .post("/documents");
     }
 
     public void assertByteArrayEquality(String fileName, byte[] response) throws IOException {
@@ -867,5 +815,37 @@ public abstract class BaseIT {
 
     public final String getXmlAsPng() {
         return xmlAsPng;
+    }
+
+    public String getVideo260kbId() {
+        return video260kbId;
+    }
+
+    public void setVideo260kbId(String video260kbId) {
+        this.video260kbId = video260kbId;
+    }
+
+    public String getPdf990mbId() {
+        return pdf990mbId;
+    }
+
+    public void setPdf990mbId(String pdf990mbId) {
+        this.pdf990mbId = pdf990mbId;
+    }
+
+    public String getPdf1point2gbId() {
+        return pdf1point2gbId;
+    }
+
+    public void setPdf1point2gbId(String pdf1point2gbId) {
+        this.pdf1point2gbId = pdf1point2gbId;
+    }
+
+    public String getPdf1kbId() {
+        return pdf1kbId;
+    }
+
+    public void setPdf1kbId(String pdf1kbId) {
+        this.pdf1kbId = pdf1kbId;
     }
 }

@@ -39,26 +39,10 @@ public class BlobReader {
                 .filter(blobItem -> blobItem.getName().equals(blobName))
                 .map(blobItem ->
                     new BlobInfo(
-                            containerClient.getBlobClient(blobItem.getName())
+                        containerClient.getBlobClient(blobItem.getName())
                     )
                 )
-                .filter(blobInfo -> {
-                    this.acquireLease(blobInfo);
-                    return blobInfo.isLeased();
-                })
                 .findFirst();
 
-    }
-
-    private void acquireLease(BlobInfo blobInfo) {
-        try {
-            var blobLeaseClient = leaseClientProvider.get(blobInfo.getBlobClient());
-            String leaseId = blobLeaseClient.acquireLease(leaseTime);
-            blobInfo.setBlobLeaseClient(blobLeaseClient);
-            blobInfo.setLeaseId(leaseId);
-        } catch (Exception e) {
-            LOG.error("Unable to acquire lease for blob {}",
-                    blobInfo.getBlobClient().getBlobName());
-        }
     }
 }

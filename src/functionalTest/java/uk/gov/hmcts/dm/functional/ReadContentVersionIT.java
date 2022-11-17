@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.functional;
 
 import io.restassured.response.Response;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +16,6 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
-@Ignore
 public class ReadContentVersionIT extends BaseIT {
 
     @Rule
