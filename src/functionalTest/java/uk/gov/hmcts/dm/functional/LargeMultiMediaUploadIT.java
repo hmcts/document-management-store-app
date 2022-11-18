@@ -32,8 +32,8 @@ public class LargeMultiMediaUploadIT extends BaseIT {
         streamBlobToUpload(getVideo260kbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
         streamBlobToUpload(getPdf1kbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
 
-        //streamBlobToUpload(getVideo465mbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
-        streamBlobToUpload(getPdf990mbId(), APPLICATION_PDF_VALUE, this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
+        streamBlobToUpload(getVideo465mbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
+        //streamBlobToUpload(getPdf990mbId(), APPLICATION_PDF_VALUE, this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
 
         //streamBlobToUpload(getVideo625mbId(), VIDEO_MPEG_VALUE, this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
         //streamBlobToUpload(getPdf1point2gbId(), APPLICATION_PDF_VALUE,this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
