@@ -1,5 +1,8 @@
 package uk.gov.hmcts.dm.functional;
 
+import io.restassured.RestAssured;
+import io.restassured.config.HttpClientConfig;
+import io.restassured.config.RestAssuredConfig;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import net.jcip.annotations.NotThreadSafe;
@@ -7,6 +10,7 @@ import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
+import org.apache.http.params.CoreConnectionPNames;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
@@ -145,8 +149,14 @@ public abstract class BaseIT {
     }
 
     public RequestSpecification givenRequest(String username, List<String> userRoles) {
+        RestAssuredConfig config = RestAssured.config()
+                .httpClient(HttpClientConfig.httpClientConfig()
+                        .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 60000)
+                        .setParam(CoreConnectionPNames.SO_TIMEOUT, 60000));
 
-        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
+        RequestSpecification request = SerenityRest.given()
+            .config(config)
+            .baseUri(dmStoreBaseUri).log().all();
         if (username != null) {
             request = request.header("serviceauthorization", serviceToken());
             request = request.header("user-id", username);
