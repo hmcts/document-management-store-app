@@ -74,6 +74,12 @@ public class FileContentVerifierTests {
     }
 
     @Test
+    public void testUploadMimeTypeNotAllowedWithAllowedExtension() {
+        MultipartFile file =  new MockMultipartFile("file", "filename.txt", "application/xml", "hello".getBytes(StandardCharsets.UTF_8));
+        assertFalse(fileContentVerifier.verifyContentType(file));
+    }
+
+    @Test
     public void testIgnoreClientMimeType() throws Exception {
         MultipartFile file = new MockMultipartFile("files", "filename.txt", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
         assertTrue(fileContentVerifier.verifyContentType(file));

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.controller;
 
+import org.apache.catalina.connector.ClientAbortException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -188,6 +189,33 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         doThrow(UncheckedIOException.class).when(auditedDocumentContentVersionOperationsService)
                 .readDocumentContentVersionBinaryFromBlobStore(Mockito.any(DocumentContentVersion.class),
                     Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
+
+        restActions
+            .withAuthorizedUser("userId")
+            .withAuthorizedService("divorce")
+            .get("/documents/" + id + "/binary")
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetBinaryClientAbortException() throws Exception {
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
+            new MockMultipartFile("files",
+                "filename.txt",
+                "text/plain",
+                "hello".getBytes(
+                    StandardCharsets.UTF_8)),
+            "user");
+
+        documentContentVersion.setCreatedBy("userId");
+
+        when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
+            Optional.of(documentContentVersion)
+        );
+
+        doThrow(ClientAbortException.class).when(auditedDocumentContentVersionOperationsService)
+            .readDocumentContentVersionBinaryFromBlobStore(Mockito.any(DocumentContentVersion.class),
+                Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
 
         restActions
             .withAuthorizedUser("userId")
