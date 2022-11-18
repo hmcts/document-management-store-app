@@ -155,7 +155,7 @@ public class DocumentContentVersionController {
                 description = "Service Authorization (S2S Bearer token)", required = true,
                 schema = @Schema(type = "string")),
             @Parameter(in = ParameterIn.HEADER, name = "user-id", description = "User Id",
-            schema = @Schema(type = "string")),
+                schema = @Schema(type = "string")),
             @Parameter(in = ParameterIn.HEADER, name = "user-roles", description = "User Roles", required = true,
                 schema = @Schema(type = "string"))})
     @ApiResponses(value = {
