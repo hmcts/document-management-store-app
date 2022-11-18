@@ -42,6 +42,7 @@ public class FileSizeVerifier {
         log.info("nonMediaFileSizeInBytes {} ", nonMediaFileSizeInBytes);
         log.info("File name {} ", multipartFile.getOriginalFilename());
         log.info("File content length: {} ",multipartFile.getSize());
+        log.info("File content type: {} ",multipartFile.getContentType());
 
         try (InputStream inputStream = multipartFile.getInputStream();
              TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
