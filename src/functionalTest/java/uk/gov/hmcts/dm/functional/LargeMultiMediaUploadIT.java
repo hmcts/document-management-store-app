@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.functional;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +27,33 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     public RetryRule retryRule = new RetryRule(3);
 
     @Test
-    public void uploadLargeFilesFromBlobStoreDmStoreFiles() {
+    public void uploadASmallMp3() {
         streamBlobToUpload(getVideo260kbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
+    }
+
+    @Test
+    public void uploadSmallPdf() {
         streamBlobToUpload(getPdf1kbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
+    }
 
+    @Test
+    public void uploadMediumMp3() {
         streamBlobToUpload(getVideo465mbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
-        streamBlobToUpload(getPdf990mbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
+    }
 
+    @Test
+    public void uploadMediumPdf() {
+        streamBlobToUpload(getPdf990mbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
+    }
+
+    @Test
+    public void uploadLargeMp3() {
         streamBlobToUpload(getVideo625mbId(), VIDEO_MPEG_VALUE, this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
-        //streamBlobToUpload(getPdf1point2gbId(), APPLICATION_PDF_VALUE,this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
+    }
+
+    @Test
+    public void uploadLargePdf() {
+        streamBlobToUpload(getPdf1point2gbId(), APPLICATION_PDF_VALUE,this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
     }
 
     private void streamBlobToUpload(String fileName,String mimeType, TriConsumer<InputStream, String, String> uploadFunction) {
@@ -71,25 +88,17 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     }
 
     private void uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage(InputStream inputStream, String fileName, String mimeType) {
-        try {
-            givenRequest(getCitizen())
-                    .multiPart("files", fileName, inputStream, mimeType)
-                    .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-                    .multiPart("roles", "citizen")
-                    .multiPart("roles", "caseworker")
-                    .relaxedHTTPSValidation()
-                    .expect().log().all()
-                    .statusCode(422)
-                    .body("error", equalTo("Your upload file size is more than allowed limit."))
-                    .when()
-                    .post("/documents");
-        } catch (RuntimeException e) {
-            fail(String.join(" : ",
-                    "File name : ",
-                    fileName, ExceptionUtils.getStackTrace(e))
-            );
-        }
-
+        givenRequest(getCitizen())
+            .multiPart("files", fileName, inputStream, mimeType)
+            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .relaxedHTTPSValidation()
+            .expect().log().all()
+            .statusCode(422)
+            .body("error", equalTo("Your upload file size is more than allowed limit."))
+            .when()
+            .post("/documents");
     }
 
     @FunctionalInterface

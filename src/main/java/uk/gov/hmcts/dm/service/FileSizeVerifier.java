@@ -40,6 +40,7 @@ public class FileSizeVerifier {
 
         log.info("mediaFileSizeInBytes {} ", mediaFileSizeInBytes);
         log.info("nonMediaFileSizeInBytes {} ", nonMediaFileSizeInBytes);
+        log.info("File name {} ", multipartFile.getOriginalFilename());
         log.info("File content length: {} ",multipartFile.getSize());
 
         try (InputStream inputStream = multipartFile.getInputStream();
