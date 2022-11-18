@@ -37,12 +37,12 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     }
 
     @Test
-    public void uploadMediumMp3() {
+    public void uploadLargeMp3SuccessfullyUploaded() {
         streamBlobToUpload(getVideo465mbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
     }
 
     @Test
-    public void uploadMediumPdf() {
+    public void uploadLargePdfSuccessfullyUploaded() {
         streamBlobToUpload(getPdf990mbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
     }
 
