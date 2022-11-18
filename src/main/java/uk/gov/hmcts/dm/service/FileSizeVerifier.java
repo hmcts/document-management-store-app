@@ -38,9 +38,14 @@ public class FileSizeVerifier {
         long mediaFileSizeInBytes = mediaFileSize * 1024 * 1024;
         long nonMediaFileSizeInBytes = nonMediaFileSize * 1024 * 1024;
 
+        log.info("mediaFileSizeInBytes {} ", mediaFileSizeInBytes);
+        log.info("nonMediaFileSizeInBytes {} ", nonMediaFileSizeInBytes);
+        log.info("File content length: {} ",multipartFile.getSize());
+
         try (InputStream inputStream = multipartFile.getInputStream();
              TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
             long fileSizeInBytes = tikaInputStream.getLength();
+            log.info("TikaInputStream File content length: {} ",fileSizeInBytes);
 
             Metadata metadata = new Metadata();
             if (multipartFile.getOriginalFilename() != null) {
@@ -48,6 +53,7 @@ public class FileSizeVerifier {
                 metadata.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
             }
             String detected = tika.detect(tikaInputStream, metadata);
+            log.info("TikaInputStream detected: {} ",detected);
             if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(detected))
                     && fileSizeInBytes > mediaFileSizeInBytes) {
                 log.error(
