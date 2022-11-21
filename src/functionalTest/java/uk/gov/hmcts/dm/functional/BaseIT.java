@@ -30,6 +30,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static io.restassured.config.LogConfig.logConfig;
+
 
 @NotThreadSafe
 @RunWith(SpringIntegrationSerenityRunner.class)
@@ -151,8 +153,9 @@ public abstract class BaseIT {
     public RequestSpecification givenRequest(String username, List<String> userRoles) {
         RestAssuredConfig config = RestAssured.config()
                 .httpClient(HttpClientConfig.httpClientConfig()
-                        .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 60000)
-                        .setParam(CoreConnectionPNames.SO_TIMEOUT, 300000));
+                    .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 60000)
+                    .setParam(CoreConnectionPNames.SO_TIMEOUT, 300000))
+                .logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails());;
 
         RequestSpecification request = SerenityRest.given()
             .config(config)
