@@ -79,9 +79,9 @@ public class StoredDocumentSearchController {
                 description = "Service Authorization (S2S Bearer token)", required = true,
                 schema = @Schema(type = "string"))})
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Returns search results"),
-            @ApiResponse(responseCode = "400", description = "Error when search criteria not specified"),
-            @ApiResponse(responseCode = "403", description = "Access Denied")
+        @ApiResponse(responseCode = "200", description = "Returns search results"),
+        @ApiResponse(responseCode = "400", description = "Error when search criteria not specified"),
+        @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> searchOwned(
             Pageable pageable,
