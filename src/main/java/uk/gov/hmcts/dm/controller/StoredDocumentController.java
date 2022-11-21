@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +55,6 @@ import static java.lang.String.format;
 @RestController
 @RequestMapping(path = "/documents")
 @Tag(name = "StoredDocument Service", description = "Endpoint for Stored Document Management")
-@Slf4j
 public class StoredDocumentController {
 
     private final Logger logger = LoggerFactory.getLogger(StoredDocumentController.class);
@@ -109,10 +107,8 @@ public class StoredDocumentController {
         if (result.hasErrors()) {
             throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
-            logger.info("Start time");
             List<StoredDocument> storedDocuments =
                     auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
-            logger.info("End time");
             return ResponseEntity
                     .ok()
                     .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)

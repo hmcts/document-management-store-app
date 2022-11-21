@@ -16,19 +16,13 @@ public class BlobReader {
     private static final Logger LOG = LoggerFactory.getLogger(BlobReader.class);
 
     private final BlobServiceClient blobServiceClient;
-    private final LeaseClientProvider leaseClientProvider;
     private final String containerName;
-    private final int leaseTime;
 
     public BlobReader(
             BlobServiceClient blobServiceClient,
-            LeaseClientProvider leaseClientProvider,
-            @Value("${azure.storage.blob-container-reference}") String containerName,
-            @Value("${azure.storage.leaseTime}") int leaseTime) {
+            @Value("${azure.storage.blob-container-reference}") String containerName) {
         this.blobServiceClient =  blobServiceClient;
-        this.leaseClientProvider = leaseClientProvider;
         this.containerName = containerName;
-        this.leaseTime = leaseTime;
     }
 
     public Optional<BlobInfo> retrieveBlobToProcess(String blobName) {
