@@ -63,7 +63,7 @@ withPipeline(type , product, component) {
         env.MP4_465MB = "490MB_video_mp4.mp4"
         env.MP4_625MB = "652MB_video_mp4.mp4"
         env.PDF_1KB = "1KB.pdf"
-        env.PDF_990MB = "990MB.pdf"
+        env.PDF_600MB = "600MB.pdf"
         env.PDF_1_2GB = "1.2GB.pdf"
 
         after('test') {
@@ -85,7 +85,7 @@ withPipeline(type , product, component) {
         env.MP4_465MB = "490MB_video_mp4.mp4"
         env.MP4_625MB = "652MB_video_mp4.mp4"
         env.PDF_1KB = "1KB.pdf"
-        env.PDF_990MB = "600MB.pdf"
+        env.PDF_600MB = "600MB.pdf"
         env.PDF_1_2GB = "1.2GB.pdf"
     }
 

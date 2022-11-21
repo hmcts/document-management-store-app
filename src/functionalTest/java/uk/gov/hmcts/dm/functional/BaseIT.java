@@ -1,8 +1,5 @@
 package uk.gov.hmcts.dm.functional;
 
-import io.restassured.RestAssured;
-import io.restassured.config.HttpClientConfig;
-import io.restassured.config.RestAssuredConfig;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import net.jcip.annotations.NotThreadSafe;
@@ -10,7 +7,6 @@ import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
 import net.thucydides.core.annotations.WithTag;
 import net.thucydides.core.annotations.WithTags;
-import org.apache.http.params.CoreConnectionPNames;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
@@ -30,7 +26,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static io.restassured.config.LogConfig.logConfig;
 
 
 @NotThreadSafe
@@ -60,8 +55,8 @@ public abstract class BaseIT {
     private String video625mbId;
     @Value("${large-docs.metadata.pdf-1kb.id}")
     private String pdf1kbId;
-    @Value("${large-docs.metadata.pdf-990mb.id}")
-    private String pdf990mbId;
+    @Value("${large-docs.metadata.pdf-600mb.id}")
+    private String pdf600mbId;
     @Value("${large-docs.metadata.pdf-1-2gb.id}")
     private String pdf1point2gbId;
     @Value("${toggle.ttl}")
@@ -151,15 +146,8 @@ public abstract class BaseIT {
     }
 
     public RequestSpecification givenRequest(String username, List<String> userRoles) {
-        RestAssuredConfig config = RestAssured.config()
-                .httpClient(HttpClientConfig.httpClientConfig()
-                    .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 60000)
-                    .setParam(CoreConnectionPNames.SO_TIMEOUT, 300000))
-                .logConfig(logConfig().enableLoggingOfRequestAndResponseIfValidationFails());;
 
-        RequestSpecification request = SerenityRest.given()
-            .config(config)
-            .baseUri(dmStoreBaseUri).log().all();
+        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
         if (username != null) {
             request = request.header("serviceauthorization", serviceToken());
             request = request.header("user-id", username);
@@ -838,12 +826,12 @@ public abstract class BaseIT {
         this.video260kbId = video260kbId;
     }
 
-    public String getPdf990mbId() {
-        return pdf990mbId;
+    public String getPdf600mbId() {
+        return pdf600mbId;
     }
 
-    public void setPdf990mbId(String pdf990mbId) {
-        this.pdf990mbId = pdf990mbId;
+    public void setPdf600mbId(String pdf600mbId) {
+        this.pdf600mbId = pdf600mbId;
     }
 
     public String getPdf1point2gbId() {

@@ -42,7 +42,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
     @Test
     public void uploadLargePdfSuccessfullyUploaded() {
-        streamBlobToUpload(getPdf990mbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
+        streamBlobToUpload(getPdf600mbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
     }
 
     @Test
