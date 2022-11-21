@@ -151,8 +151,8 @@ public abstract class BaseIT {
     public RequestSpecification givenRequest(String username, List<String> userRoles) {
         RestAssuredConfig config = RestAssured.config()
                 .httpClient(HttpClientConfig.httpClientConfig()
-                        .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 120000)
-                        .setParam(CoreConnectionPNames.SO_TIMEOUT, 120000));
+                        .setParam(CoreConnectionPNames.CONNECTION_TIMEOUT, 60000)
+                        .setParam(CoreConnectionPNames.SO_TIMEOUT, 300000));
 
         RequestSpecification request = SerenityRest.given()
             .config(config)
