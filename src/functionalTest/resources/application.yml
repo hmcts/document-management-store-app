@@ -48,9 +48,9 @@ large-docs:
             extension: mp4
             size: 26076
 
-        mp4-465mb:
-            id: ${MP4_465MB:test1.mp4}
-            documentName: 465MB_Video
+        mp4-272mb:
+            id: ${MP4_272MB:test1.mp4}
+            documentName: 272MB_Video
             extension: mp4
             size: 260760
 
@@ -66,8 +66,8 @@ large-docs:
             extension: pdf
             size: 1000
 
-        pdf-600mb:
-            id: ${PDF_600MB:1KB.pdf}
+        pdf-500mb:
+            id: ${PDF_500MB:1KB.pdf}
             documentName: 600MB
             extension: pdf
             size: 1038090240

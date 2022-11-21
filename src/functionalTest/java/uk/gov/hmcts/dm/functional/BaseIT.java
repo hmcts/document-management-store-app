@@ -49,14 +49,14 @@ public abstract class BaseIT {
     private String video52mbId;
     @Value("${large-docs.metadata.mp4-260kb.id}")
     private String video260kbId;
-    @Value("${large-docs.metadata.mp4-465mb.id}")
-    private String video465mbId;
+    @Value("${large-docs.metadata.mp4-272mb.id}")
+    private String video272mbId;
     @Value("${large-docs.metadata.mp4-625mb.id}")
     private String video625mbId;
     @Value("${large-docs.metadata.pdf-1kb.id}")
     private String pdf1kbId;
-    @Value("${large-docs.metadata.pdf-600mb.id}")
-    private String pdf600mbId;
+    @Value("${large-docs.metadata.pdf-500mb.id}")
+    private String pdf500mbId;
     @Value("${large-docs.metadata.pdf-1-2gb.id}")
     private String pdf1point2gbId;
     @Value("${toggle.ttl}")
@@ -486,8 +486,8 @@ public abstract class BaseIT {
         return video52mbId;
     }
 
-    public String getVideo465mbId() {
-        return video465mbId;
+    public String getVideo272mbId() {
+        return video272mbId;
     }
 
     public String getVideo625mbId() {
@@ -826,12 +826,12 @@ public abstract class BaseIT {
         this.video260kbId = video260kbId;
     }
 
-    public String getPdf600mbId() {
-        return pdf600mbId;
+    public String getPdf500mbId() {
+        return pdf500mbId;
     }
 
-    public void setPdf600mbId(String pdf600mbId) {
-        this.pdf600mbId = pdf600mbId;
+    public void setPdf500mbId(String pdf500mbId) {
+        this.pdf500mbId = pdf500mbId;
     }
 
     public String getPdf1point2gbId() {

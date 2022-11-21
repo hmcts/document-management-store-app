@@ -60,10 +60,10 @@ withPipeline(type , product, component) {
         env.MP4_52MB = "e58a9fa5-4f6f-438f-b44a-8c0877e945d0/binary"
         env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
         env.MP4_260KB = "test1.mp4"
-        env.MP4_465MB = "490MB_video_mp4.mp4"
+        env.MP4_272MB = "272MB_mp4_video.mp4"
         env.MP4_625MB = "652MB_video_mp4.mp4"
         env.PDF_1KB = "1KB.pdf"
-        env.PDF_600MB = "600MB.pdf"
+        env.PDF_500MB = "500MB.pdf"
         env.PDF_1_2GB = "1.2GB.pdf"
 
         after('test') {
@@ -82,10 +82,10 @@ withPipeline(type , product, component) {
         env.MP4_52MB = "e58a9fa5-4f6f-438f-b44a-8c0877e945d0/binary"
         env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
         env.MP4_260KB = "test1.mp4"
-        env.MP4_465MB = "490MB_video_mp4.mp4"
+        env.MP4_272MB = "272MB_mp4_video.mp4"
         env.MP4_625MB = "652MB_video_mp4.mp4"
         env.PDF_1KB = "1KB.pdf"
-        env.PDF_600MB = "600MB.pdf"
+        env.PDF_500MB = "500MB.pdf"
         env.PDF_1_2GB = "1.2GB.pdf"
     }
 

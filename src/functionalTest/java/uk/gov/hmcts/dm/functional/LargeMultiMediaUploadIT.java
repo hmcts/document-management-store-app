@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.dm.blob.BlobInfo;
 import uk.gov.hmcts.dm.blob.BlobReader;
+import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.InputStream;
 import java.util.Optional;
@@ -21,12 +22,11 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     @Autowired(required = false)
     private BlobReader blobReader;
 
-    /*@Rule
     public RetryRule retryRule = new RetryRule(3);
-    */
+
 
     @Test
-    public void uploadASmallMp3() {
+    public void uploadSmallMp3() {
         streamBlobToUpload(getVideo260kbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
     }
 
@@ -37,21 +37,21 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
     @Test
     public void uploadLargeMp3SuccessfullyUploaded() {
-        streamBlobToUpload(getVideo465mbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
+        streamBlobToUpload(getVideo272mbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
     }
 
     @Test
     public void uploadLargePdfSuccessfullyUploaded() {
-        streamBlobToUpload(getPdf600mbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
+        streamBlobToUpload(getPdf500mbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
     }
 
     @Test
-    public void uploadLargeMp3() {
+    public void largeMp3RejectedDueToSizeValidation() {
         streamBlobToUpload(getVideo625mbId(), VIDEO_MPEG_VALUE, this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
     }
 
     @Test
-    public void uploadLargePdf() {
+    public void largePdfRejectedDueToSizeValidation() {
         streamBlobToUpload(getPdf1point2gbId(), APPLICATION_PDF_VALUE,this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
     }
 
