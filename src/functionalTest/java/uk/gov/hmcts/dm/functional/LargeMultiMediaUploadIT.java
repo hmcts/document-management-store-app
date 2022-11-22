@@ -21,9 +21,6 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     @Autowired(required = false)
     private BlobReader blobReader;
 
-    //public RetryRule retryRule = new RetryRule(3);
-
-
     @Test
     public void uploadSmallMp3() {
         streamBlobToUpload(getVideo260kbId(), VIDEO_MPEG_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
