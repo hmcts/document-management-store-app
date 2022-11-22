@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.dm.blob.BlobInfo;
 import uk.gov.hmcts.dm.blob.BlobReader;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.InputStream;
 import java.util.Optional;
