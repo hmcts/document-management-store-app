@@ -1,17 +1,12 @@
 package uk.gov.hmcts.dm.service;
 
 import org.apache.tika.Tika;
-import org.apache.tika.io.TikaInputStream;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.metadata.TikaCoreProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -35,7 +30,7 @@ public class FileSizeVerifier {
             return false;
         }
 
-        long mediaFileSizeInBytes = mediaFileSize * 1024 * 1024;
+  /*      long mediaFileSizeInBytes = mediaFileSize * 1024 * 1024;
         long nonMediaFileSizeInBytes = nonMediaFileSize * 1024 * 1024;
 
         try (InputStream inputStream = multipartFile.getInputStream();
@@ -63,7 +58,7 @@ public class FileSizeVerifier {
             log.error("Could not verify the file content type", e);
             return false;
         }
-
+*/
         return true;
     }
 
