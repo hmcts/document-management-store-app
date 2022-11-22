@@ -22,7 +22,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     @Autowired(required = false)
     private BlobReader blobReader;
 
-    public RetryRule retryRule = new RetryRule(3);
+    //public RetryRule retryRule = new RetryRule(3);
 
 
     @Test
