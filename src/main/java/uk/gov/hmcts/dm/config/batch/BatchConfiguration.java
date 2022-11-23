@@ -72,6 +72,7 @@ public class BatchConfiguration {
 
     @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+        log.info("start deletejob");
         jobLauncher
             .run(processDocument(step1()), new JobParametersBuilder()
             .addDate("date", new Date())
@@ -115,7 +116,7 @@ public class BatchConfiguration {
 
     public Step step1() {
         return stepBuilderFactory.get("step1")
-            .<StoredDocument, StoredDocument>chunk(10)
+            .<StoredDocument, StoredDocument>chunk(30)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
@@ -157,7 +158,8 @@ public class BatchConfiguration {
                 .createQuery("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
                             + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
-                .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED);
+                .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED)
+                .setMaxResults(1000);
         }
 
         @Override
