@@ -41,7 +41,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
         streamBlobToUpload(getPdf500mbId(), APPLICATION_PDF_VALUE, this::uploadWhitelistedLargeFileSuccessfully);
     }
 
-    /*@Test
+    @Test
     public void largeMp3RejectedDueToSizeValidation() {
         streamBlobToUpload(getVideo625mbId(), VIDEO_MPEG_VALUE, this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
     }
@@ -50,7 +50,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     public void largePdfRejectedDueToSizeValidation() {
         streamBlobToUpload(getPdf1point2gbId(), APPLICATION_PDF_VALUE,this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
     }
-*/
+
     private void streamBlobToUpload(String fileName,String mimeType, TriConsumer<InputStream, String, String> uploadFunction) {
         assumeNotNull(blobReader);
         Optional<BlobInfo> mayBeBlobInfo = blobReader.retrieveBlobToProcess(fileName);
