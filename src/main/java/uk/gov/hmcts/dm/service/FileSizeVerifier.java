@@ -30,10 +30,15 @@ public class FileSizeVerifier {
             return false;
         }
 
-  /*      long mediaFileSizeInBytes = mediaFileSize * 1024 * 1024;
+        long mediaFileSizeInBytes = mediaFileSize * 1024 * 1024;
         long nonMediaFileSizeInBytes = nonMediaFileSize * 1024 * 1024;
 
-        try (InputStream inputStream = multipartFile.getInputStream();
+        long size = multipartFile.getSize();
+
+        return size <= mediaFileSizeInBytes && size <= nonMediaFileSizeInBytes;
+
+
+/*        try (InputStream inputStream = multipartFile.getInputStream();
              TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
             long fileSizeInBytes = tikaInputStream.getLength();
 
@@ -57,9 +62,7 @@ public class FileSizeVerifier {
         } catch (IOException e) {
             log.error("Could not verify the file content type", e);
             return false;
-        }
-*/
-        return true;
+        }*/
     }
 
 }
