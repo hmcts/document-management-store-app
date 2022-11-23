@@ -20,8 +20,8 @@ import javax.validation.constraints.NotNull;
 @Service
 public class BlobStorageDeleteService {
 
-    public BlobContainerClient cloudBlobContainer;
-    public DocumentContentVersionRepository documentContentVersionRepository;
+    private BlobContainerClient cloudBlobContainer;
+    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
     public BlobStorageDeleteService(BlobContainerClient cloudBlobContainer,
