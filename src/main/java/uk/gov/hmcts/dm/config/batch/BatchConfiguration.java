@@ -33,6 +33,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableBatchProcessing
@@ -127,7 +128,7 @@ public class BatchConfiguration {
 
     private ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setThreadNamePrefix("del_w_ttl");
+        taskExecutor.setThreadNamePrefix("del_w_ttl-" + new Random().nextInt(500) + "-");
         taskExecutor.setCorePoolSize(deleteThreadCount);
         taskExecutor.setMaxPoolSize(deleteThreadCount);
         taskExecutor.setQueueCapacity(deleteExecutorQueueCapacity);
