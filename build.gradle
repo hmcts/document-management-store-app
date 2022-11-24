@@ -7,7 +7,7 @@ buildscript {
 
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.32'
+    id 'uk.gov.hmcts.java' version '0.12.33'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'org.springframework.boot' version '2.7.5'
     id 'com.github.ben-manes.versions' version '0.44.0'
@@ -17,7 +17,7 @@ plugins {
     id 'io.freefair.lombok' version '6.5.1'
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '9.8.1'
+    id 'org.flywaydb.flyway' version '9.8.2'
 }
 
 apply plugin: 'java'
@@ -141,7 +141,7 @@ dependencies {
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '6.0.0'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '6.0.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
@@ -211,7 +211,7 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.12'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.13'
 }
 
 dependencyCheck {
