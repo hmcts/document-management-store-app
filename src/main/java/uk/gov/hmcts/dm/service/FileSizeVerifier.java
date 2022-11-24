@@ -49,16 +49,16 @@ public class FileSizeVerifier {
             }
             String detected = tika.detect(tikaInputStream, metadata);
             if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(detected))
-                && fileSizeInBytes  > mediaFileSizeInBytes) {
-            log.error(
-                String.format("Warning. The uploaded Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, mediaFileSize));
-            return false;
+                    && fileSizeInBytes > mediaFileSizeInBytes) {
+                log.error(
+                        String.format("Warning. The uploaded Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, mediaFileSize));
+                return false;
             } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(detected))
-                && fileSizeInBytes > nonMediaFileSizeInBytes) {
-            log.error(
-                String.format("Warning. The uploaded Non-Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, nonMediaFileSize));
-            return false;
-        }
+                    && fileSizeInBytes > nonMediaFileSizeInBytes) {
+                log.error(
+                        String.format("Warning. The uploaded Non-Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, nonMediaFileSize));
+                return false;
+            }
         } catch (IOException e) {
             log.error("Could not verify the file content type", e);
             return false;
