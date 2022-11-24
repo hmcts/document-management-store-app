@@ -39,21 +39,21 @@ public class FileSizeVerifierTest {
         assertTrue(fileSizeVerifier.verifyFileSize(kmlfile));
     }
 
-/*    @Test
+    @Test
     public void verifyFileSizeNonMediaFileWithZeroSize() {
         //We had to set size limit to zero as we can't have big files uploaded in to github for the tests to run.
         ReflectionTestUtils.setField(fileSizeVerifier, "nonMediaFileSize", 0L);
         MockMultipartFile kmlfile = new MockMultipartFile("data", "filename.kml", "text/plain", "some kml".getBytes());
         assertFalse(fileSizeVerifier.verifyFileSize(kmlfile));
-    }*/
+    }
 
-/*    @Test
+    @Test
     public void verifyFileSizeMediaFile() throws IOException {
         //We had to set size limit to zero as we can't have big files uploaded in to github for the tests to run.
         ReflectionTestUtils.setField(fileSizeVerifier, "mediaFileSize", 0L);
         MockMultipartFile kmlfile = new MockMultipartFile("data", "mp4.mp4", "audio/mpeg", fileToByteArray("files/audio_test.mp3"));
         assertFalse(fileSizeVerifier.verifyFileSize(kmlfile));
-    }*/
+    }
 
     private byte[] fileToByteArray(String file) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();

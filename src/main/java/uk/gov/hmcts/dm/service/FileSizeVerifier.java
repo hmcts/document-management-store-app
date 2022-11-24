@@ -38,29 +38,17 @@ public class FileSizeVerifier {
         long mediaFileSizeInBytes = mediaFileSize * 1024 * 1024;
         long nonMediaFileSizeInBytes = nonMediaFileSize * 1024 * 1024;
 
-        try (InputStream inputStream = multipartFile.getInputStream();
-             TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
-            long fileSizeInBytes = tikaInputStream.getLength();
+        long fileSizeInBytes = multipartFile.getSize();
 
-            Metadata metadata = new Metadata();
-            if (multipartFile.getOriginalFilename() != null) {
-                metadata.add(TikaCoreProperties.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
-                metadata.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
-            }
-            String detected = tika.detect(tikaInputStream, metadata);
-            if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(detected))
-                    && fileSizeInBytes > mediaFileSizeInBytes) {
-                log.error(
-                    String.format("Warning. The uploaded Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, mediaFileSize));
-                return false;
-            } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(detected))
-                    && fileSizeInBytes > nonMediaFileSizeInBytes) {
-                log.error(
-                    String.format("Warning. The uploaded Non-Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, nonMediaFileSize));
-                return false;
-            }
-        } catch (IOException e) {
-            log.error("Could not verify the file content type", e);
+        if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(multipartFile.getContentType()))
+                && fileSizeInBytes  > mediaFileSizeInBytes) {
+            log.error(
+                String.format("Warning. The uploaded Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, mediaFileSize));
+            return false;
+        } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(multipartFile.getContentType()))
+                && fileSizeInBytes > nonMediaFileSizeInBytes) {
+            log.error(
+                String.format("Warning. The uploaded Non-Media file size %s is more than the allowed limit of : %s MB", fileSizeInBytes, nonMediaFileSize));
             return false;
         }
 
