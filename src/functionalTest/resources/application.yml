@@ -42,44 +42,7 @@ large-docs:
             extension: mp4
             size: 52254796
 
-        mp4-260kb:
-            id: ${MP4_260KB:test1.mp4}
-            documentName: test1
-            extension: mp4
-            size: 26076
-
-        mp4-272mb:
-            id: ${MP4_272MB:test1.mp4}
-            documentName: 272MB_Video
-            extension: mp4
-            size: 260760
-
-        mp4-625mb:
-            id: ${MP4_625MB:test1.mp4}
-            documentName: 652MB_video_mp4
-            extension: mp4
-            size: 622250000
-
-        pdf-1kb:
-            id: ${PDF_1KB:1KB.pdf}
-            documentName: 1KB
-            extension: pdf
-            size: 1000
-
-        pdf-500mb:
-            id: ${PDF_500MB:1KB.pdf}
-            documentName: 600MB
-            extension: pdf
-            size: 1038090240
-
-        pdf-1-2gb:
-            id: ${PDF_1_2GB:1KB.pdf}
-            documentName: 1.2GB
-            extension: pdf
-            size: 1283457024
-
 azure:
   storage:
     connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:}
     blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
-    leaseTime: ${BLOB_LEASE_TIME:15} #In seconds

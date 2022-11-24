@@ -47,18 +47,6 @@ public abstract class BaseIT {
     private String video111mbId;
     @Value("${large-docs.metadata.mp4-52mb.id}")
     private String video52mbId;
-    @Value("${large-docs.metadata.mp4-260kb.id}")
-    private String video260kbId;
-    @Value("${large-docs.metadata.mp4-272mb.id}")
-    private String video272mbId;
-    @Value("${large-docs.metadata.mp4-625mb.id}")
-    private String video625mbId;
-    @Value("${large-docs.metadata.pdf-1kb.id}")
-    private String pdf1kbId;
-    @Value("${large-docs.metadata.pdf-500mb.id}")
-    private String pdf500mbId;
-    @Value("${large-docs.metadata.pdf-1-2gb.id}")
-    private String pdf1point2gbId;
     @Value("${toggle.ttl}")
     private boolean toggleTtlEnabled;
     @Value("${toggle.metadatamigration}")
@@ -486,14 +474,6 @@ public abstract class BaseIT {
         return video52mbId;
     }
 
-    public String getVideo272mbId() {
-        return video272mbId;
-    }
-
-    public String getVideo625mbId() {
-        return video625mbId;
-    }
-
     public void setVideo52mbId(String video52mbId) {
         this.video52mbId = video52mbId;
     }
@@ -816,37 +796,5 @@ public abstract class BaseIT {
 
     public final String getXmlAsPng() {
         return xmlAsPng;
-    }
-
-    public String getVideo260kbId() {
-        return video260kbId;
-    }
-
-    public void setVideo260kbId(String video260kbId) {
-        this.video260kbId = video260kbId;
-    }
-
-    public String getPdf500mbId() {
-        return pdf500mbId;
-    }
-
-    public void setPdf500mbId(String pdf500mbId) {
-        this.pdf500mbId = pdf500mbId;
-    }
-
-    public String getPdf1point2gbId() {
-        return pdf1point2gbId;
-    }
-
-    public void setPdf1point2gbId(String pdf1point2gbId) {
-        this.pdf1point2gbId = pdf1point2gbId;
-    }
-
-    public String getPdf1kbId() {
-        return pdf1kbId;
-    }
-
-    public void setPdf1kbId(String pdf1kbId) {
-        this.pdf1kbId = pdf1kbId;
     }
 }
