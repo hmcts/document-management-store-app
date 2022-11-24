@@ -98,7 +98,7 @@ public class BatchConfiguration {
             .name("documentTaskReader")
             .entityManagerFactory(entityManagerFactory)
             .queryProvider(new QueryProvider())
-            .pageSize(100)
+            .pageSize(500)
             .build();
     }
 
@@ -157,10 +157,10 @@ public class BatchConfiguration {
         public Query createQuery() {
             return entityManager
                 .createQuery("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
-                            + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
+                            + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by random()")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED)
-                .setMaxResults(1000);
+                .setMaxResults(500);
         }
 
         @Override
