@@ -5,11 +5,11 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConditionalOnExpression("!T(org.springframework.util.StringUtils).isEmpty('${azure.storage.connection-string:}')")
+@ConditionalOnBean(BlobServiceClient.class)
 public class BlobReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(BlobReader.class);
