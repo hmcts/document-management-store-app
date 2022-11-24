@@ -1,6 +1,6 @@
 java:
-  devmemoryLimits: "3Gi"
-  devmemoryRequests: '3Gi'
+  devmemoryLimits: "2Gi"
+  devmemoryRequests: '2Gi'
   cpuRequests: "1000m"
   cpuLimits: "2000m"
   image: ${IMAGE_NAME}
