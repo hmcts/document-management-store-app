@@ -32,8 +32,11 @@ public class BlobStorageDeleteService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion) {
-        log.debug("Deleting document {} / version {} from Azure Blob Storage...",
-            documentContentVersion.getStoredDocument().getId(), documentContentVersion.getId());
+        log.info(
+            "Deleting document {} / version {} from Azure Blob Storage...",
+            documentContentVersion.getStoredDocument().getId(),
+            documentContentVersion.getId()
+        );
 
         BlockBlobClient blob = cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
         try {
@@ -48,7 +51,11 @@ public class BlobStorageDeleteService {
             }
         } catch (BlobStorageException e) {
             if (e.getStatusCode() == 404) {
-                log.info("blob not found for deletion {}", documentContentVersion.getId());
+                log.info(
+                    "blob not found for deletion {},versionId{}",
+                    documentContentVersion.getId(),
+                    documentContentVersion.getStoredDocument().getId()
+                );
                 documentContentVersionRepository.updateContentUriAndContentCheckSum(
                     documentContentVersion.getId(), null, null);
             }
