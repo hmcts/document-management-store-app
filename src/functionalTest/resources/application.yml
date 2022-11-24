@@ -44,5 +44,5 @@ large-docs:
 
 azure:
   storage:
-    connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:}
+    connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:false}
     blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}

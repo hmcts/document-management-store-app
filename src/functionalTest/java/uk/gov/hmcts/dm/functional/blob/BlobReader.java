@@ -1,4 +1,4 @@
-package uk.gov.hmcts.dm.blob;
+package uk.gov.hmcts.dm.functional.blob;
 
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;

@@ -4,7 +4,7 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.hmcts.dm.blob.BlobReader;
+import uk.gov.hmcts.dm.functional.blob.BlobReader;
 
 import java.io.InputStream;
 
