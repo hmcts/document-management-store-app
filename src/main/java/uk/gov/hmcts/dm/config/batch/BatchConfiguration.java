@@ -97,7 +97,7 @@ public class BatchConfiguration {
             .name("documentTaskReader")
             .entityManagerFactory(entityManagerFactory)
             .queryProvider(new QueryProvider())
-            .pageSize(500)
+            .pageSize(400)
             .build();
     }
 
@@ -116,7 +116,7 @@ public class BatchConfiguration {
 
     public Step step1() {
         return stepBuilderFactory.get("step1")
-            .<StoredDocument, StoredDocument>chunk(10)
+            .<StoredDocument, StoredDocument>chunk(5)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
@@ -159,7 +159,7 @@ public class BatchConfiguration {
                             + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by random()")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED)
-                .setMaxResults(500);
+                .setMaxResults(400);
         }
 
         @Override

@@ -33,18 +33,20 @@ public class BlobStorageDeleteService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion) {
         log.info(
-            "Deleting document {} / version {} from Azure Blob Storage...",
-            documentContentVersion.getStoredDocument().getId(),
-            documentContentVersion.getId()
+            "Deleting document {}, StoredDocument {} from Azure Blob Storage...",
+            documentContentVersion.getId(),
+            documentContentVersion.getStoredDocument().getId()
         );
 
         BlockBlobClient blob = cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
         try {
             Response res = blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
             if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
-                log.info("Deleting document {} failed. Response status code {}",
+                log.info(
+                    "Deleting document {} failed. Response status code {}",
                     documentContentVersion.getId(),
-                    res.getStatusCode());
+                    res.getStatusCode()
+                );
             } else {
                 documentContentVersionRepository.updateContentUriAndContentCheckSum(
                     documentContentVersion.getId(), null, null);
@@ -52,9 +54,9 @@ public class BlobStorageDeleteService {
         } catch (BlobStorageException e) {
             if (e.getStatusCode() == 404) {
                 log.info(
-                    "Blob not found for deletion {},versionId{}",
-                    documentContentVersion.getStoredDocument().getId(),
-                    documentContentVersion.getId()
+                    "Blob not found for deletion {}, StoredDocument {}",
+                    documentContentVersion.getId(),
+                    documentContentVersion.getStoredDocument().getId()
                 );
                 documentContentVersionRepository.updateContentUriAndContentCheckSum(
                     documentContentVersion.getId(), null, null);
