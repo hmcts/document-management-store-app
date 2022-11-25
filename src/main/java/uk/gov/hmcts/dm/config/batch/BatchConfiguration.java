@@ -33,7 +33,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 import java.util.Date;
-import java.util.Random;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableBatchProcessing
@@ -117,7 +116,7 @@ public class BatchConfiguration {
 
     public Step step1() {
         return stepBuilderFactory.get("step1")
-            .<StoredDocument, StoredDocument>chunk(30)
+            .<StoredDocument, StoredDocument>chunk(10)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
@@ -128,7 +127,7 @@ public class BatchConfiguration {
 
     private ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setThreadNamePrefix("del_w_ttl-" + new Random().nextInt(500) + "-");
+        taskExecutor.setThreadNamePrefix("del_w_ttl-");
         taskExecutor.setCorePoolSize(deleteThreadCount);
         taskExecutor.setMaxPoolSize(deleteThreadCount);
         taskExecutor.setQueueCapacity(deleteExecutorQueueCapacity);
