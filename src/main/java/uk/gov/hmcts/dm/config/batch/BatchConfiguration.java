@@ -1,5 +1,9 @@
 package uk.gov.hmcts.dm.config.batch;
 
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.hibernate.LockOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +25,7 @@ import org.springframework.batch.item.database.orm.JpaQueryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -32,6 +37,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
+import javax.sql.DataSource;
 import java.util.Date;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -39,6 +45,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableScheduling
 @Configuration
 @ConditionalOnProperty("toggle.ttl")
+@EnableSchedulerLock(defaultLockAtMostFor = "PT1M")
 public class BatchConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
@@ -71,6 +78,8 @@ public class BatchConfiguration {
     private int deleteExecutorQueueCapacity;
 
     @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
+    @SchedulerLock(name = "DeleteDoc_scheduledTask",
+        lockAtLeastFor = "PT1M", lockAtMostFor = "PT4M")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         log.info("start deletejob");
         jobLauncher
@@ -79,6 +88,12 @@ public class BatchConfiguration {
             .toJobParameters());
 
     }
+
+    @Bean
+    public LockProvider lockProvider(DataSource dataSource) {
+        return new JdbcTemplateLockProvider(dataSource);
+    }
+
 
     @Scheduled(fixedDelayString = "${spring.batch.historicExecutionsRetentionMilliseconds}")
     public void scheduleCleanup() throws JobParametersInvalidException,
@@ -116,7 +131,7 @@ public class BatchConfiguration {
 
     public Step step1() {
         return stepBuilderFactory.get("step1")
-            .<StoredDocument, StoredDocument>chunk(5)
+            .<StoredDocument, StoredDocument>chunk(30)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
