@@ -14,18 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import uk.gov.hmcts.dm.FunctionalTestContextConfiguration;
+import uk.gov.hmcts.dm.StorageTestConfiguration;
 import uk.gov.hmcts.dm.functional.DocumentMetadataPropertiesConfig.DocumentMetadata;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 
 
 @NotThreadSafe
 @RunWith(SpringIntegrationSerenityRunner.class)
-@SpringBootTest(classes = uk.gov.hmcts.dm.FunctionalTestContextConfiguration.class)
+@SpringBootTest(classes = {FunctionalTestContextConfiguration.class, StorageTestConfiguration.class})
 @WithTags(@WithTag("testType:Functional"))
 public abstract class BaseIT {
 
@@ -159,7 +164,6 @@ public abstract class BaseIT {
     }
 
     public RequestSpecification givenLargeFileRequest(String username, List<String> userRoles) {
-
         RequestSpecification request = SerenityRest.given().baseUri(largeDocsBaseUri).log().all();
 
         if (username != null) {
@@ -250,6 +254,7 @@ public abstract class BaseIT {
 
         try (
             OutputStream outputStream = new FileOutputStream(tmpFile);
+
             final InputStream inputStream = givenLargeFileRequest(citizen, new ArrayList<>(List.of(caseWorkerRoleProbate)))
                 .get(doc)
                 .getBody()
