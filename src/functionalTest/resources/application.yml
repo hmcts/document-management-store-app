@@ -41,3 +41,8 @@ large-docs:
             documentName: 52MB_Video
             extension: mp4
             size: 52254796
+
+azure:
+  storage:
+    connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:false}
+    blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
