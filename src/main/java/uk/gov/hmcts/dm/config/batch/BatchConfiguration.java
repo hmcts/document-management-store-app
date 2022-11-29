@@ -45,7 +45,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableScheduling
 @Configuration
 @ConditionalOnProperty("toggle.ttl")
-@EnableSchedulerLock(defaultLockAtMostFor = "PT1M")
+@EnableSchedulerLock(defaultLockAtMostFor = "PT2M")
 public class BatchConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
@@ -79,9 +79,9 @@ public class BatchConfiguration {
 
     @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
-        lockAtLeastFor = "PT1M", lockAtMostFor = "PT4M")
+        lockAtLeastFor = "PT2M", lockAtMostFor = "PT4M")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
-        log.info("start deletejob");
+        log.info("deleteJob starting");
         jobLauncher
             .run(processDocument(step1()), new JobParametersBuilder()
             .addDate("date", new Date())
