@@ -1,8 +1,6 @@
 package uk.gov.hmcts.dm.service.batch;
 
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,8 +11,6 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 @Service
 public class AuditedStoredDocumentBatchOperationsService {
-
-    private static final Logger log = LoggerFactory.getLogger(AuditedStoredDocumentBatchOperationsService.class);
 
     @Autowired
     private StoredDocumentService storedDocumentService;
@@ -32,7 +28,6 @@ public class AuditedStoredDocumentBatchOperationsService {
 
     public void hardDeleteStoredDocument(StoredDocument storedDocument) {
         if (storedDocument != null && !storedDocument.isHardDeleted()) {
-            log.info("Audited hardDeleteStoredDocument {}", storedDocument.getId());
             storedDocumentService.deleteDocument(storedDocument, true);
             auditEntryService.createAndSaveEntry(
                 storedDocument,
