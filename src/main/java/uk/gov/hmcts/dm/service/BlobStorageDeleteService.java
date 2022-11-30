@@ -33,17 +33,18 @@ public class BlobStorageDeleteService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion) {
         log.info(
-            "Deleting document {}, StoredDocument {} from Azure Blob Storage...",
+            "Deleting document blob {}, StoredDocument {}",
             documentContentVersion.getId(),
             documentContentVersion.getStoredDocument().getId()
         );
 
-        BlockBlobClient blob = cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
         try {
+            BlockBlobClient blob =
+                cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
             Response res = blob.deleteIfExistsWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
             if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
                 log.info(
-                    "Deleting document {} failed. Response status code {}",
+                    "Deleting document blob {} failed. Response status code {}",
                     documentContentVersion.getId(),
                     res.getStatusCode()
                 );
@@ -54,7 +55,7 @@ public class BlobStorageDeleteService {
         } catch (BlobStorageException e) {
             if (e.getStatusCode() == 404) {
                 log.info(
-                    "Blob not found for deletion {}, StoredDocument {}",
+                    "Blob Not found for deletion {}, StoredDocument {}",
                     documentContentVersion.getId(),
                     documentContentVersion.getStoredDocument().getId()
                 );
@@ -62,7 +63,7 @@ public class BlobStorageDeleteService {
                     documentContentVersion.getId(), null, null);
             } else {
                 log.info(
-                    "Deleting document failed {},status {} from Azure Blob Storage.",
+                    "Deleting document blob failed {},status {}",
                     documentContentVersion.getId(),
                     e.getStatusCode(),
                     e

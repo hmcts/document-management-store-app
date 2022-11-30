@@ -79,7 +79,7 @@ public class BatchConfiguration {
 
     @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
-        lockAtLeastFor = "PT2M", lockAtMostFor = "PT4M")
+        lockAtLeastFor = "PT3M", lockAtMostFor = "PT8M")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         log.info("deleteJob starting");
         jobLauncher
