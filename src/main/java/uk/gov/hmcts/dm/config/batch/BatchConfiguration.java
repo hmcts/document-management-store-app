@@ -171,7 +171,7 @@ public class BatchConfiguration {
         public Query createQuery() {
             return entityManager
                 .createQuery("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
-                            + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by random()")
+                            + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED)
                 .setMaxResults(400);

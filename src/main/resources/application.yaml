@@ -21,7 +21,7 @@ spring:
     active: dev
   jpa:
     database: postgresql
-    show-sql: ${SHOW_SQL:false}
+    show-sql: ${SHOW_SQL:true}
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -31,6 +31,7 @@ spring:
       hibernate:
         order_inserts: true
         order_updates: true
+        format_sql: true
         jdbc:
           batch_size: 5
           batch_versioned_data: true
@@ -82,6 +83,7 @@ logging:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
     org.springframework.batch: ${LOG_LEVEL_SPRING_BATCH:DEBUG}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
+    logging.level.org.hibernate.SQL: true
 
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
