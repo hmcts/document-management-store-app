@@ -2,6 +2,11 @@ spring:
   datasource:
     driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
     url: jdbc:tc:postgresql:11:///localhost?stringtype=unspecified
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create
 
 azure:
   storage:
