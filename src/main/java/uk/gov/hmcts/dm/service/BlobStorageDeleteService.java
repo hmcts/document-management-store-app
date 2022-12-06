@@ -41,17 +41,19 @@ public class BlobStorageDeleteService {
         try {
             BlockBlobClient blob =
                 cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
-            Response res = blob.deleteIfExistsWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
-            if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
-                log.info(
-                    "Deleting document blob {} failed. Response status code {}",
-                    documentContentVersion.getId(),
-                    res.getStatusCode()
-                );
-            } else {
-                documentContentVersionRepository.updateContentUriAndContentCheckSum(
-                    documentContentVersion.getId(), null, null);
+            if (blob.exists()) {
+                Response res = blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+                if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
+                    log.info(
+                        "Deleting document blob {} failed. Response status code {}",
+                        documentContentVersion.getId(),
+                        res.getStatusCode()
+                    );
+                    return;
+                }
             }
+            documentContentVersionRepository.updateContentUriAndContentCheckSum(
+                documentContentVersion.getId(), null, null);
         } catch (BlobStorageException e) {
             if (e.getStatusCode() == 404) {
                 log.info(

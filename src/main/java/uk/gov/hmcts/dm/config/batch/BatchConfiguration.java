@@ -39,6 +39,7 @@ import javax.persistence.LockModeType;
 import javax.persistence.Query;
 import javax.sql.DataSource;
 import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableBatchProcessing
@@ -142,7 +143,7 @@ public class BatchConfiguration {
 
     private ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setThreadNamePrefix("del_w_ttl-");
+        taskExecutor.setThreadNamePrefix("del_w_ttl-" + ThreadLocalRandom.current().nextInt(1, 100) + "-");
         taskExecutor.setCorePoolSize(deleteThreadCount);
         taskExecutor.setMaxPoolSize(deleteThreadCount);
         taskExecutor.setQueueCapacity(deleteExecutorQueueCapacity);
