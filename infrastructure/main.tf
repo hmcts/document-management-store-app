@@ -27,15 +27,6 @@ locals {
   vaultName           = (var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName
 }
 
-module "azure-media-services" {
-  source      = "git@github.com:hmcts/cnp-module-azure-media-services"
-  location    = var.location
-  env         = var.env
-  common_tags = var.common_tags
-  product     = var.product
-  enabled     = var.enable_azure_media_service
-}
-
 resource "azurerm_storage_container" "document_container" {
   name                  = "${local.app_full_name}-docstore-${var.env}"
   storage_account_name  = local.storageAccountNameDM
