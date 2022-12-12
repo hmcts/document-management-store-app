@@ -21,7 +21,7 @@ spring:
     active: dev
   jpa:
     database: postgresql
-    show-sql: ${SHOW_SQL:true}
+    show-sql: ${SHOW_SQL:false}
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -31,7 +31,6 @@ spring:
       hibernate:
         order_inserts: true
         order_updates: true
-        format_sql: true
         jdbc:
           batch_size: 5
           batch_versioned_data: true
@@ -51,7 +50,8 @@ spring:
       auditUserName: ${TTL_JOB_AUDIT_USERNAME:"(admin)"}
       auditServiceName: ${TTL_JOB_AUDIT_SERVICE_NAME:"dm"}
     initialize-schema: always
-    document-task-milliseconds: ${DOCUMENT_TASK_MILLISECONDS:60000}
+    document-delete-task-cron: ${DOCUMENT_DELETE_TASK_CRON:0 5 21-6 * * *}
+
     deleteThreadCount:  ${DOCUMENT_TASK_THREAD_COUNT:10}
     deleteExecutorQueueCapacity:  ${DOCUMENT_TASK_EXECUTER_QUEUE_CAPACITY:10}
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
@@ -83,7 +83,6 @@ logging:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
     org.springframework.batch: ${LOG_LEVEL_SPRING_BATCH:DEBUG}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
-    logging.level.org.hibernate.SQL: DEBUG
 
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}

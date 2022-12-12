@@ -78,7 +78,7 @@ public class BatchConfiguration {
     @Value("${spring.batch.deleteExecutorQueueCapacity}")
     private int deleteExecutorQueueCapacity;
 
-    @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
+    @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
         lockAtLeastFor = "PT3M", lockAtMostFor = "PT15M")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
