@@ -14,7 +14,7 @@ base-urls:
     idam-user: ${IDAM_API_URL:http://localhost:4501}
     idam-s2s: ${S2S_URL:http://localhost:4502}
     s2s-token: ${S2S_TOKEN:AAAAAAAAAAAAAAAA}
-    ccd-case-disposer-s2s-token: ${CCD_CASE_DISPOSER_S2S_TOKEN:BBBBBBBBBBBBBBBB}
+    ccd-case-disposer-s2s-token: ${CCD_CASE_DISPOSER_S2S_TOKEN:AAAAAAAAAAAAAAAA}
     dm-store: ${TEST_URL:http://localhost:4603}
     large-docs: ${TEST_URL:https://www.dropbox.com/s}
 
