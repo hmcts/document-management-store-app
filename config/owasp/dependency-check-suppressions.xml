@@ -6,6 +6,7 @@
         </notes>
         <cve>CVE-2016-1000027</cve>
         <cve>CVE-2021-37533</cve>
+        <cve>CVE-2022-41915</cve>
     </suppress>
     <!--netty vulnerabilities, 4.1.86 cause other vulnerabilities -->
     <suppress until="2023-03-04">
