@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assume.assumeFalse;
 
 public class MultiMediaUploadIT extends BaseIT {
 
@@ -20,6 +21,7 @@ public class MultiMediaUploadIT extends BaseIT {
 
     @Test
     public void mv1R1AsAuthenticatedUserIUploadLargeMultiMediaFiles() throws IOException {
+        assumeFalse(isDropBoxFile());
         uploadWhitelistedLargeFileThenDownload(getVideo52mbId(), "mp4-52mb", "video/mp4");
         uploadWhitelistedLargeFileThenDownload(getVideo111mbId(), "mp4-111mb", "video/mp4");
     }
@@ -56,6 +58,7 @@ public class MultiMediaUploadIT extends BaseIT {
 
     private boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType) throws IOException {
         File file = largeFile(doc, metadataKey);
+        boolean exists = file.exists();
         Response response = givenRequest(getCitizen())
             .multiPart("files", file, mimeType)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))

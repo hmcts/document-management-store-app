@@ -123,6 +123,7 @@ public abstract class BaseIT {
     private final String exeAsPng = "exe_as_png.png";
     private final String svgAsPng = "svg_as_png.png";
     private final String xmlAsPng = "xml_as_png.png";
+    private final String dropBoxUrl = "https://www.dropbox.com/s";
 
     @PostConstruct
     public void init() {
@@ -796,5 +797,9 @@ public abstract class BaseIT {
 
     public final String getXmlAsPng() {
         return xmlAsPng;
+    }
+
+    public boolean isDropBoxFile() {
+        return dropBoxUrl.equals(largeDocsBaseUri);
     }
 }

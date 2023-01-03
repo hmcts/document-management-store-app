@@ -25,6 +25,7 @@ services:
         image: hmctspublic.azurecr.io/rpe/service-auth-provider:latest
         environment:
             - microserviceKeys_em_gw=AAAAAAAAAAAAAAAA
+            - microserviceKeys_ccd_case_disposer=AAAAAAAAAAAAAAAA
             - microserviceKeys_em_ccd_orchestrator=AAAAAAAAAAAAAAAA
             - microserviceKeys_em_stitching_api=AAAAAAAAAAAAAAAA
             - microserviceKeys_ccd_case_document_am_api=AAAAAAAAAAAAAAAA
