@@ -1,6 +1,12 @@
 package uk.gov.hmcts.dm.config.batch;
 
+import net.javacrumbs.shedlock.core.LockProvider;
+import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.hibernate.LockOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -19,54 +25,76 @@ import org.springframework.batch.item.database.orm.JpaQueryProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
+import javax.sql.DataSource;
 import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableBatchProcessing
 @EnableScheduling
 @Configuration
 @ConditionalOnProperty("toggle.ttl")
+@EnableSchedulerLock(defaultLockAtMostFor = "PT2M")
 public class BatchConfiguration {
 
-    @Autowired
-    public JobBuilderFactory jobBuilderFactory;
+    private final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
 
     @Autowired
-    public StepBuilderFactory stepBuilderFactory;
+    private JobBuilderFactory jobBuilderFactory;
 
     @Autowired
-    public EntityManagerFactory entityManagerFactory;
+    private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
-    public JobLauncher jobLauncher;
+    private EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    public DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor;
+    private JobLauncher jobLauncher;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Value("${spring.batch.historicExecutionsRetentionMilliseconds}")
-    int historicExecutionsRetentionMilliseconds;
+    private int historicExecutionsRetentionMilliseconds;
 
-    @Scheduled(fixedRateString = "${spring.batch.document-task-milliseconds}")
+    @Value("${spring.batch.deleteThreadCount}")
+    private int deleteThreadCount;
+
+    @Value("${spring.batch.deleteExecutorQueueCapacity}")
+    private int deleteExecutorQueueCapacity;
+
+    @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
+    @SchedulerLock(name = "DeleteDoc_scheduledTask",
+        lockAtLeastFor = "PT3M", lockAtMostFor = "PT15M")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+        log.info("deleteJob starting");
         jobLauncher
             .run(processDocument(step1()), new JobParametersBuilder()
             .addDate("date", new Date())
             .toJobParameters());
 
     }
+
+    @Bean
+    public LockProvider lockProvider(DataSource dataSource) {
+        return new JdbcTemplateLockProvider(dataSource);
+    }
+
 
     @Scheduled(fixedDelayString = "${spring.batch.historicExecutionsRetentionMilliseconds}")
     public void scheduleCleanup() throws JobParametersInvalidException,
@@ -85,7 +113,7 @@ public class BatchConfiguration {
             .name("documentTaskReader")
             .entityManagerFactory(entityManagerFactory)
             .queryProvider(new QueryProvider())
-            .pageSize(100)
+            .pageSize(400)
             .build();
     }
 
@@ -104,13 +132,30 @@ public class BatchConfiguration {
 
     public Step step1() {
         return stepBuilderFactory.get("step1")
-            .<StoredDocument, StoredDocument>chunk(10)
+            .<StoredDocument, StoredDocument>chunk(30)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
-            .taskExecutor(new SimpleAsyncTaskExecutor("del_w_ttl"))
+            .taskExecutor(taskExecutor())
             .build();
 
+    }
+
+    private ThreadPoolTaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setThreadNamePrefix("del_w_ttl-" + ThreadLocalRandom.current().nextInt(1, 100) + "-");
+        taskExecutor.setCorePoolSize(deleteThreadCount);
+        taskExecutor.setMaxPoolSize(deleteThreadCount);
+        taskExecutor.setQueueCapacity(deleteExecutorQueueCapacity);
+        taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy() {
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+                log.info("Delete execution rejected");
+                super.rejectedExecution(r, e);
+            }
+        });
+        taskExecutor.setDaemon(true);
+        taskExecutor.initialize();
+        return taskExecutor;
     }
 
     public Job clearHistoryData() {
@@ -127,9 +172,10 @@ public class BatchConfiguration {
         public Query createQuery() {
             return entityManager
                 .createQuery("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
-                            + "where d.hardDeleted = false AND d.ttl < current_timestamp()")
+                            + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
-                .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED);
+                .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED)
+                .setMaxResults(400);
         }
 
         @Override

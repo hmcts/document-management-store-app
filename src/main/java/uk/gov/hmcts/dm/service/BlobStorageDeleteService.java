@@ -32,32 +32,45 @@ public class BlobStorageDeleteService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion) {
-        log.debug("Deleting document {} / version {} from Azure Blob Storage...",
-            documentContentVersion.getStoredDocument().getId(), documentContentVersion.getId());
+        log.info(
+            "Deleting document blob {}, StoredDocument {}",
+            documentContentVersion.getId(),
+            documentContentVersion.getStoredDocument().getId()
+        );
 
-        BlockBlobClient blob = cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
         try {
-            Response res = blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
-            if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
-                log.info("Deleting document {} failed. Response status code {}",
-                    documentContentVersion.getId(),
-                    res.getStatusCode());
-            } else {
-                documentContentVersionRepository.updateContentUriAndContentCheckSum(
-                    documentContentVersion.getId(), null, null);
+            BlockBlobClient blob =
+                cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
+            if (blob.exists()) {
+                Response res = blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+                if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
+                    log.info(
+                        "Deleting document blob {} failed. Response status code {}",
+                        documentContentVersion.getId(),
+                        res.getStatusCode()
+                    );
+                    return;
+                }
             }
+            documentContentVersionRepository.updateContentUriAndContentCheckSum(
+                documentContentVersion.getId(), null, null);
         } catch (BlobStorageException e) {
             if (e.getStatusCode() == 404) {
-                log.info("blob not found for deletion {}", documentContentVersion.getId());
+                log.info(
+                    "Blob Not found for deletion {}, StoredDocument {}",
+                    documentContentVersion.getId(),
+                    documentContentVersion.getStoredDocument().getId()
+                );
                 documentContentVersionRepository.updateContentUriAndContentCheckSum(
                     documentContentVersion.getId(), null, null);
+            } else {
+                log.info(
+                    "Deleting document blob failed {},status {}",
+                    documentContentVersion.getId(),
+                    e.getStatusCode(),
+                    e
+                );
             }
-            log.info(
-                "Deleting document failed {} / status {} from Azure Blob Storage: Blob could not be found.",
-                documentContentVersion.getId(),
-                e.getStatusCode(),
-                e
-            );
         }
     }
 
