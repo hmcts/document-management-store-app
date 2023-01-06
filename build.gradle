@@ -162,7 +162,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.10.2'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.11.0'
 
     implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5', {
         exclude group: 'com.github.hmcts', module: 'java-logging-spring'
