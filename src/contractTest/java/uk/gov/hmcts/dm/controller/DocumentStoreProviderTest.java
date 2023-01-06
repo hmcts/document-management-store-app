@@ -40,7 +40,6 @@ import static org.mockito.Mockito.when;
     port = "${PACT_BROKER_PORT:80}",
     consumerVersionSelectors = {@VersionSelector(tag = "master")})
 @WebMvcTest({StoredDocumentController.class, StoredDocumentDeleteController.class})
-@IgnoreNoPactsToVerify
 @AutoConfigureMockMvc(addFilters = false)
 @ExtendWith(SpringExtension.class)
 @Import(StoreDocumentControllerTestConfiguration.class)
