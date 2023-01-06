@@ -8,6 +8,12 @@
         <cve>CVE-2021-37533</cve>
         <cve>CVE-2022-41915</cve>
     </suppress>
+    <suppress until="2023-03-14">
+        <notes>
+            False positive - https://github.com/jeremylong/DependencyCheck/issues/5213
+        </notes>
+        <cve>CVE-2021-4277</cve>
+    </suppress>
     <!--netty vulnerabilities, 4.1.86 cause other vulnerabilities -->
     <suppress until="2023-03-04">
         <notes><![CDATA[file name: netty-buffer-4.1.84.Final.jar]]></notes>
