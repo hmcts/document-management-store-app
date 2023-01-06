@@ -389,7 +389,9 @@ task runProviderPactVerification(type: Test) {
     useJUnitPlatform()
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
-    systemProperty 'pact.verifier.publishResults', System.getProperty('pact.verifier.publishResults')
+    if (hasProperty('pact.verifier.publishResults')) {
+        systemProperty 'pact.verifier.publishResults', project.pact.verifier.publishResults
+    }
 }
 
 runProviderPactVerification.finalizedBy pactVerify
