@@ -7,8 +7,8 @@
         <cve>CVE-2016-1000027</cve>
         <cve>CVE-2021-37533</cve>
         <cve>CVE-2022-41915</cve>
-    </suppress until="2023-03-14">
-    <suppress>
+    </suppress>
+    <suppress until="2023-03-14">
         <notes>
             False positive - https://github.com/jeremylong/DependencyCheck/issues/5213
         </notes>
