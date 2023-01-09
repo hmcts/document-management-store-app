@@ -41,7 +41,9 @@ def vaultOverrides = [
 ]
 
 withPipeline(type , product, component) {
-    env.PACT_BROKER_URL = 'https://pact-broker.platform.hmcts.net'
+    env.PACT_BROKER_URL = 'pact-broker.platform.hmcts.net'
+    env.PACT_BROKER_SCHEME = 'https'
+    env.port = ''
     env.ENABLE_SECURE_URL = true
 
     enableDbMigration('dm')
