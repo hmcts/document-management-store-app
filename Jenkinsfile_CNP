@@ -184,6 +184,17 @@ withPipeline(type , product, component) {
             ]
         }
 
+        after('pact-provider-verification') {
+            publishHTML target: [
+                allowMissing         : true,
+                alwaysLinkToLastBuild: true,
+                keepAll              : true,
+                reportDir            : "build/reports/tests/runProviderPactVerification",
+                reportFiles          : "index.html",
+                reportName           : "DM-Store Contract vertification Test Report"
+            ]
+        }
+
         after('pactconsumerVerification:aat') {
             publishHTML target: [
                     allowMissing         : true,
