@@ -9,7 +9,7 @@ properties([
     ],
 ])
 
-@Library("Infrastructure@testpact")
+@Library("Infrastructure@fixpactbrokerparams")
 
 def type = "java"
 def product = "dm"
@@ -41,9 +41,8 @@ def vaultOverrides = [
 ]
 
 withPipeline(type , product, component) {
-    env.PACT_BROKER_URL = 'pact-broker.platform.hmcts.net'
-    env.PACT_BROKER_SCHEME = 'https'
-    env.PACT_BROKER_PORT = ''
+
+    env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
     env.ENABLE_SECURE_URL = true
 
     enableDbMigration('dm')
