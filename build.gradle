@@ -390,7 +390,7 @@ task runProviderPactVerification(type: Test) {
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
     systemProperty 'pact.verifier.publishResults', System.getProperty('pact.verifier.publishResults')
-    systemProperty 'PACT_PROVIDER_VERSION', pactVersion.toString();
+    systemProperty 'pact.provider.version', pactVersion.toString();
 }
 
 runProviderPactVerification.finalizedBy pactVerify
