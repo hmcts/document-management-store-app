@@ -124,7 +124,7 @@ dependencyManagement {
         }
 
         //CVE-2022-45143
-        dependencySet(group: 'org.apache.tomcat.embed', version: '9.0.69') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.5') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
         }
