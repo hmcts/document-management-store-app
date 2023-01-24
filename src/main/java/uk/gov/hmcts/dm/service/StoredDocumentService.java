@@ -92,6 +92,11 @@ public class StoredDocumentService {
 
     public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand) {
         String userId = securityUtilService.getUserId();
+        log.info(
+            "Save items for userID:{}, service name:{}",
+            userId,
+            securityUtilService.getCurrentlyAuthenticatedServiceName()
+        );
         return uploadDocumentsCommand.getFiles().stream().map(file -> {
             StoredDocument document = new StoredDocument();
             document.setCreatedBy(userId);
