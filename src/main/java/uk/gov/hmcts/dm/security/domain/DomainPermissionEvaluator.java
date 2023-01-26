@@ -83,6 +83,15 @@ public class DomainPermissionEvaluator {
                 && securityUtilService.getCurrentlyAuthenticatedServiceName().equalsIgnoreCase(CCD_CASE_DISPOSER)) {
             result = true;
         }
+        log.info(
+            "AuthenticatedUserId {}, CreatorAware CreatedBy {}, Permissions {}, "
+                + "CurrentlyAuthenticatedServiceName {}, Result {}",
+            authenticatedUserId,
+            creatorAware.getCreatedBy(),
+            permission,
+            securityUtilService.getCurrentlyAuthenticatedServiceName(),
+            result
+        );
 
         return result;
     }
