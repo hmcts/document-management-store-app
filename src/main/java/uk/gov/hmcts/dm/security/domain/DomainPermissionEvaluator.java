@@ -87,7 +87,7 @@ public class DomainPermissionEvaluator {
             "AuthenticatedUserId {}, CreatorAware CreatedBy {}, Permissions {}, "
                 + "CurrentlyAuthenticatedServiceName {}, Result {}",
             authenticatedUserId,
-            creatorAware == null ? "creatorAware null" : creatorAware.getCreatedBy(),
+            creatorAware.getCreatedBy(),
             permission,
             securityUtilService.getCurrentlyAuthenticatedServiceName(),
             result
