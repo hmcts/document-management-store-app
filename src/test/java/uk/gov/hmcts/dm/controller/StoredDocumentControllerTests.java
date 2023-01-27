@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
@@ -51,14 +50,10 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                 .collect(Collectors.toList())
         ).build();
 
-    public StoredDocumentControllerTests() throws Exception {
-    }
-
     @Test
     public void testGetDocument() throws Exception {
         when(this.auditedStoredDocumentOperationsService.readStoredDocument(id))
             .thenReturn(storedDocument);
-
         restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
@@ -71,12 +66,23 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
             .thenReturn(Optional.of(documentContentVersion));
 
-        ResultActions result = restActions
+        restActions
             .withAuthorizedUser("userId")
             .withAuthorizedService("divorce")
-            .get("/documents/" + id + "/binary");
+            .get("/documents/" + id + "/binary")
+            .andExpect(status().isOk())
+            .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
+            .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString()))
+            .andExpect(header().string("OriginalFileName", documentContentVersion.getOriginalDocumentName()))
+            .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION,
+                format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName())));
+    }
 
-        String headerValue = header().toString();
+    @Test
+    public void testGetDocumentBinaryWithChunkingFromBlobStore() throws Exception {
+        when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
+            .thenReturn(Optional.of(documentContentVersion));
+        when(this.toggleConfiguration.isChunking()).thenReturn(true);
 
         restActions
             .withAuthorizedUser("userId")
@@ -86,6 +92,8 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
             .andExpect(header().string(HttpHeaders.CONTENT_LENGTH, documentContentVersion.getSize().toString()))
             .andExpect(header().string("OriginalFileName", documentContentVersion.getOriginalDocumentName()))
+            .andExpect(header().string("Accept-Ranges", "bytes"))
+            .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.ACCEPT_RANGES))
             .andExpect(header().string(HttpHeaders.CONTENT_DISPOSITION,
                 format("fileName=\"%s\"", documentContentVersion.getOriginalDocumentName())));
     }
@@ -149,13 +157,15 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetBinary() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
-                                                                                   new MockMultipartFile("files",
-                                                                                                         "filename.txt",
-                                                                                                         "text/plain",
-                                                                                                         "hello".getBytes(
-                                                                                                             StandardCharsets.UTF_8)),
-                                                                                   "user");
+        DocumentContentVersion documentContentVersion =
+            new DocumentContentVersion(
+                new StoredDocument(),
+                new MockMultipartFile("files",
+                "filename.txt",
+                "text/plain",
+                "hello".getBytes(StandardCharsets.UTF_8)),
+            "user"
+            );
 
         documentContentVersion.setCreatedBy("userId");
 

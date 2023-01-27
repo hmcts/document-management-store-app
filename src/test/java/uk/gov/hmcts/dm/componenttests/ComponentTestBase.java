@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
 import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.*;
@@ -56,6 +57,9 @@ public abstract class ComponentTestBase {
 
     @Autowired
     protected AuthCheckerServiceOnlyFilter filter;
+
+    @MockBean
+    protected ToggleConfiguration toggleConfiguration;
 
     @MockBean
     protected FolderService folderService;

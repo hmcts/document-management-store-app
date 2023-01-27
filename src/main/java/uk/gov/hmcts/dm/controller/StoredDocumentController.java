@@ -217,13 +217,13 @@ public class StoredDocumentController {
                 logger.debug("documentId : {} has Request Header {} = {}", documentId.toString(), key, value));
         }
         if (toggleConfiguration.isChunking()) {
-            logger.debug("DocumentId : {} has Response: Content-Length, {}", documentId,
+            logger.info("DocumentId : {} has Response: Content-Length, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_LENGTH));
-            logger.debug("DocumentId : {} has Response: Content-Type, {}", documentId,
+            logger.info("DocumentId : {} has Response: Content-Type, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_TYPE));
-            logger.debug("DocumentId : {} has Response: Content-Range, {}", documentId,
+            logger.info("DocumentId : {} has Response: Content-Range, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_RANGE));
-            logger.debug("DocumentId : {} has Response: Accept-Ranges, {}", documentId,
+            logger.info("DocumentId : {} has Response: Accept-Ranges, {}", documentId,
                 response.getHeader(HttpHeaders.ACCEPT_RANGES));
         }
         return ResponseEntity.ok().build();
