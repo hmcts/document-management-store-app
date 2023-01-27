@@ -177,7 +177,7 @@ public class StoredDocumentController {
             documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(
                     documentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
+        logger.info("getBinary documentId {}", documentId);
         try {
             response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
             // Set Default content size for whole document
@@ -194,13 +194,19 @@ public class StoredDocumentController {
                 documentContentVersion,
                 httpServletRequest,
                 response);
+            logger.info("Completed getBinary documentId {}", documentId);
         } catch (UncheckedIOException | IOException e) {
+            logger.info("Exception getBinary documentId {}", documentId);
             if (toggleConfiguration.isChunking()) {
                 response.reset();
             }
             if (e instanceof UncheckedIOException uncheckedIoException
                 && uncheckedIoException.getCause() instanceof ClientAbortException) {
-                logger.warn("IOException streaming error, broken pipe, peer closed connection {}", e.getMessage());
+                logger.warn(
+                    "documentId {},IOException streaming error, broken pipe, peer closed connection {}",
+                    documentId,
+                    e.getMessage()
+                );
             } else {
                 logger.warn("IOException streaming error, for  {} ", documentId, e);
             }
@@ -211,13 +217,13 @@ public class StoredDocumentController {
                 logger.debug("documentId : {} has Request Header {} = {}", documentId.toString(), key, value));
         }
         if (toggleConfiguration.isChunking()) {
-            logger.debug("DocumentId : {} has Response: Content-Length, {}", documentId,
+            logger.info("DocumentId : {} has Response: Content-Length, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_LENGTH));
-            logger.debug("DocumentId : {} has Response: Content-Type, {}", documentId,
+            logger.info("DocumentId : {} has Response: Content-Type, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_TYPE));
-            logger.debug("DocumentId : {} has Response: Content-Range, {}", documentId,
+            logger.info("DocumentId : {} has Response: Content-Range, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_RANGE));
-            logger.debug("DocumentId : {} has Response: Accept-Ranges, {}", documentId,
+            logger.info("DocumentId : {} has Response: Accept-Ranges, {}", documentId,
                 response.getHeader(HttpHeaders.ACCEPT_RANGES));
         }
         return ResponseEntity.ok().build();
