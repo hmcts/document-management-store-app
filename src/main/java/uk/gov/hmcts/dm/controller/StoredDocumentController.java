@@ -177,7 +177,10 @@ public class StoredDocumentController {
             documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(
                     documentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        logger.info("getBinary documentId {}", documentId);
+
+        String azureRef = headers.getOrDefault("x-azure-ref", "null");
+        logger.info("getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
+
         try {
             response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
             // Set Default content size for whole document
@@ -194,9 +197,9 @@ public class StoredDocumentController {
                 documentContentVersion,
                 httpServletRequest,
                 response);
-            logger.info("Completed getBinary documentId {}", documentId);
+            logger.info("Completed getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
         } catch (UncheckedIOException | IOException e) {
-            logger.info("Exception getBinary documentId {}", documentId);
+            logger.info("Exception getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
             if (toggleConfiguration.isChunking()) {
                 response.reset();
             }
