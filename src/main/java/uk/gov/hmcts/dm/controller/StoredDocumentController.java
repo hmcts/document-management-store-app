@@ -178,8 +178,8 @@ public class StoredDocumentController {
                     documentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        String  xAzureRef = headers.getOrDefault("x-azure-ref", "null");
-        logger.info("getBinary documentId {}, x-azure-ref: {}", documentId, xAzureRef);
+        String azureRef = headers.getOrDefault("x-azure-ref", "null");
+        logger.info("getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
 
         try {
             response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
@@ -197,9 +197,9 @@ public class StoredDocumentController {
                 documentContentVersion,
                 httpServletRequest,
                 response);
-            logger.info("Completed getBinary documentId {}, x-azure-ref: {}", documentId, xAzureRef);
+            logger.info("Completed getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
         } catch (UncheckedIOException | IOException e) {
-            logger.info("Exception getBinary documentId {}, x-azure-ref: {}", documentId, xAzureRef);
+            logger.info("Exception getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
             if (toggleConfiguration.isChunking()) {
                 response.reset();
             }
