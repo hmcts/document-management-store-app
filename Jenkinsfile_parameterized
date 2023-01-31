@@ -58,7 +58,7 @@ withParameterizedPipeline(type, product, component, params.ENVIRONMENT, 'sandbox
     overrideVaultEnvironments(vaultOverrides)
     loadVaultSecrets(secrets)
 
-    after('checkout') {
+    afterSuccess('checkout') {
         echo '${product}-${component} out'
         sh '''
 mkdir -p application/src/main/resources/META-INF
@@ -74,7 +74,7 @@ EOF
 '''
     }
 
-    after('test'){
+    afterAlways('test'){
         junit 'application/build/test-results/test/**/*.xml'
         publishHTML([
             allowMissing         : true,
@@ -143,7 +143,7 @@ EOF
         }
     }
 
-    after('smoketest:spreview') {
+    afterAlways('smoketest:spreview') {
         publishHTML([
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -154,7 +154,7 @@ EOF
         ])
     }
 
-    after('functionalTest:spreview') {
+    afterAlways('functionalTest:spreview') {
         publishHTML([
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -165,7 +165,7 @@ EOF
         ])
     }
 
-    after('smoketest:saat') {
+    afterAlways('smoketest:saat') {
         publishHTML([
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -176,7 +176,7 @@ EOF
         ])
     }
 
-    after('functionalTest:saat') {
+    afterAlways('functionalTest:saat') {
         publishHTML([
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -187,7 +187,7 @@ EOF
         ])
     }
 
-    after('smoketest:sprod'){
+    afterAlways('smoketest:sprod'){
         publishHTML([
             allowMissing         : true,
             alwaysLinkToLastBuild: true,
@@ -198,11 +198,11 @@ EOF
         ])
     }
 
-    after('functionalTest:preview') {
+    afterAlways('functionalTest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 
-    after('functionalTest:aat') {
+    afterAlways('functionalTest:aat') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
     }
 }

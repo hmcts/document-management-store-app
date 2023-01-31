@@ -68,7 +68,7 @@ withNightlyPipeline(type, product, component) {
     enableSecurityScan()
 
     enableSlackNotifications('#em-dev-chat')
-    after('fortify-scan') {
+    afterAlways('fortify-scan') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
     }
 }
