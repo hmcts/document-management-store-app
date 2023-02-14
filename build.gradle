@@ -16,7 +16,7 @@ plugins {
     id 'checkstyle'
     id 'io.freefair.lombok' version '6.6.2'
     id 'info.solidsoft.pitest' version '1.9.0'
-    id 'org.owasp.dependencycheck' version '8.0.2'
+    id 'org.owasp.dependencycheck' version '8.1.0'
     id 'au.com.dius.pact' version '4.2.14'
     id 'org.flywaydb.flyway' version '9.14.1'
 }
