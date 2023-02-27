@@ -14,7 +14,7 @@ plugins {
     id 'org.sonarqube' version '4.0.0.2929'
     id 'jacoco'
     id 'checkstyle'
-    id 'io.freefair.lombok' version '6.6.2'
+    id 'io.freefair.lombok' version '6.6.3'
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'org.owasp.dependencycheck' version '8.1.0'
     id 'au.com.dius.pact' version '4.2.14'
@@ -134,7 +134,7 @@ dependencyManagement {
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.20.3'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.21.0'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.27'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.7.0'
 
