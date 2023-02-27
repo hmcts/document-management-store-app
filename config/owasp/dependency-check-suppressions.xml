@@ -12,6 +12,20 @@
         </notes>
         <cve>CVE-2021-4277</cve>
     </suppress>
+    <suppress until="2023-05-05">
+        <notes>![CDATA[
+            False positive - https://github.com/jeremylong/DependencyCheck/issues/5502
+            ]]</notes>
+        <packageUrl regex="true">^(?!pkg:maven/org\.json/json@).+$</packageUrl>
+        <cve>CVE-2022-45688</cve>
+    </suppress>
+    <suppress until="2023-04-04">
+        <notes>![CDATA[
+            Latest available version hasn't resolved this
+            ]]</notes>
+        <packageUrl regex="true">^pkg:maven/org\.json/json@.*$</packageUrl>
+        <cve>CVE-2022-45688</cve>
+    </suppress>
     <!--netty vulnerabilities, 4.1.86 cause other vulnerabilities -->
     <suppress until="2023-03-04">
         <notes><![CDATA[file name: netty-buffer-4.1.84.Final.jar]]></notes>
