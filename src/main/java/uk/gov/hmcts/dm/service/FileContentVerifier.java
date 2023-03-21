@@ -38,6 +38,7 @@ public class FileContentVerifier {
 
     public boolean verifyContentType(MultipartFile multipartFile) {
         if (multipartFile == null) {
+            log.info("Warning. MultipartFile is null. VerifyContentType failed");
             return false;
         }
 
