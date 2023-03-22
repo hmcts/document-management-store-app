@@ -14,11 +14,11 @@ plugins {
     id 'org.sonarqube' version '4.0.0.2929'
     id 'jacoco'
     id 'checkstyle'
-    id 'io.freefair.lombok' version '6.6.3'
+    id 'io.freefair.lombok' version '8.0.1'
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'org.owasp.dependencycheck' version '8.1.2'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '9.16.0'
+    id 'org.flywaydb.flyway' version '9.16.1'
 }
 
 apply plugin: 'java'
@@ -169,7 +169,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.16.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.16.1'
 
     implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5', {
         exclude group: 'com.github.hmcts', module: 'java-logging-spring'
