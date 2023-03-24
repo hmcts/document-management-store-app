@@ -8,14 +8,14 @@ java:
   readinessDelay: 60
   secrets:
     BLOB_ACCOUNT_NAME:
-      secretRef: storage-secret-{{ .Release.Name }}
-      key: storageAccountName
+      secretRef: storage-secret-{{ .Release.Name }}-blobstorage
+      key: storage_account_name
     BLOB_ACCESS_KEY:
-      secretRef: storage-secret-{{ .Release.Name }}
+      secretRef: storage-secret-{{ .Release.Name }}-blobstorage
       key: accessKey
     BLOB_SERVICE_ENDPOINT:
-      secretRef: storage-secret-{{ .Release.Name }}
-      key: primaryBlobServiceEndPoint
+      secretRef: storage-secret-{{ .Release.Name }}-blobstorage
+      key: blobEndpoint
   keyVaults:
     dm: # Need to override only to get rid of the BlobStorage URL/details mapping.
       resourceGroup: dm-shared

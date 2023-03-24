@@ -70,7 +70,7 @@ java:
     DOCUMENT_DELETE_TASK_CRON: 0 5 0-6 * * *
 
 blobstorage:
-  resourceGroup: dm-store-aks
+  resourceGroup: dm-store-aso-preview-rg
   teamName: "CCD"
   location: uksouth
   setup:
