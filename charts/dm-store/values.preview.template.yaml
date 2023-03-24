@@ -8,7 +8,7 @@ java:
   readinessDelay: 60
   secrets:
     BLOB_ACCOUNT_NAME:
-      secretRef: storage-secret-{{ .Release.Name }}-blobstorage
+      secretRef: storage-account-{{ .Release.Name }}-blobstorage
       key: storage_account_name
     BLOB_ACCESS_KEY:
       secretRef: storage-secret-{{ .Release.Name }}-blobstorage
