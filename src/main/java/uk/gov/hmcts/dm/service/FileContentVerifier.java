@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Locale;
 
+import static uk.gov.hmcts.dm.utils.StringUtils.sanitiseFileName;
+
 @Service
 @SuppressWarnings({"squid:S2629"})
 public class FileContentVerifier {
@@ -38,12 +40,13 @@ public class FileContentVerifier {
 
     public boolean verifyContentType(MultipartFile multipartFile) {
         if (multipartFile == null) {
+            log.info("Warning. MultipartFile is null. VerifyContentType failed");
             return false;
         }
 
         String fileNameExtension = getOriginalFileNameExtension(multipartFile);
         if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
-            log.info("Warning. The extension of uploaded file is not white-listed");
+            log.info("Warning. The extension of uploaded file is not white-listed {}", sanitiseFileName(fileNameExtension));
             return false;
         }
 
