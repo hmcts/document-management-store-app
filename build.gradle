@@ -18,7 +18,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'org.owasp.dependencycheck' version '8.2.1'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '9.16.1'
+    id 'org.flywaydb.flyway' version '9.16.3'
 }
 
 apply plugin: 'java'
@@ -168,7 +168,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.16.1'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.16.3'
 
     implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5', {
         exclude group: 'com.github.hmcts', module: 'java-logging-spring'
