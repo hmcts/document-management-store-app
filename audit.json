@@ -94,6 +94,7 @@
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/robots.txt_GET":"ignore",
     "10021_X-Content-Type-Options Header Missing_http://dm-store-aat.service.core-compute-aat.internal_GET":"ignore",
     "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal_GET":"ignore",
-    "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/robots.txt_GET":"ignore"
+    "90033_Loosely Scoped Cookie_http://dm-store-aat.service.core-compute-aat.internal/robots.txt_GET":"ignore",
+    "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal_GET":"ignore"
 }
 
