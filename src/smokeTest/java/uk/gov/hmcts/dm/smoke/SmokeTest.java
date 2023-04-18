@@ -27,14 +27,20 @@ public class SmokeTest {
     public void testHealthEndpoint() {
         SerenityRest.useRelaxedHTTPSValidation();
 
-        String response = SerenityRest
-            .given()
-            .baseUri(testUrl)
-            .get("/")
-            .then()
-            .statusCode(200).extract().body().asString();
+        Map responseMap =
+            SerenityRest
+                .given()
+                .baseUri(testUrl)
+                .get("/")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Map.class);
 
-        Assert.assertEquals(Map.of("message",MESSAGE).toString(), response);
+        Assert.assertEquals(1, responseMap.size());
+        Assert.assertEquals(MESSAGE, responseMap.get("message"));
+
     }
 
     @Test
