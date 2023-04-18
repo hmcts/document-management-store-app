@@ -34,7 +34,7 @@ public class SmokeTest {
             .then()
             .statusCode(200).extract().body().asString();
 
-        Assert.assertEquals(Map.of("message", MESSAGE).toString(), response);
+        Assert.assertEquals(Map.of("message",MESSAGE).toString(), response);
     }
 
     @Test
