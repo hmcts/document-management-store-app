@@ -16,7 +16,7 @@ import uk.gov.hmcts.dm.smoke.config.SmokeTestContextConfiguration;
 @WithTags(@WithTag("testType:Smoke"))
 public class SmokeTest {
 
-    private static final String MESSAGE = "Welcome to DM Store API!";
+    private static final String MESSAGE = "{\"message\":\"Welcome to DM Store API!\"}";
 
     @Value("${base-urls.dm-store}")
     String testUrl;
