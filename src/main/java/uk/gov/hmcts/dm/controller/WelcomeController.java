@@ -33,7 +33,7 @@ public class WelcomeController {
         produces = APPLICATION_JSON_VALUE
     )
     @ResponseBody
-    public ResponseEntity<Map<String,String>> welcome() {
+    public ResponseEntity<Map<String, String>> welcome() {
 
         log.info("Welcome message : '{}'", MESSAGE);
 
