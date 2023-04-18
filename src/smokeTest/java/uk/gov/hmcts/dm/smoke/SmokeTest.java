@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import uk.gov.hmcts.dm.smoke.config.SmokeTestContextConfiguration;
 
+import java.util.Map;
+
 @SpringBootTest(classes = {SmokeTestContextConfiguration.class})
 @RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags(@WithTag("testType:Smoke"))
 public class SmokeTest {
 
-    private static final String MESSAGE = "{\"message\":\"Welcome to DM Store API!\"}";
+    private static final String MESSAGE = "Welcome to DM Store API!";
 
     @Value("${base-urls.dm-store}")
     String testUrl;
@@ -32,7 +34,7 @@ public class SmokeTest {
             .then()
             .statusCode(200).extract().body().asString();
 
-        Assert.assertEquals(MESSAGE, response);
+        Assert.assertEquals(Map.of("message",MESSAGE).toString(), response);
     }
 
     @Test
