@@ -101,7 +101,7 @@ app-insights:
   telemetry-component: on
 
 errors:
-  globalIncludeStackTrace: ${SHOW_STACK_TRACE:true}
+  globalIncludeStackTrace: ${SHOW_STACK_TRACE:false}
 
 info:
   app:
