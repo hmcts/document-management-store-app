@@ -21,7 +21,7 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
     private static final Logger log = LoggerFactory.getLogger(ApiErrorAttributes.class);
 
     @Value("${errors.globalIncludeStackTrace}")
-    private boolean globalIncludeStackTrace = true;
+    private boolean globalIncludeStackTrace;
 
     @Autowired
     private ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
