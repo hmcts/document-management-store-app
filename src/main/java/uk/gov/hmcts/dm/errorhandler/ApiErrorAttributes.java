@@ -53,9 +53,9 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
 
         if (!globalIncludeStackTrace) {
             errorAttributes.remove("exception");
-            errorAttributes.remove("trace");
         }
 
+        errorAttributes.remove("trace");
         errorAttributes.remove("message");
 
         return errorAttributes;
