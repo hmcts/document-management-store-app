@@ -5,7 +5,7 @@ java:
   cpuLimits: "2000m"
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
-  readinessDelay: 60
+  readinessDelay: 45
   secrets:
     BLOB_ACCOUNT_NAME:
       secretRef: storage-secret-{{ .Release.Name }}
@@ -48,6 +48,7 @@ blobstorage:
 xui-webapp:
   enabled: true
   nodejs:
+    readinessDelay: 60
     imagePullPolicy: Always
     releaseNameOverride: ${SERVICE_NAME}-xui-webapp
     image: hmctspublic.azurecr.io/xui/webapp:latest
