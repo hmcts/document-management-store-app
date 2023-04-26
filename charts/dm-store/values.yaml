@@ -77,3 +77,9 @@ blobstorage:
     containers:
       - dm-docstore
   enabled: false
+
+xui-webapp:
+  enabled: false
+
+idam-pr:
+  enabled: false
