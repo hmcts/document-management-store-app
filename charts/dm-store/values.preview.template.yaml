@@ -55,7 +55,6 @@ xui-webapp:
     environment:
       HEALTH_DOCUMENTS_API: https://${SERVICE_FQDN}/health
       SERVICES_DOCUMENTS_API: https://${SERVICE_FQDN}
-      SERVICES_DOCUMENTS_API_V2: https://ccd-case-document-am-api-${SERVICE_FQDN}
       FEATURE_REDIS_ENABLED: false
       FEATURE_APP_INSIGHTS_ENABLED: false
       FEATURE_SECURE_COOKIE_ENABLED: false
@@ -70,13 +69,4 @@ idam-pr:
     XUI:
       - https://xui-${SERVICE_FQDN}/oauth2/callback
 
-ccd-case-document-am-api:
-  enabled: true
-  java:
-    imagePullPolicy: Always
-    releaseNameOverride: ${SERVICE_NAME}-ccd-case-document-am-api
-    image: hmctspublic.azurecr.io/ccd/case-document-am-api:latest
-    ingressHost: ccd-case-document-am-api-${SERVICE_FQDN}
-    environment:
-      DM_STORE_BASE_URL: https://${SERVICE_FQDN}
 

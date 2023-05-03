@@ -84,5 +84,3 @@ xui-webapp:
 idam-pr:
   enabled: false
 
-ccd-case-document-am-api:
-  enabled: false
