@@ -15,7 +15,7 @@ dependencies:
     repository: https://hmctspublic.azurecr.io/helm/v1/repo/
     condition: blobstorage.enabled
   - name: xui-webapp
-    version: ~1.0.0
+    version: ~1.0.6
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: xui-webapp.enabled
   - name: idam-pr
@@ -23,6 +23,6 @@ dependencies:
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: idam-pr.enabled
   - name: ccd-case-document-am-api
-    version: ~8.0.29
+    version: ~1.7.11
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: ccd-case-document-am-api.enabled
