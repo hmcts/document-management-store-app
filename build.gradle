@@ -18,7 +18,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'org.owasp.dependencycheck' version '8.2.1'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '9.16.3'
+    id 'org.flywaydb.flyway' version '9.17.0'
 }
 
 apply plugin: 'java'
