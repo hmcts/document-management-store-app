@@ -80,7 +80,7 @@ auth:
 
 idam:
   s2s-auth:
-    url: ${S2S_BASE_URI:http://localhost:4502}
+    url: ${IDAM_S2S_BASE_URI:http://localhost:4502}
     totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
     microservice: ${S2S_SERVICE_NAME:em_gw}
   s2s-authorised:
