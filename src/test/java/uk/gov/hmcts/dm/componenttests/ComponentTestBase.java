@@ -14,18 +14,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
-import uk.gov.hmcts.dm.componenttests.backdoors.ServiceResolverBackdoor;
-import uk.gov.hmcts.dm.componenttests.sugar.CustomResultMatcher;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.*;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.AuthCheckerServiceOnlyFilter;
+import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -43,20 +40,19 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @DirtiesContext
 public abstract class ComponentTestBase {
 
-    @Autowired
-    protected ServiceResolverBackdoor serviceRequestAuthorizer;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
 
     @Autowired
     protected WebApplicationContext webApplicationContext;
 
     @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
     @Autowired
-    protected AuthCheckerServiceOnlyFilter filter;
+    protected ServiceAuthFilter filter;
 
     @MockBean
     protected ToggleConfiguration toggleConfiguration;
@@ -101,19 +97,12 @@ public abstract class ComponentTestBase {
 
     @Before
     public void setUp() {
-        MockMvc mvc = webAppContextSetup(webApplicationContext).apply(springSecurity()).build();
-        this.restActions = new RestActions(mvc, serviceRequestAuthorizer, objectMapper);
-        filter.setCheckForPrincipalChanges(true);
-        filter.setInvalidateSessionOnPrincipalChange(true);
+        this.restActions = new RestActions(webApplicationContext, objectMapper);
     }
 
     @After
     public void tearDown() {
         SecurityContextHolder.clearContext();
-    }
-
-    CustomResultMatcher body() {
-        return new CustomResultMatcher(objectMapper);
     }
 
     @SneakyThrows

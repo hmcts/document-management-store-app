@@ -60,7 +60,7 @@ public class AddContentVersionIT extends BaseIT {
         givenUnauthenticatedRequest()
             .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-            .statusCode(403)
+            .statusCode(401)
             .when()
             .post("/documents/" + UUID.randomUUID());
 
@@ -74,7 +74,7 @@ public class AddContentVersionIT extends BaseIT {
         givenUnauthenticatedRequest()
             .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
             .expect()
-            .statusCode(403)
+            .statusCode(401)
             .when()
             .post(url);
     }

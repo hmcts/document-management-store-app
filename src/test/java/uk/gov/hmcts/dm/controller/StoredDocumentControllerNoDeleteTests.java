@@ -51,7 +51,6 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
     public void testDelete() throws Exception {
         restActions
                 .withAuthorizedUser("userId")
-                .withAuthorizedService("divorce")
                 .delete("/documents/" + id)
                 .andExpect(status().is(HttpStatus.NO_CONTENT.value()));
     }
@@ -60,7 +59,6 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
     public void testHardDelete() throws Exception {
         restActions
                 .withAuthorizedUser("userId")
-                .withAuthorizedService("divorce")
                 .delete("/documents/" + id + "?permanent=true")
                 .andExpect(status().is(HttpStatus.NO_CONTENT.value()));
     }

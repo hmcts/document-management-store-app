@@ -58,7 +58,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .postDocumentVersion("/documents/" + id + "/versions", TestUtil.TEST_FILE)
             .andExpect(status().isCreated());
     }
@@ -74,7 +73,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE)
             .andExpect(status().isCreated());
     }
@@ -86,7 +84,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE)
             .andExpect(status().isNotFound());
     }
@@ -102,7 +99,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .postDocumentVersion("/documents/" + id, TestUtil.TEST_FILE_EXE)
             .andExpect(status().isUnprocessableEntity());
     }
@@ -114,7 +110,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id)
             .andExpect(status().isOk());
     }
@@ -127,7 +122,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/binary")
             .andExpect(status().isOk())
             .andExpect(header().string(HttpHeaders.CONTENT_TYPE, "text/plain"))
@@ -147,7 +141,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/binary")
             .andExpect(status().isNotFound());
     }
@@ -160,7 +153,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id)
             .andExpect(status().isNotFound());
     }
@@ -172,7 +164,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/binary")
             .andExpect(status().isNotFound());
     }
@@ -189,7 +180,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/binary")
             .andExpect(status().isNotFound());
     }

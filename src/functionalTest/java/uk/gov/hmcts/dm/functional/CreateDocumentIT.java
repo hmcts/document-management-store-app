@@ -110,7 +110,7 @@ public class CreateDocumentIT extends BaseIT {
             .multiPart("roles", "caseworker")
             .multiPart("roles", "citizen")
             .expect()
-            .statusCode(403)
+            .statusCode(401)
             .when()
             .post("/documents");
     }

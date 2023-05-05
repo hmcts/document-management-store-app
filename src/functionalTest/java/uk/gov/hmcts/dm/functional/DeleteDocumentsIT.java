@@ -148,7 +148,7 @@ public class DeleteDocumentsIT extends BaseIT {
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson(map))
             .expect().log().all()
-            .statusCode(403)
+            .statusCode(401)
             .when()
             .post("/documents/delete");
     }

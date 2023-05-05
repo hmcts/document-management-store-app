@@ -17,7 +17,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -25,8 +24,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.SearchService;
-import uk.gov.hmcts.reform.auth.checker.core.RequestAuthorizer;
-import uk.gov.hmcts.reform.auth.checker.core.service.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -48,13 +45,6 @@ public class DocumentStoreProviderTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-
-    @MockBean
-    private RequestAuthorizer<Service> serviceRequestAuthorizer;
-
-    @MockBean
-    private AuthenticationManager authenticationManager;
 
     @MockBean
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;

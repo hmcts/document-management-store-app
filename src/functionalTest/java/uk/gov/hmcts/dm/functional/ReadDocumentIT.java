@@ -46,7 +46,7 @@ public class ReadDocumentIT extends BaseIT {
 
         givenUnauthenticatedRequest()
             .expect()
-            .statusCode(403)
+            .statusCode(401)
             .when()
             .get(documentUrl);
     }
@@ -56,7 +56,7 @@ public class ReadDocumentIT extends BaseIT {
 
         givenUnauthenticatedRequest()
             .expect()
-            .statusCode(403)
+            .statusCode(401)
             .when()
             .get("/documents/XXX");
     }

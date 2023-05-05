@@ -43,6 +43,7 @@ public class VersionTest extends End2EndTestBase {
     @Override
     @Before
     public void setUp() throws IOException {
+        super.setUp();
         doAnswer(invocation -> {
             try (final InputStream inputStream = FILE_V1.getInputStream();
                  final OutputStream out = invocation.getArgument(1)
