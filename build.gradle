@@ -217,6 +217,15 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
 }
 
+dependencyManagement {
+    dependencies {
+        //CVE-2023-24998
+        dependencySet(group: 'commons-fileupload', version: '1.5') {
+            entry 'commons-fileupload'
+        }
+    }
+}
+
 dependencyCheck {
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
 }
