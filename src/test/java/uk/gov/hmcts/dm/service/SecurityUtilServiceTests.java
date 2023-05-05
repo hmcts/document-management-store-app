@@ -35,6 +35,20 @@ public class SecurityUtilServiceTests {
     }
 
     @Test
+    public void testSuccessfulRetrievalOfStringFromSecurityContext() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn("x");
+
+        SecurityContextHolder.setContext(securityContext);
+
+        Assert.assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
+    }
+
+
+    @Test
     public void testFailureOfUsernameFromSecurityContextWhenItsNotThere() {
         Assert.assertNull(securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
