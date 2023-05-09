@@ -3,8 +3,6 @@ package uk.gov.hmcts.dm.endtoend;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.web.util.NestedServletException;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

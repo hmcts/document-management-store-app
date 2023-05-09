@@ -12,7 +12,6 @@ import uk.gov.hmcts.dm.repository.*;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteListValidator;
 import uk.gov.hmcts.dm.security.MultipartFileSizeValidator;
 import uk.gov.hmcts.dm.service.*;
-import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 import java.util.Arrays;
 
