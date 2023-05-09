@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
-import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -19,7 +18,7 @@ public class SpringSecurityConfiguration {
 
     private DmServiceAuthFilter dmServiceAuthFilter;
 
-    public SpringSecurityConfiguration(final ServiceAuthFilter serviceAuthFilter, DmServiceAuthFilter dmServiceAuthFilter) {
+    public SpringSecurityConfiguration(DmServiceAuthFilter dmServiceAuthFilter) {
         this.dmServiceAuthFilter = dmServiceAuthFilter;
     }
 

@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.authorisation.exceptions.ServiceException;
-import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
 
     public static final String AUTHORISATION = "ServiceAuthorization";
 
-    private static final Logger LOG = LoggerFactory.getLogger(ServiceAuthFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DmServiceAuthFilter.class);
 
     private final List<String> authorisedServices;
 
