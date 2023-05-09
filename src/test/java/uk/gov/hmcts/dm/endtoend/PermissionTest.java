@@ -33,7 +33,6 @@ public class PermissionTest extends End2EndTestBase {
                 .andExpect(status().is(204));
     }
 
-    //@Test(expected = NestedServletException.class)
     @Test
     public void should_not_be_able_to_delete_another_users_doc_if_citizen() throws Exception {
         final String url = uploadFileAndReturnSelfUrl(headersUser);
