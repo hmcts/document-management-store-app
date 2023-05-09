@@ -24,6 +24,7 @@ public class ErrorPageIT extends BaseIT {
         givenUnauthenticatedRequest()
             .expect()
             .statusCode(403)
+            .contentType(ContentType.JSON)
             .when()
             .get(documentUrl);
     }
@@ -102,6 +103,7 @@ public class ErrorPageIT extends BaseIT {
             .accept(ContentType.JSON)
             .expect()
             .statusCode(403)
+            .contentType(ContentType.JSON)
             .body(not(containsString("<!DOCTYPE html>")))
             .when()
             .get(documentUrl);
@@ -115,6 +117,7 @@ public class ErrorPageIT extends BaseIT {
         givenUnauthenticatedRequest()
             .expect()
             .statusCode(403)
+            .contentType(ContentType.JSON)
             .body(not(containsString("<!DOCTYPE html>")))
             .when()
             .get(documentUrl);
@@ -128,6 +131,7 @@ public class ErrorPageIT extends BaseIT {
         givenUnauthenticatedRequest()
             .expect()
             .statusCode(403)
+            .contentType(ContentType.JSON)
             .body(not(containsString("<!DOCTYPE html>")))
             .when()
             .get(documentUrl);
