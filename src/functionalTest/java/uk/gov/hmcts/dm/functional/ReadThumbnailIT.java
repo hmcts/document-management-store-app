@@ -114,6 +114,7 @@ public class ReadThumbnailIT extends BaseIT {
             .then()
             .assertThat()
             .statusCode(403)
+            .body("error", Matchers.equalTo("Access Denied"))
             .log().all();
     }
 
@@ -142,6 +143,7 @@ public class ReadThumbnailIT extends BaseIT {
             .then()
             .assertThat()
             .statusCode(403)
+            .body("error", Matchers.equalTo("Access Denied"))
             .log().all();
     }
 
