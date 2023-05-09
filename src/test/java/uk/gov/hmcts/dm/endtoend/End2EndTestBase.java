@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -40,12 +41,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = DmApp.class)
 @AutoConfigureMockMvc
+@WithMockUser
 @ActiveProfiles("local")
 @TestPropertySource(locations = "classpath:application-local.yaml")
 public abstract class End2EndTestBase {
@@ -70,21 +73,12 @@ public abstract class End2EndTestBase {
     @MockBean
     protected TestController testController;
 
-    @Mock
-    protected Authentication authentication;
-
-    @Mock
-    protected SecurityContext securityContext;
-
 
     @Before
     public void setUp() throws IOException {
-        MockitoAnnotations.openMocks(this);
-        doReturn(authentication).when(securityContext).getAuthentication();
-        UserDetails userDetails = new User("user", "", Collections.emptyList());
-        when(authentication.getPrincipal()).thenReturn(userDetails);
-        SecurityContextHolder.setContext(securityContext);
-        this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(springSecurity())
+            .build();
 
         doAnswer(invocation -> {
             HttpServletResponse r = invocation.getArgument(2);

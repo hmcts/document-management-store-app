@@ -25,18 +25,18 @@ public class DocumentContentVersionHalResourceTest {
         DocumentContentVersionHalResource halResource = new DocumentContentVersionHalResource(documentContentVersion);
 
         Optional<Link> document = halResource.getLink("document");
-        assertEquals(format("http://localhost/documents/%s", storedDocument.getId()), document.get().toUri().toString());
+        assertEquals(format("/documents/%s", storedDocument.getId()), document.get().toUri().toString());
 
         Optional<Link> self = halResource.getLink("self");
-        assertEquals(format("http://localhost/documents/%s/versions/%s", storedDocument.getId(),
+        assertEquals(format("/documents/%s/versions/%s", storedDocument.getId(),
             documentContentVersion.getId()), self.get().toUri().toString());
 
         Optional<Link> binary = halResource.getLink("binary");
-        assertEquals(format("http://localhost/documents/%s/versions/%s/binary", storedDocument.getId(),
+        assertEquals(format("/documents/%s/versions/%s/binary", storedDocument.getId(),
             documentContentVersion.getId()), binary.get().toUri().toString());
 
         Optional<Link> thumbnail = halResource.getLink("thumbnail");
-        assertEquals(format("http://localhost/documents/%s/versions/%s/thumbnail", storedDocument.getId(),
+        assertEquals(format("/documents/%s/versions/%s/thumbnail", storedDocument.getId(),
             documentContentVersion.getId()), thumbnail.get().toUri().toString());
     }
 }

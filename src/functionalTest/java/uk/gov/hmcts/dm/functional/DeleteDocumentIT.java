@@ -33,7 +33,7 @@ public class DeleteDocumentIT extends BaseIT {
     public void d1UnauthenticatedUserCannotDelete() {
         givenUnauthenticatedRequest()
             .expect()
-            .statusCode(401)
+            .statusCode(403)
             .when()
             .delete(citizenDocumentUrl);
     }

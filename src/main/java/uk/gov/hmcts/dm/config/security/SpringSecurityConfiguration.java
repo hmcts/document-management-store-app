@@ -17,13 +17,10 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfiguration {
 
+    private DmServiceAuthFilter dmServiceAuthFilter;
 
-    private ServiceAuthFilter serviceAuthFilter;
-
-
-
-    public SpringSecurityConfiguration(final ServiceAuthFilter serviceAuthFilter) {
-        this.serviceAuthFilter = serviceAuthFilter;
+    public SpringSecurityConfiguration(final ServiceAuthFilter serviceAuthFilter, DmServiceAuthFilter dmServiceAuthFilter) {
+        this.dmServiceAuthFilter = dmServiceAuthFilter;
     }
 
     @Bean
@@ -34,13 +31,13 @@ public class SpringSecurityConfiguration {
         http.securityMatchers()
             .requestMatchers("/documents", "/documents/**", "/folders/**")
             .and()
-            .addFilterBefore(serviceAuthFilter, AnonymousAuthenticationFilter.class)
+            .addFilterBefore(dmServiceAuthFilter, AnonymousAuthenticationFilter.class)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()
             .csrf().disable()
             .formLogin().disable()
             .logout().disable()
             .authorizeHttpRequests()
-            .anyRequest().permitAll();
+            .anyRequest().authenticated();
         return http.build();
     }
 

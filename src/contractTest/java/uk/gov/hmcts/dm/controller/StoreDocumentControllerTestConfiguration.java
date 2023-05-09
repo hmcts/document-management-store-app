@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
+import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
 import uk.gov.hmcts.dm.repository.*;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteListValidator;
@@ -20,7 +21,7 @@ import java.util.Arrays;
 public class StoreDocumentControllerTestConfiguration {
 
     @MockBean
-    ServiceAuthFilter serviceAuthFilter;
+    DmServiceAuthFilter serviceAuthFilter;
 
     @MockBean
     private FolderRepository folderRepository;

@@ -19,10 +19,10 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
+import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.*;
-import uk.gov.hmcts.reform.authorisation.filters.ServiceAuthFilter;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -50,7 +50,7 @@ public abstract class ComponentTestBase {
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
     @Autowired
-    protected ServiceAuthFilter filter;
+    protected DmServiceAuthFilter filter;
 
     @MockBean
     protected ToggleConfiguration toggleConfiguration;

@@ -72,7 +72,7 @@ public class SearchDocumentIT extends BaseIT {
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson(map))
             .expect().log().all()
-            .statusCode(401)
+            .statusCode(403)
             .when()
             .post("/documents/filter");
     }

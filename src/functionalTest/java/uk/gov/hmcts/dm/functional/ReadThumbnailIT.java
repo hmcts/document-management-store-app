@@ -113,7 +113,7 @@ public class ReadThumbnailIT extends BaseIT {
             .get(url)
             .then()
             .assertThat()
-            .statusCode(401)
+            .statusCode(403)
             .log().all();
     }
 
@@ -141,7 +141,7 @@ public class ReadThumbnailIT extends BaseIT {
             .get(url)
             .then()
             .assertThat()
-            .statusCode(401)
+            .statusCode(403)
             .log().all();
     }
 

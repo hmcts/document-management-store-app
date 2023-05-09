@@ -9,19 +9,4 @@ import org.springframework.security.core.AuthenticationException;
 @Configuration
 public class TestConfiguration {
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        return new AuthenticationProvider() {
-            @Override
-            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                return authentication;
-            }
-
-            @Override
-            public boolean supports(Class<?> authentication) {
-                return Authentication.class.isAssignableFrom(authentication);
-            }
-        };
-    }
-
 }
