@@ -20,7 +20,7 @@ import java.util.Arrays;
 public class StoreDocumentControllerTestConfiguration {
 
     @MockBean
-    DmServiceAuthFilter serviceAuthFilter;
+    private DmServiceAuthFilter serviceAuthFilter;
 
     @MockBean
     private FolderRepository folderRepository;
