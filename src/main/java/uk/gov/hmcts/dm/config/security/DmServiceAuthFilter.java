@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilter {
 
-    public static final String AUTHORISATION = "ServiceAuthorization";
+    public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
 
     private static final Logger LOG = LoggerFactory.getLogger(DmServiceAuthFilter.class);
 
@@ -68,7 +68,7 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
     }
 
     private String extractBearerToken(HttpServletRequest request) {
-        String token = request.getHeader(AUTHORISATION);
+        String token = request.getHeader(SERVICE_AUTHORIZATION);
         if (token == null) {
             throw new InvalidTokenException("ServiceAuthorization Token is missing");
         }
