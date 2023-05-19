@@ -9,7 +9,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.43'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '2.7.11'
+    id 'org.springframework.boot' version '3.1.0'
     id 'com.github.ben-manes.versions' version '0.46.0'
     id 'org.sonarqube' version '4.0.0.2929'
     id 'jacoco'
