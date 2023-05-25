@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import uk.gov.hmcts.dm.smoke.config.SmokeTestContextConfiguration;
 
+import java.util.Map;
+
 @SpringBootTest(classes = {SmokeTestContextConfiguration.class})
 @RunWith(SpringIntegrationSerenityRunner.class)
 @WithTags(@WithTag("testType:Smoke"))
@@ -25,14 +27,20 @@ public class SmokeTest {
     public void testHealthEndpoint() {
         SerenityRest.useRelaxedHTTPSValidation();
 
-        String response = SerenityRest
-            .given()
-            .baseUri(testUrl)
-            .get("/")
-            .then()
-            .statusCode(200).extract().body().asString();
+        Map responseMap =
+            SerenityRest
+                .given()
+                .baseUri(testUrl)
+                .get("/")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(Map.class);
 
-        Assert.assertEquals(MESSAGE, response);
+        Assert.assertEquals(1, responseMap.size());
+        Assert.assertEquals(MESSAGE, responseMap.get("message"));
+
     }
 
     @Test
