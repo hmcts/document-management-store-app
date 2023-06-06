@@ -50,7 +50,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     }
 
     private void streamBlobToUpload(String fileName,String mimeType, TriConsumer<InputStream, String, String> uploadFunction) {
-        assumeNotNull(blobReader);
+        //assumeNotNull(blobReader);
         BlockBlobClient blockBlobClient = blobReader.retrieveBlobToProcess(fileName);
         uploadFunction.accept(blockBlobClient.openInputStream(), fileName, mimeType);
     }
