@@ -16,7 +16,7 @@ import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 @Slf4j
 public class LargeMultiMediaUploadIT extends BaseIT {
 
-    @Autowired(required = false)
+    @Autowired//(required = false)
     private BlobReader blobReader;
 
     @Test
