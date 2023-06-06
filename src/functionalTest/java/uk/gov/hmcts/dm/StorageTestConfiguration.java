@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class StorageTestConfiguration {
 
     @Bean
-    @ConditionalOnProperty("azure.storage.connection-string")
+    //@ConditionalOnProperty("azure.storage.connection-string")
     public BlobServiceClient getStorageClient(
         @Value("${azure.storage.connection-string}") String connection) {
         return new BlobServiceClientBuilder()
