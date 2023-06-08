@@ -96,11 +96,11 @@ def versions = [
     serenityRestAssured: '2.6.0',
     logging            : '5.1.7',
     pact_version       : '4.1.7',
-    emTestHelper       : '1.21.4',
+    emTestHelper       : '1.21.8',
     shedlock           : '4.33.0',
     hibernate          : '5.6.5.Final',
     jupiter            : '5.8.2',
-    springSecurity     : '5.7.8'
+    springSecurity     : '5.8.3'
 ]
 
 dependencyManagement {
@@ -163,17 +163,21 @@ dependencies {
 
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.19.1'
 
-    implementation group: 'com.github.hmcts', name: 'auth-checker-lib', version: '2.1.5', {
-        exclude group: 'com.github.hmcts', module: 'java-logging-spring'
-    }
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
+
+
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '3.1.5'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
@@ -211,6 +215,15 @@ dependencies {
     contractTestImplementation sourceSets.test.runtimeClasspath
 
     implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.7.0'
+}
+
+dependencyManagement {
+    dependencies {
+        //CVE-2023-24998
+        dependencySet(group: 'commons-fileupload', version: '1.5') {
+            entry 'commons-fileupload'
+        }
+    }
 }
 
 dependencyCheck {
