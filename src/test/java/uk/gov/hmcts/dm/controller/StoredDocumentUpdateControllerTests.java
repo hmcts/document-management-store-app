@@ -28,7 +28,6 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .patch("/documents/" + id, ImmutableMap.of("ttl", new Date()))
             .andExpect(status().isOk());
 
@@ -43,7 +42,6 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .patch("/documents", ImmutableMap.of(
                 "ttl", ttl,
                 "documents", Lists.newArrayList(
@@ -68,7 +66,6 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .patch("/documents", ImmutableMap.of(
                 "ttl", ttl,
                 "documents", Lists.newArrayList(

@@ -41,7 +41,6 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .post("/documents/filter", searchCommand)
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.page.size", is(2)))
@@ -60,7 +59,6 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .post("/documents/filter", searchCommand)
             .andExpect(status().is4xxClientError());
     }

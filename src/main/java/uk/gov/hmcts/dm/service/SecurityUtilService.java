@@ -2,12 +2,12 @@ package uk.gov.hmcts.dm.service;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import uk.gov.hmcts.dm.utils.StringUtils;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -40,9 +40,10 @@ public class SecurityUtilService {
     public String getCurrentlyAuthenticatedServiceName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
-            ServiceDetails userDetails = (ServiceDetails) authentication.getPrincipal();
-            if (userDetails != null) {
-                return userDetails.getUsername();
+            if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
+                return springSecurityUser.getUsername();
+            } else if (authentication.getPrincipal() instanceof String) {
+                return (String) authentication.getPrincipal();
             }
         }
         return null;

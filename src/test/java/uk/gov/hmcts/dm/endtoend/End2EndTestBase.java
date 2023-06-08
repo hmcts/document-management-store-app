@@ -9,10 +9,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.DmApp;
 import uk.gov.hmcts.dm.controller.testing.TestController;
@@ -29,14 +32,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = DmApp.class)
 @AutoConfigureMockMvc
+@WithMockUser
 @ActiveProfiles("local")
 @TestPropertySource(locations = "classpath:application-local.yaml")
 public abstract class End2EndTestBase {
@@ -44,8 +48,10 @@ public abstract class End2EndTestBase {
     protected static final MockMultipartFile FILE =
         new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
-    @Autowired
     protected MockMvc mvc;
+
+    @Autowired
+    protected WebApplicationContext webApplicationContext;
 
     @MockBean
     protected BlobStorageWriteService blobStorageWriteService;
@@ -59,8 +65,12 @@ public abstract class End2EndTestBase {
     @MockBean
     protected TestController testController;
 
+
     @Before
     public void setUp() throws IOException {
+        this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(springSecurity())
+            .build();
 
         doAnswer(invocation -> {
             HttpServletResponse r = invocation.getArgument(2);
