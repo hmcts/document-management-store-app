@@ -163,7 +163,7 @@ dependencies {
 
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.19.1'
 
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '4.1.2'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.0'
 
 
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
