@@ -27,7 +27,6 @@ public class StoredDocumentAuditControllerTests extends ComponentTestBase {
 
         restActions
                 .withAuthorizedUser("userId")
-                .withAuthorizedService("divorce")
                 .get("/documents/" + TestUtil.RANDOM_UUID + "/auditEntries")
                 .andExpect(status().isOk());
     }
@@ -36,7 +35,6 @@ public class StoredDocumentAuditControllerTests extends ComponentTestBase {
     public void testGetAuditEntriesOnDocumentThatDoesNotExist() throws Exception {
         restActions
                 .withAuthorizedUser("userId")
-                .withAuthorizedService("divorce")
                 .get("/documents/" + TestUtil.RANDOM_UUID + "/auditEntries")
                 .andExpect(status().isNotFound());
     }

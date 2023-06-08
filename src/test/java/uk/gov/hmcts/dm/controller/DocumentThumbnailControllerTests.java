@@ -36,7 +36,6 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/thumbnail");
     }
 
@@ -47,7 +46,6 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/thumbnail");
     }
 
@@ -62,7 +60,6 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/thumbnail")
             .andExpect(status().isNotFound());
     }
@@ -75,7 +72,6 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/versions/" + id + "/thumbnail")
             .andExpect(status().isNotFound());
     }
@@ -92,7 +88,6 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/thumbnail")
             .andExpect(status().isOk());
     }
@@ -101,7 +96,6 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
     public void testGetThumbnailThatDoesNotExist() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/thumbnail")
             .andExpect(status().isNotFound());
     }

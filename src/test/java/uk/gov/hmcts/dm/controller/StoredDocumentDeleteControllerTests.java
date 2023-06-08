@@ -38,7 +38,6 @@ public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("ccd_data")
             .post("/documents/delete", deleteCaseDocumentsCommand)
             .andExpect(status().isOk());
     }
@@ -49,7 +48,6 @@ public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("ccd_data")
             .post("/documents/delete", deleteCaseDocumentsCommand)
             .andExpect(status().is4xxClientError());
     }
@@ -60,7 +58,6 @@ public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("ccd_data")
             .post("/documents/delete", deleteCaseDocumentsCommand)
             .andExpect(status().is4xxClientError());
     }
