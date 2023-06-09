@@ -34,7 +34,6 @@ public class FolderControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/folders/" + TestUtil.RANDOM_UUID)
             .andExpect(status().isOk());
     }
@@ -46,7 +45,6 @@ public class FolderControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/folders/" + TestUtil.RANDOM_UUID)
             .andExpect(status().isNotFound());
     }
@@ -56,7 +54,6 @@ public class FolderControllerTests extends ComponentTestBase {
     public void testPostSuccess() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .post("/folders/", TestUtil.TEST_FOLDER).andExpect(status().isOk());
     }
 
@@ -67,7 +64,6 @@ public class FolderControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents", files, Classifications.PUBLIC, null)
             .andExpect(status().is(204));
     }
@@ -79,7 +75,6 @@ public class FolderControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .postDocuments("/folders/" + TestUtil.RANDOM_UUID + "/documents", files, Classifications.PUBLIC, null)
             .andExpect(status().isNotFound());
     }
@@ -94,7 +89,6 @@ public class FolderControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .delete("/folders/" + TestUtil.RANDOM_UUID).andExpect(status().isNoContent());
 
     }
@@ -107,7 +101,6 @@ public class FolderControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .delete("/folders/" + TestUtil.RANDOM_UUID).andExpect(status().isNotFound());
     }
 

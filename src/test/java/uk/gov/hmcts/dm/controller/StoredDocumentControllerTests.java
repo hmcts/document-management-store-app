@@ -56,7 +56,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             .thenReturn(storedDocument);
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id)
             .andExpect(status().isOk());
     }
@@ -68,7 +67,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
             .andExpect(status().isOk())
             .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
@@ -86,7 +84,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
             .andExpect(status().isOk())
             .andExpect(header().string(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType()))
@@ -102,7 +99,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testGetDocument404() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + UUID.randomUUID())
             .andExpect(status().isNotFound());
     }
@@ -126,7 +122,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .postDocuments("/documents", files, Classifications.PUBLIC, null)
             .andExpect(status().isOk());
 
@@ -150,7 +145,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .postDocuments("/documents", files, Classifications.PUBLIC, null)
             .andExpect(status().is4xxClientError());
     }
@@ -175,7 +169,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
             .andExpect(status().isOk());
     }
@@ -202,7 +195,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
             .andExpect(status().isOk());
     }
@@ -229,7 +221,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
             .andExpect(status().isOk());
     }
@@ -238,7 +229,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testGetThatDoesNotExist() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id)
             .andExpect(status().isNotFound());
     }
@@ -247,7 +237,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testGetBinaryThatDoesNotExist() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/" + id + "/binary")
             .andExpect(status().isNotFound());
     }
@@ -256,7 +245,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testDelete() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .delete("/documents/" + id)
             .andExpect(status().is(204));
         verify(auditedStoredDocumentOperationsService).deleteStoredDocument(id, false);
@@ -266,7 +254,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testHardDelete() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .delete("/documents/" + id + "?permanent=true")
             .andExpect(status().is(204));
 
@@ -277,7 +264,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testSoftDeleteWithParam() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .delete("/documents/" + id + "?permanent=false")
             .andExpect(status().is(204));
 
@@ -288,7 +274,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testReturn400WhenUuidInvalid() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .withAuthorizedService("divorce")
             .get("/documents/123456")
             .andExpect(status().isBadRequest());
     }

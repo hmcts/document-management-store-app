@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
-import uk.gov.hmcts.reform.auth.checker.spring.serviceonly.ServiceDetails;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,7 +23,7 @@ public class SecurityUtilServiceTests {
     public void testSuccessfulRetrievalOfUsernameFromSecurityContext() {
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
-        ServiceDetails serviceDetails = mock(ServiceDetails.class);
+        UserDetails serviceDetails = mock(UserDetails.class);
 
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getPrincipal()).thenReturn(serviceDetails);
@@ -33,6 +33,20 @@ public class SecurityUtilServiceTests {
 
         Assert.assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
+
+    @Test
+    public void testSuccessfulRetrievalOfStringFromSecurityContext() {
+        SecurityContext securityContext = mock(SecurityContext.class);
+        Authentication authentication = mock(Authentication.class);
+
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn("x");
+
+        SecurityContextHolder.setContext(securityContext);
+
+        Assert.assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
+    }
+
 
     @Test
     public void testFailureOfUsernameFromSecurityContextWhenItsNotThere() {
