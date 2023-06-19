@@ -50,6 +50,8 @@ public class SpringSecurityConfiguration {
                 "/v3/**",
                 "/favicon.ico",
                 "/health",
+                "/health/liveness",
+                "/health/readiness",
                 "/mappings",
                 "/info",
                 "/metrics",
