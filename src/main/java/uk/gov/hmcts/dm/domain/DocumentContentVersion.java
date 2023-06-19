@@ -15,8 +15,8 @@ import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 import uk.gov.hmcts.dm.utils.StringUtils;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Set;
 import java.util.UUID;

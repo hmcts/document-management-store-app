@@ -11,7 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.hmcts.dm.dialect.ByteWrappingBlobType;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.sql.Blob;
 import java.util.Date;
 
