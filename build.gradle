@@ -118,7 +118,7 @@ dependencyManagement {
         }
 
         //CVE-2022-45688
-        dependencySet(group: 'org.json', version: '20230227') {
+        dependencySet(group: 'org.json', version: '20230618') {
             entry 'json'
         }
     }
