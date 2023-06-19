@@ -52,6 +52,7 @@ public class SpringSecurityConfiguration {
                 "/health",
                 "/health/liveness",
                 "/health/readiness",
+                "/status/health",
                 "/mappings",
                 "/info",
                 "/metrics",
