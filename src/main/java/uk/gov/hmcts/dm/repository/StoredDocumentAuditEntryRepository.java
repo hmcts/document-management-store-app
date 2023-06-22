@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface StoredDocumentAuditEntryRepository extends PagingAndSortingRepository<StoredDocumentAuditEntry, UUID>, CrudRepository <StoredDocumentAuditEntry, UUID> {
+public interface StoredDocumentAuditEntryRepository extends PagingAndSortingRepository<StoredDocumentAuditEntry, UUID>, CrudRepository<StoredDocumentAuditEntry, UUID> {
 
     List<StoredDocumentAuditEntry> findByStoredDocumentOrderByRecordedDateTimeAsc(StoredDocument storedDocument);
 
