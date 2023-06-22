@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import uk.gov.hmcts.dm.dialect.ByteWrappingBlobType;
 
 import jakarta.persistence.*;
 import java.sql.Blob;
@@ -31,7 +30,6 @@ public class DocumentContent {
     @Getter
     @Setter
     @Basic(fetch = FetchType.LAZY)
-    @Convert(converter = ByteWrappingBlobType.class)
     private Blob data;
 
     @OneToOne
