@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -21,7 +19,6 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@TypeDef(name = "BlobDataUserType", typeClass = ByteWrappingBlobType.class)
 public class DocumentContent {
 
     @Id
@@ -34,7 +31,7 @@ public class DocumentContent {
     @Getter
     @Setter
     @Basic(fetch = FetchType.LAZY)
-    @Type(type = "BlobDataUserType")
+    @Convert(converter = ByteWrappingBlobType.class)
     private Blob data;
 
     @OneToOne
