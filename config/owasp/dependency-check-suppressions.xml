@@ -3,6 +3,7 @@
     <suppress>
         <notes>Awaiting fix as updating to latest available version hasn't resolved this.</notes>
         <cve>CVE-2022-45688</cve>
+        <cve>CVE-2023-35116</cve>
     </suppress>
 </suppressions>
 
