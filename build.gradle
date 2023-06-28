@@ -14,7 +14,7 @@ plugins {
     id 'org.sonarqube' version '4.2.1.3168'
     id 'jacoco'
     id 'checkstyle'
-    id 'io.freefair.lombok' version '8.0.1'
+    id 'io.freefair.lombok' version '8.1.0'
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'org.owasp.dependencycheck' version '8.3.1'
     id 'au.com.dius.pact' version '4.2.14'
@@ -90,7 +90,7 @@ repositories {
 def versions = [
     ehcache            : '3.9.3',
     postgresql         : '42.5.1',
-    jackson            : '2.14.0-rc1',
+    jackson            : '2.15.2',
     serenity           : '2.6.0',
     serenityreporter   : '2.6.0',
     serenityRestAssured: '2.6.0',
