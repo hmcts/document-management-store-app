@@ -43,7 +43,6 @@ public class AzureStorageConfiguration {
         try {
             if (!client.exists()) {
                 client.createIfNotExists();
-                return client;
             }
             return client;
         } catch (BlobStorageException e) {
