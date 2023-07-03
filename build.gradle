@@ -64,6 +64,7 @@ configurations.all {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
     exclude group: 'org.codehaus.jettison', module: 'jettison'
+    exclude group: 'ch.qos.logback', module: 'logback-classic'
 }
 
 tasks.withType(JavaCompile) {
