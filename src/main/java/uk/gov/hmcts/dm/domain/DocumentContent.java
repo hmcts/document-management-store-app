@@ -4,12 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import uk.gov.hmcts.dm.dialect.ByteWrappingBlobType;
 
 import javax.persistence.*;
 import java.sql.Blob;
@@ -21,7 +18,6 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@TypeDef(name = "BlobDataUserType", typeClass = ByteWrappingBlobType.class)
 public class DocumentContent {
 
     @Id
@@ -32,9 +28,7 @@ public class DocumentContent {
 
     @JsonIgnore
     @Getter
-    @Setter
     @Basic(fetch = FetchType.LAZY)
-    @Type(type = "BlobDataUserType")
     private Blob data;
 
     @OneToOne
@@ -50,17 +44,6 @@ public class DocumentContent {
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
-
-
-
-    public DocumentContent(Blob blob) {
-        this.data = blob;
-    }
-
-    public DocumentContent(DocumentContentVersion documentContentVersion, Blob blob) {
-        this(blob);
-        this.documentContentVersion = documentContentVersion;
-    }
 
 
     public Date getCreatedOn() {
