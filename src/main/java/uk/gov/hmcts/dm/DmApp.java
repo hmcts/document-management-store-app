@@ -6,7 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, it's not a utility class
-@SpringBootApplication(scanBasePackages = {"uk.gov.hmcts.dm"})
+@SpringBootApplication(scanBasePackages = {
+    "uk.gov.hmcts.dm",
+    "uk.gov.hmcts.reform.authorisation",
+})
 public class DmApp {
 
     public static void main(String[] args) {
