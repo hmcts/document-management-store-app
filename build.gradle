@@ -64,7 +64,6 @@ configurations.all {
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
     exclude group: 'org.codehaus.jettison', module: 'jettison'
-    exclude group: 'ch.qos.logback', module: 'logback-classic'
 }
 
 tasks.withType(JavaCompile) {
@@ -105,7 +104,7 @@ dependencyManagement {
             entry 'snakeyaml'
         }
         // 1.2.11 cause java.lang.NullPointerException: Cannot read the array length because "throwableSuppressed" is null
-        dependencySet(group: 'ch.qos.logback', version: '1.2.10') {
+        dependencySet(group: 'ch.qos.logback', version: '1.4.7') {
             entry 'logback-core'
             entry 'logback-access'
             entry 'logback-classic'
@@ -177,7 +176,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '5.7.5'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.1.0'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'

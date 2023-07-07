@@ -36,7 +36,6 @@ public abstract class AuditEntry {
     @Getter
     @Setter
     @NotNull
-    @Column(name = "service_name", insertable = false, updatable = false)
     private String serviceName;
 
     @NotNull
