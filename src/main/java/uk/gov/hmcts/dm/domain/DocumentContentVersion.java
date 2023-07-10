@@ -62,7 +62,6 @@ public class DocumentContentVersion implements RolesAware {
      */
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
     @Getter
-    @Setter
     @JoinColumn(name = "document_content_version_id")
     @LazyToOne(LazyToOneOption.NO_PROXY)
 //    @Deprecated

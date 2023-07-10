@@ -28,7 +28,6 @@ public class DocumentContent {
 
     @JsonIgnore
     @Getter
-    @Setter
     @Basic(fetch = FetchType.LAZY)
     private Blob data;
 
@@ -45,17 +44,6 @@ public class DocumentContent {
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
-
-
-
-    public DocumentContent(Blob blob) {
-        this.data = blob;
-    }
-
-    public DocumentContent(DocumentContentVersion documentContentVersion, Blob blob) {
-        this(blob);
-        this.documentContentVersion = documentContentVersion;
-    }
 
 
     public Date getCreatedOn() {
