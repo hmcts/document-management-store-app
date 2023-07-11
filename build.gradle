@@ -180,6 +180,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
