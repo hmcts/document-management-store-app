@@ -115,10 +115,10 @@ dependencyManagement {
             entry 'json'
         }
 
-        //CVE-2023-34981
-        dependencySet(group :'org.apache.tomcat', version: '10.1.9') {
+        // CVE-2023-34981
+        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.0-M4') {
             entry 'tomcat-embed-core'
-            entry 'tomcat-coyote'
+            entry 'tomcat-embed-websocket'
         }
     }
 }
