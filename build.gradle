@@ -116,8 +116,9 @@ dependencyManagement {
         }
 
         //CVE-2023-34981
-        dependencySet(group :'org.apache.tomcat.embed', version: '10.1.9') {
+        dependencySet(group :'org.apache.tomcat', version: '10.1.9') {
             entry 'tomcat-embed-core'
+            entry 'tomcat-coyote'
         }
     }
 }
