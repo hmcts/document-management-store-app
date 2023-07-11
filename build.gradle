@@ -165,7 +165,6 @@ dependencies {
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
 
-    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.12'
 
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
@@ -180,7 +179,6 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
-    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.3'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
