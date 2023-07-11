@@ -114,6 +114,11 @@ dependencyManagement {
         dependencySet(group: 'org.json', version: '20230618') {
             entry 'json'
         }
+
+        //CVE-2023-34981
+        dependencySet(group :'org.apache.tomcat.embed', version: '10.1.9') {
+            entry 'tomcat-embed-core'
+        }
     }
 }
 
