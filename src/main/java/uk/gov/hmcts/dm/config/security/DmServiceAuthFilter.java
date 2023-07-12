@@ -39,8 +39,8 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
 
     @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
-        if (StringUtils.isNotBlank(request.getRequestURI()) &&
-            !request.getRequestURI().contains(HEALTH_CHECK_ENDPOINT)) {
+        if (StringUtils.isNotBlank(request.getRequestURI())
+            && !request.getRequestURI().contains(HEALTH_CHECK_ENDPOINT)) {
             try {
 
                 String bearerToken = extractBearerToken(request);
