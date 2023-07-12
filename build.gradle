@@ -164,6 +164,7 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.19.4'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
+    implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '2.6.4'
 
 
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
