@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.config.security;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
@@ -38,7 +39,8 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
 
     @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
-        if (!HEALTH_CHECK_ENDPOINT.contains(request.getRequestURI())) {
+        if (StringUtils.isNotBlank(request.getRequestURI()) &&
+            !request.getRequestURI().contains(HEALTH_CHECK_ENDPOINT)) {
             try {
 
                 String bearerToken = extractBearerToken(request);
