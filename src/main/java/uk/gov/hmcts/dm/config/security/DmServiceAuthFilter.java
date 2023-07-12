@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.config.security;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.web.authentication.preauth.AbstractPreAuthenticatedProcessingFilter;
@@ -15,8 +14,6 @@ import java.util.stream.Collectors;
 public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilter {
 
     public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
-
-    public static final String HEALTH_CHECK_ENDPOINT = "health";
 
     public static final String NOT_APPLICABLE = "N/A";
 
@@ -39,36 +36,30 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
 
     @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
-        if (StringUtils.isNotBlank(request.getRequestURI())
-            && !request.getRequestURI().contains(HEALTH_CHECK_ENDPOINT)) {
-            try {
-
-                String bearerToken = extractBearerToken(request);
-                String serviceName = authTokenValidator.getServiceName(bearerToken);
-                if (!authorisedServices.contains(serviceName)) {
-                    LOG.debug(
-                        "service forbidden {} for endpoint: {} method: {} ",
-                        serviceName,
-                        request.getRequestURI(),
-                        request.getMethod()
-                    );
-                    return null;
-                } else {
-                    LOG.debug(
-                        "service authorized {} for endpoint: {} method: {}  ",
-                        serviceName,
-                        request.getRequestURI(),
-                        request.getMethod()
-                    );
-
-                    return serviceName;
-                }
-            } catch (InvalidTokenException | ServiceException exception) {
-                LOG.warn("Unsuccessful service authentication", exception);
+        try {
+            String bearerToken = extractBearerToken(request);
+            String serviceName = authTokenValidator.getServiceName(bearerToken);
+            if (!authorisedServices.contains(serviceName)) {
+                LOG.debug(
+                    "service forbidden {} for endpoint: {} method: {} ",
+                    serviceName,
+                    request.getRequestURI(),
+                    request.getMethod()
+                );
                 return null;
+            } else {
+                LOG.debug(
+                    "service authorized {} for endpoint: {} method: {}  ",
+                    serviceName,
+                    request.getRequestURI(),
+                    request.getMethod()
+                );
+
+                return serviceName;
             }
-        } else {
-            return NOT_APPLICABLE;
+        } catch (InvalidTokenException | ServiceException exception) {
+            LOG.warn("Unsuccessful service authentication", exception);
+            return null;
         }
     }
 
