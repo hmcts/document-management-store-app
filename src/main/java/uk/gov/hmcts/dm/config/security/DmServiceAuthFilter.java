@@ -15,6 +15,10 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
 
     public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
 
+    public static final String HEALTH_CHECK_ENDPOINT = "health";
+
+    public static final String NOT_APPLICABLE = "N/A";
+
     private static final Logger LOG = LoggerFactory.getLogger(DmServiceAuthFilter.class);
 
     private final List<String> authorisedServices;
@@ -34,37 +38,41 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
 
     @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
-        try {
+        if (!HEALTH_CHECK_ENDPOINT.contains(request.getRequestURI())) {
+            try {
 
-            String bearerToken = extractBearerToken(request);
-            String serviceName = authTokenValidator.getServiceName(bearerToken);
-            if (!authorisedServices.contains(serviceName)) {
-                LOG.debug(
-                    "service forbidden {} for endpoint: {} method: {} ",
-                    serviceName,
-                    request.getRequestURI(),
-                    request.getMethod()
-                );
+                String bearerToken = extractBearerToken(request);
+                String serviceName = authTokenValidator.getServiceName(bearerToken);
+                if (!authorisedServices.contains(serviceName)) {
+                    LOG.debug(
+                        "service forbidden {} for endpoint: {} method: {} ",
+                        serviceName,
+                        request.getRequestURI(),
+                        request.getMethod()
+                    );
+                    return null;
+                } else {
+                    LOG.debug(
+                        "service authorized {} for endpoint: {} method: {}  ",
+                        serviceName,
+                        request.getRequestURI(),
+                        request.getMethod()
+                    );
+
+                    return serviceName;
+                }
+            } catch (InvalidTokenException | ServiceException exception) {
+                LOG.warn("Unsuccessful service authentication", exception);
                 return null;
-            } else {
-                LOG.debug(
-                    "service authorized {} for endpoint: {} method: {}  ",
-                    serviceName,
-                    request.getRequestURI(),
-                    request.getMethod()
-                );
-
-                return serviceName;
             }
-        } catch (InvalidTokenException | ServiceException exception) {
-            LOG.warn("Unsuccessful service authentication", exception);
-            return null;
+        } else {
+            return NOT_APPLICABLE;
         }
     }
 
     @Override
     protected Object getPreAuthenticatedCredentials(HttpServletRequest request) {
-        return "N/A";
+        return NOT_APPLICABLE;
     }
 
     private String extractBearerToken(HttpServletRequest request) {
