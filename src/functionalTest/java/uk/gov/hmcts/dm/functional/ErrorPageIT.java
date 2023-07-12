@@ -50,7 +50,7 @@ public class ErrorPageIT extends BaseIT {
             .statusCode(405)
             .contentType(ContentType.JSON)
             .when()
-            .get("documents/");
+            .get("documents");
     }
 
     @Test
