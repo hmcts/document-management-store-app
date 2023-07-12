@@ -62,7 +62,7 @@ public class ErrorPageIT extends BaseIT {
             .statusCode(415)
             .contentType(ContentType.JSON)
             .when()
-            .post("documents/");
+            .post("documents");
     }
 
     @Test
@@ -162,7 +162,7 @@ public class ErrorPageIT extends BaseIT {
             .statusCode(422)
             .body(not(containsString("<!DOCTYPE html>")))
             .when()
-            .post("documents/");
+            .post("documents");
     }
 
     @Test
