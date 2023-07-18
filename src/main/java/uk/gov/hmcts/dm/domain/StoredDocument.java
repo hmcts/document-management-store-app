@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -14,12 +16,6 @@ import org.springframework.util.CollectionUtils;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.domain.RolesAware;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -36,6 +32,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Builder
@@ -93,6 +95,7 @@ public class StoredDocument implements RolesAware {
     @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument")
     @OrderColumn(name = "itm_idx")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<DocumentContentVersion> documentContentVersions;
 
     @Getter
@@ -109,6 +112,7 @@ public class StoredDocument implements RolesAware {
     @Getter
     @Setter
     @CollectionTable(name = "documentroles", joinColumns = @JoinColumn(name = "documentroles_id"))
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Set<String> roles;
 
     @ElementCollection
@@ -117,6 +121,7 @@ public class StoredDocument implements RolesAware {
     @Getter
     @Setter
     @CollectionTable(name = "documentmetadata", joinColumns = @JoinColumn(name = "documentmetadata_id"))
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Map<String, String> metadata;
 
     @Getter
