@@ -34,6 +34,7 @@ spring:
         jdbc:
           batch_size: 5
           batch_versioned_data: true
+    open-in-view: ${OPEN_IN_VIEW:false}
   main:
     allow-bean-definition-overriding: true
 
