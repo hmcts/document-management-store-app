@@ -142,6 +142,7 @@ public class StoredDocumentService {
                                                                                    securityUtilService.getUserId());
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         documentContentVersionRepository.save(documentContentVersion);
+        storedDocumentRepository.save(storedDocument);
         storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
 
         return documentContentVersion;
