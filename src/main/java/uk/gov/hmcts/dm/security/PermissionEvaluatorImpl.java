@@ -10,7 +10,7 @@ import uk.gov.hmcts.dm.security.domain.CreatorAware;
 import uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
