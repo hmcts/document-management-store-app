@@ -21,7 +21,7 @@ import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.SearchService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
