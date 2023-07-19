@@ -29,7 +29,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.ArrayList;
@@ -94,7 +93,6 @@ public class StoredDocument implements RolesAware {
     @Getter
     @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument")
-    @OrderColumn(name = "itm_idx")
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<DocumentContentVersion> documentContentVersions;
 
