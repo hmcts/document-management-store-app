@@ -1,12 +1,27 @@
 package uk.gov.hmcts.dm.domain;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderColumn;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -22,22 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapKeyColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderColumn;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 @Entity
 @Builder
@@ -93,14 +92,13 @@ public class StoredDocument implements RolesAware {
 
     @Getter
     @Setter
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument",fetch = FetchType.EAGER)
     @OrderColumn(name = "itm_idx")
-    @LazyCollection(LazyCollectionOption.FALSE)
     private List<DocumentContentVersion> documentContentVersions;
 
     @Getter
     @Setter
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument",fetch = FetchType.EAGER)
     private Set<StoredDocumentAuditEntry> auditEntries;
 
     @Getter
@@ -108,20 +106,18 @@ public class StoredDocument implements RolesAware {
     @Enumerated
     private Classifications classification;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @Getter
     @Setter
     @CollectionTable(name = "documentroles", joinColumns = @JoinColumn(name = "documentroles_id"))
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Set<String> roles;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyColumn(name = "name")
     @Column(name = "value")
     @Getter
     @Setter
     @CollectionTable(name = "documentmetadata", joinColumns = @JoinColumn(name = "documentmetadata_id"))
-    @LazyCollection(LazyCollectionOption.FALSE)
     private Map<String, String> metadata;
 
     @Getter

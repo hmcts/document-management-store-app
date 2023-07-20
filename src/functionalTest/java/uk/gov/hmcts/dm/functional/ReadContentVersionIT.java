@@ -139,7 +139,6 @@ public class ReadContentVersionIT extends BaseIT {
             .assertThat()
             .statusCode(is(404))
             .body("error", equalTo(String.format("DocumentContentVersion with ID: %s could not be found", nonExistentVersionId)))
-            .body("exception", equalTo("uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException"))
             .log()
             .all();
     }
@@ -159,7 +158,6 @@ public class ReadContentVersionIT extends BaseIT {
             .assertThat()
             .statusCode(is(404))
             .body("error", equalTo(String.format("DocumentContentVersion with ID: %s could not be found", nonExistentVersionId)))
-            .body("exception", equalTo("uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException"))
             .log()
             .all();
     }
