@@ -116,7 +116,7 @@ dependencyManagement {
         }
 
         // CVE-2023-34981
-        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.0-M4') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.0-M9') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
         }
