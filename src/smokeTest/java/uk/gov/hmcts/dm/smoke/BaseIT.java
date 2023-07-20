@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import uk.gov.hmcts.dm.smoke.utilities.FileUtils;
 import uk.gov.hmcts.dm.smoke.utilities.V1MediaTypes;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;

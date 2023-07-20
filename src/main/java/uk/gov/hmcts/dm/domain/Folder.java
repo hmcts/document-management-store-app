@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.hmcts.dm.security.domain.CreatorAware;
 
 import java.util.*;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 
 @Entity
