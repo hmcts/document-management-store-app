@@ -4,7 +4,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -69,8 +68,7 @@ public class DocumentContentVersion implements RolesAware {
      * We will use {@link DocumentContentVersion#contentUri} instead.
      //     * @deprecated To be removed when we will migrate to AzureBlobStore.
      */
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
-    @Getter
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion")
     @JoinColumn(name = "document_content_version_id")
 //    @Deprecated
     private DocumentContent documentContent;
