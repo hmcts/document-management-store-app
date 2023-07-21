@@ -98,7 +98,7 @@ public class StoredDocument implements RolesAware {
 
     @Getter
     @Setter
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument",fetch = FetchType.LAZY)
     private Set<StoredDocumentAuditEntry> auditEntries;
 
     @Getter
