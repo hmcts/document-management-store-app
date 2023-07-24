@@ -11,8 +11,10 @@ import uk.gov.hmcts.dm.domain.mapper.StoredDocumentMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Repository
@@ -39,6 +41,13 @@ public class DocumentDaoImpl {
         storedDocumentAuditEntries.forEach(
             storedDocumentAuditEntry -> storedDocumentAuditEntry.setStoredDocument(storedDocument)
         );
+
+        //Below will require an Index to added for the documentroles_id column
+        storedDocument.setRoles(new HashSet<>(getDocumentRoles(storedDocument.getId())));
+
+        //Below will require an Index to added for the documentmetadata_id column
+        storedDocument.setMetadata(getDocumentMetadata(storedDocument.getId()));
+
         return storedDocument;
     }
 
@@ -86,5 +95,24 @@ public class DocumentDaoImpl {
             throw new RuntimeException(e);
         }
         return storedDocumentAuditEntry;
+    }
+
+    public List<String> getDocumentRoles(UUID id) {
+
+        String sql = "SELECT * FROM DocumentRoles WHERE documentroles_id = ?";
+
+        return jdbcTemplate.query(
+            sql, new Object[]{id},
+            (rs, rowNum) -> rs.getString("roles"));
+    }
+
+    public Map<String,String> getDocumentMetadata(UUID id) {
+
+        String sql = "SELECT * FROM DocumentMetadata WHERE documentmetadata_id = ?";
+        HashMap<String,String> toreturn = new HashMap<>();
+        jdbcTemplate.query(
+            sql, new Object[]{id},
+            (rs, rowNum) -> toreturn.put(rs.getString("name"), rs.getString("value")));
+        return toreturn;
     }
 }

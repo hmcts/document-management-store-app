@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.domain.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.security.Classifications;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +24,7 @@ public class StoredDocumentMapper implements RowMapper<StoredDocument> {
             null,
             null,
             null,
-            null,
+            Classifications.values()[rs.getInt("classification")],
             null,
             null,
             rs.getDate("ttl")
