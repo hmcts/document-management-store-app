@@ -41,11 +41,11 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
             .resolveStatusCodeAndMessage(
                 throwable,
                 (String) errorAttributes.get("message"),
-                (Integer) webRequest.getAttribute("javax.servlet.error.status_code", 0),
+                (Integer) webRequest.getAttribute("jakarta.servlet.error.status_code", 0),
                 errors);
 
         errorAttributes.put("error", errorStatusCodeAndMessage.getMessage());
-        webRequest.setAttribute("javax.servlet.error.status_code", errorStatusCodeAndMessage.getStatusCode(), 0);
+        webRequest.setAttribute("jakarta.servlet.error.status_code", errorStatusCodeAndMessage.getStatusCode(), 0);
         errorAttributes.put("status", errorStatusCodeAndMessage.getStatusCode());
         if (throwable != null) {
             log.error(throwable.getMessage(), throwable);

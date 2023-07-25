@@ -9,8 +9,8 @@ import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteList;
 import uk.gov.hmcts.dm.security.MultipartFileSizeLimit;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class MultipartFileWhiteListValidator implements ConstraintValidator<MultipartFileWhiteList,MultipartFile> {
 

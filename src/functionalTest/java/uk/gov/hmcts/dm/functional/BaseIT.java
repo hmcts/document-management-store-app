@@ -18,7 +18,7 @@ import uk.gov.hmcts.dm.FunctionalTestContextConfiguration;
 import uk.gov.hmcts.dm.StorageTestConfiguration;
 import uk.gov.hmcts.dm.functional.DocumentMetadataPropertiesConfig.DocumentMetadata;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;

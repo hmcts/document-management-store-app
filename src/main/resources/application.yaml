@@ -26,7 +26,7 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: none
-    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
         order_inserts: true
@@ -43,6 +43,7 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
     hikari:
       maximumPoolSize: ${HIKARI_MAX_POOL_SIZE:10} #We need this to be overriden in another Helm Release for CDAM data-migration
+      connection-timeout: ${DB_CONNECTION_TIMEOUT:5000}
 
   batch:
     job:
