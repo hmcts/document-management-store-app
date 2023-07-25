@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.43'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '3.1.0'
+    id 'org.springframework.boot' version '3.1.2'
     id 'com.github.ben-manes.versions' version '0.47.0'
     id 'org.sonarqube' version '4.3.0.3225'
     id 'jacoco'
@@ -11,7 +11,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'org.owasp.dependencycheck' version '8.3.1'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '9.20.1'
+    id 'org.flywaydb.flyway' version '9.21.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
 }
 
@@ -182,7 +182,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
-    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.12'
+    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.13'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
@@ -192,7 +192,7 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.0'
-    testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '2.3.2'
+    testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.3'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
@@ -233,7 +233,7 @@ dependencyManagement {
         }
 
         //CVE-2023-34462
-        dependencySet(group: 'io.netty', version: '4.1.94.Final') {
+        dependencySet(group: 'io.netty', version: '4.1.95.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-codec-dns'
