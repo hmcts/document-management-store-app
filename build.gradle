@@ -340,7 +340,7 @@ project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 sonarqube {
     properties {
         property "sonar.projectName", "${rootProject.name}"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.outputLocation}"
         property "sonar.exclusions", coverageExclusionList.join(", ")
         property "sonar.pitest.mode", "reuseReport"
         property "sonar.pitest.reportsDirectory", "build/reports/pitest"
