@@ -2,7 +2,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.43'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'org.springframework.boot' version '3.1.0'
+    id 'org.springframework.boot' version '3.1.2'
     id 'com.github.ben-manes.versions' version '0.47.0'
     id 'org.sonarqube' version '4.3.0.3225'
     id 'jacoco'
@@ -182,7 +182,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
-    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.12'
+    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.13'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
@@ -233,7 +233,7 @@ dependencyManagement {
         }
 
         //CVE-2023-34462
-        dependencySet(group: 'io.netty', version: '4.1.94.Final') {
+        dependencySet(group: 'io.netty', version: '4.1.95.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-codec-dns'
@@ -340,7 +340,7 @@ project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 sonarqube {
     properties {
         property "sonar.projectName", "${rootProject.name}"
-        property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.destination.path}"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.outputLocation}"
         property "sonar.exclusions", coverageExclusionList.join(", ")
         property "sonar.pitest.mode", "reuseReport"
         property "sonar.pitest.reportsDirectory", "build/reports/pitest"
