@@ -93,7 +93,7 @@ def versions = [
     shedlock           : '4.33.0',
     hibernate          : '6.1.7.Final',
     jupiter            : '5.8.2',
-    springSecurity     : '6.0.3'
+    springSecurity     : '6.0.5'
 ]
 
 dependencyManagement {
@@ -110,15 +110,9 @@ dependencyManagement {
             entry 'logback-classic'
         }
 
-        //CVE-2022-45688
-        dependencySet(group: 'org.json', version: '20230618') {
-            entry 'json'
-        }
-
-        // CVE-2023-34981
-        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.0-M4') {
-            entry 'tomcat-embed-core'
-            entry 'tomcat-embed-websocket'
+        //CVE-2023-24998
+        dependencySet(group: 'commons-fileupload', version: '1.5') {
+            entry 'commons-fileupload'
         }
     }
 }
@@ -223,38 +217,6 @@ dependencies {
     contractTestImplementation sourceSets.test.runtimeClasspath
 
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.1.0'
-}
-
-dependencyManagement {
-    dependencies {
-        //CVE-2023-24998
-        dependencySet(group: 'commons-fileupload', version: '1.5') {
-            entry 'commons-fileupload'
-        }
-
-        //CVE-2023-34462
-        dependencySet(group: 'io.netty', version: '4.1.95.Final') {
-            entry 'netty-buffer'
-            entry 'netty-codec'
-            entry 'netty-codec-dns'
-            entry 'netty-codec-http'
-            entry 'netty-codec-http2'
-            entry 'netty-codec-socks'
-            entry 'netty-common'
-            entry 'netty-handler'
-            entry 'netty-handler-proxy'
-            entry 'netty-resolver'
-            entry 'netty-resolver-dns'
-            entry 'netty-resolver-dns-classes-macos'
-            entry 'netty-resolver-dns-native-macos'
-            entry 'netty-transport'
-            entry 'netty-transport-classes-epoll'
-            entry 'netty-transport-classes-kqueue'
-            entry 'netty-transport-native-epoll'
-            entry 'netty-transport-native-kqueue'
-            entry 'netty-transport-native-unix-common'
-        }
-    }
 }
 
 dependencyCheck {
