@@ -11,7 +11,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'org.owasp.dependencycheck' version '8.3.1'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '9.21.0'
+    id 'org.flywaydb.flyway' version '9.21.1'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
 }
 
@@ -145,7 +145,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
 
     implementation group: 'org.hibernate', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
@@ -155,7 +155,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.21.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.21.1'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
