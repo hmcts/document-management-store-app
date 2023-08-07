@@ -1,3 +1,12 @@
+import org.jooq.codegen.GenerationTool
+import org.jooq.meta.jaxb.*
+
+buildscript {
+    dependencies {
+        classpath 'org.jooq:jooq-codegen:3.18.5'
+        classpath 'org.postgresql:postgresql:42.2.5'
+    }
+}
 plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.43'
@@ -151,6 +160,12 @@ dependencies {
     implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
 
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
+//    jooqRuntime ('org.postgresql:postgresql:42.5.4')
+
+    implementation('org.springframework.boot:spring-boot-starter-jooq')
+    implementation group: 'org.jooq', name: 'jooq', version: '3.13.2'
+    implementation group: 'org.jooq', name: 'jooq-codegen', version: '3.18.5'
+    implementation group: 'org.jooq', name: 'jooq-postgres-extensions', version: '3.18.5'
 
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
@@ -415,3 +430,24 @@ task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
         url = "jdbc:postgresql://${dburl}"
     }
 }
+
+task generateSample {
+    GenerationTool.generate(new Configuration()
+        .withJdbc(new Jdbc()
+            .withDriver('org.postgresql.Driver')
+            .withUrl('jdbc:postgresql://localhost:5432/evidence')
+            .withUsername('evidence')
+            .withPassword('evidence'))
+        .withGenerator(new Generator()
+//            .withStrategy(new Strategy().withName("uk.gov.hmcts.dm.config.AsInDatabaseStrategy"))
+            .withDatabase(new Database().withInputSchema("public"))
+            .withGenerate(new Generate()
+                .withPojos(true)
+                .withDaos(true))
+            .withTarget(new Target()
+                .withPackageName('uk.gov.hmcts.dm.generated.db')
+                .withDirectory('src/main/java'))))
+}
+
+
+
