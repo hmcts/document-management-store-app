@@ -76,11 +76,11 @@ public class DocumentDaoImpl {
     public List<StoredDocumentAuditEntry> getStoredDocumentAuditEntries(UUID id) {
 
         String sql = "SELECT * FROM AuditEntry WHERE storeddocument_id = ?";
-        List<StoredDocumentAuditEntry> StoredDocumentAuditEntries = jdbcTemplate.query(
+        List<StoredDocumentAuditEntry> storedDocumentAuditEntries = jdbcTemplate.query(
             sql, new Object[]{id},
             (rs, rowNum) -> createAndSaveStoredDocumentAuditEntry(rs));
 
-        return StoredDocumentAuditEntries;
+        return storedDocumentAuditEntries;
     }
 
     private StoredDocumentAuditEntry createAndSaveStoredDocumentAuditEntry(ResultSet rs) {

@@ -10,7 +10,7 @@ import java.util.UUID;
 public class DocumentContentVersionMapper implements RowMapper<DocumentContentVersion> {
     @Override
     public DocumentContentVersion mapRow(ResultSet rs, int rowNum) throws SQLException {
-        DocumentContentVersion documentContentVersion=  new DocumentContentVersion(
+        DocumentContentVersion documentContentVersion =  new DocumentContentVersion(
             UUID.fromString(rs.getString("id")),
             rs.getString("mimeType"),
             rs.getString("originalDocumentName"),

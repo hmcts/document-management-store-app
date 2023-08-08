@@ -163,7 +163,7 @@ dependencies {
 //    jooqRuntime ('org.postgresql:postgresql:42.5.4')
 
     implementation('org.springframework.boot:spring-boot-starter-jooq')
-    implementation group: 'org.jooq', name: 'jooq', version: '3.13.2'
+    implementation group: 'org.jooq', name: 'jooq', version: '3.18.5'
     implementation group: 'org.jooq', name: 'jooq-codegen', version: '3.18.5'
     implementation group: 'org.jooq', name: 'jooq-postgres-extensions', version: '3.18.5'
 
@@ -446,7 +446,7 @@ task generateSample {
                 .withDaos(true))
             .withTarget(new Target()
                 .withPackageName('uk.gov.hmcts.dm.generated.db')
-                .withDirectory('src/main/java'))))
+                .withDirectory(projectDir.toString() + '/build/generated-jooq'))))
 }
 
 
