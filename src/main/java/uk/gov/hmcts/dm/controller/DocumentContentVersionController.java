@@ -185,7 +185,7 @@ public class DocumentContentVersionController {
             response.setHeader("data-source", "contentURI");
             auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                 documentContentVersion, request,
-                response);
+                response, documentId);
             response.flushBuffer();
 
         } catch (IOException e) {

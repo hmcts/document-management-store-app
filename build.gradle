@@ -3,6 +3,7 @@ import org.jooq.meta.jaxb.*
 
 buildscript {
     dependencies {
+        //Needs these 2 entires for jooq to generate the classes
         classpath 'org.jooq:jooq-codegen:3.18.5'
         classpath 'org.postgresql:postgresql:42.2.5'
     }
@@ -22,6 +23,7 @@ plugins {
     id 'au.com.dius.pact' version '4.2.14'
     id 'org.flywaydb.flyway' version '9.21.1'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
+    id 'nu.studer.jooq' version '8.2'
 }
 
 apply plugin: 'java'
@@ -160,7 +162,6 @@ dependencies {
     implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
 
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
-//    jooqRuntime ('org.postgresql:postgresql:42.5.4')
 
     implementation('org.springframework.boot:spring-boot-starter-jooq')
     implementation group: 'org.jooq', name: 'jooq', version: '3.18.5'
@@ -439,7 +440,6 @@ task generateSample {
             .withUsername('evidence')
             .withPassword('evidence'))
         .withGenerator(new Generator()
-//            .withStrategy(new Strategy().withName("uk.gov.hmcts.dm.config.AsInDatabaseStrategy"))
             .withDatabase(new Database().withInputSchema("public"))
             .withGenerate(new Generate()
                 .withPojos(true)

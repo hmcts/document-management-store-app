@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.DocumentDaoImpl;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -36,17 +35,13 @@ public class DocumentContentVersionService {
         HikariDataSource dataSource = (HikariDataSource) jdbcTemplate.getDataSource();
         System.out.println("Active in DocumentContentVersionService : " + dataSource.getHikariPoolMXBean().getActiveConnections());
         System.out.println("Idle in DocumentContentVersionService : " + dataSource.getHikariPoolMXBean().getIdleConnections());
+
 //        Optional<DocumentContentVersion> documentContentVersion = storedDocumentRepository
 //                    .findByIdAndDeleted(id, false)
 //                    .map(StoredDocument::getMostRecentDocumentContentVersion);
 
-        StoredDocument storedDocument = documentDao.getStoredDocument(id);
-
-        DocumentContentVersion documentContentVersion = storedDocument.getMostRecentDocumentContentVersion();
-
-
-        System.out.println("After : " + dataSource.getHikariPoolMXBean().getActiveConnections());
-        return null;
+        //Need ot check if deleted flag is set to true for StoredDocument
+        return Optional.ofNullable(documentDao.getRecentDocumentContentVersion(id));
     }
 
 }

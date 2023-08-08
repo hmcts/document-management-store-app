@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
+import uk.gov.hmcts.dm.repository.DocumentDaoImpl;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,12 +33,21 @@ public class AuditedDocumentContentVersionOperationsService {
     @Autowired
     private AuditEntryService auditEntryService;
 
+    @Autowired
+    private SecurityUtilService securityUtilService;
+
+    @Autowired
+    private DocumentDaoImpl documentDao;
+
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
     public void readDocumentContentVersionBinaryFromBlobStore(DocumentContentVersion documentContentVersion,
-                                                              HttpServletRequest request, HttpServletResponse response)
+                                                              HttpServletRequest request, HttpServletResponse response, UUID documentId)
         throws IOException {
+//        auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
+        documentDao.createAndSaveDocumentContentVersionAuditEntry(documentContentVersion, securityUtilService.getUserId(),
+            securityUtilService.getCurrentlyAuthenticatedServiceName(), AuditActions.READ, documentId);
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
-        auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.READ);
+
     }
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")

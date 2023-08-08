@@ -196,7 +196,7 @@ public class StoredDocumentController {
             auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
                 documentContentVersion,
                 httpServletRequest,
-                response);
+                response, documentId);
             logger.info("Completed getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
         } catch (UncheckedIOException | IOException e) {
             logger.info("Exception getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
