@@ -1,6 +1,9 @@
 package uk.gov.hmcts.dm.repository;
 
+import org.jooq.DSLContext;
+import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -19,6 +22,9 @@ public class DocumentDaoImpl {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
 
     public StoredDocument getStoredDocument(UUID id) {
         try {
@@ -50,6 +56,8 @@ public class DocumentDaoImpl {
     public DocumentContentVersionAuditEntry createAndSaveDocumentContentVersionAuditEntry(
         DocumentContentVersion documentContentVersion, String username,
             String serviceName, AuditActions action, UUID documentId) {
+
+        DSLContext dslContext = DSL.using(dbUrl);
 
         DocumentContentVersionAuditEntry documentContentVersionAuditEntry = new DocumentContentVersionAuditEntry();
         documentContentVersionAuditEntry.setAction(action);
