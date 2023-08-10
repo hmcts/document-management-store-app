@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.repository;
 
+import jakarta.persistence.EntityManager;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,10 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersionAuditEntry;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.domain.mapper.DocumentContentVersionMapper;
 import uk.gov.hmcts.dm.domain.mapper.StoredDocumentMapper;
+import uk.gov.hmcts.dm.generated.db.tables.Auditentry;
+import uk.gov.hmcts.dm.generated.db.tables.records.AuditentryRecord;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -22,6 +26,9 @@ public class DocumentDaoImpl {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Value("${spring.datasource.url}")
     private String dbUrl;
@@ -57,15 +64,34 @@ public class DocumentDaoImpl {
         DocumentContentVersion documentContentVersion, String username,
             String serviceName, AuditActions action, UUID documentId) {
 
-        DSLContext dslContext = DSL.using(dbUrl);
-
         DocumentContentVersionAuditEntry documentContentVersionAuditEntry = new DocumentContentVersionAuditEntry();
-        documentContentVersionAuditEntry.setAction(action);
-        documentContentVersionAuditEntry.setUsername(username);
-        documentContentVersionAuditEntry.setServiceName(serviceName);
-        documentContentVersionAuditEntry.setRecordedDateTime(new Date());
-        documentContentVersionAuditEntry.setDocumentContentVersion(documentContentVersion);
-        documentContentVersionAuditEntry.setStoredDocument(getStoredDocument(documentId));
+        //entityManager.persist(documentContentVersionAuditEntry);
+
+        DSLContext dslContext = DSL.using(dbUrl);
+        AuditentryRecord auditentryRecord = dslContext.newRecord(Auditentry.AUDITENTRY);
+        auditentryRecord.setAction(action.toString());
+        auditentryRecord.setUsername(username);
+        auditentryRecord.setServicename(serviceName);
+        auditentryRecord.setDocumentcontentversionId(documentContentVersion.getId());
+        auditentryRecord.setStoreddocumentId(documentId);
+        auditentryRecord.setType("document_content_version");
+        auditentryRecord.setRecordeddatetime(LocalDateTime.now());
+        //auditentryRecord.setId(documentContentVersionAuditEntry.getId());
+        //dslContext.insertInto(Auditentry.AUDITENTRY).set(auditentryRecord).execute();
+        //entityManager.detach(documentContentVersionAuditEntry);
+        //entityManager.clear();
+        auditentryRecord.store();
+
+
+
+//        documentContentVersionAuditEntry.setAction(action);
+//        documentContentVersionAuditEntry.setUsername(username);
+//        documentContentVersionAuditEntry.setServiceName(serviceName);
+//        documentContentVersionAuditEntry.setRecordedDateTime(new Date());
+//        documentContentVersionAuditEntry.setDocumentContentVersion(documentContentVersion);
+//        documentContentVersionAuditEntry.setStoredDocument(getStoredDocument(documentId));
+//
+//        dslContext.insertInto(Auditentry.AUDITENTRY).set(documentContentVersionAuditEntry);
 
         return null;
     }
