@@ -1,14 +1,9 @@
-import org.jooq.codegen.GenerationTool
-import org.jooq.meta.jaxb.*
 
 buildscript {
     dependencies {
         //Needs these 2 entires for jooq to generate the classes
-        classpath 'org.jooq:jooq-codegen:3.18.5'
         classpath 'org.postgresql:postgresql:42.2.5'
         classpath "org.testcontainers:postgresql:1.18.3"
-        classpath group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
-
     }
 }
 plugins {
@@ -441,7 +436,6 @@ dependencies {
 }
 
 flyway {
-    configurations = ['flywayMigration']
     url = 'jdbc:tc:postgresql:11.21-alpine:///migrate?TC_REUSABLE=true'
 }
 ext['flyway.postgresql.transactional.lock'] = 'false'
@@ -488,7 +482,7 @@ tasks.named('generateJooq').configure {
 }
 
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
- t    baselineOnMigrate = true
+     baselineOnMigrate = true
     if (project.hasProperty("dburl")) {
         url = "jdbc:postgresql://${dburl}"
     }
