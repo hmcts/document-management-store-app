@@ -6,6 +6,9 @@ buildscript {
         //Needs these 2 entires for jooq to generate the classes
         classpath 'org.jooq:jooq-codegen:3.18.5'
         classpath 'org.postgresql:postgresql:42.2.5'
+        classpath "org.testcontainers:postgresql:1.18.3"
+        classpath group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
+
     }
 }
 plugins {
@@ -23,7 +26,7 @@ plugins {
     id 'au.com.dius.pact' version '4.2.14'
     id 'org.flywaydb.flyway' version '9.21.1'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
-    id 'nu.studer.jooq' version '8.2'
+    id 'nu.studer.jooq' version '8.2.1'
 }
 
 apply plugin: 'java'
@@ -425,29 +428,68 @@ flyway {
     baselineVersion = '1'
 }
 
+configurations {
+    flywayMigration
+}
+
+dependencies {
+    flywayMigration "org.testcontainers:postgresql:1.18.3"
+    flywayMigration group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
+
+    jooqGenerator "org.testcontainers:postgresql:1.18.3"
+    jooqGenerator group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
+}
+
+flyway {
+    configurations = ['flywayMigration']
+    url = 'jdbc:tc:postgresql:11.21-alpine:///migrate?TC_REUSABLE=true'
+}
+ext['flyway.postgresql.transactional.lock'] = 'false'
+
+jooq {
+    configurations {
+        main {
+            generationTool {
+                jdbc {
+                    url = 'jdbc:tc:postgresql:11.21-alpine:///migrate?TC_REUSABLE=true'
+                    driver = 'org.testcontainers.jdbc.ContainerDatabaseDriver'
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        includes = '.*'
+                        excludes = ''
+                    }
+                    target {
+                        packageName = 'uk.gov.hmcts.dm.jooq'
+                    }
+                }
+            }
+        }
+    }
+}
+
+// configure jOOQ task such that it only executes when something has changed that potentially affects the generated JOOQ sources
+// - the jOOQ configuration has changed (Jdbc, Generator, Strategy, etc.)
+// - the classpath used to execute the jOOQ generation tool has changed (jOOQ library, database driver, strategy classes, etc.)
+// - the schema files from which the schema is generated and which is used by jOOQ to generate the sources have changed (scripts added, modified, etc.)
+tasks.named('generateJooq').configure {
+    // ensure database schema has been prepared by Flyway before generating the jOOQ sources
+    dependsOn tasks.named('flywayMigrate')
+
+    // declare Flyway migration scripts as inputs on the jOOQ task
+    inputs.files(fileTree('src/main/resources/db/migration'))
+        .withPropertyName('migrations')
+        .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    // make jOOQ task participate in incremental builds (and build caching)
+    allInputsDeclared = true
+}
+
 task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
     baselineOnMigrate = true
     if (project.hasProperty("dburl")) {
         url = "jdbc:postgresql://${dburl}"
     }
 }
-
-task generateSample {
-    GenerationTool.generate(new Configuration()
-        .withJdbc(new Jdbc()
-            .withDriver('org.postgresql.Driver')
-            .withUrl('jdbc:postgresql://localhost:5432/evidence')
-            .withUsername('evidence')
-            .withPassword('evidence'))
-        .withGenerator(new Generator()
-            .withDatabase(new Database().withInputSchema("public"))
-            .withGenerate(new Generate()
-                .withPojos(true)
-                .withDaos(true))
-            .withTarget(new Target()
-                .withPackageName('uk.gov.hmcts.dm.generated.db')
-                .withDirectory(projectDir.toString() + '/build/generated-jooq'))))
-}
-
-
-
