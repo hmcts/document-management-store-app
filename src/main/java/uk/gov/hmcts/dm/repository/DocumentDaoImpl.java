@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.repository;
 
 import jakarta.persistence.EntityManager;
 import org.jooq.DSLContext;
+import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import uk.gov.hmcts.dm.domain.mapper.StoredDocumentMapper;
 import uk.gov.hmcts.dm.generated.db.tables.Auditentry;
 import uk.gov.hmcts.dm.generated.db.tables.records.AuditentryRecord;
 
+import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
@@ -29,6 +31,9 @@ public class DocumentDaoImpl {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private DataSource dataSource;
 
     @Value("${spring.datasource.url}")
     private String dbUrl;
@@ -67,8 +72,12 @@ public class DocumentDaoImpl {
         DocumentContentVersionAuditEntry documentContentVersionAuditEntry = new DocumentContentVersionAuditEntry();
         //entityManager.persist(documentContentVersionAuditEntry);
 
-        DSLContext dslContext = DSL.using(dbUrl);
+
+        // Jooq will close (return to pool) this connection after query execution.
+        // https://www.jooq.org/doc/3.18/manual/sql-building/dsl-context/connection-vs-datasource/
+        var dslContext = DSL.using(this.dataSource, SQLDialect.POSTGRES);
         AuditentryRecord auditentryRecord = dslContext.newRecord(Auditentry.AUDITENTRY);
+        auditentryRecord.setId(UUID.randomUUID());
         auditentryRecord.setAction(action.toString());
         auditentryRecord.setUsername(username);
         auditentryRecord.setServicename(serviceName);
