@@ -1,3 +1,4 @@
+import org.flywaydb.gradle.task.FlywayMigrateTask
 
 buildscript {
     dependencies {
@@ -423,20 +424,14 @@ flyway {
     baselineVersion = '1'
 }
 
-configurations {
-    flywayMigration
-}
-
 dependencies {
-    flywayMigration "org.testcontainers:postgresql:1.18.3"
-    flywayMigration group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
-
     jooqGenerator "org.testcontainers:postgresql:1.18.3"
     jooqGenerator group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 }
 
-flyway {
-    url = 'jdbc:tc:postgresql:11.21-alpine:///migrate?TC_REUSABLE=true'
+def jooqURL = 'jdbc:tc:postgresql:11.21-alpine:///migrate?TC_REUSABLE=true'
+task migrateJooq(type: FlywayMigrateTask) {
+    url = jooqURL
 }
 ext['flyway.postgresql.transactional.lock'] = 'false'
 
@@ -445,7 +440,7 @@ jooq {
         main {
             generationTool {
                 jdbc {
-                    url = 'jdbc:tc:postgresql:11.21-alpine:///migrate?TC_REUSABLE=true'
+                    url = jooqURL
                     driver = 'org.testcontainers.jdbc.ContainerDatabaseDriver'
                 }
                 generator {
@@ -470,7 +465,7 @@ jooq {
 // - the schema files from which the schema is generated and which is used by jOOQ to generate the sources have changed (scripts added, modified, etc.)
 tasks.named('generateJooq').configure {
     // ensure database schema has been prepared by Flyway before generating the jOOQ sources
-    dependsOn tasks.named('flywayMigrate')
+    dependsOn tasks.named('migrateJooq')
 
     // declare Flyway migration scripts as inputs on the jOOQ task
     inputs.files(fileTree('src/main/resources/db/migration'))
