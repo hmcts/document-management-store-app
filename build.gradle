@@ -447,11 +447,10 @@ jooq {
                     name = 'org.jooq.codegen.DefaultGenerator'
                     database {
                         name = 'org.jooq.meta.postgres.PostgresDatabase'
-                        includes = '.*'
-                        excludes = ''
+                        inputSchema = "public"
                     }
                     target {
-                        packageName = 'uk.gov.hmcts.dm.jooq'
+                        packageName = 'uk.gov.hmcts.dm.generated.db'
                     }
                 }
             }
