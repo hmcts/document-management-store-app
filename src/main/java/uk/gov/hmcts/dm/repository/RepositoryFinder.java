@@ -20,7 +20,8 @@ public class RepositoryFinder {
         try {
             return this.find(Class.forName(domainClassName));
         } catch (ClassNotFoundException e) {
-            throw new RepositoryCouldNotBeFoundException("Could not find a Repository for Domain class: " + domainClassName);
+            throw new RepositoryCouldNotBeFoundException(
+                "Could not find a Repository for Domain class: " + domainClassName);
         }
     }
 

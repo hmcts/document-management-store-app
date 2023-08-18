@@ -13,11 +13,11 @@ import uk.gov.hmcts.reform.authorisation.ServiceAuthorisationApi;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.authorisation.validators.ServiceAuthTokenValidator;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 public class EmAuthCheckerConfiguration {
@@ -45,7 +45,8 @@ public class EmAuthCheckerConfiguration {
     @Bean
     @ConditionalOnMissingBean(name = "preAuthenticatedAuthenticationProvider")
     public PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider() {
-        PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider = new PreAuthenticatedAuthenticationProvider();
+        PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider
+            = new PreAuthenticatedAuthenticationProvider();
         preAuthenticatedAuthenticationProvider.setPreAuthenticatedUserDetailsService(
             token -> new User((String) token.getPrincipal(), "N/A", Collections.emptyList())
         );
@@ -53,7 +54,8 @@ public class EmAuthCheckerConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider) {
+    public AuthenticationManager authenticationManager(
+        PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider) {
         return new ProviderManager(Collections.singletonList(preAuthenticatedAuthenticationProvider));
     }
 

@@ -18,8 +18,11 @@ import java.util.UUID;
 @Repository
 public interface StoredDocumentRepository extends PagingAndSortingRepository<StoredDocument, UUID> {
 
-    @Query("select s from StoredDocument s join s.metadata m where s.deleted = false and KEY(m) = :#{#metadataSearchCommand.name} and m = :#{#metadataSearchCommand.value}")
-    Page<StoredDocument> findAllByMetadata(@NonNull @Param("metadataSearchCommand") MetadataSearchCommand metadataSearchCommand, @NonNull Pageable pageable);
+    @Query("select s from StoredDocument s join s.metadata m where s.deleted = false and "
+        + "KEY(m) = :#{#metadataSearchCommand.name} and m = :#{#metadataSearchCommand.value}")
+    Page<StoredDocument> findAllByMetadata(
+        @NonNull @Param("metadataSearchCommand") MetadataSearchCommand metadataSearchCommand,
+        @NonNull Pageable pageable);
 
     @Query(value = "select cast(s.id as varchar) as id from storedDocument s "
            + "join documentmetadata m on s.id = m.documentmetadata_id "

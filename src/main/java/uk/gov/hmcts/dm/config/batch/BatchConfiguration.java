@@ -33,14 +33,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
+import java.util.Date;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.ThreadPoolExecutor;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 import javax.sql.DataSource;
-import java.util.Date;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableBatchProcessing
 @EnableScheduling
@@ -81,7 +81,8 @@ public class BatchConfiguration {
     @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
         lockAtLeastFor = "PT3M", lockAtMostFor = "PT15M")
-    public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+    public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
+        JobRestartException, JobInstanceAlreadyCompleteException {
         log.info("deleteJob starting");
         jobLauncher
             .run(processDocument(step1()), new JobParametersBuilder()

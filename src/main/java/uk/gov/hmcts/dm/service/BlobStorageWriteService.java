@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;
-import java.io.BufferedInputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +11,11 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
-import javax.validation.constraints.NotNull;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
+import javax.validation.constraints.NotNull;
 
 @Slf4j
 @Service
@@ -35,9 +35,10 @@ public class BlobStorageWriteService {
                                              @NotNull DocumentContentVersion documentContentVersion,
                                              @NotNull MultipartFile multiPartFile) {
         writeBinaryStream(storedDocument.getId(), documentContentVersion, multiPartFile);
-        documentContentVersionRepository.updateContentUriAndContentCheckSum(documentContentVersion.getId(),
-                                                                            documentContentVersion.getContentUri(),
-                                                                            documentContentVersion.getContentChecksum());
+        documentContentVersionRepository.updateContentUriAndContentCheckSum(
+            documentContentVersion.getId(),
+            documentContentVersion.getContentUri(),
+            documentContentVersion.getContentChecksum());
     }
 
     private void writeBinaryStream(UUID documentId,

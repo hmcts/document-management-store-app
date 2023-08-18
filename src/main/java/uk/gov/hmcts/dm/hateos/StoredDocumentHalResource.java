@@ -57,7 +57,8 @@ public class StoredDocumentHalResource extends HalResource {
     public StoredDocumentHalResource(@NonNull StoredDocument storedDocument) {
         BeanUtils.copyProperties(storedDocument, this);
 
-        roles = storedDocument.getRoles() != null ? storedDocument.getRoles().stream().sorted().collect(Collectors.toList()) : null;
+        roles = storedDocument.getRoles() != null
+            ? storedDocument.getRoles().stream().sorted().collect(Collectors.toList()) : null;
 
         DocumentContentVersion mostRecentDocumentContentVersion = storedDocument.getMostRecentDocumentContentVersion();
         if (mostRecentDocumentContentVersion != null) {
@@ -69,7 +70,8 @@ public class StoredDocumentHalResource extends HalResource {
         if (mostRecentDocumentContentVersion != null) {
             add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId(), null, null, null))
                 .withRel("binary"));
-            add(linkTo(methodOn(DocumentThumbnailController.class).getPreviewThumbnail(storedDocument.getId())).withRel("thumbnail"));
+            add(linkTo(methodOn(DocumentThumbnailController.class)
+                .getPreviewThumbnail(storedDocument.getId())).withRel("thumbnail"));
         }
 
         if (storedDocument.getFolder() != null) {
@@ -78,7 +80,10 @@ public class StoredDocumentHalResource extends HalResource {
 
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {
             CollectionModel<DocumentContentVersionHalResource> versionResources =
-                    CollectionModel.of(new ArrayList<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList())));
+                CollectionModel.of(new ArrayList<>(storedDocument.getDocumentContentVersions()
+                    .stream()
+                    .map(DocumentContentVersionHalResource::new)
+                    .collect(Collectors.toList())));
             embedResource("allDocumentVersions", versionResources);
 
         }

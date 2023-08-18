@@ -2,9 +2,9 @@ package uk.gov.hmcts.dm.commandobject;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Map;
 import java.util.UUID;
+import javax.validation.constraints.NotBlank;
 
 @Data
 public class DocumentUpdate {

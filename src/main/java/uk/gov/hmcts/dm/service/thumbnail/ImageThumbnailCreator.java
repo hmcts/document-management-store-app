@@ -3,9 +3,9 @@ package uk.gov.hmcts.dm.service.thumbnail;
 import uk.gov.hmcts.dm.exception.CantCreateThumbnailException;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import javax.imageio.ImageIO;
 
 public class ImageThumbnailCreator extends AbstractFileSpecificThumbnailCreator {
 

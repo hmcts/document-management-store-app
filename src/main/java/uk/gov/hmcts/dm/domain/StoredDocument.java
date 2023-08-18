@@ -131,9 +131,11 @@ public class StoredDocument implements RolesAware {
         setId(id);
     }
 
-    public StoredDocument(UUID id, String createdBy, String createdByService, String lastModifiedBy, String lastModifiedByService,
+    public StoredDocument(UUID id, String createdBy, String createdByService,
+                          String lastModifiedBy, String lastModifiedByService,
                           Date modifiedOn, Date createdOn,
-                          boolean deleted, boolean hardDeleted, Folder folder, List<DocumentContentVersion> documentContentVersions,
+                          boolean deleted, boolean hardDeleted,
+                          Folder folder, List<DocumentContentVersion> documentContentVersions,
                           Set<StoredDocumentAuditEntry> auditEntries,
                           Classifications classification, Set<String> roles, Map<String, String> metadata, Date ttl) {
         setId(id);
@@ -155,7 +157,8 @@ public class StoredDocument implements RolesAware {
     }
 
     public DocumentContentVersion getMostRecentDocumentContentVersion() {
-        return CollectionUtils.isEmpty(documentContentVersions) ? null : documentContentVersions.get(documentContentVersions.size() - 1);
+        return CollectionUtils.isEmpty(documentContentVersions)
+            ? null : documentContentVersions.get(documentContentVersions.size() - 1);
     }
 
     public Date getModifiedOn() {
