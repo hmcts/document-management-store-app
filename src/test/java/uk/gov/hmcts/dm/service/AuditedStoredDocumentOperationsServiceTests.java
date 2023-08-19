@@ -56,7 +56,8 @@ public class AuditedStoredDocumentOperationsServiceTests {
     public void testReadNullStoredDocument() {
         StoredDocument storedDocument = null;
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
-        StoredDocument readStoredDocument = auditedStoredDocumentOperationsService.readStoredDocument(TestUtil.RANDOM_UUID);
+        StoredDocument readStoredDocument =
+            auditedStoredDocumentOperationsService.readStoredDocument(TestUtil.RANDOM_UUID);
         Assert.assertNull(readStoredDocument);
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.READ);
     }

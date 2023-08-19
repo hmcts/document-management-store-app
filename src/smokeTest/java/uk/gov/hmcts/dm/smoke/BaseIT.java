@@ -13,11 +13,11 @@ import org.springframework.test.context.ContextConfiguration;
 import uk.gov.hmcts.dm.smoke.utilities.FileUtils;
 import uk.gov.hmcts.dm.smoke.utilities.V1MediaTypes;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 
 @ContextConfiguration(classes = uk.gov.hmcts.dm.smoke.config.SmokeTestContextConfiguration.class)
 @NotThreadSafe
@@ -84,11 +84,13 @@ public class BaseIT {
         return createDocument(username, filename, null, Collections.emptyList(), null);
     }
 
-    public String createDocumentAndGetUrlAs(String username, String filename, String classification, List<String> roles, Map<String, String> metadata) {
+    public String createDocumentAndGetUrlAs(String username, String filename,
+                                            String classification, List<String> roles, Map<String, String> metadata) {
         return createDocument(username, filename, classification, roles, metadata).path("_embedded.documents[0]._links.self.href");
     }
 
-    public String createDocumentAndGetUrlAs(String username, String filename, String classification, List<String> roles) {
+    public String createDocumentAndGetUrlAs(String username, String filename,
+                                            String classification, List<String> roles) {
         return createDocumentAndGetUrlAs(username, filename, classification, roles, null);
     }
 
@@ -104,7 +106,8 @@ public class BaseIT {
         return createDocumentAndGetUrlAs(username, null, null, Collections.emptyList(), null);
     }
 
-    public String createDocumentAndGetBinaryUrlAs(String username, String filename, String classification, List<String> roles) {
+    public String createDocumentAndGetBinaryUrlAs(String username, String filename,
+                                                  String classification, List<String> roles) {
         return createDocument(username, filename, classification, roles).path("_embedded.documents[0]._links.binary.href");
     }
 
