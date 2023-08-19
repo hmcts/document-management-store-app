@@ -18,13 +18,17 @@ import uk.gov.hmcts.dm.FunctionalTestContextConfiguration;
 import uk.gov.hmcts.dm.StorageTestConfiguration;
 import uk.gov.hmcts.dm.functional.DocumentMetadataPropertiesConfig.DocumentMetadata;
 
-import javax.annotation.PostConstruct;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.PostConstruct;
 
 
 
@@ -256,7 +260,8 @@ public abstract class BaseIT {
         try (
             OutputStream outputStream = new FileOutputStream(tmpFile);
 
-            final InputStream inputStream = givenLargeFileRequest(citizen, new ArrayList<>(List.of(caseWorkerRoleProbate)))
+            final InputStream inputStream = givenLargeFileRequest(citizen,
+                new ArrayList<>(List.of(caseWorkerRoleProbate)))
                 .get(doc)
                 .getBody()
                 .asInputStream()) {
@@ -318,13 +323,15 @@ public abstract class BaseIT {
         return createDocument(username, null, null, Collections.emptyList(), null);
     }
 
-    public String createDocumentAndGetUrlAs(String username, String filename, String classification, List<String> roles, Map<String, String> metadata) {
+    public String createDocumentAndGetUrlAs(String username, String filename, String classification,
+                                            List<String> roles, Map<String, String> metadata) {
         String documentUrl =  createDocument(username, filename, classification, roles, metadata)
             .path("_embedded.documents[0]._links.self.href");
         return replaceHttp(documentUrl);
     }
 
-    public String createDocumentAndGetUrlAs(String username, String filename, String classification, List<String> roles) {
+    public String createDocumentAndGetUrlAs(String username, String filename,
+                                            String classification, List<String> roles) {
         return createDocumentAndGetUrlAs(username, filename, classification, roles, null);
     }
 
@@ -344,7 +351,8 @@ public abstract class BaseIT {
         return givenRequest(username).get(documentUrl);
     }
 
-    public String createDocumentAndGetBinaryUrlAs(String username, String filename, String classification, List<String> roles) {
+    public String createDocumentAndGetBinaryUrlAs(String username, String filename,
+                                                  String classification, List<String> roles) {
         String url = createDocument(username, filename, classification, roles)
             .path("_embedded.documents[0]._links.binary.href");
         return replaceHttp(url);

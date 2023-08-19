@@ -80,7 +80,7 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void ep6AsAnAuthenticatedUserButNotTheOwnerOfTheFilePostTheNewerVersionOfTheFileReceiveJsonErrorPageWith403() {
+    public void ep6AsAnAuthenticatedUserNotTheOwnerOfTheFilePostTheNewerVersionOfTheFileReceiveJsonErrorPageWith403() {
 
         String url = createDocumentAndGetUrlAs(getCitizen());
 
@@ -138,7 +138,7 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void ep10AsAnAuthenticatedUserButNotTheOwnerOfTheFilePostTheNewerVersionOfTheFileReceiveJsonErrorPageWith403() {
+    public void ep10AsAnAuthenticatedUserNotTheOwnerOfTheFilePostTheNewerVersionOfTheFileReceiveJsonErrorPageWith403() {
 
         String url = createDocumentAndGetUrlAs(getCitizen());
 

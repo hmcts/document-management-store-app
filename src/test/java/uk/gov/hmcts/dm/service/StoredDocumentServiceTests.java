@@ -253,7 +253,8 @@ public class StoredDocumentServiceTests {
         assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
         verify(securityUtilService).getUserId();
         verify(folderRepository).save(folder);
-        verify(blobStorageWriteService).uploadDocumentContentVersion(folder.getStoredDocuments().get(0), latestVersionInFolder, TEST_FILE);
+        verify(blobStorageWriteService).uploadDocumentContentVersion(
+            folder.getStoredDocuments().get(0), latestVersionInFolder, TEST_FILE);
     }
 
     @Test

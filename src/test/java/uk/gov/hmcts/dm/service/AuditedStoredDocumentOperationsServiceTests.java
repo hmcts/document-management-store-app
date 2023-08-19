@@ -66,7 +66,8 @@ public class AuditedStoredDocumentOperationsServiceTests {
         StoredDocument storedDocument = new StoredDocument();
         MultipartFile multipartFile = TestUtil.TEST_FILE;
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        when(storedDocumentService.addStoredDocumentVersion(storedDocument, multipartFile)).thenReturn(documentContentVersion);
+        when(storedDocumentService.addStoredDocumentVersion(storedDocument, multipartFile))
+            .thenReturn(documentContentVersion);
         auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, multipartFile);
         verify(storedDocumentService, times(1)).addStoredDocumentVersion(storedDocument, multipartFile);
         verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
@@ -86,7 +87,8 @@ public class AuditedStoredDocumentOperationsServiceTests {
         auditedStoredDocumentOperationsService.createStoredDocuments(documentsCommand);
         verify(storedDocumentService, times(1)).saveItems(documentsCommand);
         verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT, AuditActions.CREATED);
-        verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT.getDocumentContentVersions().get(0), AuditActions.CREATED);
+        verify(auditEntryService, times(1)).createAndSaveEntry(
+            TestUtil.STORED_DOCUMENT.getDocumentContentVersions().get(0), AuditActions.CREATED);
     }
 
     @Test

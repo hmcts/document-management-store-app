@@ -56,7 +56,8 @@ public class MultiMediaUploadIT extends BaseIT {
 
     }
 
-    private boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType) throws IOException {
+    private boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType)
+        throws IOException {
         File file = largeFile(doc, metadataKey);
         boolean exists = file.exists();
         Response response = givenRequest(getCitizen())

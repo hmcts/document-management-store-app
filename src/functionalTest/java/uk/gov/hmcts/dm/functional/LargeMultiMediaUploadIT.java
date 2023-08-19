@@ -41,15 +41,18 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
     @Test
     public void largeMp3RejectedDueToSizeValidation() {
-        streamBlobToUpload("652MB_video_mp4.mp4", VIDEO_MPEG_VALUE, this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
+        streamBlobToUpload("652MB_video_mp4.mp4", VIDEO_MPEG_VALUE,
+            this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
     }
 
     @Test
     public void largePdfRejectedDueToSizeValidation() {
-        streamBlobToUpload("1.2GB.pdf", APPLICATION_PDF_VALUE,this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
+        streamBlobToUpload("1.2GB.pdf", APPLICATION_PDF_VALUE,
+            this::uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage);
     }
 
-    private void streamBlobToUpload(String fileName,String mimeType, TriConsumer<InputStream, String, String> uploadFunction) {
+    private void streamBlobToUpload(String fileName,String mimeType,
+                                    TriConsumer<InputStream, String, String> uploadFunction) {
         assumeNotNull(blobReader);
         BlockBlobClient blockBlobClient = blobReader.retrieveBlobToProcess(fileName);
         uploadFunction.accept(blockBlobClient.openInputStream(), fileName, mimeType);
@@ -74,7 +77,8 @@ public class LargeMultiMediaUploadIT extends BaseIT {
             .post("/documents");
     }
 
-    private void uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage(InputStream inputStream, String fileName, String mimeType) {
+    private void uploadingLargeFileBeyoundLimitThrowsValidationSizeErrorMessage(
+        InputStream inputStream, String fileName, String mimeType) {
         givenRequest(getCitizen())
             .multiPart("files", fileName, inputStream, mimeType)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
