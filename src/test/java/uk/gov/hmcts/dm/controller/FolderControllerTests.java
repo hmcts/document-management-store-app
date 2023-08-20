@@ -4,16 +4,16 @@ import net.thucydides.core.annotations.Pending;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.service.Constants;
 
-import java.util.Arrays;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

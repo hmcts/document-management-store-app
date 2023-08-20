@@ -34,13 +34,15 @@ public class StoredDocumentDeleteControllerTest {
 
     @Test
     void shouldReturnValidResponse() {
-        final DeleteCaseDocumentsCommand deleteCaseDocumentsCommand = new DeleteCaseDocumentsCommand("0123456789123456");
+        final DeleteCaseDocumentsCommand deleteCaseDocumentsCommand =
+            new DeleteCaseDocumentsCommand("0123456789123456");
 
         final List<StoredDocument> storedDocumentList = List.of(mock(StoredDocument.class));
         final CaseDocumentsDeletionResults caseDocumentsDeletionResults = new CaseDocumentsDeletionResults(1, 1);
 
         when(searchService.findStoredDocumentsIdsByCaseRef(deleteCaseDocumentsCommand)).thenReturn(storedDocumentList);
-        when(auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocumentList)).thenReturn(caseDocumentsDeletionResults);
+        when(auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocumentList))
+            .thenReturn(caseDocumentsDeletionResults);
 
         final ResponseEntity<CaseDocumentsDeletionResults> caseDocumentsDeletionResultsResponseEntity =
                 storedDocumentDeleteController.deleteCaseDocuments(deleteCaseDocumentsCommand);

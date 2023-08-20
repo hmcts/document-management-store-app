@@ -29,7 +29,8 @@ public class DocumentContentVersionServiceTests {
 
     @Test
     public void testFindOne() {
-        when(documentContentVersionRepository.findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(new DocumentContentVersion()));
+        when(documentContentVersionRepository
+            .findById(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(new DocumentContentVersion()));
         Assert.assertNotNull(documentContentVersionService.findById(TestUtil.RANDOM_UUID));
     }
 

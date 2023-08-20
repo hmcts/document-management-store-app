@@ -11,14 +11,18 @@ import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import java.util.Date;
 import java.util.UUID;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
     private final UUID id = UUID.randomUUID();
 
-    private final StoredDocumentNotFoundException storedDocumentNotFoundException = new StoredDocumentNotFoundException(id);
+    private final StoredDocumentNotFoundException storedDocumentNotFoundException =
+        new StoredDocumentNotFoundException(id);
 
     @Test
     public void testUpdateDocument() throws Exception {

@@ -9,10 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-
-import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -46,7 +45,8 @@ public class ApiErrorControllerTest {
         Map<String, Object> body = apiErrorAttributes.getErrorAttributes(webRequest, errorAttributeOptions);
         when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).thenReturn(500);
         ApiErrorController apiErrorController = new ApiErrorController(apiErrorAttributes);
-        assertThat(apiErrorController.error(request), equalTo(new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR)));
+        assertThat(apiErrorController.error(request),
+            equalTo(new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR)));
     }
 
 }
