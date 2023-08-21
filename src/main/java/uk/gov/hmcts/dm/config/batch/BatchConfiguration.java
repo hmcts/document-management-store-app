@@ -9,7 +9,7 @@ import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
-import org.hibernate.LockOptions;
+import org.hibernate.LockMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -176,7 +176,7 @@ public class BatchConfiguration {
                 .createQuery("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
                             + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
-                .setHint("jakarta.persistence.lock.timeout", LockOptions.SKIP_LOCKED)
+                .setHint("jakarta.persistence.lock.timeout", LockMode.UPGRADE_SKIPLOCKED)
                 .setMaxResults(400);
         }
 
