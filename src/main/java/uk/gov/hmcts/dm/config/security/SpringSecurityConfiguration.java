@@ -13,7 +13,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity (prePostEnabled = true)
 public class SpringSecurityConfiguration {
 
     private DmServiceAuthFilter dmServiceAuthFilter;
