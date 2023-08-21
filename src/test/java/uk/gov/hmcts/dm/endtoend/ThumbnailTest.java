@@ -8,18 +8,14 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
-import static org.springframework.http.MediaType.IMAGE_GIF_VALUE;
-import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
-import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
-import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -176,9 +172,7 @@ public class ThumbnailTest extends End2EndTestBase {
                 return null;
             }
         }).when(blobStorageReadService)
-            .loadBlob(Mockito.any(DocumentContentVersion.class),
-                Mockito.any(HttpServletRequest.class),
-                Mockito.any(HttpServletResponse.class));
+            .loadBlob(Mockito.any(DocumentContentVersion.class), Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
 
         Mockito.doAnswer(invocation -> {
             try (final InputStream inputStream = file.getInputStream();

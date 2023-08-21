@@ -5,9 +5,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.service.FileSizeVerifier;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.List;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 public class MultipartFileSizeValidator
     implements ConstraintValidator<MultipartFileSizeLimit,List<MultipartFile>> {

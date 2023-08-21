@@ -5,9 +5,9 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.List;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 public class MultipartFileListWhiteListValidator
     implements ConstraintValidator<MultipartFileListWhiteList,List<MultipartFile>> {

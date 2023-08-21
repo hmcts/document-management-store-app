@@ -54,7 +54,7 @@ public class FolderControllerTests extends ComponentTestBase {
     public void testPostSuccess() throws Exception {
         restActions
             .withAuthorizedUser("userId")
-            .post("/folders/", TestUtil.TEST_FOLDER).andExpect(status().isOk());
+            .post("/folders",TestUtil.TEST_FOLDER).andExpect(status().isOk());
     }
 
     @Test

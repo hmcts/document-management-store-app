@@ -17,18 +17,15 @@ import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Collections;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 public class BlobStorageReadServiceTest {
@@ -120,9 +117,9 @@ public class BlobStorageReadServiceTest {
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
         // whole doc is returned so we never set the partial content header
-        verify(response, Mockito.times(0)).setStatus(HttpStatus.PARTIAL_CONTENT.value());
-        verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 0-4/4");
-        verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_LENGTH, "5");
+        Mockito.verify(response, Mockito.times(0)).setStatus(HttpStatus.PARTIAL_CONTENT.value());
+        Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 0-4/4");
+        Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_LENGTH, "5");
     }
 
     @Test
@@ -133,9 +130,9 @@ public class BlobStorageReadServiceTest {
 
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
 
-        verify(response, Mockito.times(1)).setStatus(HttpStatus.PARTIAL_CONTENT.value());
-        verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 0-2/4");
-        verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_LENGTH, "3");
+        Mockito.verify(response, Mockito.times(1)).setStatus(HttpStatus.PARTIAL_CONTENT.value());
+        Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 0-2/4");
+        Mockito.verify(response, Mockito.times(1)).setHeader(HttpHeaders.CONTENT_LENGTH, "3");
     }
 
     @Test

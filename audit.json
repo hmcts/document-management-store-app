@@ -73,6 +73,7 @@
     "10010_Cookie No HttpOnly Flag_http://dm-store-aat.service.core-compute-aat.internal/documents_POST":"ignore",
     "10021_X-Content-Type-Options Header Missing_http://dm-store-aat.service.core-compute-aat.internal/_GET":"ignore",
     "10021_X-Content-Type-Options Header Missing_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET":"ignore",
+    "10049_Storable and Cacheable Content_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/filter?page=10\u0026size=10\u0026sort=sort_POST":"ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/owned?page=10\u0026size=10\u0026sort=sort_POST":"ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents_POST":"ignore",

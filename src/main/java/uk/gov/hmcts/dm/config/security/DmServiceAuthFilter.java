@@ -7,13 +7,15 @@ import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
 import uk.gov.hmcts.reform.authorisation.exceptions.ServiceException;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
 
 public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilter {
 
     public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
+
+    public static final String NOT_APPLICABLE = "N/A";
 
     private static final Logger LOG = LoggerFactory.getLogger(DmServiceAuthFilter.class);
 
@@ -35,7 +37,6 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
     @Override
     protected Object getPreAuthenticatedPrincipal(HttpServletRequest request) {
         try {
-
             String bearerToken = extractBearerToken(request);
             String serviceName = authTokenValidator.getServiceName(bearerToken);
             if (!authorisedServices.contains(serviceName)) {
@@ -64,7 +65,7 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
 
     @Override
     protected Object getPreAuthenticatedCredentials(HttpServletRequest request) {
-        return "N/A";
+        return NOT_APPLICABLE;
     }
 
     private String extractBearerToken(HttpServletRequest request) {

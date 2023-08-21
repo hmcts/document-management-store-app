@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.config.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,11 +14,11 @@ import uk.gov.hmcts.reform.authorisation.ServiceAuthorisationApi;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.authorisation.validators.ServiceAuthTokenValidator;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
-import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 public class EmAuthCheckerConfiguration {
@@ -43,10 +44,17 @@ public class EmAuthCheckerConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty("idam.s2s-authorised.services")
+    public FilterRegistrationBean<DmServiceAuthFilter> registration(DmServiceAuthFilter filter) {
+        FilterRegistrationBean<DmServiceAuthFilter> registration = new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
     @ConditionalOnMissingBean(name = "preAuthenticatedAuthenticationProvider")
     public PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider() {
-        PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider
-            = new PreAuthenticatedAuthenticationProvider();
+        PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider = new PreAuthenticatedAuthenticationProvider();
         preAuthenticatedAuthenticationProvider.setPreAuthenticatedUserDetailsService(
             token -> new User((String) token.getPrincipal(), "N/A", Collections.emptyList())
         );
@@ -54,8 +62,7 @@ public class EmAuthCheckerConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-        PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider) {
+    public AuthenticationManager authenticationManager(PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider) {
         return new ProviderManager(Collections.singletonList(preAuthenticatedAuthenticationProvider));
     }
 

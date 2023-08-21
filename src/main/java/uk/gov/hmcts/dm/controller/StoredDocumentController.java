@@ -39,15 +39,15 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import static java.lang.String.format;
 
@@ -163,8 +163,7 @@ public class StoredDocumentController {
                 schema = @Schema(type = "string")),
             @Parameter(in = ParameterIn.HEADER, name = "user-roles", description = "User Roles", required = true,
                 schema = @Schema(type = "string")),
-            @Parameter(in = ParameterIn.HEADER, name =
-                "classification", description = "Classification", required = true,
+            @Parameter(in = ParameterIn.HEADER, name = "classification", description = "Classification", required = true,
                 schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Returns contents of a file"),

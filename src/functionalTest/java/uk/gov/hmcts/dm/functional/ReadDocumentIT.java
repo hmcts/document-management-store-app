@@ -144,7 +144,7 @@ public class ReadDocumentIT extends BaseIT {
             .expect()
             .statusCode(405)
             .when()
-            .get("documents/");
+            .get("documents");
     }
 
     @Test

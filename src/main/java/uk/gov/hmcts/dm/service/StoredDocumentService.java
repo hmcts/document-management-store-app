@@ -18,15 +18,9 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import jakarta.transaction.Transactional;
+import java.util.*;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 
 @Service
 public class StoredDocumentService {
@@ -199,9 +193,9 @@ public class StoredDocumentService {
             storedDocument.getMetadata().putAll(metadata);
         } else {
             //Don't override existing value for key. Instead add only new key/value to the Metadata
-            //            Map<String, String> newMetaData = metadata.entrySet().stream()
-            //                .filter(entry -> !storedDocument.getMetadata().containsKey(entry.getKey()))
-            //                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//            Map<String, String> newMetaData = metadata.entrySet().stream()
+//                .filter(entry -> !storedDocument.getMetadata().containsKey(entry.getKey()))
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             Map<String, String> newMetaData = new HashMap<>();
             metadata.forEach((key, val) -> {
                 if (!storedDocument.getMetadata().containsKey(key)) {

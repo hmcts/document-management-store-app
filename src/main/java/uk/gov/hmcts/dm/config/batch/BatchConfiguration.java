@@ -33,14 +33,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.Query;
+import javax.sql.DataSource;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.LockModeType;
-import javax.persistence.Query;
-import javax.sql.DataSource;
 
 @EnableBatchProcessing
 @EnableScheduling
@@ -81,8 +81,7 @@ public class BatchConfiguration {
     @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
         lockAtLeastFor = "PT3M", lockAtMostFor = "PT15M")
-    public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
-        JobRestartException, JobInstanceAlreadyCompleteException {
+    public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
         log.info("deleteJob starting");
         jobLauncher
             .run(processDocument(step1()), new JobParametersBuilder()
@@ -175,7 +174,7 @@ public class BatchConfiguration {
                 .createQuery("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
                             + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
-                .setHint("javax.persistence.lock.timeout", LockOptions.SKIP_LOCKED)
+                .setHint("jakarta.persistence.lock.timeout", LockOptions.SKIP_LOCKED)
                 .setMaxResults(400);
         }
 
