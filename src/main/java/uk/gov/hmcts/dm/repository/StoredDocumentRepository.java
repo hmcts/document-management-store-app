@@ -17,7 +17,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface StoredDocumentRepository extends PagingAndSortingRepository<StoredDocument, UUID>, CrudRepository<StoredDocument, UUID> {
+public interface StoredDocumentRepository extends PagingAndSortingRepository<StoredDocument, UUID>,
+    CrudRepository<StoredDocument, UUID> {
 
     @Query("select s from StoredDocument s join s.metadata m where s.deleted = false and "
         + "KEY(m) = :#{#metadataSearchCommand.name} and m = :#{#metadataSearchCommand.value}")

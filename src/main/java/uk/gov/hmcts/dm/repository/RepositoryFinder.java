@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.repository;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.dm.exception.RepositoryCouldNotBeFoundException;
 
 import java.io.Serializable;
-import jakarta.validation.constraints.NotNull;
 
 @Component
 public class RepositoryFinder {
