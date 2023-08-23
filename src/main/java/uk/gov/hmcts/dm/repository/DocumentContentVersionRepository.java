@@ -11,7 +11,8 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import java.util.UUID;
 
 @Repository
-public interface DocumentContentVersionRepository extends PagingAndSortingRepository<DocumentContentVersion, UUID>, CrudRepository<DocumentContentVersion, UUID> {
+public interface DocumentContentVersionRepository extends
+    PagingAndSortingRepository<DocumentContentVersion, UUID>, CrudRepository<DocumentContentVersion, UUID> {
 
     @Modifying(clearAutomatically = true)
     @Query("update DocumentContentVersion dcv set dcv.contentUri = :contentUri, dcv.contentChecksum = "

@@ -14,7 +14,7 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j

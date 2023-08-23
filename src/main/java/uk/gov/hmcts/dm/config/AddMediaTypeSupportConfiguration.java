@@ -20,10 +20,12 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
             ((RequestMappingHandlerAdapter) bean).getMessageConverters().stream()
                 .filter(converter -> converter instanceof MappingJackson2HttpMessageConverter)
                 .forEach(converter -> {
-                    MappingJackson2HttpMessageConverter halConverterCandidate = (MappingJackson2HttpMessageConverter) converter;
+                    MappingJackson2HttpMessageConverter halConverterCandidate =
+                        (MappingJackson2HttpMessageConverter) converter;
                     ObjectMapper objectMapper = halConverterCandidate.getObjectMapper();
                     if (Jackson2HalModule.isAlreadyRegisteredIn(objectMapper)) {
-                        List<MediaType> vendorSpecificTypes = new ArrayList<>(halConverterCandidate.getSupportedMediaTypes());
+                        List<MediaType> vendorSpecificTypes =
+                            new ArrayList<>(halConverterCandidate.getSupportedMediaTypes());
                         vendorSpecificTypes.add(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE);
                         vendorSpecificTypes.add(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE);
                         vendorSpecificTypes.add(V1MediaType.V1_HAL_FOLDER_MEDIA_TYPE);

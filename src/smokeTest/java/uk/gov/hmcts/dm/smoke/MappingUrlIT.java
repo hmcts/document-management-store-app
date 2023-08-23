@@ -45,8 +45,10 @@ public class MappingUrlIT extends BaseIT {
 
     @Test
     public void toggle_metadatasearchendpoint_toggle_Mappings() {
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint -> endpoint.contains("owned")), metadatasearchendpoint);
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint -> endpoint.contains("filter")), metadatasearchendpoint);
+        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
+            endpoint.contains("owned")), metadatasearchendpoint);
+        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
+            endpoint.contains("filter")), metadatasearchendpoint);
     }
 
     @Test

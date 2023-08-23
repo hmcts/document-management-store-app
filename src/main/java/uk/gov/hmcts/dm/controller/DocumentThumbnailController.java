@@ -59,7 +59,8 @@ public class DocumentThumbnailController {
                 .map(documentContentVersion ->
                 ResponseEntity.ok()
                     .contentType(MediaType.IMAGE_JPEG)
-                    .body(auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion))
+                    .body(auditedDocumentContentVersionOperationsService
+                        .readDocumentContentVersionThumbnail(documentContentVersion))
             ).orElse(ResponseEntity.notFound().build());
     }
 

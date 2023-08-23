@@ -25,7 +25,8 @@ public class TestUtil {
 
     static {
         try {
-            TEST_FILE = new MockMultipartFile("file", "filename.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
+            TEST_FILE = new MockMultipartFile("file", "filename.txt",
+                "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -35,7 +36,8 @@ public class TestUtil {
 
     static {
         try {
-            TEST_FILE_EXE = new MockMultipartFile("file", "filename.exe", "application/octet-stream", "some xml".getBytes(StandardCharsets.UTF_8));
+            TEST_FILE_EXE = new MockMultipartFile("file", "filename.exe",
+                "application/octet-stream", "some xml".getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -45,14 +47,17 @@ public class TestUtil {
 
     static {
         try {
-            TEST_FILE_WITH_FUNNY_NAME = new MockMultipartFile("file", "filename!@£$%^&*()<>.txt", "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
+            TEST_FILE_WITH_FUNNY_NAME = new MockMultipartFile("file", "filename!@£$%^&*()<>.txt",
+                "text/plain", "some xml".getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
-    public static final MediaType MULTIPART_FORM_DATA = new MediaType(MediaType.MULTIPART_FORM_DATA.getType(), MediaType.MULTIPART_FORM_DATA.getSubtype());
+    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
+        MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
+    public static final MediaType MULTIPART_FORM_DATA =
+        new MediaType(MediaType.MULTIPART_FORM_DATA.getType(), MediaType.MULTIPART_FORM_DATA.getSubtype());
 
     public static final UUID RANDOM_UUID = UUID.randomUUID();
 
@@ -65,7 +70,8 @@ public class TestUtil {
         .originalDocumentName("filename.txt")
         .size(4L)
         .contentUri("someUri")
-        .storedDocument(StoredDocument.builder().id(RANDOM_UUID).folder(Folder.builder().id(RANDOM_UUID).build()).build())
+        .storedDocument(StoredDocument.builder().id(RANDOM_UUID)
+            .folder(Folder.builder().id(RANDOM_UUID).build()).build())
         .build();
 
     public static final Folder folder = Folder.builder()
