@@ -32,7 +32,8 @@ public class WebChecker {
 
     private boolean getStatus() {
         try {
-            final HealthCheckResponse healthCheckResponse = restTemplate.getForObject(url + "/health", HealthCheckResponse.class);
+            final HealthCheckResponse healthCheckResponse =
+                restTemplate.getForObject(url + "/health", HealthCheckResponse.class);
             if (Objects.nonNull(healthCheckResponse) && StringUtils.isNotBlank(healthCheckResponse.getStatus())) {
                 return "UP".equalsIgnoreCase(healthCheckResponse.getStatus());
             }

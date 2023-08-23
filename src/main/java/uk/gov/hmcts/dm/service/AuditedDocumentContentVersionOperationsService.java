@@ -1,5 +1,8 @@
 package uk.gov.hmcts.dm.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,9 +13,6 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.UUID;
 

@@ -1,10 +1,11 @@
 package uk.gov.hmcts.dm.exception;
 
+
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import jakarta.servlet.http.HttpServletResponse;
 
 @ResponseStatus(value = HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE)
 public class InvalidRangeRequestException extends RuntimeException {

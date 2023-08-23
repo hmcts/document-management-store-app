@@ -97,7 +97,8 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
             stopwatch.stop();
             long timeElapsed = stopwatch.getTime();
 
-            log.info("Time taken to update {} documents is  : {} milliseconds from csv file with name {} ", updates.size(),
+            log.info("Time taken to update {} documents is  :"
+                    + " {} milliseconds from csv file with name {} ", updates.size(),
                 timeElapsed, client.getBlobName());
 
             client.delete();

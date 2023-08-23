@@ -11,7 +11,8 @@ public class DeleteExpiredDocumentsProcessor implements ItemProcessor<StoredDocu
 
     private final AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
 
-    public DeleteExpiredDocumentsProcessor(AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService) {
+    public DeleteExpiredDocumentsProcessor(
+        AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService) {
         this.auditedStoredDocumentBatchOperationsService = auditedStoredDocumentBatchOperationsService;
     }
 

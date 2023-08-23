@@ -2,9 +2,9 @@ package uk.gov.hmcts.dm.config.batch;
 
 import com.azure.storage.blob.BlobContainerClient;
 import net.javacrumbs.shedlock.core.LockProvider;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -25,8 +25,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
-import javax.sql.DataSource;
 import java.util.Date;
+import javax.sql.DataSource;
 
 @EnableBatchProcessing
 @EnableScheduling

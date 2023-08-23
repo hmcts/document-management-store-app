@@ -130,7 +130,8 @@ public class ReadContentVersionIT extends BaseIT {
     @Test
     public void rcv10AsACreatorWhenIReadNonExistentVersionByUrl() {
         final String nonExistentVersionId = UUID.randomUUID().toString();
-        final String newDocumentVersionUrl = documentVersionUrl.replace(documentVersionUrl.substring(documentVersionUrl.lastIndexOf("/") + 1), nonExistentVersionId);
+        final String newDocumentVersionUrl = documentVersionUrl.replace(
+            documentVersionUrl.substring(documentVersionUrl.lastIndexOf("/") + 1), nonExistentVersionId);
 
         givenRequest(getCitizen())
             .when()
@@ -138,7 +139,8 @@ public class ReadContentVersionIT extends BaseIT {
             .then()
             .assertThat()
             .statusCode(is(404))
-            .body("error", equalTo(String.format("DocumentContentVersion with ID: %s could not be found", nonExistentVersionId)))
+            .body("error", equalTo(String.format("DocumentContentVersion with ID: %s could not be found",
+                nonExistentVersionId)))
             .body("exception", equalTo("uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException"))
             .log()
             .all();
@@ -148,7 +150,8 @@ public class ReadContentVersionIT extends BaseIT {
     public void rcv11AsACreatorWhenIReadNonExistentVersionBinaryByUrl() {
         final String nonExistentVersionId = UUID.randomUUID().toString();
         String versionsStr = "versions";
-        String url = documentVersionBinaryUrl.substring(0, (documentVersionBinaryUrl.indexOf(versionsStr) + versionsStr.length()));
+        String url = documentVersionBinaryUrl.substring(0, (
+            documentVersionBinaryUrl.indexOf(versionsStr) + versionsStr.length()));
         String binaryPath = "/%s/binary";
         String newDocumentVersionBinaryUrl = url + String.format(binaryPath, nonExistentVersionId);
 
@@ -158,7 +161,8 @@ public class ReadContentVersionIT extends BaseIT {
             .then()
             .assertThat()
             .statusCode(is(404))
-            .body("error", equalTo(String.format("DocumentContentVersion with ID: %s could not be found", nonExistentVersionId)))
+            .body("error", equalTo(String.format("DocumentContentVersion with ID: %s could not be found",
+                nonExistentVersionId)))
             .body("exception", equalTo("uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException"))
             .log()
             .all();

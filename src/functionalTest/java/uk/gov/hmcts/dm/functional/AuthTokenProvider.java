@@ -11,9 +11,11 @@ import org.hamcrest.CoreMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.util.Base64;
 import java.util.Map;
 import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -44,7 +46,8 @@ public class AuthTokenProvider {
         return new AuthTokens(userToken, "");
     }
 
-    public void createIdamUser(String email, String password, Optional<String> maybeRole) throws JsonProcessingException {
+    public void createIdamUser(String email, String password, Optional<String> maybeRole)
+        throws JsonProcessingException {
         ImmutableMap<String, Object> body = ImmutableMap.of("email", email,
                 "forename", "test",
                 "surname", "test",
