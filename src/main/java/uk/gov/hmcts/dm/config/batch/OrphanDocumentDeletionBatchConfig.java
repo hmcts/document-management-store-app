@@ -26,8 +26,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService;
 
-import javax.sql.DataSource;
 import java.util.Date;
+import javax.sql.DataSource;
 
 @EnableBatchProcessing
 @EnableScheduling

@@ -1,5 +1,7 @@
 package uk.gov.hmcts.dm.commandobject;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +11,6 @@ import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteList;
 import uk.gov.hmcts.dm.security.MultipartFileSizeLimit;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

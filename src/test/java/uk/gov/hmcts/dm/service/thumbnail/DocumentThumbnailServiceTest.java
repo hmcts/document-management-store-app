@@ -11,10 +11,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class DocumentThumbnailServiceTest {

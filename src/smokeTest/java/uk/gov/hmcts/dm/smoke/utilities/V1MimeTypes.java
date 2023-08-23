@@ -9,7 +9,8 @@ public class V1MimeTypes extends MediaType implements Serializable {
         super(type);
     }
 
-    public static final String APPLICATION_DOCX_VALUE = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    public static final String APPLICATION_DOCX_VALUE =
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     public static final MediaType APPLICATION_DOCX = valueOf(APPLICATION_DOCX_VALUE);
 
     public static final String APPLICATION_RTF_VALUE = "application/rtf";
@@ -24,10 +25,12 @@ public class V1MimeTypes extends MediaType implements Serializable {
     public static final String IMAGE_SVG_VALUE = "image/svg+xml";
     public static final MediaType IMAGE_SVG = valueOf(IMAGE_SVG_VALUE);
 
-    public static final String APPLICATION_PPT_VALUE = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+    public static final String APPLICATION_PPT_VALUE =
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation";
     public static final MediaType APPLICATION_PPT = valueOf(APPLICATION_PPT_VALUE);
 
-    public static final String APPLICATION_XLS_VALUE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public static final String APPLICATION_XLS_VALUE =
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     public static final MediaType APPLICATION_XLS = valueOf(APPLICATION_XLS_VALUE);
 
     public static final String APPLICATION_ODT_VALUE = "application/vnd.oasis.opendocument.text";

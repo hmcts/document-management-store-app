@@ -7,7 +7,11 @@ import org.junit.Test;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class UpdateDocumentIT extends BaseIT {
 

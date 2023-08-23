@@ -41,14 +41,16 @@ public class FileContentVerifierTests {
 
     @Test
     public void testUploadDocumentsSuccess() {
-        MultipartFile file = new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8));
+        MultipartFile file = new MockMultipartFile("files", "filename.txt",
+            "text/plain", "hello".getBytes(StandardCharsets.UTF_8));
         boolean b = fileContentVerifier.verifyContentType(file);
         assertTrue(b);
     }
 
     @Test
     public void testUploadDifferentDocumentsTypesSuccess() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename.txt", "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        MultipartFile file = new MockMultipartFile("files", "filename.txt",
+            "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
         boolean b = fileContentVerifier.verifyContentType(file);
         assertTrue(b);
     }
@@ -69,31 +71,36 @@ public class FileContentVerifierTests {
 
     @Test
     public void testUploadMimeTypeNotAllowed() {
-        MultipartFile file =  new MockMultipartFile("file", "filename.xml", "application/xml", "hello".getBytes(StandardCharsets.UTF_8));
+        MultipartFile file =  new MockMultipartFile("file", "filename.xml",
+            "application/xml", "hello".getBytes(StandardCharsets.UTF_8));
         assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testUploadMimeTypeNotAllowedWithAllowedExtension() {
-        MultipartFile file =  new MockMultipartFile("file", "filename.txt", "application/xml", "hello".getBytes(StandardCharsets.UTF_8));
+        MultipartFile file =  new MockMultipartFile("file", "filename.txt",
+            "application/xml", "hello".getBytes(StandardCharsets.UTF_8));
         assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testIgnoreClientMimeType() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename.txt", "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        MultipartFile file = new MockMultipartFile("files", "filename.txt",
+            "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
         assertTrue(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testFailureForDisallowedExt() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename.dat", "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        MultipartFile file = new MockMultipartFile("files", "filename.dat",
+            "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
         assertFalse(fileContentVerifier.verifyContentType(file));
     }
 
     @Test
     public void testFailureForNoExt() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename", "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+        MultipartFile file = new MockMultipartFile("files", "filename",
+            "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
         assertFalse(fileContentVerifier.verifyContentType(file));
     }
 

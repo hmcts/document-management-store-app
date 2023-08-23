@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,6 @@ import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.SearchService;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(
@@ -63,7 +63,9 @@ public class StoredDocumentSearchController {
         Pageable pageable,
         PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
 
-        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByMetadata(metadataSearchCommand, pageable).map(StoredDocumentHalResource::new);
+        Page<StoredDocumentHalResource> page =
+            searchService.findStoredDocumentsByMetadata(metadataSearchCommand, pageable)
+            .map(StoredDocumentHalResource::new);
 
         return ResponseEntity
                 .ok()
@@ -87,7 +89,9 @@ public class StoredDocumentSearchController {
             Pageable pageable,
             PagedResourcesAssembler<StoredDocumentHalResource> assembler) {
 
-        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByCreator(securityUtilService.getUserId(), pageable).map(StoredDocumentHalResource::new);
+        Page<StoredDocumentHalResource> page = searchService.findStoredDocumentsByCreator(
+            securityUtilService.getUserId(),
+            pageable).map(StoredDocumentHalResource::new);
 
         return ResponseEntity
                 .ok()

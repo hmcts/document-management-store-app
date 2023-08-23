@@ -13,10 +13,14 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
 
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static uk.gov.hmcts.dm.service.Constants.*;
+import static uk.gov.hmcts.dm.service.Constants.FALSE;
 
 @Transactional
 @Service
@@ -32,7 +36,8 @@ public class AuditedStoredDocumentOperationsService {
         List<StoredDocument> storedDocuments = storedDocumentService.saveItems(uploadDocumentsCommand);
         storedDocuments.forEach(storedDocument -> {
             auditEntryService.createAndSaveEntry(storedDocument, AuditActions.CREATED);
-            auditEntryService.createAndSaveEntry(storedDocument.getDocumentContentVersions().get(0), AuditActions.CREATED);
+            auditEntryService.createAndSaveEntry(storedDocument.getDocumentContentVersions().get(0),
+                AuditActions.CREATED);
         });
         return storedDocuments;
     }
