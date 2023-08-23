@@ -1,5 +1,10 @@
 package uk.gov.hmcts.dm.config.batch;
 
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.Query;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
@@ -33,14 +38,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.LockModeType;
-import jakarta.persistence.Query;
-import javax.sql.DataSource;
 import java.util.Date;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
+import javax.sql.DataSource;
 
 @EnableBatchProcessing
 @EnableScheduling
@@ -81,7 +82,8 @@ public class BatchConfiguration {
     @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
         lockAtLeastFor = "PT3M", lockAtMostFor = "PT15M")
-    public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException, JobRestartException, JobInstanceAlreadyCompleteException {
+    public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
+        JobRestartException, JobInstanceAlreadyCompleteException {
         log.info("deleteJob starting");
         jobLauncher
             .run(processDocument(step1()), new JobParametersBuilder()

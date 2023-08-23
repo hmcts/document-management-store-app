@@ -53,7 +53,8 @@ public class CustomResultMatcher implements ResultMatcher {
     // TODO - removed because "Possible heap pollution from parameterized vararg type O" EM-186
     // public <I, O> CustomResultMatcher containsExactly(Function<I, O> mapper, O... expected) {
     //     matchers.add(result -> {
-    //         CollectionType valueType = objectMapper.getTypeFactory().constructCollectionType(List.class, expectedClass);
+    //         CollectionType valueType =
+    //          objectMapper.getTypeFactory().constructCollectionType(List.class, expectedClass);
     //         List<I> actual = objectMapper.readValue(result.getResponse().getContentAsByteArray(), valueType);
     //         assertThat(actual.stream().map(mapper).collect(toList())).containsExactly(expected);
     //     });

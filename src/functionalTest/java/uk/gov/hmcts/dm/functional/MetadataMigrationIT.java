@@ -31,7 +31,8 @@ public class MetadataMigrationIT extends BaseIT {
             split = document2Url
                 .split("/");
             String document2Id = split[split.length - 1];
-            String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,case_created_date,case_last_modified_date,migrated\n"
+            String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,"
+                + "case_created_date,case_last_modified_date,migrated\n"
                 + "1,1,AAT,AUTOTEST1," + document1Id + ",http://dm-store:8080/documents/" + document1Id
                 + ",2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f\n" + "2,2,AAT,AUTOTEST1," + document2Id
                 + ",http://dm-store:8080/documents/" + document2Id + ",2020-03-02 11:10:56.615,2020-03-02 11:10:56.622,f";
@@ -65,7 +66,8 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void asACitizenIWantMetadataChangesAppliedToOnlyMatchingRecordsFromCsv() throws IOException, InterruptedException {
+    public void asACitizenIWantMetadataChangesAppliedToOnlyMatchingRecordsFromCsv()
+        throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
             String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url
@@ -82,7 +84,8 @@ public class MetadataMigrationIT extends BaseIT {
             String document3Id = split[split.length - 1];
 
             // only 2 records are in the CSV , 3rd one is not Present  and should not be Enriched by Metadata Migration.
-            String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,case_created_date,case_last_modified_date,migrated\n"
+            String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,"
+                + "case_created_date,case_last_modified_date,migrated\n"
                 + "1,1,AAT,AUTOTEST1," + document1Id + ",http://dm-store:8080/documents/" + document1Id
                 + ",2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f\n" + "2,2,AAT,AUTOTEST1," + document2Id
                 + ",http://dm-store:8080/documents/" + document2Id + ",2020-03-02 11:10:56.615,2020-03-02 11:10:56.622,f";
@@ -127,7 +130,8 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasMissingMetadataForOneCase() throws IOException, InterruptedException {
+    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasMissingMetadataForOneCase()
+        throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
             String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url
@@ -139,7 +143,8 @@ public class MetadataMigrationIT extends BaseIT {
             String document2Id = split[split.length - 1];
 
             // missing metadata in the CSV file
-            String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,case_created_date,case_last_modified_date,migrated\n"
+            String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,"
+                + "case_created_date,case_last_modified_date,migrated\n"
                 + ",,,," + document1Id + ",http://dm-store:8080/documents/" + document1Id + ",2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f";
 
             File file = File.createTempFile("migration", ".csv");
@@ -163,7 +168,8 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasMissingMetadataForOneCaseAndValidMetadataForAnother() throws IOException, InterruptedException {
+    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasMissingMetadataForOneCaseAndValidMetadataForAnother()
+        throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
             String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url
@@ -175,7 +181,8 @@ public class MetadataMigrationIT extends BaseIT {
             String document2Id = split[split.length - 1];
 
             // missing metadata in the CSV file
-            String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,case_created_date,case_last_modified_date,migrated\n"
+            String body = "id,case_id,case_type_id,jurisdiction,document_id,document_url,case_created_date,"
+                + "case_last_modified_date,migrated\n"
                 + "1,,,," + document1Id + ",http://dm-store:8080/documents/" + document1Id + ",2020-02-28 14:51:10.592,2020-02-28 14:51:10.6,f\n"
                 + "2,2,AAT,AUTOTEST2," + document2Id + ",http://dm-store:8080/documents/" + document2Id + ",2020-03-02 11:10:56.615,2020-03-02 11:10:56.622,f";
 
@@ -209,7 +216,8 @@ public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
-    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasRandomDocumentidGeneratedAndMetadataShouldNotBeUpdated() throws IOException, InterruptedException {
+    public void asAnAuthenticatedUserIWantToProcessACsvFileWhichHasRandomDocidGeneratedAndMetadataShouldNotBeUpdated()
+        throws IOException, InterruptedException {
         if (getMetadataMigrationEnabled()) {
             String document1Url = createDocumentAndGetUrlAs(getCitizen());
             String[] split = document1Url

@@ -1,10 +1,10 @@
 package uk.gov.hmcts.dm.commandobject;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.security.MultipartFileWhiteList;
 
-import jakarta.validation.constraints.NotNull;
 
 @Data
 public class UploadDocumentVersionCommand {

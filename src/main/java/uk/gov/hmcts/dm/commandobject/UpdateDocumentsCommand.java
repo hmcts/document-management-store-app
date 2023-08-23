@@ -1,8 +1,8 @@
 package uk.gov.hmcts.dm.commandobject;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
-import jakarta.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.List;
 

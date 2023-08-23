@@ -21,7 +21,8 @@ public class UnsupportedThumbnailCreatorTest {
         UnsupportedThumbnailCreator unsupportedThumbnailService = new UnsupportedThumbnailCreator();
         InputStream thumbnail = unsupportedThumbnailService.getThumbnail(documentContentVersion);
 
-        InputStream expectInputStream = getClass().getResourceAsStream(UnsupportedThumbnailCreator.DEFAULT_FILE_THUMBNAIL);
+        InputStream expectInputStream =
+            getClass().getResourceAsStream(UnsupportedThumbnailCreator.DEFAULT_FILE_THUMBNAIL);
         assertTrue(IOUtils.contentEquals(thumbnail,expectInputStream));
     }
 

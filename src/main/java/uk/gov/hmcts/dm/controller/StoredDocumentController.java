@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,10 +43,6 @@ import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
@@ -163,7 +163,8 @@ public class StoredDocumentController {
                 schema = @Schema(type = "string")),
             @Parameter(in = ParameterIn.HEADER, name = "user-roles", description = "User Roles", required = true,
                 schema = @Schema(type = "string")),
-            @Parameter(in = ParameterIn.HEADER, name = "classification", description = "Classification", required = true,
+            @Parameter(in = ParameterIn.HEADER, name = "classification", description = "Classification",
+                required = true,
                 schema = @Schema(type = "string"))})
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Returns contents of a file"),

@@ -8,7 +8,9 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersionAuditEntry;
 import java.util.UUID;
 
 @Repository
-public interface DocumentContentVersionAuditEntryRepository extends PagingAndSortingRepository<DocumentContentVersionAuditEntry, UUID>, CrudRepository<DocumentContentVersionAuditEntry, UUID> {
+public interface DocumentContentVersionAuditEntryRepository extends
+    PagingAndSortingRepository<DocumentContentVersionAuditEntry, UUID>,
+    CrudRepository<DocumentContentVersionAuditEntry, UUID> {
 
 
 }

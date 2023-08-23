@@ -27,14 +27,16 @@ public class WebCheckerTest {
 
     @Test
     public void healthDown() {
-        when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class)).thenReturn(new HealthCheckResponse("DOWN"));
+        when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class))
+            .thenReturn(new HealthCheckResponse("DOWN"));
         WebChecker webChecker = new WebChecker(NAME,URL,restTemplate);
         Assert.assertEquals(Status.DOWN,webChecker.health().getStatus());
     }
 
     @Test
     public void healthUknownDown() {
-        when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class)).thenReturn(new HealthCheckResponse("UNKNOWN"));
+        when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class))
+            .thenReturn(new HealthCheckResponse("UNKNOWN"));
         WebChecker webChecker = new WebChecker(NAME,URL,restTemplate);
         Assert.assertEquals(Status.DOWN,webChecker.health().getStatus());
     }
