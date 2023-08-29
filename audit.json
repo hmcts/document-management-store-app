@@ -89,6 +89,7 @@
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions_POST":"ignore",
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId?permanent=false_DELETE":"ignore" ,
     "10054_Cookie without SameSite Attribute_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId_GET":"ignore",
-    "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal_GET":"ignore"
+    "10096_Timestamp Disclosure - Unix_http://dm-store-aat.service.core-compute-aat.internal_GET":"ignore",
+    "10112_Session Management Response Identified_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET": "ignore"
 }
 
