@@ -13,6 +13,11 @@
     <suppress>
         <cve>CVE-2023-34036</cve>
     </suppress>
+    <suppress until="2023-11-30">
+        <notes>spring-plugin-core-3.0.0.jar (pkg:maven/org.springframework.plugin/spring-plugin-core@3.0.0,.</notes>
+        <packageUrl regex="true">^pkg:maven/org.springframework.plugin/spring-plugin-core@.*$</packageUrl>
+        <cve>CVE-2023-34040</cve>
+    </suppress>
 </suppressions>
 
 
