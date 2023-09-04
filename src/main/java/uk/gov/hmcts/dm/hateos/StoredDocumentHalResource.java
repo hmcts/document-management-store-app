@@ -9,7 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.util.CollectionUtils;
-import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -65,14 +64,6 @@ public class StoredDocumentHalResource extends HalResource {
         }
 
         add(linkTo(methodOn(StoredDocumentController.class).getMetaData(storedDocument.getId(), null)).withSelfRel());
-
-        if (mostRecentDocumentContentVersion != null) {
-            add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId(), null, null, null))
-                .withRel("binary"));
-            add(linkTo(methodOn(DocumentThumbnailController.class)
-                .getPreviewThumbnail(storedDocument.getId())).withRel("thumbnail"));
-        }
-
 
 
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {
