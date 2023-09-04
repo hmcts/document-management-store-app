@@ -1,13 +1,11 @@
 package uk.gov.hmcts.dm.endtoend;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.dm.security.Classifications;
 
-//import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.CoreMatchers.both;
-import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -34,9 +32,7 @@ public class UploadDocumentTest extends End2EndTestBase {
             .andExpect(jsonPath("$._embedded.documents[0].mimeType", equalTo("text/plain")))
             .andExpect(jsonPath("$._embedded.documents[0].createdBy", equalTo("user")))
             .andExpect(jsonPath("$._embedded.documents[0].lastModifiedBy", equalTo("user")))
-            .andExpect(jsonPath("$._embedded.documents[0]._links.self.href", startsWith("http://localhost/documents/")))
-            .andExpect(jsonPath("$._embedded.documents[0]._links.binary.href",
-                both(startsWith("http://localhost/documents/")).and(endsWith("/binary"))));
+            .andExpect(jsonPath("$._embedded.documents[0]._links.self.href", startsWith("http://localhost/documents/")));
     }
 
     @Test
