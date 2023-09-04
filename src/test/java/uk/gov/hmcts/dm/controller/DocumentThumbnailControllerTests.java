@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.nio.charset.StandardCharsets;
@@ -22,7 +21,7 @@ public class DocumentThumbnailControllerTests extends ComponentTestBase {
         .id(id)
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
-        .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
+        .storedDocument(StoredDocument.builder().id(id).build())
         .build();
 
     public DocumentThumbnailControllerTests() throws Exception {

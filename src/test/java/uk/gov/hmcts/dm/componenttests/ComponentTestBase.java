@@ -29,7 +29,6 @@ import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
-import uk.gov.hmcts.dm.service.FolderService;
 import uk.gov.hmcts.dm.service.SearchService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
@@ -63,9 +62,6 @@ public abstract class ComponentTestBase {
 
     @MockBean
     protected ToggleConfiguration toggleConfiguration;
-
-    @MockBean
-    protected FolderService folderService;
 
     @MockBean
     protected StoredDocumentService storedDocumentService;

@@ -26,11 +26,6 @@ public class V1MediaType extends MediaType {
 
     public static final MediaType V1_HAL_DOCUMENT_MEDIA_TYPE = valueOf(V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE);
 
-    public static final String V1_HAL_FOLDER_MEDIA_TYPE_VALUE =
-        "application/vnd.uk.gov.hmcts.dm.folder.v1+hal+json;charset=UTF-8";
-
-    public static final MediaType V1_HAL_FOLDER_MEDIA_TYPE = valueOf(V1_HAL_FOLDER_MEDIA_TYPE_VALUE);
-
     public static final String V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE =
         "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8";
 
@@ -58,11 +53,6 @@ public class V1MediaType extends MediaType {
         "application/vnd.uk.gov.hmcts.dm.document.v1+json;charset=UTF-8";
 
     public static final MediaType V1_DOCUMENT_MEDIA_TYPE = valueOf(V1_DOCUMENT_MEDIA_TYPE_VALUE);
-
-    public static final String V1_FOLDER_MEDIA_TYPE_VALUE =
-        "application/vnd.uk.gov.hmcts.dm.folder.v1+json;charset=UTF-8";
-
-    public static final MediaType V1_FOLDER_MEDIA_TYPE = valueOf(V1_FOLDER_MEDIA_TYPE_VALUE);
 
     public static final String V1_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE =
         "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+json;charset=UTF-8";

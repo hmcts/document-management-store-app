@@ -22,8 +22,6 @@ public class MappingUrlIT extends BaseIT {
 
     @Value("${toggle.metadatasearchendpoint}")
     private boolean metadatasearchendpoint;
-    @Value("${toggle.folderendpoint}")
-    private boolean folderendpoint;
     @Value("${toggle.documentandmetadatauploadendpoint}")
     private boolean documentandmetadatauploadendpoint;
     @Value("${toggle.deleteenabled}")
@@ -51,10 +49,6 @@ public class MappingUrlIT extends BaseIT {
             endpoint.contains("filter")), metadatasearchendpoint);
     }
 
-    @Test
-    public void toggle_folderendpoint_toggle_Mappings() {
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint -> endpoint.contains("folders")), folderendpoint);
-    }
 
     @Test
     public void toggle_deleteenabled_toggle_Mappings() {
@@ -87,18 +81,6 @@ public class MappingUrlIT extends BaseIT {
 
     public void setMetadatasearchendpoint(boolean metadatasearchendpoint) {
         this.metadatasearchendpoint = metadatasearchendpoint;
-    }
-
-    public boolean getFolderendpoint() {
-        return folderendpoint;
-    }
-
-    public boolean isFolderendpoint() {
-        return folderendpoint;
-    }
-
-    public void setFolderendpoint(boolean folderendpoint) {
-        this.folderendpoint = folderendpoint;
     }
 
     public boolean getDocumentandmetadatauploadendpoint() {

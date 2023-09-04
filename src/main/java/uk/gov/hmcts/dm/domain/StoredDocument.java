@@ -10,7 +10,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapKeyColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
@@ -84,11 +83,6 @@ public class StoredDocument implements RolesAware {
     @Setter
     private boolean hardDeleted;
 
-    @ManyToOne
-    @Getter
-    @Setter
-    private Folder folder;
-
     @Getter
     @Setter
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "storedDocument")
@@ -135,7 +129,7 @@ public class StoredDocument implements RolesAware {
                           String lastModifiedBy, String lastModifiedByService,
                           Date modifiedOn, Date createdOn,
                           boolean deleted, boolean hardDeleted,
-                          Folder folder, List<DocumentContentVersion> documentContentVersions,
+                          List<DocumentContentVersion> documentContentVersions,
                           Set<StoredDocumentAuditEntry> auditEntries,
                           Classifications classification, Set<String> roles, Map<String, String> metadata, Date ttl) {
         setId(id);
@@ -147,7 +141,6 @@ public class StoredDocument implements RolesAware {
         setCreatedOn(createdOn);
         setDeleted(deleted);
         setHardDeleted(hardDeleted);
-        setFolder(folder);
         setDocumentContentVersions(documentContentVersions);
         setAuditEntries(auditEntries);
         setClassification(classification);

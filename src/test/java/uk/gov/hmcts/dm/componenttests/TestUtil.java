@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.io.IOException;
@@ -61,8 +60,6 @@ public class TestUtil {
 
     public static final UUID RANDOM_UUID = UUID.randomUUID();
 
-    public static final Folder TEST_FOLDER =
-            new Folder(RANDOM_UUID, "name", null, null, null, null, null);
 
     public static final DocumentContentVersion DOCUMENT_CONTENT_VERSION = DocumentContentVersion.builder()
         .id(RANDOM_UUID)
@@ -70,22 +67,13 @@ public class TestUtil {
         .originalDocumentName("filename.txt")
         .size(4L)
         .contentUri("someUri")
-        .storedDocument(StoredDocument.builder().id(RANDOM_UUID)
-            .folder(Folder.builder().id(RANDOM_UUID).build()).build())
+        .storedDocument(StoredDocument.builder().id(RANDOM_UUID).build())
         .build();
 
-    public static final Folder folder = Folder.builder()
-        .id(RANDOM_UUID)
-        .storedDocuments(
-            Stream.of(StoredDocument.builder().id(RANDOM_UUID).documentContentVersions(
-                Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList())
-            ).build())
-                .collect(Collectors.toList())
-        )
-        .build();
+
 
     public static final StoredDocument STORED_DOCUMENT = StoredDocument.builder().id(RANDOM_UUID)
-        .folder(Folder.builder().id(RANDOM_UUID).build()).documentContentVersions(
+        .documentContentVersions(
             Stream.of(DOCUMENT_CONTENT_VERSION)
                 .collect(Collectors.toList())
         ).build();
@@ -93,7 +81,6 @@ public class TestUtil {
     public static final StoredDocument DELETED_DOCUMENT = StoredDocument.builder()
         .id(RANDOM_UUID)
         .deleted(true)
-        .folder(Folder.builder().id(RANDOM_UUID).build())
         .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList()))
         .build();
 
@@ -101,7 +88,6 @@ public class TestUtil {
         .id(RANDOM_UUID)
         .deleted(true)
         .hardDeleted(true)
-        .folder(Folder.builder().id(RANDOM_UUID).build())
         .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList()))
         .build();
 
