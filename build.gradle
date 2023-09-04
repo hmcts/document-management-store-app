@@ -141,7 +141,7 @@ dependencies {
         exclude group: "org.hibernate", module: "hibernate-core"
     }
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '3.1.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
