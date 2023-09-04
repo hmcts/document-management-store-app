@@ -145,7 +145,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-    implementation group: 'org.apache.tomcat.embed', name: 'tomcat-embed-core', version: '10.1.13'
+    implementation group: 'org.apache.tomcat', name: 'tomcat', version: '10.1.13', ext: 'pom'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
 
