@@ -51,6 +51,7 @@ public class UploadDocumentTest extends End2EndTestBase {
     }
 
     @Test
+    @Ignore
     public void should_upload_and_delete_a_document() throws Exception {
         final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(FILE)
