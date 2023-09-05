@@ -36,6 +36,15 @@ CREATE TABLE public.databasechangelog (
 	deployment_id varchar(10) NULL
 );
 
+CREATE TABLE public.folder (
+	id uuid NOT NULL,
+	createdby varchar(255) NULL,
+	createdon timestamp NULL,
+	lastmodifiedby varchar(255) NULL,
+	modifiedon timestamp NULL,
+	name varchar(255) NULL,
+	CONSTRAINT folderpk PRIMARY KEY (id)
+);
 
 CREATE TABLE public.shedlock (
 	name varchar(64) NOT NULL,
@@ -120,12 +129,14 @@ CREATE TABLE public.storeddocument (
 	deleted bool NOT NULL,
 	lastmodifiedby varchar(255) NULL,
 	modifiedon timestamp NULL,
+	folder_id uuid NULL,
 	ds_idx int4 NULL,
 	ttl timestamp NULL,
 	harddeleted bool NOT NULL,
 	createdbyservice varchar(255) NULL,
 	lastmodifiedbyservice varchar(255) NULL,
 	CONSTRAINT storeddocumentpk PRIMARY KEY (id),
+	CONSTRAINT fkojrsdraudt0hefy54egkbor4k FOREIGN KEY (folder_id) REFERENCES public.folder(id)
 );
 
 CREATE TABLE public.documentcontentversion (
