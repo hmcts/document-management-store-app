@@ -65,7 +65,10 @@ public class StoredDocumentHalResource extends HalResource {
 
         add(linkTo(methodOn(StoredDocumentController.class).getMetaData(storedDocument.getId(), null)).withSelfRel());
 
-
+        if (mostRecentDocumentContentVersion != null) {
+            add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId(), null, null, null))
+                .withRel("binary"));
+        }
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {
             CollectionModel<DocumentContentVersionHalResource> versionResources =
                 CollectionModel.of(new ArrayList<>(storedDocument.getDocumentContentVersions()
