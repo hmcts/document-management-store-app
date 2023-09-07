@@ -10,7 +10,6 @@ import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
-import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.RepositoryFinder;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -34,9 +33,6 @@ public class StoreDocumentControllerTestConfiguration {
 
     @MockBean
     private DmServiceAuthFilter serviceAuthFilter;
-
-    @MockBean
-    private FolderRepository folderRepository;
 
     @MockBean
     private StoredDocumentRepository storedDocumentRepository;

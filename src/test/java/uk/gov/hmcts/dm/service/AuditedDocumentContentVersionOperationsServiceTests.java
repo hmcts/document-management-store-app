@@ -8,12 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
-import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
-import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -37,9 +35,6 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     @Mock
     private BlobStorageReadService blobStorageReadService;
 
-    @Mock
-    private DocumentThumbnailService documentThumbnailService;
-
     @InjectMocks
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
@@ -56,15 +51,6 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
     }
 
-    @Test
-    public void testReadDocumentContentVersionThumbnail() {
-        DocumentContentVersion documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
-
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion);
-
-        verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
-        verify(documentThumbnailService, times(1)).generateThumbnail(documentContentVersion);
-    }
 
     @Test
     public void testReadFileContentVersionThatExists() {

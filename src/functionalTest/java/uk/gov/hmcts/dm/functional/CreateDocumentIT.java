@@ -3,7 +3,6 @@ package uk.gov.hmcts.dm.functional;
 import io.restassured.response.Response;
 import net.thucydides.core.annotations.Pending;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,7 +10,6 @@ import org.springframework.http.MediaType;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -313,80 +311,6 @@ public class CreateDocumentIT extends BaseIT {
                 .get(url);
         }
 
-    }
-
-    @Test
-    public void cd13R1AsAuthenticatedWhenIUploadATiffIGetAnIconInReturn() throws IOException {
-        Response response = givenRequest(getCitizen())
-            .multiPart("files", file(getAttachment25Tiff()), V1MimeTypes.IMAGE_TIF_VALUE)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .expect().log().all()
-            .statusCode(200)
-            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment25Tiff()))
-            .body("_embedded.documents[0].mimeType", equalTo(V1MimeTypes.IMAGE_TIF_VALUE))
-            .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-            .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
-            .when()
-            .post("/documents")
-            .andReturn();
-
-        String tiffUrl = replaceHttp(response.path("_embedded.documents[0]._links.thumbnail.href"));
-
-        byte[] tiffByteArray = givenRequest(getCitizen())
-            .get(tiffUrl).asByteArray();
-
-        byte[] file = Files.readAllBytes(file("ThumbnailNPad.jpg").toPath());
-
-        Assert.assertArrayEquals(tiffByteArray, file);
-    }
-
-    @Test
-    @Pending
-    public void cd14R1AsAuthenticatedUserWhenIUploadAJpegItGetsAThumbnail() throws IOException {
-        String url = givenRequest(getCitizen())
-            .multiPart("files", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .expect().log().all()
-            .statusCode(200)
-            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment9Jpg()))
-            .body("_embedded.documents[0].mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
-            .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-            .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
-            .when()
-            .post("/documents")
-            .path("_embedded.documents[0]._links.thumbnail.href");
-
-        byte[] downloadedFileByteArray = givenRequest(getCitizen())
-            .get(url).asByteArray();
-
-        byte[] file = Files.readAllBytes(file("ThumbnailJPG.jpg").toPath());
-
-        Assert.assertArrayEquals(downloadedFileByteArray, file);
-    }
-
-    @Test
-    @Pending
-    public void cd15R1AsAuthenticatedUserWhenIUploadAPdfICanGetTheThumbnailOfThatPdf() throws IOException {
-        String url = givenRequest(getCitizen())
-            .multiPart("files", file(getAttachment4Pdf()), MediaType.APPLICATION_PDF_VALUE)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .expect().log().all()
-            .statusCode(200)
-            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
-            .body("_embedded.documents[0].originalDocumentName", equalTo(getAttachment4Pdf()))
-            .body("_embedded.documents[0].mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
-            .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-            .body("_embedded.documents[0]._links.thumbnail.href", containsString("thumbnail"))
-            .when()
-            .post("/documents")
-            .path("_embedded.documents[0]._links.thumbnail.href");
-
-        assertByteArrayEquality(getThumbnailPdf(), givenRequest(getCitizen()).get(url).asByteArray());
     }
 
     @Test

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.UUID;
@@ -32,10 +31,10 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
             .id(id)
             .mimeType("text/plain")
             .originalDocumentName("filename.txt")
-            .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
+            .storedDocument(StoredDocument.builder().id(id).build())
             .build();
         storedDocument = StoredDocument.builder().id(id)
-            .folder(Folder.builder().id(id).build()).documentContentVersions(
+            .documentContentVersions(
                 Stream.of(documentContentVersion)
                     .collect(Collectors.toList())
             ).build();
