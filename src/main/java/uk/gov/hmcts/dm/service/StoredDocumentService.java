@@ -13,10 +13,8 @@ import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
-import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.util.Date;
@@ -32,9 +30,6 @@ import java.util.stream.Collectors;
 public class StoredDocumentService {
 
     private static final Logger log = LoggerFactory.getLogger(StoredDocumentService.class);
-
-    @Autowired
-    private FolderRepository folderRepository;
 
     @Autowired
     private StoredDocumentRepository storedDocumentRepository;
@@ -74,27 +69,6 @@ public class StoredDocumentService {
         return storedDocumentRepository.save(storedDocument);
     }
 
-    public void saveItemsToBucket(Folder folder, List<MultipartFile> files) {
-        String userId = securityUtilService.getUserId();
-        List<StoredDocument> items = files.stream().map(file -> {
-            StoredDocument storedDocument = new StoredDocument();
-            storedDocument.setFolder(folder);
-            storedDocument.setCreatedBy(userId);
-            storedDocument.setLastModifiedBy(userId);
-            final DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
-                                                                                             file,
-                                                                                             userId);
-            storedDocument.getDocumentContentVersions().add(documentContentVersion);
-
-            save(storedDocument);
-            storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
-            return storedDocument;
-        }).collect(Collectors.toList());
-
-        folder.getStoredDocuments().addAll(items);
-
-        folderRepository.save(folder);
-    }
 
     public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand) {
         String userId = securityUtilService.getUserId();

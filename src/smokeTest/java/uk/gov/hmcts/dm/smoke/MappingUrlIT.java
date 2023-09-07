@@ -22,16 +22,12 @@ public class MappingUrlIT extends BaseIT {
 
     @Value("${toggle.metadatasearchendpoint}")
     private boolean metadatasearchendpoint;
-    @Value("${toggle.folderendpoint}")
-    private boolean folderendpoint;
     @Value("${toggle.documentandmetadatauploadendpoint}")
     private boolean documentandmetadatauploadendpoint;
     @Value("${toggle.deleteenabled}")
     private boolean deleteenabled;
     @Value("${toggle.ttl}")
     private boolean ttl;
-    @Value("${toggle.thumbnail}")
-    private boolean thumbnail;
     @Value("${toggle.testing}")
     private boolean testing;
     private List<String> allEndpoints;
@@ -51,23 +47,11 @@ public class MappingUrlIT extends BaseIT {
             endpoint.contains("filter")), metadatasearchendpoint);
     }
 
-    @Test
-    public void toggle_folderendpoint_toggle_Mappings() {
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint -> endpoint.contains("folders")), folderendpoint);
-    }
 
     @Test
     public void toggle_deleteenabled_toggle_Mappings() {
         Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.equals("{DELETE [/documents/{documentId}]}")), deleteenabled);
-    }
-
-    @Test
-    public void toggle_thumbnail_toggle_Mappings() {
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
-            endpoint.equals("{GET [/documents/{documentId}/thumbnail]}")), thumbnail);
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
-            endpoint.equals("{GET [/documents/{documentId}/versions/{versionId}/thumbnail]}")), thumbnail);
     }
 
     @Test
@@ -87,18 +71,6 @@ public class MappingUrlIT extends BaseIT {
 
     public void setMetadatasearchendpoint(boolean metadatasearchendpoint) {
         this.metadatasearchendpoint = metadatasearchendpoint;
-    }
-
-    public boolean getFolderendpoint() {
-        return folderendpoint;
-    }
-
-    public boolean isFolderendpoint() {
-        return folderendpoint;
-    }
-
-    public void setFolderendpoint(boolean folderendpoint) {
-        this.folderendpoint = folderendpoint;
     }
 
     public boolean getDocumentandmetadatauploadendpoint() {
@@ -135,18 +107,6 @@ public class MappingUrlIT extends BaseIT {
 
     public void setTtl(boolean ttl) {
         this.ttl = ttl;
-    }
-
-    public boolean getThumbnail() {
-        return thumbnail;
-    }
-
-    public boolean isThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(boolean thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public boolean getTesting() {

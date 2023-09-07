@@ -34,9 +34,5 @@ public class DocumentContentVersionHalResourceTest {
         Optional<Link> binary = halResource.getLink("binary");
         assertEquals(format("/documents/%s/versions/%s/binary", storedDocument.getId(),
             documentContentVersion.getId()), binary.get().toUri().toString());
-
-        Optional<Link> thumbnail = halResource.getLink("thumbnail");
-        assertEquals(format("/documents/%s/versions/%s/thumbnail", storedDocument.getId(),
-            documentContentVersion.getId()), thumbnail.get().toUri().toString());
     }
 }

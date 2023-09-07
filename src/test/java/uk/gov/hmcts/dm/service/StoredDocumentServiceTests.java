@@ -18,10 +18,8 @@ import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
-import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.util.Date;
@@ -30,8 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.Collections.singletonList;
@@ -64,9 +60,6 @@ public class StoredDocumentServiceTests {
 
     @Mock
     private ToggleConfiguration toggleConfiguration;
-
-    @Mock
-    private FolderRepository folderRepository;
 
     @Mock
     private BlobStorageWriteService blobStorageWriteService;
@@ -253,24 +246,6 @@ public class StoredDocumentServiceTests {
             verify(blobStorageDeleteService).deleteDocumentContentVersion(documentContentVersion);
         });
         verify(storedDocumentRepository, atLeastOnce()).save(storedDocumentWithContent);
-    }
-
-    @Test
-    public void testSaveItemsToBucketToBlobStore() {
-        Folder folder = new Folder();
-        storedDocumentService.saveItemsToBucket(folder, Stream.of(TEST_FILE).collect(Collectors.toList()));
-
-        assertThat(folder.getStoredDocuments().size(), equalTo(1));
-
-        final DocumentContentVersion latestVersionInFolder =
-            folder.getStoredDocuments().get(0).getDocumentContentVersions().get(0);
-
-        assertThat(latestVersionInFolder.getMimeType(), equalTo(TEST_FILE.getContentType()));
-        assertThat(latestVersionInFolder.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
-        verify(securityUtilService).getUserId();
-        verify(folderRepository).save(folder);
-        verify(blobStorageWriteService).uploadDocumentContentVersion(
-            folder.getStoredDocuments().get(0), latestVersionInFolder, TEST_FILE);
     }
 
     @Test

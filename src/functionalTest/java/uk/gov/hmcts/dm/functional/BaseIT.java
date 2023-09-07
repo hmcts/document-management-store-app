@@ -112,9 +112,6 @@ public abstract class BaseIT {
     private final String powerPointTemplateMacroEnabled = "potm.potm";
     private final String powerPointSlideShow = "ppsx.ppsx";
     private final String powerPointSlideShowMacroEnabled = "ppsm.ppsm";
-    private final String thumbnailPdf = "thumbnailPDF.jpg";
-    private final String thumbnailBmp = "thumbnailBMP.jpg";
-    private final String thumbnailGif = "thumbnailGIF.jpg";
     private final String badAttachment1 = "1MB.exe";
     private final String badAttachment2 = "Attachment3.zip";
     private final String illegalNameFile = "uploadFile~@$!.jpg";
@@ -745,18 +742,6 @@ public abstract class BaseIT {
 
     public final String getPowerPointSlideShowMacroEnabled() {
         return powerPointSlideShowMacroEnabled;
-    }
-
-    public final String getThumbnailPdf() {
-        return thumbnailPdf;
-    }
-
-    public final String getThumbnailBmp() {
-        return thumbnailBmp;
-    }
-
-    public final String getThumbnailGif() {
-        return thumbnailGif;
     }
 
     public final String getBadAttachment1() {
