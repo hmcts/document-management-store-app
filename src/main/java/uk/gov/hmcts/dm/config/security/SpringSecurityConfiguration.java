@@ -28,7 +28,7 @@ public class SpringSecurityConfiguration {
         http.headers().cacheControl().disable();
 
         http.securityMatchers()
-            .requestMatchers("/documents", "/documents/**", "/folders/**")
+            .requestMatchers("/documents", "/documents/**")
             .and()
             .addFilterBefore(dmServiceAuthFilter, AnonymousAuthenticationFilter.class)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()

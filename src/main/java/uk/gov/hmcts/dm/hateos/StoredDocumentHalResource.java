@@ -9,8 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.core.Relation;
 import org.springframework.util.CollectionUtils;
-import uk.gov.hmcts.dm.controller.DocumentThumbnailController;
-import uk.gov.hmcts.dm.controller.FolderController;
 import uk.gov.hmcts.dm.controller.StoredDocumentController;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -57,7 +55,8 @@ public class StoredDocumentHalResource extends HalResource {
     public StoredDocumentHalResource(@NonNull StoredDocument storedDocument) {
         BeanUtils.copyProperties(storedDocument, this);
 
-        roles = storedDocument.getRoles() != null ? storedDocument.getRoles().stream().sorted().collect(Collectors.toList()) : null;
+        roles = storedDocument.getRoles() != null
+            ? storedDocument.getRoles().stream().sorted().collect(Collectors.toList()) : null;
 
         DocumentContentVersion mostRecentDocumentContentVersion = storedDocument.getMostRecentDocumentContentVersion();
         if (mostRecentDocumentContentVersion != null) {
@@ -69,16 +68,13 @@ public class StoredDocumentHalResource extends HalResource {
         if (mostRecentDocumentContentVersion != null) {
             add(linkTo(methodOn(StoredDocumentController.class).getBinary(storedDocument.getId(), null, null, null))
                 .withRel("binary"));
-            add(linkTo(methodOn(DocumentThumbnailController.class).getPreviewThumbnail(storedDocument.getId())).withRel("thumbnail"));
         }
-
-        if (storedDocument.getFolder() != null) {
-            add(linkTo(methodOn(FolderController.class).get(storedDocument.getFolder().getId())).withRel("folder"));
-        }
-
         if (!CollectionUtils.isEmpty(storedDocument.getDocumentContentVersions())) {
             CollectionModel<DocumentContentVersionHalResource> versionResources =
-                    CollectionModel.of(new ArrayList<>(storedDocument.getDocumentContentVersions().stream().map(DocumentContentVersionHalResource::new).collect(Collectors.toList())));
+                CollectionModel.of(new ArrayList<>(storedDocument.getDocumentContentVersions()
+                    .stream()
+                    .map(DocumentContentVersionHalResource::new)
+                    .collect(Collectors.toList())));
             embedResource("allDocumentVersions", versionResources);
 
         }

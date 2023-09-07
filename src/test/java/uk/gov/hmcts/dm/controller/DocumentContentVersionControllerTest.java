@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.Constants;
@@ -38,11 +37,11 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
         .size(1L)
         .mimeType("text/plain")
         .originalDocumentName("filename.txt")
-        .storedDocument(StoredDocument.builder().id(id).folder(Folder.builder().id(id).build()).build())
+        .storedDocument(StoredDocument.builder().id(id).build())
         .build();
 
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
-        .folder(Folder.builder().id(id).build()).documentContentVersions(
+        .documentContentVersions(
             Stream.of(documentContentVersion)
                 .collect(Collectors.toList())
         ).build();

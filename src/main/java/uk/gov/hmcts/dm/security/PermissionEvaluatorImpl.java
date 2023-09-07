@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.security;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.security.access.PermissionEvaluator;
@@ -10,7 +11,6 @@ import uk.gov.hmcts.dm.security.domain.CreatorAware;
 import uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 
-import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;

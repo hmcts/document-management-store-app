@@ -1,5 +1,7 @@
 package uk.gov.hmcts.dm.endtoend;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +13,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.security.Classifications;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -82,6 +82,6 @@ public class VersionTest extends End2EndTestBase {
                 .with(VersionTest::setMethodToPost)
                 .headers(headers))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$._links.length()", is(4)));
+                .andExpect(jsonPath("$._links.length()", is(3)));
     }
 }

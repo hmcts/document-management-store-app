@@ -45,11 +45,13 @@ public class StoredDocumentAuditController {
         @ApiResponse(responseCode = "200", description = "Success"),
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
-    public ResponseEntity<CollectionModel<StoredDocumentAuditEntryHalResource>> findAudits(@PathVariable UUID documentId) {
+    public ResponseEntity<CollectionModel<StoredDocumentAuditEntryHalResource>>
+        findAudits(@PathVariable UUID documentId) {
         return storedDocumentRepository
             .findById(documentId)
             .map(storedDocument -> ResponseEntity.ok()
-                .contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE).body(CollectionModel.of(new ArrayList<StoredDocumentAuditEntryHalResource>(
+                .contentType(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE)
+                .body(CollectionModel.of(new ArrayList<StoredDocumentAuditEntryHalResource>(
                     auditEntryService
                         .findStoredDocumentAudits(storedDocument)
                         .stream()

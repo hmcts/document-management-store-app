@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,23 +13,23 @@ import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.domain.Folder;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
-import uk.gov.hmcts.dm.repository.FolderRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
-import jakarta.transaction.Transactional;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class StoredDocumentService {
 
     private static final Logger log = LoggerFactory.getLogger(StoredDocumentService.class);
-
-    @Autowired
-    private FolderRepository folderRepository;
 
     @Autowired
     private StoredDocumentRepository storedDocumentRepository;
@@ -68,27 +69,6 @@ public class StoredDocumentService {
         return storedDocumentRepository.save(storedDocument);
     }
 
-    public void saveItemsToBucket(Folder folder, List<MultipartFile> files) {
-        String userId = securityUtilService.getUserId();
-        List<StoredDocument> items = files.stream().map(file -> {
-            StoredDocument storedDocument = new StoredDocument();
-            storedDocument.setFolder(folder);
-            storedDocument.setCreatedBy(userId);
-            storedDocument.setLastModifiedBy(userId);
-            final DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
-                                                                                             file,
-                                                                                             userId);
-            storedDocument.getDocumentContentVersions().add(documentContentVersion);
-
-            save(storedDocument);
-            storeInAzureBlobStorage(storedDocument, documentContentVersion, file);
-            return storedDocument;
-        }).collect(Collectors.toList());
-
-        folder.getStoredDocuments().addAll(items);
-
-        folderRepository.save(folder);
-    }
 
     public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand) {
         String userId = securityUtilService.getUserId();
@@ -193,9 +173,9 @@ public class StoredDocumentService {
             storedDocument.getMetadata().putAll(metadata);
         } else {
             //Don't override existing value for key. Instead add only new key/value to the Metadata
-//            Map<String, String> newMetaData = metadata.entrySet().stream()
-//                .filter(entry -> !storedDocument.getMetadata().containsKey(entry.getKey()))
-//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            //            Map<String, String> newMetaData = metadata.entrySet().stream()
+            //                .filter(entry -> !storedDocument.getMetadata().containsKey(entry.getKey()))
+            //                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             Map<String, String> newMetaData = new HashMap<>();
             metadata.forEach((key, val) -> {
                 if (!storedDocument.getMetadata().containsKey(key)) {

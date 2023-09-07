@@ -11,7 +11,6 @@ public class ToggleConfiguration {
 
     private boolean metadatasearchendpoint;
     private boolean documentandmetadatauploadendpoint;
-    private boolean folderendpoint;
     private boolean includeidamhealth;
     private boolean ttl;
     private boolean overridemetadata;
