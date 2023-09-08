@@ -18,8 +18,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -74,8 +72,6 @@ public class DocumentContentVersion implements RolesAware {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
     @Getter
     @JoinColumn(name = "document_content_version_id")
-    @LazyToOne(LazyToOneOption.NO_PROXY)
-    //@Deprecated
     private DocumentContent documentContent;
 
     @ManyToOne
