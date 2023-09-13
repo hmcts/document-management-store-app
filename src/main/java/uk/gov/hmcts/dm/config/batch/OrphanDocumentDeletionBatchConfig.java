@@ -9,12 +9,13 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.PlatformTransactionManager;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService;
 
@@ -37,10 +39,10 @@ import javax.sql.DataSource;
 public class OrphanDocumentDeletionBatchConfig {
 
     @Autowired
-    public JobBuilderFactory jobBuilderFactory;
+    private JobRepository jobRepository;
 
     @Autowired
-    public StepBuilderFactory stepBuilderFactory;
+    private PlatformTransactionManager transactionManager;
 
     @Autowired
     public JobLauncher jobLauncher;
@@ -76,10 +78,10 @@ public class OrphanDocumentDeletionBatchConfig {
     }
 
     public Job orphanDocumentDeletionJob() {
-        return jobBuilderFactory.get("orphanDocumentDeletionJob")
-            .flow(stepBuilderFactory.get("orphanDocumentDeletionJob")
+        return new JobBuilder("orphanDocumentDeletionJob", jobRepository)
+            .flow(new StepBuilder("orphanDocumentDeletionJob",jobRepository)
                 .tasklet(new OrphanDocumentDeletionTasklet(blobClient, storedDocumentService,
-                    auditedStoredDocumentBatchOperationsService))
+                    auditedStoredDocumentBatchOperationsService),transactionManager)
                 .build()).build().build();
     }
 }
