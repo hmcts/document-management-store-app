@@ -17,12 +17,13 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
@@ -36,6 +37,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.Date;
@@ -52,11 +54,12 @@ public class BatchConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
 
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
 
     @Autowired
-    private StepBuilderFactory stepBuilderFactory;
+    private JobRepository jobRepository;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -126,15 +129,15 @@ public class BatchConfiguration {
     }
 
     public Job processDocument(Step step1) {
-        return jobBuilderFactory.get("processDocumentJob")
+        return new JobBuilder("processDocumentJob", jobRepository)
             .flow(step1)
             .end()
             .build();
     }
 
     public Step step1() {
-        return stepBuilderFactory.get("step1")
-            .<StoredDocument, StoredDocument>chunk(30)
+        return new StepBuilder("step1",jobRepository)
+            .<StoredDocument, StoredDocument>chunk(30, transactionManager)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
@@ -161,9 +164,10 @@ public class BatchConfiguration {
     }
 
     public Job clearHistoryData() {
-        return jobBuilderFactory.get("clearHistoricBatchExecutions")
-            .flow(stepBuilderFactory.get("deleteAllExpiredBatchExecutions")
-                .tasklet(new RemoveSpringBatchHistoryTasklet(historicExecutionsRetentionMilliseconds, jdbcTemplate))
+        return new JobBuilder("clearHistoricBatchExecutions", jobRepository)
+            .flow(new StepBuilder("deleteAllExpiredBatchExecutions",jobRepository)
+                .tasklet(new RemoveSpringBatchHistoryTasklet(
+                    historicExecutionsRetentionMilliseconds, jdbcTemplate), transactionManager)
                 .build()).build().build();
     }
 

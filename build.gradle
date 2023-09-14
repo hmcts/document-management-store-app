@@ -11,7 +11,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.9.0'
     id 'org.owasp.dependencycheck' version '8.4.0'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '9.22.0'
+    id 'org.flywaydb.flyway' version '9.22.1'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
 }
 
@@ -125,7 +125,7 @@ dependencyManagement {
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.23.1'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.24.0'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.0'
 
     implementation group: 'com.google.guava', name: 'guava', version: '32.1.2-jre'
