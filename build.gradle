@@ -161,7 +161,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.22.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.22.1'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
