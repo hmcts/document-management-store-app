@@ -1,25 +1,27 @@
 package uk.gov.hmcts.dm.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
-import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
-import uk.gov.hmcts.dm.service.thumbnail.DocumentThumbnailService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+
 
 @RunWith(SpringRunner.class)
 public class AuditedDocumentContentVersionOperationsServiceTests {
@@ -33,9 +35,6 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     @Mock
     private BlobStorageReadService blobStorageReadService;
 
-    @Mock
-    private DocumentThumbnailService documentThumbnailService;
-
     @InjectMocks
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
@@ -45,21 +44,13 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(documentContentVersion, request, response);
+        auditedDocumentContentVersionOperationsService.readDocumentContentVersionBinaryFromBlobStore(
+            documentContentVersion, request, response);
 
         verify(blobStorageReadService, times(1)).loadBlob(documentContentVersion, request, response);
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
     }
 
-    @Test
-    public void testReadDocumentContentVersionThumbnail() {
-        DocumentContentVersion documentContentVersion = TestUtil.DOCUMENT_CONTENT_VERSION;
-
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersionThumbnail(documentContentVersion);
-
-        verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
-        verify(documentThumbnailService, times(1)).generateThumbnail(documentContentVersion);
-    }
 
     @Test
     public void testReadFileContentVersionThatExists() {

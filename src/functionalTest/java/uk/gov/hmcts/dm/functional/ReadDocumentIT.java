@@ -5,7 +5,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 
@@ -103,7 +107,9 @@ public class ReadDocumentIT extends BaseIT {
 
         String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
-        givenSpacedRolesRequest(getCaseWorker(), new ArrayList<>(Arrays.asList(getCustomUserRole(), getCaseWorkerRoleProbate())))
+        givenSpacedRolesRequest(getCaseWorker(),
+            new ArrayList<>(Arrays.asList(getCustomUserRole(),
+                getCaseWorkerRoleProbate())))
             .expect()
             .statusCode(200)
             .when()
@@ -152,7 +158,7 @@ public class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    public void r14AsAuthenticatedUserWithASpecificRoleICanAccessADocumentIfItsClassificationIsRestrictedAndRolesMatch() {
+    public void r14AsAuthenticatedUserWithASpecificRoleICanAccessADocIfItsClassificationIsRestrictedAndRolesMatch() {
 
         String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "RESTRICTED",
             new ArrayList<>(List.of("caseworker")));
@@ -218,7 +224,7 @@ public class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    public void r19AsAuthenticatedUserWithSomeRoleICannotAccessADocumentIfItsClassificationIsPublicAndRolesDoesNotMatch() {
+    public void r19AsAuthenticatedUserWithSomeRoleICannotAccessADocumentIfItsClassificationIsPublicAndRolesNotMatch() {
 
         String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "PUBLIC",
             Collections.emptyList());
@@ -232,7 +238,7 @@ public class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    public void r20AsAuthenticatedUserWithNoRoleTestsByDefaultSetsRoleAsCitizenICanAccessADocumentIfItsClassificationIsPublicAndRolesIsCitizen() {
+    public void r20AsAuthUserWithNoRoleTestsByDefaultSetsRoleAsCitzICanAccessADocIfItsClassPublicAndRolesIsCitz() {
 
         String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "PUBLIC",
             new ArrayList<>(List.of("citizen")));
@@ -257,8 +263,7 @@ public class ReadDocumentIT extends BaseIT {
     }
 
     @Test
-    public void r22AsAuthenticatedUserWithASpecificRoleICanTAccessADocumentIfItsClassificationIsRestrictedAndRolesDonTMatch() {
-
+    public void r22AsAuthenticatedUserWithASpecificRoleICanTAccessADocIfClassificationIsRestrictedAndRolesDonTMatch() {
         String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "RESTRICTED",
             new ArrayList<>(List.of("caseworker")));
 

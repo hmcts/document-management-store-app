@@ -18,12 +18,16 @@ public class CantReadDocumentContentVersionBinaryException extends RuntimeExcept
         this.documentContentVersion = null;
     }
 
-    public CantReadDocumentContentVersionBinaryException(String message, DocumentContentVersion documentContentVersion) {
+    public CantReadDocumentContentVersionBinaryException(
+        String message,
+        DocumentContentVersion documentContentVersion) {
         super(message);
         this.documentContentVersion = documentContentVersion;
     }
 
-    public CantReadDocumentContentVersionBinaryException(Throwable cause, DocumentContentVersion documentContentVersion) {
+    public CantReadDocumentContentVersionBinaryException(
+        Throwable cause,
+        DocumentContentVersion documentContentVersion) {
         super(cause);
         this.documentContentVersion = documentContentVersion;
     }
@@ -38,7 +42,11 @@ public class CantReadDocumentContentVersionBinaryException extends RuntimeExcept
         this.documentContentVersion = null;
     }
 
-    protected CantReadDocumentContentVersionBinaryException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected CantReadDocumentContentVersionBinaryException(
+        String message,
+        Throwable cause,
+        boolean enableSuppression,
+        boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
         this.documentContentVersion = null;
     }

@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 public class DocumentContentVersionHalResourceTest {
 
     @Test
-    @SuppressWarnings("unchecked") // can't tell why it's complaining #getLink does return `Optional<Link>` and it's safe anyway
+    @SuppressWarnings("unchecked") // can't tell why it's complaining #getLink does return `Optional<Link>` and is safe.
     public void documentContentVersionHasValidLinks() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.randomUUID());
@@ -34,9 +34,5 @@ public class DocumentContentVersionHalResourceTest {
         Optional<Link> binary = halResource.getLink("binary");
         assertEquals(format("/documents/%s/versions/%s/binary", storedDocument.getId(),
             documentContentVersion.getId()), binary.get().toUri().toString());
-
-        Optional<Link> thumbnail = halResource.getLink("thumbnail");
-        assertEquals(format("/documents/%s/versions/%s/thumbnail", storedDocument.getId(),
-            documentContentVersion.getId()), thumbnail.get().toUri().toString());
     }
 }

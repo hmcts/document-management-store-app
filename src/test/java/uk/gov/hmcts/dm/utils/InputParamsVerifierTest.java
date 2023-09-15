@@ -40,7 +40,8 @@ public class InputParamsVerifierTest {
     @Test
     public void shouldThrowExceptionWhenRequestParamsConditionsInvalidForCaseRef() {
         try {
-            final DeleteCaseDocumentsCommand deleteCaseDocumentsCommand = new DeleteCaseDocumentsCommand(randomNumeric(17));
+            final DeleteCaseDocumentsCommand deleteCaseDocumentsCommand =
+                new DeleteCaseDocumentsCommand(randomNumeric(17));
             verifyRequestParamsConditions(deleteCaseDocumentsCommand);
             fail("The method should have thrown InvalidRequestException due to invalid caseRef");
         } catch (final InvalidRequestException invalidRequestException) {
