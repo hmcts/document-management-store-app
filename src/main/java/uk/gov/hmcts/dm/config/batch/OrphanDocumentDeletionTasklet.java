@@ -28,8 +28,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * This tasklet periodically checks for CSV files in the orphandocuments blob container. If it finds one it will download
- * it and then delete all the documents found with the UUID provided in the file. After the deletion has been completed the file
+ * This tasklet periodically checks for CSV files in the orphandocuments blob container.
+    * If it finds one it will download
+ * it and then delete all the documents found with the UUID provided in the file.
+    * After the deletion has been completed the file
  * is removed from the blob container.
  */
 @AllArgsConstructor
@@ -107,7 +109,8 @@ public class OrphanDocumentDeletionTasklet implements Tasklet {
             stopwatch.stop();
             long timeElapsed = stopwatch.getTime();
 
-            log.info("Time taken to delete {} Orphan Documents is  : {} milliseconds from csv file with name {} ", documentIds.size(),
+            log.info("Time taken to delete {} Orphan Documents is  "
+                    + ": {} milliseconds from csv file with name {} ", documentIds.size(),
                 timeElapsed, client.getBlobName());
 
             client.delete();

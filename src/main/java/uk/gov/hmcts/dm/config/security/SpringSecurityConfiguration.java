@@ -13,7 +13,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity (prePostEnabled = true)
 public class SpringSecurityConfiguration {
 
     private DmServiceAuthFilter dmServiceAuthFilter;
@@ -28,7 +28,7 @@ public class SpringSecurityConfiguration {
         http.headers().cacheControl().disable();
 
         http.securityMatchers()
-            .requestMatchers("/documents", "/documents/**", "/folders/**")
+            .requestMatchers("/documents", "/documents/**")
             .and()
             .addFilterBefore(dmServiceAuthFilter, AnonymousAuthenticationFilter.class)
             .sessionManagement().sessionCreationPolicy(STATELESS).and()

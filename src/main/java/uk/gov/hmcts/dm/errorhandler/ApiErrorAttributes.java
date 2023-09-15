@@ -13,7 +13,12 @@ import org.springframework.web.context.request.WebRequest;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.*;
+import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.BINDING_ERRORS;
+import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.EXCEPTION;
+import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.MESSAGE;
+import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.STACK_TRACE;
+
+
 
 @Component
 public class ApiErrorAttributes extends DefaultErrorAttributes {

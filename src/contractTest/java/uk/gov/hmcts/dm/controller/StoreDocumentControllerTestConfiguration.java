@@ -8,10 +8,22 @@ import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
-import uk.gov.hmcts.dm.repository.*;
+import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
+import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
+import uk.gov.hmcts.dm.repository.RepositoryFinder;
+import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
+import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteListValidator;
 import uk.gov.hmcts.dm.security.MultipartFileSizeValidator;
-import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.service.AuditEntryService;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
+import uk.gov.hmcts.dm.service.BlobStorageWriteService;
+import uk.gov.hmcts.dm.service.FileContentVerifier;
+import uk.gov.hmcts.dm.service.FileSizeVerifier;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
+import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.util.Arrays;
 
@@ -21,9 +33,6 @@ public class StoreDocumentControllerTestConfiguration {
 
     @MockBean
     private DmServiceAuthFilter serviceAuthFilter;
-
-    @MockBean
-    private FolderRepository folderRepository;
 
     @MockBean
     private StoredDocumentRepository storedDocumentRepository;
