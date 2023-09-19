@@ -40,7 +40,7 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
             String bearerToken = extractBearerToken(request);
             String serviceName = authTokenValidator.getServiceName(bearerToken);
             if (!authorisedServices.contains(serviceName)) {
-                LOG.debug(
+                LOG.info(
                     "service forbidden {} for endpoint: {} method: {} ",
                     serviceName,
                     request.getRequestURI(),
@@ -48,7 +48,7 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
                 );
                 return null;
             } else {
-                LOG.debug(
+                LOG.info(
                     "service authorized {} for endpoint: {} method: {}  ",
                     serviceName,
                     request.getRequestURI(),
