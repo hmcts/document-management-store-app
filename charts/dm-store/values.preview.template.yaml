@@ -48,6 +48,10 @@ blobstorage:
 xui-webapp:
   enabled: true
   nodejs:
+    memoryLimits: "3Gi"
+    memoryRequests: '1.5Gi'
+    cpuRequests: "1000m"
+    cpuLimits: "2000m"
     imagePullPolicy: Always
     releaseNameOverride: ${SERVICE_NAME}-xui-webapp
     image: hmctspublic.azurecr.io/xui/webapp:latest
