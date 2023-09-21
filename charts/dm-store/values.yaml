@@ -82,6 +82,12 @@ blobstorage:
 xui-webapp:
   enabled: false
 
+ccd:
+  enabled: false
+
+ccd-case-document-am-api:
+  enabled: false
+
 idam-pr:
   enabled: false
 
