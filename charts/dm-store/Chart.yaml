@@ -18,14 +18,14 @@ dependencies:
     version: ~1.0.6
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: xui-webapp.enabled
-  - name: ccd-case-document-am-api
-    version: 1.7.11
-    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
-    condition: ccd-case-document-am-api.enabled
   - name: ccd
     version: 9.0.1
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
     condition: ccd.enabled
+  - name: ccd-case-document-am-api
+    version: 1.7.11
+    repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
+    condition: ccd-case-document-am-api.enabled
   - name: idam-pr
     version: ~2.3.0
     repository: 'https://hmctspublic.azurecr.io/helm/v1/repo/'
