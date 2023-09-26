@@ -165,7 +165,7 @@ dependencies {
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.0.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
-    implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '2.6.4'
+    implementation group: 'com.microsoft.azure', name: 'applicationinsights-web', version: '3.4.17'
 
 
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
