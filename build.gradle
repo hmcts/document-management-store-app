@@ -12,7 +12,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '8.4.0'
     id 'au.com.dius.pact' version '4.2.14'
     id 'org.flywaydb.flyway' version '9.22.1'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.0.12'
 }
 
 apply plugin: 'java'
