@@ -18,6 +18,11 @@
         <packageUrl regex="true">^pkg:maven/org.springframework.plugin/spring-plugin-core@.*$</packageUrl>
         <cve>CVE-2023-34040</cve>
     </suppress>
+    <suppress until="2024-01-11">
+        <notes>netty-handler-4.1.97 (pkg:maven/io\.netty/netty-handler@4.1.97,.</notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/netty-handler@.*$</packageUrl>
+        <cve>CVE-2023-4586</cve>
+    </suppress>
 </suppressions>
 
 
