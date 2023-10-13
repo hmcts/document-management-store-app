@@ -116,7 +116,7 @@ dependencyManagement {
         }
 
         //CVE-2023-41080
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.13') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.14') {
             entry 'tomcat-embed-websocket'
             entry 'tomcat-embed-core'
         }
@@ -161,7 +161,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.22.2'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.22.3'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
