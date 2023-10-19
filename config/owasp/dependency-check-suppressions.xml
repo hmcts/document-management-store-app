@@ -4,6 +4,7 @@
         <notes>json-20230227.jar (pkg:maven/org.json/json@json-20230227,.</notes>
         <packageUrl regex="true">^pkg:maven/org\.json/json@.*$</packageUrl>
         <cve>CVE-2022-45688</cve>
+        <cve>CVE-2023-5072</cve>
     </suppress>
     <suppress until="2024-01-12">
         <notes>jackson-databind-2.15.2.jar (pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.15.2,.</notes>
