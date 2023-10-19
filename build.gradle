@@ -121,7 +121,7 @@ dependencyManagement {
             entry 'tomcat-embed-core'
         }
 
-                // CVE-2023-44487
+         // CVE-2023-44487
         dependencySet(group: 'io.netty', version: '4.1.100.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
