@@ -59,7 +59,7 @@ public class DomainPermissionEvaluator {
                 || Classifications.PUBLIC.equals(rolesAware.getClassification()))
                 ) {
                 Set<String> documentRoles = sanitizedSetFrom(rolesAware.getRoles());
-                log.info("User with roles {} accessing document that accepts roles {}",
+                log.debug("User with roles {} accessing document that accepts roles {}",
                     StringUtils.convertValidLogStrings(authenticatedUserRolesSet),
                     StringUtils.convertValidLogStrings(documentRoles));
 
@@ -83,7 +83,7 @@ public class DomainPermissionEvaluator {
                 && securityUtilService.getCurrentlyAuthenticatedServiceName().equalsIgnoreCase(CCD_CASE_DISPOSER)) {
             result = true;
         }
-        log.info(
+        log.debug(
             "AuthenticatedUserId {}, CreatorAware CreatedBy {}, Permissions {}, "
                 + "CurrentlyAuthenticatedServiceName {}, Result {}",
             authenticatedUserId,

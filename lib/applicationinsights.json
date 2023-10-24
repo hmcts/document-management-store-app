@@ -2,5 +2,22 @@
     "connectionString": "${file:/mnt/secrets/dm/app-insights-connection-string}",
     "role": {
         "name": "dm-store"
+    },
+    "preview": {
+        "sampling": {
+            "overrides": [
+                {
+                    "telemetryType": "request",
+                    "attributes": [
+                        {
+                            "key": "http.url",
+                            "value": "https?://[^/]+/health.*",
+                            "matchType": "regexp"
+                        }
+                    ],
+                    "percentage": 1
+                }
+            ]
+        }
     }
 }
