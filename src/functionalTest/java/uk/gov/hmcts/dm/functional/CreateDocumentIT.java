@@ -470,7 +470,7 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    public void uploadLessThanMinSizeFails() throws IOException {
+    public void uploadLessThanMinSizeFails() {
         Response response = givenRequest(getCitizen())
             .multiPart("files", file("zerobytes.txt"), MediaType.TEXT_PLAIN_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))

@@ -26,9 +26,6 @@ public class FileSizeVerifier {
     @Value("${dm.nonmediafile.sizelimit}")
     private Long nonMediaFileSize;
 
-    @Value("${dm.maxdisallowedfilesize}")
-    private long maxDisallowedFileSize;
-
     private final Tika tika = new Tika();
 
     private static final Logger log = LoggerFactory.getLogger(FileSizeVerifier.class);
@@ -78,8 +75,8 @@ public class FileSizeVerifier {
             return false;
         }
         long fileSize = multipartFile.getSize();
-        if (fileSize <= maxDisallowedFileSize) {
-            log.error("Warning. The uploaded file size of {} is less than required", fileSize);
+        if (fileSize <= 0) {
+            log.error("Warning. The uploaded file is empty and has size: {}", fileSize);
             return false;
         }
         return true;

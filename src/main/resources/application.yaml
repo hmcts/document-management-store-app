@@ -174,7 +174,6 @@ dm:
     sizelimit: ${MAX_MEDIA_FILE_SIZE:500}
   nonmediafile:
     sizelimit: ${MAX_NON_MEDIA_FILE_SIZE:1024}
-  maxdisallowedfilesize: ${MAX_DISALLOWED_FILE_SIZE:0}
 
 
 thumbnail:

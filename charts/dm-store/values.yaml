@@ -68,7 +68,6 @@ java:
     #Below File size limits are in MB
     MAX_MEDIA_FILE_SIZE: 500
     MAX_NON_MEDIA_FILE_SIZE: 1024
-    MAX_DISALLOWED_FILE_SIZE: 0
     DOCUMENT_DELETE_TASK_CRON: 0 5 0-6 * * *
 
 blobstorage:
