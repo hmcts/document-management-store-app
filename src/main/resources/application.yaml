@@ -175,7 +175,6 @@ dm:
   nonmediafile:
     sizelimit: ${MAX_NON_MEDIA_FILE_SIZE:1024}
 
-
 thumbnail:
     imageThumbnailCreator: ${SUPPORT_IMG_THUMBNAIL_MIME_TYPES:image/jpeg,image/png,image/gif,image/webp,image/bmp}
     pdfThumbnailCreator: ${SUPPORT_PDF_THUMBNAIL_MIME_TYPES:application/pdf}
