@@ -173,7 +173,7 @@ module "db-v15" {
   pgsql_server_configuration = [
     {
       name  = "azure.extensions"
-      value = "plpgsql,pg_stat_statements,pg_buffercache,uuid-ossp"
+      value = "plpgsql,pg_stat_statements,pg_buffercache,hypopg,uuid-ossp"
     }
   ]
   //Below attributes needs to be overridden for Perftest & Prod
