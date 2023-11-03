@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.config.batch;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ import java.util.stream.Stream;
 @Service
 @ConditionalOnProperty("toggle.orphandocumentdeletion")
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
 public class OrphanDocumentDeletionTask {
     private static final Logger log = LoggerFactory.getLogger(OrphanDocumentDeletionTask.class);
     private static final String TASK_NAME = "Orphan-Document-Deletion-Task";
