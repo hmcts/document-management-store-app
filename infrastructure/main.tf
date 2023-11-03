@@ -169,6 +169,8 @@ module "db-v15" {
   pgsql_version        = "15"
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "CFT"
+  # The original subnet is full, this is required to use the new subnet for new databases
+  subnet_suffix        = "expanded"
   pgsql_databases      = [
     {
       name : "evidence"
