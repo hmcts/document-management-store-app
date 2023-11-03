@@ -16,6 +16,10 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -63,8 +67,13 @@ public class OrphanDocumentDeletionTaskTest {
 
 
     @Test
-    public void shouldProcessAllValidDocumentIds() {
-        File file = new File("src/test/resources/files/orphan-document-deletion-example.csv");
+    public void shouldProcessAllValidDocumentIds() throws IOException {
+        Path tempFile = Files.createTempFile("test-file", ".csv");
+        UUID uuidRepeat = UUID.randomUUID();
+        Files.write(tempFile, (uuidRepeat + "," + UUID.randomUUID() + "\n"
+            + UUID.randomUUID() + "," + uuidRepeat + ",SDSF-skip-this\n")
+            .getBytes(StandardCharsets.UTF_8));
+        File file = new File(tempFile.toUri());
 
         try (MockedStatic<File> mockedStatic = Mockito.mockStatic(File.class)) {
             mockedStatic.when(() -> File.createTempFile("orphan-document", ".csv")).thenReturn(file);
@@ -115,8 +124,14 @@ public class OrphanDocumentDeletionTaskTest {
     }
 
     @Test
-    public void shouldSkipIfDocumentsNotFound() {
-        File file = new File("src/test/resources/files/orphan-document-deletion-example.csv");
+    public void shouldSkipIfDocumentsNotFound() throws IOException {
+
+        Path tempFile = Files.createTempFile("test-file", ".csv");
+
+        Files.write(tempFile, (UUID.randomUUID() + "," + UUID.randomUUID() + "\n"
+            + UUID.randomUUID() + "," + "SDSF-skip-this\n")
+            .getBytes(StandardCharsets.UTF_8));
+        File file = new File(tempFile.toUri());
 
         try (MockedStatic<File> mockedStatic = Mockito.mockStatic(File.class)) {
             mockedStatic.when(() -> File.createTempFile("orphan-document", ".csv")).thenReturn(file);
