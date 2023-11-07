@@ -38,5 +38,5 @@ database_storage_mb = "512000"
 
 
 //v15 Flexiserver DB
-pgsql_sku = "MO_Standard_E16ds_v5"
+pgsql_sku = "MO_Standard_E16ds_v4"
 pgsql_storage_mb = "524288"
