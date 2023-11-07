@@ -218,7 +218,6 @@ dependencies {
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
-
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
     testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
