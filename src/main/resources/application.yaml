@@ -167,8 +167,8 @@ management:
 
 dm:
   multipart:
-    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/octect-stream,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv,audio/mpeg,video/mp4}
-    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv,.mp3,.mp4}
+    whitelist: ${DM_MULTIPART_WHITELIST:image/jpeg,application/pdf,image/tiff,image/png,image/bmp,text/plain,application/octect-stream,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.wordprocessingml.template,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.template,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/vnd.openxmlformats-officedocument.presentationml.template,application/vnd.openxmlformats-officedocument.presentationml.slideshow,application/rtf,text/csv,audio/mpeg,audio/m4a,video/mp4}
+    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,.dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv,.mp3,.m4a,.mp4}
   mediafile:
     whitelist: ${DM_MEDIAFILE_WHITELIST:audio/mpeg,video/mp4}
     sizelimit: ${MAX_MEDIA_FILE_SIZE:500}
