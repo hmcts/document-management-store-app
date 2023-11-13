@@ -181,3 +181,17 @@ variable max_file_size_in_mb {
 variable common_tags {
   type = map(string)
 }
+
+//// v15 DB
+variable "aks_subscription_id" {}
+
+variable "pgsql_sku" {
+  description = "The PGSql flexible server instance sku"
+  default     = "MO_Standard_E2ds_v4"
+}
+
+variable "pgsql_storage_mb" {
+  description = "Max storage allowed for the PGSql Flexibile instance"
+  type        = number
+  default     = 65536
+}
