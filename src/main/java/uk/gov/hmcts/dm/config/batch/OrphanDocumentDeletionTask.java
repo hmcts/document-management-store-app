@@ -121,7 +121,7 @@ public class OrphanDocumentDeletionTask {
         try {
             Set<UUID> documentIds = getCsvFileAndParse(client);
 
-            if (documentIds == null || documentIds.size() < 1) {
+            if (documentIds == null || documentIds.isEmpty()) {
                 log.info("No item found in the file to processed in {}", client.getBlobUrl());
                 return;
             }
