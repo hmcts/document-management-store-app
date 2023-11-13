@@ -40,8 +40,6 @@ import java.util.stream.Stream;
 @EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
 public class OrphanDocumentDeletionTask {
     private static final Logger log = LoggerFactory.getLogger(OrphanDocumentDeletionTask.class);
-    private static final String TASK_NAME = "Orphan-Document-Deletion-Task";
-
     private final BlobContainerClient blobClient;
     private final StoredDocumentService documentService;
     private final AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
@@ -57,7 +55,7 @@ public class OrphanDocumentDeletionTask {
     }
 
     @Scheduled(cron = "${spring.batch.orphanFileDeletionCronJobSchedule}")
-    @SchedulerLock(name = TASK_NAME)
+    @SchedulerLock(name = "${task.env}-Orphan-Document-Deletion-Task")
     public void execute() {
 
         log.info("==== Deletion of Orphan Documents started ====");
