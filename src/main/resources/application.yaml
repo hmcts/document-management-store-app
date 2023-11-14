@@ -196,6 +196,9 @@ toggle:
 task:
   env: ${TASK_ENV:documentTaskLock-local}
 
+scheduling:
+  lock_at_most_for: PT10M # 10 minutes in ISO-8601
+
 springdoc:
   packagesToScan: uk.gov.hmcts.dm.controller
   pathsToMatch: /**
