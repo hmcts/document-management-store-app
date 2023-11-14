@@ -8,14 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -68,39 +65,34 @@ public class OrphanDocumentDeletionTaskTest {
 
     @Test
     public void shouldProcessAllValidDocumentIds() throws IOException {
-        Path tempFile = Files.createTempFile("test-file", ".csv");
+        Path tempFile = Files.createFile(Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv"));
         UUID uuidRepeat = UUID.randomUUID();
         Files.write(tempFile, (uuidRepeat + "," + UUID.randomUUID() + "\n"
             + UUID.randomUUID() + "," + uuidRepeat + ",SDSF-skip-this\n")
             .getBytes(StandardCharsets.UTF_8));
-        File file = new File(tempFile.toUri());
+        PagedIterable pagedIterable = mock(PagedIterable.class);
 
-        try (MockedStatic<File> mockedStatic = Mockito.mockStatic(File.class)) {
-            mockedStatic.when(() -> File.createTempFile("orphan-document", ".csv")).thenReturn(file);
-            PagedIterable pagedIterable = mock(PagedIterable.class);
+        when(blobClient.listBlobs()).thenReturn(pagedIterable);
 
-            when(blobClient.listBlobs()).thenReturn(pagedIterable);
+        BlobItem mockedBlobItem = mock(BlobItem.class);
+        String deleteFileName = "delete-file.csv";
+        given(mockedBlobItem.getName()).willReturn(deleteFileName);
+        BlobClient mockedBlobClient = mock(BlobClient.class);
+        given(blobClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
 
-            BlobItem mockedBlobItem = mock(BlobItem.class);
-            String deleteFileName = "delete-file.csv";
-            given(mockedBlobItem.getName()).willReturn(deleteFileName);
-            BlobClient mockedBlobClient = mock(BlobClient.class);
-            given(blobClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+        given(pagedIterable.stream())
+            .willReturn(Stream.of(mockedBlobItem));
 
-            given(pagedIterable.stream())
-                .willReturn(Stream.of(mockedBlobItem));
+        Optional<StoredDocument> mockedOpt = mock(Optional.class);
+        given(documentService.findOne(any())).willReturn(mockedOpt);
+        StoredDocument mockedStoredDocument = mock(StoredDocument.class);
+        given(mockedOpt.get()).willReturn(mockedStoredDocument);
+        given(mockedOpt.isPresent()).willReturn(true);
+        orphanDocumentDeletionTask.execute();
 
-            Optional<StoredDocument> mockedOpt = mock(Optional.class);
-            given(documentService.findOne(any())).willReturn(mockedOpt);
-            StoredDocument mockedStoredDocument = mock(StoredDocument.class);
-            given(mockedOpt.get()).willReturn(mockedStoredDocument);
-            given(mockedOpt.isPresent()).willReturn(true);
-            orphanDocumentDeletionTask.execute();
-
-            verify(documentService, times(3)).findOne(any(UUID.class));
-            verify(auditedStoredDocumentBatchOperationsService, times(3))
-                .hardDeleteStoredDocument(mockedStoredDocument);
-        }
+        verify(documentService, times(3)).findOne(any(UUID.class));
+        verify(auditedStoredDocumentBatchOperationsService, times(3))
+            .hardDeleteStoredDocument(mockedStoredDocument);
     }
 
     @Test
@@ -126,38 +118,33 @@ public class OrphanDocumentDeletionTaskTest {
     @Test
     public void shouldSkipIfDocumentsNotFound() throws IOException {
 
-        Path tempFile = Files.createTempFile("test-file", ".csv");
+        Path tempFile = Files.createFile(Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv"));
 
         Files.write(tempFile, (UUID.randomUUID() + "," + UUID.randomUUID() + "\n"
             + UUID.randomUUID() + "," + "SDSF-skip-this\n")
             .getBytes(StandardCharsets.UTF_8));
-        File file = new File(tempFile.toUri());
 
-        try (MockedStatic<File> mockedStatic = Mockito.mockStatic(File.class)) {
-            mockedStatic.when(() -> File.createTempFile("orphan-document", ".csv")).thenReturn(file);
+        PagedIterable pagedIterable = mock(PagedIterable.class);
 
-            PagedIterable pagedIterable = mock(PagedIterable.class);
+        when(blobClient.listBlobs()).thenReturn(pagedIterable);
 
-            when(blobClient.listBlobs()).thenReturn(pagedIterable);
+        BlobItem mockedBlobItem = mock(BlobItem.class);
+        String deleteFileName = "delete-file.csv";
+        given(mockedBlobItem.getName()).willReturn(deleteFileName);
+        BlobClient mockedBlobClient = mock(BlobClient.class);
+        given(blobClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
 
-            BlobItem mockedBlobItem = mock(BlobItem.class);
-            String deleteFileName = "delete-file.csv";
-            given(mockedBlobItem.getName()).willReturn(deleteFileName);
-            BlobClient mockedBlobClient = mock(BlobClient.class);
-            given(blobClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+        given(pagedIterable.stream())
+            .willReturn(Stream.of(mockedBlobItem));
 
-            given(pagedIterable.stream())
-                .willReturn(Stream.of(mockedBlobItem));
-
-            Optional<StoredDocument> mockedOpt = mock(Optional.class);
-            given(documentService.findOne(any())).willReturn(mockedOpt);
-            StoredDocument mockedStoredDocument = mock(StoredDocument.class);
-            given(mockedOpt.get()).willReturn(mockedStoredDocument);
-            given(mockedOpt.isPresent()).willReturn(false);
-            orphanDocumentDeletionTask.execute();
-            verify(documentService, times(3)).findOne(any());
-            verify(auditedStoredDocumentBatchOperationsService, never())
-                .hardDeleteStoredDocument(any());
-        }
+        Optional<StoredDocument> mockedOpt = mock(Optional.class);
+        given(documentService.findOne(any())).willReturn(mockedOpt);
+        StoredDocument mockedStoredDocument = mock(StoredDocument.class);
+        given(mockedOpt.get()).willReturn(mockedStoredDocument);
+        given(mockedOpt.isPresent()).willReturn(false);
+        orphanDocumentDeletionTask.execute();
+        verify(documentService, times(3)).findOne(any());
+        verify(auditedStoredDocumentBatchOperationsService, never())
+            .hardDeleteStoredDocument(any());
     }
 }

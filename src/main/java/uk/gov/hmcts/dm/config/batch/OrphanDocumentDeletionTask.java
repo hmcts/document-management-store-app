@@ -44,6 +44,8 @@ public class OrphanDocumentDeletionTask {
     private final StoredDocumentService documentService;
     private final AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
 
+    private static String TMP_DIR = System.getProperty("java.io.tmpdir");
+
     public OrphanDocumentDeletionTask(
         @Qualifier("orphandocument-storage") BlobContainerClient blobClient,
         StoredDocumentService documentService,
@@ -72,14 +74,12 @@ public class OrphanDocumentDeletionTask {
     }
 
     private Set<UUID> getCsvFileAndParse(BlobClient client) {
-        File csv = null;
+        String csvPath = null;
         try {
-            csv = File.createTempFile("orphan-document", ".csv");
-            final String fileName = csv.getAbsolutePath();
+            csvPath = TMP_DIR + File.separatorChar + "orphan-document.csv";
+            client.downloadToFile(csvPath);
 
-            client.downloadToFile(fileName);
-
-            try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
+            try (Stream<String> stream = Files.lines(Paths.get(csvPath))) {
                 Set<UUID> set = stream
                     .flatMap(line -> Arrays.stream(line.split(",")))
                     .map(str -> {
@@ -103,11 +103,11 @@ public class OrphanDocumentDeletionTask {
 
         } finally {
             try {
-                if (csv != null && csv.exists()) {
-                    csv.delete();
+                if (csvPath != null) {
+                    Files.delete(Paths.get(csvPath));
                 }
             } catch (Exception ex) {
-                log.info("Deleting temp file failed, {} ", csv.getPath());
+                log.info("Deleting temp file failed, {} ", csvPath);
             }
         }
         return null;
