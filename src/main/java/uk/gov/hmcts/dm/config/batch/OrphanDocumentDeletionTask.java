@@ -122,10 +122,9 @@ public class OrphanDocumentDeletionTask {
             Set<UUID> documentIds = getCsvFileAndParse(client);
 
             if (documentIds == null || documentIds.isEmpty()) {
-                log.info("No item found in the file to processed in {}", client.getBlobUrl());
+                log.info("No orphan item found in the file to processed in {}", client.getBlobUrl());
                 return;
             }
-            log.info(" {} file processed ", client.getBlobName());
 
             for (UUID docId : documentIds) {
                 Optional<StoredDocument> storedDocument = documentService.findOne(docId);
@@ -136,7 +135,7 @@ public class OrphanDocumentDeletionTask {
                 }
             }
 
-            log.info("Orphan Documents {} from csv file with name {} ",
+            log.info("Num of Orphan Documents: {} csv file name {} ",
                 documentIds.size(),
                 client.getBlobName()
             );
