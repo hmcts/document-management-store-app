@@ -30,6 +30,7 @@ public class MultiMediaUploadIT extends BaseIT {
     public void mv1R1AsAuthenticatedUserIUploadMultiMediaFiles() throws IOException {
         uploadWhitelistedSmallFileThenDownload("video_test.mp4", "video/mp4");
         uploadWhitelistedSmallFileThenDownload("audio_test.mp3", "audio/mpeg");
+        uploadWhitelistedSmallFileThenDownload("m4a.m4a", "audio/mp4");
     }
 
     @Test
