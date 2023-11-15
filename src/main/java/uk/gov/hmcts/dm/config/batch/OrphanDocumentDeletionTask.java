@@ -18,6 +18,7 @@ import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -45,7 +46,6 @@ public class OrphanDocumentDeletionTask {
     private final BlobContainerClient blobClient;
     private final StoredDocumentService documentService;
     private final AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
-
     private static String TMP_DIR = System.getProperty("java.io.tmpdir");
 
     public OrphanDocumentDeletionTask(
@@ -81,7 +81,7 @@ public class OrphanDocumentDeletionTask {
             csvPath = TMP_DIR + File.separatorChar + "orphan-document.csv";
             client.downloadToFile(csvPath);
 
-            try (Stream<String> stream = Files.lines(Paths.get(csvPath))) {
+            try (Stream<String> stream = Files.lines(Paths.get(csvPath), StandardCharsets.UTF_8)) {
                 Set<UUID> set = stream
                     .flatMap(line -> Arrays.stream(line.split(",")))
                     .map(str -> {
