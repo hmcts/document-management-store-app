@@ -93,6 +93,7 @@ public class OrphanDocumentDeletionTaskTest {
         verify(documentService, times(3)).findOne(any(UUID.class));
         verify(auditedStoredDocumentBatchOperationsService, times(3))
             .hardDeleteStoredDocument(mockedStoredDocument);
+        verify(mockedBlobClient).delete();
     }
 
     @Test
@@ -113,6 +114,7 @@ public class OrphanDocumentDeletionTaskTest {
         verify(documentService, never()).findOne(any());
         verify(auditedStoredDocumentBatchOperationsService, never())
             .hardDeleteStoredDocument(any());
+        verify(mockedBlobClient).delete();
     }
 
     @Test
@@ -146,5 +148,6 @@ public class OrphanDocumentDeletionTaskTest {
         verify(documentService, times(3)).findOne(any());
         verify(auditedStoredDocumentBatchOperationsService, never())
             .hardDeleteStoredDocument(any());
+        verify(mockedBlobClient).delete();
     }
 }

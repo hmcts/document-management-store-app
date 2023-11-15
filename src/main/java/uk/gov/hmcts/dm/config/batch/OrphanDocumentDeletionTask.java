@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService;
@@ -38,6 +39,7 @@ import java.util.stream.Stream;
 @ConditionalOnProperty("toggle.orphandocumentdeletion")
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
+@Transactional
 public class OrphanDocumentDeletionTask {
     private static final Logger log = LoggerFactory.getLogger(OrphanDocumentDeletionTask.class);
     private final BlobContainerClient blobClient;
@@ -139,9 +141,11 @@ public class OrphanDocumentDeletionTask {
                 client.getBlobName()
             );
 
-            client.delete();
+
         } catch (Exception ex) {
             log.error("ProcessItem of Orphan Documents failed for : {} ", client.getBlobName(), ex);
+        } finally {
+            client.delete();
         }
 
     }
