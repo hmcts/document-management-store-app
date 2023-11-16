@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
@@ -40,7 +41,7 @@ import java.util.stream.Stream;
 @ConditionalOnProperty("toggle.orphandocumentdeletion")
 @EnableScheduling
 @EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED)
 public class OrphanDocumentDeletionTask {
     private static final Logger log = LoggerFactory.getLogger(OrphanDocumentDeletionTask.class);
     private final BlobContainerClient blobClient;
@@ -122,10 +123,9 @@ public class OrphanDocumentDeletionTask {
             Set<UUID> documentIds = getCsvFileAndParse(client);
 
             if (documentIds == null || documentIds.isEmpty()) {
-                log.info("No item found in the file to processed in {}", client.getBlobUrl());
+                log.info("No orphan item found in the file to processed in {}", client.getBlobUrl());
                 return;
             }
-            log.info(" {} file processed ", client.getBlobName());
 
             for (UUID docId : documentIds) {
                 Optional<StoredDocument> storedDocument = documentService.findOne(docId);
@@ -136,7 +136,7 @@ public class OrphanDocumentDeletionTask {
                 }
             }
 
-            log.info("Orphan Documents {} from csv file with name {} ",
+            log.info("Num of Orphan Documents: {} csv file name {} ",
                 documentIds.size(),
                 client.getBlobName()
             );

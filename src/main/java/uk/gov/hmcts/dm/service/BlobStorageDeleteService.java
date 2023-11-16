@@ -50,6 +50,12 @@ public class BlobStorageDeleteService {
                     );
                     return;
                 }
+                log.info(
+                    "Successfully deleted blob: {}, document {}, StoredDocument {}",
+                    blob.getBlobUrl(),
+                    documentContentVersion.getId(),
+                    documentContentVersion.getStoredDocument().getId()
+                );
             }
             documentContentVersionRepository.updateContentUriAndContentCheckSum(
                 documentContentVersion.getId(), null, null);
