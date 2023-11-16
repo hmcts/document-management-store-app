@@ -127,7 +127,6 @@ public class StoredDocumentService {
         return documentContentVersion;
     }
 
-    @Transactional
     public void deleteDocument(StoredDocument storedDocument, boolean permanent) {
         storedDocument.setDeleted(true);
         if (permanent) {
