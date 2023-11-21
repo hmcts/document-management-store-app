@@ -5,7 +5,6 @@ steps:
     retries: 10
     retryDelay: 5
     when: ["-"]
-    keep: true
 
   - id: runtime-amd64
     build: >
@@ -17,7 +16,6 @@ steps:
     retryDelay: 5
     when:
       - pull-base-image-amd64
-    keep: true
 
   - id: pull-base-image-arm64
     cmd: docker pull --platform linux/arm64 hmctspublic.azurecr.io/base/java:21-distroless && docker tag hmctspublic.azurecr.io/base/java:21-distroless hmctspublic.azurecr.io/base/java/linux/arm64:21-distroless
@@ -25,7 +23,6 @@ steps:
     retryDelay: 5
     when:
       - pull-base-image-amd64
-    keep: true
 
   - id: runtime-arm64
     build: >
@@ -37,7 +34,6 @@ steps:
     retryDelay: 5
     when:
       - pull-base-image-arm64
-    keep: true
 
   - id: push-images
     push:
@@ -55,7 +51,6 @@ steps:
     retryDelay: 5
     when:
       - push-images
-    keep: true
 
   - id: manifest-push
     cmd: docker manifest push --purge {{.Run.Registry}}/{{CI_IMAGE_TAG}}
@@ -63,4 +58,3 @@ steps:
     retryDelay: 5
     when:
       - manifest-create
-    keep: true
