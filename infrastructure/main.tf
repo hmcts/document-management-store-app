@@ -52,7 +52,7 @@ data "azurerm_key_vault" "dm_shared_vault" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-DM" {
   name         = "${var.component}-POSTGRES-PASS"
-  value        = module.db-v11.postgresql_password
+  value        = module.db-v15.password
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
@@ -129,30 +129,6 @@ module "db-v11" {
   storage_mb         = var.database_storage_mb
   common_tags        = var.common_tags
   subscription       = var.subscription
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name = "${var.component}-POSTGRES-USER"
-  value = module.db-v11.user_name
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-HOST" {
-  name = "${var.component}-POSTGRES-HOST"
-  value = module.db-v11.host_name
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-PORT" {
-  name = "${var.component}-POSTGRES-PORT"
-  value = module.db-v11.postgresql_listen_port
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-DATABASE" {
-  name = "${var.component}-POSTGRES-DATABASE"
-  value = module.db-v11.postgresql_database
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
 # FlexibleServer v15
