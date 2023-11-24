@@ -49,7 +49,7 @@ public class OrphanDocumentDeletionTask {
     private final StoredDocumentService documentService;
     private final AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
     private static String TMP_DIR = System.getProperty("java.io.tmpdir");
-    private static String FILE_NAME_REGEX = "^EM-\\d+.*\\.csv$";
+    private static String FILE_NAME_REGEX =  "^(EM-\\d+|CHG.*|INC.*)\\.csv$";
     private static String SERVICE_NAME = "orphan-document-deletion";
 
 

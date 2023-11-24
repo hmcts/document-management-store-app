@@ -77,7 +77,7 @@ public class OrphanDocumentDeletionTaskTest {
             when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
 
             BlobItem mockedBlobItem = mock(BlobItem.class);
-            String deleteFileName = "EM-23423.csv";
+            String deleteFileName = "INC23423.csv";
             given(mockedBlobItem.getName()).willReturn(deleteFileName);
             BlobClient mockedBlobClient = mock(BlobClient.class);
             given(blobContainerClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
@@ -95,7 +95,7 @@ public class OrphanDocumentDeletionTaskTest {
             verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
             verify(documentService, times(3)).findOne(any(UUID.class));
             verify(auditedStoredDocumentBatchOperationsService, times(3))
-                .hardDeleteStoredDocument(mockedStoredDocument, "EM-23423", "orphan-document-deletion");
+                .hardDeleteStoredDocument(mockedStoredDocument, "INC23423", "orphan-document-deletion");
 
             verify(mockedBlobClient).delete();
         } finally {
@@ -110,7 +110,7 @@ public class OrphanDocumentDeletionTaskTest {
         when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
 
         BlobItem mockedBlobItem = mock(BlobItem.class);
-        String deleteFileName = "EM-65975.csv";
+        String deleteFileName = "CHG-65975.csv";
         given(mockedBlobItem.getName()).willReturn(deleteFileName);
         BlobClient mockedBlobClient = mock(BlobClient.class);
         given(blobContainerClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
@@ -164,7 +164,7 @@ public class OrphanDocumentDeletionTaskTest {
             when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
 
             BlobItem mockedBlobItem = mock(BlobItem.class);
-            String deleteFileName = "EM-608R.csv";
+            String deleteFileName = "EM-608.csv";
             given(mockedBlobItem.getName()).willReturn(deleteFileName);
             BlobClient mockedBlobClient = mock(BlobClient.class);
             given(blobContainerClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
