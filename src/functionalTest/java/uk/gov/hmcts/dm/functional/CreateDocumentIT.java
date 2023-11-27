@@ -468,4 +468,18 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents")
             .path("_embedded.documents[0]._links.self.href");
     }
+
+    @Test
+    public void uploadLessThanMinSizeFails() {
+        Response response = givenRequest(getCitizen())
+            .multiPart("files", file("zerobytes.txt"), MediaType.TEXT_PLAIN_VALUE)
+            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect().log().all()
+            .statusCode(422)
+            .body("error", equalTo("Your upload file size is less than allowed limit."))
+            .when()
+            .post("/documents");
+    }
 }

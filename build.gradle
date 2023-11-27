@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.47'
+    id 'uk.gov.hmcts.java' version '0.12.48'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.springframework.boot' version '3.1.5'
     id 'com.github.ben-manes.versions' version '0.50.0'
@@ -176,7 +176,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
 
     implementation group: 'org.hibernate', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
