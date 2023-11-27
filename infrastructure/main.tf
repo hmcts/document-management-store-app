@@ -131,6 +131,30 @@ module "db-v11" {
   subscription       = var.subscription
 }
 
+resource "azurerm_key_vault_secret" "POSTGRES-USER" {
+  name = "${var.component}-POSTGRES-USER"
+  value = module.db-v15.username
+  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-HOST" {
+  name = "${var.component}-POSTGRES-HOST"
+  value = module.db-v15.fqdn
+  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-PORT" {
+  name = "${var.component}-POSTGRES-PORT"
+  value = "5432"
+  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
+}
+
+resource "azurerm_key_vault_secret" "POSTGRES-DATABASE" {
+  name = "${var.component}-POSTGRES-DATABASE"
+  value = "evidence"
+  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
+}
+
 # FlexibleServer v15
 module "db-v15" {
   providers = {
