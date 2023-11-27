@@ -52,7 +52,7 @@ data "azurerm_key_vault" "dm_shared_vault" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS-DM" {
   name         = "${var.component}-POSTGRES-PASS"
-  value        = module.db-v11.postgresql_password
+  value        = module.db-v15.password
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
@@ -131,30 +131,6 @@ module "db-v11" {
   subscription       = var.subscription
 }
 
-resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name = "${var.component}-POSTGRES-USER"
-  value = module.db-v11.user_name
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-HOST" {
-  name = "${var.component}-POSTGRES-HOST"
-  value = module.db-v11.host_name
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-PORT" {
-  name = "${var.component}-POSTGRES-PORT"
-  value = module.db-v11.postgresql_listen_port
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
-resource "azurerm_key_vault_secret" "POSTGRES-DATABASE" {
-  name = "${var.component}-POSTGRES-DATABASE"
-  value = module.db-v11.postgresql_database
-  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
-}
-
 # FlexibleServer v15
 module "db-v15" {
   providers = {
@@ -185,6 +161,7 @@ module "db-v15" {
   //Below attributes needs to be overridden for Perftest & Prod
   pgsql_sku            = var.pgsql_sku
   pgsql_storage_mb     = var.pgsql_storage_mb
+  force_user_permissions_trigger = "1"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER-V15" {

@@ -1,9 +1,10 @@
 version: 1.0-preview-1
 steps:
   - id: pull-base-image-amd64
-    cmd: docker pull --platform linux/amd64 hmctspublic.azurecr.io/base/java:17-distroless && docker tag hmctspublic.azurecr.io/base/java:17-distroless hmctspublic.azurecr.io/base/java/linux/amd64:17-distroless
+    cmd: docker pull --platform linux/amd64 hmctspublic.azurecr.io/base/java:21-distroless && docker tag hmctspublic.azurecr.io/base/java:21-distroless hmctspublic.azurecr.io/base/java/linux/amd64:21-distroless
+    retries: 10
+    retryDelay: 5
     when: ["-"]
-    keep: true
 
   - id: runtime-amd64
     build: >
@@ -11,15 +12,17 @@ steps:
       --build-arg PLATFORM=/linux/amd64
       --platform linux/amd64
       .
+    retries: 10
+    retryDelay: 5
     when:
       - pull-base-image-amd64
-    keep: true
 
   - id: pull-base-image-arm64
-    cmd: docker pull --platform linux/arm64 hmctspublic.azurecr.io/base/java:17-distroless && docker tag hmctspublic.azurecr.io/base/java:17-distroless hmctspublic.azurecr.io/base/java/linux/arm64:17-distroless
+    cmd: docker pull --platform linux/arm64 hmctspublic.azurecr.io/base/java:21-distroless && docker tag hmctspublic.azurecr.io/base/java:21-distroless hmctspublic.azurecr.io/base/java/linux/arm64:21-distroless
+    retries: 10
+    retryDelay: 5
     when:
       - pull-base-image-amd64
-    keep: true
 
   - id: runtime-arm64
     build: >
@@ -27,26 +30,31 @@ steps:
       --build-arg PLATFORM=/linux/arm64
       --platform linux/arm64/v8
       .
+    retries: 10
+    retryDelay: 5
     when:
       - pull-base-image-arm64
-    keep: true
 
   - id: push-images
     push:
       - "{{.Run.Registry}}/{{CI_IMAGE_TAG}}-amd64"
       - "{{.Run.Registry}}/{{CI_IMAGE_TAG}}-arm64"
+    retries: 10
+    retryDelay: 5
     when:
       - runtime-amd64
       - runtime-arm64
 
   - id: manifest-create
     cmd: docker manifest create {{.Run.Registry}}/{{CI_IMAGE_TAG}} {{.Run.Registry}}/{{CI_IMAGE_TAG}}-amd64 {{.Run.Registry}}/{{CI_IMAGE_TAG}}-arm64
+    retries: 10
+    retryDelay: 5
     when:
       - push-images
-    keep: true
 
   - id: manifest-push
     cmd: docker manifest push --purge {{.Run.Registry}}/{{CI_IMAGE_TAG}}
+    retries: 10
+    retryDelay: 5
     when:
       - manifest-create
-    keep: true
