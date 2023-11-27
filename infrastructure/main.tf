@@ -133,7 +133,7 @@ module "db-v11" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name = "${var.component}-POSTGRES-USER"
-  value = module.db-v15.user_name
+  value = module.db-v15.username
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
