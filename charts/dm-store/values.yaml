@@ -28,8 +28,8 @@ java:
     SPRING_DATASOURCE_PORT: 5432
     SPRING_DATASOURCE_NAME: evidence
     SPRING_DATASOURCE_OPTIONS: "?ssl=disable"
-    SPRING_DATASOURCE_HOST: dm-store-postgres-db-v11-{{ .Values.global.environment }}.postgres.database.azure.com
-    SPRING_DATASOURCE_USERNAME: evidence@dm-store-postgres-db-v11-{{ .Values.global.environment }}
+    SPRING_DATASOURCE_HOST: dm-store-postgres-db-v15-{{ .Values.global.environment }}.postgres.database.azure.com
+    SPRING_DATASOURCE_USERNAME: pgadmin
     HIKARI_MAX_POOL_SIZE: 10
     DB_CONNECTION_TIMEOUT: 5000
 
