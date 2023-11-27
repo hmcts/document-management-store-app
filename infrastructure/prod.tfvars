@@ -33,8 +33,6 @@ enable_testing                      = "false"
 max_file_size_in_mb        = "100"
 
 // DB
-sku_name = "GP_Gen5_16"
-sku_capacity = "16"
 database_storage_mb = "512000"
 
 //v15 Flexiserver DB
