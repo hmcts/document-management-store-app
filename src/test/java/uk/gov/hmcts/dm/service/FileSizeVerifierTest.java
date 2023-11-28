@@ -56,6 +56,18 @@ public class FileSizeVerifierTest {
         assertFalse(fileSizeVerifier.verifyFileSize(kmlfile));
     }
 
+    @Test
+    public void verifyMinFileSize() {
+        MockMultipartFile kmlfile = new MockMultipartFile("data", "filename.kml", "text/plain", "some kml".getBytes());
+        assertTrue(fileSizeVerifier.verifyMinFileSize(kmlfile));
+    }
+
+    @Test
+    public void verifyLowerThanMinFileSize() {
+        MockMultipartFile kmlfile = new MockMultipartFile("data", "filename.kml", "text/plain", "".getBytes());
+        assertFalse(fileSizeVerifier.verifyMinFileSize(kmlfile));
+    }
+
     private byte[] fileToByteArray(String file) throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         return IOUtils.toByteArray(classLoader.getResourceAsStream(file));

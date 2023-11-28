@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,6 +49,9 @@ public class OrphanDocumentDeletionTask {
     private final StoredDocumentService documentService;
     private final AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
     private static String TMP_DIR = System.getProperty("java.io.tmpdir");
+    private static String FILE_NAME_REGEX =  "^(EM-\\d+|CHG.*|INC.*)\\.csv$";
+    private static String SERVICE_NAME = "orphan-document-deletion";
+
 
     public OrphanDocumentDeletionTask(
         @Qualifier("orphandocument-storage") BlobContainerClient blobClient,
@@ -68,6 +72,7 @@ public class OrphanDocumentDeletionTask {
             .stream()
             .map(blobItem -> blobClient.getBlobClient(blobItem.getName()))
             .findAny();
+
 
         if (blob.isPresent()) {
             processItem(blob.get());
@@ -116,10 +121,20 @@ public class OrphanDocumentDeletionTask {
         return null;
     }
 
+    private String extractTicketNumFromFileName(String blobName) {
+        if (!Pattern.matches(FILE_NAME_REGEX, blobName)) {
+            throw new IllegalArgumentException("File should be ticket Number and extension should be '.csv',"
+                + " Invalid file name:" + blobName);
+        }
+        return blobName.replace(".csv","");
+    }
+
     private void processItem(BlobClient client) {
 
-        log.info("ProcessItem of Orphan Documents started for : {} ", client.getBlobName());
+        var blobName = client.getBlobName();
+        log.info("ProcessItem of Orphan Documents started for : {} ", blobName);
         try {
+            String ticketNumber = extractTicketNumFromFileName(blobName);
             Set<UUID> documentIds = getCsvFileAndParse(client);
 
             if (documentIds == null || documentIds.isEmpty()) {
@@ -130,7 +145,11 @@ public class OrphanDocumentDeletionTask {
             for (UUID docId : documentIds) {
                 Optional<StoredDocument> storedDocument = documentService.findOne(docId);
                 if (storedDocument.isPresent()) {
-                    auditedStoredDocumentBatchOperationsService.hardDeleteStoredDocument(storedDocument.get());
+                    auditedStoredDocumentBatchOperationsService.hardDeleteStoredDocument(
+                        storedDocument.get(),
+                        ticketNumber,
+                        SERVICE_NAME
+                    );
                 } else {
                     log.error("Document with Id: {} not found.", docId);
                 }

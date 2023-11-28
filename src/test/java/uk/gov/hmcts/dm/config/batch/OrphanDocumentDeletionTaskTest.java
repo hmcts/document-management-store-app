@@ -35,7 +35,7 @@ public class OrphanDocumentDeletionTaskTest {
     private OrphanDocumentDeletionTask orphanDocumentDeletionTask;
 
     @Mock
-    private BlobContainerClient blobClient;
+    private BlobContainerClient blobContainerClient;
 
     @Mock
     private StoredDocumentService documentService;
@@ -49,10 +49,10 @@ public class OrphanDocumentDeletionTaskTest {
     }
 
     @Test
-    public void shouldContinueIfThereIsnoFile() {
+    public void shouldContinueIfThereIsNoFile() {
 
         PagedIterable pagedIterable = mock(PagedIterable.class);
-        when(blobClient.listBlobs()).thenReturn(pagedIterable);
+        when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
 
         given(pagedIterable.stream())
             .willReturn(Stream.of());
@@ -65,52 +65,61 @@ public class OrphanDocumentDeletionTaskTest {
 
     @Test
     public void shouldProcessAllValidDocumentIds() throws IOException {
-        Path tempFile = Files.createFile(Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv"));
-        UUID uuidRepeat = UUID.randomUUID();
-        Files.write(tempFile, (uuidRepeat + "," + UUID.randomUUID() + "\n"
-            + UUID.randomUUID() + "," + uuidRepeat + ",SDSF-skip-this\n")
-            .getBytes(StandardCharsets.UTF_8));
-        PagedIterable pagedIterable = mock(PagedIterable.class);
+        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+        try {
+            Path tempFile = Files.createFile(filePath);
+            UUID uuidRepeat = UUID.randomUUID();
+            Files.write(tempFile, (uuidRepeat + "," + UUID.randomUUID() + "\n"
+                + UUID.randomUUID() + "," + uuidRepeat + ",SDSF-skip-this\n")
+                .getBytes(StandardCharsets.UTF_8));
+            PagedIterable pagedIterable = mock(PagedIterable.class);
 
-        when(blobClient.listBlobs()).thenReturn(pagedIterable);
+            when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
 
-        BlobItem mockedBlobItem = mock(BlobItem.class);
-        String deleteFileName = "delete-file.csv";
-        given(mockedBlobItem.getName()).willReturn(deleteFileName);
-        BlobClient mockedBlobClient = mock(BlobClient.class);
-        given(blobClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+            BlobItem mockedBlobItem = mock(BlobItem.class);
+            String deleteFileName = "INC23423.csv";
+            given(mockedBlobItem.getName()).willReturn(deleteFileName);
+            BlobClient mockedBlobClient = mock(BlobClient.class);
+            given(blobContainerClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+            given(mockedBlobClient.getBlobName()).willReturn(deleteFileName);
 
-        given(pagedIterable.stream())
-            .willReturn(Stream.of(mockedBlobItem));
+            given(pagedIterable.stream())
+                .willReturn(Stream.of(mockedBlobItem));
 
-        Optional<StoredDocument> mockedOpt = mock(Optional.class);
-        given(documentService.findOne(any())).willReturn(mockedOpt);
-        StoredDocument mockedStoredDocument = mock(StoredDocument.class);
-        given(mockedOpt.get()).willReturn(mockedStoredDocument);
-        given(mockedOpt.isPresent()).willReturn(true);
-        orphanDocumentDeletionTask.execute();
+            Optional<StoredDocument> mockedOpt = mock(Optional.class);
+            given(documentService.findOne(any())).willReturn(mockedOpt);
+            StoredDocument mockedStoredDocument = mock(StoredDocument.class);
+            given(mockedOpt.get()).willReturn(mockedStoredDocument);
+            given(mockedOpt.isPresent()).willReturn(true);
+            orphanDocumentDeletionTask.execute();
+            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+            verify(documentService, times(3)).findOne(any(UUID.class));
+            verify(auditedStoredDocumentBatchOperationsService, times(3))
+                .hardDeleteStoredDocument(mockedStoredDocument, "INC23423", "orphan-document-deletion");
 
-        verify(documentService, times(3)).findOne(any(UUID.class));
-        verify(auditedStoredDocumentBatchOperationsService, times(3))
-            .hardDeleteStoredDocument(mockedStoredDocument);
-        verify(mockedBlobClient).delete();
+            verify(mockedBlobClient).delete();
+        } finally {
+            Files.deleteIfExists(filePath);
+        }
     }
 
     @Test
     public void shouldContinueIfCsvFileEmpty() {
 
         PagedIterable pagedIterable = mock(PagedIterable.class);
-        when(blobClient.listBlobs()).thenReturn(pagedIterable);
+        when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
 
         BlobItem mockedBlobItem = mock(BlobItem.class);
-        String deleteFileName = "delete-file.csv";
+        String deleteFileName = "CHG-65975.csv";
         given(mockedBlobItem.getName()).willReturn(deleteFileName);
         BlobClient mockedBlobClient = mock(BlobClient.class);
-        given(blobClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+        given(blobContainerClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+        given(mockedBlobClient.getBlobName()).willReturn(deleteFileName);
 
         given(pagedIterable.stream())
             .willReturn(Stream.of(mockedBlobItem));
         orphanDocumentDeletionTask.execute();
+        verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
         verify(documentService, never()).findOne(any());
         verify(auditedStoredDocumentBatchOperationsService, never())
             .hardDeleteStoredDocument(any());
@@ -118,36 +127,65 @@ public class OrphanDocumentDeletionTaskTest {
     }
 
     @Test
-    public void shouldSkipIfDocumentsNotFound() throws IOException {
-
-        Path tempFile = Files.createFile(Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv"));
-
-        Files.write(tempFile, (UUID.randomUUID() + "," + UUID.randomUUID() + "\n"
-            + UUID.randomUUID() + "," + "SDSF-skip-this\n")
-            .getBytes(StandardCharsets.UTF_8));
+    public void shouldDeleteFileIfFileNameIsNotValid() {
 
         PagedIterable pagedIterable = mock(PagedIterable.class);
-
-        when(blobClient.listBlobs()).thenReturn(pagedIterable);
+        when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
 
         BlobItem mockedBlobItem = mock(BlobItem.class);
-        String deleteFileName = "delete-file.csv";
+        String deleteFileName = "EM65975.csv";
         given(mockedBlobItem.getName()).willReturn(deleteFileName);
         BlobClient mockedBlobClient = mock(BlobClient.class);
-        given(blobClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+        given(blobContainerClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+        given(mockedBlobClient.getBlobName()).willReturn(deleteFileName);
 
         given(pagedIterable.stream())
             .willReturn(Stream.of(mockedBlobItem));
-
-        Optional<StoredDocument> mockedOpt = mock(Optional.class);
-        given(documentService.findOne(any())).willReturn(mockedOpt);
-        StoredDocument mockedStoredDocument = mock(StoredDocument.class);
-        given(mockedOpt.get()).willReturn(mockedStoredDocument);
-        given(mockedOpt.isPresent()).willReturn(false);
         orphanDocumentDeletionTask.execute();
-        verify(documentService, times(3)).findOne(any());
+        verify(mockedBlobClient,never()).downloadToFile(any());
+        verify(documentService, never()).findOne(any());
         verify(auditedStoredDocumentBatchOperationsService, never())
             .hardDeleteStoredDocument(any());
         verify(mockedBlobClient).delete();
+    }
+
+    @Test
+    public void shouldSkipIfStoredDocumentsNotFound() throws IOException {
+        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+        try {
+            Path tempFile = Files.createFile(filePath);
+
+            Files.write(tempFile, (UUID.randomUUID() + "," + UUID.randomUUID() + "\n"
+                + UUID.randomUUID() + "," + "SDSF-skip-this\n")
+                .getBytes(StandardCharsets.UTF_8));
+
+            PagedIterable pagedIterable = mock(PagedIterable.class);
+
+            when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
+
+            BlobItem mockedBlobItem = mock(BlobItem.class);
+            String deleteFileName = "EM-608.csv";
+            given(mockedBlobItem.getName()).willReturn(deleteFileName);
+            BlobClient mockedBlobClient = mock(BlobClient.class);
+            given(blobContainerClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
+            given(mockedBlobClient.getBlobName()).willReturn(deleteFileName);
+
+            given(pagedIterable.stream())
+                .willReturn(Stream.of(mockedBlobItem));
+
+            Optional<StoredDocument> mockedOpt = mock(Optional.class);
+            given(documentService.findOne(any())).willReturn(mockedOpt);
+            StoredDocument mockedStoredDocument = mock(StoredDocument.class);
+            given(mockedOpt.get()).willReturn(mockedStoredDocument);
+            given(mockedOpt.isPresent()).willReturn(false);
+            orphanDocumentDeletionTask.execute();
+            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+            verify(documentService, times(3)).findOne(any());
+            verify(auditedStoredDocumentBatchOperationsService, never())
+                .hardDeleteStoredDocument(any());
+            verify(mockedBlobClient).delete();
+        } finally {
+            Files.deleteIfExists(filePath);
+        }
     }
 }
