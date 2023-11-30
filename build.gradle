@@ -78,6 +78,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven { url "https://jitpack.io" }
+    maven { url  'https://repo.spring.io/milestone/'}
 }
 
 def versions = [
@@ -195,8 +196,8 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.0.4'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.0.4'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.0-RC1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.0-RC1'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
