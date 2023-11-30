@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.47'
+    id 'uk.gov.hmcts.java' version '0.12.48'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.springframework.boot' version '3.1.5'
     id 'com.github.ben-manes.versions' version '0.50.0'
@@ -83,7 +83,7 @@ repositories {
 def versions = [
     ehcache            : '3.10.8',
     postgresql         : '42.6.0',
-    jackson            : '2.15.3',
+    jackson            : '2.16.0',
     serenity           : '3.7.0',
     serenityreporter   : '3.7.0',
     serenityRestAssured: '3.7.0',
@@ -91,7 +91,7 @@ def versions = [
     pact_version       : '4.6.3',
     emTestHelper       : '2.0.4',
     shedlock           : '5.10.0',
-    hibernate          : '6.3.1.Final',
+    hibernate          : '6.4.0.Final',
     jupiter            : '5.8.2',
     springSecurity     : '6.1.5'
 ]
@@ -104,7 +104,7 @@ dependencyManagement {
             entry 'snakeyaml'
         }
         // 1.2.11 cause java.lang.NullPointerException: Cannot read the array length because "throwableSuppressed" is null
-        dependencySet(group: 'ch.qos.logback', version: '1.4.11') {
+        dependencySet(group: 'ch.qos.logback', version: '1.4.13') {
             entry 'logback-core'
             entry 'logback-access'
             entry 'logback-classic'
@@ -176,7 +176,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
 
     implementation group: 'org.hibernate', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
@@ -234,7 +234,7 @@ dependencies {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
 
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.19.2'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.19.3'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
