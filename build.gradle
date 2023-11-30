@@ -9,7 +9,7 @@ plugins {
     id 'checkstyle'
     id 'io.freefair.lombok' version '8.4'
     id 'info.solidsoft.pitest' version '1.9.0'
-    id 'org.owasp.dependencycheck' version '8.4.3'
+    id 'org.owasp.dependencycheck' version '9.0.1'
     id 'au.com.dius.pact' version '4.2.14'
     id 'org.flywaydb.flyway' version '9.22.3'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
@@ -83,8 +83,8 @@ repositories {
 
 def versions = [
     ehcache            : '3.10.8',
-    postgresql         : '42.6.0',
-    jackson            : '2.15.3',
+    postgresql         : '42.7.0',
+    jackson            : '2.16.0',
     serenity           : '3.7.0',
     serenityreporter   : '3.7.0',
     serenityRestAssured: '3.7.0',
@@ -105,7 +105,7 @@ dependencyManagement {
             entry 'snakeyaml'
         }
         // 1.2.11 cause java.lang.NullPointerException: Cannot read the array length because "throwableSuppressed" is null
-        dependencySet(group: 'ch.qos.logback', version: '1.4.11') {
+        dependencySet(group: 'ch.qos.logback', version: '1.4.13') {
             entry 'logback-core'
             entry 'logback-access'
             entry 'logback-classic'
@@ -207,7 +207,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
-    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.15'
+    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.16'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
@@ -235,7 +235,7 @@ dependencies {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
 
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.19.2'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.19.3'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
