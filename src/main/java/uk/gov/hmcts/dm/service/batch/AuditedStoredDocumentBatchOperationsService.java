@@ -27,13 +27,17 @@ public class AuditedStoredDocumentBatchOperationsService {
     private String batchAuditServiceName;
 
     public void hardDeleteStoredDocument(StoredDocument storedDocument) {
+        hardDeleteStoredDocument(storedDocument, batchAuditUserName, batchAuditServiceName);
+    }
+
+    public void hardDeleteStoredDocument(StoredDocument storedDocument, String userName, String serviceName) {
         if (storedDocument != null && !storedDocument.isHardDeleted()) {
             storedDocumentService.deleteDocument(storedDocument, true);
             auditEntryService.createAndSaveEntry(
                 storedDocument,
                 AuditActions.HARD_DELETED,
-                batchAuditUserName,
-                batchAuditServiceName);
+                userName,
+                serviceName);
         }
     }
 
