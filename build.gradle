@@ -110,12 +110,6 @@ dependencyManagement {
             entry 'logback-access'
             entry 'logback-classic'
         }
-
-        //CVE-2023-24998
-        dependencySet(group: 'commons-fileupload', version: '1.5') {
-            entry 'commons-fileupload'
-        }
-
     }
 }
 
