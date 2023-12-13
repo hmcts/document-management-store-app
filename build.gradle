@@ -117,7 +117,7 @@ dependencyManagement {
         }
 
         //CVE-2023-41080
-        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.16') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.17') {
             entry 'tomcat-embed-websocket'
             entry 'tomcat-embed-core'
         }
