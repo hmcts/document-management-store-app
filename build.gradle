@@ -94,7 +94,7 @@ def versions = [
     shedlock           : '5.10.2',
     hibernate          : '6.4.0.Final',
     jupiter            : '5.10.0',
-    springSecurity     : '6.2.0'
+    springSecurity     : '6.2.1'
 ]
 
 dependencyManagement {
@@ -179,7 +179,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.2.0'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.2.1'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.1'
