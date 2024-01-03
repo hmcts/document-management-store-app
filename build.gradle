@@ -1,6 +1,6 @@
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.52'
+    id 'uk.gov.hmcts.java' version '0.12.53'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.springframework.boot' version '3.2.0'
     id 'com.github.ben-manes.versions' version '0.50.0'
@@ -9,7 +9,7 @@ plugins {
     id 'checkstyle'
     id 'io.freefair.lombok' version '8.4'
     id 'info.solidsoft.pitest' version '1.9.0'
-    id 'org.owasp.dependencycheck' version '9.0.4'
+    id 'org.owasp.dependencycheck' version '9.0.7'
     id 'au.com.dius.pact' version '4.2.14'
     id 'org.flywaydb.flyway' version '9.22.3'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
@@ -89,7 +89,7 @@ def versions = [
     serenityreporter   : '3.7.0',
     serenityRestAssured: '3.7.0',
     logging            : '6.0.1',
-    pact_version       : '4.6.3',
+    pact_version       : '4.1.7',
     emTestHelper       : '2.0.4',
     shedlock           : '5.10.2',
     hibernate          : '6.4.0.Final',
@@ -118,7 +118,7 @@ dependencies {
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.25.1'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.1'
 
-    implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '33.0.0-jre'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
@@ -222,7 +222,7 @@ dependencyCheck {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.12.5'
+    toolVersion = '10.12.7'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
