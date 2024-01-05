@@ -1,3 +1,10 @@
+
+buildscript {
+    dependencies {
+        classpath("org.flywaydb:flyway-database-postgresql:10.4.1")
+    }
+}
+
 plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.54'
