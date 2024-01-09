@@ -73,7 +73,7 @@ java:
     DOCUMENT_DELETE_TASK_CRON: 0 5 0-6 * * *
     DOCUMENT_DELETE_NUM_PAGES: 1
     DOCUMENT_DELETE_PAGE_SIZE: 1
-    DOCUMENT_DELETE_ENABLED: 'false'
+    DOCUMENT_DELETE_ENABLED: 'true'
 
 blobstorage:
   resourceGroup: dm-store-aso-preview-rg
