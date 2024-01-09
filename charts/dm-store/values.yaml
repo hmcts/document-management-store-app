@@ -68,7 +68,12 @@ java:
     #Below File size limits are in MB
     MAX_MEDIA_FILE_SIZE: 500
     MAX_NON_MEDIA_FILE_SIZE: 1024
+
+    #Doc hard delete vars/schedule
     DOCUMENT_DELETE_TASK_CRON: 0 5 0-6 * * *
+    DOCUMENT_DELETE_NUM_PAGES: 1
+    DOCUMENT_DELETE_PAGE_SIZE: 1
+    DOCUMENT_DELETE_ENABLED: 'false'
 
 blobstorage:
   resourceGroup: dm-store-aso-preview-rg

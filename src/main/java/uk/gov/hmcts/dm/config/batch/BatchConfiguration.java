@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.Query;
+import jdk.jfr.Enabled;
 import net.javacrumbs.shedlock.core.LockProvider;
 import net.javacrumbs.shedlock.provider.jdbctemplate.JdbcTemplateLockProvider;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
@@ -82,17 +83,29 @@ public class BatchConfiguration {
     @Value("${spring.batch.deleteExecutorQueueCapacity}")
     private int deleteExecutorQueueCapacity;
 
+    @Value("${DOCUMENT_DELETE_ENABLED}")
+    private boolean documentDeleteEnabled;
+
+    @Value("${DOCUMENT_DELETE_PAGE_SIZE}")
+    private int documentDeletePageSize;
+
+    @Value("${DOCUMENT_DELETE_NUM_PAGES}")
+    private int documentDeleteNumberPages;
+
     @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
         lockAtLeastFor = "PT3M", lockAtMostFor = "PT15M")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
         JobRestartException, JobInstanceAlreadyCompleteException {
-        log.info("deleteJob starting");
-        jobLauncher
-            .run(processDocument(step1()), new JobParametersBuilder()
-            .addDate("date", new Date())
-            .toJobParameters());
-
+        if (documentDeleteEnabled) {
+            log.info("deleteJob starting");
+            jobLauncher
+                .run(processDocument(step1()), new JobParametersBuilder()
+                    .addDate("date", new Date())
+                    .toJobParameters());
+        }
+        else
+            log.info("Hard delete job not running, status of DOC_DELETE_ENABLED: {}", "${DOC_DELETE_ENABLED}");
     }
 
     @Bean
@@ -118,7 +131,8 @@ public class BatchConfiguration {
             .name("documentTaskReader")
             .entityManagerFactory(entityManagerFactory)
             .queryProvider(new QueryProvider())
-            .pageSize(400)
+            .pageSize(documentDeletePageSize)
+            .maxItemCount(documentDeleteNumberPages)
             .build();
     }
 
