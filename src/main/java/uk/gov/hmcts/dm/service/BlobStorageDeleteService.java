@@ -57,8 +57,8 @@ public class BlobStorageDeleteService {
                     documentContentVersion.getStoredDocument().getId()
                 );
             }
-            documentContentVersionRepository.updateContentUriAndContentCheckSum(
-                documentContentVersion.getId(), null, null);
+            documentContentVersion.setContentUri(null);
+            documentContentVersion.setContentChecksum(null);
         } catch (BlobStorageException e) {
             if (e.getStatusCode() == 404) {
                 log.info(
