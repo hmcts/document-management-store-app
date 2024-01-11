@@ -82,9 +82,6 @@ public class BatchConfiguration {
     @Value("${spring.batch.deleteExecutorQueueCapacity}")
     private int deleteExecutorQueueCapacity;
 
-    @Value("${DOCUMENT_DELETE_ENABLED}")
-    private boolean documentDeleteEnabled;
-
     @Value("${DOCUMENT_DELETE_PAGE_SIZE}")
     private int documentDeletePageSize;
 
@@ -96,15 +93,11 @@ public class BatchConfiguration {
         lockAtLeastFor = "PT3M", lockAtMostFor = "PT15M")
     public void schedule() throws JobParametersInvalidException, JobExecutionAlreadyRunningException,
         JobRestartException, JobInstanceAlreadyCompleteException {
-        if (documentDeleteEnabled) {
-            log.info("deleteJob starting");
-            jobLauncher
-                .run(processDocument(step1()), new JobParametersBuilder()
-                    .addDate("date", new Date())
-                    .toJobParameters());
-        }
-        else
-            log.info("Hard delete job not running, status of DOC_DELETE_ENABLED: {}", "${DOC_DELETE_ENABLED}");
+        log.info("deleteJob starting");
+        jobLauncher
+            .run(processDocument(step1()), new JobParametersBuilder()
+                .addDate("date", new Date())
+                .toJobParameters());
     }
 
     @Bean
