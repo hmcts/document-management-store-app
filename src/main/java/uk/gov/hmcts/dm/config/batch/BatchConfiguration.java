@@ -82,11 +82,15 @@ public class BatchConfiguration {
     @Value("${spring.batch.deleteExecutorQueueCapacity}")
     private int deleteExecutorQueueCapacity;
 
-    @Value("${DOCUMENT_DELETE_PAGE_SIZE}")
+    @Value("${spring.batch.documentDeletePageSize}")
     private int documentDeletePageSize;
 
-    @Value("${DOCUMENT_DELETE_NUM_PAGES}")
+    @Value("${spring.batch.documentDeleteNumberPages}")
     private int documentDeleteNumberPages;
+
+    @Value("${spring.batch.documentChunkSize}")
+    private int documentChunkSize;
+
 
     @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
@@ -122,7 +126,8 @@ public class BatchConfiguration {
         return new JpaPagingItemReaderBuilder<StoredDocument>()
             .name("documentTaskReader")
             .entityManagerFactory(entityManagerFactory)
-            .queryProvider(new QueryProvider())
+            .queryString("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
+                + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
             .pageSize(documentDeletePageSize)
             .maxItemCount(documentDeleteNumberPages)
             .build();
@@ -143,7 +148,7 @@ public class BatchConfiguration {
 
     public Step step1() {
         return new StepBuilder("step1",jobRepository)
-            .<StoredDocument, StoredDocument>chunk(30, transactionManager)
+            .<StoredDocument, StoredDocument>chunk(documentChunkSize, transactionManager)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
@@ -184,7 +189,8 @@ public class BatchConfiguration {
         public Query createQuery() {
             return entityManager
                 .createQuery("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
-                            + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
+                            + "where d.hardDeleted = false AND d.ttl < current_timestamp()"
+                            + "order by ttl asc")
                 .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .setHint("jakarta.persistence.lock.timeout", LockMode.UPGRADE_SKIPLOCKED)
                 .setMaxResults(400);

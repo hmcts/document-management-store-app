@@ -55,6 +55,10 @@ spring:
 
     deleteThreadCount:  ${DOCUMENT_TASK_THREAD_COUNT:10}
     deleteExecutorQueueCapacity:  ${DOCUMENT_TASK_EXECUTER_QUEUE_CAPACITY:10}
+    documentDeletePageSize: ${DOCUMENT_DELETE_PAGE_SIZE:1}
+    documentDeleteNumberPages: ${DOCUMENT_DELETE_NUM_PAGES:1}
+    documentChunkSize: ${DOCUMENT_CHUNK_SIZE:1}
+
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
