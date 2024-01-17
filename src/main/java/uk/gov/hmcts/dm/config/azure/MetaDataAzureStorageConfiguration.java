@@ -44,7 +44,7 @@ public class MetaDataAzureStorageConfiguration {
         try {
             client.create();
             return client;
-        } catch (BlobStorageException e) {
+        } catch (Exception e) {
             return client;
         }
     }
