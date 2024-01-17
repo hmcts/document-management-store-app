@@ -40,12 +40,10 @@ public class AzureStorageConfiguration {
             .containerName(containerReference)
             .buildClient();
 
-        try {
+        if (!client.exists()) {
             client.createIfNotExists();
-            return client;
-        } catch (BlobStorageException e) {
-            return client;
         }
+        return client;
     }
 
 }
