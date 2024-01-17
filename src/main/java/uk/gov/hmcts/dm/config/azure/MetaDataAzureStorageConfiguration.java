@@ -41,10 +41,12 @@ public class MetaDataAzureStorageConfiguration {
 
         final BlobContainerClient client = getClient(blobAddress, metadataContainerName);
 
-        if (!client.exists()) {
+        try {
             client.createIfNotExists();
+            return client;
+        } catch (BlobStorageException e) {
+            return client;
         }
-        return client;
     }
 
     BlobContainerClient getClient(String blobAddress, String containerName) {
@@ -66,10 +68,12 @@ public class MetaDataAzureStorageConfiguration {
 
         final BlobContainerClient client = getClient(blobAddress, orphanDocumentContainerName);
 
-        if (!client.exists()) {
+        try {
             client.createIfNotExists();
+            return client;
+        } catch (BlobStorageException e) {
+            return client;
         }
-        return client;
     }
 
 }
