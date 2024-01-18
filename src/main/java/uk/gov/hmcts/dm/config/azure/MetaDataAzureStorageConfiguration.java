@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.config.azure;
 
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
-import com.azure.storage.blob.models.BlobStorageException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -42,9 +41,9 @@ public class MetaDataAzureStorageConfiguration {
         final BlobContainerClient client = getClient(blobAddress, metadataContainerName);
 
         try {
-            client.createIfNotExists();
+            client.create();
             return client;
-        } catch (BlobStorageException e) {
+        } catch (Exception e) {
             return client;
         }
     }
@@ -69,9 +68,9 @@ public class MetaDataAzureStorageConfiguration {
         final BlobContainerClient client = getClient(blobAddress, orphanDocumentContainerName);
 
         try {
-            client.createIfNotExists();
+            client.create();
             return client;
-        } catch (BlobStorageException e) {
+        } catch (Exception e) {
             return client;
         }
     }
