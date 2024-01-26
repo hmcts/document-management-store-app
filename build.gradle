@@ -209,7 +209,7 @@ dependencies {
         exclude group: 'org.apache.commons', module: 'commons-lang3'
     }
 
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.19.3'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.19.4'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
