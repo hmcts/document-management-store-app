@@ -31,7 +31,7 @@ mainClassName = 'uk.gov.hmcts.dm.DmApp'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
