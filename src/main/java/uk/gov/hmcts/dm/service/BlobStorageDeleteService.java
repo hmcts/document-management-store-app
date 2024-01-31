@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 
 @Slf4j
@@ -20,13 +19,10 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 public class BlobStorageDeleteService {
 
     private BlobContainerClient cloudBlobContainer;
-    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Autowired
-    public BlobStorageDeleteService(BlobContainerClient cloudBlobContainer,
-                                    DocumentContentVersionRepository documentContentVersionRepository) {
+    public BlobStorageDeleteService(BlobContainerClient cloudBlobContainer) {
         this.cloudBlobContainer = cloudBlobContainer;
-        this.documentContentVersionRepository = documentContentVersionRepository;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -57,8 +53,8 @@ public class BlobStorageDeleteService {
                     documentContentVersion.getStoredDocument().getId()
                 );
             }
-            documentContentVersionRepository.updateContentUriAndContentCheckSum(
-                documentContentVersion.getId(), null, null);
+            documentContentVersion.setContentUri(null);
+            documentContentVersion.setContentChecksum(null);
         } catch (BlobStorageException e) {
             if (e.getStatusCode() == 404) {
                 log.info(
@@ -66,8 +62,8 @@ public class BlobStorageDeleteService {
                     documentContentVersion.getId(),
                     documentContentVersion.getStoredDocument().getId()
                 );
-                documentContentVersionRepository.updateContentUriAndContentCheckSum(
-                    documentContentVersion.getId(), null, null);
+                documentContentVersion.setContentUri(null);
+                documentContentVersion.setContentChecksum(null);
             } else {
                 log.info(
                     "Deleting document blob failed {},status {}",
