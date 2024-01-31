@@ -6,6 +6,7 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.models.BlobStorageException;
 import com.azure.storage.blob.models.DeleteSnapshotsOptionType;
 import com.azure.storage.blob.specialized.BlockBlobClient;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +14,6 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
-import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
 import java.util.UUID;
 
@@ -23,7 +23,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,9 +40,6 @@ public class BlobStorageDeleteServiceTest {
     @Mock
     private BlockBlobClient blob;
 
-    @Mock
-    private DocumentContentVersionRepository documentContentVersionRepository;
-
     final StoredDocument storedDocument = createStoredDocument();
     final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
 
@@ -55,7 +51,10 @@ public class BlobStorageDeleteServiceTest {
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
 
-        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer, documentContentVersionRepository);
+        documentContentVersion.setContentChecksum("");
+        documentContentVersion.setContentUri("");
+
+        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer);
     }
 
     @Test
@@ -66,8 +65,9 @@ public class BlobStorageDeleteServiceTest {
             .willReturn(mockResponse);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
-        verify(documentContentVersionRepository, times(1))
-            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
+        Assert.assertNull(documentContentVersion.getContentChecksum());
+        Assert.assertNull(documentContentVersion.getContentUri());
+
     }
 
     @Test
@@ -77,8 +77,8 @@ public class BlobStorageDeleteServiceTest {
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenReturn(mockResponse);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(documentContentVersionRepository, times(1))
-            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
+        Assert.assertNull(documentContentVersion.getContentChecksum());
+        Assert.assertNull(documentContentVersion.getContentUri());
     }
 
     @Test
@@ -88,8 +88,8 @@ public class BlobStorageDeleteServiceTest {
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenReturn(mockResponse);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(documentContentVersionRepository, never())
-            .updateContentUriAndContentCheckSum(any(), any(), any());
+        Assert.assertNotNull(documentContentVersion.getContentChecksum());
+        Assert.assertNotNull(documentContentVersion.getContentUri());
     }
 
     @Test
@@ -100,7 +100,8 @@ public class BlobStorageDeleteServiceTest {
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenThrow(blobStorageException);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(documentContentVersionRepository, never()).updateContentUriAndContentCheckSum(any(), any(), any());
+        Assert.assertNotNull(documentContentVersion.getContentChecksum());
+        Assert.assertNotNull(documentContentVersion.getContentUri());
     }
 
     @Test
@@ -111,8 +112,8 @@ public class BlobStorageDeleteServiceTest {
         when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
             .thenThrow(blobStorageException);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(documentContentVersionRepository, times(1))
-            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
+        Assert.assertNull(documentContentVersion.getContentChecksum());
+        Assert.assertNull(documentContentVersion.getContentUri());
     }
 
     @Test
@@ -120,8 +121,8 @@ public class BlobStorageDeleteServiceTest {
         when(blob.exists()).thenReturn(false);
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
         verify(blob, never()).deleteWithResponse(any(), any(), any(), any());
-        verify(documentContentVersionRepository, times(1))
-            .updateContentUriAndContentCheckSum(documentContentVersion.getId(), null, null);
+        Assert.assertNull(documentContentVersion.getContentChecksum());
+        Assert.assertNull(documentContentVersion.getContentUri());
     }
 
     private StoredDocument createStoredDocument() {

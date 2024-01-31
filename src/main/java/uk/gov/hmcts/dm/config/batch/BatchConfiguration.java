@@ -40,7 +40,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
-import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import javax.sql.DataSource;
@@ -82,6 +82,18 @@ public class BatchConfiguration {
     @Value("${spring.batch.deleteExecutorQueueCapacity}")
     private int deleteExecutorQueueCapacity;
 
+    @Value("${spring.batch.deletePageSize}")
+    private int deleteDocumentsPageSize;
+
+    @Value("${spring.batch.deleteMaxItemCount}")
+    private int deleteDocumentsMaxItemCount;
+
+    @Value("${spring.batch.deleteChunkSize}")
+    private int deleteDocumentsChunkSize;
+
+    private Random random = new Random();
+
+
     @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
     @SchedulerLock(name = "DeleteDoc_scheduledTask",
         lockAtLeastFor = "PT3M", lockAtMostFor = "PT15M")
@@ -90,8 +102,9 @@ public class BatchConfiguration {
         log.info("deleteJob starting");
         jobLauncher
             .run(processDocument(step1()), new JobParametersBuilder()
-            .addDate("date", new Date())
-            .toJobParameters());
+                .addString("date",
+                    System.currentTimeMillis() + "-" + random.nextInt(0, 300))
+                .toJobParameters());
 
     }
 
@@ -102,23 +115,26 @@ public class BatchConfiguration {
 
 
     @Scheduled(fixedDelayString = "${spring.batch.historicExecutionsRetentionMilliseconds}")
+    @SchedulerLock(name = "${task.env}-historicExecutionsRetention")
     public void scheduleCleanup() throws JobParametersInvalidException,
         JobExecutionAlreadyRunningException,
         JobRestartException,
         JobInstanceAlreadyCompleteException {
 
         jobLauncher.run(clearHistoryData(), new JobParametersBuilder()
-            .addDate("date", new Date())
+            .addString("date",
+                System.currentTimeMillis() + "-" + random.nextInt(400, 700))
             .toJobParameters());
-
     }
 
     public JpaPagingItemReader undeletedDocumentsWithTtl() {
         return new JpaPagingItemReaderBuilder<StoredDocument>()
             .name("documentTaskReader")
             .entityManagerFactory(entityManagerFactory)
-            .queryProvider(new QueryProvider())
-            .pageSize(400)
+            .queryString("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
+                + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
+            .pageSize(deleteDocumentsPageSize)
+            .maxItemCount(deleteDocumentsMaxItemCount)
             .build();
     }
 
@@ -137,7 +153,7 @@ public class BatchConfiguration {
 
     public Step step1() {
         return new StepBuilder("step1",jobRepository)
-            .<StoredDocument, StoredDocument>chunk(30, transactionManager)
+            .<StoredDocument, StoredDocument>chunk(deleteDocumentsChunkSize, transactionManager)
             .reader(undeletedDocumentsWithTtl())
             .processor(deleteExpiredDocumentsProcessor)
             .writer(itemWriter())
