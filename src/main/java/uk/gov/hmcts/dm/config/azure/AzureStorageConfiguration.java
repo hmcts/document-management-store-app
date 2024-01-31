@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.config.azure;
 
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
-import com.azure.storage.blob.models.BlobStorageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,9 +40,9 @@ public class AzureStorageConfiguration {
             .buildClient();
 
         try {
-            client.createIfNotExists();
+            client.create();
             return client;
-        } catch (BlobStorageException e) {
+        } catch (Exception e) {
             return client;
         }
     }

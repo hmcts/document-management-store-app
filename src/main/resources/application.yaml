@@ -67,6 +67,7 @@ spring:
 server:
   port: ${SERVER_PORT:4603}
   forward-headers-strategy: none
+  shutdown: graceful
 
 connection:
   upload-timeout-min: ${UPLOAD_TIMEOUT_MIN:60}
