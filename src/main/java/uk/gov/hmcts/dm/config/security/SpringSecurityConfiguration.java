@@ -6,6 +6,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 
@@ -25,18 +27,19 @@ public class SpringSecurityConfiguration {
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.headers().cacheControl().disable();
+        http.headers(httpSecurityHeadersConfigurer ->
+            httpSecurityHeadersConfigurer.cacheControl(HeadersConfigurer.CacheControlConfig::disable));
 
-        http.securityMatchers()
-            .requestMatchers("/documents", "/documents/**")
-            .and()
+        http.securityMatchers(requestMatcherConfigurer ->
+                requestMatcherConfigurer.requestMatchers("/documents", "/documents/**"))
             .addFilterBefore(dmServiceAuthFilter, AnonymousAuthenticationFilter.class)
-            .sessionManagement().sessionCreationPolicy(STATELESS).and()
-            .csrf().disable()
-            .formLogin().disable()
-            .logout().disable()
-            .authorizeHttpRequests()
-            .anyRequest().authenticated();
+            .sessionManagement(httpSecuritySessionManagementConfigurer ->
+                httpSecuritySessionManagementConfigurer.sessionCreationPolicy(STATELESS))
+            .csrf(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .logout(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                authorizationManagerRequestMatcherRegistry.anyRequest().authenticated());
         return http.build();
     }
 
