@@ -100,7 +100,7 @@ def versions = [
     emTestHelper       : '2.0.4',
     shedlock           : '5.10.2',
     hibernate          : '6.4.3.Final',
-    jupiter            : '5.10.0',
+    jupiter            : '5.10.2',
     springSecurity     : '6.2.1'
 ]
 
