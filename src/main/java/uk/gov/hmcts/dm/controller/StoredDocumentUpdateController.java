@@ -100,6 +100,7 @@ public class StoredDocumentUpdateController {
 
         try {
             for (DocumentUpdate d : updateDocumentsCommand.documents) {
+                logger.debug("DocumentId: {},Metadata: {}", d.documentId, d.metadata);
                 documentService.updateDocument(d.documentId, d.metadata, updateDocumentsCommand.ttl);
             }
         } catch (StoredDocumentNotFoundException exception) {
