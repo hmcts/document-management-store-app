@@ -102,7 +102,7 @@ public class StoredDocumentUpdateController {
             for (DocumentUpdate d : updateDocumentsCommand.documents) {
                 //to hack sonar
                 var docId = d.documentId;
-                var metadata = d.metadata;
+                var metadata = d.metadata.toString();
                 logger.debug("DocumentId: {},Metadata: {}", docId, metadata);
                 documentService.updateDocument(d.documentId, d.metadata, updateDocumentsCommand.ttl);
             }
