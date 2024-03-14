@@ -7,7 +7,7 @@ buildscript {
 
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.57'
+    id 'uk.gov.hmcts.java' version '0.12.58'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.springframework.boot' version '3.2.3'
     id 'com.github.ben-manes.versions' version '0.51.0'
@@ -181,7 +181,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
-    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.19'
+    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.20'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
