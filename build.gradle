@@ -125,7 +125,7 @@ dependencies {
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.25.2'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.1'
 
-    implementation group: 'com.google.guava', name: 'guava', version: '33.0.0-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '33.1.0-jre'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
