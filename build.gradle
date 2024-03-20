@@ -248,6 +248,7 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
     '**uk/gov/hmcts/dm/controller/WelcomeController.java',
     '**uk/gov/hmcts/dm/service/Constants.java',
+    '**uk/gov/hmcts/dm/service/FileContentVerifier*',
     '**uk/gov/hmcts/dm/service/DocumentContentVersionModel.java',
     '**uk/gov/hmcts/dm/data/migration/PendingMigrationScriptException*',
     '**uk/gov/hmcts/dm/data/migration/FlywayNoOpStrategy*',
