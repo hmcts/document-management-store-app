@@ -48,6 +48,7 @@ public class FileContentVerifier {
         if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
             log.info("Warning. The extension of uploaded file is not white-listed {}",
                 sanitiseFileName(fileNameExtension));
+            log.info("Disallowed Filename {}", multipartFile.getOriginalFilename());
             return false;
         }
 
