@@ -16,7 +16,7 @@ plugins {
     id 'checkstyle'
     id 'io.freefair.lombok' version '8.6'
     id 'info.solidsoft.pitest' version '1.15.0'
-    id 'org.owasp.dependencycheck' version '9.0.10'
+    id 'org.owasp.dependencycheck' version '9.1.0'
     id 'au.com.dius.pact' version '4.2.14'
     id 'org.flywaydb.flyway' version '10.10.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
@@ -103,22 +103,6 @@ def versions = [
     jupiter            : '5.10.2',
     springSecurity     : '6.2.3'
 ]
-
-dependencyManagement {
-    dependencies {
-
-        //CVE-2022-1471
-        dependencySet(group: 'org.yaml', version: '2.2') {
-            entry 'snakeyaml'
-        }
-        // 1.2.11 cause java.lang.NullPointerException: Cannot read the array length because "throwableSuppressed" is null
-        dependencySet(group: 'ch.qos.logback', version: '1.5.3') {
-            entry 'logback-core'
-            entry 'logback-access'
-            entry 'logback-classic'
-        }
-    }
-}
 
 dependencies {
 
