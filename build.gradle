@@ -104,22 +104,6 @@ def versions = [
     springSecurity     : '6.2.3'
 ]
 
-dependencyManagement {
-    dependencies {
-
-        //CVE-2022-1471
-        dependencySet(group: 'org.yaml', version: '2.2') {
-            entry 'snakeyaml'
-        }
-        // 1.2.11 cause java.lang.NullPointerException: Cannot read the array length because "throwableSuppressed" is null
-        dependencySet(group: 'ch.qos.logback', version: '1.5.3') {
-            entry 'logback-core'
-            entry 'logback-access'
-            entry 'logback-classic'
-        }
-    }
-}
-
 dependencies {
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.25.3'
