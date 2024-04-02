@@ -107,15 +107,11 @@ def versions = [
 dependencyManagement {
     dependencies {
 
-        //CVE-2022-1471
-        dependencySet(group: 'org.yaml', version: '2.2') {
-            entry 'snakeyaml'
+        dependencySet(group: 'com.azure', version: '1.47.0') {
+            entry 'azure-core'
         }
-        // 1.2.11 cause java.lang.NullPointerException: Cannot read the array length because "throwableSuppressed" is null
-        dependencySet(group: 'ch.qos.logback', version: '1.5.3') {
-            entry 'logback-core'
-            entry 'logback-access'
-            entry 'logback-classic'
+        dependencySet(group: 'com.azure', version: '1.14.1') {
+            entry 'azure-core-http-netty'
         }
     }
 }
