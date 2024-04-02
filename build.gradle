@@ -104,18 +104,6 @@ def versions = [
     springSecurity     : '6.2.3'
 ]
 
-dependencyManagement {
-    dependencies {
-
-        dependencySet(group: 'com.azure', version: '1.47.0') {
-            entry 'azure-core'
-        }
-        dependencySet(group: 'com.azure', version: '1.14.1') {
-            entry 'azure-core-http-netty'
-        }
-    }
-}
-
 dependencies {
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.25.3'
