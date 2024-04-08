@@ -1,13 +1,13 @@
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:10.10.0")
+        classpath("org.flywaydb:flyway-database-postgresql:10.11.0")
     }
 }
 
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.59'
+    id 'uk.gov.hmcts.java' version '0.12.60'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.springframework.boot' version '3.2.4'
     id 'com.github.ben-manes.versions' version '0.51.0'
@@ -18,7 +18,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'org.owasp.dependencycheck' version '9.1.0'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '10.10.0'
+    id 'org.flywaydb.flyway' version '10.11.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
 }
 
@@ -98,7 +98,7 @@ def versions = [
     logging            : '6.1.4',
     pact_version       : '4.1.7',
     emTestHelper       : '2.0.4',
-    shedlock           : '5.12.0',
+    shedlock           : '5.13.0',
     hibernate          : '6.4.4.Final',
     jupiter            : '5.10.2',
     springSecurity     : '6.2.3'
@@ -111,7 +111,7 @@ dependencies {
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.1.0-jre'
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.15.1'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.16.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
@@ -144,8 +144,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.10.0'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.10.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.11.0'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.11.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.2'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '7.4'
@@ -154,8 +154,8 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.1'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.0'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.2'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.1'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
@@ -205,7 +205,7 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.4.0'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.5.0'
 }
 
 dependencyCheck {
@@ -241,7 +241,7 @@ def coverageExclusionList = [
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
-    toolVersion = "0.8.11"
+    toolVersion = "0.8.12"
     reportsDirectory = file("$buildDir/reports/jacoco")
 }
 
