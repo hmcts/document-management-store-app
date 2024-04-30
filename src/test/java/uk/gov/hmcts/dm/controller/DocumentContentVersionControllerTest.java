@@ -11,7 +11,11 @@ import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
-import uk.gov.hmcts.dm.service.*;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.Constants;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -186,11 +190,11 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     @Test
     public void testInitBinder() {
 
-        WebDataBinder webDataBinder = new WebDataBinder(null);
         documentContentVersionService = new DocumentContentVersionService();
         auditedDocumentContentVersionOperationsService = new AuditedDocumentContentVersionOperationsService();
         storedDocumentService = new StoredDocumentService();
         auditedStoredDocumentOperationsService = new AuditedStoredDocumentOperationsService();
+        WebDataBinder webDataBinder = new WebDataBinder(null);
 
         Assert.assertNull(webDataBinder.getDisallowedFields());
         new DocumentContentVersionController(documentContentVersionService,
@@ -199,5 +203,4 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
             auditedStoredDocumentOperationsService).initBinder(webDataBinder);
         Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
-
 }
