@@ -72,9 +72,6 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
     @Test
     public void testInitBinder() {
 
-        searchService = new SearchService();
-        securityUtilService = new SecurityUtilService();
-
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
         Assert.assertNull(webDataBinder.getDisallowedFields());

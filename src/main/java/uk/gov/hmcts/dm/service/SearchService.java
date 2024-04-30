@@ -20,8 +20,12 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 public class SearchService {
 
+    private final StoredDocumentRepository storedDocumentRepository;
+
     @Autowired
-    private StoredDocumentRepository storedDocumentRepository;
+    public SearchService(StoredDocumentRepository storedDocumentRepository) {
+        this.storedDocumentRepository = storedDocumentRepository;
+    }
 
     public Page<StoredDocument> findStoredDocumentsByMetadata(
             @NonNull MetadataSearchCommand metadataSearchCommand, @NonNull Pageable pageable) {
