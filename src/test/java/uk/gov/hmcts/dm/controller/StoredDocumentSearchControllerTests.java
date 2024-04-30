@@ -11,7 +11,6 @@ import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.Constants;
-import uk.gov.hmcts.dm.service.SearchService;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 
 import java.util.Arrays;
