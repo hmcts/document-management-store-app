@@ -41,11 +41,15 @@ public class StoredDocumentSearchController {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
-    @Autowired
-    private SearchService searchService;
+    private final SearchService searchService;
+
+    private final SecurityUtilService securityUtilService;
 
     @Autowired
-    private SecurityUtilService securityUtilService;
+    public StoredDocumentSearchController(SearchService searchService, SecurityUtilService securityUtilService) {
+        this.searchService = searchService;
+        this.securityUtilService = securityUtilService;
+    }
 
     @PostMapping(value = "/filter", consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(summary = "Search stored documents using metadata.",

@@ -64,19 +64,26 @@ public class StoredDocumentController {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
-    @Autowired
-    private DocumentContentVersionService documentContentVersionService;
+    private final DocumentContentVersionService documentContentVersionService;
 
-    @Autowired
-    private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
+    private final AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @Autowired
-    private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+    private final AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     private MethodParameter uploadDocumentsCommandMethodParameter;
 
-    @Autowired
-    private ToggleConfiguration toggleConfiguration;
+    private final ToggleConfiguration toggleConfiguration;
+
+    public StoredDocumentController(DocumentContentVersionService documentContentVersionService,
+                                    AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService,
+                                    AuditedDocumentContentVersionOperationsService
+                                        auditedDocumentContentVersionOperationsService,
+                                    ToggleConfiguration toggleConfiguration) {
+        this.documentContentVersionService = documentContentVersionService;
+        this.auditedStoredDocumentOperationsService = auditedStoredDocumentOperationsService;
+        this.auditedDocumentContentVersionOperationsService = auditedDocumentContentVersionOperationsService;
+        this.toggleConfiguration = toggleConfiguration;
+    }
 
     @PostConstruct
     void init() throws NoSuchMethodException {
@@ -218,7 +225,7 @@ public class StoredDocumentController {
             logger.debug("ContentType for documentId : {} is : {} ", documentId, documentContentVersion.getMimeType());
             logger.debug("Size for documentId : {} is : {} ", documentId, documentContentVersion.getSize());
             headers.forEach((key, value) ->
-                logger.debug("documentId : {} has Request Header {} = {}", documentId.toString(), key, value));
+                logger.debug("documentId : {} has Request Header {} = {}", documentId, key, value));
         }
         if (toggleConfiguration.isChunking()) {
             logger.info("DocumentId : {} has Response: Content-Length, {}", documentId,

@@ -10,6 +10,8 @@ import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.Constants;
+import uk.gov.hmcts.dm.service.SearchService;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -66,10 +68,14 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
     @Test
     public void testInitBinder() {
 
+        searchService = new SearchService();
+        //TODO: Why does the securityUtilService not appear as a MockBean?
+        SecurityUtilService securityUtilService = new SecurityUtilService();
+
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
         Assert.assertNull(webDataBinder.getDisallowedFields());
-        new StoredDocumentSearchController().initBinder(webDataBinder);
+        new StoredDocumentSearchController(searchService, securityUtilService).initBinder(webDataBinder);
         Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 

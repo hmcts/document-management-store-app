@@ -12,10 +12,14 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
+import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.Constants;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
@@ -281,11 +285,16 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testInitBinder() {
+        documentContentVersionService = new DocumentContentVersionService();
+        auditedStoredDocumentOperationsService = new AuditedStoredDocumentOperationsService();
+        auditedDocumentContentVersionOperationsService = new AuditedDocumentContentVersionOperationsService();
+        toggleConfiguration = new ToggleConfiguration();
 
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
         Assert.assertNull(webDataBinder.getDisallowedFields());
-        new StoredDocumentController().initBinder(webDataBinder);
+        new StoredDocumentController(documentContentVersionService, auditedStoredDocumentOperationsService,
+            auditedDocumentContentVersionOperationsService, toggleConfiguration).initBinder(webDataBinder);
         Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 
