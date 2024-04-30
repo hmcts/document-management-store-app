@@ -29,11 +29,16 @@ import java.util.stream.Collectors;
 @Tag(name = "StoredDocumentAudit Service", description = "Endpoint for Audit entities")
 public class StoredDocumentAuditController {
 
-    @Autowired
-    private AuditEntryService auditEntryService;
+    private final AuditEntryService auditEntryService;
+
+    private final StoredDocumentRepository storedDocumentRepository;
 
     @Autowired
-    private StoredDocumentRepository storedDocumentRepository;
+    public StoredDocumentAuditController(AuditEntryService auditEntryService,
+                                         StoredDocumentRepository storedDocumentRepository) {
+        this.auditEntryService = auditEntryService;
+        this.storedDocumentRepository = storedDocumentRepository;
+    }
 
     @GetMapping("{documentId}/auditEntries")
     @Operation(summary = "Retrieves audits related to a Stored Document.",
@@ -56,7 +61,7 @@ public class StoredDocumentAuditController {
                         .findStoredDocumentAudits(storedDocument)
                         .stream()
                         .map(StoredDocumentAuditEntryHalResource::new)
-                        .collect(Collectors.toList())))))
+                        .toList()))))
             .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
     }
 
