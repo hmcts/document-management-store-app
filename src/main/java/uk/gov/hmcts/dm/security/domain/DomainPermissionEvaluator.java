@@ -11,9 +11,7 @@ import uk.gov.hmcts.dm.service.SecurityUtilService;
 import uk.gov.hmcts.dm.utils.StringUtils;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static uk.gov.hmcts.dm.service.SecurityUtilService.sanitizedSetFrom;
 
@@ -48,12 +46,10 @@ public class DomainPermissionEvaluator {
             result = true;
         }
 
-        HashSet<String> authenticatedUserRolesSet = sanitizedSetFrom(authenticatedUserRoles);
+        Set<String> authenticatedUserRolesSet = sanitizedSetFrom(authenticatedUserRoles);
 
-        if (!result && permission == Permissions.READ && creatorAware instanceof RolesAware) {
-            RolesAware rolesAware = (RolesAware) creatorAware;
+        if (!result && permission == Permissions.READ && creatorAware instanceof RolesAware rolesAware) {
             if (rolesAware.getRoles() != null
-                && authenticatedUserRoles != null
                 && rolesAware.getClassification() != null
                 && (Classifications.RESTRICTED.equals(rolesAware.getClassification())
                 || Classifications.PUBLIC.equals(rolesAware.getClassification()))
@@ -64,7 +60,7 @@ public class DomainPermissionEvaluator {
                     StringUtils.convertValidLogStrings(documentRoles));
 
                 documentRoles.retainAll(authenticatedUserRolesSet);
-                if (documentRoles.size() > 0) {
+                if (!documentRoles.isEmpty()) {
                     result = true;
                 }
             }
@@ -73,7 +69,7 @@ public class DomainPermissionEvaluator {
         if (!result && permission == Permissions.READ) {
             boolean hasCaseworkerRole = !authenticatedUserRolesSet.stream()
                 .filter(role -> role.startsWith(CASE_WORKER_PREFIX))
-                .collect(Collectors.toList())
+                .toList()
                 .isEmpty();
 
             result = hasCaseworkerRole;

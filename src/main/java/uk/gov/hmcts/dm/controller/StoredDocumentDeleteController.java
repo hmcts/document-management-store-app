@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.hmcts.dm.commandobject.DeleteCaseDocumentsCommand;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -98,7 +97,6 @@ public class StoredDocumentDeleteController {
         produces = MediaType.APPLICATION_JSON_VALUE,
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    @ResponseBody
     public ResponseEntity<CaseDocumentsDeletionResults> deleteCaseDocuments(
         @Valid @RequestBody DeleteCaseDocumentsCommand deleteCaseDocumentsCommand) {
 
