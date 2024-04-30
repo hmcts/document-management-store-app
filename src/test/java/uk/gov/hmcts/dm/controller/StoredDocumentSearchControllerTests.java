@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StoredDocumentSearchControllerTests extends ComponentTestBase {
+
+    @Mock
+    SecurityUtilService securityUtilService;
 
     @Test
     public void testValidCommandAndSearchReturn3Documents() throws Exception {
@@ -69,8 +73,7 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
     public void testInitBinder() {
 
         searchService = new SearchService();
-        //TODO: Why does the securityUtilService not appear as a MockBean?
-        SecurityUtilService securityUtilService = new SecurityUtilService();
+        securityUtilService = new SecurityUtilService();
 
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
@@ -78,5 +81,4 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
         new StoredDocumentSearchController(searchService, securityUtilService).initBinder(webDataBinder);
         Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
-
 }

@@ -25,8 +25,12 @@ public class DomainPermissionEvaluator {
 
     private static final String CCD_CASE_DISPOSER = "ccd_case_disposer";
 
+    private final SecurityUtilService securityUtilService;
+
     @Autowired
-    private SecurityUtilService securityUtilService;
+    public DomainPermissionEvaluator(SecurityUtilService securityUtilService) {
+        this.securityUtilService = securityUtilService;
+    }
 
     @Deprecated
     public boolean hasPermission(@NonNull final CreatorAware creatorAware,

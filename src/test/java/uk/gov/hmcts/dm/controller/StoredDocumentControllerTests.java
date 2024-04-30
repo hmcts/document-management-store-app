@@ -287,7 +287,8 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     public void testInitBinder() {
         documentContentVersionService = new DocumentContentVersionService();
         auditedStoredDocumentOperationsService = new AuditedStoredDocumentOperationsService();
-        auditedDocumentContentVersionOperationsService = new AuditedDocumentContentVersionOperationsService();
+        auditedDocumentContentVersionOperationsService = new AuditedDocumentContentVersionOperationsService(
+            documentContentVersionService, blobStorageReadService, auditEntryService);
         toggleConfiguration = new ToggleConfiguration();
 
         WebDataBinder webDataBinder = new WebDataBinder(null);

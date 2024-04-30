@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
@@ -44,7 +45,7 @@ public class TestController {
     }
 
     @PostMapping(value = "/metadata-migration-csv", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Boolean> uploadCsv(@Valid UploadDocumentsCommand command) throws Exception {
+    public ResponseEntity<Boolean> uploadCsv(@Valid UploadDocumentsCommand command) throws IOException {
         MultipartFile file = command.getFiles().get(0);
         BlockBlobClient client = blobClient.getBlobClient(file.getName()).getBlockBlobClient();
 
@@ -58,5 +59,4 @@ public class TestController {
 
         return ResponseEntity.ok(true);
     }
-
 }

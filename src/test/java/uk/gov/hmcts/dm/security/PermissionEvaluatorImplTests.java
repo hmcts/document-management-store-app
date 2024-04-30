@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.dm.repository.RepositoryFinder;
@@ -25,11 +24,12 @@ public class PermissionEvaluatorImplTests {
     @Mock
     SecurityUtilService securityUtilService;
 
-    @InjectMocks
     PermissionEvaluatorImpl permissionEvaluator;
 
     @Before
     public void setup() {
+        permissionEvaluator = new PermissionEvaluatorImpl(securityUtilService,
+            domainPermissionEvaluator, repositoryFinder);
         when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("em_gw");
     }
 

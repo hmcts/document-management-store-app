@@ -18,14 +18,20 @@ import java.util.UUID;
 @Transactional
 public class AuditedDocumentContentVersionOperationsService {
 
-    @Autowired
-    private DocumentContentVersionService documentContentVersionService;
+    private final DocumentContentVersionService documentContentVersionService;
+
+    private final BlobStorageReadService blobStorageReadService;
+
+    private final AuditEntryService auditEntryService;
 
     @Autowired
-    private BlobStorageReadService blobStorageReadService;
-
-    @Autowired
-    private AuditEntryService auditEntryService;
+    public AuditedDocumentContentVersionOperationsService(DocumentContentVersionService documentContentVersionService,
+                                                          BlobStorageReadService blobStorageReadService,
+                                                          AuditEntryService auditEntryService) {
+        this.documentContentVersionService = documentContentVersionService;
+        this.blobStorageReadService = blobStorageReadService;
+        this.auditEntryService = auditEntryService;
+    }
 
     @PreAuthorize("hasPermission(#documentContentVersion, 'READ')")
     public void readDocumentContentVersionBinaryFromBlobStore(DocumentContentVersion documentContentVersion,
