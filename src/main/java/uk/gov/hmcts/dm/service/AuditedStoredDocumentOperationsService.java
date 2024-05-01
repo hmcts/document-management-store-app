@@ -26,16 +26,11 @@ import static uk.gov.hmcts.dm.service.Constants.FALSE;
 @Service
 public class AuditedStoredDocumentOperationsService {
 
-    private final StoredDocumentService storedDocumentService;
-
-    private final AuditEntryService auditEntryService;
+    @Autowired
+    private StoredDocumentService storedDocumentService;
 
     @Autowired
-    public AuditedStoredDocumentOperationsService(StoredDocumentService storedDocumentService,
-                                                  AuditEntryService auditEntryService) {
-        this.storedDocumentService = storedDocumentService;
-        this.auditEntryService = auditEntryService;
-    }
+    private AuditEntryService auditEntryService;
 
     public List<StoredDocument> createStoredDocuments(UploadDocumentsCommand uploadDocumentsCommand) {
         List<StoredDocument> storedDocuments = storedDocumentService.saveItems(uploadDocumentsCommand);

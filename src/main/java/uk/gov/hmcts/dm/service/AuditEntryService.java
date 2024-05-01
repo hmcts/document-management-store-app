@@ -17,20 +17,14 @@ import java.util.List;
 @Service
 public class AuditEntryService {
 
-    private final StoredDocumentAuditEntryRepository storedDocumentAuditEntryRepository;
-
-    private final DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository;
-
-    private final SecurityUtilService securityUtilService;
+    @Autowired
+    private StoredDocumentAuditEntryRepository storedDocumentAuditEntryRepository;
 
     @Autowired
-    public AuditEntryService(StoredDocumentAuditEntryRepository storedDocumentAuditEntryRepository,
-                             DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository,
-                             SecurityUtilService securityUtilService) {
-        this.storedDocumentAuditEntryRepository = storedDocumentAuditEntryRepository;
-        this.documentContentVersionAuditEntryRepository = documentContentVersionAuditEntryRepository;
-        this.securityUtilService = securityUtilService;
-    }
+    private DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository;
+
+    @Autowired
+    private SecurityUtilService securityUtilService;
 
     public List<StoredDocumentAuditEntry> findStoredDocumentAudits(StoredDocument storedDocument) {
         return storedDocumentAuditEntryRepository.findByStoredDocumentOrderByRecordedDateTimeAsc(storedDocument);
