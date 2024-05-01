@@ -15,11 +15,16 @@ import java.util.UUID;
 @Service
 public class DocumentContentVersionService {
 
-    @Autowired
-    private DocumentContentVersionRepository documentContentVersionRepository;
+    private final DocumentContentVersionRepository documentContentVersionRepository;
+
+    private final StoredDocumentRepository storedDocumentRepository;
 
     @Autowired
-    private StoredDocumentRepository storedDocumentRepository;
+    public DocumentContentVersionService(DocumentContentVersionRepository documentContentVersionRepository,
+                                         StoredDocumentRepository storedDocumentRepository) {
+        this.documentContentVersionRepository = documentContentVersionRepository;
+        this.storedDocumentRepository = storedDocumentRepository;
+    }
 
     public Optional<DocumentContentVersion> findById(UUID id) {
         return documentContentVersionRepository.findById(id);

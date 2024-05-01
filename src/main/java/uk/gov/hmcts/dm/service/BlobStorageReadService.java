@@ -31,10 +31,10 @@ public class BlobStorageReadService {
 
     private final Logger logger = LoggerFactory.getLogger(BlobStorageReadService.class);
 
-    private BlobContainerClient cloudBlobContainer;
+    private final BlobContainerClient cloudBlobContainer;
     private static final int DEFAULT_BUFFER_SIZE = 20480; // ..bytes = 20KB.
 
-    private ToggleConfiguration toggleConfiguration;
+    private final ToggleConfiguration toggleConfiguration;
 
     @Autowired
     public BlobStorageReadService(BlobContainerClient cloudBlobContainer, ToggleConfiguration toggleConfiguration) {
@@ -117,7 +117,7 @@ public class BlobStorageReadService {
 
         response.setStatus(HttpStatus.PARTIAL_CONTENT.value());
 
-        logger.debug("Processing blob range: {}", b.toString());
+        logger.debug("Processing blob range: {}", b);
         blockBlobClient(documentContentVersion.getId().toString())
             .downloadStreamWithResponse(
                 response.getOutputStream(),

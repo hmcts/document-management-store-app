@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.controller;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.Constants;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class StoredDocumentSearchControllerTests extends ComponentTestBase {
+
+    @Mock
+    SecurityUtilService securityUtilService;
 
     @Test
     public void testValidCommandAndSearchReturn3Documents() throws Exception {
@@ -69,8 +74,7 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
         Assert.assertNull(webDataBinder.getDisallowedFields());
-        new StoredDocumentSearchController().initBinder(webDataBinder);
+        new StoredDocumentSearchController(searchService, securityUtilService).initBinder(webDataBinder);
         Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
-
 }

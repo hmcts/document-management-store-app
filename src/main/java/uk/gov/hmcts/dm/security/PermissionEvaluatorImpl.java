@@ -21,14 +21,20 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
 
     private static final String CASE_DOCUMENT_ACCESS_API = "ccd_case_document_am_api";
 
-    @Autowired
-    private SecurityUtilService securityUtilService;
+    private final SecurityUtilService securityUtilService;
+
+    private final DomainPermissionEvaluator domainPermissionEvaluator;
+
+    private final RepositoryFinder repositoryFinder;
 
     @Autowired
-    private DomainPermissionEvaluator domainPermissionEvaluator;
-
-    @Autowired
-    private RepositoryFinder repositoryFinder;
+    public PermissionEvaluatorImpl(SecurityUtilService securityUtilService,
+                                   DomainPermissionEvaluator domainPermissionEvaluator,
+                                   RepositoryFinder repositoryFinder) {
+        this.securityUtilService = securityUtilService;
+        this.domainPermissionEvaluator = domainPermissionEvaluator;
+        this.repositoryFinder = repositoryFinder;
+    }
 
     @Override
     public boolean hasPermission(@NotNull Authentication authentication,
