@@ -14,10 +14,10 @@ import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsAreNo
 import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsConditions;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class InputParamsVerifierTest {
+class InputParamsVerifierTest {
 
     @Test
-    public void shouldVerifyRequestParamsAreNotEmptyForCaseRef() {
+    void shouldVerifyRequestParamsAreNotEmptyForCaseRef() {
         assertDoesNotThrow(() -> verifyRequestParamsAreNotEmpty(new DeleteCaseDocumentsCommand("123")));
     }
 
@@ -33,12 +33,12 @@ public class InputParamsVerifierTest {
     }
 
     @Test
-    public void shouldVerifyRequestParamsConditionsForCaseRef() {
+    void shouldVerifyRequestParamsConditionsForCaseRef() {
         assertDoesNotThrow(() -> verifyRequestParamsConditions(new DeleteCaseDocumentsCommand(randomNumeric(16))));
     }
 
     @Test
-    public void shouldThrowExceptionWhenRequestParamsConditionsInvalidForCaseRef() {
+    void shouldThrowExceptionWhenRequestParamsConditionsInvalidForCaseRef() {
         try {
             final DeleteCaseDocumentsCommand deleteCaseDocumentsCommand =
                 new DeleteCaseDocumentsCommand(randomNumeric(17));
@@ -49,6 +49,4 @@ public class InputParamsVerifierTest {
                 .isEqualTo(Constants.INVALID_CASEREF_EXCEPTION_MESSAGE);
         }
     }
-
 }
-

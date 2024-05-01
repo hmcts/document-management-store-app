@@ -39,13 +39,13 @@ public class PermissionEvaluatorImpl implements PermissionEvaluator {
             return true;
         }
 
-        if (targetDomainObject instanceof CreatorAware) {
+        if (targetDomainObject instanceof CreatorAware creatorAware) {
             Collection<String> userRoles = securityUtilService.getUserRoles() != null
                 ? securityUtilService.getUserRoles()
-                : Collections.EMPTY_SET;
+                : Collections.emptySet();
 
             return domainPermissionEvaluator.hasPermission(
-                    (CreatorAware)targetDomainObject,
+                    creatorAware,
                     Permissions.valueOf((String)permissionString),
                     securityUtilService.getUserId(),
                     userRoles);

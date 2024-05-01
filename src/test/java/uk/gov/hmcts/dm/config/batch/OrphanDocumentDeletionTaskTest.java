@@ -29,7 +29,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class OrphanDocumentDeletionTaskTest {
+class OrphanDocumentDeletionTaskTest {
 
     @InjectMocks
     private OrphanDocumentDeletionTask orphanDocumentDeletionTask;
@@ -44,12 +44,12 @@ public class OrphanDocumentDeletionTaskTest {
     private AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void shouldContinueIfThereIsNoFile() {
+    void shouldContinueIfThereIsNoFile() {
 
         PagedIterable pagedIterable = mock(PagedIterable.class);
         when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
@@ -64,7 +64,7 @@ public class OrphanDocumentDeletionTaskTest {
 
 
     @Test
-    public void shouldProcessAllValidDocumentIds() throws IOException {
+    void shouldProcessAllValidDocumentIds() throws IOException {
         Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
         try {
             Path tempFile = Files.createFile(filePath);
@@ -104,7 +104,7 @@ public class OrphanDocumentDeletionTaskTest {
     }
 
     @Test
-    public void shouldContinueIfCsvFileEmpty() {
+    void shouldContinueIfCsvFileEmpty() {
 
         PagedIterable pagedIterable = mock(PagedIterable.class);
         when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
@@ -127,7 +127,7 @@ public class OrphanDocumentDeletionTaskTest {
     }
 
     @Test
-    public void shouldDeleteFileIfFileNameIsNotValid() {
+    void shouldDeleteFileIfFileNameIsNotValid() {
 
         PagedIterable pagedIterable = mock(PagedIterable.class);
         when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
@@ -150,7 +150,7 @@ public class OrphanDocumentDeletionTaskTest {
     }
 
     @Test
-    public void shouldSkipIfStoredDocumentsNotFound() throws IOException {
+    void shouldSkipIfStoredDocumentsNotFound() throws IOException {
         Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
         try {
             Path tempFile = Files.createFile(filePath);

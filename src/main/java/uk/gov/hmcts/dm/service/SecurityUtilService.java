@@ -42,14 +42,14 @@ public class SecurityUtilService {
         if (authentication != null) {
             if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
                 return springSecurityUser.getUsername();
-            } else if (authentication.getPrincipal() instanceof String) {
-                return (String) authentication.getPrincipal();
+            } else if (authentication.getPrincipal() instanceof String string) {
+                return string;
             }
         }
         return null;
     }
 
-    public static HashSet<String> sanitizedSetFrom(Collection<String> collection) {
+    public static Set<String> sanitizedSetFrom(Collection<String> collection) {
         return collection.stream()
             .map(String::trim)
             .map(StringUtils::sanitiseUserRoles)

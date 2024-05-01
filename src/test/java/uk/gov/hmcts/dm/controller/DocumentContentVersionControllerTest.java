@@ -185,12 +185,14 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testInitBinder() {
-
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
         Assert.assertNull(webDataBinder.getDisallowedFields());
-        new DocumentContentVersionController().initBinder(webDataBinder);
+        new DocumentContentVersionController(documentContentVersionService,
+            auditedDocumentContentVersionOperationsService,
+            storedDocumentService,
+            auditedStoredDocumentOperationsService
+        ).initBinder(webDataBinder);
         Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
-
 }
