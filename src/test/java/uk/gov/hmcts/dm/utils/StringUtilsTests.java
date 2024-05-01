@@ -13,16 +13,16 @@ public class StringUtilsTests {
     public void testVariousScenarios() {
 
         String sanitised = StringUtils.sanitiseFileName(null);
-        Assert.assertEquals(sanitised, null);
+        Assert.assertNull(sanitised);
 
         sanitised = StringUtils.sanitiseFileName("±!@£$%^&*()_+}{|\"':?><~abc");
-        Assert.assertEquals(sanitised, "_+abc");
+        Assert.assertEquals("_+abc", sanitised);
 
         sanitised = StringUtils.sanitiseFileName("marriage-certificate.png");
-        Assert.assertEquals(sanitised, "marriage-certificate.png");
+        Assert.assertEquals("marriage-certificate.png", sanitised);
 
         sanitised = StringUtils.sanitiseFileName("marriage-certificate<script>alert(1)</script>.png");
-        Assert.assertEquals(sanitised, "marriage-certificatescriptalert1script.png");
+        Assert.assertEquals("marriage-certificatescriptalert1script.png", sanitised);
 
     }
 
@@ -30,7 +30,7 @@ public class StringUtilsTests {
     public void testSanitiseUserRoles() {
 
         String sanitised = StringUtils.sanitiseUserRoles(null);
-        Assert.assertEquals(null, sanitised);
+        Assert.assertNull(sanitised);
 
         sanitised = StringUtils.sanitiseUserRoles("±!@£$%^&*()_+}{|\"':?><~abc");
         Assert.assertEquals("_+abc", sanitised);

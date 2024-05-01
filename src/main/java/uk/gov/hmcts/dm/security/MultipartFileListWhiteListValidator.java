@@ -20,10 +20,6 @@ public class MultipartFileListWhiteListValidator
     }
 
     @Override
-    public void initialize(MultipartFileListWhiteList fileWhiteList) {
-    }
-
-    @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
         return CollectionUtils.isEmpty(multipartFiles) || multipartFiles.stream()
             .allMatch(fileContentVerifier::verifyContentType);

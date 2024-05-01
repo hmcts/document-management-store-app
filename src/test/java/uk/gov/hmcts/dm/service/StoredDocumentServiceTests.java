@@ -144,7 +144,7 @@ public class StoredDocumentServiceTests {
 
         assertEquals(1, documents.size());
         assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
-        assertEquals(storedDocument.getClassification(), PRIVATE);
+        assertEquals(PRIVATE, storedDocument.getClassification());
         Assert.assertNull(storedDocument.getMetadata());
         Assert.assertNotNull(storedDocument.getTtl());
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
@@ -170,7 +170,7 @@ public class StoredDocumentServiceTests {
 
         assertEquals(1, documents.size());
         assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
-        assertEquals(storedDocument.getClassification(), PRIVATE);
+        assertEquals(PRIVATE, storedDocument.getClassification());
         assertEquals(storedDocument.getMetadata(), ImmutableMap.of("prop1", "value1"));
         Assert.assertNotNull(storedDocument.getTtl());
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
@@ -261,8 +261,8 @@ public class StoredDocumentServiceTests {
 
         storedDocumentService.updateItems(command);
 
-        assertEquals(storedDocument.getMetadata().get("Key"), "Value");
-        assertEquals(storedDocument.getMetadata().get("UpdateKey"), "UpdateValue");
+        assertEquals("Value", storedDocument.getMetadata().get("Key"));
+        assertEquals("UpdateValue", storedDocument.getMetadata().get("UpdateKey"));
     }
 
     @Test
@@ -284,8 +284,8 @@ public class StoredDocumentServiceTests {
         storedDocumentService.updateStoredDocument(storedDocument, newTtl, Maps.newHashMap("UpdateKey", "UpdateValue"));
 
         assertEquals(newTtl, storedDocument.getTtl());
-        assertEquals(storedDocument.getMetadata().get("Key"), "Value");
-        assertEquals(storedDocument.getMetadata().get("UpdateKey"), "UpdateValue");
+        assertEquals("Value", storedDocument.getMetadata().get("Key"));
+        assertEquals("UpdateValue", storedDocument.getMetadata().get("UpdateKey"));
     }
 
     @Test
