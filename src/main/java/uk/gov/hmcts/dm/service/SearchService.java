@@ -38,16 +38,13 @@ public class SearchService {
         final List<UUID> storedDocumentsIdsList =
                 storedDocumentRepository.findAllByCaseRef(deleteCaseDocumentsCommand.getCaseRef());
 
-        final List<StoredDocument> storedDocuments = storedDocumentsIdsList
+        return storedDocumentsIdsList
                 .stream()
                 .map(StoredDocument::new)
                 .collect(toList());
-
-        return storedDocuments;
     }
 
     public Page<StoredDocument> findStoredDocumentsByCreator(@NonNull String creator, @NonNull Pageable pageable) {
         return storedDocumentRepository.findByCreatedBy(creator, pageable);
     }
-
 }

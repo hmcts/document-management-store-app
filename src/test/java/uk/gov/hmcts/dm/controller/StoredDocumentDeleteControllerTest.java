@@ -21,7 +21,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 @ExtendWith(MockitoExtension.class)
-public class StoredDocumentDeleteControllerTest {
+class StoredDocumentDeleteControllerTest {
 
     @Mock
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;

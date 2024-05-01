@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,12 +27,12 @@ public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
 
         when(
             this.searchService
-                .findStoredDocumentsIdsByCaseRef(eq(deleteCaseDocumentsCommand)))
+                .findStoredDocumentsIdsByCaseRef(deleteCaseDocumentsCommand))
             .thenReturn(storedDocuments);
 
         when(
             this.auditedStoredDocumentOperationsService
-                .deleteCaseStoredDocuments(eq(storedDocuments)))
+                .deleteCaseStoredDocuments(storedDocuments))
             .thenReturn(caseDocumentsDeletionResults);
 
         restActions

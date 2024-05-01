@@ -26,8 +26,8 @@ public class MultipartFileSizeValidator
 
     @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
-        return CollectionUtils.isEmpty(multipartFiles) || multipartFiles.stream().allMatch(ft ->
-            fileSizeVerifier.verifyFileSize(ft));
+        return CollectionUtils.isEmpty(multipartFiles) || multipartFiles.stream()
+            .allMatch(fileSizeVerifier::verifyFileSize);
     }
 
 }

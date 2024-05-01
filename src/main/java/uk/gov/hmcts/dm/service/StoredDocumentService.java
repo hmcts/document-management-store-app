@@ -131,9 +131,8 @@ public class StoredDocumentService {
         storedDocument.setDeleted(true);
         if (permanent) {
             storedDocument.setHardDeleted(true);
-            storedDocument.getDocumentContentVersions().parallelStream().forEach(documentContentVersion -> {
-                blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-            });
+            storedDocument.getDocumentContentVersions().parallelStream().forEach(documentContentVersion ->
+                blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion));
         }
         storedDocumentRepository.save(storedDocument);
     }

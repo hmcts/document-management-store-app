@@ -53,17 +53,26 @@ public class DocumentContentVersionController {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
-    @Autowired
-    private DocumentContentVersionService documentContentVersionService;
+    private final DocumentContentVersionService documentContentVersionService;
+
+    private final AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+
+    private final StoredDocumentService storedDocumentService;
+
+    private final AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
     @Autowired
-    private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
-
-    @Autowired
-    private StoredDocumentService storedDocumentService;
-
-    @Autowired
-    private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
+    public DocumentContentVersionController(DocumentContentVersionService documentContentVersionService,
+                                            AuditedDocumentContentVersionOperationsService
+                                                auditedDocumentContentVersionOperationsService,
+                                            StoredDocumentService storedDocumentService,
+                                            AuditedStoredDocumentOperationsService
+                                                    auditedStoredDocumentOperationsService) {
+        this.documentContentVersionService = documentContentVersionService;
+        this.auditedDocumentContentVersionOperationsService = auditedDocumentContentVersionOperationsService;
+        this.storedDocumentService = storedDocumentService;
+        this.auditedStoredDocumentOperationsService = auditedStoredDocumentOperationsService;
+    }
 
     // Please do not remove "" mapping. API is already consumed and might break backwards compatibility.
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
