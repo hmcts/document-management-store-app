@@ -13,8 +13,13 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class DeleteAllExpiredStoredDocumentTasklet implements Tasklet {
 
+    private final AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
+
     @Autowired
-    private AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
+    public DeleteAllExpiredStoredDocumentTasklet(AuditedStoredDocumentBatchOperationsService
+                                                         auditedStoredDocumentBatchOperationsService) {
+        this.auditedStoredDocumentBatchOperationsService = auditedStoredDocumentBatchOperationsService;
+    }
 
     @Override
     @Transactional

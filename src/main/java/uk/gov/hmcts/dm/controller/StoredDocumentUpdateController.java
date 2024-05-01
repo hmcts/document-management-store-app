@@ -49,8 +49,12 @@ public class StoredDocumentUpdateController {
         binder.setDisallowedFields(Constants.IS_ADMIN);
     }
 
+    private final AuditedStoredDocumentOperationsService documentService;
+
     @Autowired
-    private AuditedStoredDocumentOperationsService documentService;
+    public StoredDocumentUpdateController(AuditedStoredDocumentOperationsService documentService) {
+        this.documentService = documentService;
+    }
 
     @PatchMapping(value = "/{documentId}",
         consumes = MediaType.APPLICATION_JSON_VALUE)

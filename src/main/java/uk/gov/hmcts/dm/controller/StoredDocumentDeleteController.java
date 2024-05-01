@@ -44,11 +44,16 @@ import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsCondi
 @ConditionalOnProperty("toggle.deleteenabled")
 public class StoredDocumentDeleteController {
 
-    @Autowired
-    private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
+    private final AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
+
+    private final SearchService searchService;
 
     @Autowired
-    private SearchService searchService;
+    public StoredDocumentDeleteController(AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService,
+                                          SearchService searchService) {
+        this.auditedStoredDocumentOperationsService = auditedStoredDocumentOperationsService;
+        this.searchService = searchService;
+    }
 
     @DeleteMapping(value = "{documentId}")
     @Operation(summary = "Deletes a Stored Document.",

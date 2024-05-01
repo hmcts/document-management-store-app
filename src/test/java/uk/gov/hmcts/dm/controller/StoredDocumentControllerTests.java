@@ -281,11 +281,11 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testInitBinder() {
-
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
         Assert.assertNull(webDataBinder.getDisallowedFields());
-        new StoredDocumentController().initBinder(webDataBinder);
+        new StoredDocumentController(documentContentVersionService, auditedStoredDocumentOperationsService,
+            auditedDocumentContentVersionOperationsService, toggleConfiguration).initBinder(webDataBinder);
         Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 

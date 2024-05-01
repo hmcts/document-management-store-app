@@ -97,8 +97,7 @@ public class StoredDocumentService {
             save(document);
             storeInAzureBlobStorage(document, documentContentVersion, file);
             return document;
-        }).collect(Collectors.toList());
-
+        }).toList();
     }
 
     public List<StoredDocument> saveItems(List<MultipartFile> files) {
@@ -171,10 +170,6 @@ public class StoredDocumentService {
         if (storedDocument.getMetadata().isEmpty() || toggleConfiguration.isOverridemetadata()) {
             storedDocument.getMetadata().putAll(metadata);
         } else {
-            //Don't override existing value for key. Instead add only new key/value to the Metadata
-            //            Map<String, String> newMetaData = metadata.entrySet().stream()
-            //                .filter(entry -> !storedDocument.getMetadata().containsKey(entry.getKey()))
-            //                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
             Map<String, String> newMetaData = new HashMap<>();
             metadata.forEach((key, val) -> {
                 if (!storedDocument.getMetadata().containsKey(key)) {

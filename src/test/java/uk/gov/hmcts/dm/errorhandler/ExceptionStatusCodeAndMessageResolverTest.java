@@ -88,6 +88,6 @@ public class ExceptionStatusCodeAndMessageResolverTest {
                 Stream.of(fieldError1, fieldError2).collect(Collectors.toList()));
 
 
-        assertEquals(errorStatusCodeAndMessage.getMessage(), "The validation message AND The validation message 2");
+        assertEquals("The validation message AND The validation message 2", errorStatusCodeAndMessage.getMessage());
     }
 }
