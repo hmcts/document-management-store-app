@@ -12,11 +12,9 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 @Service
 public class AuditedStoredDocumentBatchOperationsService {
 
-    @Autowired
-    private StoredDocumentService storedDocumentService;
+    private final StoredDocumentService storedDocumentService;
 
-    @Autowired
-    private AuditEntryService auditEntryService;
+    private final AuditEntryService auditEntryService;
 
     @Value("${spring.batch.job.auditUserName}")
     @Getter
@@ -25,6 +23,12 @@ public class AuditedStoredDocumentBatchOperationsService {
     @Value("${spring.batch.job.auditServiceName}")
     @Getter
     private String batchAuditServiceName;
+
+    public AuditedStoredDocumentBatchOperationsService(StoredDocumentService storedDocumentService,
+                                                       AuditEntryService auditEntryService) {
+        this.storedDocumentService = storedDocumentService;
+        this.auditEntryService = auditEntryService;
+    }
 
     public void hardDeleteStoredDocument(StoredDocument storedDocument) {
         hardDeleteStoredDocument(storedDocument, batchAuditUserName, batchAuditServiceName);
