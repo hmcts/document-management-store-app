@@ -24,6 +24,7 @@ public class AuditedStoredDocumentBatchOperationsService {
     @Getter
     private String batchAuditServiceName;
 
+    @Autowired
     public AuditedStoredDocumentBatchOperationsService(StoredDocumentService storedDocumentService,
                                                        AuditEntryService auditEntryService) {
         this.storedDocumentService = storedDocumentService;
