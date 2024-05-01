@@ -41,7 +41,7 @@ public class SearchService {
         return storedDocumentsIdsList
                 .stream()
                 .map(StoredDocument::new)
-                .collect(toList());
+                .toList();
     }
 
     public Page<StoredDocument> findStoredDocumentsByCreator(@NonNull String creator, @NonNull Pageable pageable) {
