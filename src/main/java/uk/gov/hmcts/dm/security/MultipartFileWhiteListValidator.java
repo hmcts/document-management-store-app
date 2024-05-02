@@ -20,7 +20,4 @@ public class MultipartFileWhiteListValidator implements ConstraintValidator<Mult
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
         return fileContentVerifier.verifyContentType(multipartFile);
     }
-
-
-
 }
