@@ -14,8 +14,6 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 @Slf4j
 public class SearchService {
@@ -41,7 +39,7 @@ public class SearchService {
         return storedDocumentsIdsList
                 .stream()
                 .map(StoredDocument::new)
-                .collect(toList());
+                .toList();
     }
 
     public Page<StoredDocument> findStoredDocumentsByCreator(@NonNull String creator, @NonNull Pageable pageable) {

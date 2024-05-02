@@ -12,7 +12,7 @@ import uk.gov.hmcts.dm.security.Permissions;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 
 import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import static org.mockito.Mockito.when;
 
@@ -233,7 +233,7 @@ public class DomainPermissionEvaluatorTests {
     public void testRolesReadPermissionsWithClassificationRestrictedAndMatchingRoles() {
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
-        storedFile.setRoles(Arrays.asList(new String[] { "allowingrole" }).stream().collect(Collectors.toSet()));
+        storedFile.setRoles(Set.of("allowingrole"));
         storedFile.setClassification(Classifications.RESTRICTED);
 
         Assert.assertTrue(domainPermissionEvaluator
@@ -249,7 +249,7 @@ public class DomainPermissionEvaluatorTests {
     public void testRolesReadPermissionsWithClassificationPrivateAndMatchingRoles() {
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
-        storedFile.setRoles(Arrays.asList(new String[] { "allowingrole" }).stream().collect(Collectors.toSet()));
+        storedFile.setRoles(Set.of("allowingrole"));
         storedFile.setClassification(Classifications.PRIVATE);
 
 
@@ -267,7 +267,7 @@ public class DomainPermissionEvaluatorTests {
     public void testRolesReadPermissionsWithClassificationPublicAndMatchingRoles() {
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
-        storedFile.setRoles(Arrays.asList(new String[] { "allowingrole" }).stream().collect(Collectors.toSet()));
+        storedFile.setRoles(Set.of("allowingrole"));
         storedFile.setClassification(Classifications.PUBLIC);
 
 
@@ -284,7 +284,7 @@ public class DomainPermissionEvaluatorTests {
     public void testRolesReadPermissionsWithClassificationRestrictedAndNotMatchingRoles() {
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
-        storedFile.setRoles(Arrays.asList(new String[] { "notallowingrole" }).stream().collect(Collectors.toSet()));
+        storedFile.setRoles(Set.of("notallowingrole"));
         storedFile.setClassification(Classifications.RESTRICTED);
 
 
@@ -301,7 +301,7 @@ public class DomainPermissionEvaluatorTests {
     public void testDocumentRolesWithLeadingSpaceCharacter() {
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
-        storedFile.setRoles(Arrays.asList(new String[] { " valid-role" }).stream().collect(Collectors.toSet()));
+        storedFile.setRoles(Set.of(" valid-role"));
         storedFile.setClassification(Classifications.RESTRICTED);
 
 
@@ -318,7 +318,7 @@ public class DomainPermissionEvaluatorTests {
     public void testUserRolesWithLeadingSpaceCharacter() {
         StoredDocument storedFile = new StoredDocument();
         storedFile.setCreatedBy("nobody");
-        storedFile.setRoles(Arrays.asList(new String[] { "valid-role" }).stream().collect(Collectors.toSet()));
+        storedFile.setRoles(Set.of(" valid-role"));
         storedFile.setClassification(Classifications.RESTRICTED);
 
 
@@ -330,5 +330,4 @@ public class DomainPermissionEvaluatorTests {
                 Arrays.asList(" valid-role", "x")
             ));
     }
-
 }
