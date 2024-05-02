@@ -19,10 +19,6 @@ public class MultipartFileSizeMinValidator
     }
 
     @Override
-    public void initialize(MultipartFileSizeMinimum fileSizeLimit) {
-    }
-
-    @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
         return CollectionUtils.isEmpty(multipartFiles)
             || multipartFiles.stream().allMatch(fileSizeVerifier::verifyMinFileSize);
