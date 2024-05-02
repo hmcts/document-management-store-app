@@ -12,9 +12,7 @@ import uk.gov.hmcts.dm.security.Permissions;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.when;
 
