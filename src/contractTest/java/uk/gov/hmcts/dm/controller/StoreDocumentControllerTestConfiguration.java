@@ -108,7 +108,12 @@ public class StoreDocumentControllerTestConfiguration {
     @Bean
     @Primary
     public StoredDocumentService storedDocumentService() {
-        return new StoredDocumentService();
+        return new StoredDocumentService(storedDocumentRepository,
+            documentContentVersionRepository,
+            toggleConfiguration,
+            securityUtilService,
+            blobStorageWriteService,
+            blobStorageDeleteService);
     }
 
     @Bean
