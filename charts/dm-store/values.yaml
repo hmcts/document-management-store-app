@@ -72,8 +72,6 @@ java:
     DOCUMENT_DELETE_TASK_PAGE_SIZE: 1
     DOCUMENT_DELETE_TASK_CHUNK_SIZE: 1
     DOCUMENT_DELETE_TASK_MAX_ITEM_COUNT: 1
-  spotInstances:
-    enabled: true
 
 blobstorage:
   resourceGroup: dm-store-aso-preview-rg
