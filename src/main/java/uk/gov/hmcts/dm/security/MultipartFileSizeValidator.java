@@ -19,11 +19,6 @@ public class MultipartFileSizeValidator
         this.fileSizeVerifier = fileSizeVerifier;
     }
 
-
-    @Override
-    public void initialize(MultipartFileSizeLimit fileSizeLimit) {
-    }
-
     @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
         return CollectionUtils.isEmpty(multipartFiles) || multipartFiles.stream()

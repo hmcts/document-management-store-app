@@ -31,23 +31,32 @@ public class StoredDocumentService {
 
     private static final Logger log = LoggerFactory.getLogger(StoredDocumentService.class);
 
-    @Autowired
-    private StoredDocumentRepository storedDocumentRepository;
+    private final StoredDocumentRepository storedDocumentRepository;
+
+    private final DocumentContentVersionRepository documentContentVersionRepository;
+
+    private final ToggleConfiguration toggleConfiguration;
+
+    private final SecurityUtilService securityUtilService;
+
+    private final BlobStorageWriteService blobStorageWriteService;
+
+    private final BlobStorageDeleteService blobStorageDeleteService;
 
     @Autowired
-    private DocumentContentVersionRepository documentContentVersionRepository;
-
-    @Autowired
-    private ToggleConfiguration toggleConfiguration;
-
-    @Autowired
-    private SecurityUtilService securityUtilService;
-
-    @Autowired
-    private BlobStorageWriteService blobStorageWriteService;
-
-    @Autowired
-    private BlobStorageDeleteService blobStorageDeleteService;
+    public StoredDocumentService(StoredDocumentRepository storedDocumentRepository,
+                                 DocumentContentVersionRepository documentContentVersionRepository,
+                                 ToggleConfiguration toggleConfiguration,
+                                 SecurityUtilService securityUtilService,
+                                 BlobStorageWriteService blobStorageWriteService,
+                                 BlobStorageDeleteService blobStorageDeleteService) {
+        this.storedDocumentRepository = storedDocumentRepository;
+        this.documentContentVersionRepository = documentContentVersionRepository;
+        this.toggleConfiguration = toggleConfiguration;
+        this.securityUtilService = securityUtilService;
+        this.blobStorageWriteService = blobStorageWriteService;
+        this.blobStorageDeleteService = blobStorageDeleteService;
+    }
 
     public Optional<StoredDocument> findOne(UUID id) {
         Optional<StoredDocument> storedDocument = storedDocumentRepository.findById(id);

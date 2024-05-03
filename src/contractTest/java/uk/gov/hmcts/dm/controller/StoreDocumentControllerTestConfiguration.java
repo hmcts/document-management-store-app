@@ -64,6 +64,12 @@ public class StoreDocumentControllerTestConfiguration {
     @MockBean
     public ToggleConfiguration toggleConfiguration;
 
+    @MockBean
+    public StoredDocumentService storedDocumentService;
+
+    @MockBean
+    public AuditEntryService auditEntryService;
+
     @Bean
     @Primary
     public FileSizeVerifier fileSizeVerifier() {
@@ -94,19 +100,26 @@ public class StoreDocumentControllerTestConfiguration {
     @Bean
     @Primary
     public AuditEntryService auditEntryService() {
-        return new AuditEntryService();
+        return new AuditEntryService(storedDocumentAuditEntryRepository,
+            documentContentVersionAuditEntryRepository,
+            securityUtilService);
     }
 
     @Bean
     @Primary
     public StoredDocumentService storedDocumentService() {
-        return new StoredDocumentService();
+        return new StoredDocumentService(storedDocumentRepository,
+            documentContentVersionRepository,
+            toggleConfiguration,
+            securityUtilService,
+            blobStorageWriteService,
+            blobStorageDeleteService);
     }
 
     @Bean
     @Primary
     public AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService() {
-        return new AuditedStoredDocumentOperationsService();
+        return new AuditedStoredDocumentOperationsService(storedDocumentService, auditEntryService);
     }
 
 
