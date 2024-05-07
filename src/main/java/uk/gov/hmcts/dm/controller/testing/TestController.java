@@ -31,6 +31,7 @@ public class TestController {
 
     private final BlobContainerClient blobClient;
 
+    @SuppressWarnings("java:S6830")
     public TestController(
         BlobStorageReadService blobStorageReadService,
         @Autowired(required = false) @Qualifier("metadata-storage") BlobContainerClient blobClient

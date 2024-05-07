@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class HealthControllerTests extends ComponentTestBase {
 
+    @SuppressWarnings("java:S1607")
     @Test
     @Ignore
     public void testGetSuccess() throws Exception {
