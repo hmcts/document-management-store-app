@@ -2,6 +2,8 @@ package uk.gov.hmcts.dm.actuate.health;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -25,18 +27,11 @@ public class WebCheckerTest {
         Assert.assertEquals(Status.UP,webChecker.health().getStatus());
     }
 
-    @Test
-    public void healthDown() {
+    @ParameterizedTest
+    @ValueSource(strings = {"DOWN", "UNKNOWN"})
+    public void healthDownVarious(String arg) {
         when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class))
-            .thenReturn(new HealthCheckResponse("DOWN"));
-        WebChecker webChecker = new WebChecker(NAME,URL,restTemplate);
-        Assert.assertEquals(Status.DOWN,webChecker.health().getStatus());
-    }
-
-    @Test
-    public void healthUknownDown() {
-        when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class))
-            .thenReturn(new HealthCheckResponse("UNKNOWN"));
+            .thenReturn(new HealthCheckResponse(arg));
         WebChecker webChecker = new WebChecker(NAME,URL,restTemplate);
         Assert.assertEquals(Status.DOWN,webChecker.health().getStatus());
     }
