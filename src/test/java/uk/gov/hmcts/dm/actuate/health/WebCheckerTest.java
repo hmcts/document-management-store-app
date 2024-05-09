@@ -12,7 +12,7 @@ import uk.gov.hmcts.dm.actuate.health.model.HealthCheckResponse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class WebCheckerTest {
+class WebCheckerTest {
 
     private static final String NAME = "test";
     private static final String URL = "http://test.com";
@@ -29,7 +29,7 @@ public class WebCheckerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"DOWN", "UNKNOWN"})
-    public void healthDownVarious(String arg) {
+    void healthDownVarious(String arg) {
         when(restTemplate.getForObject(HEALTH_URL,HealthCheckResponse.class))
             .thenReturn(new HealthCheckResponse(arg));
         WebChecker webChecker = new WebChecker(NAME,URL,restTemplate);

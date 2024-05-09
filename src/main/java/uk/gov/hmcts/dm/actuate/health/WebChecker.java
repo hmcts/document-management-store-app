@@ -29,7 +29,6 @@ public class WebChecker {
         return (getStatus()) ? healthBuilder.up().build() : healthBuilder.down().build();
     }
 
-
     private boolean getStatus() {
         try {
             final HealthCheckResponse healthCheckResponse =
@@ -43,10 +42,4 @@ public class WebChecker {
             return false;
         }
     }
-
-
-
-
-
-
 }

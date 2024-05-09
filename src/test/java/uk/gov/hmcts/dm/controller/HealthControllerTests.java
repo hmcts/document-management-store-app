@@ -11,12 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class HealthControllerTests extends ComponentTestBase {
 
     @Test
-    @Ignore
     public void testGetSuccess() throws Exception {
         restActions
             .get("/health")
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status", Matchers.is("UP")));
     }
-
 }
