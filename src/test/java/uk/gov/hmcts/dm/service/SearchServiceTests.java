@@ -74,7 +74,7 @@ public class SearchServiceTests {
 
         List<StoredDocument> documents = searchService.findStoredDocumentsIdsByCaseRef(searchCommand);
 
-        assertThat(mockedDocuments.size()).isEqualTo(documents.size());
+        assertThat(mockedDocuments).hasSameSizeAs(documents);
         assertThat(mockedDocuments.get(0)).isEqualTo(documents.get(0).getId());
         assertThat(mockedDocuments.get(1)).isEqualTo(documents.get(1).getId());
     }

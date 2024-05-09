@@ -313,21 +313,4 @@ public class DomainPermissionEvaluatorTests {
                 Arrays.asList(" valid-role", "x")
             ));
     }
-
-    @Test
-    public void testUserRolesWithLeadingSpaceCharacter() {
-        StoredDocument storedFile = new StoredDocument();
-        storedFile.setCreatedBy("nobody");
-        storedFile.setRoles(Set.of(" valid-role"));
-        storedFile.setClassification(Classifications.RESTRICTED);
-
-
-        Assert.assertTrue(domainPermissionEvaluator
-            .hasPermission(
-                storedFile,
-                Permissions.READ,
-                MRS_CASE_WORKER,
-                Arrays.asList(" valid-role", "x")
-            ));
-    }
 }

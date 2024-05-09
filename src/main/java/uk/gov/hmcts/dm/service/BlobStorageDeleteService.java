@@ -39,7 +39,8 @@ public class BlobStorageDeleteService {
             BlockBlobClient blob =
                 cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
             if (TRUE.equals(blob.exists())) {
-                Response res = blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+                Response<Void> res = blob.deleteWithResponse(
+                    DeleteSnapshotsOptionType.INCLUDE, null, null, null);
                 if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
                     log.info(
                         "Deleting document blob {} failed. Response status code {}",

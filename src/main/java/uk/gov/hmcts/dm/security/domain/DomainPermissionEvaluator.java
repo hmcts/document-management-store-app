@@ -30,15 +30,6 @@ public class DomainPermissionEvaluator {
         this.securityUtilService = securityUtilService;
     }
 
-    @Deprecated
-    public boolean hasPermission(@NonNull final CreatorAware creatorAware,
-                                 @NonNull final Permissions permission,
-                                 final String authenticatedUserId,
-                                 @NonNull final Collection<String> authenticatedUserRoles,
-                                 @NonNull final Collection<String> caseWorkerRoles) {
-        return hasPermission(creatorAware, permission, authenticatedUserId, authenticatedUserRoles);
-    }
-
     public boolean hasPermission(@NonNull final CreatorAware creatorAware,
                                  @NonNull final Permissions permission,
                                  final String authenticatedUserId,
@@ -52,31 +43,29 @@ public class DomainPermissionEvaluator {
 
         Set<String> authenticatedUserRolesSet = sanitizedSetFrom(authenticatedUserRoles);
 
-        if (!result && permission == Permissions.READ && creatorAware instanceof RolesAware rolesAware) {
-            if (rolesAware.getRoles() != null
-                && rolesAware.getClassification() != null
-                && (Classifications.RESTRICTED.equals(rolesAware.getClassification())
-                || Classifications.PUBLIC.equals(rolesAware.getClassification()))
-                ) {
-                Set<String> documentRoles = sanitizedSetFrom(rolesAware.getRoles());
-                log.debug("User with roles {} accessing document that accepts roles {}",
-                    StringUtils.convertValidLogStrings(authenticatedUserRolesSet),
-                    StringUtils.convertValidLogStrings(documentRoles));
+        if (!result && permission == Permissions.READ && creatorAware instanceof RolesAware rolesAware
+            && (rolesAware.getRoles() != null
+            && rolesAware.getClassification() != null
+            && (Classifications.RESTRICTED.equals(rolesAware.getClassification())
+            || Classifications.PUBLIC.equals(rolesAware.getClassification()))
+            )) {
+            Set<String> documentRoles = sanitizedSetFrom(rolesAware.getRoles());
+            log.debug("User with roles {} accessing document that accepts roles {}",
+                StringUtils.convertValidLogStrings(authenticatedUserRolesSet),
+                StringUtils.convertValidLogStrings(documentRoles));
 
-                documentRoles.retainAll(authenticatedUserRolesSet);
-                if (!documentRoles.isEmpty()) {
-                    result = true;
-                }
+            documentRoles.retainAll(authenticatedUserRolesSet);
+            if (!documentRoles.isEmpty()) {
+                result = true;
             }
         }
 
         if (!result && permission == Permissions.READ) {
-            boolean hasCaseworkerRole = !authenticatedUserRolesSet.stream()
+
+            result = !authenticatedUserRolesSet.stream()
                 .filter(role -> role.startsWith(CASE_WORKER_PREFIX))
                 .toList()
                 .isEmpty();
-
-            result = hasCaseworkerRole;
         }
 
         if (!result && permission == Permissions.DELETE
