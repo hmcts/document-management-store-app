@@ -206,6 +206,9 @@ dependencies {
     contractTestImplementation sourceSets.test.runtimeClasspath
 
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.5.0'
+    testImplementation "org.wiremock:wiremock:3.5.4"
+    testImplementation "org.assertj:assertj-core:3.24.2"
+
 }
 
 dependencyCheck {
