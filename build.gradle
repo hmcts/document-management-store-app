@@ -106,7 +106,7 @@ def versions = [
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.25.4'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.26.0'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.2'
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.2.0-jre'
