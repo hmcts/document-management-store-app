@@ -97,7 +97,7 @@ def versions = [
     serenityRestAssured: '3.7.0',
     logging            : '6.1.4',
     pact_version       : '4.1.7',
-    emTestHelper       : '2.0.4',
+    emTestHelper       : '2.0.7',
     shedlock           : '5.13.0',
     hibernate          : '6.5.2.Final',
     jupiter            : '5.10.2',
