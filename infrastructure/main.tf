@@ -117,26 +117,26 @@ data "azurerm_subnet" "postgres" {
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
-  name = "${var.component}-POSTGRES-USER"
-  value = module.db-v15.username
+  name         = "${var.component}-POSTGRES-USER"
+  value        = module.db-v15.username
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-HOST" {
-  name = "${var.component}-POSTGRES-HOST"
-  value = module.db-v15.fqdn
+  name         = "${var.component}-POSTGRES-HOST"
+  value        = module.db-v15.fqdn
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PORT" {
-  name = "${var.component}-POSTGRES-PORT"
-  value = "5432"
+  name         = "${var.component}-POSTGRES-PORT"
+  value        = "5432"
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-DATABASE" {
-  name = "${var.component}-POSTGRES-DATABASE"
-  value = "evidence"
+  name         = "${var.component}-POSTGRES-DATABASE"
+  value        = "evidence"
   key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
 }
 
@@ -155,8 +155,8 @@ module "db-v15" {
   admin_user_object_id = var.jenkins_AAD_objectId
   business_area        = "CFT"
   # The original subnet is full, this is required to use the new subnet for new databases
-  subnet_suffix        = "expanded"
-  pgsql_databases      = [
+  subnet_suffix = "expanded"
+  pgsql_databases = [
     {
       name : "evidence"
     }
@@ -168,7 +168,7 @@ module "db-v15" {
     }
   ]
   //Below attributes needs to be overridden for Perftest & Prod
-  pgsql_sku            = var.pgsql_sku
-  pgsql_storage_mb     = var.pgsql_storage_mb
+  pgsql_sku                      = var.pgsql_sku
+  pgsql_storage_mb               = var.pgsql_storage_mb
   force_user_permissions_trigger = "1"
 }
