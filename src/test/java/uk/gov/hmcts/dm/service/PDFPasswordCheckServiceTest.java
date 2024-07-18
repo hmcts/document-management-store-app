@@ -16,7 +16,7 @@ public class PDFPasswordCheckServiceTest {
         PDFPasswordCheckService.checkPasswordProtectedPDF(input);
     }
     @Test
-    public void shouldLogErrorWhenNoFilePathProvided() {
+    public void shouldErrorWhenNoFilePathProvided() {
         String path = null;
         PDFPasswordCheckService.checkPasswordProtectedPDF(path);
     }
