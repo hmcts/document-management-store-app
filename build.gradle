@@ -9,7 +9,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.63'
     id 'io.spring.dependency-management' version '1.1.6'
-    id 'org.springframework.boot' version '3.3.1'
+    id 'org.springframework.boot' version '3.3.2'
     id 'com.github.ben-manes.versions' version '0.51.0'
     id 'org.sonarqube' version '5.1.0.4882'
     id 'jacoco'
@@ -106,7 +106,7 @@ def versions = [
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.26.1'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.27.0'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.2'
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.2.1-jre'
