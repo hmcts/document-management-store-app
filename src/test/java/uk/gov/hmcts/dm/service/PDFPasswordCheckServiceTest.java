@@ -13,11 +13,11 @@ public class PDFPasswordCheckServiceTest {
                             "invalid/path/to/pdf.pdf"})
 
     void shouldCheckFileForPasswordProtection(String input) {
-        PDFPasswordCheckService.checkPasswordProtectedPDF(input);
+        PdfPasswordVerifier.checkPasswordProtectedPDF(input);
     }
     @Test
     public void shouldErrorWhenNoFilePathProvided() {
         String path = null;
-        PDFPasswordCheckService.checkPasswordProtectedPDF(path);
+        PdfPasswordVerifier.checkPasswordProtectedPDF(path);
     }
 }
