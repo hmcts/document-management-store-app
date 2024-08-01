@@ -22,28 +22,23 @@ public class PdfPasswordVerifier {
             return false;
         }
 
-        try (PDDocument document = Loader.loadPDF(multipartFile.getInputStream())) {
+        File temporaryFile = new File("src/main/resources/tempPdf.pdf");
+        try {
+            multipartFile.transferTo(temporaryFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (PDDocument document = Loader.loadPDF(temporaryFile)) {
+            log.info("The document {} is not password protected.", temporaryFile.getName());
             return true;
         } catch (InvalidPasswordException e) {
-            log.error("The document {} is password protected.", multipartFile.getOriginalFilename());
+            log.error("The document {} is password protected.", temporaryFile.getName());
             return false;
         } catch (IOException e) {
-            log.error("An error occurred while trying to load the document {}.", multipartFile.getOriginalFilename());
+            log.error("An error occurred while trying to load the document {}.", temporaryFile.getName());
             e.printStackTrace();
             return false;
         }
-
-//        File file = new File(filePath);
-//        try (PDDocument document = Loader.loadPDF(file)) {
-//            log.info("The document {} is not password protected.", file.getName());
-//            return true;
-//        } catch (InvalidPasswordException e) {
-//            log.error("The document {} is password protected.", file.getName());
-//            return false;
-//        } catch (IOException e) {
-//            log.error("An error occurred while trying to load the document {}.", file.getName());
-//            e.printStackTrace();
-//            return false;
-//        }
     }
 }
