@@ -5,24 +5,23 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 
-public class PdfPasswordVerifier {
+@Service
+public class PasswordVerifier {
 
-    private PdfPasswordVerifier() {
-    }
-
-    private static final Logger log = LoggerFactory.getLogger(PdfPasswordVerifier.class);
+    private static final Logger log = LoggerFactory.getLogger(PasswordVerifier.class);
 
     public boolean checkPasswordProtectedPDF(MultipartFile multipartFile) {
         if (multipartFile == null) {
             return false;
         }
 
-        File temporaryFile = new File("src/main/resources/tempPdf.pdf");
+        File temporaryFile = new File("src/main/resources/files/tempPdf.pdf");
         try {
             multipartFile.transferTo(temporaryFile);
         } catch (IOException e) {

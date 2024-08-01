@@ -10,8 +10,8 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PdfPasswordValidator.class)
-public @interface PdfPasswordCheck {
+@Constraint(validatedBy = MultipartFilePasswordValidator.class)
+public @interface MultipartFilePasswordCheck {
     String message() default "{uk.gov.hmcts.dm.security.PdfPasswordCheck.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
