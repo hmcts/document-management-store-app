@@ -5,9 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.service.FileSizeVerifier;
 import uk.gov.hmcts.dm.service.PdfPasswordVerifier;
-
 
 import java.util.List;
 
