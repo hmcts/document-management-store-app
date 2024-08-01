@@ -21,6 +21,23 @@ public class PasswordVerifier {
             return false;
         }
 
+        //TODO: Add in filetype verifier logic before the password check, similar to FileContentVerifier
+
+//        private String getOriginalFileNameExtension(MultipartFile multipartFile) {
+//            String originalFileName = multipartFile.getOriginalFilename();
+//            if (StringUtils.isNotBlank(originalFileName)) {
+//                int lastDotIndex = originalFileName.lastIndexOf('.');
+//                if (lastDotIndex >= 0) {
+//                    return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length())
+//                        .toLowerCase(Locale.UK);
+//                }
+//            }
+//            return EMPTY_STRING;
+//        }
+
+        // if PDF -> use PDFBox approach below
+        // else -> research java approach to checking password protected files for other filetypes
+
         File temporaryFile = new File("src/main/resources/files/tempPdf.pdf");
         try {
             multipartFile.transferTo(temporaryFile);
