@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
@@ -10,34 +11,45 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 @Service
 public class PasswordVerifier {
 
+    private static final String EMPTY_STRING = "";
+
     private static final Logger log = LoggerFactory.getLogger(PasswordVerifier.class);
 
-    public boolean checkPasswordProtectedPDF(MultipartFile multipartFile) {
+    public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
         if (multipartFile == null) {
             return false;
         }
 
-        //TODO: Add in filetype verifier logic before the password check, similar to FileContentVerifier
-
-//        private String getOriginalFileNameExtension(MultipartFile multipartFile) {
-//            String originalFileName = multipartFile.getOriginalFilename();
-//            if (StringUtils.isNotBlank(originalFileName)) {
-//                int lastDotIndex = originalFileName.lastIndexOf('.');
-//                if (lastDotIndex >= 0) {
-//                    return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length())
-//                        .toLowerCase(Locale.UK);
-//                }
-//            }
-//            return EMPTY_STRING;
-//        }
-
-        // if PDF -> use PDFBox approach below
+        //TODO: Add in further cases (.docx, ?, need to understand what formats DM-store accepts)
+        // if PDF -> use PDFBox approach (checkPdfPassword)
         // else -> research java approach to checking password protected files for other filetypes
 
+        String extensionType = getOriginalFileNameExtension(multipartFile);
+        switch (extensionType) {
+            case ".pdf":
+                return checkPdfPassword(multipartFile);
+            case ".txt":
+                return checkTxtPassword(multipartFile);
+            default:
+                return false;
+        }
+
+
+
+    }
+
+    private boolean checkTxtPassword(MultipartFile multipartFile) {
+        //TODO: Implement password check for .txt files if possible
+
+        return true;
+    }
+
+    private boolean checkPdfPassword(MultipartFile multipartFile) {
         File temporaryFile = new File("src/main/resources/files/tempPdf.pdf");
         try {
             multipartFile.transferTo(temporaryFile);
@@ -56,5 +68,18 @@ public class PasswordVerifier {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    private String getOriginalFileNameExtension(MultipartFile multipartFile) {
+        String originalFileName = multipartFile.getOriginalFilename();
+        if (StringUtils.isNotBlank(originalFileName)) {
+            int lastDotIndex = originalFileName.lastIndexOf('.');
+            if (lastDotIndex >= 0) {
+                return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length())
+                    .toLowerCase(Locale.UK);
+            }
+        }
+        return EMPTY_STRING;
     }
 }

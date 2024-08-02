@@ -22,6 +22,6 @@ public class MultipartFilePasswordValidator
     @Override
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
         return CollectionUtils.isEmpty(multipartFiles) || multipartFiles.stream()
-            .allMatch(passwordVerifier::checkPasswordProtectedPDF);
+            .allMatch(passwordVerifier::checkPasswordProtectedFile);
     }
 }
