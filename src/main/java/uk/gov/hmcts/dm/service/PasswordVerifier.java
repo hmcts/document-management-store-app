@@ -29,6 +29,10 @@ public class PasswordVerifier {
         // if PDF -> use PDFBox approach (checkPdfPassword)
         // else -> research java approach to checking password protected files for other filetypes
 
+        //Accepted filetime extensions:
+        //    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,
+        //    .dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv,.mp3,.m4a,.mp4}
+
         String extensionType = getOriginalFileNameExtension(multipartFile);
         switch (extensionType) {
             case ".pdf":
@@ -38,9 +42,6 @@ public class PasswordVerifier {
             default:
                 return false;
         }
-
-
-
     }
 
     private boolean checkTxtPassword(MultipartFile multipartFile) {
@@ -69,7 +70,6 @@ public class PasswordVerifier {
             return false;
         }
     }
-
 
     private String getOriginalFileNameExtension(MultipartFile multipartFile) {
         String originalFileName = multipartFile.getOriginalFilename();
