@@ -133,7 +133,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '2.0.32'
+    implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '3.0.2'
     implementation group: 'org.apache.pdfbox', name: 'pdfbox-io', version: '3.0.2'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.15.0'
@@ -173,6 +173,11 @@ dependencies {
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard', version: '2.9.2', ext: 'pom'
     implementation group: 'org.apache.tika', name: 'tika-parsers', version: '2.9.2', ext: 'pom'
     implementation group: 'org.apache.tika', name: 'tika-parser-pdf-module', version: '2.9.2'
+    implementation group: 'org.apache.tika', name: 'tika-parser-microsoft-module', version: '2.9.2'
+    implementation group: 'org.apache.tika', name: 'tika-parser-image-module', version: '2.9.2'
+    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '2.9.2'
+
+
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
