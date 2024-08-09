@@ -14,7 +14,7 @@ plugins {
     id 'org.sonarqube' version '5.1.0.4882'
     id 'jacoco'
     id 'checkstyle'
-    id 'io.freefair.lombok' version '8.6'
+    id 'io.freefair.lombok' version '8.7.1'
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'org.owasp.dependencycheck' version '9.2.0'
     id 'au.com.dius.pact' version '4.2.14'
@@ -99,7 +99,7 @@ def versions = [
     pact_version       : '4.1.7',
     emTestHelper       : '2.0.8',
     shedlock           : '5.14.0',
-    hibernate          : '6.5.2.Final',
+    hibernate          : '6.6.0.Final',
     jupiter            : '5.10.3',
     springSecurity     : '6.3.1'
 ]
@@ -134,7 +134,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.15.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.16.0'
 
     implementation group: 'org.hibernate', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
