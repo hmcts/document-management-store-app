@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.service;
 
-import org.apache.commons.csv.CSVParser;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
@@ -16,8 +15,7 @@ import org.apache.tika.parser.csv.TextAndCSVParser;
 import org.apache.tika.parser.mp4.MP4Parser;
 import org.apache.tika.parser.odf.OpenDocumentParser;
 import org.apache.tika.parser.audio.MidiParser;
-
-//import org.apache.tika.parser.rtf.RTFParser;
+import org.apache.tika.parser.microsoft.rtf.RTFParser;
 
 import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.stereotype.Service;
@@ -55,7 +53,7 @@ public class PasswordVerifier1 {
         MP4Parser mp4Parser = new MP4Parser();
         MidiParser midiParser = new MidiParser();
         OpenDocumentParser openDocumentParser = new OpenDocumentParser();
-
+        RTFParser rtfParser = new RTFParser();
 
         switch (documentType) {
             case "application/pdf":
@@ -78,9 +76,9 @@ public class PasswordVerifier1 {
                 return checkPasswordWithParser(inputStream, midiParser);
             case ODF_formats:
                 return checkPasswordWithParser(inputStream, openDocumentParser);
-            case "test":
-                return checkPasswordWithParser(inputStream, ?);
-            case "test":
+            case "application/rtf":
+                return checkPasswordWithParser(inputStream, rtfParser);
+            case "application/octect-stream":
                 return checkPasswordWithParser(inputStream, ?);
             default:
                 return false;
@@ -100,36 +98,6 @@ public class PasswordVerifier1 {
         }
         return true;
     }
-
-    private boolean checkPdfPassword(InputStream inputStream) {
-        try {
-            BodyContentHandler handler = new BodyContentHandler();
-            Metadata metadata = new Metadata();
-            ParseContext pcontext = new ParseContext();
-
-            PDFParser pdfparser = new PDFParser();
-            pdfparser.parse(inputStream, handler, metadata, pcontext);
-        } catch (TikaException | IOException | SAXException e) {
-                return false;
-            }
-        return true;
-    }
-
-    private boolean checkMicrosoftSuitePassword(InputStream inputStream) {
-        try {
-            BodyContentHandler handler = new BodyContentHandler();
-            Metadata metadata = new Metadata();
-            ParseContext pcontext = new ParseContext();
-
-            OOXMLParser ooxmlparser = new OOXMLParser();
-            ooxmlparser.parse(inputStream, handler, metadata, pcontext);
-        } catch (TikaException | IOException | SAXException e) {
-            return false;
-        }
-        return true;
-    }
-
-
 
     private static String detectDocTypeUsingFacade(InputStream stream)
         throws IOException {

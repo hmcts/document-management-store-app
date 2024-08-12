@@ -176,6 +176,8 @@ dependencies {
     implementation group: 'org.apache.tika', name: 'tika-parser-microsoft-module', version: '2.9.2'
     implementation group: 'org.apache.tika', name: 'tika-parser-image-module', version: '2.9.2'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '2.9.2'
+    implementation group: 'org.apache.tika', name: 'tika-parser-ocr-module', version: '2.9.2'
+
 
 
 
