@@ -6,16 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.service.PasswordVerifier;
+import uk.gov.hmcts.dm.service.PasswordVerifier1;
 
 import java.util.List;
 
 public class MultipartFilePasswordValidator
     implements ConstraintValidator<MultipartFilePasswordCheck, List<MultipartFile>> {
 
-    private final PasswordVerifier passwordVerifier;
+    private final PasswordVerifier1 passwordVerifier;
 
     @Autowired
-    public MultipartFilePasswordValidator(PasswordVerifier passwordVerifier) {
+    public MultipartFilePasswordValidator(PasswordVerifier1 passwordVerifier) {
         this.passwordVerifier = passwordVerifier;
     }
 
