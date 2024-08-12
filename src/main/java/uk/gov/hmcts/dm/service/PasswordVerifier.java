@@ -1,85 +1,98 @@
 package uk.gov.hmcts.dm.service;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.parser.pdf.PDFParser;
+import org.apache.tika.parser.microsoft.ooxml.OOXMLParser;
+import org.apache.tika.parser.txt.TXTParser;
+import org.apache.tika.parser.image.JpegParser;
+import org.apache.tika.parser.image.TiffParser;
+import org.apache.tika.parser.image.ImageParser;
+import org.apache.tika.parser.csv.TextAndCSVParser;
+import org.apache.tika.parser.mp4.MP4Parser;
+import org.apache.tika.parser.odf.OpenDocumentParser;
+import org.apache.tika.parser.audio.MidiParser;
+import org.apache.tika.parser.microsoft.rtf.RTFParser;
+
+import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.xml.sax.SAXException;
 
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.util.Locale;
+import java.io.InputStream;
 
 @Service
 public class PasswordVerifier {
 
-    private static final String EMPTY_STRING = "";
+    private static final String ODF_FORMAT =
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet," +
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.template," +
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document," +
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.template," +
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation," +
+        "application/vnd.openxmlformats-officedocument.presentationml.template," +
+        "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
 
-    private static final Logger log = LoggerFactory.getLogger(PasswordVerifier.class);
 
-    public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
-        if (multipartFile == null) {
-            return false;
-        }
+    public boolean checkPasswordProtectedFile(MultipartFile multipartFile) throws IOException {
 
-        //TODO: Add in further cases (.docx, ?, need to understand what formats DM-store accepts)
-        // if PDF -> use PDFBox approach (checkPdfPassword)
-        // else -> research java approach to checking password protected files for other filetypes
+        InputStream inputStream = new BufferedInputStream(multipartFile.getInputStream());
+        String documentType = detectDocTypeUsingFacade(inputStream);
 
-        //Accepted filetime extensions:
-        //    whitelist-ext: ${DM_MULTIPART_WHITELIST_EXT:.jpg,.jpeg,.bmp,.tif,.tiff,.png,.pdf,.txt,.doc,.dot,.docx,
-        //    .dotx,.xls,.xlt,.xla,.xlsx,.xltx,.xlsb,.ppt,.pot,.pps,.ppa,.pptx,.potx,.ppsx,.rtf,.csv,.mp3,.m4a,.mp4}
+        PDFParser pdfparser = new PDFParser();
+        OOXMLParser ooxmlparser = new OOXMLParser();
+        TXTParser  textParser = new TXTParser();
+        TextAndCSVParser textAndCSVParser = new TextAndCSVParser();
+        JpegParser jpegParser = new JpegParser();
+        TiffParser tiffParser = new TiffParser();
+        ImageParser imageParser = new ImageParser();
+        MP4Parser mp4Parser = new MP4Parser();
+        MidiParser midiParser = new MidiParser();
+        OpenDocumentParser openDocumentParser = new OpenDocumentParser();
+        RTFParser rtfParser = new RTFParser();
 
-        String extensionType = getOriginalFileNameExtension(multipartFile);
-        switch (extensionType) {
-            case ".pdf":
-                return checkPdfPassword(multipartFile);
-            case ".txt":
-                return checkTxtPassword(multipartFile);
-            default:
-                return false;
-        }
+        return switch (documentType) {
+            case "application/pdf" -> checkPasswordWithParser(inputStream, pdfparser);
+            case "application/vnd.ms-excel | application/msword | application/vnd.ms-powerpoint" ->
+                    checkPasswordWithParser(inputStream, ooxmlparser);
+            case "text/plain" -> checkPasswordWithParser(inputStream, textParser);
+            case "text/csv" -> checkPasswordWithParser(inputStream, textAndCSVParser);
+            case "image/jpeg," -> checkPasswordWithParser(inputStream, jpegParser);
+            case "image/tiff" -> checkPasswordWithParser(inputStream, tiffParser);
+            case "image/png | image/bmp" ->
+                    checkPasswordWithParser(inputStream, imageParser); //NOT SURE IF THE imageParser is the right one
+            case "audio/mp4 | video/mp4}" -> checkPasswordWithParser(inputStream, mp4Parser);
+            case "audio/mpeg" -> checkPasswordWithParser(inputStream, midiParser);
+            case ODF_FORMAT -> checkPasswordWithParser(inputStream, openDocumentParser);
+            case "application/rtf" -> checkPasswordWithParser(inputStream, rtfParser);
+            case "application/octect-stream" -> true; //Change to make correct call for format.
+            default -> false;
+        };
     }
 
-    private boolean checkTxtPassword(MultipartFile multipartFile) {
-        //TODO: Implement password check for .txt files if possible
+    private boolean checkPasswordWithParser(InputStream inputStream, Parser parser) {
+        try {
+            BodyContentHandler handler = new BodyContentHandler();
+            Metadata metadata = new Metadata();
+            ParseContext pcontext = new ParseContext();
 
+            parser.parse(inputStream, handler, metadata, pcontext);
+
+        } catch (TikaException | IOException | SAXException e) {
+            return false;
+        }
         return true;
     }
 
-    private boolean checkPdfPassword(MultipartFile multipartFile) {
-        File temporaryFile = new File("src/main/resources/files/tempPdf.pdf");
-        try {
-            multipartFile.transferTo(temporaryFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private static String detectDocTypeUsingFacade(InputStream stream)
+        throws IOException {
 
-        try (PDDocument document = Loader.loadPDF(temporaryFile)) {
-            log.info("The document {} is not password protected.", temporaryFile.getName());
-            return true;
-        } catch (InvalidPasswordException e) {
-            log.error("The document {} is password protected.", temporaryFile.getName());
-            return false;
-        } catch (IOException e) {
-            log.error("An error occurred while trying to load the document {}.", temporaryFile.getName());
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private String getOriginalFileNameExtension(MultipartFile multipartFile) {
-        String originalFileName = multipartFile.getOriginalFilename();
-        if (StringUtils.isNotBlank(originalFileName)) {
-            int lastDotIndex = originalFileName.lastIndexOf('.');
-            if (lastDotIndex >= 0) {
-                return originalFileName.substring(originalFileName.lastIndexOf('.'), originalFileName.length())
-                    .toLowerCase(Locale.UK);
-            }
-        }
-        return EMPTY_STRING;
+        Tika tika = new Tika();
+        return tika.detect(stream);
     }
 }
