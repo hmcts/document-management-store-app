@@ -147,7 +147,7 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.17.1'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.17.1'
 
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.3'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.1.4'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
 
 
