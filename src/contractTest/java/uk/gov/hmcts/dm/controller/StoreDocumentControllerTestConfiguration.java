@@ -23,9 +23,9 @@ import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
 import uk.gov.hmcts.dm.service.FileSizeVerifier;
+import uk.gov.hmcts.dm.service.PasswordVerifier;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
-import uk.gov.hmcts.dm.service.PasswordVerifier;
 
 import java.util.Arrays;
 
