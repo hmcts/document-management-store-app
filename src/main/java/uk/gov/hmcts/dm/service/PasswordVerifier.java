@@ -5,18 +5,17 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
-import org.apache.tika.parser.pdf.PDFParser;
-import org.apache.tika.parser.microsoft.ooxml.OOXMLParser;
-import org.apache.tika.parser.txt.TXTParser;
+import org.apache.tika.parser.audio.MidiParser;
+import org.apache.tika.parser.csv.TextAndCSVParser;
+import org.apache.tika.parser.image.ImageParser;
 import org.apache.tika.parser.image.JpegParser;
 import org.apache.tika.parser.image.TiffParser;
-import org.apache.tika.parser.image.ImageParser;
-import org.apache.tika.parser.csv.TextAndCSVParser;
+import org.apache.tika.parser.microsoft.ooxml.OOXMLParser;
+import org.apache.tika.parser.microsoft.rtf.RTFParser;
 import org.apache.tika.parser.mp4.MP4Parser;
 import org.apache.tika.parser.odf.OpenDocumentParser;
-import org.apache.tika.parser.audio.MidiParser;
-import org.apache.tika.parser.microsoft.rtf.RTFParser;
-
+import org.apache.tika.parser.pdf.PDFParser;
+import org.apache.tika.parser.txt.TXTParser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,13 +29,13 @@ import java.io.InputStream;
 public class PasswordVerifier {
 
     private static final String ODF_FORMAT =
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet," +
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.template," +
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document," +
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.template," +
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation," +
-        "application/vnd.openxmlformats-officedocument.presentationml.template," +
-        "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,"
+        + "application/vnd.openxmlformats-officedocument.spreadsheetml.template,"
+        + "application/vnd.openxmlformats-officedocument.wordprocessingml.document,"
+        + "application/vnd.openxmlformats-officedocument.wordprocessingml.template,"
+        + "application/vnd.openxmlformats-officedocument.presentationml.presentation,"
+        + "application/vnd.openxmlformats-officedocument.presentationml.template,"
+        + "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
 
 
     public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
