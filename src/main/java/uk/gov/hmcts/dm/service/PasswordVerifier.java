@@ -39,14 +39,20 @@ public class PasswordVerifier {
         "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
 
 
-    public boolean checkPasswordProtectedFile(MultipartFile multipartFile) throws IOException {
+    public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
 
-        InputStream inputStream = new BufferedInputStream(multipartFile.getInputStream());
-        String documentType = detectDocTypeUsingFacade(inputStream);
+        String documentType;
+        InputStream inputStream;
+        try {
+            inputStream = new BufferedInputStream(multipartFile.getInputStream());
+            documentType = detectDocTypeUsingFacade(inputStream);
+        } catch (IOException e) {
+            return false;
+        }
 
         PDFParser pdfparser = new PDFParser();
         OOXMLParser ooxmlparser = new OOXMLParser();
-        TXTParser  textParser = new TXTParser();
+        TXTParser textParser = new TXTParser();
         TextAndCSVParser textAndCSVParser = new TextAndCSVParser();
         JpegParser jpegParser = new JpegParser();
         TiffParser tiffParser = new TiffParser();

@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = MultipartFilePasswordValidator.class)
-public @interface MultipartFilePasswordCheck {
+public @interface MultipartFileListPasswordCheck {
     String message() default "{uk.gov.hmcts.dm.security.PdfPasswordCheck.message}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

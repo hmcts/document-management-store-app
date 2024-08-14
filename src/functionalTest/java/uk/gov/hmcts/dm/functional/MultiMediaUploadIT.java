@@ -57,6 +57,11 @@ public class MultiMediaUploadIT extends BaseIT {
 
     }
 
+    private void uploadWhiteListedWithPassword_then_fail(String doc, String mimetype) {
+        uploadFileThrowsPasswordErrorMessage("pw_protected.pdf", "application/pdf");
+        uploadFileThrowsPasswordErrorMessage("pw_protected.docx", "application/msword");
+    }
+
     private boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType)
         throws IOException {
         File file = largeFile(doc, metadataKey);
@@ -172,4 +177,19 @@ public class MultiMediaUploadIT extends BaseIT {
             .when()
             .post("/documents");
     }
+
+    private void uploadFileThrowsPasswordErrorMessage(String filename, String mimeType) {
+        Response response = givenRequest(getCitizen())
+            .multiPart("files", file(filename), mimeType)
+            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect().log().all()
+            .statusCode(422)
+            .body("error", equalTo("Your upload file is password protected."))
+            .when()
+            .post("/documents");
+    }
+
+
 }

@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteList;
-import uk.gov.hmcts.dm.security.MultipartFilePasswordCheck;
+import uk.gov.hmcts.dm.security.MultipartFileListPasswordCheck;
 import uk.gov.hmcts.dm.security.MultipartFileSizeLimit;
 import uk.gov.hmcts.dm.security.MultipartFileSizeMinimum;
 
@@ -36,7 +36,7 @@ public class UploadDocumentsCommand {
     @MultipartFileListWhiteList(message = DISALLOWED_FILE_ERR_MSG)
     @MultipartFileSizeLimit(message = FILE_SIZE_ERR_MSG)
     @MultipartFileSizeMinimum(message = FILE_SIZE_MIN_ERR_MSG)
-    @MultipartFilePasswordCheck(message = PDF_PASSWORD_ERR_MSG)
+    @MultipartFileListPasswordCheck(message = PDF_PASSWORD_ERR_MSG)
     private List<MultipartFile> files;
 
     @NotNull(message = "Please provide classification")

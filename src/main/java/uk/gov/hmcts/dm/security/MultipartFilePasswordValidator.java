@@ -10,7 +10,7 @@ import uk.gov.hmcts.dm.service.PasswordVerifier;
 import java.util.List;
 
 public class MultipartFilePasswordValidator
-    implements ConstraintValidator<MultipartFilePasswordCheck, List<MultipartFile>> {
+    implements ConstraintValidator<MultipartFileListPasswordCheck, List<MultipartFile>> {
 
     private final PasswordVerifier passwordVerifier;
 
