@@ -23,7 +23,7 @@ class PasswordVerifierTest {
     PasswordVerifier passwordVerifier;
 
     @BeforeEach
-    void init(){
+    void init() {
         MockitoAnnotations.openMocks(this);
     }
 
