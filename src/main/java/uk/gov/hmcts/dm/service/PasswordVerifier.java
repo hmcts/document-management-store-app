@@ -61,23 +61,35 @@ public class PasswordVerifier {
         OpenDocumentParser openDocumentParser = new OpenDocumentParser();
         RTFParser rtfParser = new RTFParser();
 
-        return switch (documentType) {
-            case "application/pdf" -> checkPasswordWithParser(inputStream, pdfparser);
-            case "application/vnd.ms-excel | application/msword | application/vnd.ms-powerpoint" ->
-                    checkPasswordWithParser(inputStream, ooxmlparser);
-            case "text/plain" -> checkPasswordWithParser(inputStream, textParser);
-            case "text/csv" -> checkPasswordWithParser(inputStream, textAndCSVParser);
-            case "image/jpeg," -> checkPasswordWithParser(inputStream, jpegParser);
-            case "image/tiff" -> checkPasswordWithParser(inputStream, tiffParser);
-            case "image/png | image/bmp" ->
-                    checkPasswordWithParser(inputStream, imageParser); //NOT SURE IF THE imageParser is the right one
-            case "audio/mp4 | video/mp4}" -> checkPasswordWithParser(inputStream, mp4Parser);
-            case "audio/mpeg" -> checkPasswordWithParser(inputStream, midiParser);
-            case ODF_FORMAT -> checkPasswordWithParser(inputStream, openDocumentParser);
-            case "application/rtf" -> checkPasswordWithParser(inputStream, rtfParser);
-            case "application/octect-stream" -> true; //Change to make correct call for format.
-            default -> false;
-        };
+
+        switch (documentType) {
+            case "application/pdf":
+                return checkPasswordWithParser(inputStream, pdfparser);
+            case "application/vnd.ms-excel | application/msword | application/vnd.ms-powerpoint":
+                return checkPasswordWithParser(inputStream, ooxmlparser);
+            case "text/plain":
+                return checkPasswordWithParser(inputStream, textParser);
+            case "text/csv":
+                return checkPasswordWithParser(inputStream, textAndCSVParser);
+            case "image/jpeg,":
+                return checkPasswordWithParser(inputStream, jpegParser);
+            case "image/tiff":
+                return checkPasswordWithParser(inputStream, tiffParser);
+            case "image/png | image/bmp":
+                return checkPasswordWithParser(inputStream, imageParser); //NOT SURE IF THE imageParser is the right one
+            case "audio/mp4 | video/mp4}":
+                return checkPasswordWithParser(inputStream, mp4Parser);
+            case "audio/mpeg":
+                return checkPasswordWithParser(inputStream, midiParser);
+            case ODF_FORMAT:
+                return checkPasswordWithParser(inputStream, openDocumentParser);
+            case "application/rtf":
+                return checkPasswordWithParser(inputStream, rtfParser);
+            case "application/octect-stream":
+                return true; //Change to make correct call for format.
+            default:
+                return false;
+        }
     }
 
     private boolean checkPasswordWithParser(InputStream inputStream, Parser parser) {
