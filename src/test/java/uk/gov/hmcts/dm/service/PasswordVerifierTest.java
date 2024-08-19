@@ -1,10 +1,12 @@
 package uk.gov.hmcts.dm.service;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +21,11 @@ class PasswordVerifierTest {
 
     @InjectMocks
     PasswordVerifier passwordVerifier;
+
+    @BeforeEach
+    void init(){
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void verifyPassword_PDF() {
