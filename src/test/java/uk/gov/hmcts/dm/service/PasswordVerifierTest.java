@@ -4,19 +4,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-@RunWith(SpringRunner.class)
 class PasswordVerifierTest {
 
     @InjectMocks
