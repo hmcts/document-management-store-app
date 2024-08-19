@@ -208,6 +208,13 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
 }
 
+dependencyManagement {
+    dependencies {
+        dependencySet(group: 'org.junit.platform', version: '1.11.0') {
+            entry 'junit-platform-commons'
+        }
+    }
+}
 dependencyCheck {
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
 }
