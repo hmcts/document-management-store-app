@@ -169,17 +169,14 @@ dependencies {
 
     implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.22'
 
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.2'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.0.0-BETA2'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard', version: '2.9.2', ext: 'pom'
     implementation group: 'org.apache.tika', name: 'tika-parsers', version: '2.9.2', ext: 'pom'
-    implementation group: 'org.apache.tika', name: 'tika-parser-pdf-module', version: '2.9.2'
+    implementation group: 'org.apache.tika', name: 'tika-parser-pdf-module', version: '3.0.0-BETA2'
     implementation group: 'org.apache.tika', name: 'tika-parser-microsoft-module', version: '2.9.2'
     implementation group: 'org.apache.tika', name: 'tika-parser-image-module', version: '2.9.2'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '2.9.2'
     implementation group: 'org.apache.tika', name: 'tika-parser-ocr-module', version: '2.9.2'
-
-
-
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
