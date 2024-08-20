@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.service;
 
-import org.apache.tika.Tika;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.TikaInputStream;
