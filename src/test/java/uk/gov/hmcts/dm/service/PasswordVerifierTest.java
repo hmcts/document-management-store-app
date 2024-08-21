@@ -134,14 +134,14 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
-    //    @Test
-    //    void testPasswordVerifier_xls_success() throws IOException {
-    //        InputStream inputStream = new ClassPathResource("files/file.xls").getInputStream();
-    //        MockMultipartFile mockMultipartFile = new MockMultipartFile(
-    //        "file", "sample.xls", OPENXML_SHEET, inputStream);
-    //
-    //        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
-    //    }
+    @Test
+    void testPasswordVerifier_xlsx_success() throws IOException {
+        InputStream inputStream = new ClassPathResource("files/file.xlsx").getInputStream();
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+            "file", "sample.xlsx", OPENXML_SHEET, inputStream);
+
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+    }
 
     @Test
     void testPasswordVerifier_xltx_success() throws IOException {
