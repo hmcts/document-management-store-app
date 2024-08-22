@@ -1,11 +1,11 @@
 package uk.gov.hmcts.dm.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.detect.Detector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
-import org.apache.tika.mime.MimeTypes;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
@@ -27,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -76,15 +75,22 @@ public class PasswordVerifier {
 
         String mimeType = getRealMimeType(multipartFile);
 
+        if (StringUtils.endsWith(mimeType,"protected")) {
+            return false;
+        }
         return switch (mimeType) {
-            case org.springframework.http.MediaType.APPLICATION_PDF_VALUE -> checkPasswordWithParser(inputStream, new PDFParser());
+            case org.springframework.http.MediaType.APPLICATION_PDF_VALUE ->
+                checkPasswordWithParser(inputStream, new PDFParser());
             case APPLICATION_MSEXCEL, APPLICATION_MSWORD, APPLICATION_MSPOWERPOINT ->
                 checkPasswordWithParser(inputStream, new OOXMLParser());
             case TEXT_CSV -> checkPasswordWithParser(inputStream, new TextAndCSVParser());
-            case org.springframework.http.MediaType.TEXT_PLAIN_VALUE -> checkPasswordWithParser(inputStream, new TXTParser());
-            case org.springframework.http.MediaType.IMAGE_JPEG_VALUE -> checkPasswordWithParser(inputStream, new JpegParser());
+            case org.springframework.http.MediaType.TEXT_PLAIN_VALUE ->
+                checkPasswordWithParser(inputStream, new TXTParser());
+            case org.springframework.http.MediaType.IMAGE_JPEG_VALUE ->
+                checkPasswordWithParser(inputStream, new JpegParser());
             case IMAGE_TIFF -> checkPasswordWithParser(inputStream, new TiffParser());
-            case org.springframework.http.MediaType.IMAGE_GIF_VALUE, IMAGE_BMP -> checkPasswordWithParser(inputStream, new ImageParser());
+            case org.springframework.http.MediaType.IMAGE_GIF_VALUE, IMAGE_BMP ->
+                checkPasswordWithParser(inputStream, new ImageParser());
             case AUDIO_MP4, VIDEO_MP4 -> checkPasswordWithParser(inputStream, new MP4Parser());
             case AUDIO_MPEG -> checkPasswordWithParser(inputStream, new MidiParser());
             //case ODF_FORMAT -> checkPasswordWithParser(inputStream, openDocumentParser);
@@ -99,8 +105,8 @@ public class PasswordVerifier {
             case OPENXML_PRESENTATION_SLIDESHOW -> checkPasswordWithParser(inputStream, new OpenDocumentParser());
             case DUMMY -> true;
             default -> true;
-// TODO - Need to log default to identitfy the missing parser scenarios.
-//  logger.info("Document with Name : {} could not be find a parser", multipartFile.getOriginalFilename());
+            // TODO - Need to log default to identitfy the missing parser scenarios.
+            //  logger.info("Document with Name : {} could not be find a parser", multipartFile.getOriginalFilename());
         };
     }
 
@@ -127,7 +133,8 @@ public class PasswordVerifier {
             MediaType mediaType = detector.detect(stream, metadata);
             return mediaType.toString();
         } catch (Exception e) {
-            logger.info("Document with Name : {} could not be detected for pwd verification.", file.getOriginalFilename());
+            logger.info("Document with Name : {} could not be detected "
+                    + "for pwd verification.", file.getOriginalFilename());
             return DUMMY;
         }
     }
