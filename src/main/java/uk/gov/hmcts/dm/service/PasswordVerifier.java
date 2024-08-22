@@ -21,6 +21,8 @@ import org.apache.tika.parser.odf.OpenDocumentParser;
 import org.apache.tika.parser.pdf.PDFParser;
 import org.apache.tika.parser.txt.TXTParser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
@@ -33,6 +35,8 @@ import java.io.InputStream;
 
 @Service
 public class PasswordVerifier {
+
+    private final Logger logger = LoggerFactory.getLogger(PasswordVerifier.class);
 
     private static final String OPENXML_SHEET =
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
@@ -48,52 +52,55 @@ public class PasswordVerifier {
         "application/vnd.openxmlformats-officedocument.presentationml.template";
     private static final String OPENXML_PRESENTATION_SLIDESHOW =
         "application/vnd.openxmlformats-officedocument.presentationml.slideshow";
+    private static final String APPLICATION_MSWORD = "application/msword";
+    private static final String APPLICATION_MSEXCEL = "application/vnd.ms-excel";
+    private static final String APPLICATION_MSPOWERPOINT = "application/vnd.ms-powerpoint";
+    private static final String APPLICATION_RTF = "application/rtf";
+    private static final String APPLICATION_OCTECTSTREAM = "application/octect-stream";
+    private static final String TEXT_CSV = "text/csv";
+    private static final String IMAGE_TIFF = "image/tiff";
+    private static final String IMAGE_BMP = "image/bmp";
+    private static final String AUDIO_MP4 = "audio/mp4";
+    private static final String AUDIO_MPEG = "audio/mpeg";
+    private static final String VIDEO_MP4 = "video/mp4";
+    private static final String DUMMY = "dummy";
 
     public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
 
         InputStream inputStream;
         try {
-            inputStream = new BufferedInputStream(multipartFile.getInputStream());
+            inputStream = multipartFile.getInputStream();
         } catch (IOException e) {
             return false;
         }
 
         String mimeType = getRealMimeType(multipartFile);
 
-        PDFParser pdfparser = new PDFParser();
-        OOXMLParser ooxmlparser = new OOXMLParser();
-        TXTParser textParser = new TXTParser();
-        TextAndCSVParser textAndCSVParser = new TextAndCSVParser();
-        JpegParser jpegParser = new JpegParser();
-        TiffParser tiffParser = new TiffParser();
-        ImageParser imageParser = new ImageParser();
-        MP4Parser mp4Parser = new MP4Parser();
-        MidiParser midiParser = new MidiParser();
-        OpenDocumentParser openDocumentParser = new OpenDocumentParser();
-        RTFParser rtfParser = new RTFParser();
-
         return switch (mimeType) {
-            case "application/pdf" -> checkPasswordWithParser(inputStream, pdfparser);
-            case "application/vnd.ms-excel", "application/msword", "application/vnd.ms-powerpoint" ->
-                checkPasswordWithParser(inputStream, ooxmlparser);
-            case "text/csv" -> checkPasswordWithParser(inputStream, textAndCSVParser);
-            case "text/plain" -> checkPasswordWithParser(inputStream, textParser);
-            case "image/jpeg" -> checkPasswordWithParser(inputStream, jpegParser);
-            case "image/tiff" -> checkPasswordWithParser(inputStream, tiffParser);
-            case "image/png", "image/bmp" -> checkPasswordWithParser(inputStream, imageParser);
-            case "audio/mp4", "video/mp4" -> checkPasswordWithParser(inputStream, mp4Parser);
-            case "audio/mpeg" -> checkPasswordWithParser(inputStream, midiParser);
+            case org.springframework.http.MediaType.APPLICATION_PDF_VALUE -> checkPasswordWithParser(inputStream, new PDFParser());
+            case APPLICATION_MSEXCEL, APPLICATION_MSWORD, APPLICATION_MSPOWERPOINT ->
+                checkPasswordWithParser(inputStream, new OOXMLParser());
+            case TEXT_CSV -> checkPasswordWithParser(inputStream, new TextAndCSVParser());
+            case org.springframework.http.MediaType.TEXT_PLAIN_VALUE -> checkPasswordWithParser(inputStream, new TXTParser());
+            case org.springframework.http.MediaType.IMAGE_JPEG_VALUE -> checkPasswordWithParser(inputStream, new JpegParser());
+            case IMAGE_TIFF -> checkPasswordWithParser(inputStream, new TiffParser());
+            case org.springframework.http.MediaType.IMAGE_GIF_VALUE, IMAGE_BMP -> checkPasswordWithParser(inputStream, new ImageParser());
+            case AUDIO_MP4, VIDEO_MP4 -> checkPasswordWithParser(inputStream, new MP4Parser());
+            case AUDIO_MPEG -> checkPasswordWithParser(inputStream, new MidiParser());
             //case ODF_FORMAT -> checkPasswordWithParser(inputStream, openDocumentParser);
-            case "application/rtf" -> checkPasswordWithParser(inputStream, rtfParser);
-            case "application/octect-stream" -> true; //Change to make correct call for format.
-            case OPENXML_SHEET -> checkPasswordWithParser(inputStream, openDocumentParser);
-            case OPENXML_SHEET_TEMPLATE -> checkPasswordWithParser(inputStream, openDocumentParser);
-            case OPENXML_DOC -> checkPasswordWithParser(inputStream, openDocumentParser);
-            case OPENXML_DOC_TEMPLATE -> checkPasswordWithParser(inputStream, openDocumentParser);
-            case OPENXML_PRESENTATION -> checkPasswordWithParser(inputStream, openDocumentParser);
-            case OPENXML_PRESENTATION_TEMPLATE -> checkPasswordWithParser(inputStream, openDocumentParser);
-            case OPENXML_PRESENTATION_SLIDESHOW -> checkPasswordWithParser(inputStream, openDocumentParser);
-            default -> false;
+            case APPLICATION_RTF -> checkPasswordWithParser(inputStream, new RTFParser());
+            case APPLICATION_OCTECTSTREAM -> true; //Change to make correct call for format.
+            case OPENXML_SHEET -> checkPasswordWithParser(inputStream, new OpenDocumentParser());
+            case OPENXML_SHEET_TEMPLATE -> checkPasswordWithParser(inputStream, new OpenDocumentParser());
+            case OPENXML_DOC -> checkPasswordWithParser(inputStream, new OpenDocumentParser());
+            case OPENXML_DOC_TEMPLATE -> checkPasswordWithParser(inputStream, new OpenDocumentParser());
+            case OPENXML_PRESENTATION -> checkPasswordWithParser(inputStream, new OpenDocumentParser());
+            case OPENXML_PRESENTATION_TEMPLATE -> checkPasswordWithParser(inputStream, new OpenDocumentParser());
+            case OPENXML_PRESENTATION_SLIDESHOW -> checkPasswordWithParser(inputStream, new OpenDocumentParser());
+            case DUMMY -> true;
+            default -> true;
+// TODO - Need to log default to identitfy the missing parser scenarios.
+//  logger.info("Document with Name : {} could not be find a parser", multipartFile.getOriginalFilename());
         };
     }
 
@@ -111,7 +118,7 @@ public class PasswordVerifier {
         return true;
     }
 
-    public static String getRealMimeType(MultipartFile file) {
+    public String getRealMimeType(MultipartFile file) {
         AutoDetectParser parser = new AutoDetectParser();
         Detector detector = parser.getDetector();
         try {
@@ -119,8 +126,9 @@ public class PasswordVerifier {
             TikaInputStream stream = TikaInputStream.get(file.getInputStream());
             MediaType mediaType = detector.detect(stream, metadata);
             return mediaType.toString();
-        } catch (IOException e) {
-            return MimeTypes.OCTET_STREAM;
+        } catch (Exception e) {
+            logger.info("Document with Name : {} could not be detected for pwd verification.", file.getOriginalFilename());
+            return DUMMY;
         }
     }
 }
