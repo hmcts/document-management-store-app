@@ -58,7 +58,7 @@ public class MultiMediaUploadIT extends BaseIT {
     }
 
     @Test
-    private void uploadWhiteListedWithPassword_then_fail() {
+    public void uploadWhiteListedWithPassword_then_fail() {
         uploadFileThrowsPasswordErrorMessage("pw_protected.pdf", "application/pdf");
         uploadFileThrowsPasswordErrorMessage("pw_protected.docx", "application/msword");
     }
