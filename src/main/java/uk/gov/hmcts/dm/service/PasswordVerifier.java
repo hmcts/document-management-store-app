@@ -4,6 +4,7 @@ import org.apache.tika.detect.Detector;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
+import org.apache.tika.metadata.TikaCoreProperties;
 import org.apache.tika.mime.MediaType;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tika.parser.AutoDetectParser;
@@ -117,6 +118,7 @@ public class PasswordVerifier {
         try {
             Metadata metadata = new Metadata();
             TikaInputStream stream = TikaInputStream.get(file.getInputStream());
+            metadata.set(TikaCoreProperties.RESOURCE_NAME_KEY, file.getOriginalFilename());
             MediaType mediaType = detector.detect(stream, metadata);
             return mediaType.toString();
         } catch (IOException e) {

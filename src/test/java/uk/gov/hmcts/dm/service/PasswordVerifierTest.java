@@ -194,7 +194,6 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
-    //TODO: resolves as audio/mp4
     @Test
     void testPasswordVerifier_mp4_video_success() throws IOException {
         InputStream inputStream = new ClassPathResource("files/file.mp4").getInputStream();

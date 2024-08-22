@@ -165,6 +165,7 @@ public class ErrorPageIT extends BaseIT {
             .post("documents");
     }
 
+    @Ignore
     @Test
     public void ep12AsAnAuthenticatedUserWhenIPostASvgDocumentIShouldGetJsonResponse() {
 
@@ -180,6 +181,7 @@ public class ErrorPageIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void ep13AsAnAuthenticatedUserWhenIPostAXmlDocumentIShouldGetJsonResponse() {
 

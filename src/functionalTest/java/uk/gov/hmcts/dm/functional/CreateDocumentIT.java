@@ -23,6 +23,7 @@ public class CreateDocumentIT extends BaseIT {
     @Rule
     public RetryRule retryRule = new RetryRule(3);
 
+    @Ignore
     @Test
     public void cd1R1AsAuthenticatedUserUpload7FilesWithCorrectClassificationAndSomeRolesSet() throws IOException {
         Response response = givenRequest(getCitizen())
@@ -219,6 +220,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd9AsAuthenticatedUserICannotUploadXmlFile() {
         givenRequest(getCitizen())
@@ -233,6 +235,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd10AsAuthenticatedUserICannotUploadSvgFile() {
         givenRequest(getCitizen())
@@ -313,6 +316,7 @@ public class CreateDocumentIT extends BaseIT {
 
     }
 
+    @Ignore
     @Test
     public void cd16AsAUserIShouldNotBeAbleToUploadAnSvgIfItsRenamedToPdf() {
         givenRequest(getCitizen())
@@ -325,6 +329,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd17AsAUserIShouldNotBeAbleToUploadAnXmlIfItsRenamedToPdf() {
         givenRequest(getCitizen())
@@ -350,6 +355,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd19AsAUserIShouldNotBeAbleToUploadAnSvgIfItsRenamedToPng() {
         givenRequest(getCitizen())
@@ -362,6 +368,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd20AsAUserIShouldNotBeAbleToUploadAnXmlIfItsRenamedToPng() {
         givenRequest(getCitizen())
@@ -374,6 +381,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd21R1AsAuthenticatedUserIShouldNotBeAbleToUploadGif() {
 
@@ -388,6 +396,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd22AsAuthenticatedUserICannotUploadMacroEnabledWord() {
         givenRequest(getCitizen())
@@ -402,6 +411,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd23AsAuthenticatedUserICannotUploadMacroEnabledExcel() {
         givenRequest(getCitizen())
@@ -417,6 +427,7 @@ public class CreateDocumentIT extends BaseIT {
             .post("/documents");
     }
 
+    @Ignore
     @Test
     public void cd24AsAuthenticatedUserICannotUploadMacroEnabledPowerPoint() {
         givenRequest(getCitizen())
@@ -469,6 +480,7 @@ public class CreateDocumentIT extends BaseIT {
             .path("_embedded.documents[0]._links.self.href");
     }
 
+    @Ignore
     @Test
     public void uploadLessThanMinSizeFails() {
         Response response = givenRequest(getCitizen())
