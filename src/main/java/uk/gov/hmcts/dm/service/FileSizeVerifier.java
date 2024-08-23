@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import static uk.gov.hmcts.dm.utils.StringUtils.sanitiseFileName;
+
 @Service
 public class FileSizeVerifier {
 
@@ -77,7 +79,7 @@ public class FileSizeVerifier {
         long fileSize = multipartFile.getSize();
         if (fileSize <= 0) {
             log.error("Warning. The uploaded file : {} is empty and has size: {}",
-                multipartFile.getOriginalFilename(), fileSize);
+                sanitiseFileName(multipartFile.getOriginalFilename()), fileSize);
             return false;
         }
         return true;
