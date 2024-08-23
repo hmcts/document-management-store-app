@@ -1,7 +1,7 @@
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:10.17.1")
+        classpath("org.flywaydb:flyway-database-postgresql:10.17.2")
     }
 }
 
@@ -9,7 +9,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.63'
     id 'io.spring.dependency-management' version '1.1.6'
-    id 'org.springframework.boot' version '3.3.2'
+    id 'org.springframework.boot' version '3.3.3'
     id 'com.github.ben-manes.versions' version '0.51.0'
     id 'org.sonarqube' version '5.1.0.4882'
     id 'jacoco'
@@ -18,7 +18,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'org.owasp.dependencycheck' version '9.2.0'
     id 'au.com.dius.pact' version '4.2.14'
-    id 'org.flywaydb.flyway' version '10.17.1'
+    id 'org.flywaydb.flyway' version '10.17.2'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
 }
 
@@ -90,7 +90,7 @@ repositories {
 
 def versions = [
     ehcache            : '3.10.8',
-    postgresql         : '42.7.3',
+    postgresql         : '42.7.4',
     jackson            : '2.17.2',
     serenity           : '3.7.0',
     serenityreporter   : '3.7.0',
@@ -101,7 +101,7 @@ def versions = [
     shedlock           : '5.15.0',
     hibernate          : '6.6.0.Final',
     jupiter            : '5.11.0',
-    springSecurity     : '6.3.2'
+    springSecurity     : '6.3.3'
 ]
 
 dependencies {
@@ -146,8 +146,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.17.1'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.17.1'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.17.2'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.17.2'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.2.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
@@ -182,7 +182,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.3.2'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.3.3'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
