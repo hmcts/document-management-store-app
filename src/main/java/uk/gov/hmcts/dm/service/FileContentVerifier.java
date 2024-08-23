@@ -30,6 +30,8 @@ public class FileContentVerifier {
 
     private static final String EMPTY_STRING = "";
 
+    private static final String PROTECTED = "protected";
+
     private static final Logger log = LoggerFactory.getLogger(FileContentVerifier.class);
 
     public FileContentVerifier(@Value("#{'${dm.multipart.whitelist}'.split(',')}") List<String> mimeTypeList,
@@ -60,7 +62,9 @@ public class FileContentVerifier {
                 metadata.add(Metadata.CONTENT_TYPE, multipartFile.getContentType());
             }
             String detected = tika.detect(tikaInputStream, metadata);
-            if (mimeTypeList.stream().noneMatch(m -> m.equalsIgnoreCase(detected))) {
+
+            if (!StringUtils.endsWithIgnoreCase(detected, PROTECTED)
+                && mimeTypeList.stream().noneMatch(m -> m.equalsIgnoreCase(detected))) {
                 log.error(
                     String.format("Warning. The mime-type of uploaded file is not white-listed: %s", detected));
                 return false;

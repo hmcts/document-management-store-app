@@ -21,16 +21,18 @@ public class PasswordVerifier {
     private final Logger logger = LoggerFactory.getLogger(PasswordVerifier.class);
 
     public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
-        try {
-            BodyContentHandler handler = new BodyContentHandler();
-            Metadata metadata = new Metadata();
-            ParseContext pcontext = new ParseContext();
+        if (!multipartFile.isEmpty()) {
+            try {
+                BodyContentHandler handler = new BodyContentHandler();
+                Metadata metadata = new Metadata();
+                ParseContext pcontext = new ParseContext();
 
-            new AutoDetectParser().parse(multipartFile.getInputStream(), handler, metadata, pcontext);
+                new AutoDetectParser().parse(multipartFile.getInputStream(), handler, metadata, pcontext);
 
-        } catch (TikaException | IOException | SAXException e) {
-            logger.info("Document with Name : {} could not be parsed", multipartFile.getOriginalFilename());
-            return false;
+            } catch (TikaException | IOException | SAXException e) {
+                logger.info("Document with Name : {} could not be parsed", multipartFile.getOriginalFilename());
+                return false;
+            }
         }
         return true;
     }
