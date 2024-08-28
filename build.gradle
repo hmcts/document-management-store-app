@@ -98,7 +98,7 @@ def versions = [
     logging            : '6.1.6',
     pact_version       : '4.1.7',
     emTestHelper       : '2.0.8',
-    shedlock           : '5.15.0',
+    shedlock           : '5.15.1',
     hibernate          : '6.6.0.Final',
     jupiter            : '5.11.0',
     springSecurity     : '6.3.3'
