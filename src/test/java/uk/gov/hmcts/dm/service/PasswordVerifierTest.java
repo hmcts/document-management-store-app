@@ -92,6 +92,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_docx_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/test.docx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.docx", OPENXML_DOC, inputStream);
 
@@ -100,6 +101,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_docx_failure() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/pw_protected_docx.docx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.docx", OPENXML_DOC, inputStream);
 
@@ -108,6 +110,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_dotx_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.dotx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.dotx", OPENXML_DOTX, inputStream);
 
@@ -116,6 +119,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_pptx_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.pptx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.dotx", OPENXML_PRESENTATION, inputStream);
@@ -125,6 +129,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_potx_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.potx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.dotx", OPENXML_PRESENTATION_TEMPLATE, inputStream);
@@ -134,6 +139,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_ppsx_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.ppsx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.dotx", OPENXML_PRESENTATION_SLIDESHOW, inputStream);
@@ -143,6 +149,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_xlsx_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.xlsx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.xlsx", OPENXML_SHEET, inputStream);
@@ -152,6 +159,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_xltx_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.xltx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.xltx", OPENXML_SHEET_TEMPLATE, inputStream);
@@ -161,6 +169,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_jpeg_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.jpg").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.jpg", "application/jpeg", inputStream);
@@ -170,6 +179,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_png_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.png").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.png", "application/png", inputStream);
@@ -179,6 +189,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_tif_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.tif").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.tif", "image/tiff", inputStream);
 
@@ -187,6 +198,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_bmp_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.bmp").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.bmp", "image/bmp", inputStream);
 
@@ -195,6 +207,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_mp3_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/audio_test.mp3").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.mp3", "audio/mpeg", inputStream);
 
@@ -203,6 +216,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_mp4_video_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.mp4").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.mp4", "video/mp4", inputStream);
 
@@ -211,6 +225,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_mp4_audio_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.mp4").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.mp4", "audio/mp4", inputStream);
 
@@ -219,6 +234,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_txt_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.txt").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.txt", "text/plain", inputStream);
 
@@ -227,6 +243,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_rtf_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.rtf").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.rtf", "application/rtf", inputStream);
@@ -236,6 +253,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_csv_success() throws IOException {
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/file.csv").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.csv", "text/csv", inputStream);
 
