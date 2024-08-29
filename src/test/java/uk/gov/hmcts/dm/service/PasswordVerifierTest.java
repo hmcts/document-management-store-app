@@ -41,8 +41,8 @@ class PasswordVerifierTest {
     @InjectMocks
     PasswordVerifier passwordVerifier;
 
-    @Mock
-    ToggleConfiguration toggleConfiguration;
+//    @Mock
+//    ToggleConfiguration toggleConfiguration;
 
     @BeforeEach
     void init() {
@@ -73,7 +73,7 @@ class PasswordVerifierTest {
         "filename.xltx, application/vnd.openxmlformats-officedocument.spreadsheetml.template"
     })
     void testPasswordVerifier_parameterized_success(String filename, String mimetype) {
-        when(toggleConfiguration.isPasswordcheck).thenReturn(true);
+//        when(toggleConfiguration.isPasswordcheck).thenReturn(true);
         MultipartFile file =
             new MockMultipartFile("files", filename, mimetype, "hello".getBytes(StandardCharsets.UTF_8));
 
@@ -83,7 +83,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_pdf() throws IOException {
-        when(toggleConfiguration.isPasswordcheck).thenReturn(true);
+//        when(toggleConfiguration.isPasswordcheck).thenReturn(true);
         InputStream inputStream = new ClassPathResource("files/test.pdf").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.pdf", "application/pdf", inputStream);

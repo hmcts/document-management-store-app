@@ -8,6 +8,7 @@ import org.apache.tika.sax.BodyContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
@@ -21,6 +22,9 @@ public class PasswordVerifier {
 
     private final ToggleConfiguration toggleConfiguration;
 
+    @Value("${toggle.passwordcheck}")
+    private boolean passwordcheck;
+
     @Autowired
     public PasswordVerifier(ToggleConfiguration toggleConfiguration) {
         this.toggleConfiguration = toggleConfiguration;
@@ -30,7 +34,7 @@ public class PasswordVerifier {
     private final Logger logger = LoggerFactory.getLogger(PasswordVerifier.class);
 
     public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
-        if (toggleConfiguration.isPasswordcheck()) {
+        if (passwordcheck) {
             if (!multipartFile.isEmpty()) {
                 try {
                     BodyContentHandler handler = new BodyContentHandler();
