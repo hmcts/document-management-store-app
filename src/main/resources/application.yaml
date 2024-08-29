@@ -198,6 +198,7 @@ toggle:
   overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
   chunking: ${ENABLE_CHUNKING:false}
   orphandocumentdeletion: ${ENABLE_ORPHAN_DOCUMENT_DELETION:false}
+  passwordcheck: ${ENABLE_PASSWORD_CHECK:false}
 task:
   env: ${TASK_ENV:documentTaskLock-local}
 

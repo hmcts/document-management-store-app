@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.security;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,6 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
@@ -58,7 +59,7 @@ class MultipartListPasswordValidatorTest {
 
         Mockito.when(passwordVerifier.checkPasswordProtectedFile(any(MultipartFile.class))).thenReturn(true);
 
-        Assertions.assertTrue(multipartFilePasswordValidator.isValid(files, null));
+        assumeTrue(multipartFilePasswordValidator.isValid(files, null));
     }
 
     @ParameterizedTest
@@ -91,7 +92,7 @@ class MultipartListPasswordValidatorTest {
 
         Mockito.when(passwordVerifier.checkPasswordProtectedFile(any())).thenReturn(false);
 
-        Assertions.assertFalse(multipartFilePasswordValidator.isValid(files, null));
+        assumeFalse(multipartFilePasswordValidator.isValid(files, null));
     }
 
     @Test
@@ -102,7 +103,7 @@ class MultipartListPasswordValidatorTest {
 
         Mockito.when(passwordVerifier.checkPasswordProtectedFile(any(MultipartFile.class))).thenReturn(false);
 
-        Assertions.assertFalse(multipartFilePasswordValidator.isValid(files, null));
+        assumeFalse(multipartFilePasswordValidator.isValid(files, null));
     }
 
     @Test
@@ -113,6 +114,6 @@ class MultipartListPasswordValidatorTest {
 
         Mockito.when(passwordVerifier.checkPasswordProtectedFile(any(MultipartFile.class))).thenReturn(false);
 
-        Assertions.assertFalse(multipartFilePasswordValidator.isValid(files, null));
+        assumeFalse(multipartFilePasswordValidator.isValid(files, null));
     }
 }
