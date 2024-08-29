@@ -5,20 +5,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.config.ToggleConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.*;
 
 
 class PasswordVerifierTest {
@@ -41,8 +39,8 @@ class PasswordVerifierTest {
     @InjectMocks
     PasswordVerifier passwordVerifier;
 
-//    @Mock
-//    ToggleConfiguration toggleConfiguration;
+    @Value("${toggle.passwordcheck}")
+    private boolean passwordcheck;
 
     @BeforeEach
     void init() {
@@ -73,22 +71,22 @@ class PasswordVerifierTest {
         "filename.xltx, application/vnd.openxmlformats-officedocument.spreadsheetml.template"
     })
     void testPasswordVerifier_parameterized_success(String filename, String mimetype) {
-//        when(toggleConfiguration.isPasswordcheck).thenReturn(true);
+        assumeTrue(passwordcheck);
         MultipartFile file =
             new MockMultipartFile("files", filename, mimetype, "hello".getBytes(StandardCharsets.UTF_8));
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(file));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
     }
 
 
     @Test
     void testPasswordVerifier_pdf() throws IOException {
-//        when(toggleConfiguration.isPasswordcheck).thenReturn(true);
+        assumeTrue(passwordcheck);
         InputStream inputStream = new ClassPathResource("files/test.pdf").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.pdf", "application/pdf", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -96,7 +94,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/test.docx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.docx", OPENXML_DOC, inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -104,7 +102,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/pw_protected_docx.docx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.docx", OPENXML_DOC, inputStream);
 
-        assumeFalse(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertFalse(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -112,7 +110,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/file.dotx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.dotx", OPENXML_DOTX, inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -121,7 +119,7 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.dotx", OPENXML_PRESENTATION, inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -130,7 +128,7 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.dotx", OPENXML_PRESENTATION_TEMPLATE, inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -139,7 +137,7 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.dotx", OPENXML_PRESENTATION_SLIDESHOW, inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -148,7 +146,7 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.xlsx", OPENXML_SHEET, inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -157,7 +155,7 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.xltx", OPENXML_SHEET_TEMPLATE, inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -166,7 +164,7 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.jpg", "application/jpeg", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -175,7 +173,7 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.png", "application/png", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -183,7 +181,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/file.tif").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.tif", "image/tiff", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -191,7 +189,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/file.bmp").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.bmp", "image/bmp", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -199,7 +197,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/audio_test.mp3").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.mp3", "audio/mpeg", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -207,7 +205,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/file.mp4").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.mp4", "video/mp4", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -215,7 +213,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/file.mp4").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.mp4", "audio/mp4", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -223,7 +221,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/file.txt").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.txt", "text/plain", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -232,7 +230,7 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.rtf", "application/rtf", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @Test
@@ -240,6 +238,6 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/file.csv").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.csv", "text/csv", inputStream);
 
-        assumeTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 }
