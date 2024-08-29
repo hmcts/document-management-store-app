@@ -99,7 +99,7 @@ public class StoreDocumentControllerTestConfiguration {
     @Bean
     @Primary
     public PasswordVerifier passwordVerifier() {
-        return new PasswordVerifier();
+        return new PasswordVerifier(toggleConfiguration);
     }
 
     @Bean
