@@ -98,7 +98,7 @@ def versions = [
     logging            : '6.1.6',
     pact_version       : '4.1.7',
     emTestHelper       : '2.0.8',
-    shedlock           : '5.15.0',
+    shedlock           : '5.15.1',
     hibernate          : '6.6.0.Final',
     jupiter            : '5.11.0',
     springSecurity     : '6.3.3'
@@ -106,7 +106,7 @@ def versions = [
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.27.0'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.27.1'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '2.9.2'
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.3.0-jre'
@@ -232,7 +232,7 @@ dependencyCheck {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.17.0'
+    toolVersion = '10.18.0'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
