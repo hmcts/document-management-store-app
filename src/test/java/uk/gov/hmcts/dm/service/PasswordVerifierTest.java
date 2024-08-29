@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.Mockito.when;
 
 
 class PasswordVerifierTest {
@@ -37,6 +40,9 @@ class PasswordVerifierTest {
 
     @InjectMocks
     PasswordVerifier passwordVerifier;
+
+    @Mock
+    ToggleConfiguration toggleConfiguration;
 
     @BeforeEach
     void init() {
@@ -67,6 +73,7 @@ class PasswordVerifierTest {
         "filename.xltx, application/vnd.openxmlformats-officedocument.spreadsheetml.template"
     })
     void testPasswordVerifier_parameterized_success(String filename, String mimetype) {
+        when(toggleConfiguration.isPasswordchecking).thenReturn(true);
         MultipartFile file =
             new MockMultipartFile("files", filename, mimetype, "hello".getBytes(StandardCharsets.UTF_8));
 
@@ -76,6 +83,7 @@ class PasswordVerifierTest {
 
     @Test
     void testPasswordVerifier_pdf() throws IOException {
+        when(toggleConfiguration.isPasswordchecking).thenReturn(true);
         InputStream inputStream = new ClassPathResource("files/test.pdf").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
             "file", "sample.pdf", "application/pdf", inputStream);
