@@ -53,13 +53,13 @@ public class FileSizeVerifier {
             String detected = tika.detect(tikaInputStream, metadata);
             if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(detected))
                     && fileSizeInBytes > mediaFileSizeInBytes) {
-                log.error("Warning. The uploaded Media file size {} is more than the allowed limit of: {} MB",
+                log.error("The uploaded Media file size {} is more than the allowed limit of: {} MB",
                         fileSizeInBytes,
                         mediaFileSize);
                 return false;
             } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(detected))
                     && fileSizeInBytes > nonMediaFileSizeInBytes) {
-                log.error("Warning. The uploaded Non-Media file size {} is more than the allowed limit of : {} MB",
+                log.error("The uploaded Non-Media file size {} is more than the allowed limit of : {} MB",
                     fileSizeInBytes,
                     nonMediaFileSize);
                 return false;
@@ -78,7 +78,7 @@ public class FileSizeVerifier {
         }
         long fileSize = multipartFile.getSize();
         if (fileSize <= 0) {
-            log.error("Warning. The uploaded file : {} is empty and has size: {}",
+            log.error("The uploaded file : {} is empty and has size: {}",
                 sanitiseFileName(multipartFile.getOriginalFilename()), fileSize);
             return false;
         }

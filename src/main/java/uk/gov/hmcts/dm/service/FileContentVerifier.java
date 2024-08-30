@@ -42,15 +42,14 @@ public class FileContentVerifier {
 
     public boolean verifyContentType(MultipartFile multipartFile) {
         if (multipartFile == null) {
-            log.info("Warning. MultipartFile is null. VerifyContentType failed");
+            log.error("Warning. MultipartFile is null. VerifyContentType failed");
             return false;
         }
 
         String fileNameExtension = getOriginalFileNameExtension(multipartFile);
         if (!extensionsList.stream().anyMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
-            log.info("Warning. The extension of uploaded file is not white-listed {}",
-                sanitiseFileName(fileNameExtension));
-            log.info("Disallowed Filename {}", multipartFile.getOriginalFilename());
+            log.error("The extension {} of uploaded file with name : {} is not white-listed",
+                sanitiseFileName(fileNameExtension), sanitiseFileName(multipartFile.getOriginalFilename()));
             return false;
         }
 
@@ -65,8 +64,8 @@ public class FileContentVerifier {
 
             if (!StringUtils.endsWithIgnoreCase(detected, PROTECTED)
                 && mimeTypeList.stream().noneMatch(m -> m.equalsIgnoreCase(detected))) {
-                log.error(
-                    String.format("Warning. The mime-type of uploaded file is not white-listed: %s", detected));
+                log.error("The mime-type {} of uploaded file with name : {} is not white-listed: ",
+                    detected, sanitiseFileName(multipartFile.getOriginalFilename()));
                 return false;
             }
         } catch (IOException e) {
