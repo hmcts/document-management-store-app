@@ -44,6 +44,7 @@ withPipeline(type , product, component) {
 
     env.PACT_BROKER_FULL_URL = 'https://pact-broker.platform.hmcts.net'
     env.ENABLE_SECURE_URL = true
+    env.ENABLE_PASSWORD_CHECK = true
 
     enableDbMigration('dm')
     overrideVaultEnvironments(vaultOverrides)
