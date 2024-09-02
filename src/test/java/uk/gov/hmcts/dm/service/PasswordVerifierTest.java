@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -48,6 +49,7 @@ class PasswordVerifierTest {
         passwordVerifier = new PasswordVerifier(toggleConfiguration);
     }
 
+    @DisplayName("Test successful Password Verifier with all accepted mime types")
     @ParameterizedTest
     @CsvSource({
         "filename.pdf, application/pdf",
@@ -80,9 +82,9 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
     }
 
-
+    @DisplayName("Test passwordVerifier with pdf file and expect success")
     @Test
-    void testPasswordVerifier_pdf() throws IOException {
+    void testPasswordVerifier_pdf_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
         InputStream inputStream = new ClassPathResource("files/test.pdf").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile(
@@ -91,6 +93,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with docx file and expect success")
     @Test
     void testPasswordVerifier_docx_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -100,6 +103,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with docx file and expect failure")
     @Test
     void testPasswordVerifier_docx_failure() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -109,6 +113,7 @@ class PasswordVerifierTest {
         assertFalse(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with dotx file and expect success")
     @Test
     void testPasswordVerifier_dotx_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -118,6 +123,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with pptx file and expect success")
     @Test
     void testPasswordVerifier_pptx_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -128,6 +134,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with potx file and expect success")
     @Test
     void testPasswordVerifier_potx_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -138,6 +145,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with ppsx file and expect success")
     @Test
     void testPasswordVerifier_ppsx_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -148,6 +156,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with xlsx file and expect success")
     @Test
     void testPasswordVerifier_xlsx_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -158,6 +167,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with xltx file and expect success")
     @Test
     void testPasswordVerifier_xltx_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -168,6 +178,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with jpeg file and expect success")
     @Test
     void testPasswordVerifier_jpeg_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -178,6 +189,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with png file and expect success")
     @Test
     void testPasswordVerifier_png_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -188,6 +200,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with tif file and expect success")
     @Test
     void testPasswordVerifier_tif_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -197,6 +210,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with bmp file and expect success")
     @Test
     void testPasswordVerifier_bmp_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -206,6 +220,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with mp3 file and expect success")
     @Test
     void testPasswordVerifier_mp3_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -215,6 +230,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with mp4 file and expect success")
     @Test
     void testPasswordVerifier_mp4_video_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -224,6 +240,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with mp4 audio file and expect success")
     @Test
     void testPasswordVerifier_mp4_audio_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -233,6 +250,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with txt file and expect success")
     @Test
     void testPasswordVerifier_txt_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -242,6 +260,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with rtf file and expect success")
     @Test
     void testPasswordVerifier_rtf_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
@@ -252,6 +271,7 @@ class PasswordVerifierTest {
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
+    @DisplayName("Test passwordVerifier with csv file and expect success")
     @Test
     void testPasswordVerifier_csv_success() throws IOException {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);

@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.security;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,6 +30,7 @@ class MultipartListPasswordValidatorTest {
     @InjectMocks
     private MultipartFilePasswordValidator multipartFilePasswordValidator;
 
+    @DisplayName("Test MultipartListPasswordValidator with all accepted mime times and expect success")
     @ParameterizedTest
     @CsvSource({
         "filename.pdf, application/pdf",
@@ -62,6 +64,7 @@ class MultipartListPasswordValidatorTest {
         assumeTrue(multipartFilePasswordValidator.isValid(files, null));
     }
 
+    @DisplayName("Test MultipartListPasswordValidator with all accepted mime times and expect failure")
     @ParameterizedTest
     @CsvSource({
         "filename.pdf, application/pdf",
@@ -95,6 +98,7 @@ class MultipartListPasswordValidatorTest {
         assumeFalse(multipartFilePasswordValidator.isValid(files, null));
     }
 
+    @DisplayName("Test MultipartListPasswordValidator with pdf mimetype and expect failure")
     @Test
     void testPasswordValidatorFailure_pdf() {
         List<MultipartFile> files = Stream.of(
@@ -106,6 +110,7 @@ class MultipartListPasswordValidatorTest {
         assumeFalse(multipartFilePasswordValidator.isValid(files, null));
     }
 
+    @DisplayName("Test MultipartListPasswordValidator with csv mimetype and expect failure")
     @Test
     void testPasswordValidatorFailure_csv() {
         List<MultipartFile> files = Stream.of(
