@@ -5,6 +5,7 @@ import net.thucydides.core.annotations.Pending;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.File;
@@ -13,8 +14,11 @@ import java.io.IOException;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class MultiMediaUploadIT extends BaseIT {
+
+    private ToggleConfiguration toggleConfiguration;
 
     @Rule
     public RetryRule retryRule = new RetryRule(3);
@@ -59,6 +63,8 @@ public class MultiMediaUploadIT extends BaseIT {
 
     @Test
     public void uploadWhiteListedWithPassword_then_fail() {
+        assumeTrue(toggleConfiguration.isPasswordcheck());
+
         uploadFileThrowsPasswordErrorMessage("pw_protected.pdf", "application/pdf");
         uploadFileThrowsPasswordErrorMessage("pw_protected_docx.docx", "application/msword");
     }
