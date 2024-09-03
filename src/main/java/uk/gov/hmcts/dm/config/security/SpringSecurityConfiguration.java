@@ -20,8 +20,12 @@ public class SpringSecurityConfiguration {
 
     private DmServiceAuthFilter dmServiceAuthFilter;
 
-    public SpringSecurityConfiguration(DmServiceAuthFilter dmServiceAuthFilter) {
+    private DmServiceServiceFilter dmServiceServiceFilter;
+
+    public SpringSecurityConfiguration(DmServiceAuthFilter dmServiceAuthFilter,
+                                       DmServiceServiceFilter dmServiceServiceFilter) {
         this.dmServiceAuthFilter = dmServiceAuthFilter;
+        this.dmServiceServiceFilter = dmServiceServiceFilter;
     }
 
     @Bean
@@ -33,6 +37,25 @@ public class SpringSecurityConfiguration {
         http.securityMatchers(requestMatcherConfigurer ->
                 requestMatcherConfigurer.requestMatchers("/documents", "/documents/**"))
             .addFilterBefore(dmServiceAuthFilter, AnonymousAuthenticationFilter.class)
+            .sessionManagement(httpSecuritySessionManagementConfigurer ->
+                httpSecuritySessionManagementConfigurer.sessionCreationPolicy(STATELESS))
+            .csrf(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .logout(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
+                authorizationManagerRequestMatcherRegistry.anyRequest().authenticated());
+        return http.build();
+    }
+
+    @Bean
+    protected SecurityFilterChain deleteFilterChain(HttpSecurity http) throws Exception {
+
+        http.headers(httpSecurityHeadersConfigurer ->
+            httpSecurityHeadersConfigurer.cacheControl(HeadersConfigurer.CacheControlConfig::disable));
+
+        http.securityMatchers(requestMatcherConfigurer ->
+                requestMatcherConfigurer.requestMatchers("/documents/delete/**"))
+            .addFilterBefore(dmServiceServiceFilter, AnonymousAuthenticationFilter.class)
             .sessionManagement(httpSecuritySessionManagementConfigurer ->
                 httpSecuritySessionManagementConfigurer.sessionCreationPolicy(STATELESS))
             .csrf(AbstractHttpConfigurer::disable)
