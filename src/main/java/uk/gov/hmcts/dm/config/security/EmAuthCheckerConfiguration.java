@@ -26,9 +26,17 @@ public class EmAuthCheckerConfiguration {
     @Value("#{'${authorization.s2s-names-whitelist}'.split(',')}")
     private List<String> s2sNamesWhiteList;
 
+    @Value("${authorization.delete-endpoint-whitelist}")
+    private String deleteEndpointWhitelist;
+
     @Bean
     public Function<HttpServletRequest, Collection<String>> authorizedServicesExtractor() {
         return any -> s2sNamesWhiteList;
+    }
+
+    @Bean
+    public Function<HttpServletRequest, String> deleteEndpointExtractor() {
+        return any -> deleteEndpointWhitelist;
     }
 
     @Bean
