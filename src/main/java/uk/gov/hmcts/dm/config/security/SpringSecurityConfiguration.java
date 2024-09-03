@@ -20,10 +20,10 @@ public class SpringSecurityConfiguration {
 
     private DmServiceAuthFilter dmServiceAuthFilter;
 
-    private DmServiceServiceFilter dmServiceServiceFilter;
+    private DmServiceDocDeleteFilter dmServiceServiceFilter;
 
     public SpringSecurityConfiguration(DmServiceAuthFilter dmServiceAuthFilter,
-                                       DmServiceServiceFilter dmServiceServiceFilter) {
+                                       DmServiceDocDeleteFilter dmServiceServiceFilter) {
         this.dmServiceAuthFilter = dmServiceAuthFilter;
         this.dmServiceServiceFilter = dmServiceServiceFilter;
     }

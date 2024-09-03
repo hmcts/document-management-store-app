@@ -11,19 +11,19 @@ import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DmServiceServiceFilter extends AbstractPreAuthenticatedProcessingFilter {
+public class DmServiceDocDeleteFilter extends AbstractPreAuthenticatedProcessingFilter {
 
     public static final String SERVICE_AUTHORIZATION = "ServiceAuthorization";
 
     public static final String NOT_APPLICABLE = "N/A";
 
-    private static final Logger LOG = LoggerFactory.getLogger(DmServiceServiceFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DmServiceDocDeleteFilter.class);
 
     private final List<String> authorisedServices;
 
     private final AuthTokenValidator authTokenValidator;
 
-    public DmServiceServiceFilter(AuthTokenValidator authTokenValidator, List<String> authorisedServices) {
+    public DmServiceDocDeleteFilter(AuthTokenValidator authTokenValidator, List<String> authorisedServices) {
 
         this.authTokenValidator = authTokenValidator;
         if (authorisedServices == null || authorisedServices.isEmpty()) {
