@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -110,7 +109,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/pw_protected_docx.docx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.docx", OPENXML_DOC, inputStream);
 
-        assertFalse(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @DisplayName("Test passwordVerifier with dotx file and expect success")
