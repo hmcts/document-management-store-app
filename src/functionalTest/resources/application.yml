@@ -28,6 +28,7 @@ toggle:
     includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
     metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
     secureurl: ${ENABLE_SECURE_URL:false}
+    passwordcheck: ${ENABLE_PASSWORD_CHECK:false}
 large-docs:
     metadata:
         mp4-52mb:

@@ -35,7 +35,10 @@ public class PasswordVerifier {
                 new AutoDetectParser().parse(multipartFile.getInputStream(), new BodyContentHandler(),
                     new Metadata(), new ParseContext());
 
-            } catch (TikaException | IOException | SAXException e) {
+            } catch (TikaException e) {
+                logger.error("Document with Name : {} is password protected", multipartFile.getOriginalFilename());
+                return false;
+            } catch (IOException | SAXException e) {
                 logger.error("Document with Name : {} could not be parsed", multipartFile.getOriginalFilename());
                 return false;
             }

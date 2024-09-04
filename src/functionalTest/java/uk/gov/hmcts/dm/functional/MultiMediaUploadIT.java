@@ -5,7 +5,6 @@ import net.thucydides.core.annotations.Pending;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.File;
@@ -18,10 +17,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class MultiMediaUploadIT extends BaseIT {
 
-    private ToggleConfiguration toggleConfiguration;
-
     @Rule
-    public RetryRule retryRule = new RetryRule(3);
+    public RetryRule retryRule = new RetryRule(1);
 
     @Test
     public void mv1R1AsAuthenticatedUserIUploadLargeMultiMediaFiles() throws IOException {
