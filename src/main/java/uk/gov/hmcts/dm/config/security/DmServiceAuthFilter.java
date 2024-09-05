@@ -20,16 +20,24 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
     private static final Logger LOG = LoggerFactory.getLogger(DmServiceAuthFilter.class);
 
     private final List<String> authorisedServices;
+    private final List<String> deleteAuthorisedServices;
 
     private final AuthTokenValidator authTokenValidator;
 
-    public DmServiceAuthFilter(AuthTokenValidator authTokenValidator, List<String> authorisedServices) {
+    public DmServiceAuthFilter(
+        AuthTokenValidator authTokenValidator,
+        List<String> authorisedServices,
+        List<String> deleteAuthorisedServices
+    ) {
 
         this.authTokenValidator = authTokenValidator;
         if (authorisedServices == null || authorisedServices.isEmpty()) {
             throw new IllegalArgumentException("Must have at least one service defined");
         }
         this.authorisedServices = authorisedServices.stream()
+            .map(String::toLowerCase)
+            .collect(Collectors.toList());
+        this.deleteAuthorisedServices = deleteAuthorisedServices.stream()
             .map(String::toLowerCase)
             .collect(Collectors.toList());
     }
@@ -47,16 +55,27 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
                     request.getMethod()
                 );
                 return null;
-            } else {
-                LOG.info(
-                    "service authorized {} for endpoint: {} method: {}  ",
-                    serviceName,
-                    request.getRequestURI(),
-                    request.getMethod()
-                );
-
-                return serviceName;
+            } else if (request.getRequestURI().contains("/documents/delete")) {
+                if (!deleteAuthorisedServices.contains(serviceName)) {
+                    LOG.info(
+                        "service forbidden {} for DELETE endpoint: {} method: {} ",
+                        serviceName,
+                        request.getRequestURI(),
+                        request.getMethod()
+                    );
+                    return null;
+                }
             }
+
+            LOG.info(
+                "service authorized {} for endpoint: {} method: {}  ",
+                serviceName,
+                request.getRequestURI(),
+                request.getMethod()
+            );
+
+            return serviceName;
+
         } catch (InvalidTokenException | ServiceException exception) {
             LOG.warn("Unsuccessful service authentication", exception);
             return null;

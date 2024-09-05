@@ -26,6 +26,9 @@ public class EmAuthCheckerConfiguration {
     @Value("#{'${authorization.s2s-names-whitelist}'.split(',')}")
     private List<String> s2sNamesWhiteList;
 
+    @Value("#{'${authorization.delete-endpoint-whitelist}'.split(',')}")
+    private List<String> deleteEndPointWhiteList;
+
     @Bean
     public Function<HttpServletRequest, Collection<String>> authorizedServicesExtractor() {
         return any -> s2sNamesWhiteList;
@@ -38,7 +41,8 @@ public class EmAuthCheckerConfiguration {
                                                    AuthenticationManager authenticationManager) {
 
         AuthTokenValidator authTokenValidator = new ServiceAuthTokenValidator(authorisationApi);
-        DmServiceAuthFilter dmServiceAuthFilter = new DmServiceAuthFilter(authTokenValidator, authorisedServices);
+        DmServiceAuthFilter dmServiceAuthFilter
+            = new DmServiceAuthFilter(authTokenValidator, authorisedServices, deleteEndPointWhiteList);
         dmServiceAuthFilter.setAuthenticationManager(authenticationManager);
         return dmServiceAuthFilter;
     }
