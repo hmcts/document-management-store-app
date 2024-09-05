@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
@@ -17,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -109,7 +111,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/pw_protected_docx.docx").getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.docx", OPENXML_DOC, inputStream);
 
-        assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertFalse(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
     }
 
     @DisplayName("Test passwordVerifier with dotx file and expect success")
@@ -278,5 +280,23 @@ class PasswordVerifierTest {
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", "sample.csv", "text/csv", inputStream);
 
         assertTrue(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+    }
+
+    @Test
+    @DisplayName("Test passwordVerifier to throw IOException and expect success")
+    public void testInputException() throws Exception {
+        MultipartFile file = Mockito.mock(MockMultipartFile.class);
+        when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
+        when(file.isEmpty()).thenReturn(false);
+        when(file.getInputStream()).thenThrow(new IOException("x"));
+        assertFalse(passwordVerifier.checkPasswordProtectedFile(file));
+    }
+
+    @Test
+    @DisplayName("Test passwordVerifier to check toggle turned off and expect success")
+    public void testToggleConfiguration() throws Exception {
+        when(toggleConfiguration.isPasswordcheck()).thenReturn(false);
+        MultipartFile file = Mockito.mock(MockMultipartFile.class);
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
     }
 }
