@@ -25,21 +25,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PasswordVerifierTest {
 
-    private static final String OPENXML_DOC =
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-    private static final String OPENXML_DOTX =
-        "filename.dotx, application/vnd.openxmlformats-officedocument.wordprocessingml.template";
-    private static final String OPENXML_SHEET =
-        "filename.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    private static final String OPENXML_SHEET_TEMPLATE =
-        "filename.xltx, application/vnd.openxmlformats-officedocument.spreadsheetml.template";
-    private static final String OPENXML_PRESENTATION =
-        "filename.pptx, application/vnd.openxmlformats-officedocument.presentationml.presentation";
-    private static final String OPENXML_PRESENTATION_TEMPLATE =
-        "filename.potx, application/vnd.openxmlformats-officedocument.presentationml.template";
-    private static final String OPENXML_PRESENTATION_SLIDESHOW =
-        "filename.ppsx, application/vnd.openxmlformats-officedocument.presentationml.slideshow";
-
     @Mock
     private ToggleConfiguration toggleConfiguration;
 
@@ -90,6 +75,16 @@ class PasswordVerifierTest {
     public void testToggleConfiguration() {
         when(toggleConfiguration.isPasswordcheck()).thenReturn(false);
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
+    }
+
+    @Test
+    @DisplayName("Test passwordVerifier for encrypted file and expect success")
+    public void testPasswordVerifier_encrypted_file_success() throws IOException {
+        when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
+        InputStream inputStream = new ClassPathResource("files/passwordencryptedprotected.pdf").getInputStream();
+        MockMultipartFile file = new MockMultipartFile("file", "passwordencryptedprotected.pdf",
+            "application/pdf", inputStream);
         assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
     }
 
