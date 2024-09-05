@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.security;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -18,8 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(SpringExtension.class)
@@ -30,7 +29,9 @@ class MultipartListPasswordValidatorTest {
     @InjectMocks
     private MultipartFilePasswordValidator multipartFilePasswordValidator;
 
-    @DisplayName("Test MultipartListPasswordValidator with all accepted mime times and expect success")
+    @DisplayName(value = """ 
+        Test MultipartListPasswordValidator with all accepted mime times for non-password protected files 
+            and expect success""")
     @ParameterizedTest
     @CsvSource({
         "filename.pdf, application/pdf",
@@ -61,10 +62,12 @@ class MultipartListPasswordValidatorTest {
 
         Mockito.when(passwordVerifier.checkPasswordProtectedFile(any(MultipartFile.class))).thenReturn(true);
 
-        assumeTrue(multipartFilePasswordValidator.isValid(files, null));
+        assertTrue(multipartFilePasswordValidator.isValid(files, null));
     }
 
-    @DisplayName("Test MultipartListPasswordValidator with all accepted mime times and expect failure")
+    @DisplayName(value = """ 
+        Test MultipartListPasswordValidator with all accepted mime times for password protected files 
+            and expect failure""")
     @ParameterizedTest
     @CsvSource({
         "filename.pdf, application/pdf",
@@ -95,30 +98,6 @@ class MultipartListPasswordValidatorTest {
 
         Mockito.when(passwordVerifier.checkPasswordProtectedFile(any())).thenReturn(false);
 
-        assumeFalse(multipartFilePasswordValidator.isValid(files, null));
-    }
-
-    @DisplayName("Test MultipartListPasswordValidator with pdf mimetype and expect failure")
-    @Test
-    void testPasswordValidatorFailure_pdf() {
-        List<MultipartFile> files = Stream.of(
-            new MockMultipartFile("files", "filename.pdf", "application/pdf", "hello".getBytes(StandardCharsets.UTF_8))
-        ).collect(Collectors.toList());
-
-        Mockito.when(passwordVerifier.checkPasswordProtectedFile(any(MultipartFile.class))).thenReturn(false);
-
-        assumeFalse(multipartFilePasswordValidator.isValid(files, null));
-    }
-
-    @DisplayName("Test MultipartListPasswordValidator with csv mimetype and expect failure")
-    @Test
-    void testPasswordValidatorFailure_csv() {
-        List<MultipartFile> files = Stream.of(
-            new MockMultipartFile("files", "filename.csv", "text/csv", "hello".getBytes(StandardCharsets.UTF_8))
-        ).collect(Collectors.toList());
-
-        Mockito.when(passwordVerifier.checkPasswordProtectedFile(any(MultipartFile.class))).thenReturn(false);
-
-        assumeFalse(multipartFilePasswordValidator.isValid(files, null));
+        assertFalse(multipartFilePasswordValidator.isValid(files, null));
     }
 }
