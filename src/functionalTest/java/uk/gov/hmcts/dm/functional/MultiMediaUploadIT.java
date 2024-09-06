@@ -13,11 +13,12 @@ import java.io.IOException;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class MultiMediaUploadIT extends BaseIT {
 
     @Rule
-    public RetryRule retryRule = new RetryRule(3);
+    public RetryRule retryRule = new RetryRule(1);
 
     @Test
     public void mv1R1AsAuthenticatedUserIUploadLargeMultiMediaFiles() throws IOException {
@@ -55,6 +56,14 @@ public class MultiMediaUploadIT extends BaseIT {
         uploadNotWhitelistedFileThenDownload("audio_test.ogg", "audio/vorbis");
         uploadNotWhitelistedFileThenDownload("audio_test.wma", "audio/x-ms-wma");
 
+    }
+
+    @Test
+    public void uploadWhiteListedWithPassword_then_fail() {
+        assumeTrue(toggleConfiguration.isPasswordcheck());
+
+        uploadFileThrowsPasswordErrorMessage("pw_protected.pdf", "application/pdf");
+        uploadFileThrowsPasswordErrorMessage("pw_protected_docx.docx", "application/msword");
     }
 
     private boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType)
@@ -172,4 +181,19 @@ public class MultiMediaUploadIT extends BaseIT {
             .when()
             .post("/documents");
     }
+
+    private void uploadFileThrowsPasswordErrorMessage(String filename, String mimeType) {
+        Response response = givenRequest(getCitizen())
+            .multiPart("files", file(filename), mimeType)
+            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
+            .multiPart("roles", "citizen")
+            .multiPart("roles", "caseworker")
+            .expect().log().all()
+            .statusCode(422)
+            .body("error", equalTo("Your upload file is password protected."))
+            .when()
+            .post("/documents");
+    }
+
+
 }

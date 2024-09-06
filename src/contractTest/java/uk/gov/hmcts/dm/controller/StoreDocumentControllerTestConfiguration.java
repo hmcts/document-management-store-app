@@ -14,6 +14,7 @@ import uk.gov.hmcts.dm.repository.RepositoryFinder;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.security.MultipartFileListWhiteListValidator;
+import uk.gov.hmcts.dm.security.MultipartFilePasswordValidator;
 import uk.gov.hmcts.dm.security.MultipartFileSizeValidator;
 import uk.gov.hmcts.dm.service.AuditEntryService;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
@@ -22,6 +23,7 @@ import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
 import uk.gov.hmcts.dm.service.FileSizeVerifier;
+import uk.gov.hmcts.dm.service.PasswordVerifier;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
@@ -92,6 +94,18 @@ public class StoreDocumentControllerTestConfiguration {
     @Primary
     public MultipartFileListWhiteListValidator multipartFileListWhiteListValidator() {
         return  new MultipartFileListWhiteListValidator(fileContentVerifier());
+    }
+
+    @Bean
+    @Primary
+    public PasswordVerifier passwordVerifier() {
+        return new PasswordVerifier(toggleConfiguration);
+    }
+
+    @Bean
+    @Primary
+    public MultipartFilePasswordValidator multipartFilePasswordValidator() {
+        return new MultipartFilePasswordValidator(passwordVerifier());
     }
 
     @MockBean

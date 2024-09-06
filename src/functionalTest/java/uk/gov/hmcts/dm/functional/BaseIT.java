@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import uk.gov.hmcts.dm.FunctionalTestContextConfiguration;
 import uk.gov.hmcts.dm.StorageTestConfiguration;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.functional.DocumentMetadataPropertiesConfig.DocumentMetadata;
 
 import java.io.File;
@@ -34,7 +35,8 @@ import java.util.Map;
 
 @NotThreadSafe
 @RunWith(SpringIntegrationSerenityRunner.class)
-@SpringBootTest(classes = {FunctionalTestContextConfiguration.class, StorageTestConfiguration.class})
+@SpringBootTest(classes = {FunctionalTestContextConfiguration.class, StorageTestConfiguration.class,
+    ToggleConfiguration.class})
 @WithTags(@WithTag("testType:Functional"))
 public abstract class BaseIT {
 
@@ -42,6 +44,8 @@ public abstract class BaseIT {
     private AuthTokenProvider authTokenProvider;
     @Autowired
     private DocumentMetadataPropertiesConfig metadataPropertiesConfig;
+    @Autowired
+    ToggleConfiguration toggleConfiguration;
     private FileUtils fileUtils = new FileUtils();
     @Value("${base-urls.dm-store}")
     private String dmStoreBaseUri;
