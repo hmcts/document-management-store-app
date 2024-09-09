@@ -31,6 +31,7 @@ public class PasswordVerifier {
 
     public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
         if (toggleConfiguration.isPasswordcheck() && !multipartFile.isEmpty()) {
+            logger.info("Pwd protected file restriction validation is enabled");
             try {
                 new AutoDetectParser().parse(multipartFile.getInputStream(), new BodyContentHandler(),
                     new Metadata(), new ParseContext());
