@@ -7,4 +7,3 @@ java:
     TASK_ENV: documentTaskLock-aat-staging
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 1000
     DOCUMENT_DELETE_TASK_CRON: 0 1 * * * *
-    DELETE_ENDPOINT_WHITELIST: ccd_case_disposer,em_gw
