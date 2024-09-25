@@ -191,6 +191,8 @@ dependencies {
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.4', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+        exclude group: 'ch.qos.logback', module: 'logback-core'
     }
 
     testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.20.1'
