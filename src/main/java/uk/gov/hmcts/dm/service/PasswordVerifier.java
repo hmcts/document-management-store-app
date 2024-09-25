@@ -40,7 +40,7 @@ public class PasswordVerifier {
                 logger.error("Document with Name : {} is password protected", multipartFile.getOriginalFilename());
                 return false;
             } catch (IOException | SAXException e) {
-                logger.error("Document with Name : {} could not be parsed", multipartFile.getOriginalFilename());
+                logger.info("Document with Name : {} could not be parsed", multipartFile.getOriginalFilename());
                 return true;
             }
         }
