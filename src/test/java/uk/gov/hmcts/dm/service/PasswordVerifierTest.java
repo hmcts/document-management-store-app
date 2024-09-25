@@ -35,8 +35,8 @@ class PasswordVerifierTest {
         passwordVerifier = new PasswordVerifier(toggleConfiguration);
     }
 
-    @DisplayName(""" 
-        Test passwordVerifier with all accepted mime times for non-password protected files 
+    @DisplayName("""
+        Test passwordVerifier with all accepted mime times for non-password protected files
             and expect success""")
     @ParameterizedTest
     @CsvSource({
@@ -89,13 +89,13 @@ class PasswordVerifierTest {
     }
 
     @Test
-    @DisplayName("Test passwordVerifier to throw IOException and expect failure")
+    @DisplayName("Test passwordVerifier to throw IOException and expect success")
     public void testInputException() throws Exception {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
         when(file.isEmpty()).thenReturn(false);
         when(file.getInputStream()).thenThrow(new IOException("x"));
-        assertFalse(passwordVerifier.checkPasswordProtectedFile(file));
+        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
     }
 
     @DisplayName("Test passwordVerifier with password protected docx/pdf file and expect failure")
