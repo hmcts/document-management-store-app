@@ -9,7 +9,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.63'
     id 'io.spring.dependency-management' version '1.1.6'
-    id 'org.springframework.boot' version '3.3.3'
+    id 'org.springframework.boot' version '3.3.4'
     id 'com.github.ben-manes.versions' version '0.51.0'
     id 'org.sonarqube' version '5.1.0.4882'
     id 'jacoco'
@@ -188,9 +188,15 @@ dependencies {
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: versions.jupiter
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
 
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.8'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.8'
+
+
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.4', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
+        exclude group: 'ch.qos.logback', module: 'logback-classic'
+        exclude group: 'ch.qos.logback', module: 'logback-core'
     }
 
     testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.20.1'
