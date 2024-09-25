@@ -39,7 +39,7 @@ public class PasswordVerifier {
             } catch (TikaException e) {
                 logger.error("Document with Name : {} is password protected", multipartFile.getOriginalFilename());
                 return false;
-62            } catch (IOException | SAXException e) {
+            } catch (IOException | SAXException e) {
                 logger.error("Document with Name : {} could not be parsed", multipartFile.getOriginalFilename());
                 return true;
             }
