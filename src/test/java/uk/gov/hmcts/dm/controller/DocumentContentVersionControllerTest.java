@@ -130,12 +130,12 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionBinaryThatStoredDocumentWasDeleted() throws Exception {
-        DocumentContentVersion documentContentVersionLocal = new DocumentContentVersion();
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
         documentContentVersion.setStoredDocument(new StoredDocument());
         documentContentVersion.getStoredDocument().setDeleted(true);
 
         when(this.documentContentVersionService.findById(id))
-            .thenReturn(Optional.of(documentContentVersionLocal));
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -168,13 +168,13 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionBinaryThatIsDeleted() throws Exception {
-        DocumentContentVersion documentContentVersionLocal = mock(DocumentContentVersion.class);
-        StoredDocument storedDocumentLocal = mock(StoredDocument.class);
-        when(documentContentVersionLocal.getStoredDocument()).thenReturn(storedDocument);
-        when(storedDocumentLocal.isDeleted()).thenReturn(true);
+        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
+        StoredDocument storedDocument = mock(StoredDocument.class);
+        when(documentContentVersion.getStoredDocument()).thenReturn(storedDocument);
+        when(storedDocument.isDeleted()).thenReturn(true);
 
         when(this.documentContentVersionService.findById(id))
-            .thenReturn(Optional.of(documentContentVersionLocal));
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
