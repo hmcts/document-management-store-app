@@ -152,7 +152,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetBinary() throws Exception {
-        DocumentContentVersion documentContentVersionLocal =
+        DocumentContentVersion documentContentVersion =
             new DocumentContentVersion(
                 new StoredDocument(),
                 new MockMultipartFile("files",
@@ -162,10 +162,10 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
             "user"
             );
 
-        documentContentVersionLocal.setCreatedBy("userId");
+        documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
-            Optional.of(documentContentVersionLocal)
+            Optional.of(documentContentVersion)
         );
 
         restActions
@@ -176,7 +176,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetBinaryException() throws Exception {
-        DocumentContentVersion documentContentVersionLocal = new DocumentContentVersion(new StoredDocument(),
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
             new MockMultipartFile("files",
                 "filename.txt",
                 "text/plain",
@@ -184,10 +184,10 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
                     StandardCharsets.UTF_8)),
             "user");
 
-        documentContentVersionLocal.setCreatedBy("userId");
+        documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
-            Optional.of(documentContentVersionLocal)
+            Optional.of(documentContentVersion)
         );
 
         doThrow(UncheckedIOException.class).when(auditedDocumentContentVersionOperationsService)

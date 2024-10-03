@@ -130,12 +130,12 @@ public class BlobStorageDeleteServiceTest {
     }
 
     private StoredDocument createStoredDocument(UUID documentContentVersionUuid) {
-        StoredDocument storedDocumentLocal = new StoredDocument();
-        storedDocumentLocal.setId(randomUUID());
-        storedDocumentLocal.setDocumentContentVersions(
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(randomUUID());
+        storedDocument.setDocumentContentVersions(
             singletonList(buildDocumentContentVersion(documentContentVersionUuid,
-            storedDocumentLocal)));
-        return storedDocumentLocal;
+            storedDocument)));
+        return storedDocument;
     }
 
     private DocumentContentVersion buildDocumentContentVersion(
