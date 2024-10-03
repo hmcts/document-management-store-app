@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -85,7 +84,7 @@ public class ExceptionStatusCodeAndMessageResolverTest {
             resolver.resolveStatusCodeAndMessage(new RuntimeException("Test"),
                 "x",
                 100,
-                Stream.of(fieldError1, fieldError2).collect(Collectors.toList()));
+                Stream.of(fieldError1, fieldError2).toList());
 
 
         assertEquals("The validation message AND The validation message 2", errorStatusCodeAndMessage.getMessage());

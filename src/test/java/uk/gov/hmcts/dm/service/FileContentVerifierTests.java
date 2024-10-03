@@ -65,7 +65,7 @@ public class FileContentVerifierTests {
     }
 
     @Test
-    public void testNull() throws Exception {
+    public void testNull() {
         assertFalse(fileContentVerifier.verifyContentType(null));
     }
 
@@ -105,7 +105,7 @@ public class FileContentVerifierTests {
     }
 
     @Test
-    public void testEmptyFileNameException() throws Exception {
+    public void testEmptyFileNameException() {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         Mockito.when(file.getContentType()).thenReturn("application/pdf");
         Mockito.when(file.getOriginalFilename()).thenReturn(null);

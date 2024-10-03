@@ -11,7 +11,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditEntryService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RunWith(SpringRunner.class)
@@ -62,7 +61,7 @@ public class AuditedStoredDocumentBatchOperationsServiceTests {
         StoredDocument storedDocument2 = new StoredDocument();
         storedDocument2.setHardDeleted(false);
         Mockito.when(storedDocumentService.findAllExpiredStoredDocuments()).thenReturn(
-            Stream.of(storedDocument1, storedDocument2).collect(Collectors.toList())
+            Stream.of(storedDocument1, storedDocument2).toList()
         );
         service.hardDeleteAllExpiredStoredDocuments();
         Mockito.verify(storedDocumentService, Mockito.times(1)).findAllExpiredStoredDocuments();

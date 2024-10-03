@@ -16,7 +16,6 @@ import uk.gov.hmcts.dm.service.Constants;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -43,7 +42,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .documentContentVersions(
             Stream.of(documentContentVersion)
-                .collect(Collectors.toList())
+                .toList()
         ).build();
 
     @Test
@@ -131,12 +130,12 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionBinaryThatStoredDocumentWasDeleted() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        DocumentContentVersion documentContentVersionLocal = new DocumentContentVersion();
         documentContentVersion.setStoredDocument(new StoredDocument());
         documentContentVersion.getStoredDocument().setDeleted(true);
 
         when(this.documentContentVersionService.findById(id))
-            .thenReturn(Optional.of(documentContentVersion));
+            .thenReturn(Optional.of(documentContentVersionLocal));
 
         restActions
             .withAuthorizedUser("userId")
@@ -169,13 +168,13 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionBinaryThatIsDeleted() throws Exception {
-        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
-        StoredDocument storedDocument = mock(StoredDocument.class);
-        when(documentContentVersion.getStoredDocument()).thenReturn(storedDocument);
-        when(storedDocument.isDeleted()).thenReturn(true);
+        DocumentContentVersion documentContentVersionLocal = mock(DocumentContentVersion.class);
+        StoredDocument storedDocumentLocal = mock(StoredDocument.class);
+        when(documentContentVersionLocal.getStoredDocument()).thenReturn(storedDocument);
+        when(storedDocumentLocal.isDeleted()).thenReturn(true);
 
         when(this.documentContentVersionService.findById(id))
-            .thenReturn(Optional.of(documentContentVersion));
+            .thenReturn(Optional.of(documentContentVersionLocal));
 
         restActions
             .withAuthorizedUser("userId")

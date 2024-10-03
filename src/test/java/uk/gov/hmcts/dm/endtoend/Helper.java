@@ -2,12 +2,12 @@ package uk.gov.hmcts.dm.endtoend;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 
 import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
 import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ROLES_HEADER;
@@ -53,7 +53,7 @@ public class Helper {
         final HttpHeaders headers = new HttpHeaders();
         if ("userCaseWorker".equals(user)) {
             headers.putAll(
-                ImmutableMap.of(
+                Map.of(
                     "ServiceAuthorization", Collections.singletonList("sscs"),
                     USER_ID_HEADER, Collections.singletonList(user),
                     USER_ROLES_HEADER, Collections.singletonList("caseworker-probate")
@@ -61,7 +61,7 @@ public class Helper {
             );
         } else {
             headers.putAll(
-                ImmutableMap.of(
+                Map.of(
                     "ServiceAuthorization", Collections.singletonList("sscs"),
                     USER_ID_HEADER, Collections.singletonList(user),
                     USER_ROLES_HEADER, Collections.singletonList("citizen")

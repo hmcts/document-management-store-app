@@ -13,7 +13,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class DmBuildInfoTest {
 
     @Test
-    public void shouldAddBuildInfoToBuilder() throws Exception {
+    public void shouldAddBuildInfoToBuilder() {
         DmBuildInfo dmBuildInfo = new DmBuildInfo("name","env","project");
 
         Info.Builder builder = new Info.Builder();

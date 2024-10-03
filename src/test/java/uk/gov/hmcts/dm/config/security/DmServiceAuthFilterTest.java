@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.config.security;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.reform.authorisation.exceptions.InvalidTokenException;
@@ -8,7 +9,6 @@ import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -22,15 +22,15 @@ class DmServiceAuthFilterTest {
 
     private static final String SSCS = "sscs";
 
-    private List<String> authorisedServices = List.of(SSCS, CCD_CASE_DISPOSER, EM_GW);
+    private final List<String> authorisedServices = List.of(SSCS, CCD_CASE_DISPOSER, EM_GW);
 
-    private List<String> deleteAuthorisedServices = List.of(CCD_CASE_DISPOSER);
+    private final List<String> deleteAuthorisedServices = List.of(CCD_CASE_DISPOSER);
 
-    private HttpServletRequest request = mock(HttpServletRequest.class);
+    private final HttpServletRequest request = mock(HttpServletRequest.class);
 
-    private AuthTokenValidator authTokenValidator = mock(AuthTokenValidator.class);
+    private final AuthTokenValidator authTokenValidator = mock(AuthTokenValidator.class);
 
-    private DmServiceAuthFilter dmServiceAuthFilter
+    private final DmServiceAuthFilter dmServiceAuthFilter
         = new DmServiceAuthFilter(authTokenValidator, authorisedServices, deleteAuthorisedServices);
 
     @Test
@@ -47,33 +47,33 @@ class DmServiceAuthFilterTest {
 
     @Test
     @DisplayName("Should return null when service is not authorized")
-    void shouldReturnNullWhenNotAuthorized() throws Exception {
+    void shouldReturnNullWhenNotAuthorized() {
         when(request.getHeader("ServiceAuthorization")).thenReturn("Bearer validToken");
         when(authTokenValidator.getServiceName("Bearer validToken")).thenReturn("serviceC");
         when(request.getRequestURI()).thenReturn("/documents/get");
         when(request.getMethod()).thenReturn("GET");
 
         Object principal = dmServiceAuthFilter.getPreAuthenticatedPrincipal(request);
-        assertNull(principal);
+        Assertions.assertNull(principal);
         verify(authTokenValidator).getServiceName("Bearer validToken");
     }
 
     @Test
     @DisplayName("SSCS calling DELETE endpoint should return null")
-    void shouldReturnNullWhenNotAuthorizedForDelete() throws Exception {
+    void shouldReturnNullWhenNotAuthorizedForDelete() {
         when(request.getHeader("ServiceAuthorization")).thenReturn("Bearer validToken");
         when(authTokenValidator.getServiceName("Bearer validToken")).thenReturn(SSCS);
         when(request.getRequestURI()).thenReturn("/documents/delete");
 
         Object principal = dmServiceAuthFilter.getPreAuthenticatedPrincipal(request);
 
-        assertNull(principal);
+        Assertions.assertNull(principal);
         verify(authTokenValidator).getServiceName("Bearer validToken");
     }
 
     @Test
     @DisplayName("Ccd CaseDisposer calling DELETE endpoint")
-    void shouldLogServiceAuthorizationForDelete() throws Exception {
+    void shouldLogServiceAuthorizationForDelete() {
         when(request.getHeader("ServiceAuthorization")).thenReturn("Bearer validToken");
         when(authTokenValidator.getServiceName("Bearer validToken")).thenReturn(CCD_CASE_DISPOSER);
         when(request.getRequestURI()).thenReturn("/documents/delete");
@@ -90,19 +90,19 @@ class DmServiceAuthFilterTest {
 
         Object principal = dmServiceAuthFilter.getPreAuthenticatedPrincipal(request);
 
-        assertNull(principal);
+        Assertions.assertNull(principal);
     }
 
     @Test
     @DisplayName("Should handle invalid token")
-    void shouldHandleInvalidToken() throws Exception {
+    void shouldHandleInvalidToken() {
         when(request.getHeader("ServiceAuthorization")).thenReturn("Bearer invalidToken");
         when(authTokenValidator.getServiceName("Bearer invalidToken"))
             .thenThrow(new InvalidTokenException("Invalid Token"));
 
         Object principal = dmServiceAuthFilter.getPreAuthenticatedPrincipal(request);
 
-        assertNull(principal);
+        Assertions.assertNull(principal);
         verify(authTokenValidator).getServiceName("Bearer invalidToken");
     }
 

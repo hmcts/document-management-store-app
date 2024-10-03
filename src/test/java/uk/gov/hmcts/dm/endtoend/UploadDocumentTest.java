@@ -5,7 +5,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.dm.security.Classifications;
 
-//import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;

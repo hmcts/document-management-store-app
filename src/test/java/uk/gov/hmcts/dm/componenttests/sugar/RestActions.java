@@ -94,6 +94,7 @@ public class RestActions {
 
     }
 
+    //TODO: decide what to do with roles
     public ResultActions postDocuments(String urlTemplate, List<MultipartFile> files,
                                        Classifications classification, List<String> roles) {
 

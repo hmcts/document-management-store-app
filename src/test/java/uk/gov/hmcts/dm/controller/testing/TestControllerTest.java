@@ -42,7 +42,7 @@ public class TestControllerTest {
     TestController testController;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
@@ -51,14 +51,14 @@ public class TestControllerTest {
     }
 
     @Test
-    public void getTrue() throws Exception {
+    public void getTrue() {
         BDDMockito.given(blobStorageReadService.doesBinaryExist(Mockito.any())).willReturn(true);
         ResponseEntity<Boolean> responseEntity = testController.get(UUID.randomUUID());
         assertTrue(responseEntity.getBody().booleanValue());
     }
 
     @Test
-    public void getFalse() throws Exception {
+    public void getFalse() {
         BDDMockito.given(blobStorageReadService.doesBinaryExist(Mockito.any())).willReturn(false);
         ResponseEntity<Boolean> responseEntity = testController.get(UUID.randomUUID());
         assertFalse(responseEntity.getBody().booleanValue());

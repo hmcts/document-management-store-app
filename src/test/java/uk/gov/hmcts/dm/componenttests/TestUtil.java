@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
@@ -75,20 +74,24 @@ public class TestUtil {
     public static final StoredDocument STORED_DOCUMENT = StoredDocument.builder().id(RANDOM_UUID)
         .documentContentVersions(
             Stream.of(DOCUMENT_CONTENT_VERSION)
-                .collect(Collectors.toList())
+                .toList()
         ).build();
 
     public static final StoredDocument DELETED_DOCUMENT = StoredDocument.builder()
         .id(RANDOM_UUID)
         .deleted(true)
-        .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList()))
+        .documentContentVersions(
+            Stream.of(DOCUMENT_CONTENT_VERSION)
+                .toList())
         .build();
 
     public static final StoredDocument HARD_DELETED_DOCUMENT = StoredDocument.builder()
         .id(RANDOM_UUID)
         .deleted(true)
         .hardDeleted(true)
-        .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList()))
+        .documentContentVersions(
+            Stream.of(DOCUMENT_CONTENT_VERSION)
+                .toList())
         .build();
 
     private TestUtil() {

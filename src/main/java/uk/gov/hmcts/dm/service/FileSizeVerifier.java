@@ -78,8 +78,9 @@ public class FileSizeVerifier {
         }
         long fileSize = multipartFile.getSize();
         if (fileSize <= 0) {
+            String filename = sanitiseFileName(multipartFile.getOriginalFilename());
             log.error("The uploaded file : {} is empty and has size: {}",
-                sanitiseFileName(multipartFile.getOriginalFilename()), fileSize);
+                filename, fileSize);
             return false;
         }
         return true;

@@ -55,12 +55,11 @@ public class BlobStorageReadServiceTest {
     @Mock
     private ToggleConfiguration toggleConfiguration;
 
-    private OutputStream outputStream;
 
     @Before
 
-    public void setUp() throws IOException {
-        outputStream = mock(OutputStream.class);
+    public void setUp() {
+        OutputStream outputStream = mock(OutputStream.class);
 
         when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.getBlockBlobClient()).thenReturn(blockBlobClient);
