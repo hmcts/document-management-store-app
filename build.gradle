@@ -100,7 +100,7 @@ def versions = [
     emTestHelper       : '2.0.9',
     shedlock           : '5.16.0',
     hibernate          : '6.6.1.Final',
-    jupiter            : '5.11.1',
+    jupiter            : '5.11.2',
     springSecurity     : '6.3.3'
 ]
 
@@ -216,7 +216,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.junit.platform', version: '1.11.1') {
+        dependencySet(group: 'org.junit.platform', version: '1.11.2') {
             entry 'junit-platform-commons'
         }
     }
