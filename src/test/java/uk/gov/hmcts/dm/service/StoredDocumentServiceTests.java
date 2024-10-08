@@ -1,7 +1,5 @@
 package uk.gov.hmcts.dm.service;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import org.assertj.core.util.Maps;
 import org.junit.Assert;
 import org.junit.Before;
@@ -131,9 +129,9 @@ public class StoredDocumentServiceTests {
     public void testSaveItemsWithCommand() {
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
-        uploadDocumentsCommand.setRoles(ImmutableList.of("a", "b"));
+        uploadDocumentsCommand.setRoles(List.of("a", "b"));
         uploadDocumentsCommand.setClassification(PRIVATE);
-        uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
+        uploadDocumentsCommand.setMetadata(Map.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
         when(storedDocumentRepository.save(any(StoredDocument.class))).thenReturn(new StoredDocument());
@@ -158,9 +156,9 @@ public class StoredDocumentServiceTests {
 
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
-        uploadDocumentsCommand.setRoles(ImmutableList.of("a", "b"));
+        uploadDocumentsCommand.setRoles(List.of("a", "b"));
         uploadDocumentsCommand.setClassification(PRIVATE);
-        uploadDocumentsCommand.setMetadata(ImmutableMap.of("prop1", "value1"));
+        uploadDocumentsCommand.setMetadata(Map.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
         List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand);
@@ -171,7 +169,7 @@ public class StoredDocumentServiceTests {
         assertEquals(1, documents.size());
         assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
         assertEquals(PRIVATE, storedDocument.getClassification());
-        assertEquals(storedDocument.getMetadata(), ImmutableMap.of("prop1", "value1"));
+        assertEquals(storedDocument.getMetadata(), Map.of("prop1", "value1"));
         Assert.assertNotNull(storedDocument.getTtl());
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
         assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
@@ -223,7 +221,7 @@ public class StoredDocumentServiceTests {
     @Test
     public void testHardDeleteAzureBlobEnabled() {
         StoredDocument storedDocumentWithContent = StoredDocument.builder()
-            .documentContentVersions(ImmutableList.of(DocumentContentVersion.builder()
+            .documentContentVersions(List.of(DocumentContentVersion.builder()
                 .build()))
             .build();
 

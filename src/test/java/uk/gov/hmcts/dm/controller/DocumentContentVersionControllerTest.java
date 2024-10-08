@@ -16,7 +16,6 @@ import uk.gov.hmcts.dm.service.Constants;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -43,7 +42,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .documentContentVersions(
             Stream.of(documentContentVersion)
-                .collect(Collectors.toList())
+                .toList()
         ).build();
 
     @Test

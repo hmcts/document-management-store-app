@@ -83,7 +83,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
         documentsCommand.setClassification(Classifications.PRIVATE);
         documentsCommand.setRoles(List.of("role1"));
 
-        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
+        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).toList();
         when(storedDocumentService.saveItems(documentsCommand)).thenReturn(storedDocuments);
         auditedStoredDocumentOperationsService.createStoredDocuments(documentsCommand);
         verify(storedDocumentService, times(1)).saveItems(documentsCommand);
@@ -195,7 +195,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
 
     @Test
     public void testDeleteCaseStoredDocumentsShouldMarkAllDocumentsForDeletion() {
-        final List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
+        final List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).toList();
 
         final CaseDocumentsDeletionResults caseDocumentsDeletionResults =
             auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocuments);

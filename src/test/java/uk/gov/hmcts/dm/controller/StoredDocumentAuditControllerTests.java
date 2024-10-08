@@ -6,7 +6,6 @@ import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.when;
@@ -23,7 +22,7 @@ public class StoredDocumentAuditControllerTests extends ComponentTestBase {
         entry.setStoredDocument(TestUtil.STORED_DOCUMENT);
 
         when(this.auditEntryService.findStoredDocumentAudits(TestUtil.STORED_DOCUMENT))
-                .thenReturn(Stream.of(entry).collect(Collectors.toList()));
+                .thenReturn(Stream.of(entry).toList());
 
         restActions
                 .withAuthorizedUser("userId")

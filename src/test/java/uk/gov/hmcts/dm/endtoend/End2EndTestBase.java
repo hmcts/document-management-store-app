@@ -105,7 +105,7 @@ public abstract class End2EndTestBase {
                                           any(MultipartFile.class));
     }
 
-    private void uploadDocument(final InvocationOnMock invocation) throws IOException {
+    private void uploadDocument(final InvocationOnMock invocation) {
         final DocumentContentVersion dcv = invocation.getArgument(1);
         dcv.setContentUri("uri");
         dcv.setContentChecksum("checksum");

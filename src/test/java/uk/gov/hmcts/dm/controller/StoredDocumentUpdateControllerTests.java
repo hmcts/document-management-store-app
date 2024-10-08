@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.controller;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
@@ -9,6 +8,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.Mockito.any;
@@ -32,7 +32,7 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .patch("/documents/" + id, ImmutableMap.of("ttl", new Date()))
+            .patch("/documents/" + id, Map.of("ttl", new Date()))
             .andExpect(status().isOk());
 
     }
@@ -46,12 +46,12 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .patch("/documents", ImmutableMap.of(
+            .patch("/documents", Map.of(
                 "ttl", ttl,
                 "documents", Lists.newArrayList(
-                    ImmutableMap.of(
+                    Map.of(
                         "documentId", id,
-                        "metadata", ImmutableMap.of("key", "value")
+                        "metadata", Map.of("key", "value")
                     )
                 )
             ))
@@ -70,17 +70,15 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .patch("/documents", ImmutableMap.of(
+            .patch("/documents", Map.of(
                 "ttl", ttl,
                 "documents", Lists.newArrayList(
-                    ImmutableMap.of(
+                    Map.of(
                         "documentId", UUID.randomUUID(),
-                        "metadata", ImmutableMap.of("key2", "value2")
+                        "metadata", Map.of("key2", "value2")
                     )
                 )
             ))
             .andExpect(status().isNotFound());
-
     }
-
 }

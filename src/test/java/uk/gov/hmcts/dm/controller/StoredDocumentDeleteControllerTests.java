@@ -8,7 +8,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.when;
@@ -19,7 +18,7 @@ public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
     @Test
     public void testValidDeleteCaseDocumentsCommand() throws Exception {
         DeleteCaseDocumentsCommand deleteCaseDocumentsCommand = new DeleteCaseDocumentsCommand("0123456789123456");
-        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).collect(Collectors.toList());
+        List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).toList();
 
         CaseDocumentsDeletionResults caseDocumentsDeletionResults = new CaseDocumentsDeletionResults();
         caseDocumentsDeletionResults.setCaseDocumentsFound(storedDocuments.size());

@@ -16,7 +16,6 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.any;
@@ -66,7 +65,7 @@ public class AuditEntryServiceTests {
     public void testFindStoredDocumentAudits() {
         when(storedDocumentAuditEntryRepository
                 .findByStoredDocumentOrderByRecordedDateTimeAsc(TestUtil.STORED_DOCUMENT))
-                .thenReturn(Stream.of(new StoredDocumentAuditEntry()).collect(Collectors.toList()));
+                .thenReturn(Stream.of(new StoredDocumentAuditEntry()).toList());
         List<StoredDocumentAuditEntry> entries = auditEntryService.findStoredDocumentAudits(TestUtil.STORED_DOCUMENT);
         Assert.assertEquals(1, entries.size());
     }

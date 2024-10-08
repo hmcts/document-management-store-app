@@ -9,7 +9,6 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,7 +35,7 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
         storedDocument = StoredDocument.builder().id(id)
             .documentContentVersions(
                 Stream.of(documentContentVersion)
-                    .collect(Collectors.toList())
+                    .toList()
             ).build();
     }
 

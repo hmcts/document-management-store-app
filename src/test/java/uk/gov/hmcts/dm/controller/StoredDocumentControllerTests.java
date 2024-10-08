@@ -48,7 +48,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     private final StoredDocument storedDocument = StoredDocument.builder().id(id)
         .documentContentVersions(
             Stream.of(documentContentVersion)
-                .collect(Collectors.toList())
+                .toList()
         ).build();
 
     @Test
@@ -113,7 +113,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         List<StoredDocument> storedDocuments = files.stream()
             .map(f -> new StoredDocument())
-            .collect(Collectors.toList());
+            .toList();
 
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(files);
@@ -137,7 +137,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         List<StoredDocument> storedDocuments = files.stream()
             .map(f -> new StoredDocument())
-            .collect(Collectors.toList());
+            .toList();
 
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(files);
