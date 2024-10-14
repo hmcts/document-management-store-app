@@ -95,7 +95,7 @@ public class RestActions {
     }
 
     public ResultActions postDocuments(String urlTemplate, List<MultipartFile> files,
-                                       Classifications classification, List<String> roles) {
+                                       Classifications classification) {
 
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(urlTemplate);
 
