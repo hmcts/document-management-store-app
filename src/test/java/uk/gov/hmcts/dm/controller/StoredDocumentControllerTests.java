@@ -202,18 +202,10 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetBinaryClientAbortException() throws Exception {
-        DocumentContentVersion documentContentVersionLocal = new DocumentContentVersion(new StoredDocument(),
-            new MockMultipartFile("files",
-                "filename.txt",
-                "text/plain",
-                "hello".getBytes(
-                    StandardCharsets.UTF_8)),
-            "user");
-
-        documentContentVersionLocal.setCreatedBy("userId");
+        documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
-            Optional.of(documentContentVersionLocal)
+            Optional.of(documentContentVersion)
         );
 
         doThrow(ClientAbortException.class).when(auditedDocumentContentVersionOperationsService)

@@ -40,8 +40,8 @@ public class BlobStorageDeleteServiceTest {
     @Mock
     private BlockBlobClient blob;
 
-    final StoredDocument storedDocument = createStoredDocument();
-    final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
+    StoredDocument storedDocument;
+    DocumentContentVersion documentContentVersion;
 
     private Response mockResponse = mock(Response.class);
 
@@ -50,6 +50,9 @@ public class BlobStorageDeleteServiceTest {
     public void setUp() {
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
+
+        storedDocument = createStoredDocument();
+        documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
 
         documentContentVersion.setContentChecksum("");
         documentContentVersion.setContentUri("");
@@ -130,12 +133,12 @@ public class BlobStorageDeleteServiceTest {
     }
 
     private StoredDocument createStoredDocument(UUID documentContentVersionUuid) {
-        StoredDocument storedDocumentLocal = new StoredDocument();
-        storedDocumentLocal.setId(randomUUID());
-        storedDocumentLocal.setDocumentContentVersions(
+        storedDocument = new StoredDocument();
+        storedDocument.setId(randomUUID());
+        storedDocument.setDocumentContentVersions(
             singletonList(buildDocumentContentVersion(documentContentVersionUuid,
-                storedDocumentLocal)));
-        return storedDocumentLocal;
+                storedDocument)));
+        return storedDocument;
     }
 
     private DocumentContentVersion buildDocumentContentVersion(

@@ -19,7 +19,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -130,12 +129,10 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionBinaryThatStoredDocumentWasDeleted() throws Exception {
-        DocumentContentVersion documentContentVersionLocal = new DocumentContentVersion();
-        documentContentVersionLocal.setStoredDocument(new StoredDocument());
-        documentContentVersionLocal.getStoredDocument().setDeleted(true);
+        documentContentVersion.getStoredDocument().setDeleted(true);
 
         when(this.documentContentVersionService.findById(id))
-            .thenReturn(Optional.of(documentContentVersionLocal));
+            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")
@@ -159,22 +156,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     public void testGetDocumentVersionBinaryThatDoesNotExist() throws Exception {
         when(this.documentContentVersionService.findById(id))
             .thenReturn(Optional.empty());
-
-        restActions
-            .withAuthorizedUser("userId")
-            .get("/documents/" + id + "/versions/" + id + "/binary")
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testGetDocumentVersionBinaryThatIsDeleted() throws Exception {
-        DocumentContentVersion documentContentVersionLocal = mock(DocumentContentVersion.class);
-        StoredDocument storedDocumentLocal = mock(StoredDocument.class);
-        when(documentContentVersionLocal.getStoredDocument()).thenReturn(storedDocumentLocal);
-        when(storedDocumentLocal.isDeleted()).thenReturn(true);
-
-        when(this.documentContentVersionService.findById(id))
-            .thenReturn(Optional.of(documentContentVersionLocal));
 
         restActions
             .withAuthorizedUser("userId")
