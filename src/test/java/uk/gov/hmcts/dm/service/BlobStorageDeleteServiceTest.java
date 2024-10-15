@@ -136,8 +136,7 @@ public class BlobStorageDeleteServiceTest {
         storedDocument = new StoredDocument();
         storedDocument.setId(randomUUID());
         storedDocument.setDocumentContentVersions(
-            singletonList(buildDocumentContentVersion(documentContentVersionUuid,
-                storedDocument)));
+            singletonList(buildDocumentContentVersion(documentContentVersionUuid, storedDocument)));
         return storedDocument;
     }
 
