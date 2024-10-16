@@ -19,7 +19,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -130,8 +129,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Test
     public void testGetDocumentVersionBinaryThatStoredDocumentWasDeleted() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        documentContentVersion.setStoredDocument(new StoredDocument());
         documentContentVersion.getStoredDocument().setDeleted(true);
 
         when(this.documentContentVersionService.findById(id))
@@ -159,22 +156,6 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     public void testGetDocumentVersionBinaryThatDoesNotExist() throws Exception {
         when(this.documentContentVersionService.findById(id))
             .thenReturn(Optional.empty());
-
-        restActions
-            .withAuthorizedUser("userId")
-            .get("/documents/" + id + "/versions/" + id + "/binary")
-            .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testGetDocumentVersionBinaryThatIsDeleted() throws Exception {
-        DocumentContentVersion documentContentVersion = mock(DocumentContentVersion.class);
-        StoredDocument storedDocument = mock(StoredDocument.class);
-        when(documentContentVersion.getStoredDocument()).thenReturn(storedDocument);
-        when(storedDocument.isDeleted()).thenReturn(true);
-
-        when(this.documentContentVersionService.findById(id))
-            .thenReturn(Optional.of(documentContentVersion));
 
         restActions
             .withAuthorizedUser("userId")

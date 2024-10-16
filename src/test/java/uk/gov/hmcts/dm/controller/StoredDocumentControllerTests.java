@@ -123,7 +123,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .postDocuments("/documents", files, Classifications.PUBLIC, null)
+            .postDocuments("/documents", files, Classifications.PUBLIC)
             .andExpect(status().isOk());
 
     }
@@ -146,21 +146,12 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
         restActions
             .withAuthorizedUser("userId")
-            .postDocuments("/documents", files, Classifications.PUBLIC, null)
+            .postDocuments("/documents", files, Classifications.PUBLIC)
             .andExpect(status().is4xxClientError());
     }
 
     @Test
     public void testGetBinary() throws Exception {
-        DocumentContentVersion documentContentVersion =
-            new DocumentContentVersion(
-                new StoredDocument(),
-                new MockMultipartFile("files",
-                "filename.txt",
-                "text/plain",
-                "hello".getBytes(StandardCharsets.UTF_8)),
-            "user"
-            );
 
         documentContentVersion.setCreatedBy("userId");
 
@@ -176,14 +167,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetBinaryException() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
-            new MockMultipartFile("files",
-                "filename.txt",
-                "text/plain",
-                "hello".getBytes(
-                    StandardCharsets.UTF_8)),
-            "user");
-
         documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
@@ -202,14 +185,6 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
 
     @Test
     public void testGetBinaryClientAbortException() throws Exception {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
-            new MockMultipartFile("files",
-                "filename.txt",
-                "text/plain",
-                "hello".getBytes(
-                    StandardCharsets.UTF_8)),
-            "user");
-
         documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
