@@ -17,7 +17,7 @@ plugins {
     id 'io.freefair.lombok' version '8.10.2'
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'org.owasp.dependencycheck' version '11.0.0'
-    id 'au.com.dius.pact' version '4.2.14'
+    id 'au.com.dius.pact' version '4.6.15'
     id 'org.flywaydb.flyway' version '10.20.1'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
 }
