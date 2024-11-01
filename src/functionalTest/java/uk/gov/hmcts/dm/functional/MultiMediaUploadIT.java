@@ -13,6 +13,7 @@ import java.io.IOException;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 public class MultiMediaUploadIT extends BaseIT {
 
@@ -59,6 +60,8 @@ public class MultiMediaUploadIT extends BaseIT {
 
     @Test
     public void uploadWhiteListedWithPassword_then_fail() {
+        assumeTrue(toggleConfiguration.isPasswordcheck());
+
         uploadFileThrowsPasswordErrorMessage("pw_protected.pdf", "application/pdf");
         uploadFileThrowsPasswordErrorMessage("pw_protected_docx.docx", "application/msword");
     }
