@@ -1,7 +1,7 @@
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:10.21.0")
+        classpath("org.flywaydb:flyway-database-postgresql:10.22.0")
     }
 }
 
@@ -145,7 +145,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '10.22.0'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.21.0'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '10.22.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.2.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
