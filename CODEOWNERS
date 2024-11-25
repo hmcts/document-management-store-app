@@ -1,0 +1,5 @@
+# https://help.github.com/en/articles/about-code-owners
+
+CODEOWNERS @hmcts/evidence
+
+# https://github.com/orgs/hmcts/teams/evidence/members
