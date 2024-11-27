@@ -37,6 +37,6 @@ public class ApiErrorController extends BasicErrorController {
         // For the sake of time, I've overridden this method to achieve the same functionality as before and raised
         // a Jira ticket as a tech debt item to resolve this in the future.
         status = getStatus(request);
-        return new ResponseEntity<>(body, status);
+        return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(body);
     }
 }
