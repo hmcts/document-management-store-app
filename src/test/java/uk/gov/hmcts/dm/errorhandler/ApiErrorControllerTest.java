@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.request.WebRequest;
@@ -46,7 +47,8 @@ public class ApiErrorControllerTest {
         when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).thenReturn(500);
         ApiErrorController apiErrorController = new ApiErrorController(apiErrorAttributes);
         assertThat(apiErrorController.error(request),
-            equalTo(new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR)));
+            equalTo(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .contentType(MediaType.APPLICATION_JSON).body(body)));
     }
 
 }
