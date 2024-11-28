@@ -104,6 +104,8 @@ def versions = [
     springSecurity     : '6.4.1'
 ]
 
+ext['hibernate.version'] = '6.6.3.Final'
+
 dependencies {
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.29.0'
