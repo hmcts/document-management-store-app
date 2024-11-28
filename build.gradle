@@ -92,9 +92,7 @@ def versions = [
     ehcache            : '3.10.8',
     postgresql         : '42.7.4',
     jackson            : '2.18.1',
-    serenity           : '3.7.0',
-    serenityreporter   : '3.7.0',
-    serenityRestAssured: '3.7.0',
+    serenity           : '4.2.9',
     logging            : '6.1.7',
     pact_version       : '4.1.7',
     emTestHelper       : '2.0.9',
@@ -181,11 +179,11 @@ dependencies {
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenityRestAssured
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenityreporter
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
 
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: versions.jupiter
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
