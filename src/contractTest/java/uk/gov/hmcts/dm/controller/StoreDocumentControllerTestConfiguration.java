@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.controller;
 
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
@@ -33,43 +33,43 @@ import java.util.Arrays;
 @TestConfiguration
 public class StoreDocumentControllerTestConfiguration {
 
-    @MockBean
+    @MockitoBean
     private DmServiceAuthFilter serviceAuthFilter;
 
-    @MockBean
+    @MockitoBean
     private StoredDocumentRepository storedDocumentRepository;
 
-    @MockBean
+    @MockitoBean
     private DocumentContentVersionRepository documentContentVersionRepository;
 
-    @MockBean
+    @MockitoBean
     private AzureStorageConfiguration azureStorageConfiguration;
 
-    @MockBean
+    @MockitoBean
     private SecurityUtilService securityUtilService;
 
-    @MockBean
+    @MockitoBean
     private BlobStorageWriteService blobStorageWriteService;
 
-    @MockBean
+    @MockitoBean
     private BlobStorageDeleteService blobStorageDeleteService;
 
-    @MockBean
+    @MockitoBean
     private StoredDocumentAuditEntryRepository storedDocumentAuditEntryRepository;
 
-    @MockBean
+    @MockitoBean
     private DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository;
 
-    @MockBean
+    @MockitoBean
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    @MockBean
+    @MockitoBean
     public ToggleConfiguration toggleConfiguration;
 
-    @MockBean
+    @MockitoBean
     public StoredDocumentService storedDocumentService;
 
-    @MockBean
+    @MockitoBean
     public AuditEntryService auditEntryService;
 
     @Bean
@@ -108,7 +108,7 @@ public class StoreDocumentControllerTestConfiguration {
         return new MultipartFilePasswordValidator(passwordVerifier());
     }
 
-    @MockBean
+    @MockitoBean
     RepositoryFinder repositoryFinder;
 
     @Bean
