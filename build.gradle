@@ -17,9 +17,9 @@ plugins {
     id 'io.freefair.lombok' version '8.11'
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'org.owasp.dependencycheck' version '11.1.0'
-    id 'au.com.dius.pact' version '4.2.14'
+    id 'au.com.dius.pact' version '4.6.15'
     id 'org.flywaydb.flyway' version '11.0.0'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '3.0.0'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.8'
 }
 
 apply plugin: 'java'
@@ -94,7 +94,7 @@ def versions = [
     jackson            : '2.18.1',
     serenity           : '4.2.9',
     logging            : '6.1.7',
-    pact_version       : '4.1.7',
+    pact_version       : '4.6.15',
     emTestHelper       : '2.0.9',
     shedlock           : '6.0.1',
     hibernate          : '6.6.3.Final',
@@ -201,9 +201,7 @@ dependencies {
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
-    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
-    contractTestImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version : versions.jupiter
     contractTestImplementation sourceSets.main.runtimeClasspath
