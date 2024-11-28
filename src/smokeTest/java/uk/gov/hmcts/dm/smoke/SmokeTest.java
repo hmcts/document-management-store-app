@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.smoke;
 
+import net.serenitybdd.annotations.WithTag;
+import net.serenitybdd.annotations.WithTags;
 import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
 import net.serenitybdd.rest.SerenityRest;
-import net.thucydides.core.annotations.WithTag;
-import net.thucydides.core.annotations.WithTags;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

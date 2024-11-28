@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.functional;
 
 import io.restassured.response.Response;
-import net.thucydides.core.annotations.Pending;
+import net.serenitybdd.annotations.Pending;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
