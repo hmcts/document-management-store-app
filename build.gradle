@@ -102,7 +102,7 @@ def versions = [
     springSecurity     : '6.4.1'
 ]
 
-ext['hibernate.version'] = '6.6.3.Final'
+ext['hibernate.version'] = versions.hibernate
 
 dependencies {
 
