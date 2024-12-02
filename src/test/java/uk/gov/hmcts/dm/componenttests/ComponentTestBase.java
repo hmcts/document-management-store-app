@@ -8,11 +8,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -60,42 +60,42 @@ public abstract class ComponentTestBase {
     @Autowired
     protected DmServiceAuthFilter filter;
 
-    @MockitoBean
+    @MockBean
     protected ToggleConfiguration toggleConfiguration;
 
-    @MockitoBean
+    @MockBean
     protected StoredDocumentService storedDocumentService;
 
-    @MockitoBean
+    @MockBean
     protected StoredDocumentRepository storedDocumentRepository;
 
-    @MockitoBean
+    @MockBean
     protected DocumentContentVersionService documentContentVersionService;
 
-    @MockitoBean
+    @MockBean
     protected AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @MockitoBean
+    @MockBean
     protected AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    @MockitoBean
+    @MockBean
     protected BlobStorageWriteService blobStorageWriteService;
 
-    @MockitoBean
+    @MockBean
     protected BlobStorageDeleteService blobStorageDeleteService;
 
-    @MockitoBean
+    @MockBean
     protected BlobStorageReadService blobStorageReadService;
 
-    @MockitoBean
+    @MockBean
     protected SearchService searchService;
 
-    @MockitoBean
+    @MockBean
     protected AuditEntryService auditEntryService;
 
     protected RestActions restActions;
 
-    @MockitoBean
+    @MockBean
     TestController testController;
 
     @Before
