@@ -9,9 +9,9 @@ spring:
   data:
     rest:
       detection-strategy: annotated
-  cloud:
-    compatibility-verifier:
-      enabled: false
+  # cloud:
+  #   compatibility-verifier:
+  #     enabled: false
   jackson:
     date-format: "yyyy-MM-dd'T'HH:mm:ssZ"
     serialization:
