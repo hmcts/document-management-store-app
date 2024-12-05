@@ -16,7 +16,7 @@ plugins {
     id 'checkstyle'
     id 'io.freefair.lombok' version '8.11'
     id 'info.solidsoft.pitest' version '1.15.0'
-    id 'org.owasp.dependencycheck' version '11.1.0'
+    id 'org.owasp.dependencycheck' version '11.1.1'
     id 'au.com.dius.pact' version '4.6.16'
     id 'org.flywaydb.flyway' version '11.0.1'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.8'
