@@ -146,15 +146,15 @@ module "db-v15" {
   providers = {
     azurerm.postgres_network = azurerm.cft_vnet
   }
-  source               = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
-  env                  = var.env
-  product              = var.product
-  component            = var.component
-  common_tags          = var.common_tags
-  name                 = local.db_name
-  pgsql_version        = "15"
-  admin_user_object_id = var.jenkins_AAD_objectId
-  business_area        = "CFT"
+  source                      = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
+  env                         = var.env
+  product                     = var.product
+  component                   = var.component
+  common_tags                 = var.common_tags
+  name                        = local.db_name
+  pgsql_version               = "15"
+  admin_user_object_id        = var.jenkins_AAD_objectId
+  business_area               = "CFT"
   action_group_name           = join("-", [local.db_name, var.action_group_name])
   email_address_key           = var.email_address_key
   email_address_key_vault_id  = data.azurerm_key_vault.dm_shared_vault.id
