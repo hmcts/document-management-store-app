@@ -155,7 +155,7 @@ module "db-v15" {
   pgsql_version               = "15"
   admin_user_object_id        = var.jenkins_AAD_objectId
   business_area               = "CFT"
-  action_group_name           = join("-", [local.db_name, var.action_group_name])
+  action_group_name           = join("-", [local.db_name, var.action_group_name, var.env])
   email_address_key           = var.email_address_key
   email_address_key_vault_id  = data.azurerm_key_vault.dm_shared_vault.id
   # The original subnet is full, this is required to use the new subnet for new databases
