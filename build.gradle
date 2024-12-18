@@ -192,7 +192,7 @@ dependencies {
     testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.12'
 
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.5', classifier: 'all', {
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.6', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'ch.qos.logback', module: 'logback-classic'
