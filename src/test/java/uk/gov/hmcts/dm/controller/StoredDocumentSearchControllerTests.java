@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.controller;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -17,19 +16,21 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class StoredDocumentSearchControllerTests extends ComponentTestBase {
+class StoredDocumentSearchControllerTests extends ComponentTestBase {
 
     @Mock
     SecurityUtilService securityUtilService;
 
     @Test
-    public void testValidCommandAndSearchReturn3Documents() throws Exception {
+    void testValidCommandAndSearchReturn3Documents() throws Exception {
         MetadataSearchCommand searchCommand = new MetadataSearchCommand("name", "thename");
 
         List<StoredDocument> documents = Arrays.asList(
@@ -59,7 +60,7 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testInValidCommandAnd() throws Exception {
+    void testInValidCommandAnd() throws Exception {
         MetadataSearchCommand searchCommand = new MetadataSearchCommand("thename", null);
 
         restActions
@@ -69,12 +70,12 @@ public class StoredDocumentSearchControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testInitBinder() {
+    void testInitBinder() {
 
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
-        Assert.assertNull(webDataBinder.getDisallowedFields());
+        assertNull(webDataBinder.getDisallowedFields());
         new StoredDocumentSearchController(searchService, securityUtilService).initBinder(webDataBinder);
-        Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
+        assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 }

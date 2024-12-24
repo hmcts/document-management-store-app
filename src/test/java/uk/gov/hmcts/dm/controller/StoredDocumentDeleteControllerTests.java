@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.controller;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.dm.commandobject.DeleteCaseDocumentsCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
@@ -13,10 +13,10 @@ import java.util.stream.Stream;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
+class StoredDocumentDeleteControllerTests extends ComponentTestBase {
 
     @Test
-    public void testValidDeleteCaseDocumentsCommand() throws Exception {
+    void testValidDeleteCaseDocumentsCommand() throws Exception {
         DeleteCaseDocumentsCommand deleteCaseDocumentsCommand = new DeleteCaseDocumentsCommand("0123456789123456");
         List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).toList();
 
@@ -41,7 +41,7 @@ public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testInValidDeleteCaseDocumentsCommand() throws Exception {
+    void testInValidDeleteCaseDocumentsCommand() throws Exception {
         DeleteCaseDocumentsCommand deleteCaseDocumentsCommand = new DeleteCaseDocumentsCommand("123");
 
         restActions
@@ -51,7 +51,7 @@ public class StoredDocumentDeleteControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testEmptyDeleteCaseDocumentsCommand() throws Exception {
+    void testEmptyDeleteCaseDocumentsCommand() throws Exception {
         DeleteCaseDocumentsCommand deleteCaseDocumentsCommand = new DeleteCaseDocumentsCommand();
 
         restActions

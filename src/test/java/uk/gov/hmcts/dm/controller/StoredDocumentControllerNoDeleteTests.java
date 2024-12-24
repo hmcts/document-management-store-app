@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.controller;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
+class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
 
     @Autowired
     private StoredDocumentController controller;
@@ -40,7 +40,7 @@ public class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
     }
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
     }

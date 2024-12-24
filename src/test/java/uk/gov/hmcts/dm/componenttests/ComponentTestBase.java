@@ -2,18 +2,18 @@ package uk.gov.hmcts.dm.componenttests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
@@ -38,14 +38,13 @@ import java.nio.file.Paths;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ActiveProfiles({"embedded", "local", "componenttest"})
 @SpringBootTest(webEnvironment = MOCK)
 @Transactional
 @EnableSpringDataWebSupport
 @DirtiesContext
 public abstract class ComponentTestBase {
-
 
 
     @Autowired
@@ -60,50 +59,50 @@ public abstract class ComponentTestBase {
     @Autowired
     protected DmServiceAuthFilter filter;
 
-    @MockBean
+    @MockitoBean
     protected ToggleConfiguration toggleConfiguration;
 
-    @MockBean
+    @MockitoBean
     protected StoredDocumentService storedDocumentService;
 
-    @MockBean
+    @MockitoBean
     protected StoredDocumentRepository storedDocumentRepository;
 
-    @MockBean
+    @MockitoBean
     protected DocumentContentVersionService documentContentVersionService;
 
-    @MockBean
+    @MockitoBean
     protected AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @MockBean
+    @MockitoBean
     protected AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    @MockBean
+    @MockitoBean
     protected BlobStorageWriteService blobStorageWriteService;
 
-    @MockBean
+    @MockitoBean
     protected BlobStorageDeleteService blobStorageDeleteService;
 
-    @MockBean
+    @MockitoBean
     protected BlobStorageReadService blobStorageReadService;
 
-    @MockBean
+    @MockitoBean
     protected SearchService searchService;
 
-    @MockBean
+    @MockitoBean
     protected AuditEntryService auditEntryService;
 
     protected RestActions restActions;
 
-    @MockBean
-    TestController testController;
+    @MockitoBean
+    protected TestController testController;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         this.restActions = new RestActions(webApplicationContext, objectMapper);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         SecurityContextHolder.clearContext();
     }

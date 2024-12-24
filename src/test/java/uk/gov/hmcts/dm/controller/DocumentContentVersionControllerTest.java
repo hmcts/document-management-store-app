@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.controller;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.WebDataBinder;
@@ -18,12 +17,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class DocumentContentVersionControllerTest extends ComponentTestBase {
+class DocumentContentVersionControllerTest extends ComponentTestBase {
 
     @Mock
     private WebDataBinder binder;
@@ -45,7 +46,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
         ).build();
 
     @Test
-    public void testAddDocumentVersion() throws Exception {
+    void testAddDocumentVersion() throws Exception {
         when(this.storedDocumentService.findOne(id))
             .thenReturn(Optional.of(storedDocument));
 
@@ -60,7 +61,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testAddDocumentVersionForVersionsMappingNotPresent() throws Exception {
+    void testAddDocumentVersionForVersionsMappingNotPresent() throws Exception {
         when(this.storedDocumentService.findOne(id))
             .thenReturn(Optional.of(storedDocument));
 
@@ -75,7 +76,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testAddDocumentToVersionToNotExistingOne() throws Exception {
+    void testAddDocumentToVersionToNotExistingOne() throws Exception {
         when(this.storedDocumentService.findOne(id))
             .thenReturn(Optional.empty());
 
@@ -86,7 +87,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testAddDocumentVersionWithNotAllowedFileType() throws Exception {
+    void testAddDocumentVersionWithNotAllowedFileType() throws Exception {
         when(this.storedDocumentService.findOne(id))
             .thenReturn(Optional.of(storedDocument));
 
@@ -101,7 +102,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentVersion() throws Exception {
+    void testGetDocumentVersion() throws Exception {
         when(this.auditedDocumentContentVersionOperationsService.readDocumentContentVersion(id))
             .thenReturn(documentContentVersion);
 
@@ -112,7 +113,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentVersionBinaryFromBlobStore() throws Exception {
+    void testGetDocumentVersionBinaryFromBlobStore() throws Exception {
         documentContentVersion.setContentUri("someURI");
         when(this.documentContentVersionService.findById(id))
             .thenReturn(Optional.of(documentContentVersion));
@@ -128,7 +129,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentVersionBinaryThatStoredDocumentWasDeleted() throws Exception {
+    void testGetDocumentVersionBinaryThatStoredDocumentWasDeleted() throws Exception {
         documentContentVersion.getStoredDocument().setDeleted(true);
 
         when(this.documentContentVersionService.findById(id))
@@ -142,7 +143,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
 
 
     @Test
-    public void testGetDocumentVersionThatDoesNotExist() throws Exception {
+    void testGetDocumentVersionThatDoesNotExist() throws Exception {
         when(this.auditedDocumentContentVersionOperationsService.readDocumentContentVersion(id))
             .thenThrow(new DocumentContentVersionNotFoundException(id));
 
@@ -153,7 +154,7 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentVersionBinaryThatDoesNotExist() throws Exception {
+    void testGetDocumentVersionBinaryThatDoesNotExist() throws Exception {
         when(this.documentContentVersionService.findById(id))
             .thenReturn(Optional.empty());
 
@@ -164,15 +165,15 @@ public class DocumentContentVersionControllerTest extends ComponentTestBase {
     }
 
     @Test
-    public void testInitBinder() {
+    void testInitBinder() {
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
-        Assert.assertNull(webDataBinder.getDisallowedFields());
+        assertNull(webDataBinder.getDisallowedFields());
         new DocumentContentVersionController(documentContentVersionService,
             auditedDocumentContentVersionOperationsService,
             storedDocumentService,
             auditedStoredDocumentOperationsService
         ).initBinder(webDataBinder);
-        Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
+        assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 }
