@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.hateos;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.Link;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -9,13 +9,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DocumentContentVersionHalResourceTest {
+class DocumentContentVersionHalResourceTest {
 
     @Test
-    @SuppressWarnings("unchecked") // can't tell why it's complaining #getLink does return `Optional<Link>` and is safe.
-    public void documentContentVersionHasValidLinks() {
+    @SuppressWarnings("unchecked")
+    void documentContentVersionHasValidLinks() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.randomUUID());
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
