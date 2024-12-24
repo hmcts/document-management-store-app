@@ -3,8 +3,8 @@ package uk.gov.hmcts.dm.endtoend;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
-public class VersionTest extends End2EndTestBase {
+class VersionTest extends End2EndTestBase {
 
     private static final MockMultipartFile FILE_V1 =
         new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
@@ -41,7 +41,7 @@ public class VersionTest extends End2EndTestBase {
     }
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         super.setUp();
         doAnswer(invocation -> {
@@ -67,7 +67,7 @@ public class VersionTest extends End2EndTestBase {
     }
 
     @Test
-    public void should_upload_a_second_version_of_a_document() throws Exception {
+    void should_upload_a_second_version_of_a_document() throws Exception {
 
         final MockHttpServletResponse response = mvc.perform(multipart("/documents")
                 .file(FILE_V1)

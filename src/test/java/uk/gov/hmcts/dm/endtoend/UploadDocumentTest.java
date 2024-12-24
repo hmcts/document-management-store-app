@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.dm.security.Classifications;
@@ -18,12 +18,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static uk.gov.hmcts.dm.endtoend.Helper.getBinaryUrlFromResponse;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
-public class UploadDocumentTest extends End2EndTestBase {
+class UploadDocumentTest extends End2EndTestBase {
 
     private final HttpHeaders headers = Helper.getHeaders();
 
     @Test
-    public void should_upload_a_document() throws Exception {
+    void should_upload_a_document() throws Exception {
         mvc.perform(multipart("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
@@ -39,7 +39,7 @@ public class UploadDocumentTest extends End2EndTestBase {
     }
 
     @Test
-    public void should_upload_and_retrieve_a_document() throws Exception {
+    void should_upload_and_retrieve_a_document() throws Exception {
         final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
@@ -54,7 +54,7 @@ public class UploadDocumentTest extends End2EndTestBase {
     }
 
     @Test
-    public void should_upload_and_delete_a_document() throws Exception {
+    void should_upload_and_delete_a_document() throws Exception {
         final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())
@@ -73,7 +73,7 @@ public class UploadDocumentTest extends End2EndTestBase {
     }
 
     @Test
-    public void should_upload_and_hard_delete_a_document() throws Exception {
+    void should_upload_and_hard_delete_a_document() throws Exception {
         final MockHttpServletResponse response = mvc.perform(multipart("/documents")
                 .file(FILE)
                 .param("classification", Classifications.PRIVATE.toString())
