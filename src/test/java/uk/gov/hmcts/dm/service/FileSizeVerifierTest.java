@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class FileSizeVerifierTest {
 
     @InjectMocks
-    FileSizeVerifier fileSizeVerifier;
+    private FileSizeVerifier fileSizeVerifier;
 
     @BeforeEach
     public void setup() {

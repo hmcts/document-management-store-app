@@ -88,6 +88,7 @@ class SearchServiceTests {
             searchService.findStoredDocumentsIdsByCaseRef(null)
         );
     }
+
     @Test
     void testSearchByCreator() {
 
