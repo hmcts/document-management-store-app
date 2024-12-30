@@ -1,11 +1,11 @@
 package uk.gov.hmcts.dm.service.batch;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditEntryService;
@@ -13,8 +13,8 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.util.stream.Stream;
 
-@RunWith(SpringRunner.class)
-public class AuditedStoredDocumentBatchOperationsServiceTests {
+@ExtendWith(SpringExtension.class)
+class AuditedStoredDocumentBatchOperationsServiceTests {
 
     @Mock
     private StoredDocumentService storedDocumentService;
@@ -26,7 +26,7 @@ public class AuditedStoredDocumentBatchOperationsServiceTests {
     private AuditedStoredDocumentBatchOperationsService service;
 
     @Test
-    public void testDeleteNotDeleted() {
+    void testDeleteNotDeleted() {
         StoredDocument storedDocument = new StoredDocument();
         service.hardDeleteStoredDocument(storedDocument);
         Mockito.verify(storedDocumentService, Mockito.times(1)).deleteDocument(storedDocument, true);
@@ -35,7 +35,7 @@ public class AuditedStoredDocumentBatchOperationsServiceTests {
     }
 
     @Test
-    public void testDeleteSoftDeletedDeleted() {
+    void testDeleteSoftDeletedDeleted() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
         service.hardDeleteStoredDocument(storedDocument);
@@ -45,7 +45,7 @@ public class AuditedStoredDocumentBatchOperationsServiceTests {
     }
 
     @Test
-    public void testDeleteHardDeletedDeleted() {
+    void testDeleteHardDeletedDeleted() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setHardDeleted(true);
         service.hardDeleteStoredDocument(storedDocument);
@@ -55,7 +55,7 @@ public class AuditedStoredDocumentBatchOperationsServiceTests {
     }
 
     @Test
-    public void testDeleteAll() {
+    void testDeleteAll() {
         StoredDocument storedDocument1 = new StoredDocument();
         storedDocument1.setHardDeleted(true);
         StoredDocument storedDocument2 = new StoredDocument();
