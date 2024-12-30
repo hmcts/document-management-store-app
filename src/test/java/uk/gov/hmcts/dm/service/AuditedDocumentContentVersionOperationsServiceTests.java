@@ -2,12 +2,12 @@ package uk.gov.hmcts.dm.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -17,14 +17,15 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
 
-@RunWith(SpringRunner.class)
-public class AuditedDocumentContentVersionOperationsServiceTests {
+@ExtendWith(SpringExtension.class)
+class AuditedDocumentContentVersionOperationsServiceTests {
 
     @Mock
     private DocumentContentVersionService documentContentVersionService;
@@ -39,7 +40,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
     private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @Test
-    public void testReadFileContentVersionBinaryFromBlobStore() throws IOException {
+    void testReadFileContentVersionBinaryFromBlobStore() throws IOException {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
         HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
@@ -53,7 +54,7 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
 
 
     @Test
-    public void testReadFileContentVersionThatExists() {
+    void testReadFileContentVersionThatExists() {
         StoredDocument storedDocument = new StoredDocument();
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
         documentContentVersion.setStoredDocument(storedDocument);
@@ -64,8 +65,9 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
 
     }
 
-    @Test(expected = DocumentContentVersionNotFoundException.class)
-    public void testReadFileContentVersionThatBelongsToDeletedDocument() {
+    @Test
+    void testReadFileContentVersionThatBelongsToDeletedDocument() {
+        // Arrange
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
@@ -75,19 +77,20 @@ public class AuditedDocumentContentVersionOperationsServiceTests {
 
         when(documentContentVersionService.findById(uuid)).thenReturn(Optional.of(documentContentVersion));
 
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
-
+        assertThrows(DocumentContentVersionNotFoundException.class, () -> {
+            auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
+        });
     }
 
-    @Test(expected = DocumentContentVersionNotFoundException.class)
-    public void testReadFileContentVersionThatDoesNotExists() {
-
+    @Test
+    void testReadFileContentVersionThatDoesNotExist() {
         UUID uuid = UUID.randomUUID();
 
         when(documentContentVersionService.findById(uuid)).thenReturn(Optional.empty());
 
-        auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
-
+        assertThrows(DocumentContentVersionNotFoundException.class, () -> {
+            auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
+        });
     }
 
 }

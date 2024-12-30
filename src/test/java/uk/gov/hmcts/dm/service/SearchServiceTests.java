@@ -1,15 +1,14 @@
 package uk.gov.hmcts.dm.service;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.commandobject.DeleteCaseDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.MetadataSearchCommand;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -21,11 +20,13 @@ import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-public class SearchServiceTests {
+@ExtendWith(SpringExtension.class)
+class SearchServiceTests {
 
     @Mock
     StoredDocumentRepository storedDocumentRepository;
@@ -34,7 +35,7 @@ public class SearchServiceTests {
     SearchService searchService;
 
     @Test
-    public void testSearchMetadata() {
+    void testSearchMetadata() {
 
         MetadataSearchCommand searchCommand = new MetadataSearchCommand("name", "thename");
 
@@ -51,17 +52,19 @@ public class SearchServiceTests {
 
         Page<StoredDocument> page = searchService.findStoredDocumentsByMetadata(searchCommand, pageable);
 
-        Assert.assertEquals(mockedPage, page);
+        assertEquals(mockedPage, page);
 
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testSearchMetadataNullArg() {
-        searchService.findStoredDocumentsByMetadata(null, null);
     }
 
     @Test
-    public void testSearchCaseRef() {
+    void testSearchMetadataNullArg() {
+        assertThrows(NullPointerException.class, () ->
+            searchService.findStoredDocumentsByMetadata(null, null)
+        );
+    }
+
+    @Test
+    void testSearchCaseRef() {
 
         DeleteCaseDocumentsCommand searchCommand = new DeleteCaseDocumentsCommand("theCase");
 
@@ -79,13 +82,14 @@ public class SearchServiceTests {
         assertThat(mockedDocuments.get(1)).isEqualTo(documents.get(1).getId());
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testSearchCaseRefNullArg() {
-        searchService.findStoredDocumentsIdsByCaseRef(null);
-    }
-
     @Test
-    public void testSearchByCreator() {
+    void testSearchCaseRefNullArg() {
+        assertThrows(NullPointerException.class, () ->
+            searchService.findStoredDocumentsIdsByCaseRef(null)
+        );
+    }
+    @Test
+    void testSearchByCreator() {
 
         List<StoredDocument> documents = Arrays.asList(
             new StoredDocument(),
@@ -100,17 +104,20 @@ public class SearchServiceTests {
 
         Page<StoredDocument> page = searchService.findStoredDocumentsByCreator("creatorX", pageable);
 
-        Assert.assertEquals(mockedPage, page);
+        assertEquals(mockedPage, page);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void testFindStoredDocumentsByMetadataNullPageable() {
-        searchService.findStoredDocumentsByCreator("creatorX", null);
+    @Test
+    void testFindStoredDocumentsByMetadataNullPageable() {
+        assertThrows(NullPointerException.class, () ->
+            searchService.findStoredDocumentsByCreator("creatorX", null)
+        );
     }
 
-    @Test(expected = NullPointerException.class)
-    public void findStoredDocumentsByCreator() {
-        searchService.findStoredDocumentsByCreator("x", null);
+    @Test
+    void findStoredDocumentsByCreator() {
+        assertThrows(NullPointerException.class, () ->
+            searchService.findStoredDocumentsByCreator("x", null)
+        );
     }
-
 }
