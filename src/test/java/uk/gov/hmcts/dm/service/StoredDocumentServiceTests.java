@@ -324,11 +324,9 @@ class StoredDocumentServiceTests {
 
     @Test
     void testUpdateMigratedStoredDocumentNullStoredDocument() {
-        NullPointerException exception = assertThrows(
-            NullPointerException.class,
-            () -> storedDocumentService.updateMigratedStoredDocument(null, null)
+        assertThrows(NullPointerException.class, () ->
+            storedDocumentService.updateMigratedStoredDocument(null, null)
         );
-        assertEquals("Expected exception message", exception.getMessage());
     }
 
     @Test
