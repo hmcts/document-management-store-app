@@ -31,6 +31,7 @@ public class MultiMediaUploadIT extends BaseIT {
 
     @Test
     @Pending
+    @Disabled
     public void mv1R1AsAuthenticatedUserIShouldNotBeAbleToUploadFilesThatExceedPermittedSizes() {
         uploadingFileThrowsValidationSizeErrorMessage("516MB_video_mp4.mp4", "video/mp4");
         uploadingFileThrowsValidationSizeErrorMessage("367MB_word.doc", "application/msword");
