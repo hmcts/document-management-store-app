@@ -42,20 +42,20 @@ public class MetadataMigrationIT extends BaseIT {
             postCsvFileAndTriggerSpringBatchJob(file);
 
             Response metadata1 = fetchDocumentMetaDataAs(getCitizen(), document1Url);
+
             Object caseId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_id");
+            assertEquals("1", caseId1);
             Object caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_type_id");
+            assertEquals("AAT", caseTypeId1);
             Object jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
+            assertEquals("AUTOTEST1", jurisdiction1);
 
             Response metadata2 = fetchDocumentMetaDataAs(getCitizen(), document2Url);
             Object caseId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_id");
-            Object caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_type_id");
-            Object jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
-
-            assertEquals("1", caseId1);
-            assertEquals("AAT", caseTypeId1);
-            assertEquals("AUTOTEST1", jurisdiction1);
             assertEquals("2", caseId2);
+            Object caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             assertEquals("AAT", caseTypeId2);
+            Object jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
             assertEquals("AUTOTEST1", jurisdiction2);
         }
 
@@ -99,23 +99,22 @@ public class MetadataMigrationIT extends BaseIT {
             Object caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
 
+            assertEquals("1", caseId1);
+            assertEquals("AAT", caseTypeId1);
+            assertEquals("AUTOTEST1", jurisdiction1);
+
             Response metadata2 = fetchDocumentMetaDataAs(getCitizen(), document2Url);
-            Object caseId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
+            Object caseId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_id");
+            assertEquals("2", caseId2);
+            assertEquals("AAT", caseTypeId2);
+            assertEquals("AUTOTEST1", jurisdiction2);
 
             Response metadata3 = fetchDocumentMetaDataAs(getCitizen(), document3Url);
             Object caseId3 = metadata3.body().prettyPeek().jsonPath().get("metadata.case_id");
             Object caseTypeId3 = metadata3.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction3 = metadata3.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
-
-            assertEquals("1", caseId1);
-            assertEquals("AAT", caseTypeId1);
-            assertEquals("AUTOTEST1", jurisdiction1);
-
-            assertEquals("2", caseId2);
-            assertEquals("AAT", caseTypeId2);
-            assertEquals("AUTOTEST1", jurisdiction2);
 
             // Document3 must not be enriched with metadata as it was not present in the CSV File.
             assertNull(caseId3);
