@@ -2,9 +2,7 @@ package uk.gov.hmcts.dm.functional;
 
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
+import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,9 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 public class UpdateDocumentIT extends BaseIT {
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     public void ud1UpdateTtlForADocument() {

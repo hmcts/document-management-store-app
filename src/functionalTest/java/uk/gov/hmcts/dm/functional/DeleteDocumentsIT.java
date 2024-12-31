@@ -4,17 +4,13 @@ import groovy.json.JsonOutput;
 import io.restassured.http.ContentType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
 public class DeleteDocumentsIT extends BaseIT {
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     public void s1AsAuthenticatedUserICanDeleteDocumentsForASpecificCaseThatHasDocuments() {

@@ -3,11 +3,9 @@ package uk.gov.hmcts.dm.functional;
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Pending;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -19,9 +17,6 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.oneOf;
 
 public class CreateDocumentIT extends BaseIT {
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     public void cd1R1AsAuthenticatedUserUpload7FilesWithCorrectClassificationAndSomeRolesSet() throws IOException {
@@ -206,7 +201,7 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
+    @Disabled("exe seems to be blocked somewhere causing these tests to fail in CI")
     public void cd8AsAuthenticatedUserICanNotUploadFilesOfDifferentFormatIfNotOnTheWhitelistExe() {
         givenRequest(getCitizen())
             .multiPart("files", file(getAttachment4Pdf()), MediaType.APPLICATION_PDF_VALUE)
@@ -338,7 +333,7 @@ public class CreateDocumentIT extends BaseIT {
     }
 
     @Test
-    @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
+    @Disabled("exe seems to be blocked somewhere causing these tests to fail in CI")
     public void cd18AsAUserIShouldNotBeAbleToUploadAnExeIfItsRenamedToPng() {
         givenRequest(getCitizen())
             .multiPart("files", file(getExeAsPng()), MediaType.IMAGE_PNG_VALUE)

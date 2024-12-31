@@ -2,11 +2,9 @@ package uk.gov.hmcts.dm.functional;
 
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.util.UUID;
 
@@ -14,8 +12,9 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class AddContentVersionIT extends BaseIT {
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
+    private static final String ORIGINAL_DOCUMENT_NAME = "originalDocumentName";
+    private static final String MIME_TYPE = "mimeType";
+    private static final String LOCATION = "Location";
 
     @Test
     public void acv1AsAuthenticatedUserWhoIsAnOwnerPostANewVersionOfTheContentToAnExistingDocumentThenExpect201() {
@@ -27,14 +26,14 @@ public class AddContentVersionIT extends BaseIT {
             .expect().log().all()
             .statusCode(201)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(getAttachment9Jpg()))
-            .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+            .body(ORIGINAL_DOCUMENT_NAME, equalTo(getAttachment9Jpg()))
+            .body(MIME_TYPE, equalTo(MediaType.IMAGE_JPEG_VALUE))
             .when()
             .post(documentUrl)
             .thenReturn();
 
 
-        String newVersionUrl = response.getHeader("Location");
+        String newVersionUrl = response.getHeader(LOCATION);
 
         newVersionUrl = replaceHttp(newVersionUrl);
 
@@ -93,7 +92,7 @@ public class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    @Ignore("exe seems to be blocked somewhere causing this test to fail in CI")
+    @Disabled("exe seems to be blocked somewhere causing this test to fail in CI")
     public void acv6AsAuthenticatedUserWhoIsNotAnOwnerAndIsACaseWorker() {
 
         String url = createDocumentAndGetUrlAs(getCitizen());
@@ -129,13 +128,13 @@ public class AddContentVersionIT extends BaseIT {
             .expect().log().all()
             .statusCode(201)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(getAttachment9Jpg()))
-            .body("mimeType", equalTo(MediaType.IMAGE_JPEG_VALUE))
+            .body(ORIGINAL_DOCUMENT_NAME, equalTo(getAttachment9Jpg()))
+            .body(MIME_TYPE, equalTo(MediaType.IMAGE_JPEG_VALUE))
             .when()
             .post(documentUrl)
             .thenReturn();
 
-        String newVersionUrl = response.getHeader("Location");
+        String newVersionUrl = response.getHeader(LOCATION);
         newVersionUrl = replaceHttp(newVersionUrl);
 
         givenRequest(getCitizen())
@@ -154,13 +153,13 @@ public class AddContentVersionIT extends BaseIT {
             .expect().log().all()
             .statusCode(201)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-            .body("originalDocumentName", equalTo(getAttachment4Pdf()))
-            .body("mimeType", equalTo(MediaType.APPLICATION_PDF_VALUE))
+            .body(ORIGINAL_DOCUMENT_NAME, equalTo(getAttachment4Pdf()))
+            .body(MIME_TYPE, equalTo(MediaType.APPLICATION_PDF_VALUE))
             .when()
             .post(documentUrl)
             .thenReturn();
 
-        String newVersionUrl = response.getHeader("Location");
+        String newVersionUrl = response.getHeader(LOCATION);
         newVersionUrl = replaceHttp(newVersionUrl);
 
         givenRequest(getCitizen())
@@ -172,7 +171,7 @@ public class AddContentVersionIT extends BaseIT {
     }
 
     @Test
-    @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
+    @Disabled("exe seems to be blocked somewhere causing these tests to fail in CI")
     public void acv10AsAnAuthenticatedUserAndTheOwnerIShouldNotBeAbleToUploadExes() {
 
         String documentUrl = createDocumentAndGetUrlAs(getCitizen());
@@ -210,8 +209,8 @@ public class AddContentVersionIT extends BaseIT {
                 .expect().log().all()
                 .statusCode(201)
                 .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
-                .body("originalDocumentName", Matchers.equalTo(getAttachment9Jpg()))
-                .body("mimeType", Matchers.equalTo(MediaType.IMAGE_JPEG_VALUE))
+                .body(ORIGINAL_DOCUMENT_NAME, Matchers.equalTo(getAttachment9Jpg()))
+                .body(MIME_TYPE, Matchers.equalTo(MediaType.IMAGE_JPEG_VALUE))
                 .when()
                 .post(documentUrl1);
 

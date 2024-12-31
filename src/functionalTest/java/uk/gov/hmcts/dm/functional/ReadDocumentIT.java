@@ -1,9 +1,7 @@
 package uk.gov.hmcts.dm.functional;
 
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,9 +12,6 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.equalTo;
 
 public class ReadDocumentIT extends BaseIT {
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     public void r1AsAuthenticatedUserWhoIsAnOwnerCanReadOwnedDocuments() {

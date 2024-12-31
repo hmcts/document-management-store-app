@@ -187,6 +187,8 @@ dependencies {
 
     testRuntimeOnly group: 'org.junit.vintage', name : 'junit-vintage-engine', version: versions.jupiter
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version: versions.emTestHelper
+    functionalTestImplementation group: 'net.serenity-bdd', name: 'serenity-junit5', version: versions.serenity
+    functionalTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
 
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.12'
     testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.12'
@@ -350,7 +352,7 @@ task functional(type: Test, description: 'Runs the functional tests.', group: 'V
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
-
+    useJUnitPlatform()
     //finalizedBy aggregate
 }
 

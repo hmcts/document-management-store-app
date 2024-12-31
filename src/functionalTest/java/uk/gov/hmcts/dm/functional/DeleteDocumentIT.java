@@ -3,26 +3,22 @@ package uk.gov.hmcts.dm.functional;
 import io.restassured.response.Response;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DeleteDocumentIT extends BaseIT {
     private String citizenDocumentUrl;
 
     private String caseWorkerDocumentUrl;
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
-
-    @Before
+    @BeforeEach
     public void setup() {
         this.citizenDocumentUrl = createDocumentAndGetUrlAs(getCitizen());
         this.caseWorkerDocumentUrl = createDocumentAndGetUrlAs(getCaseWorker());
@@ -93,11 +89,13 @@ public class DeleteDocumentIT extends BaseIT {
         String[] split = doc
             .split("/");
         String versionId = split[split.length - 1];
-        Assert.assertTrue("Document with version " + versionId + " should exist (" + metadata.body().print() + ")",
+        assertTrue(
             Boolean.parseBoolean(givenRequest(getCaseWorker())
                 .when()
                 .get("/testing/azure-storage-binary-exists/" + versionId)
-                .print()));
+                .print()),
+            "Document with version " + versionId + " should exist (" + metadata.body().print() + ")"
+        );
 
         givenRequest(getCaseWorker())
             .expect()
@@ -112,9 +110,10 @@ public class DeleteDocumentIT extends BaseIT {
             .when()
             .get(caseWorkerDocumentUrl);
 
-        Assert.assertFalse("Document with version " + versionId + " should NOT exist (" + metadata.body().print() + ")",
+        assertFalse(
             Boolean.parseBoolean(
-                givenRequest(getCaseWorker()).when().get("/testing/azure-storage-binary-exists/" + versionId).print()));
+                givenRequest(getCaseWorker()).when().get("/testing/azure-storage-binary-exists/" + versionId).print()),
+            "Document with version " + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
     @Test
@@ -127,11 +126,12 @@ public class DeleteDocumentIT extends BaseIT {
             .split("/");
         String versionId = split[split.length - 1];
 
-        Assert.assertTrue("Document with version " + versionId + " should exist (" + metadata.body().print() + ")",
+        assertTrue(
             Boolean.parseBoolean(givenRequest(getCitizen())
                 .when()
                 .get("/testing/azure-storage-binary-exists/" + versionId)
-                .print()));
+                .print()),
+            "Document with version " + versionId + " should exist (" + metadata.body().print() + ")");
 
         givenRequest(getCitizen())
             .expect()
@@ -145,9 +145,10 @@ public class DeleteDocumentIT extends BaseIT {
             .when()
             .get(citizenDocumentUrl);
 
-        Assert.assertFalse("Document with version " + versionId + " should NOT exist (" + metadata.body().print() + ")",
+        assertFalse(
             Boolean.parseBoolean(givenRequest(
-                getCitizen()).when().get("/testing/azure-storage-binary-exists/" + versionId).print()));
+                getCitizen()).when().get("/testing/azure-storage-binary-exists/" + versionId).print()),
+            "Document with version " + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
     @Test

@@ -4,20 +4,17 @@ import io.restassured.response.Response;
 import net.serenitybdd.annotations.Pending;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
-public class MetadataMigrationIT extends BaseIT {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
+public class MetadataMigrationIT extends BaseIT {
 
     @Test
     @Pending
@@ -54,12 +51,12 @@ public class MetadataMigrationIT extends BaseIT {
             Object caseTypeId2 = metadata2.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction2 = metadata2.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
 
-            Assert.assertEquals("1", caseId1);
-            Assert.assertEquals("AAT", caseTypeId1);
-            Assert.assertEquals("AUTOTEST1", jurisdiction1);
-            Assert.assertEquals("2", caseId2);
-            Assert.assertEquals("AAT", caseTypeId2);
-            Assert.assertEquals("AUTOTEST1", jurisdiction2);
+            assertEquals("1", caseId1);
+            assertEquals("AAT", caseTypeId1);
+            assertEquals("AUTOTEST1", jurisdiction1);
+            assertEquals("2", caseId2);
+            assertEquals("AAT", caseTypeId2);
+            assertEquals("AUTOTEST1", jurisdiction2);
         }
 
     }
@@ -112,18 +109,18 @@ public class MetadataMigrationIT extends BaseIT {
             Object caseTypeId3 = metadata3.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction3 = metadata3.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
 
-            Assert.assertEquals("1", caseId1);
-            Assert.assertEquals("AAT", caseTypeId1);
-            Assert.assertEquals("AUTOTEST1", jurisdiction1);
+            assertEquals("1", caseId1);
+            assertEquals("AAT", caseTypeId1);
+            assertEquals("AUTOTEST1", jurisdiction1);
 
-            Assert.assertEquals("2", caseId2);
-            Assert.assertEquals("AAT", caseTypeId2);
-            Assert.assertEquals("AUTOTEST1", jurisdiction2);
+            assertEquals("2", caseId2);
+            assertEquals("AAT", caseTypeId2);
+            assertEquals("AUTOTEST1", jurisdiction2);
 
             // Document3 must not be enriched with metadata as it was not present in the CSV File.
-            Assert.assertNull(caseId3);
-            Assert.assertNull(caseTypeId3);
-            Assert.assertNull(jurisdiction3);
+            assertNull(caseId3);
+            assertNull(caseTypeId3);
+            assertNull(jurisdiction3);
         }
 
     }
@@ -244,9 +241,9 @@ public class MetadataMigrationIT extends BaseIT {
             Object caseTypeId1 = metadata1.body().prettyPeek().jsonPath().get("metadata.case_type_id");
             Object jurisdiction1 = metadata1.body().prettyPeek().jsonPath().get("metadata.jurisdiction");
 
-            Assert.assertNull(caseId1);
-            Assert.assertNull(caseTypeId1);
-            Assert.assertNull(jurisdiction1);
+            assertNull(caseId1);
+            assertNull(caseTypeId1);
+            assertNull(jurisdiction1);
         }
 
     }

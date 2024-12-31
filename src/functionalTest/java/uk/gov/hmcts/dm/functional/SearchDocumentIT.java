@@ -4,17 +4,12 @@ import groovy.json.JsonOutput;
 import io.restassured.http.ContentType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
 public class SearchDocumentIT extends BaseIT {
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     public void s1AsAuthenticatedUserICanSearchForDocumentUsingSpecificMetadataProperty() {

@@ -6,15 +6,16 @@ import jakarta.annotation.PostConstruct;
 import net.jcip.annotations.NotThreadSafe;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.rest.SerenityRest;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.FunctionalTestContextConfiguration;
 import uk.gov.hmcts.dm.StorageTestConfiguration;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
@@ -34,7 +35,7 @@ import java.util.Map;
 
 
 @NotThreadSafe
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
 @SpringBootTest(classes = {FunctionalTestContextConfiguration.class, StorageTestConfiguration.class,
     ToggleConfiguration.class})
 @WithTags(@WithTag("testType:Functional"))

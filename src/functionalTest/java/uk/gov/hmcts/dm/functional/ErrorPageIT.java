@@ -1,20 +1,15 @@
 package uk.gov.hmcts.dm.functional;
 
 import io.restassured.http.ContentType;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
 public class ErrorPageIT extends BaseIT {
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
 
     @Test
     public void ep1AsAnUnauthenticatedWebUserTryingToAccessADocumentReceiveJsonErrorPageWith403() {
@@ -66,7 +61,7 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
+    @Disabled("exe seems to be blocked somewhere causing these tests to fail in CI")
     public void ep5AsAnAuthenticatedUserTryingToPostBadAttachmentReceiveJsonErrorPageWith415() {
 
         givenRequest(getCitizen())
@@ -196,7 +191,7 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    @Ignore("exe seems to be blocked somewhere causing these tests to fail in CI")
+    @Disabled("exe seems to be blocked somewhere causing these tests to fail in CI")
     public void ep14AsAnAuthenticatedUserWhenIPostAExeDocumentIShouldGetJsonResponse() {
 
         givenRequest(getCitizen())

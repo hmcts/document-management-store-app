@@ -2,23 +2,18 @@ package uk.gov.hmcts.dm.functional;
 
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Pending;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class MultiMediaUploadIT extends BaseIT {
-
-    @Rule
-    public RetryRule retryRule = new RetryRule(1);
 
     @Test
     public void mv1R1AsAuthenticatedUserIUploadLargeMultiMediaFiles() throws IOException {
@@ -42,7 +37,7 @@ public class MultiMediaUploadIT extends BaseIT {
 
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void mv1R1AsAuthenticatedUserICannotUploadNotWhitelistedMultiMediaFiles() {
         uploadNotWhitelistedFileThenDownload("video_test.mov", "video/quicktime");
