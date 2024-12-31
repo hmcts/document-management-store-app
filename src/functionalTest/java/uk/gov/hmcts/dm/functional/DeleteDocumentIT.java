@@ -158,7 +158,6 @@ public class DeleteDocumentIT extends BaseIT {
             Response response = createAUserForTtl(getCaseWorker());
 
             String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
-            String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
 
             givenRequest(getCaseWorker())
                 .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)

@@ -66,6 +66,7 @@ public abstract class BaseIT {
 
     private static final String USER_ID_CONST =  "user-id";
     private static final String USER_ROLES_CONST =  "user-roles";
+    private static final String ROLES_CONST =  "roles";
     private static final String PASSWORD = "123";
     private static final String CITIZEN = "test12@test.com";
     private static final String CITIZEN_2 = "test2@test.com";
@@ -299,7 +300,7 @@ public abstract class BaseIT {
             .multiPart("classification", classification != null ? classification : "PUBLIC");
 
         for (String role : roles) {
-            request.multiPart("roles", role);
+            request.multiPart(ROLES_CONST, role);
         }
 
         if (metadata != null) {
@@ -407,8 +408,8 @@ public abstract class BaseIT {
         return givenRequest(username)
             .multiPart("files", file(ATTACHMENT_9_JPG), MediaType.IMAGE_JPEG_VALUE)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
+            .multiPart(ROLES_CONST, "citizen")
+            .multiPart(ROLES_CONST, "caseworker")
             .multiPart("ttl", "2018-10-31T10:10:10+0000")
             .expect().log().all().statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
