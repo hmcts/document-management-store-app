@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -191,19 +190,14 @@ public class UpdateDocumentIT extends BaseIT {
         String documentId = split[split.length - 1];
         final UUID uuid = UUID.randomUUID();
 
-        LinkedHashMap<String, Serializable> map = new LinkedHashMap<>(2);
-        map.put("ttl", FUTURE_DATE_3000);
-        LinkedHashMap<String, Serializable> map1 = new LinkedHashMap<>(2);
-        map1.put(DOCUMENT_ID_CONST, documentId);
-        LinkedHashMap<String, String> map2 = new LinkedHashMap<>(1);
-        map2.put(META_KEY_CONST, META_KEY_VALUE);
-        map1.put(METADATA_CONST, map2);
-        LinkedHashMap<String, Serializable> map3 = new LinkedHashMap<>(2);
-        map3.put(DOCUMENT_ID_CONST, uuid);
-        LinkedHashMap<String, String> map4 = new LinkedHashMap<>(1);
-        map4.put(META_KEY2_CONST, META_KEY2_VALUE);
-        map3.put(METADATA_CONST, map4);
-        map.put(DOCUMENTS_CONST, new ArrayList<>(List.of(map1, map3)));
+        Map<String, String> map2 = Map.of(META_KEY_CONST, META_KEY_VALUE);
+        Map<String, Object> map1 = Map.of(DOCUMENT_ID_CONST, documentId, METADATA_CONST, map2);
+
+        Map<String, String> map4 = Map.of(META_KEY2_CONST, META_KEY2_VALUE);
+        Map<String, Object> map3 = Map.of(DOCUMENT_ID_CONST, uuid, METADATA_CONST, map4);
+
+        Map<String, Serializable> map =
+            Map.of("ttl", FUTURE_DATE_3000, DOCUMENTS_CONST, new ArrayList<>(List.of(map1, map3)));
         givenRequest(getCitizen())
             .body(map)
             .contentType(ContentType.JSON)
