@@ -29,8 +29,7 @@ public class SearchDocumentIT extends BaseIT {
         Map<String, String> map3 = Map.of("case", caseNo2);
         createDocument(getCitizen(), null, null, Collections.emptyList(), map3);
 
-        Map<String, String> map4 = Map.of("name", "case");
-        map4.put(VALUE_CONST, caseNo1);
+        Map<String, String> map4 = Map.of("name", "case", VALUE_CONST, caseNo1);
         givenRequest(getCitizen())
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson(map4))
@@ -57,8 +56,7 @@ public class SearchDocumentIT extends BaseIT {
 
     @Test
     public void s3AsUnauthenticatedUserIAmForbiddenToInvokeSearch() {
-        Map<String, String> map = Map.of("name", "case");
-        map.put(VALUE_CONST, "123");
+        Map<String, String> map = Map.of("name", "case", VALUE_CONST, "123");
         givenUnauthenticatedRequest()
             .contentType(ContentType.JSON)
             .body(JsonOutput.toJson(map))

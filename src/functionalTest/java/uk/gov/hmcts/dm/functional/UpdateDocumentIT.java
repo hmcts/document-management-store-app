@@ -79,7 +79,7 @@ public class UpdateDocumentIT extends BaseIT {
         String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
         Map<String, String> map = Map.of("ttl", FUTURE_DATE_3000);
-        Map<String, String> map1 = Map.of("ttl", FUTURE_DATE_3000);
+        Map<String, String> map1 = Map.of("ttl", "3000-01-31T10:10:10+0000");
         givenRequest(getCitizen())
             .body(map)
             .body(map1)
