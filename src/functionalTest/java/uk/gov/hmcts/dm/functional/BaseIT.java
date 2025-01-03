@@ -34,6 +34,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 
+@SuppressWarnings({"java:S6813", "java:S5960"}) // Suppress SonarQube warning for autowired field and assertions
 @NotThreadSafe
 @ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
 @SpringBootTest(classes = {FunctionalTestContextConfiguration.class, StorageTestConfiguration.class,
@@ -133,6 +134,7 @@ public abstract class BaseIT {
     private static final String SVG_AS_PNG = "svg_as_png.png";
     private static final String XML_AS_PNG = "xml_as_png.png";
     private static final String DROP_BOX_URL = "https://www.dropbox.com/s";
+    private static final String SERVICE_AUTHORIZATION_HEADER = "serviceauthorization";
 
     @PostConstruct
     public void init() {
@@ -147,7 +149,7 @@ public abstract class BaseIT {
 
         RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
         if (username != null) {
-            request = request.header("serviceauthorization", serviceToken());
+            request = request.header(SERVICE_AUTHORIZATION_HEADER, serviceToken());
             request = request.header(USER_ID_CONST, username);
         }
         if (userRoles != null) {
@@ -168,7 +170,7 @@ public abstract class BaseIT {
     public RequestSpecification givenCcdCaseDisposerRequest() {
 
         RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
-        request = request.header("serviceauthorization", authTokenProvider.findCcdCaseDisposerServiceToken());
+        request = request.header(SERVICE_AUTHORIZATION_HEADER, authTokenProvider.findCcdCaseDisposerServiceToken());
 
         return request;
     }
@@ -177,7 +179,7 @@ public abstract class BaseIT {
         RequestSpecification request = SerenityRest.given().baseUri(largeDocsBaseUri).log().all();
 
         if (username != null) {
-            request = request.header("serviceauthorization", serviceToken());
+            request = request.header(SERVICE_AUTHORIZATION_HEADER, serviceToken());
             request = request.header(USER_ID_CONST, username);
         }
         if (userRoles != null) {
@@ -199,7 +201,7 @@ public abstract class BaseIT {
 
         RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
         if (username != null) {
-            request = request.header("serviceauthorization", serviceToken());
+            request = request.header(SERVICE_AUTHORIZATION_HEADER, serviceToken());
             request = request.header(USER_ID_CONST, username);
         }
         if (userRoles != null) {
@@ -240,7 +242,7 @@ public abstract class BaseIT {
     public RequestSpecification givenS2SRequest() {
         return SerenityRest.given().baseUri(dmStoreBaseUri)
             .log().all()
-            .header("serviceauthorization", serviceToken())
+            .header(SERVICE_AUTHORIZATION_HEADER, serviceToken())
             .header("cache-control", "no-cache");
     }
 

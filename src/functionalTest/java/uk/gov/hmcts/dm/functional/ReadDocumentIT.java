@@ -108,7 +108,7 @@ public class ReadDocumentIT extends BaseIT {
 
         String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
-        givenSpacedRolesRequest(getCaseWorker(),
+        givenRequest(getCaseWorker(),
             new ArrayList<>(Arrays.asList(getCustomUserRole(),
                 getCaseWorkerRoleProbate())))
             .expect()
