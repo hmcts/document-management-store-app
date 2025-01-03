@@ -2,7 +2,7 @@ package uk.gov.hmcts.dm.endtoend;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
@@ -19,12 +19,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
-public class AuditTest extends End2EndTestBase {
+class AuditTest extends End2EndTestBase {
 
     private HttpHeaders headers = Helper.getHeaders();
 
     @Test
-    public void should_audit_upload_a_document() throws Exception {
+    void should_audit_upload_a_document() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 
         final MvcResult auditResponse = mvc.perform(get(url + "/auditEntries")
@@ -40,7 +40,7 @@ public class AuditTest extends End2EndTestBase {
     }
 
     @Test
-    public void should_audit_retrieval() throws Exception {
+    void should_audit_retrieval() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 
         mvc.perform(get(url)
@@ -58,7 +58,7 @@ public class AuditTest extends End2EndTestBase {
     }
 
     @Test
-    public void should_audit_delete() throws Exception {
+    void should_audit_delete() throws Exception {
         final String url = uploadFileAndReturnSelfUrl();
 
         mvc.perform(delete(url)

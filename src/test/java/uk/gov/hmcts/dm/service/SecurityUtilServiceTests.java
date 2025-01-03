@@ -1,26 +1,27 @@
 package uk.gov.hmcts.dm.service;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-public class SecurityUtilServiceTests {
+@ExtendWith(SpringExtension.class)
+class SecurityUtilServiceTests {
 
     @InjectMocks
     SecurityUtilService securityUtilService;
 
     @Test
-    public void testSuccessfulRetrievalOfUsernameFromSecurityContext() {
+    void testSuccessfulRetrievalOfUsernameFromSecurityContext() {
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
         UserDetails serviceDetails = mock(UserDetails.class);
@@ -31,11 +32,11 @@ public class SecurityUtilServiceTests {
 
         SecurityContextHolder.setContext(securityContext);
 
-        Assert.assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
+        assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
 
     @Test
-    public void testSuccessfulRetrievalOfStringFromSecurityContext() {
+    void testSuccessfulRetrievalOfStringFromSecurityContext() {
         SecurityContext securityContext = mock(SecurityContext.class);
         Authentication authentication = mock(Authentication.class);
 
@@ -44,13 +45,12 @@ public class SecurityUtilServiceTests {
 
         SecurityContextHolder.setContext(securityContext);
 
-        Assert.assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
+        assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
 
-
     @Test
-    public void testFailureOfUsernameFromSecurityContextWhenItsNotThere() {
-        Assert.assertNull(securityUtilService.getCurrentlyAuthenticatedServiceName());
+    void testFailureOfUsernameFromSecurityContextWhenItsNotThere() {
+        assertNull(securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
 
 }

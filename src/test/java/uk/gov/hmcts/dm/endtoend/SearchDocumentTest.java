@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.endtoend;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 import uk.gov.hmcts.dm.security.Classifications;
@@ -13,12 +13,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
-public class SearchDocumentTest extends End2EndTestBase {
+class SearchDocumentTest extends End2EndTestBase {
 
     private final HttpHeaders headers = Helper.getHeaders();
 
     @Test
-    public void deleted_doc_should_not_appear_in_search() throws Exception {
+    void deleted_doc_should_not_appear_in_search() throws Exception {
         final MockHttpServletResponse response = mvc.perform(multipart("/documents")
             .file(FILE)
             .param("classification", Classifications.PRIVATE.toString())

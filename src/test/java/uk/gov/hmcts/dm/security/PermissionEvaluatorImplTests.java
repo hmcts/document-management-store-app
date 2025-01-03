@@ -1,19 +1,20 @@
 package uk.gov.hmcts.dm.security;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.repository.RepositoryFinder;
 import uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-public class PermissionEvaluatorImplTests {
+@ExtendWith(SpringExtension.class)
+class PermissionEvaluatorImplTests {
 
     @Mock
     DomainPermissionEvaluator domainPermissionEvaluator;
@@ -26,7 +27,7 @@ public class PermissionEvaluatorImplTests {
 
     PermissionEvaluatorImpl permissionEvaluator;
 
-    @Before
+    @BeforeEach
     public void setup() {
         permissionEvaluator = new PermissionEvaluatorImpl(securityUtilService,
             domainPermissionEvaluator, repositoryFinder);
@@ -34,13 +35,13 @@ public class PermissionEvaluatorImplTests {
     }
 
     @Test
-    public void testPermissionOnCreatorAwareObject() {
-        Assert.assertFalse(permissionEvaluator.hasPermission(null, null, "READ"));
+    void testPermissionOnCreatorAwareObject() {
+        assertFalse(permissionEvaluator.hasPermission(null, null, "READ"));
     }
 
     @Test
-    public void testLetCaseDocumentAccessManagementDoAnything() {
+    void testLetCaseDocumentAccessManagementDoAnything() {
         when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("ccd_case_document_am_api");
-        Assert.assertTrue(permissionEvaluator.hasPermission(null, null, "READ"));
+        assertTrue(permissionEvaluator.hasPermission(null, null, "READ"));
     }
 }
