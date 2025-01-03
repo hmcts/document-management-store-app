@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.controller;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
@@ -11,10 +11,10 @@ import java.util.stream.Stream;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class StoredDocumentAuditControllerTests extends ComponentTestBase {
+class StoredDocumentAuditControllerTests extends ComponentTestBase {
 
     @Test
-    public void testGetAuditEntries() throws Exception {
+    void testGetAuditEntries() throws Exception {
         when(this.storedDocumentRepository.findById(TestUtil.RANDOM_UUID))
                 .thenReturn(Optional.of(TestUtil.STORED_DOCUMENT));
 
@@ -31,7 +31,7 @@ public class StoredDocumentAuditControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetAuditEntriesOnDocumentThatDoesNotExist() throws Exception {
+    void testGetAuditEntriesOnDocumentThatDoesNotExist() throws Exception {
         restActions
                 .withAuthorizedUser("userId")
                 .get("/documents/" + TestUtil.RANDOM_UUID + "/auditEntries")
