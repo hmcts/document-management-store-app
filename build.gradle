@@ -181,7 +181,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation group: 'net.serenity-bdd', name: 'serenity-rest-assured', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-core', version: versions.serenity
-    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit', version: versions.serenity
+    testImplementation group: 'net.serenity-bdd', name: 'serenity-junit5', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
 
@@ -371,7 +371,7 @@ task smoke(type: Test) {
     setTestClassesDirs(sourceSets.smokeTest.output.classesDirs)
     setClasspath(sourceSets.smokeTest.runtimeClasspath)
     include "uk/gov/hmcts/dm/smoke/**"
-
+    useJUnitPlatform()
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
