@@ -5,15 +5,14 @@ import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -23,13 +22,15 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-public class BlobStorageReadServiceTest {
+@ExtendWith(SpringExtension.class)
+class BlobStorageReadServiceTest {
 
     private BlobStorageReadService blobStorageReadService;
 
@@ -53,8 +54,7 @@ public class BlobStorageReadServiceTest {
     @Mock
     private ToggleConfiguration toggleConfiguration;
 
-    @Before
-
+    @BeforeEach
     public void setUp() {
         when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.getBlockBlobClient()).thenReturn(blockBlobClient);
@@ -64,20 +64,20 @@ public class BlobStorageReadServiceTest {
     }
 
     @Test
-    public void loadsBlob() throws IOException {
+    void loadsBlob() throws IOException {
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
         verify(blockBlobClient).downloadStream(response.getOutputStream());
     }
 
     @Test
-    public void loadsBlobWhileMissingRangeAttribute() throws IOException {
+    void loadsBlobWhileMissingRangeAttribute() throws IOException {
         when(toggleConfiguration.isChunking()).thenReturn(true);
         blobStorageReadService.loadBlob(documentContentVersion, request, response);
         verify(blockBlobClient).downloadStream(response.getOutputStream());
     }
 
     @Test
-    public void loadsBlobWithHeaderNames() throws IOException {
+    void loadsBlobWithHeaderNames() throws IOException {
         when(toggleConfiguration.isChunking()).thenReturn(true);
         when(request.getHeaderNames()).thenReturn(Collections.enumeration(Arrays.asList("Content")));
         when(request.getHeaders("Content")).thenReturn(Collections.enumeration(Arrays.asList("ContentValue")));
@@ -85,28 +85,28 @@ public class BlobStorageReadServiceTest {
         verify(blockBlobClient).downloadStream(response.getOutputStream());
     }
 
-    @Test(expected = InvalidRangeRequestException.class)
-    public void loadsRangedBlobInvalidRangeHeaderStart() throws IOException {
-
+    @Test
+    void loadsRangedBlobInvalidRangeHeaderStart() {
         when(toggleConfiguration.isChunking()).thenReturn(true);
         when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=A-Z");
 
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-
-    }
-
-    @Test(expected = InvalidRangeRequestException.class)
-    public void loadsRangedBlobInvalidRangeHeaderStartGreaterThanEnd() throws IOException {
-
-        when(toggleConfiguration.isChunking()).thenReturn(true);
-        when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=1023-0");
-
-        blobStorageReadService.loadBlob(documentContentVersion, request, response);
-
+        assertThrows(InvalidRangeRequestException.class, () ->
+            blobStorageReadService.loadBlob(documentContentVersion, request, response)
+        );
     }
 
     @Test
-    public void loadsRangedBlobTooLargeRangeHeader() throws IOException {
+    void loadsRangedBlobInvalidRangeHeaderStartGreaterThanEnd() {
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=1023-0");
+
+        assertThrows(InvalidRangeRequestException.class, () ->
+            blobStorageReadService.loadBlob(documentContentVersion, request, response)
+        );
+    }
+
+    @Test
+    void loadsRangedBlobTooLargeRangeHeader() throws IOException {
 
         when(toggleConfiguration.isChunking()).thenReturn(true);
         when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=0-1023");
@@ -120,7 +120,7 @@ public class BlobStorageReadServiceTest {
     }
 
     @Test
-    public void loadsRangedBlobInvalidRangeHeader() throws IOException {
+    void loadsRangedBlobInvalidRangeHeader() throws IOException {
 
         when(toggleConfiguration.isChunking()).thenReturn(true);
         when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=0-2");
@@ -133,9 +133,9 @@ public class BlobStorageReadServiceTest {
     }
 
     @Test
-    public void doesBinaryExist() {
+    void doesBinaryExist() {
         given(blockBlobClient.exists()).willReturn(true);
-        Assert.assertTrue(blobStorageReadService.doesBinaryExist(documentContentVersion.getId()));
+        assertTrue(blobStorageReadService.doesBinaryExist(documentContentVersion.getId()));
     }
 
 }
