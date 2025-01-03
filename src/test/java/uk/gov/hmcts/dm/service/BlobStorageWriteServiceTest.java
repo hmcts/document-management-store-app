@@ -3,11 +3,11 @@ package uk.gov.hmcts.dm.service;
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.specialized.BlockBlobClient;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -30,8 +30,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 
-@RunWith(SpringRunner.class)
-public class BlobStorageWriteServiceTest {
+@ExtendWith(SpringExtension.class)
+class BlobStorageWriteServiceTest {
 
     private BlobStorageWriteService blobStorageWriteService;
 
@@ -50,7 +50,7 @@ public class BlobStorageWriteServiceTest {
     private static final String MOCK_DATA = "mock data";
     private static final String UTF8 = "UTF8";
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
@@ -63,7 +63,7 @@ public class BlobStorageWriteServiceTest {
     }
 
     @Test
-    public void uploadDocumentContentVersion() throws Exception {
+    void uploadDocumentContentVersion() throws Exception {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
         String azureProvidedUri = "someuri";

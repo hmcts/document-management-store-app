@@ -28,7 +28,7 @@ class PasswordVerifierTest {
     @Mock
     private ToggleConfiguration toggleConfiguration;
 
-    PasswordVerifier passwordVerifier;
+    private PasswordVerifier passwordVerifier;
 
     @BeforeEach
     void init() {
