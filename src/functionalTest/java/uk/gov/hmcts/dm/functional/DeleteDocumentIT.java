@@ -13,10 +13,15 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("java:S5960") // Suppress SonarQube warning for assertions
 public class DeleteDocumentIT extends BaseIT {
     private String citizenDocumentUrl;
 
     private String caseWorkerDocumentUrl;
+
+    private static final String TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH = "/testing/azure-storage-binary-exists/";
+    private static final String PERMANENT_TRUE_CONST = "?permanent=true";
+    private static final String DOCUMENT_WITH_VERSION_TEXT_CONST = "Document with version ";
 
     @BeforeEach
     public void setup() {
@@ -92,16 +97,16 @@ public class DeleteDocumentIT extends BaseIT {
         assertTrue(
             Boolean.parseBoolean(givenRequest(getCaseWorker())
                 .when()
-                .get("/testing/azure-storage-binary-exists/" + versionId)
+                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId)
                 .print()),
-            "Document with version " + versionId + " should exist (" + metadata.body().print() + ")"
+            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should exist (" + metadata.body().print() + ")"
         );
 
         givenRequest(getCaseWorker())
             .expect()
             .statusCode(204)
             .when()
-            .delete(caseWorkerDocumentUrl + "?permanent=true");
+            .delete(caseWorkerDocumentUrl + PERMANENT_TRUE_CONST);
 
 
         givenRequest(getCaseWorker())
@@ -112,8 +117,8 @@ public class DeleteDocumentIT extends BaseIT {
 
         assertFalse(
             Boolean.parseBoolean(
-                givenRequest(getCaseWorker()).when().get("/testing/azure-storage-binary-exists/" + versionId).print()),
-            "Document with version " + versionId + " should NOT exist (" + metadata.body().print() + ")");
+                givenRequest(getCaseWorker()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId).print()),
+            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
     @Test
@@ -129,15 +134,15 @@ public class DeleteDocumentIT extends BaseIT {
         assertTrue(
             Boolean.parseBoolean(givenRequest(getCitizen())
                 .when()
-                .get("/testing/azure-storage-binary-exists/" + versionId)
+                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId)
                 .print()),
-            "Document with version " + versionId + " should exist (" + metadata.body().print() + ")");
+            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should exist (" + metadata.body().print() + ")");
 
         givenRequest(getCitizen())
             .expect()
             .statusCode(204)
             .when()
-            .delete(citizenDocumentUrl + "?permanent=true");
+            .delete(citizenDocumentUrl + PERMANENT_TRUE_CONST);
 
         givenRequest(getCitizen())
             .expect()
@@ -147,8 +152,8 @@ public class DeleteDocumentIT extends BaseIT {
 
         assertFalse(
             Boolean.parseBoolean(givenRequest(
-                getCitizen()).when().get("/testing/azure-storage-binary-exists/" + versionId).print()),
-            "Document with version " + versionId + " should NOT exist (" + metadata.body().print() + ")");
+                getCitizen()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId).print()),
+            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
     @Test
@@ -218,7 +223,7 @@ public class DeleteDocumentIT extends BaseIT {
                 .statusCode(204)
                 .body(not(containsString("ttl:")))
                 .when()
-                .delete(documentUrl1 + "?permanent=true");
+                .delete(documentUrl1 + PERMANENT_TRUE_CONST);
         }
 
     }
