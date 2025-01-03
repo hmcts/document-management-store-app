@@ -3,8 +3,7 @@ package uk.gov.hmcts.dm.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.connector.ClientAbortException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
@@ -27,13 +26,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class StoredDocumentControllerTests extends ComponentTestBase {
+class StoredDocumentControllerTests extends ComponentTestBase {
 
     private final UUID id = UUID.randomUUID();
 
@@ -52,7 +53,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
         ).build();
 
     @Test
-    public void testGetDocument() throws Exception {
+    void testGetDocument() throws Exception {
         when(this.auditedStoredDocumentOperationsService.readStoredDocument(id))
             .thenReturn(storedDocument);
         restActions
@@ -62,7 +63,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentBinaryFromBlobStore() throws Exception {
+    void testGetDocumentBinaryFromBlobStore() throws Exception {
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
             .thenReturn(Optional.of(documentContentVersion));
 
@@ -78,7 +79,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocumentBinaryWithChunkingFromBlobStore() throws Exception {
+    void testGetDocumentBinaryWithChunkingFromBlobStore() throws Exception {
         when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
             .thenReturn(Optional.of(documentContentVersion));
         when(this.toggleConfiguration.isChunking()).thenReturn(true);
@@ -97,7 +98,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetDocument404() throws Exception {
+    void testGetDocument404() throws Exception {
         restActions
             .withAuthorizedUser("userId")
             .get("/documents/" + UUID.randomUUID())
@@ -105,7 +106,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testCreateFromDocuments() throws Exception {
+    void testCreateFromDocuments() throws Exception {
         List<MultipartFile> files = Stream.of(
             new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
             new MockMultipartFile("files", "filename.txt", "text/plain", "hello2".getBytes(StandardCharsets.UTF_8)))
@@ -129,7 +130,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testCreateFromDocumentsWithNonWhitelistFile() throws Exception {
+    void testCreateFromDocumentsWithNonWhitelistFile() throws Exception {
         List<MultipartFile> files = Stream.of(
             new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
             new MockMultipartFile("files", "filename.exe", "", "hello2".getBytes(StandardCharsets.UTF_8)))
@@ -151,7 +152,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetBinary() throws Exception {
+    void testGetBinary() throws Exception {
 
         documentContentVersion.setCreatedBy("userId");
 
@@ -166,7 +167,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetBinaryException() throws Exception {
+    void testGetBinaryException() throws Exception {
         documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
@@ -184,7 +185,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetBinaryClientAbortException() throws Exception {
+    void testGetBinaryClientAbortException() throws Exception {
         documentContentVersion.setCreatedBy("userId");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id)).thenReturn(
@@ -202,7 +203,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetThatDoesNotExist() throws Exception {
+    void testGetThatDoesNotExist() throws Exception {
         restActions
             .withAuthorizedUser("userId")
             .get("/documents/" + id)
@@ -210,7 +211,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testGetBinaryThatDoesNotExist() throws Exception {
+    void testGetBinaryThatDoesNotExist() throws Exception {
         restActions
             .withAuthorizedUser("userId")
             .get("/documents/" + id + "/binary")
@@ -218,7 +219,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    void testDelete() throws Exception {
         restActions
             .withAuthorizedUser("userId")
             .delete("/documents/" + id)
@@ -227,7 +228,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testHardDelete() throws Exception {
+    void testHardDelete() throws Exception {
         restActions
             .withAuthorizedUser("userId")
             .delete("/documents/" + id + "?permanent=true")
@@ -237,7 +238,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testSoftDeleteWithParam() throws Exception {
+    void testSoftDeleteWithParam() throws Exception {
         restActions
             .withAuthorizedUser("userId")
             .delete("/documents/" + id + "?permanent=false")
@@ -247,7 +248,7 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testReturn400WhenUuidInvalid() throws Exception {
+    void testReturn400WhenUuidInvalid() throws Exception {
         restActions
             .withAuthorizedUser("userId")
             .get("/documents/123456")
@@ -255,13 +256,13 @@ public class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testInitBinder() {
+    void testInitBinder() {
         WebDataBinder webDataBinder = new WebDataBinder(null);
 
-        Assert.assertNull(webDataBinder.getDisallowedFields());
+        assertNull(webDataBinder.getDisallowedFields());
         new StoredDocumentController(documentContentVersionService, auditedStoredDocumentOperationsService,
             auditedDocumentContentVersionOperationsService, toggleConfiguration).initBinder(webDataBinder);
-        Assert.assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
+        assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 
 }

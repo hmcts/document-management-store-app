@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.actuate.info;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.actuate.info.Info;
 
 import java.util.Collections;
@@ -10,10 +10,10 @@ import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class DmBuildInfoTest {
+class DmBuildInfoTest {
 
     @Test
-    public void shouldAddBuildInfoToBuilder() {
+    void shouldAddBuildInfoToBuilder() {
         DmBuildInfo dmBuildInfo = new DmBuildInfo("name","env","project");
 
         Info.Builder builder = new Info.Builder();
