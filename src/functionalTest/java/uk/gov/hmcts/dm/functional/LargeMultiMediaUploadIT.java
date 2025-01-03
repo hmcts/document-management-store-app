@@ -14,15 +14,14 @@ import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 
 @Slf4j
+@SuppressWarnings("java:S6813") // Suppress SonarQube warning for autowired field
 public class LargeMultiMediaUploadIT extends BaseIT {
 
+    @Autowired(required = false)
     private BlobReader blobReader;
-
-    @Autowired
-    public LargeMultiMediaUploadIT(BlobReader blobReader) {
-        super();
-        this.blobReader = blobReader;
-    }
+    private static final String ROLES_CONST = "roles";
+    private static final String CITIZEN_CONST = "citizen";
+    private static final String CASEWORKER_CONST = "caseworker";
 
     @Test
     public void uploadSmallMp3() {
@@ -67,8 +66,8 @@ public class LargeMultiMediaUploadIT extends BaseIT {
         givenRequest(getCitizen())
             .multiPart("files", fileName, inputStream, mimeType)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
+            .multiPart(ROLES_CONST, CITIZEN_CONST)
+            .multiPart(ROLES_CONST, CASEWORKER_CONST)
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
@@ -76,8 +75,8 @@ public class LargeMultiMediaUploadIT extends BaseIT {
             .body("_embedded.documents[0].originalDocumentName", equalTo(fileName))
             .body("_embedded.documents[0].mimeType", equalTo(mimeType))
             .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
+            .body("_embedded.documents[0].roles[0]", equalTo(CASEWORKER_CONST))
+            .body("_embedded.documents[0].roles[1]", equalTo(CITIZEN_CONST))
             .when()
             .post("/documents");
     }
@@ -87,8 +86,8 @@ public class LargeMultiMediaUploadIT extends BaseIT {
         givenRequest(getCitizen())
             .multiPart("files", fileName, inputStream, mimeType)
             .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
+            .multiPart(ROLES_CONST, CITIZEN_CONST)
+            .multiPart(ROLES_CONST, CASEWORKER_CONST)
             .relaxedHTTPSValidation()
             .expect().log().all()
             .statusCode(422)
