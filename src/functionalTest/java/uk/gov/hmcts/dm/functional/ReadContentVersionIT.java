@@ -1,12 +1,10 @@
 package uk.gov.hmcts.dm.functional;
 
 import io.restassured.response.Response;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,15 +16,12 @@ import static org.hamcrest.Matchers.is;
 
 public class ReadContentVersionIT extends BaseIT {
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
-
     private String documentUrl;
     private Object documentVersion;
     private String documentVersionUrl;
     private String documentVersionBinaryUrl;
 
-    @Before
+    @BeforeEach
     public void setup() {
         documentUrl = createDocumentAndGetUrlAs(getCitizen());
         documentVersion = createDocumentContentVersion(documentUrl, getCitizen(), getAttachment9Jpg());

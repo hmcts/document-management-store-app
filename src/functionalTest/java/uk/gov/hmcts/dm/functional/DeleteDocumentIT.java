@@ -3,26 +3,27 @@ package uk.gov.hmcts.dm.functional;
 import io.restassured.response.Response;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("java:S5960") // Suppress SonarQube warning for assertions
 public class DeleteDocumentIT extends BaseIT {
     private String citizenDocumentUrl;
 
     private String caseWorkerDocumentUrl;
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
+    private static final String TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH = "/testing/azure-storage-binary-exists/";
+    private static final String PERMANENT_TRUE_CONST = "?permanent=true";
+    private static final String DOCUMENT_WITH_VERSION_TEXT_CONST = "Document with version ";
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.citizenDocumentUrl = createDocumentAndGetUrlAs(getCitizen());
         this.caseWorkerDocumentUrl = createDocumentAndGetUrlAs(getCaseWorker());
@@ -93,17 +94,19 @@ public class DeleteDocumentIT extends BaseIT {
         String[] split = doc
             .split("/");
         String versionId = split[split.length - 1];
-        Assert.assertTrue("Document with version " + versionId + " should exist (" + metadata.body().print() + ")",
+        assertTrue(
             Boolean.parseBoolean(givenRequest(getCaseWorker())
                 .when()
-                .get("/testing/azure-storage-binary-exists/" + versionId)
-                .print()));
+                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId)
+                .print()),
+            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should exist (" + metadata.body().print() + ")"
+        );
 
         givenRequest(getCaseWorker())
             .expect()
             .statusCode(204)
             .when()
-            .delete(caseWorkerDocumentUrl + "?permanent=true");
+            .delete(caseWorkerDocumentUrl + PERMANENT_TRUE_CONST);
 
 
         givenRequest(getCaseWorker())
@@ -112,9 +115,10 @@ public class DeleteDocumentIT extends BaseIT {
             .when()
             .get(caseWorkerDocumentUrl);
 
-        Assert.assertFalse("Document with version " + versionId + " should NOT exist (" + metadata.body().print() + ")",
+        assertFalse(
             Boolean.parseBoolean(
-                givenRequest(getCaseWorker()).when().get("/testing/azure-storage-binary-exists/" + versionId).print()));
+                givenRequest(getCaseWorker()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId).print()),
+            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
     @Test
@@ -127,17 +131,18 @@ public class DeleteDocumentIT extends BaseIT {
             .split("/");
         String versionId = split[split.length - 1];
 
-        Assert.assertTrue("Document with version " + versionId + " should exist (" + metadata.body().print() + ")",
+        assertTrue(
             Boolean.parseBoolean(givenRequest(getCitizen())
                 .when()
-                .get("/testing/azure-storage-binary-exists/" + versionId)
-                .print()));
+                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId)
+                .print()),
+            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should exist (" + metadata.body().print() + ")");
 
         givenRequest(getCitizen())
             .expect()
             .statusCode(204)
             .when()
-            .delete(citizenDocumentUrl + "?permanent=true");
+            .delete(citizenDocumentUrl + PERMANENT_TRUE_CONST);
 
         givenRequest(getCitizen())
             .expect()
@@ -145,9 +150,10 @@ public class DeleteDocumentIT extends BaseIT {
             .when()
             .get(citizenDocumentUrl);
 
-        Assert.assertFalse("Document with version " + versionId + " should NOT exist (" + metadata.body().print() + ")",
+        assertFalse(
             Boolean.parseBoolean(givenRequest(
-                getCitizen()).when().get("/testing/azure-storage-binary-exists/" + versionId).print()));
+                getCitizen()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId).print()),
+            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
     @Test
@@ -157,7 +163,6 @@ public class DeleteDocumentIT extends BaseIT {
             Response response = createAUserForTtl(getCaseWorker());
 
             String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
-            String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
 
             givenRequest(getCaseWorker())
                 .multiPart("file", file(getAttachment9Jpg()), MediaType.IMAGE_JPEG_VALUE)
@@ -218,7 +223,7 @@ public class DeleteDocumentIT extends BaseIT {
                 .statusCode(204)
                 .body(not(containsString("ttl:")))
                 .when()
-                .delete(documentUrl1 + "?permanent=true");
+                .delete(documentUrl1 + PERMANENT_TRUE_CONST);
         }
 
     }

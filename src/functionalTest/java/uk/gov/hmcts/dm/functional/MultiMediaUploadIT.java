@@ -2,47 +2,53 @@ package uk.gov.hmcts.dm.functional;
 
 import io.restassured.response.Response;
 import net.serenitybdd.annotations.Pending;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assume.assumeFalse;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class MultiMediaUploadIT extends BaseIT {
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(1);
+    private static final String FILES_CONST = "files";
+    private static final String CLASSIFICATION_CONST = "classification";
+    private static final String ROLES_CONST = "roles";
+    private static final String CITIZEN_CONST = "citizen";
+    private static final String CASEWORKER_CONST = "caseworker";
+    private static final String ERROR_CONST = "error";
+    private static final String DOCUMENTS_PATH = "/documents";
+    private static final String MIME_TYPE_MP4 = "video/mp4";
 
     @Test
     public void mv1R1AsAuthenticatedUserIUploadLargeMultiMediaFiles() throws IOException {
         assumeFalse(isDropBoxFile());
-        uploadWhitelistedLargeFileThenDownload(getVideo52mbId(), "mp4-52mb", "video/mp4");
-        uploadWhitelistedLargeFileThenDownload(getVideo111mbId(), "mp4-111mb", "video/mp4");
+        uploadWhitelistedLargeFileThenDownload(getVideo52mbId(), "mp4-52mb", MIME_TYPE_MP4);
+        uploadWhitelistedLargeFileThenDownload(getVideo111mbId(), "mp4-111mb", MIME_TYPE_MP4);
     }
 
     @Test
     public void mv1R1AsAuthenticatedUserIUploadMultiMediaFiles() throws IOException {
-        uploadWhitelistedSmallFileThenDownload("video_test.mp4", "video/mp4");
+        uploadWhitelistedSmallFileThenDownload("video_test.mp4", MIME_TYPE_MP4);
         uploadWhitelistedSmallFileThenDownload("audio_test.mp3", "audio/mpeg");
         uploadWhitelistedSmallFileThenDownload("m4a.m4a", "audio/mp4");
     }
 
     @Test
     @Pending
+    @Disabled
     public void mv1R1AsAuthenticatedUserIShouldNotBeAbleToUploadFilesThatExceedPermittedSizes() {
-        uploadingFileThrowsValidationSizeErrorMessage("516MB_video_mp4.mp4", "video/mp4");
+        uploadingFileThrowsValidationSizeErrorMessage("516MB_video_mp4.mp4", MIME_TYPE_MP4);
         uploadingFileThrowsValidationSizeErrorMessage("367MB_word.doc", "application/msword");
 
     }
 
-    @Ignore
+    @Disabled
     @Test
     public void mv1R1AsAuthenticatedUserICannotUploadNotWhitelistedMultiMediaFiles() {
         uploadNotWhitelistedFileThenDownload("video_test.mov", "video/quicktime");
@@ -59,7 +65,7 @@ public class MultiMediaUploadIT extends BaseIT {
     }
 
     @Test
-    public void uploadWhiteListedWithPassword_then_fail() {
+    public void uploadWhiteListedWithPasswordThenFail() {
         assumeTrue(toggleConfiguration.isPasswordcheck());
 
         uploadFileThrowsPasswordErrorMessage("pw_protected.pdf", "application/pdf");
@@ -69,12 +75,11 @@ public class MultiMediaUploadIT extends BaseIT {
     private boolean uploadWhitelistedLargeFileThenDownload(String doc, String metadataKey, String mimeType)
         throws IOException {
         File file = largeFile(doc, metadataKey);
-        boolean exists = file.exists();
         Response response = givenRequest(getCitizen())
-            .multiPart("files", file, mimeType)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
+            .multiPart(FILES_CONST, file, mimeType)
+            .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
+            .multiPart(ROLES_CONST, CITIZEN_CONST)
+            .multiPart(ROLES_CONST, CASEWORKER_CONST)
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
@@ -82,10 +87,10 @@ public class MultiMediaUploadIT extends BaseIT {
             .body("_embedded.documents[0].originalDocumentName", equalTo(file.getName()))
             .body("_embedded.documents[0].mimeType", equalTo(mimeType))
             .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
+            .body("_embedded.documents[0].roles[0]", equalTo(CASEWORKER_CONST))
+            .body("_embedded.documents[0].roles[1]", equalTo(CITIZEN_CONST))
             .when()
-            .post("/documents");
+            .post(DOCUMENTS_PATH);
 
         String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
         String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
@@ -95,9 +100,9 @@ public class MultiMediaUploadIT extends BaseIT {
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
             .body("originalDocumentName", equalTo(file.getName()))
-            .body("classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-            .body("roles[0]", equalTo("caseworker"))
-            .body("roles[1]", equalTo("citizen"))
+            .body(CLASSIFICATION_CONST, equalTo(String.valueOf(Classifications.PUBLIC)))
+            .body("roles[0]", equalTo(CASEWORKER_CONST))
+            .body("roles[1]", equalTo(CITIZEN_CONST))
             .when()
             .get(documentUrl1);
 
@@ -110,15 +115,16 @@ public class MultiMediaUploadIT extends BaseIT {
             .get(documentContentUrl1)
             .asByteArray());
 
-        return file.delete();
+        Files.delete(file.toPath());
+        return true;
     }
 
     private void uploadWhitelistedSmallFileThenDownload(String fileName, String mimeType) throws IOException {
         Response response = givenRequest(getCitizen())
-            .multiPart("files", file(fileName), mimeType)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
+            .multiPart(FILES_CONST, file(fileName), mimeType)
+            .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
+            .multiPart(ROLES_CONST, CITIZEN_CONST)
+            .multiPart(ROLES_CONST, CASEWORKER_CONST)
             .expect().log().all()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
@@ -126,10 +132,10 @@ public class MultiMediaUploadIT extends BaseIT {
             .body("_embedded.documents[0].originalDocumentName", equalTo(fileName))
             .body("_embedded.documents[0].mimeType", equalTo(mimeType))
             .body("_embedded.documents[0].classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-            .body("_embedded.documents[0].roles[0]", equalTo("caseworker"))
-            .body("_embedded.documents[0].roles[1]", equalTo("citizen"))
+            .body("_embedded.documents[0].roles[0]", equalTo(CASEWORKER_CONST))
+            .body("_embedded.documents[0].roles[1]", equalTo(CITIZEN_CONST))
             .when()
-            .post("/documents");
+            .post(DOCUMENTS_PATH);
 
         String documentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.self.href"));
         String documentContentUrl1 = replaceHttp(response.path("_embedded.documents[0]._links.binary.href"));
@@ -139,9 +145,9 @@ public class MultiMediaUploadIT extends BaseIT {
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_MEDIA_TYPE_VALUE)
             .body("originalDocumentName", equalTo(fileName))
-            .body("classification", equalTo(String.valueOf(Classifications.PUBLIC)))
-            .body("roles[0]", equalTo("caseworker"))
-            .body("roles[1]", equalTo("citizen"))
+            .body(CLASSIFICATION_CONST, equalTo(String.valueOf(Classifications.PUBLIC)))
+            .body("roles[0]", equalTo(CASEWORKER_CONST))
+            .body("roles[1]", equalTo(CITIZEN_CONST))
             .when()
             .get(documentUrl1);
 
@@ -157,42 +163,42 @@ public class MultiMediaUploadIT extends BaseIT {
     }
 
     private void uploadNotWhitelistedFileThenDownload(String filename, String mimeType) {
-        Response response = givenRequest(getCitizen())
-            .multiPart("files", file(filename), mimeType)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
+        givenRequest(getCitizen())
+            .multiPart(FILES_CONST, file(filename), mimeType)
+            .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
+            .multiPart(ROLES_CONST, CITIZEN_CONST)
+            .multiPart(ROLES_CONST, CASEWORKER_CONST)
             .expect().log().all()
             .statusCode(422)
-            .body("error", equalTo("Your upload contains a disallowed file type"))
+            .body(ERROR_CONST, equalTo("Your upload contains a disallowed file type"))
             .when()
-            .post("/documents");
+            .post(DOCUMENTS_PATH);
     }
 
     private void uploadingFileThrowsValidationSizeErrorMessage(String filename, String mimeType) {
-        Response response = givenRequest(getCitizen())
-            .multiPart("files", file(filename), mimeType)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
+        givenRequest(getCitizen())
+            .multiPart(FILES_CONST, file(filename), mimeType)
+            .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
+            .multiPart(ROLES_CONST, CITIZEN_CONST)
+            .multiPart(ROLES_CONST, CASEWORKER_CONST)
             .expect().log().all()
             .statusCode(422)
-            .body("error", equalTo("Your upload file size is more than allowed limit."))
+            .body(ERROR_CONST, equalTo("Your upload file size is more than allowed limit."))
             .when()
-            .post("/documents");
+            .post(DOCUMENTS_PATH);
     }
 
     private void uploadFileThrowsPasswordErrorMessage(String filename, String mimeType) {
-        Response response = givenRequest(getCitizen())
-            .multiPart("files", file(filename), mimeType)
-            .multiPart("classification", String.valueOf(Classifications.PUBLIC))
-            .multiPart("roles", "citizen")
-            .multiPart("roles", "caseworker")
+        givenRequest(getCitizen())
+            .multiPart(FILES_CONST, file(filename), mimeType)
+            .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
+            .multiPart(ROLES_CONST, CITIZEN_CONST)
+            .multiPart(ROLES_CONST, CASEWORKER_CONST)
             .expect().log().all()
             .statusCode(422)
-            .body("error", equalTo("Your upload file is password protected."))
+            .body(ERROR_CONST, equalTo("Your upload file is password protected."))
             .when()
-            .post("/documents");
+            .post(DOCUMENTS_PATH);
     }
 
 

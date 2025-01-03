@@ -1,9 +1,7 @@
 package uk.gov.hmcts.dm.functional;
 
 import org.hamcrest.Matchers;
-import org.junit.Rule;
-import org.junit.Test;
-import uk.gov.hmcts.reform.em.test.retry.RetryRule;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +13,11 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class ReadDocumentIT extends BaseIT {
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(3);
+    private static final String PRIVATE_CONST = "PRIVATE";
+    private static final String PUBLIC_CONST = "PUBLIC";
+    private static final String CASEWORKER_CONST = "caseworker";
+    private static final String CITIZEN_CONST = "citizen";
+    private static final String CREATED_BY_CONST = "createdBy";
 
     @Test
     public void r1AsAuthenticatedUserWhoIsAnOwnerCanReadOwnedDocuments() {
@@ -107,7 +108,7 @@ public class ReadDocumentIT extends BaseIT {
 
         String documentUrl = createDocumentAndGetUrlAs(getCitizen());
 
-        givenSpacedRolesRequest(getCaseWorker(),
+        givenRequest(getCaseWorker(),
             new ArrayList<>(Arrays.asList(getCustomUserRole(),
                 getCaseWorkerRoleProbate())))
             .expect()
@@ -161,9 +162,9 @@ public class ReadDocumentIT extends BaseIT {
     public void r14AsAuthenticatedUserWithASpecificRoleICanAccessADocIfItsClassificationIsRestrictedAndRolesMatch() {
 
         String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "RESTRICTED",
-            new ArrayList<>(List.of("caseworker")));
+            new ArrayList<>(List.of(CASEWORKER_CONST)));
 
-        givenRequest(getCitizen2(), new ArrayList<>(List.of("caseworker")))
+        givenRequest(getCitizen2(), new ArrayList<>(List.of(CASEWORKER_CONST)))
             .expect()
             .statusCode(200)
             .when()
@@ -176,7 +177,7 @@ public class ReadDocumentIT extends BaseIT {
 
         ArrayList<String> roles = new ArrayList<>(List.of("not-a-caseworker"));
 
-        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "PRIVATE", roles);
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), PRIVATE_CONST, roles);
 
         givenRequest(getCitizen2(), roles)
             .expect()
@@ -188,10 +189,10 @@ public class ReadDocumentIT extends BaseIT {
     @Test
     public void r16AsAuthenticatedUserWithASpecificRoleICanAccessADocumentIfItsClassificationIsPublicAndRolesMatch() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "PUBLIC",
-            new ArrayList<>(List.of("caseworker")));
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), PUBLIC_CONST,
+            new ArrayList<>(List.of(CASEWORKER_CONST)));
 
-        givenRequest(getCitizen2(), new ArrayList<>(List.of("caseworker")))
+        givenRequest(getCitizen2(), new ArrayList<>(List.of(CASEWORKER_CONST)))
             .expect()
             .statusCode(200)
             .when()
@@ -202,10 +203,10 @@ public class ReadDocumentIT extends BaseIT {
     @Test
     public void r17AsAuthenticatedUserWithASpecificRoleICanAccessADocumentIfItsClassificationIsPublicAndMatchesRole() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "PUBLIC",
-            new ArrayList<>(Arrays.asList("citizen", "caseworker")));
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), PUBLIC_CONST,
+            new ArrayList<>(Arrays.asList(CITIZEN_CONST, CASEWORKER_CONST)));
 
-        givenRequest(getCitizen2(), new ArrayList<>(List.of("caseworker")))
+        givenRequest(getCitizen2(), new ArrayList<>(List.of(CASEWORKER_CONST)))
             .expect()
             .statusCode(200)
             .when()
@@ -215,10 +216,10 @@ public class ReadDocumentIT extends BaseIT {
     @Test
     public void r18AsAuthenticatedUserWithNoRoleICannotAccessADocumentIfItsClassificationIsPublicWithNoRole() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "PUBLIC",
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), PUBLIC_CONST,
             Collections.emptyList());
 
-        givenRequest(getCitizen2())
+        givenRequest()
             .expect().statusCode(403)
             .when().get(documentUrl);
     }
@@ -226,7 +227,7 @@ public class ReadDocumentIT extends BaseIT {
     @Test
     public void r19AsAuthenticatedUserWithSomeRoleICannotAccessADocumentIfItsClassificationIsPublicAndRolesNotMatch() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "PUBLIC",
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), PUBLIC_CONST,
             Collections.emptyList());
 
         givenRequest(getCitizen2())
@@ -240,10 +241,10 @@ public class ReadDocumentIT extends BaseIT {
     @Test
     public void r20AsAuthUserWithNoRoleTestsByDefaultSetsRoleAsCitzICanAccessADocIfItsClassPublicAndRolesIsCitz() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "PUBLIC",
-            new ArrayList<>(List.of("citizen")));
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), PUBLIC_CONST,
+            new ArrayList<>(List.of(CITIZEN_CONST)));
 
-        givenRequest(getCitizen2(), new ArrayList<>(List.of("citizen")))
+        givenRequest(getCitizen2(), new ArrayList<>(List.of(CITIZEN_CONST)))
             .expect()
             .statusCode(200)
             .when()
@@ -253,7 +254,7 @@ public class ReadDocumentIT extends BaseIT {
     @Test
     public void r21AsAnOwnerICanAccessADocumentEvenIfItsClassificationIsPrivateWithNoRoles() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCitizen2(), getAttachment9Jpg(), "PRIVATE",
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen2(), getAttachment9Jpg(), PRIVATE_CONST,
             Collections.emptyList());
 
         givenRequest(getCitizen2())
@@ -265,7 +266,7 @@ public class ReadDocumentIT extends BaseIT {
     @Test
     public void r22AsAuthenticatedUserWithASpecificRoleICanTAccessADocIfClassificationIsRestrictedAndRolesDonTMatch() {
         String documentUrl = createDocumentAndGetUrlAs(getCitizen(), getAttachment9Jpg(), "RESTRICTED",
-            new ArrayList<>(List.of("caseworker")));
+            new ArrayList<>(List.of(CASEWORKER_CONST)));
 
         givenRequest(getCitizen2())
             .expect()
@@ -277,8 +278,8 @@ public class ReadDocumentIT extends BaseIT {
     @Test
     public void r23AsAnOwnerWithNoRoleICanAccessADocumentEvenIfItsClassificationIsPrivateAndRoleAsCaseworker() {
 
-        String documentUrl = createDocumentAndGetUrlAs(getCitizen2(), getAttachment9Jpg(), "PRIVATE",
-            new ArrayList<>(List.of("caseworker")));
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen2(), getAttachment9Jpg(), PRIVATE_CONST,
+            new ArrayList<>(List.of(CASEWORKER_CONST)));
 
         givenRequest(getCitizen2())
             .expect()
@@ -295,7 +296,7 @@ public class ReadDocumentIT extends BaseIT {
         givenRequest(getCaseWorker(), new ArrayList<>(List.of(getCaseWorkerRoleProbate())))
             .expect().log().all()
             .statusCode(200)
-            .body("createdBy", equalTo(getCitizen()))
+            .body(CREATED_BY_CONST, equalTo(getCitizen()))
             .when()
             .get(documentUrl)
             .thenReturn();
@@ -303,7 +304,7 @@ public class ReadDocumentIT extends BaseIT {
         givenRequest(getCaseWorker(), new ArrayList<>(List.of(getCaseWorkerRoleSscs())))
             .expect().log().all()
             .statusCode(200)
-            .body("createdBy", Matchers.equalTo(getCitizen()))
+            .body(CREATED_BY_CONST, Matchers.equalTo(getCitizen()))
             .when()
             .get(documentUrl)
             .thenReturn();
@@ -311,7 +312,7 @@ public class ReadDocumentIT extends BaseIT {
         givenRequest(getCaseWorker(), new ArrayList<>(List.of(getCaseWorkerRoleCmc())))
             .expect().log().all()
             .statusCode(200)
-            .body("createdBy", Matchers.equalTo(getCitizen()))
+            .body(CREATED_BY_CONST, Matchers.equalTo(getCitizen()))
             .when()
             .get(documentUrl)
             .thenReturn();
@@ -344,19 +345,17 @@ public class ReadDocumentIT extends BaseIT {
             .expect()
             .statusCode(200)
             .log().all()
-            .body("createdBy", Matchers.equalTo(getCaseWorker()))
+            .body(CREATED_BY_CONST, Matchers.equalTo(getCaseWorker()))
             .when()
             .get(documentUrl)
             .thenReturn();
 
 
-        String userNameFromResponse = givenRequest(getCaseWorker(), List.of(getCaseWorkerRoleProbate()))
+        givenRequest(getCaseWorker(), List.of(getCaseWorkerRoleProbate()))
             .when()
             .get(documentUrl + "/auditEntries")
             .body().path("_embedded.auditEntries[0].username");
 
-        // TODO : This assert Fails on Nightly build only. Passes on Local,  Preview as well as Master build.
-        //assertThat(userNameFromResponse,equalTo(CASE_WORKER));
     }
 
     @Test
