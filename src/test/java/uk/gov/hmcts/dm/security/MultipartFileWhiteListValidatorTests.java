@@ -1,17 +1,19 @@
 package uk.gov.hmcts.dm.security;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
 
-@RunWith(SpringRunner.class)
-public class MultipartFileWhiteListValidatorTests {
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@ExtendWith(SpringExtension.class)
+class MultipartFileWhiteListValidatorTests {
 
     @Mock
     FileContentVerifier fileContentVerifier;
@@ -20,17 +22,17 @@ public class MultipartFileWhiteListValidatorTests {
     private MultipartFileWhiteListValidator multipartFileWhiteListValidator;
 
     @Test
-    public void testSuccess() {
+    void testSuccess() {
         MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(fileContentVerifier.verifyContentType(file)).thenReturn(true);
-        Assert.assertTrue(multipartFileWhiteListValidator.isValid(file, null));
+        assertTrue(multipartFileWhiteListValidator.isValid(file, null));
     }
 
     @Test
-    public void testFailure() {
+    void testFailure() {
         MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(fileContentVerifier.verifyContentType(file)).thenReturn(false);
-        Assert.assertFalse(multipartFileWhiteListValidator.isValid(file, null));
+        assertFalse(multipartFileWhiteListValidator.isValid(file, null));
     }
 
 

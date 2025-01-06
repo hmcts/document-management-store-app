@@ -1,12 +1,11 @@
 package uk.gov.hmcts.dm.service;
 
 import org.assertj.core.util.Maps;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
@@ -27,12 +26,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-public class AuditedStoredDocumentOperationsServiceTests {
+@ExtendWith(SpringExtension.class)
+class AuditedStoredDocumentOperationsServiceTests {
 
     @Mock
     private StoredDocumentService storedDocumentService;
@@ -45,7 +46,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
 
 
     @Test
-    public void testReadStoredDocument() {
+    void testReadStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(storedDocument));
         auditedStoredDocumentOperationsService.readStoredDocument(TestUtil.RANDOM_UUID);
@@ -53,17 +54,17 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testReadNullStoredDocument() {
+    void testReadNullStoredDocument() {
         StoredDocument storedDocument = null;
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         StoredDocument readStoredDocument =
             auditedStoredDocumentOperationsService.readStoredDocument(TestUtil.RANDOM_UUID);
-        Assert.assertNull(readStoredDocument);
+        assertNull(readStoredDocument);
         verify(auditEntryService, times(0)).createAndSaveEntry(storedDocument, AuditActions.READ);
     }
 
     @Test
-    public void testAddDocumentVersion() {
+    void testAddDocumentVersion() {
         StoredDocument storedDocument = new StoredDocument();
         MultipartFile multipartFile = TestUtil.TEST_FILE;
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
@@ -76,7 +77,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testCreateStoredDocuments() {
+    void testCreateStoredDocuments() {
         List<MultipartFile> multipartFiles = Stream.of(TestUtil.TEST_FILE).collect(Collectors.toList());
         UploadDocumentsCommand documentsCommand = new UploadDocumentsCommand();
         documentsCommand.setFiles(multipartFiles);
@@ -93,7 +94,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testDeleteStoredDocument() {
+    void testDeleteStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(storedDocument));
         auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
@@ -103,7 +104,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testDeleteDeletedStoredDocument() {
+    void testDeleteDeletedStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(storedDocument));
@@ -114,7 +115,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testDeleteNullStoredDocument() {
+    void testDeleteNullStoredDocument() {
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
         auditedStoredDocumentOperationsService.deleteStoredDocument(TestUtil.RANDOM_UUID, false);
         verify(storedDocumentService, times(1)).findOne(TestUtil.RANDOM_UUID);
@@ -124,7 +125,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testHardDeleteOnNotHardDeleted() {
+    void testHardDeleteOnNotHardDeleted() {
         StoredDocument storedDocument = new StoredDocument();
         auditedStoredDocumentOperationsService.deleteStoredDocument(storedDocument, true);
         verify(storedDocumentService, times(1)).deleteDocument(storedDocument, true);
@@ -132,7 +133,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testHardDeleteOnHardDeleted() {
+    void testHardDeleteOnHardDeleted() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setHardDeleted(true);
         auditedStoredDocumentOperationsService.deleteStoredDocument(storedDocument, true);
@@ -141,7 +142,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testHardDeleteOnSoftDeleted() {
+    void testHardDeleteOnSoftDeleted() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
         auditedStoredDocumentOperationsService.deleteStoredDocument(storedDocument, true);
@@ -150,7 +151,7 @@ public class AuditedStoredDocumentOperationsServiceTests {
     }
 
     @Test
-    public void testUpdateDocument() {
+    void testUpdateDocument() {
         StoredDocument storedDocument = new StoredDocument();
         UpdateDocumentCommand command = new UpdateDocumentCommand();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.of(storedDocument));
@@ -160,15 +161,17 @@ public class AuditedStoredDocumentOperationsServiceTests {
         verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
     }
 
-    @Test(expected = StoredDocumentNotFoundException.class)
-    public void testUpdateDocumentThatDoesNotExist() {
+    @Test
+    void testUpdateDocumentThatDoesNotExist() {
         UpdateDocumentCommand command = new UpdateDocumentCommand();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
-        auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
+        assertThrows(StoredDocumentNotFoundException.class, () -> {
+            auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
+        });
     }
 
     @Test
-    public void testBulkUpdateDocument() {
+    void testBulkUpdateDocument() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.randomUUID());
         Map<String, String> metadata = Maps.newHashMap("UpdateKey", "UpdateValue");
@@ -182,19 +185,22 @@ public class AuditedStoredDocumentOperationsServiceTests {
         verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
     }
 
-    @Test(expected = StoredDocumentNotFoundException.class)
-    public void testBulkUpdateDocumentWithError() {
+    @Test
+    void testBulkUpdateDocumentWithError() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.randomUUID());
-        Map<String, String> metadata = Maps.newHashMap("UpdateKey", "UpdateValue");
+        Map<String, String> metadata = Map.of("UpdateKey", "UpdateValue");
         Date newTtl = new Date();
 
         when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.empty());
-        auditedStoredDocumentOperationsService.updateDocument(storedDocument.getId(), metadata, newTtl);
+        var storedDocumentId = storedDocument.getId();
+        assertThrows(StoredDocumentNotFoundException.class, () ->
+            auditedStoredDocumentOperationsService.updateDocument(storedDocumentId, metadata, newTtl)
+        );
     }
 
     @Test
-    public void testDeleteCaseStoredDocumentsShouldMarkAllDocumentsForDeletion() {
+    void testDeleteCaseStoredDocumentsShouldMarkAllDocumentsForDeletion() {
         final List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).toList();
 
         final CaseDocumentsDeletionResults caseDocumentsDeletionResults =
@@ -204,4 +210,3 @@ public class AuditedStoredDocumentOperationsServiceTests {
         assertThat(caseDocumentsDeletionResults.getMarkedForDeletion().equals(storedDocuments.size()));
     }
 }
-

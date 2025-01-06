@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.controller;
 
 import com.google.common.collect.Lists;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
+class StoredDocumentUpdateControllerTests extends ComponentTestBase {
 
     private final UUID id = UUID.randomUUID();
 
@@ -25,7 +25,7 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
         new StoredDocumentNotFoundException(id);
 
     @Test
-    public void testUpdateDocument() throws Exception {
+    void testUpdateDocument() throws Exception {
 
         when(this.auditedStoredDocumentOperationsService.updateDocument(eq(id), any(UpdateDocumentCommand.class)))
             .thenReturn(new StoredDocument());
@@ -38,7 +38,7 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testBulkUpdate() throws Exception {
+    void testBulkUpdate() throws Exception {
 
         Date ttl = new Date();
         when(this.auditedStoredDocumentOperationsService.updateDocument(eq(id), any(), eq(ttl)))
@@ -60,7 +60,7 @@ public class StoredDocumentUpdateControllerTests extends ComponentTestBase {
     }
 
     @Test
-    public void testBulkUpdateStoredDocumentNotFoundException() throws Exception {
+    void testBulkUpdateStoredDocumentNotFoundException() throws Exception {
 
         Date ttl = new Date();
 
