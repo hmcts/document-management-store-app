@@ -5,19 +5,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-@RunWith(SpringIntegrationSerenityRunner.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @WithTags(@WithTag("testType:Smoke"))
-public class MappingUrlIT extends BaseIT {
+@ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
+class MappingUrlIT extends BaseIT {
 
 
     @Value("${toggle.metadatasearchendpoint}")
@@ -32,31 +33,31 @@ public class MappingUrlIT extends BaseIT {
     private boolean testing;
     private List<String> allEndpoints;
 
-    @Before
+    @BeforeEach
     public void setup() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(givenUnauthenticatedRequest().get("/mappings").print());
-        allEndpoints = jsonNode.findValues("predicate").stream().map(JsonNode::asText).collect(Collectors.toList());
+        allEndpoints = jsonNode.findValues("predicate").stream().map(JsonNode::asText).toList();
     }
 
     @Test
-    public void toggle_metadatasearchendpoint_toggle_Mappings() {
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
+    void toggle_metadatasearchendpoint_toggle_Mappings() {
+        assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.contains("owned")), metadatasearchendpoint);
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
+        assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.contains("filter")), metadatasearchendpoint);
     }
 
 
     @Test
-    public void toggle_deleteenabled_toggle_Mappings() {
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
+    void toggle_deleteenabled_toggle_Mappings() {
+        assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.equals("{DELETE [/documents/{documentId}]}")), deleteenabled);
     }
 
     @Test
-    public void toggle_testing_toggle_Testing() {
-        Assert.assertEquals(allEndpoints.stream().anyMatch(endpoint ->
+    void toggle_testing_toggle_Testing() {
+        assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.equals("{GET [/testing/azure-storage-binary-exists/{id}]}")), testing);
 
     }

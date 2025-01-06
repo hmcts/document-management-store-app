@@ -23,7 +23,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-
 @ExtendWith(SpringExtension.class)
 class AuditedDocumentContentVersionOperationsServiceTests {
 
@@ -52,7 +51,6 @@ class AuditedDocumentContentVersionOperationsServiceTests {
         verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.READ);
     }
 
-
     @Test
     void testReadFileContentVersionThatExists() {
         StoredDocument storedDocument = new StoredDocument();
@@ -67,7 +65,6 @@ class AuditedDocumentContentVersionOperationsServiceTests {
 
     @Test
     void testReadFileContentVersionThatBelongsToDeletedDocument() {
-        // Arrange
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setDeleted(true);
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
@@ -77,20 +74,19 @@ class AuditedDocumentContentVersionOperationsServiceTests {
 
         when(documentContentVersionService.findById(uuid)).thenReturn(Optional.of(documentContentVersion));
 
-        assertThrows(DocumentContentVersionNotFoundException.class, () -> {
-            auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
-        });
+        assertThrows(DocumentContentVersionNotFoundException.class, () ->
+            auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid)
+        );
     }
 
     @Test
-    void testReadFileContentVersionThatDoesNotExist() {
+    void testReadFileContentVersionThatDoesNotExists() {
         UUID uuid = UUID.randomUUID();
 
         when(documentContentVersionService.findById(uuid)).thenReturn(Optional.empty());
 
-        assertThrows(DocumentContentVersionNotFoundException.class, () -> {
-            auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid);
-        });
+        assertThrows(DocumentContentVersionNotFoundException.class, () ->
+            auditedDocumentContentVersionOperationsService.readDocumentContentVersion(uuid)
+        );
     }
-
 }

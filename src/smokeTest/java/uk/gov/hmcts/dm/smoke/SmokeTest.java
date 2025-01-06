@@ -2,21 +2,23 @@ package uk.gov.hmcts.dm.smoke;
 
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
-import net.serenitybdd.junit.spring.integration.SpringIntegrationSerenityRunner;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.rest.SerenityRest;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.smoke.config.SmokeTestContextConfiguration;
 
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest(classes = {SmokeTestContextConfiguration.class})
-@RunWith(SpringIntegrationSerenityRunner.class)
+@ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
 @WithTags(@WithTag("testType:Smoke"))
-public class SmokeTest {
+class SmokeTest {
 
     private static final String MESSAGE = "Welcome to DM Store API!";
 
@@ -24,7 +26,7 @@ public class SmokeTest {
     String testUrl;
 
     @Test
-    public void testHealthEndpoint() {
+    void testHealthEndpoint() {
         SerenityRest.useRelaxedHTTPSValidation();
 
         Map responseMap =
@@ -38,13 +40,13 @@ public class SmokeTest {
                 .body()
                 .as(Map.class);
 
-        Assert.assertEquals(1, responseMap.size());
-        Assert.assertEquals(MESSAGE, responseMap.get("message"));
+        assertEquals(1, responseMap.size());
+        assertEquals(MESSAGE, responseMap.get("message"));
 
     }
 
     @Test
-    public void testHealthUrlEndpoint() {
+    void testHealthUrlEndpoint() {
         SerenityRest.useRelaxedHTTPSValidation();
 
         String response = SerenityRest
@@ -56,6 +58,6 @@ public class SmokeTest {
             .extract()
             .body().jsonPath().getString("status");
 
-        Assert.assertEquals("UP", response);
+        assertEquals("UP", response);
     }
 }

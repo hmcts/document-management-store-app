@@ -90,9 +90,9 @@ class BlobStorageReadServiceTest {
         when(toggleConfiguration.isChunking()).thenReturn(true);
         when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=A-Z");
 
-        assertThrows(InvalidRangeRequestException.class, () -> {
-            blobStorageReadService.loadBlob(documentContentVersion, request, response);
-        });
+        assertThrows(InvalidRangeRequestException.class, () ->
+            blobStorageReadService.loadBlob(documentContentVersion, request, response)
+        );
     }
 
     @Test
@@ -100,9 +100,9 @@ class BlobStorageReadServiceTest {
         when(toggleConfiguration.isChunking()).thenReturn(true);
         when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=1023-0");
 
-        assertThrows(InvalidRangeRequestException.class, () -> {
-            blobStorageReadService.loadBlob(documentContentVersion, request, response);
-        });
+        assertThrows(InvalidRangeRequestException.class, () ->
+            blobStorageReadService.loadBlob(documentContentVersion, request, response)
+        );
     }
 
     @Test

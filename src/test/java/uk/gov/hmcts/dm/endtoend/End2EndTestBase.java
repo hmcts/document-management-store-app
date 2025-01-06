@@ -3,18 +3,18 @@ package uk.gov.hmcts.dm.endtoend;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -36,7 +36,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     classes = DmApp.class)
@@ -54,20 +54,20 @@ public abstract class End2EndTestBase {
     @Autowired
     protected WebApplicationContext webApplicationContext;
 
-    @MockBean
+    @MockitoBean
     protected BlobStorageWriteService blobStorageWriteService;
 
-    @MockBean
+    @MockitoBean
     protected BlobStorageReadService blobStorageReadService;
 
-    @MockBean
+    @MockitoBean
     protected BlobStorageDeleteService blobStorageDeleteService;
 
-    @MockBean
+    @MockitoBean
     protected TestController testController;
 
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         this.mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
             .apply(springSecurity())

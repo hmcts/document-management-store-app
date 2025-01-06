@@ -62,7 +62,7 @@ class BlobStorageDeleteServiceTest {
     }
 
     @Test
-    public void delete_documentContentVersion() {
+    void delete_documentContentVersion() {
         when(mockResponse.getStatusCode()).thenReturn(202);
         given(blob.exists()).willReturn(true);
         given(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))

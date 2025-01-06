@@ -90,7 +90,7 @@ class SearchServiceTests {
     }
 
     @Test
-    void testSearchByCreator() {
+    public void testSearchByCreator() {
 
         List<StoredDocument> documents = Arrays.asList(
             new StoredDocument(),
@@ -116,7 +116,7 @@ class SearchServiceTests {
     }
 
     @Test
-    void findStoredDocumentsByCreator() {
+    void testFindStoredDocumentsByCreator() {
         assertThrows(NullPointerException.class, () ->
             searchService.findStoredDocumentsByCreator("x", null)
         );

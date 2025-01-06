@@ -69,6 +69,4 @@ class AuditEntryServiceTests {
         List<StoredDocumentAuditEntry> entries = auditEntryService.findStoredDocumentAudits(TestUtil.STORED_DOCUMENT);
         assertEquals(1, entries.size());
     }
-
-
 }

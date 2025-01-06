@@ -48,7 +48,6 @@ class SecurityUtilServiceTests {
         assertEquals("x", securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
 
-
     @Test
     void testFailureOfUsernameFromSecurityContextWhenItsNotThere() {
         assertNull(securityUtilService.getCurrentlyAuthenticatedServiceName());

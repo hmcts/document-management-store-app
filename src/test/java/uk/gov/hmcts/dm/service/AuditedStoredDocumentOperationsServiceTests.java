@@ -165,7 +165,6 @@ class AuditedStoredDocumentOperationsServiceTests {
     void testUpdateDocumentThatDoesNotExist() {
         UpdateDocumentCommand command = new UpdateDocumentCommand();
         when(storedDocumentService.findOne(TestUtil.RANDOM_UUID)).thenReturn(Optional.empty());
-
         assertThrows(StoredDocumentNotFoundException.class, () -> {
             auditedStoredDocumentOperationsService.updateDocument(TestUtil.RANDOM_UUID, command);
         });
@@ -190,13 +189,13 @@ class AuditedStoredDocumentOperationsServiceTests {
     void testBulkUpdateDocumentWithError() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.randomUUID());
-        Map<String, String> metadata = Maps.newHashMap("UpdateKey", "UpdateValue");
+        Map<String, String> metadata = Map.of("UpdateKey", "UpdateValue");
         Date newTtl = new Date();
 
         when(storedDocumentService.findOne(storedDocument.getId())).thenReturn(Optional.empty());
-        var id = storedDocument.getId();
+        var storedDocumentId = storedDocument.getId();
         assertThrows(StoredDocumentNotFoundException.class, () ->
-            auditedStoredDocumentOperationsService.updateDocument(id, metadata, newTtl)
+            auditedStoredDocumentOperationsService.updateDocument(storedDocumentId, metadata, newTtl)
         );
     }
 
@@ -211,4 +210,3 @@ class AuditedStoredDocumentOperationsServiceTests {
         assertThat(caseDocumentsDeletionResults.getMarkedForDeletion().equals(storedDocuments.size()));
     }
 }
-

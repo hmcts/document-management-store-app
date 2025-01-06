@@ -307,9 +307,9 @@ class StoredDocumentServiceTests {
 
     @Test
     void testUpdateStoredDocumentNullStoredDocument() {
-        var updateCom = new UpdateDocumentCommand();
+        var updateCommand = new UpdateDocumentCommand();
         assertThrows(NullPointerException.class, () ->
-            storedDocumentService.updateStoredDocument(null, updateCom)
+            storedDocumentService.updateStoredDocument(null, updateCommand)
         );
     }
 
@@ -320,6 +320,7 @@ class StoredDocumentServiceTests {
             storedDocumentService.updateStoredDocument(storedDoc, null)
         );
     }
+
 
     @Test
     void testUpdateMigratedStoredDocumentNullStoredDocument() {
