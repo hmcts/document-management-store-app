@@ -291,7 +291,8 @@ pitest {
     timestampedReports = false
     failWhenNoMutations = false
     detectInlinedCode = true
-
+    junit5PluginVersion = '1.2.1'
+    pitestVersion = '1.17.3'
 }
 
 project.tasks['sonarqube'].group = "Verification"
