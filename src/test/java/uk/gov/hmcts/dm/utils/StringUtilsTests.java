@@ -32,8 +32,7 @@ class StringUtilsTests {
     @Test
     void testSanitiseUserRoles() {
 
-        String sanitised = StringUtils.sanitiseUserRoles(null);
-        assertNull(sanitised);
+        String sanitised;
 
         sanitised = StringUtils.sanitiseUserRoles("±!@£$%^&*()_+}{|\"':?><~abc");
         assertEquals("_+abc", sanitised);

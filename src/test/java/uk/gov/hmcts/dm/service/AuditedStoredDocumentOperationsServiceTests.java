@@ -210,4 +210,3 @@ class AuditedStoredDocumentOperationsServiceTests {
         assertThat(caseDocumentsDeletionResults.getMarkedForDeletion().equals(storedDocuments.size()));
     }
 }
-
