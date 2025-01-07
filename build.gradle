@@ -96,7 +96,7 @@ def versions = [
     logging            : '6.1.7',
     pact_version       : '4.6.16',
     emTestHelper       : '2.0.9',
-    shedlock           : '6.0.2',
+    shedlock           : '6.1.0',
     hibernate          : '6.6.4.Final',
     jupiter            : '5.11.4',
     springSecurity     : '6.4.2'
@@ -211,7 +211,7 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.0'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.1'
 }
 
 dependencyManagement {
