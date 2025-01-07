@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.functional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import io.restassured.RestAssured;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,6 +23,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Service
 public class AuthTokenProvider {
 
+    private static final String BEARER_PREFIX = "Bearer ";
     private final String idamS2SBaseUri;
     private final String idamUserBaseUrl;
     private final String s2sSecret;
@@ -37,8 +38,6 @@ public class AuthTokenProvider {
         this.idamUserBaseUrl = idamUserBaseUri;
         this.s2sSecret = s2sSecret;
         this.ccdCaseDisposerS2sSecret = ccdCaseDisposerS2sSecret;
-        System.out.println("IDAM User URL - " + idamUserBaseUri);
-        System.out.println("IDAM S2S URL - " + idamS2SBaseUri);
     }
 
     public AuthTokens getTokens(String email, String password) {
@@ -52,7 +51,7 @@ public class AuthTokenProvider {
                 "forename", "test",
                 "surname", "test",
                 "password", password,
-                "roles", ImmutableList.of(ImmutableMap.of("code", maybeRole.orElse("citizen"),
+                "roles", List.of(List.of("code", maybeRole.orElse("citizen"),
                         "displayName", maybeRole.orElse("Citizen"))));
 
         RestAssured
@@ -81,7 +80,7 @@ public class AuthTokenProvider {
 
         assertThat(response.getStatusCode(), CoreMatchers.equalTo(200));
 
-        return "Bearer " + response
+        return BEARER_PREFIX + response
             .getBody()
             .print();
     }
@@ -103,7 +102,7 @@ public class AuthTokenProvider {
 
         assertThat(response.getStatusCode(), CoreMatchers.equalTo(200));
 
-        return "Bearer " + response
+        return BEARER_PREFIX + response
             .getBody()
             .print();
     }
@@ -122,7 +121,7 @@ public class AuthTokenProvider {
         final Response details =
             RestAssured.given()
             .baseUri(idamUserBaseUrl)
-            .header("Authorization", "Bearer " + userToken)
+            .header("Authorization", BEARER_PREFIX + userToken)
             .get("details");
 
         details.then().statusCode(200);
