@@ -9,8 +9,8 @@ import uk.gov.hmcts.dm.repository.RepositoryFinder;
 import uk.gov.hmcts.dm.security.domain.DomainPermissionEvaluator;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
