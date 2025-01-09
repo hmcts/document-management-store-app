@@ -144,7 +144,7 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.1.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.1.1'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.1.1'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.0'
