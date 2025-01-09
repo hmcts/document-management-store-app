@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.dm.functional.blob.BlobReader;
 
 import java.io.InputStream;
+import java.util.Objects;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assume.assumeNotNull;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 
@@ -57,7 +58,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
     private void streamBlobToUpload(String fileName,String mimeType,
                                     TriConsumer<InputStream, String, String> uploadFunction) {
-        assumeNotNull(blobReader);
+        assumeTrue(Objects.nonNull(blobReader));
         BlockBlobClient blockBlobClient = blobReader.retrieveBlobToProcess(fileName);
         uploadFunction.accept(blockBlobClient.openInputStream(), fileName, mimeType);
     }
