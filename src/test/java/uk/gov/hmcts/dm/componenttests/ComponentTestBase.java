@@ -43,7 +43,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = MOCK)
 @Transactional
 @EnableSpringDataWebSupport
-@DirtiesContext
 public abstract class ComponentTestBase {
 
 
