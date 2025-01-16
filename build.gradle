@@ -7,7 +7,7 @@ buildscript {
 
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.63'
+    id 'uk.gov.hmcts.java' version '0.12.64'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springframework.boot' version '3.4.1'
     id 'com.github.ben-manes.versions' version '0.51.0'
@@ -123,7 +123,7 @@ dependencies {
         exclude group: "org.glassfish.jaxb", module: "jaxb-runtime"
     }
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '6.2.1'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '6.2.2'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
