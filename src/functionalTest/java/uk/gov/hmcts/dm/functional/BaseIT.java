@@ -10,6 +10,7 @@ import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import net.serenitybdd.rest.SerenityRest;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ import uk.gov.hmcts.dm.FunctionalTestContextConfiguration;
 import uk.gov.hmcts.dm.StorageTestConfiguration;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.functional.DocumentMetadataPropertiesConfig.DocumentMetadata;
+import uk.gov.hmcts.reform.em.test.retry.RetryExtension;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -64,6 +66,9 @@ public abstract class BaseIT {
 
     @Value("${toggle.secureurl}")
     private boolean secureurl;
+
+    @RegisterExtension
+    RetryExtension retryExtension = new RetryExtension(3);
 
     private static final String USER_ID_CONST =  "user-id";
     private static final String USER_ROLES_CONST =  "user-roles";
