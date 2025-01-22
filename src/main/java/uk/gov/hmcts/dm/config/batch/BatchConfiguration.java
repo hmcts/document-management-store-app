@@ -126,8 +126,11 @@ public class BatchConfiguration {
         return new JpaPagingItemReaderBuilder<StoredDocument>()
             .name("documentTaskReader")
             .entityManagerFactory(entityManagerFactory)
-            .queryString("select d from StoredDocument d JOIN FETCH d.documentContentVersions "
-                + "where d.hardDeleted = false AND d.ttl < current_timestamp() order by ttl asc")
+            .queryString("""
+                select d from StoredDocument d JOIN FETCH d.documentContentVersions
+                where d.deleted = true AND d.hardDeleted = false AND 
+                d.ttl < current_timestamp() order by ttl asc
+                """)
             .pageSize(deleteDocumentsPageSize)
             .maxItemCount(deleteDocumentsMaxItemCount)
             .build();
