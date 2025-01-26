@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
 import org.assertj.core.util.Maps;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -398,8 +397,43 @@ class StoredDocumentServiceTests {
 
         storedDocumentService.deleteCaseDocuments();
 
-        verify(blobStorageDeleteService).deleteDocumentContentVersion(documentContentVersion);
-        verify(storedDocumentRepository).delete(storedDocument);
+        verify(blobStorageDeleteService, times(1)).deleteDocumentContentVersion(any());
+        verify(storedDocumentRepository, times(1)).delete(any());
+    }
+
+    @Test
+    void shouldDelete2CaseDocumentsMarkedForDeletion() {
+        StoredDocument storedDocument = new StoredDocument();
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+
+        StoredDocument storedDocument2 = new StoredDocument();
+        DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
+        storedDocument2.getDocumentContentVersions().add(documentContentVersion2);
+
+        when(storedDocumentRepository.findCaseDocumentsForDeletion()).thenReturn(List.of(storedDocument,storedDocument2));
+
+        storedDocumentService.deleteCaseDocuments();
+
+        verify(blobStorageDeleteService, times(2)).deleteDocumentContentVersion(any());
+        verify(storedDocumentRepository, times(2)).delete(any());
+    }
+
+    @Test
+    void shouldDeleteCaseDocuments2DocumentContentConversionsMarkedForDeletion() {
+        StoredDocument storedDocument = new StoredDocument();
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+
+        DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
+        storedDocument.getDocumentContentVersions().add(documentContentVersion2);
+
+        when(storedDocumentRepository.findCaseDocumentsForDeletion()).thenReturn(List.of(storedDocument));
+
+        storedDocumentService.deleteCaseDocuments();
+
+        verify(blobStorageDeleteService, times(2)).deleteDocumentContentVersion(any());
+        verify(storedDocumentRepository, times(1)).delete(any());
     }
 
     @Test
