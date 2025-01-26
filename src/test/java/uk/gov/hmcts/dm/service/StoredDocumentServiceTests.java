@@ -348,12 +348,16 @@ class StoredDocumentServiceTests {
 
     @Test
     void testUpdateItemsOverrideTrue() {
-        StoredDocument storedDocument = getStoredDocument();
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
+        storedDocument.setMetadata(Maps.newHashMap("Key1", "Value1"));
 
         when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
         when(toggleConfiguration.isOverridemetadata()).thenReturn(true);
 
-        Map newMetadata = getMetadata();
+        Map newMetadata = new HashMap();
+        newMetadata.put("Key1", "UpdatedValue");
+        newMetadata.put("Key2", "Value2");
         DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), newMetadata);
         UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, singletonList(update));
 
@@ -365,12 +369,16 @@ class StoredDocumentServiceTests {
 
     @Test
     void testUpdateItemsOverrideFalse() {
-        StoredDocument storedDocument = getStoredDocument();
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
+        storedDocument.setMetadata(Maps.newHashMap("Key1", "Value1"));
 
         when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
         when(toggleConfiguration.isOverridemetadata()).thenReturn(false);
 
-        Map newMetadata = getMetadata();
+        Map newMetadata = new HashMap();
+        newMetadata.put("Key1", "UpdatedValue");
+        newMetadata.put("Key2", "Value2");
         DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), newMetadata);
         UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, singletonList(update));
 
@@ -379,24 +387,4 @@ class StoredDocumentServiceTests {
         assertEquals("Value1", storedDocument.getMetadata().get("Key1"));
         assertEquals("Value2", storedDocument.getMetadata().get("Key2"));
     }
-
-    @Test
-    void deleteCaseDocuments() {
-    }
-
-    private static @NotNull Map getMetadata() {
-        Map newMetadata = new HashMap();
-        newMetadata.put("Key1", "UpdatedValue");
-        newMetadata.put("Key2", "Value2");
-        return newMetadata;
-    }
-
-    private static @NotNull StoredDocument getStoredDocument() {
-        StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setId(UUID.randomUUID());
-        storedDocument.setMetadata(Maps.newHashMap("Key1", "Value1"));
-        return storedDocument;
-    }
-
-
 }
