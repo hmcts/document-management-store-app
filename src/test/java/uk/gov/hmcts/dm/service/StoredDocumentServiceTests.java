@@ -387,4 +387,28 @@ class StoredDocumentServiceTests {
         assertEquals("Value1", storedDocument.getMetadata().get("Key1"));
         assertEquals("Value2", storedDocument.getMetadata().get("Key2"));
     }
+
+    @Test
+    void shouldDeleteCaseDocumentsMarkedForDeletion() {
+        StoredDocument storedDocument = new StoredDocument();
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+
+        when(storedDocumentRepository.findCaseDocumentsForDeletion()).thenReturn(List.of(storedDocument));
+
+        storedDocumentService.deleteCaseDocuments();
+
+        verify(blobStorageDeleteService).deleteDocumentContentVersion(documentContentVersion);
+        verify(storedDocumentRepository).delete(storedDocument);
+    }
+
+    @Test
+    void shouldNotDeleteCaseDocumentsWhenNoneMarkedForDeletion() {
+        when(storedDocumentRepository.findCaseDocumentsForDeletion()).thenReturn(List.of());
+
+        storedDocumentService.deleteCaseDocuments();
+
+        verify(blobStorageDeleteService, times(0)).deleteDocumentContentVersion(any());
+        verify(storedDocumentRepository, times(0)).delete(any());
+    }
 }
