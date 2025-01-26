@@ -201,6 +201,21 @@ public class StoredDocumentService {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
     }
 
+    /**
+     * This method will delete the Case Documents marked for hard deletion.
+     * It will delete the document Binary from the blob storage and delete the related rows from the database
+     * like the DocumentContentVersions and the Audit related Entries.
+     */
+    public void deleteCaseDocuments() {
+        storedDocumentRepository.findCaseDocumentsForDeletion()
+            .forEach(storedDocument -> {
+                storedDocument.getDocumentContentVersions()
+                    .parallelStream()
+                    .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
+                storedDocumentRepository.delete(storedDocument);
+            });
+    }
+
     private void storeInAzureBlobStorage(StoredDocument storedDocument,
                                          DocumentContentVersion documentContentVersion,
                                          MultipartFile file) {

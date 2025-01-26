@@ -54,6 +54,7 @@ java:
     ENABLE_CHUNKING: 'false'
     ENABLE_ORPHAN_DOCUMENT_DELETION: 'false'
     ENABLE_PASSWORD_CHECK: 'true'
+    ENABLE_CASE_DOCUMENTS_DELETION: 'false'
 
     LOG_OUTPUT: single
     ROOT_LOGGING_LEVEL: INFO
@@ -73,6 +74,8 @@ java:
     DOCUMENT_DELETE_TASK_PAGE_SIZE: 1
     DOCUMENT_DELETE_TASK_CHUNK_SIZE: 1
     DOCUMENT_DELETE_TASK_MAX_ITEM_COUNT: 1
+    #Case Document Deletion Job Schedule
+    CASE_DOCUMENTS_DELETION_JOB_SCHEDULE: '0 */30 * * * *' // every 30 minutes
 
 blobstorage:
   resourceGroup: dm-store-aso-preview-rg
