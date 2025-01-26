@@ -411,7 +411,8 @@ class StoredDocumentServiceTests {
         DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
         storedDocument2.getDocumentContentVersions().add(documentContentVersion2);
 
-        when(storedDocumentRepository.findCaseDocumentsForDeletion()).thenReturn(List.of(storedDocument,storedDocument2));
+        when(storedDocumentRepository.findCaseDocumentsForDeletion())
+                .thenReturn(List.of(storedDocument,storedDocument2));
 
         storedDocumentService.deleteCaseDocuments();
 
