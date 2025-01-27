@@ -9,7 +9,7 @@ properties([
     ],
 ])
 
-@Library("Infrastructure")
+@Library("Infrastructure@enable-logging-on-ft")
 
 def type = "java"
 def product = "dm"
@@ -46,7 +46,7 @@ withPipeline(type , product, component) {
     env.PACT_BROKER_URL = "pact-broker.platform.hmcts.net"
     env.PACT_BROKER_PORT = "443"
     env.PACT_BROKER_SCHEME = "https"
-    
+
     env.ENABLE_SECURE_URL = true
 
     enableDbMigration('dm')
