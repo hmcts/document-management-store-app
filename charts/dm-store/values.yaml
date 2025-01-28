@@ -75,7 +75,7 @@ java:
     DOCUMENT_DELETE_TASK_CHUNK_SIZE: 1
     DOCUMENT_DELETE_TASK_MAX_ITEM_COUNT: 1
     # Case Document Deletion Job Schedule
-    CASE_DOCUMENTS_DELETION_JOB_SCHEDULE: '0 */30 * * * *' // every 30 minutes
+    CASE_DOCUMENTS_DELETION_JOB_SCHEDULE: '0 */30 * * * *'  # every 30 minutes
     CASE_DOCUMENT_DELETION_LIMIT: 10
 
 blobstorage:
