@@ -44,6 +44,6 @@ public interface StoredDocumentRepository extends PagingAndSortingRepository<Sto
     @Query("""
             select s from StoredDocument s 
             where s.deleted = true AND s.hardDeleted = false AND 
-                s.ttl < current_timestamp order by ttl asc""")
-    List<StoredDocument> findCaseDocumentsForDeletion();
+                s.ttl < current_timestamp order by ttl asc limit :#{#limit}""")
+    List<StoredDocument> findCaseDocumentsForDeletion(final @Param("limit") int limit);
 }

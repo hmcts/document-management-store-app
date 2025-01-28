@@ -5,6 +5,7 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
@@ -42,6 +43,9 @@ public class StoredDocumentService {
     private final BlobStorageWriteService blobStorageWriteService;
 
     private final BlobStorageDeleteService blobStorageDeleteService;
+
+    @Value("${spring.batch.caseDocumentsDeletionLimit}")
+    private int limit;
 
     @Autowired
     public StoredDocumentService(StoredDocumentRepository storedDocumentRepository,
@@ -207,13 +211,16 @@ public class StoredDocumentService {
      * like the DocumentContentVersions and the Audit related Entries.
      */
     public void deleteCaseDocuments() {
-        storedDocumentRepository.findCaseDocumentsForDeletion()
-            .forEach(storedDocument -> {
-                storedDocument.getDocumentContentVersions()
-                    .parallelStream()
-                    .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
-                storedDocumentRepository.delete(storedDocument);
-            });
+
+        storedDocumentRepository.findCaseDocumentsForDeletion(limit)
+                .forEach(storedDocument -> {
+                    log.info("Deletion started for StoredDocument Id: {}",storedDocument.getId());
+                    storedDocument.getDocumentContentVersions()
+                        .parallelStream()
+                        .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
+                    storedDocumentRepository.delete(storedDocument);
+                    log.info("Deletion completed for StoredDocument Id: {}",storedDocument.getId());
+                });
     }
 
     private void storeInAzureBlobStorage(StoredDocument storedDocument,

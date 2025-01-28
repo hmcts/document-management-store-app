@@ -8,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
@@ -75,6 +76,7 @@ class StoredDocumentServiceTests {
 
     @BeforeEach
     public void setUp() {
+        ReflectionTestUtils.setField(storedDocumentService, "limit", 5);
         when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
     }
 
@@ -393,7 +395,7 @@ class StoredDocumentServiceTests {
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
 
-        when(storedDocumentRepository.findCaseDocumentsForDeletion()).thenReturn(List.of(storedDocument));
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of(storedDocument));
 
         storedDocumentService.deleteCaseDocuments();
 
@@ -411,7 +413,7 @@ class StoredDocumentServiceTests {
         DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
         storedDocument2.getDocumentContentVersions().add(documentContentVersion2);
 
-        when(storedDocumentRepository.findCaseDocumentsForDeletion())
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(5))
                 .thenReturn(List.of(storedDocument,storedDocument2));
 
         storedDocumentService.deleteCaseDocuments();
@@ -429,7 +431,7 @@ class StoredDocumentServiceTests {
         DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
         storedDocument.getDocumentContentVersions().add(documentContentVersion2);
 
-        when(storedDocumentRepository.findCaseDocumentsForDeletion()).thenReturn(List.of(storedDocument));
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of(storedDocument));
 
         storedDocumentService.deleteCaseDocuments();
 
@@ -439,7 +441,7 @@ class StoredDocumentServiceTests {
 
     @Test
     void shouldNotDeleteCaseDocumentsWhenNoneMarkedForDeletion() {
-        when(storedDocumentRepository.findCaseDocumentsForDeletion()).thenReturn(List.of());
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of());
 
         storedDocumentService.deleteCaseDocuments();
 
