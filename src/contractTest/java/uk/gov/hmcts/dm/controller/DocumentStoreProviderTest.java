@@ -14,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -46,13 +46,13 @@ public class DocumentStoreProviderTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @MockBean
+    @MockitoBean
     protected DocumentContentVersionService documentContentVersionService;
 
-    @MockBean
+    @MockitoBean
     private SearchService searchService;
 
     private final UUID id = UUID.fromString("5c3c3906-2b51-468e-8cbb-a4002eded075");
