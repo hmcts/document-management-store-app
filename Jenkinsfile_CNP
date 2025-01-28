@@ -54,6 +54,7 @@ withPipeline(type , product, component) {
     disableLegacyDeployment()
     enableAksStagingDeployment()
     enableSlackNotifications('#em-dev-chat')
+    enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
 
     onMaster {
         env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
@@ -68,7 +69,6 @@ withPipeline(type , product, component) {
             sh ./publish-swagger-docs.sh
              '''
         }
-        enablePactAs([AppPipelineDsl.PactRoles.PROVIDER])
     }
 
     onPR {
@@ -177,16 +177,16 @@ withPipeline(type , product, component) {
            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
         }
 
-//    afterAlways('pactconsumerVerification:preview') {
-//            publishHTML target: [
-//                    allowMissing         : true,
-//                    alwaysLinkToLastBuild: true,
-//                    keepAll              : true,
-//                    reportDir            : "build/reports/tests/contract",
-//                    reportFiles          : "index.html",
-//                    reportName           : "DM-Store Contract Test Report"
-//            ]
-//        }
+    afterAlways('pactconsumerVerification:preview') {
+            publishHTML target: [
+                    allowMissing         : true,
+                    alwaysLinkToLastBuild: true,
+                    keepAll              : true,
+                    reportDir            : "build/reports/tests/contract",
+                    reportFiles          : "index.html",
+                    reportName           : "DM-Store Contract Test Report"
+            ]
+        }
 
     afterAlways('pactconsumerVerification:aat') {
             publishHTML target: [
