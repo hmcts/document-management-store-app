@@ -165,7 +165,7 @@ dependencies {
     implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
 
-    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.24'
+    implementation group: 'org.apache.groovy', name: 'groovy', version: '4.0.25'
 
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
         exclude(module: 'commons-logging')
