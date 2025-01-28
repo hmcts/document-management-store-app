@@ -1,9 +1,10 @@
 package uk.gov.hmcts.dm.controller;
 
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.azure.AzureStorageConfiguration;
 import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
@@ -21,9 +22,11 @@ import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
 import uk.gov.hmcts.dm.service.FileSizeVerifier;
 import uk.gov.hmcts.dm.service.PasswordVerifier;
+import uk.gov.hmcts.dm.service.SearchService;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
@@ -33,44 +36,66 @@ import java.util.Arrays;
 @TestConfiguration
 public class StoreDocumentControllerTestConfiguration {
 
-    @MockBean
-    private DmServiceAuthFilter serviceAuthFilter;
 
-    @MockBean
-    private StoredDocumentRepository storedDocumentRepository;
+    @Bean
+    public DocumentContentVersionService documentContentVersionService() {
+        return Mockito.mock(DocumentContentVersionService.class);
+    }
 
-    @MockBean
-    private DocumentContentVersionRepository documentContentVersionRepository;
+    @Bean
+    public SearchService searchService() {
+        return Mockito.mock(SearchService.class);
+    }
 
-    @MockBean
-    private AzureStorageConfiguration azureStorageConfiguration;
+    @Bean
+    public DmServiceAuthFilter serviceAuthFilter() {
+        return Mockito.mock(DmServiceAuthFilter.class);
+    }
 
-    @MockBean
-    private SecurityUtilService securityUtilService;
+    @Bean
+    public StoredDocumentRepository storedDocumentRepository() {
+        return Mockito.mock(StoredDocumentRepository.class);
+    }
 
-    @MockBean
-    private BlobStorageWriteService blobStorageWriteService;
+    @Bean
+    public DocumentContentVersionRepository documentContentVersionRepository() {
+        return Mockito.mock(DocumentContentVersionRepository.class);
+    }
 
-    @MockBean
-    private BlobStorageDeleteService blobStorageDeleteService;
+    @Bean
+    public AzureStorageConfiguration azureStorageConfiguration() {
+        return Mockito.mock(AzureStorageConfiguration.class);
+    }
 
-    @MockBean
-    private StoredDocumentAuditEntryRepository storedDocumentAuditEntryRepository;
+    @Bean
+    public SecurityUtilService securityUtilService() {
+        return Mockito.mock(SecurityUtilService.class);
+    }
 
-    @MockBean
-    private DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository;
+    @Bean
+    public BlobStorageWriteService blobStorageWriteService() {
+        return Mockito.mock(BlobStorageWriteService.class);
+    }
 
-    @MockBean
-    private AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+    @Bean
+    public BlobStorageDeleteService blobStorageDeleteService() {
+        return Mockito.mock(BlobStorageDeleteService.class);
+    }
 
-    @MockBean
-    public ToggleConfiguration toggleConfiguration;
+    @Bean
+    public StoredDocumentAuditEntryRepository storedDocumentAuditEntryRepository() {
+        return Mockito.mock(StoredDocumentAuditEntryRepository.class);
+    }
 
-    @MockBean
-    public StoredDocumentService storedDocumentService;
+    @Bean
+    public DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository() {
+        return Mockito.mock(DocumentContentVersionAuditEntryRepository.class);
+    }
 
-    @MockBean
-    public AuditEntryService auditEntryService;
+    @Bean
+    public AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService() {
+        return Mockito.mock(AuditedDocumentContentVersionOperationsService.class);
+    }
 
     @Bean
     @Primary
@@ -98,22 +123,30 @@ public class StoreDocumentControllerTestConfiguration {
 
     @Bean
     @Primary
-    public PasswordVerifier passwordVerifier() {
+    public PasswordVerifier passwordVerifier(
+        ToggleConfiguration toggleConfiguration
+    ) {
         return new PasswordVerifier(toggleConfiguration);
     }
 
     @Bean
     @Primary
-    public MultipartFilePasswordValidator multipartFilePasswordValidator() {
-        return new MultipartFilePasswordValidator(passwordVerifier());
+    public MultipartFilePasswordValidator multipartFilePasswordValidator(
+        PasswordVerifier passwordVerifier
+    ) {
+        return new MultipartFilePasswordValidator(passwordVerifier);
     }
 
-    @MockBean
+    @MockitoBean
     RepositoryFinder repositoryFinder;
 
     @Bean
     @Primary
-    public AuditEntryService auditEntryService() {
+    public AuditEntryService auditEntryService(
+        StoredDocumentAuditEntryRepository storedDocumentAuditEntryRepository,
+        DocumentContentVersionAuditEntryRepository documentContentVersionAuditEntryRepository,
+        SecurityUtilService securityUtilService
+    ) {
         return new AuditEntryService(storedDocumentAuditEntryRepository,
             documentContentVersionAuditEntryRepository,
             securityUtilService);
@@ -121,7 +154,14 @@ public class StoreDocumentControllerTestConfiguration {
 
     @Bean
     @Primary
-    public StoredDocumentService storedDocumentService() {
+    public StoredDocumentService storedDocumentService(
+        StoredDocumentRepository storedDocumentRepository,
+        DocumentContentVersionRepository documentContentVersionRepository,
+        ToggleConfiguration toggleConfiguration,
+        SecurityUtilService securityUtilService,
+        BlobStorageWriteService blobStorageWriteService,
+        BlobStorageDeleteService blobStorageDeleteService
+    ) {
         return new StoredDocumentService(storedDocumentRepository,
             documentContentVersionRepository,
             toggleConfiguration,
@@ -132,7 +172,10 @@ public class StoreDocumentControllerTestConfiguration {
 
     @Bean
     @Primary
-    public AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService() {
+    public AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService(
+        StoredDocumentService storedDocumentService,
+        AuditEntryService auditEntryService
+    ) {
         return new AuditedStoredDocumentOperationsService(storedDocumentService, auditEntryService);
     }
 
