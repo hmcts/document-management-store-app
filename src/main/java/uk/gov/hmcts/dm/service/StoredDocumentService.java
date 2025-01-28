@@ -5,6 +5,7 @@ import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
@@ -42,6 +43,9 @@ public class StoredDocumentService {
     private final BlobStorageWriteService blobStorageWriteService;
 
     private final BlobStorageDeleteService blobStorageDeleteService;
+
+    @Value("${spring.batch.caseDocumentsDeletionLimit}")
+    private int limit;
 
     @Autowired
     public StoredDocumentService(StoredDocumentRepository storedDocumentRepository,
@@ -199,6 +203,24 @@ public class StoredDocumentService {
 
     public List<StoredDocument> findAllExpiredStoredDocuments() {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
+    }
+
+    /**
+     * This method will delete the Case Documents marked for hard deletion.
+     * It will delete the document Binary from the blob storage and delete the related rows from the database
+     * like the DocumentContentVersions and the Audit related Entries.
+     */
+    public void deleteCaseDocuments() {
+
+        storedDocumentRepository.findCaseDocumentsForDeletion(limit)
+                .forEach(storedDocument -> {
+                    log.info("Deletion started for StoredDocument Id: {}",storedDocument.getId());
+                    storedDocument.getDocumentContentVersions()
+                        .parallelStream()
+                        .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
+                    storedDocumentRepository.delete(storedDocument);
+                    log.info("Deletion completed for StoredDocument Id: {}",storedDocument.getId());
+                });
     }
 
     private void storeInAzureBlobStorage(StoredDocument storedDocument,
