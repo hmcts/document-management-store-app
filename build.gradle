@@ -92,7 +92,7 @@ def versions = [
     ehcache            : '3.10.8',
     postgresql         : '42.7.5',
     jackson            : '2.18.2',
-    serenity           : '4.2.13',
+    serenity           : '4.2.14',
     logging            : '6.1.7',
     pact_version       : '4.6.16',
     emTestHelper       : '2.1.1',
