@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -28,7 +29,7 @@ public class ApiErrorController extends BasicErrorController {
         if (status == HttpStatus.NO_CONTENT) {
             return new ResponseEntity<>(status);
         }
-        Map<String, Object> body = getErrorAttributes(request, getErrorAttributeOptions(request, MediaType.ALL));
+        Map<String, Object> body = new HashMap<>();
 
         // Set the status again for the legacy error handling code to work
         // This was changed by spring here: https://github.com/spring-projects/spring-boot/commit/a354657acef83919cb3685c7dd50f2a42156efca#r35879840
