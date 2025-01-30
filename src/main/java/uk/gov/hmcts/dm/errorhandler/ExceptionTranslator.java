@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import uk.gov.hmcts.dm.exception.ResourceNotFoundException;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -89,7 +90,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
             return null;
         }
 
-        if (body == null) {
+        if (Objects.isNull(body)) {
             ProblemDetail problemDetail;
             if (ex instanceof ErrorResponse errorResponse) {
                 if (statusCode.equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
@@ -118,7 +119,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     private boolean responseCommitted(Exception ex, WebRequest request) {
         if (request instanceof ServletWebRequest servletWebRequest) {
             HttpServletResponse response = servletWebRequest.getResponse();
-            if (response != null && response.isCommitted()) {
+            if (Objects.nonNull(response) && response.isCommitted()) {
                 if (logger.isWarnEnabled()) {
                     logger.warn("Response already committed. Ignoring: " + ex);
                 }
