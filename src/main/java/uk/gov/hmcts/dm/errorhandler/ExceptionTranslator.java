@@ -84,17 +84,18 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(
         Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
 
-        if (responseCommitted(ex, request)) return null;
+        if (responseCommitted(ex, request)) {
+            return null;
+        }
 
-        if (body == null ) {
+        if (body == null) {
             ProblemDetail problemDetail;
             if (ex instanceof ErrorResponse errorResponse) {
                 if (statusCode.equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
                     statusCode = errorResponse.getStatusCode();
                 }
                 problemDetail = ProblemDetail.forStatusAndDetail(statusCode, errorResponse.getDetailMessageCode());
-            }
-            else {
+            } else {
                 problemDetail = ProblemDetail.forStatusAndDetail(statusCode, ex.getLocalizedMessage());
             }
 
