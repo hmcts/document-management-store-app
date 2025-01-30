@@ -72,7 +72,8 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
             String errorMessage = ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> messageSource.getMessage(fieldError, Locale.UK))
                 .collect(Collectors.joining(" AND "));
-            ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, "Request validation failed");
+            ProblemDetail problemDetail =
+                ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(422), "Request validation failed");
             problemDetail.setProperty("error", errorMessage);
             return handleExceptionInternal(ex, problemDetail, headers, HttpStatusCode.valueOf(422), request);
         }
