@@ -39,7 +39,7 @@ public class ErrorPageIT extends BaseIT {
     }
 
     @Test
-    public void ep2AsAnAuthenticatedUserTryingToAccessAnUnknownDocumentReceiveJsonErrorPageWith404() {
+    public void ep2AsAnAuthenticatedUserTryingToAccessAnUnknownDocumentReceiveJsonErrorPageWith400() {
 
         givenRequest(getCitizen())
             .accept(MIME_TYPE_GOV_APP)
