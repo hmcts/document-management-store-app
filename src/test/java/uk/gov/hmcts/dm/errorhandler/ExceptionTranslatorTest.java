@@ -76,7 +76,7 @@ class ExceptionTranslatorTest {
     void shouldHandleMethodArgumentTypeMismatchException() {
         MethodArgumentTypeMismatchException ex = new MethodArgumentTypeMismatchException(null, null, null, null, null);
         ResponseEntity<Object> response = exceptionTranslator.handleMethodArgumentTypeMismatchException(ex, webRequest);
-        assertThat(response.getStatusCode(), equalTo(HttpStatusCode.valueOf(404)));
+        assertThat(response.getStatusCode(), equalTo(HttpStatusCode.valueOf(400)));
     }
 
     @Test
