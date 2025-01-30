@@ -123,7 +123,7 @@ public class ReadDocumentIT extends BaseIT {
 
         givenRequest(getCitizen())
             .expect()
-            .statusCode(404)
+            .statusCode(400)
             .when()
             .get("documents/xxx");
     }
@@ -133,7 +133,7 @@ public class ReadDocumentIT extends BaseIT {
 
         givenRequest(getCitizen())
             .expect()
-            .statusCode(404)
+            .statusCode(400)
             .when()
             .get("documents/111");
     }

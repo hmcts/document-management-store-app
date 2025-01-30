@@ -44,7 +44,7 @@ public class ErrorPageIT extends BaseIT {
         givenRequest(getCitizen())
             .accept(MIME_TYPE_GOV_APP)
             .expect()
-            .statusCode(404)
+            .statusCode(400)
             .contentType(ContentType.JSON)
             .when()
             .get("documents/XXX");
