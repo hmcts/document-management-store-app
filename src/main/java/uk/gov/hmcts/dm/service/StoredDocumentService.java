@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.service;
 
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,12 +215,15 @@ public class StoredDocumentService {
 
         storedDocumentRepository.findCaseDocumentsForDeletion(limit)
                 .forEach(storedDocument -> {
-                    log.info("Deletion started for StoredDocument Id: {}",storedDocument.getId());
+                    StopWatch stopWatch = new StopWatch();
+                    stopWatch.start();
                     storedDocument.getDocumentContentVersions()
                         .parallelStream()
                         .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
                     storedDocumentRepository.delete(storedDocument);
-                    log.info("Deletion completed for StoredDocument Id: {}",storedDocument.getId());
+                    stopWatch.stop();
+                    log.info("Deletion of StoredDocument with Id: {} took {} ms",
+                            storedDocument.getId(),stopWatch.getDuration().toMillis());
                 });
     }
 

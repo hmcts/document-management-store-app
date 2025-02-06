@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.config.batch;
 
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,10 +37,12 @@ public class CaseDocumentsDeletionTask {
     @Scheduled(cron = "${spring.batch.caseDocumentsDeletionJobSchedule}")
     @SchedulerLock(name = "${task.env}-Case-Documents-Deletion-Task")
     public void execute() {
-        
-        log.info("Deletion started for Case Docs");
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         storedDocumentService.deleteCaseDocuments();
-        log.info("Deletion completed for Case Docs");
+        stopWatch.stop();
+        log.info("Deletion job for Case Docs took {} ms", stopWatch.getDuration().toMillis());
 
     }
 
