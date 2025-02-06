@@ -61,13 +61,13 @@ spring:
     deletePageSize: ${DOCUMENT_DELETE_TASK_PAGE_SIZE:10}
     deleteChunkSize: ${DOCUMENT_DELETE_TASK_CHUNK_SIZE:10}
     deleteMaxItemCount: ${DOCUMENT_DELETE_TASK_MAX_ITEM_COUNT:10}
-    caseDocumentsDeletionLimit: ${CASE_DOCUMENTS_DELETION_LIMIT:2}
+    caseDocumentsDeletionLimit: ${CASE_DOCUMENTS_DELETION_LIMIT:10}
 
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
     orphanFileDeletionCronJobSchedule: ${ORPHAN_FILE_DELETION_CRONJOB_SCHEDULE:0 15 22 * * ?}
-    caseDocumentsDeletionJobSchedule: ${CASE_DOCUMENTS_DELETION_JOB_SCHEDULE:0 */5 * * * *}
+    caseDocumentsDeletionJobSchedule: ${CASE_DOCUMENTS_DELETION_JOB_SCHEDULE:0 */15 * * * *}
 
 server:
   port: ${SERVER_PORT:4603}
@@ -204,7 +204,7 @@ toggle:
   chunking: ${ENABLE_CHUNKING:false}
   orphandocumentdeletion: ${ENABLE_ORPHAN_DOCUMENT_DELETION:false}
   passwordcheck: ${ENABLE_PASSWORD_CHECK:true}
-  casedocumentsdeletion: ${ENABLE_CASE_DOCUMENTS_DELETION:true}
+  casedocumentsdeletion: ${ENABLE_CASE_DOCUMENTS_DELETION:false}
 task:
   env: ${TASK_ENV:documentTaskLock-local}
 
