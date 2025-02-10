@@ -1,25 +1,25 @@
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.2.0")
+        classpath("org.flywaydb:flyway-database-postgresql:11.3.1")
     }
 }
 
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.64'
+    id 'uk.gov.hmcts.java' version '0.12.65'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springframework.boot' version '3.4.2'
     id 'com.github.ben-manes.versions' version '0.52.0'
     id 'org.sonarqube' version '6.0.1.5171'
     id 'jacoco'
     id 'checkstyle'
-    id 'io.freefair.lombok' version '8.12'
+    id 'io.freefair.lombok' version '8.12.1'
     id 'info.solidsoft.pitest' version '1.15.0'
-    id 'org.owasp.dependencycheck' version '12.0.1'
+    id 'org.owasp.dependencycheck' version '12.0.2'
     id 'au.com.dius.pact' version '4.6.16'
-    id 'org.flywaydb.flyway' version '11.2.0'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.15'
+    id 'org.flywaydb.flyway' version '11.3.1'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.16'
 }
 
 apply plugin: 'java'
@@ -93,7 +93,7 @@ def versions = [
     postgresql         : '42.7.5',
     jackson            : '2.18.2',
     serenity           : '4.2.16',
-    logging            : '6.1.7',
+    logging            : '6.1.8',
     pact_version       : '4.6.16',
     emTestHelper       : '2.1.1',
     shedlock           : '6.2.0',
@@ -144,8 +144,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.2.0'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.2.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.3.1'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.3.1'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
@@ -191,7 +191,7 @@ dependencies {
     testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.16'
 
 
-    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.6', classifier: 'all', {
+    testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.7', classifier: 'all', {
         exclude group: 'commons-io', module: 'commons-io'
         exclude group: 'org.apache.commons', module: 'commons-lang3'
         exclude group: 'ch.qos.logback', module: 'logback-classic'
