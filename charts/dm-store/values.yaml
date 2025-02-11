@@ -46,7 +46,6 @@ java:
     ENABLE_METADATA_SEARCH: 'true'
     ENABLE_DOCUMENT_AND_METADATA_UPLOAD: 'false'
     ENABLE_FOLDER_API: 'true'
-    ENABLE_DELETE: 'true'
     ENABLE_TTL: 'false'
     ENABLE_THUMBNAIL: 'true'
     ENABLE_METADATA_MIGRATION: 'false'

@@ -41,7 +41,6 @@ import static uk.gov.hmcts.dm.utils.InputParamsVerifier.verifyRequestParamsCondi
 @RequestMapping(
     path = "/documents/")
 @Tag(name = "StoredDocumentDelete Service", description = "Endpoint for Deletion of Documents")
-@ConditionalOnProperty("toggle.deleteenabled")
 public class StoredDocumentDeleteController {
 
     private final AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
