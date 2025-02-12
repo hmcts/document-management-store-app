@@ -123,8 +123,7 @@ public class StoreDocumentControllerTestConfiguration {
 
     @Bean
     @Primary
-    public PasswordVerifier passwordVerifier(
-        ) {
+    public PasswordVerifier passwordVerifier() {
         return new PasswordVerifier();
     }
 
