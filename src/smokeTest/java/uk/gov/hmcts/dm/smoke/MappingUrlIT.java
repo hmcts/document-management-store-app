@@ -25,8 +25,6 @@ class MappingUrlIT extends BaseIT {
     private boolean metadatasearchendpoint;
     @Value("${toggle.documentandmetadatauploadendpoint}")
     private boolean documentandmetadatauploadendpoint;
-    @Value("${toggle.deleteenabled}")
-    private boolean deleteenabled;
     @Value("${toggle.ttl}")
     private boolean ttl;
     @Value("${toggle.testing}")
@@ -46,13 +44,6 @@ class MappingUrlIT extends BaseIT {
             endpoint.contains("owned")), metadatasearchendpoint);
         assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.contains("filter")), metadatasearchendpoint);
-    }
-
-
-    @Test
-    void toggle_deleteenabled_toggle_Mappings() {
-        assertEquals(allEndpoints.stream().anyMatch(endpoint ->
-            endpoint.equals("{DELETE [/documents/{documentId}]}")), deleteenabled);
     }
 
     @Test
@@ -84,18 +75,6 @@ class MappingUrlIT extends BaseIT {
 
     public void setDocumentandmetadatauploadendpoint(boolean documentandmetadatauploadendpoint) {
         this.documentandmetadatauploadendpoint = documentandmetadatauploadendpoint;
-    }
-
-    public boolean getDeleteenabled() {
-        return deleteenabled;
-    }
-
-    public boolean isDeleteenabled() {
-        return deleteenabled;
-    }
-
-    public void setDeleteenabled(boolean deleteenabled) {
-        this.deleteenabled = deleteenabled;
     }
 
     public boolean getTtl() {

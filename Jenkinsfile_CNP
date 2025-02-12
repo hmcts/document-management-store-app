@@ -82,122 +82,32 @@ withPipeline(type , product, component) {
     }
 
     afterAlways('test') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/checkstyle/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/integration/**/*'
+    }
 
-               publishHTML target: [
-                  allowMissing         : true,
-                  alwaysLinkToLastBuild: true,
-                  keepAll              : true,
-                  reportDir            : "build/reports/checkstyle",
-                  reportFiles          : "main.html",
-                  reportName           : "DM-Store Checkstyle Main Report"
-              ]
-
-              publishHTML target: [
-                  allowMissing         : true,
-                  alwaysLinkToLastBuild: true,
-                  keepAll              : true,
-                  reportDir            : "build/reports/checkstyle",
-                  reportFiles          : "test.html",
-                  reportName           : "DM-Store Checkstyle Test Report"
-              ]
-
-             publishHTML target: [
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : "build/reports/checkstyle",
-                    reportFiles          : "functionalTest.html",
-                    reportName           : "DM-Store Checkstyle AAT Report"
-             ]
-
-             publishHTML target: [
-                     allowMissing         : true,
-                     alwaysLinkToLastBuild: true,
-                     keepAll              : true,
-                     reportDir            : "build/reports/checkstyle",
-                     reportFiles          : "contractTest.html",
-                     reportName           : "DM-Store Checkstyle PACT Report"
-             ]
-
-             publishHTML target: [
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : "build/reports/tests/test",
-                    reportFiles          : "index.html",
-                    reportName           : "DM-Store Unit Tests Report"
-             ]
-        }
+    afterAlways('pact-consumer-tests') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    }
 
     afterAlways('smoketest:preview') {
-            publishHTML target: [
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : "build/reports/tests/smoke",
-                    reportFiles          : "index.html",
-                    reportName           : "DM-Store Smoke Test Report"
-            ]
-        }
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    }
 
     afterAlways('smoketest:aat') {
-            publishHTML target: [
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : "build/reports/tests/smoke",
-                    reportFiles          : "index.html",
-                    reportName           : "DM-Store Smoke Test Report"
-            ]
-        }
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+    }
 
     afterAlways('functionalTest:preview') {
-            publishHTML target: [
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : "build/reports/tests/functional",
-                    reportFiles          : "index.html",
-                    reportName           : "DM-Store Functional Test Report"
-            ]
-            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-        }
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    }
 
     afterAlways('functionalTest:aat') {
-            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-            publishHTML target: [
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : "build/reports/tests/functional",
-                    reportFiles          : "index.html",
-                    reportName           : "DM-Store Functional Test Report"
-            ]
-
-           steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
-        }
-
-    afterAlways('pactconsumerVerification:preview') {
-            publishHTML target: [
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : "build/reports/tests/contract",
-                    reportFiles          : "index.html",
-                    reportName           : "DM-Store Contract Test Report"
-            ]
-        }
-
-    afterAlways('pactconsumerVerification:aat') {
-            publishHTML target: [
-                    allowMissing         : true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll              : true,
-                    reportDir            : "build/reports/tests/contract",
-                    reportFiles          : "index.html",
-                    reportName           : "DM-Store Contract Test Report"
-            ]
-        }
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/site/serenity/**/*'
+    }
 
     syncBranchesWithMaster(['demo', 'perftest', 'ithc'])
 }
