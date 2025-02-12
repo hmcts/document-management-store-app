@@ -124,9 +124,8 @@ public class StoreDocumentControllerTestConfiguration {
     @Bean
     @Primary
     public PasswordVerifier passwordVerifier(
-        ToggleConfiguration toggleConfiguration
-    ) {
-        return new PasswordVerifier(toggleConfiguration);
+        ) {
+        return new PasswordVerifier();
     }
 
     @Bean
