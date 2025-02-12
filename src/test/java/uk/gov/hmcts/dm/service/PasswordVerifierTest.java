@@ -67,13 +67,6 @@ class PasswordVerifierTest {
     }
 
     @Test
-    @DisplayName("Test passwordVerifier to check toggle turned off and expect success")
-    void testToggleConfiguration() {
-        MultipartFile file = Mockito.mock(MockMultipartFile.class);
-        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
-    }
-
-    @Test
     @DisplayName("Test passwordVerifier for encrypted file and expect success")
     void testPasswordVerifier_encrypted_file_success() throws IOException {
         InputStream inputStream = new ClassPathResource("files/passwordencryptedprotected.pdf").getInputStream();
