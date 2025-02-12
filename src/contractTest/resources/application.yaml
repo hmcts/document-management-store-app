@@ -175,7 +175,6 @@ toggle:
   metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:true}
   documentandmetadatauploadendpoint: ${ENABLE_DOCUMENT_AND_METADATA_UPLOAD:true}
   folderendpoint: ${ENABLE_FOLDER_API:true}
-  deleteenabled: ${ENABLE_DELETE:true}
   ttl: ${ENABLE_TTL:false}
   thumbnail: ${ENABLE_THUMBNAIL:true}
   testing: ${ENABLE_TESTING:true}

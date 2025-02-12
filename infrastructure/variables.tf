@@ -122,10 +122,6 @@ variable "enable_folder_api" {
   default = "true"
 }
 
-variable "enable_delete" {
-  default = "true"
-}
-
 variable "enable_ttl" {
   default = "false"
 }
