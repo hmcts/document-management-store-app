@@ -123,10 +123,8 @@ public class StoreDocumentControllerTestConfiguration {
 
     @Bean
     @Primary
-    public PasswordVerifier passwordVerifier(
-        ToggleConfiguration toggleConfiguration
-    ) {
-        return new PasswordVerifier(toggleConfiguration);
+    public PasswordVerifier passwordVerifier() {
+        return new PasswordVerifier();
     }
 
     @Bean
