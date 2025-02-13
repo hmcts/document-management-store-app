@@ -2,9 +2,11 @@ package uk.gov.hmcts.dm.service;
 
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
@@ -42,6 +44,9 @@ public class StoredDocumentService {
     private final BlobStorageWriteService blobStorageWriteService;
 
     private final BlobStorageDeleteService blobStorageDeleteService;
+
+    @Value("${spring.batch.caseDocumentsDeletionLimit}")
+    private int limit;
 
     @Autowired
     public StoredDocumentService(StoredDocumentRepository storedDocumentRepository,
@@ -199,6 +204,27 @@ public class StoredDocumentService {
 
     public List<StoredDocument> findAllExpiredStoredDocuments() {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
+    }
+
+    /**
+     * This method will delete the Case Documents marked for hard deletion.
+     * It will delete the document Binary from the blob storage and delete the related rows from the database
+     * like the DocumentContentVersions and the Audit related Entries.
+     */
+    public void deleteCaseDocuments() {
+
+        storedDocumentRepository.findCaseDocumentsForDeletion(limit)
+                .forEach(storedDocument -> {
+                    StopWatch stopWatch = new StopWatch();
+                    stopWatch.start();
+                    storedDocument.getDocumentContentVersions()
+                        .parallelStream()
+                        .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
+                    storedDocumentRepository.delete(storedDocument);
+                    stopWatch.stop();
+                    log.info("Deletion of StoredDocument with Id: {} took {} ms",
+                            storedDocument.getId(),stopWatch.getDuration().toMillis());
+                });
     }
 
     private void storeInAzureBlobStorage(StoredDocument storedDocument,
