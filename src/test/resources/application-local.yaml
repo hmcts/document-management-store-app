@@ -26,7 +26,6 @@ thumbnail:
 
 
 toggle:
-    deleteenabled: true
     metadatamigration: false
 
 dm:

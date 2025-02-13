@@ -193,7 +193,6 @@ toggle:
   metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:true}
   documentandmetadatauploadendpoint: ${ENABLE_DOCUMENT_AND_METADATA_UPLOAD:true}
   folderendpoint: ${ENABLE_FOLDER_API:true}
-  deleteenabled: ${ENABLE_DELETE:true}
   ttl: ${ENABLE_TTL:false}
   thumbnail: ${ENABLE_THUMBNAIL:true}
   testing: ${ENABLE_TESTING:true}
@@ -201,7 +200,6 @@ toggle:
   overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
   chunking: ${ENABLE_CHUNKING:false}
   orphandocumentdeletion: ${ENABLE_ORPHAN_DOCUMENT_DELETION:false}
-  passwordcheck: ${ENABLE_PASSWORD_CHECK:true}
 task:
   env: ${TASK_ENV:documentTaskLock-local}
 
