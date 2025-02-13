@@ -6,13 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.config.ToggleConfiguration;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,14 +23,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PasswordVerifierTest {
 
-    @Mock
-    private ToggleConfiguration toggleConfiguration;
-
     private PasswordVerifier passwordVerifier;
 
     @BeforeEach
     void init() {
-        passwordVerifier = new PasswordVerifier(toggleConfiguration);
+        passwordVerifier = new PasswordVerifier();
     }
 
     @DisplayName("""
@@ -63,7 +58,6 @@ class PasswordVerifierTest {
     })
 
     void testPasswordVerifier_parameterized_success(String filename, String mimetype) {
-        when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
         MultipartFile file =
             new MockMultipartFile("files", filename, mimetype, "hello".getBytes(StandardCharsets.UTF_8));
 
@@ -71,17 +65,8 @@ class PasswordVerifierTest {
     }
 
     @Test
-    @DisplayName("Test passwordVerifier to check toggle turned off and expect success")
-    void testToggleConfiguration() {
-        when(toggleConfiguration.isPasswordcheck()).thenReturn(false);
-        MultipartFile file = Mockito.mock(MockMultipartFile.class);
-        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
-    }
-
-    @Test
     @DisplayName("Test passwordVerifier for encrypted file and expect success")
     void testPasswordVerifier_encrypted_file_success() throws IOException {
-        when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
         InputStream inputStream = new ClassPathResource("files/passwordencryptedprotected.pdf").getInputStream();
         MockMultipartFile file = new MockMultipartFile("file", "passwordencryptedprotected.pdf",
             "application/pdf", inputStream);
@@ -92,7 +77,6 @@ class PasswordVerifierTest {
     @DisplayName("Test passwordVerifier to throw IOException and expect success")
     void testInputException() throws Exception {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
-        when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
         when(file.isEmpty()).thenReturn(false);
         when(file.getInputStream()).thenThrow(new IOException("x"));
         assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
@@ -106,7 +90,6 @@ class PasswordVerifierTest {
         "files/pw_protected.pdf, sample.pdf, application/pdf",
     })
     void testPasswordVerifier_docx_pdf_failure(String filePath, String fileName, String mimetype) throws IOException {
-        when(toggleConfiguration.isPasswordcheck()).thenReturn(true);
         InputStream inputStream = new ClassPathResource(filePath).getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", fileName, mimetype, inputStream);
 

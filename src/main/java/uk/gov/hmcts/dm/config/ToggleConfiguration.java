@@ -15,5 +15,4 @@ public class ToggleConfiguration {
     private boolean ttl;
     private boolean overridemetadata;
     private boolean chunking;
-    private boolean passwordcheck;
 }
