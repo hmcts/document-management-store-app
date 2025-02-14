@@ -30,7 +30,7 @@ public class BlobStorageDeleteService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteDocumentContentVersion(@NotNull DocumentContentVersion documentContentVersion) {
         log.info(
-            "Deleting document blob {}, StoredDocument {}",
+            "Deleting DocumentContentVersion {}, StoredDocument {}",
             documentContentVersion.getId(),
             documentContentVersion.getStoredDocument().getId()
         );
