@@ -34,4 +34,4 @@ max_file_size_in_mb = "100"
 
 //v15 Flexiserver DB
 pgsql_sku        = "MO_Standard_E4ds_v4"
-pgsql_storage_mb = "131072"
+pgsql_storage_mb = "262144"
