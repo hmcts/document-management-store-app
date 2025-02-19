@@ -219,6 +219,7 @@ public class StoredDocumentService {
                     stopWatch.start();
                     storedDocument.getDocumentContentVersions()
                         .parallelStream()
+                        .filter(Objects::nonNull)
                         .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
                     storedDocumentRepository.delete(storedDocument);
                     stopWatch.stop();
