@@ -8,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
@@ -75,6 +76,7 @@ class StoredDocumentServiceTests {
 
     @BeforeEach
     public void setUp() {
+        ReflectionTestUtils.setField(storedDocumentService, "limit", 5);
         when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
     }
 
@@ -385,5 +387,65 @@ class StoredDocumentServiceTests {
 
         assertEquals("Value1", storedDocument.getMetadata().get("Key1"));
         assertEquals("Value2", storedDocument.getMetadata().get("Key2"));
+    }
+
+    @Test
+    void shouldDeleteCaseDocumentsMarkedForDeletion() {
+        StoredDocument storedDocument = new StoredDocument();
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of(storedDocument));
+
+        storedDocumentService.deleteCaseDocuments();
+
+        verify(blobStorageDeleteService, times(1)).deleteDocumentContentVersion(any());
+        verify(storedDocumentRepository, times(1)).delete(any());
+    }
+
+    @Test
+    void shouldDelete2CaseDocumentsMarkedForDeletion() {
+        StoredDocument storedDocument = new StoredDocument();
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+
+        StoredDocument storedDocument2 = new StoredDocument();
+        DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
+        storedDocument2.getDocumentContentVersions().add(documentContentVersion2);
+
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(5))
+                .thenReturn(List.of(storedDocument,storedDocument2));
+
+        storedDocumentService.deleteCaseDocuments();
+
+        verify(blobStorageDeleteService, times(2)).deleteDocumentContentVersion(any());
+        verify(storedDocumentRepository, times(2)).delete(any());
+    }
+
+    @Test
+    void shouldDeleteCaseDocuments2DocumentContentConversionsMarkedForDeletion() {
+        StoredDocument storedDocument = new StoredDocument();
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
+        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+
+        DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
+        storedDocument.getDocumentContentVersions().add(documentContentVersion2);
+
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of(storedDocument));
+
+        storedDocumentService.deleteCaseDocuments();
+
+        verify(blobStorageDeleteService, times(2)).deleteDocumentContentVersion(any());
+        verify(storedDocumentRepository, times(1)).delete(any());
+    }
+
+    @Test
+    void shouldNotDeleteCaseDocumentsWhenNoneMarkedForDeletion() {
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of());
+
+        storedDocumentService.deleteCaseDocuments();
+
+        verify(blobStorageDeleteService, times(0)).deleteDocumentContentVersion(any());
+        verify(storedDocumentRepository, times(0)).delete(any());
     }
 }

@@ -52,6 +52,7 @@ java:
     ENABLE_OVERRIDE_METADATA: 'false'
     ENABLE_CHUNKING: 'false'
     ENABLE_ORPHAN_DOCUMENT_DELETION: 'false'
+    ENABLE_CASE_DOCUMENTS_DELETION: 'false'
 
     LOG_OUTPUT: single
     ROOT_LOGGING_LEVEL: INFO
@@ -64,13 +65,16 @@ java:
 
     TASK_ENV: documentTaskLock-aat
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 3600000
-    #Below File size limits are in MB
+    # Below File size limits are in MB
     MAX_MEDIA_FILE_SIZE: 500
     MAX_NON_MEDIA_FILE_SIZE: 1024
     DOCUMENT_DELETE_TASK_CRON: 0 5 0-6 * * *
     DOCUMENT_DELETE_TASK_PAGE_SIZE: 1
     DOCUMENT_DELETE_TASK_CHUNK_SIZE: 1
     DOCUMENT_DELETE_TASK_MAX_ITEM_COUNT: 1
+    # Case Document Deletion Job Schedule
+    CASE_DOCUMENTS_DELETION_JOB_SCHEDULE: '0 0 31 2 *'  # is a mechanism to not run the job at all (31st feb is a nonfiring date)
+    CASE_DOCUMENTS_DELETION_LIMIT: 10
 
 blobstorage:
   resourceGroup: dm-store-aso-preview-rg
