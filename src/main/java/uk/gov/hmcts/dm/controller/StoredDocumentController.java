@@ -186,7 +186,7 @@ public class StoredDocumentController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         String azureRef = headers.getOrDefault("x-azure-ref", "null");
-        logger.info("getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
+        logger.debug("getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
 
         try {
             response.setHeader(HttpHeaders.CONTENT_TYPE, documentContentVersion.getMimeType());
@@ -204,9 +204,9 @@ public class StoredDocumentController {
                 documentContentVersion,
                 httpServletRequest,
                 response);
-            logger.info("Completed getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
+            logger.debug("Completed getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
         } catch (UncheckedIOException | IOException e) {
-            logger.info("Exception getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
+            logger.debug("Exception getBinary documentId {}, x-azure-ref: {}", documentId, azureRef);
             if (toggleConfiguration.isChunking()) {
                 response.reset();
             }
@@ -227,13 +227,13 @@ public class StoredDocumentController {
                 logger.debug("documentId : {} has Request Header {} = {}", documentId, key, value));
         }
         if (toggleConfiguration.isChunking()) {
-            logger.info("DocumentId : {} has Response: Content-Length, {}", documentId,
+            logger.debug("DocumentId : {} has Response: Content-Length, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_LENGTH));
-            logger.info("DocumentId : {} has Response: Content-Type, {}", documentId,
+            logger.debug("DocumentId : {} has Response: Content-Type, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_TYPE));
-            logger.info("DocumentId : {} has Response: Content-Range, {}", documentId,
+            logger.debug("DocumentId : {} has Response: Content-Range, {}", documentId,
                 response.getHeader(HttpHeaders.CONTENT_RANGE));
-            logger.info("DocumentId : {} has Response: Accept-Ranges, {}", documentId,
+            logger.debug("DocumentId : {} has Response: Accept-Ranges, {}", documentId,
                 response.getHeader(HttpHeaders.ACCEPT_RANGES));
         }
         return ResponseEntity.ok().build();
