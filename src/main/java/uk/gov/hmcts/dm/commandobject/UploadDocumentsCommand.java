@@ -22,7 +22,7 @@ import java.util.Map;
 @Data
 public class UploadDocumentsCommand {
 
-    public static final String DISALLOWED_FILE_ERR_MSG = "Your upload contains a disallowed file type.";
+    public static final String DISALLOWED_FILE_ERR_MSG = "Your upload contains a disallowed file type";
 
     public static final String FILE_SIZE_ERR_MSG = "Your upload file size is more than allowed limit.";
 
@@ -39,7 +39,7 @@ public class UploadDocumentsCommand {
     @MultipartFileListPasswordCheck(message = PDF_PASSWORD_ERR_MSG)
     private List<MultipartFile> files;
 
-    @NotNull(message = "Please provide classification")
+    @NotNull(message = "Please provide a valid classification: PRIVATE, RESTRICTED or PUBLIC")
     private Classifications classification;
 
     @Getter
