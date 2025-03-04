@@ -11,7 +11,7 @@ dependencies:
     version: 5.3.0
     repository: oci://hmctspublic.azurecr.io/helm
   - name: blobstorage
-    version: 2.0.2
+    version: 2.1.0
     repository: oci://hmctspublic.azurecr.io/helm
     condition: blobstorage.enabled
   - name: xui-webapp
