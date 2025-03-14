@@ -1,7 +1,7 @@
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.3.4")
+        classpath("org.flywaydb:flyway-database-postgresql:11.4.0")
     }
 }
 
@@ -18,7 +18,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'org.owasp.dependencycheck' version '12.1.0'
     id 'au.com.dius.pact' version '4.6.17'
-    id 'org.flywaydb.flyway' version '11.3.4'
+    id 'org.flywaydb.flyway' version '11.4.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.16'
 }
 
@@ -144,8 +144,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.3.4'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.3.4'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.4.0'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.4.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
