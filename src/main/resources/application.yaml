@@ -103,6 +103,10 @@ logging:
     org.springframework.web: ${LOG_LEVEL_SPRING_WEB:DEBUG}
     org.springframework.batch: ${LOG_LEVEL_SPRING_BATCH:DEBUG}
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
+    org.postgresql: ${LOG_LEVEL_POSTGRES:DEBUG}
+    org.springframework.jdbc.core: ${LOG_LEVEL_SPRING_JDBC:DEBUG}
+    org.hibernate.SQL: ${LOG_LEVEL_HIBERNATE:DEBUG}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${LOG_LEVEL_HIBERNATE:DEBUG}
 
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
