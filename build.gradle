@@ -1,7 +1,7 @@
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.5.0")
+        classpath("org.flywaydb:flyway-database-postgresql:11.7.0")
     }
 }
 
@@ -16,9 +16,9 @@ plugins {
     id 'checkstyle'
     id 'io.freefair.lombok' version '8.13.1'
     id 'info.solidsoft.pitest' version '1.15.0'
-    id 'org.owasp.dependencycheck' version '12.1.0'
+    id 'org.owasp.dependencycheck' version '12.1.1'
     id 'au.com.dius.pact' version '4.6.17'
-    id 'org.flywaydb.flyway' version '11.4.0'
+    id 'org.flywaydb.flyway' version '11.7.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.16'
 }
 
@@ -110,7 +110,7 @@ dependencies {
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.1.0'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.1.0'
 
-    implementation group: 'com.google.guava', name: 'guava', version: '33.4.6-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '33.4.7-jre'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.18.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: versions.jackson
@@ -144,11 +144,11 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.5.0'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.5.0'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.7.0'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.7.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.0'
-    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.0'
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.1'
 
 
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
@@ -225,7 +225,7 @@ dependencyCheck {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.21.4'
+    toolVersion = '10.23.0'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
@@ -252,7 +252,7 @@ def coverageExclusionList = [
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.13"
     reportsDirectory = file("$buildDir/reports/jacoco")
 }
 
