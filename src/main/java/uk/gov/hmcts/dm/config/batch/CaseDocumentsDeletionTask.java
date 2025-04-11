@@ -1,13 +1,8 @@
 package uk.gov.hmcts.dm.config.batch;
 
-import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
-import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +15,8 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
  */
 
 @Service
-@ConditionalOnProperty("toggle.casedocumentsdeletion")
-@EnableScheduling
-@EnableSchedulerLock(defaultLockAtMostFor = "PT5M")
 @Transactional(propagation = Propagation.REQUIRED)
-public class CaseDocumentsDeletionTask {
+public class CaseDocumentsDeletionTask implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(CaseDocumentsDeletionTask.class);
 
@@ -34,9 +26,8 @@ public class CaseDocumentsDeletionTask {
         this.storedDocumentService = storedDocumentService;
     }
 
-    @Scheduled(cron = "${spring.batch.caseDocumentsDeletionJobSchedule}")
-    @SchedulerLock(name = "${task.env}-Case-Documents-Deletion-Task")
-    public void execute() {
+    @Override
+    public void run() {
 
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
