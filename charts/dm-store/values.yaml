@@ -52,7 +52,6 @@ java:
     ENABLE_OVERRIDE_METADATA: 'false'
     ENABLE_CHUNKING: 'false'
     ENABLE_ORPHAN_DOCUMENT_DELETION: 'false'
-    ENABLE_CASE_DOCUMENTS_DELETION: 'false'
 
     LOG_OUTPUT: single
     ROOT_LOGGING_LEVEL: INFO
@@ -76,7 +75,6 @@ java:
     DOCUMENT_DELETE_TASK_CHUNK_SIZE: 1
     DOCUMENT_DELETE_TASK_MAX_ITEM_COUNT: 1
     # Case Document Deletion Job Schedule
-    CASE_DOCUMENTS_DELETION_JOB_SCHEDULE: '0 0 31 2 *'  # is a mechanism to not run the job at all (31st feb is a nonfiring date)
     CASE_DOCUMENTS_DELETION_LIMIT: 10
 
 blobstorage:

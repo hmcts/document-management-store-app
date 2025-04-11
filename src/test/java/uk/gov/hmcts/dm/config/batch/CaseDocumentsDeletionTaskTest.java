@@ -25,7 +25,7 @@ class CaseDocumentsDeletionTaskTest {
 
     @Test
     void shouldDeleteCaseDocumentsWhenScheduledTaskRuns() {
-        caseDocumentsDeletionTask.execute();
+        caseDocumentsDeletionTask.run();
         verify(storedDocumentService, times(1)).deleteCaseDocuments();
     }
 }

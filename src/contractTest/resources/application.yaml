@@ -52,7 +52,6 @@ spring:
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
     caseDocumentsDeletionLimit: ${CASE_DOCUMENTS_DELETION_LIMIT:10}
-    caseDocumentsDeletionJobSchedule: ${CASE_DOCUMENTS_DELETION_JOB_SCHEDULE:0 */15 * * * *}
 
 server:
   port: ${SERVER_PORT:4603}
@@ -181,7 +180,6 @@ toggle:
   thumbnail: ${ENABLE_THUMBNAIL:true}
   testing: ${ENABLE_TESTING:true}
   metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
-  casedocumentsdeletion: ${ENABLE_CASE_DOCUMENTS_DELETION:false}
 
 task:
   env: ${TASK_ENV:documentTaskLock-local}
