@@ -67,7 +67,6 @@ spring:
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
     orphanFileDeletionCronJobSchedule: ${ORPHAN_FILE_DELETION_CRONJOB_SCHEDULE:0 15 22 * * ?}
-    caseDocumentsDeletionJobSchedule: ${CASE_DOCUMENTS_DELETION_JOB_SCHEDULE:0 */15 * * * *}
 
 server:
   port: ${SERVER_PORT:4603}
