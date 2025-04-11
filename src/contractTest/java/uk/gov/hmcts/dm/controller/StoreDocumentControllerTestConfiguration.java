@@ -26,6 +26,7 @@ import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.FileContentVerifier;
 import uk.gov.hmcts.dm.service.FileSizeVerifier;
 import uk.gov.hmcts.dm.service.PasswordVerifier;
+import uk.gov.hmcts.dm.service.ScheduledTaskRunner;
 import uk.gov.hmcts.dm.service.SearchService;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
@@ -40,6 +41,11 @@ public class StoreDocumentControllerTestConfiguration {
     @Bean
     public DocumentContentVersionService documentContentVersionService() {
         return Mockito.mock(DocumentContentVersionService.class);
+    }
+
+    @Bean
+    public ScheduledTaskRunner scheduledTaskRunner() {
+        return Mockito.mock(ScheduledTaskRunner.class);
     }
 
     @Bean
