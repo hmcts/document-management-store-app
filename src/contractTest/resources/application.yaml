@@ -51,8 +51,11 @@ spring:
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
-    caseDocumentsDeletionLimit: ${CASE_DOCUMENTS_DELETION_LIMIT:10}
-
+    caseDocumentsDeletion:
+      threadLimit: ${CASE_DOCUMENTS_DELETION_THREAD_LIMIT:1}
+      noOfIterations: ${CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS:1}
+      batchSize: ${CASE_DOCUMENTS_DELETION_BATCH_SIZE:10}
+      
 server:
   port: ${SERVER_PORT:4603}
   forward-headers-strategy: none
