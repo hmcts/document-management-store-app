@@ -48,13 +48,13 @@ public class StoredDocumentService {
 
     private final BlobStorageDeleteService blobStorageDeleteService;
 
-    @Value("${spring.batch.caseDocumentsDeletion.batch-size}")
+    @Value("${spring.batch.caseDocumentsDeletion.batchSize}")
     private int batchSize;
 
-    @Value("${spring.batch.caseDocumentsDeletion.no-of-iterations}")
+    @Value("${spring.batch.caseDocumentsDeletion.noOfIterations}")
     private int noOfIterations;
 
-    @Value("${spring.batch.caseDocumentsDeletion.thread-limit}")
+    @Value("${spring.batch.caseDocumentsDeletion.threadLimit}")
     private int threadLimit;
 
     @Autowired
