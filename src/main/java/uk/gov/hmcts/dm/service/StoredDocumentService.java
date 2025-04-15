@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.service;
 
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,8 +48,14 @@ public class StoredDocumentService {
 
     private final BlobStorageDeleteService blobStorageDeleteService;
 
-    @Value("${spring.batch.caseDocumentsDeletionLimit}")
-    private int limit;
+    @Value("${spring.batch.caseDocumentsDeletion.batch-size}")
+    private int batchSize;
+
+    @Value("${spring.batch.caseDocumentsDeletion.no-of-iterations}")
+    private int noOfIterations;
+
+    @Value("${spring.batch.caseDocumentsDeletion.thread-limit}")
+    private int threadLimit;
 
     @Autowired
     public StoredDocumentService(StoredDocumentRepository storedDocumentRepository,
@@ -213,19 +222,36 @@ public class StoredDocumentService {
      */
     public void deleteCaseDocuments() {
 
-        storedDocumentRepository.findCaseDocumentsForDeletion(limit)
-                .forEach(storedDocument -> {
-                    StopWatch stopWatch = new StopWatch();
-                    stopWatch.start();
-                    storedDocument.getDocumentContentVersions()
-                        .parallelStream()
-                        .filter(Objects::nonNull)
-                        .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
-                    storedDocumentRepository.delete(storedDocument);
-                    stopWatch.stop();
-                    log.info("Deletion of StoredDocument with Id: {} took {} ms",
-                            storedDocument.getId(),stopWatch.getDuration().toMillis());
-                });
+        for (int i = 0; i < noOfIterations; i++) {
+            StopWatch iterationStopWatch = new StopWatch();
+            iterationStopWatch.start();
+
+            StopWatch dbGetQueryStopWatch = new StopWatch();
+            dbGetQueryStopWatch.start();
+
+            List<StoredDocument> storedDocuments = storedDocumentRepository.findCaseDocumentsForDeletion(batchSize);
+
+            dbGetQueryStopWatch.stop();
+            log.info("Time taken to get {} rows from DB : {} ms", storedDocuments.size(),
+                    dbGetQueryStopWatch.getDuration().toMillis());
+
+            if (CollectionUtils.isEmpty(storedDocuments)) {
+                iterationStopWatch.stop();
+                log.info("Time taken to complete iteration number :  {} was : {} ms", i,
+                        iterationStopWatch.getDuration().toMillis());
+                break;
+            }
+
+            try (ExecutorService executorService = Executors.newFixedThreadPool(threadLimit)) {
+                storedDocuments.forEach(
+                        storedDocument -> executorService.submit(() -> deleteDocumentDetails(storedDocument))
+                );
+            }
+            iterationStopWatch.stop();
+            log.info("Time taken to complete iteration number :  {} was : {} ms", i,
+                    iterationStopWatch.getDuration().toMillis());
+
+        }
     }
 
     private void storeInAzureBlobStorage(StoredDocument storedDocument,
@@ -234,5 +260,27 @@ public class StoredDocumentService {
         blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
             documentContentVersion,
             file);
+    }
+
+    /**
+     * This method will delete the Case Documents marked for hard deletion.
+     * It will delete the document Binary from the blob storage and delete the related rows from the database
+     * like the DocumentContentVersions and the Audit related Entries.
+     */
+    private void deleteDocumentDetails(StoredDocument storedDocument) {
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
+        storedDocument.getDocumentContentVersions()
+                .parallelStream()
+                .filter(Objects::nonNull)
+                .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
+        storedDocumentRepository.delete(storedDocument);
+
+        stopWatch.stop();
+        log.info("Deletion of StoredDocument with Id: {} took {} ms",
+                storedDocument.getId(), stopWatch.getDuration().toMillis());
+
     }
 }

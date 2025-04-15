@@ -61,7 +61,10 @@ spring:
     deletePageSize: ${DOCUMENT_DELETE_TASK_PAGE_SIZE:10}
     deleteChunkSize: ${DOCUMENT_DELETE_TASK_CHUNK_SIZE:10}
     deleteMaxItemCount: ${DOCUMENT_DELETE_TASK_MAX_ITEM_COUNT:10}
-    caseDocumentsDeletionLimit: ${CASE_DOCUMENTS_DELETION_LIMIT:10}
+    caseDocumentsDeletion:
+      thread-limit: ${CASE_DOCUMENTS_DELETION_THREAD_LIMIT:1}
+      no-of-iterations: ${CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS:1}
+      batch-size: ${CASE_DOCUMENTS_DELETION_BATCH_SIZE:10}
 
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}

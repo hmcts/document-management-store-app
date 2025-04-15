@@ -76,7 +76,9 @@ class StoredDocumentServiceTests {
 
     @BeforeEach
     public void setUp() {
-        ReflectionTestUtils.setField(storedDocumentService, "limit", 5);
+        ReflectionTestUtils.setField(storedDocumentService, "batchSize", 5);
+        ReflectionTestUtils.setField(storedDocumentService, "noOfIterations", 1);
+        ReflectionTestUtils.setField(storedDocumentService, "threadLimit", 1);
         when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
     }
 
