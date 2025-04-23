@@ -3,7 +3,7 @@ package uk.gov.hmcts.dm.config.batch;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
@@ -14,7 +14,7 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
  * from the database.
  */
 
-@Component
+@Service
 @Transactional(propagation = Propagation.REQUIRED)
 public class CaseDocumentsDeletionTask implements Runnable {
 
@@ -34,5 +34,7 @@ public class CaseDocumentsDeletionTask implements Runnable {
         storedDocumentService.deleteCaseDocuments();
         stopWatch.stop();
         log.info("Deletion job for Case Docs took {} ms", stopWatch.getDuration().toMillis());
+
     }
+
 }
