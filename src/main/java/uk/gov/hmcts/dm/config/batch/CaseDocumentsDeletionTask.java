@@ -4,6 +4,8 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 /**
@@ -13,6 +15,7 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
  */
 
 @Component
+@Transactional(propagation = Propagation.REQUIRED)
 public class CaseDocumentsDeletionTask implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(CaseDocumentsDeletionTask.class);
