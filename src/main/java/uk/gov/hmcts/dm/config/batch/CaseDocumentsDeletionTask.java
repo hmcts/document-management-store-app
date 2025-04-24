@@ -31,10 +31,16 @@ public class CaseDocumentsDeletionTask implements Runnable {
         log.info("Started Deletion job for Case Docs");
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        storedDocumentService.deleteCaseDocuments();
+        try {
+            storedDocumentService.deleteCaseDocuments();
+        } catch (Exception e) {
+            stopWatch.stop();
+            log.error("Deletion job for Case Docs failed with Error message : {} in {} ms",
+                    e.getMessage(), stopWatch.getDuration().toMillis());
+            return;
+        }
         stopWatch.stop();
         log.info("Deletion job for Case Docs took {} ms", stopWatch.getDuration().toMillis());
-
     }
 
 }
