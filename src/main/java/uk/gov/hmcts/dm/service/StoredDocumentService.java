@@ -269,18 +269,24 @@ public class StoredDocumentService {
      */
     private void deleteDocumentDetails(StoredDocument storedDocument) {
 
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
+        try {
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
 
-        storedDocument.getDocumentContentVersions()
-                .parallelStream()
-                .filter(Objects::nonNull)
-                .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
-        storedDocumentRepository.delete(storedDocument);
+            storedDocument.getDocumentContentVersions()
+                    .parallelStream()
+                    .filter(Objects::nonNull)
+                    .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
+            storedDocumentRepository.delete(storedDocument);
 
-        stopWatch.stop();
-        log.info("Deletion of StoredDocument with Id: {} took {} ms",
-                storedDocument.getId(), stopWatch.getDuration().toMillis());
+            stopWatch.stop();
+            log.info("Deletion of StoredDocument with Id: {} took {} ms",
+                    storedDocument.getId(), stopWatch.getDuration().toMillis());
+
+        } catch (Exception e) {
+            log.error("Error while deleting the document with Id : {}. Error message : {}",
+                    storedDocument.getId(), e.getMessage());
+        }
 
     }
 }
