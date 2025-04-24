@@ -240,7 +240,7 @@ public class StoredDocumentService {
 
             if (CollectionUtils.isEmpty(storedDocuments)) {
                 iterationStopWatch.stop();
-                log.info("Time taken to complete iteration number :  {} was : {} ms", i,
+                log.info("Time taken to complete empty iteration :  {} was : {} ms", i,
                         iterationStopWatch.getDuration().toMillis());
                 break;
             }
@@ -279,7 +279,7 @@ public class StoredDocumentService {
             storedDocument.getDocumentContentVersions()
                     .stream()
                     .filter(Objects::nonNull)
-                    .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
+                    .forEach(blobStorageDeleteService::deleteCaseDocumentBinary);
             storedDocumentRepository.delete(storedDocument);
 
             stopWatch.stop();

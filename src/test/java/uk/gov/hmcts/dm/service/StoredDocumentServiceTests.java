@@ -401,7 +401,7 @@ class StoredDocumentServiceTests {
 
         storedDocumentService.deleteCaseDocuments();
 
-        verify(blobStorageDeleteService, times(1)).deleteDocumentContentVersion(any());
+        verify(blobStorageDeleteService, times(1)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(1)).delete(any());
     }
 
@@ -420,7 +420,7 @@ class StoredDocumentServiceTests {
 
         storedDocumentService.deleteCaseDocuments();
 
-        verify(blobStorageDeleteService, times(2)).deleteDocumentContentVersion(any());
+        verify(blobStorageDeleteService, times(2)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(2)).delete(any());
     }
 
@@ -437,7 +437,7 @@ class StoredDocumentServiceTests {
 
         storedDocumentService.deleteCaseDocuments();
 
-        verify(blobStorageDeleteService, times(2)).deleteDocumentContentVersion(any());
+        verify(blobStorageDeleteService, times(2)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(1)).delete(any());
     }
 
@@ -447,7 +447,7 @@ class StoredDocumentServiceTests {
 
         storedDocumentService.deleteCaseDocuments();
 
-        verify(blobStorageDeleteService, times(0)).deleteDocumentContentVersion(any());
+        verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(0)).delete(any());
     }
 }

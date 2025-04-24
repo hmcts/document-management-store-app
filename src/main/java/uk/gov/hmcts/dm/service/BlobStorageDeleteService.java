@@ -36,25 +36,8 @@ public class BlobStorageDeleteService {
         );
 
         try {
-            BlockBlobClient blob =
-                cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
-            if (TRUE.equals(blob.exists())) {
-                Response<Void> res = blob.deleteWithResponse(
-                    DeleteSnapshotsOptionType.INCLUDE, null, null, null);
-                if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
-                    log.info(
-                        "Deleting document blob {} failed. Response status code {}",
-                        documentContentVersion.getId(),
-                        res.getStatusCode()
-                    );
-                    return;
-                }
-                log.info(
-                    "Successfully deleted blob: {}, document {}, StoredDocument {}",
-                    blob.getBlobUrl(),
-                    documentContentVersion.getId(),
-                    documentContentVersion.getStoredDocument().getId()
-                );
+            if (!deleteDocumentBinary(documentContentVersion)) {
+                return;
             }
             documentContentVersion.setContentUri(null);
             documentContentVersion.setContentChecksum(null);
@@ -78,4 +61,41 @@ public class BlobStorageDeleteService {
         }
     }
 
+    private boolean deleteDocumentBinary(DocumentContentVersion documentContentVersion) {
+        BlockBlobClient blob =
+            cloudBlobContainer.getBlobClient(documentContentVersion.getId().toString()).getBlockBlobClient();
+        if (TRUE.equals(blob.exists())) {
+            Response<Void> res = blob.deleteWithResponse(
+                DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+            if (res.getStatusCode() != 202 && res.getStatusCode() != 404) {
+                log.info(
+                    "Deleting document blob {} failed. Response status code {}",
+                    documentContentVersion.getId(),
+                    res.getStatusCode()
+                );
+                return false;
+            }
+            log.info(
+                "Successfully deleted blob: {}, document {}, StoredDocument {}",
+                blob.getBlobUrl(),
+                documentContentVersion.getId(),
+                documentContentVersion.getStoredDocument().getId()
+            );
+        }
+        return true;
+    }
+
+    public void deleteCaseDocumentBinary(DocumentContentVersion documentContentVersion) {
+        try {
+            if (!deleteDocumentBinary(documentContentVersion)) {
+                throw new Exception("Blob could not be deleted");
+            }
+        } catch (Exception e) {
+            log.info(
+                    "DocumentContentVersion deletion {}, StoredDocument {} has failed.",
+                    documentContentVersion.getId(),
+                    documentContentVersion.getStoredDocument().getId()
+            );
+        }
+    }
 }
