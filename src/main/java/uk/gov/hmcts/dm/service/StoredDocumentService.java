@@ -222,6 +222,9 @@ public class StoredDocumentService {
      */
     public void deleteCaseDocuments() {
 
+        log.info("threadLimit is : {}  and noOfIterations is {} and batchSize is : {}", threadLimit, noOfIterations,
+                batchSize);
+
         for (int i = 0; i < noOfIterations; i++) {
             StopWatch iterationStopWatch = new StopWatch();
             iterationStopWatch.start();

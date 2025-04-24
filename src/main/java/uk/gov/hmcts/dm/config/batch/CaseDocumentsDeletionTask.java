@@ -28,7 +28,7 @@ public class CaseDocumentsDeletionTask implements Runnable {
 
     @Override
     public void run() {
-
+        log.info("Started Deletion job for Case Docs");
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         storedDocumentService.deleteCaseDocuments();
