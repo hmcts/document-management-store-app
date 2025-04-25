@@ -129,6 +129,53 @@ class BlobStorageDeleteServiceTest {
         assertNull(documentContentVersion.getContentUri());
     }
 
+    @Test
+    void shouldLogErrorWhenBlobDeletionFails() {
+        var blobStorageException = mock(BlobStorageException.class);
+        when(blob.exists()).thenReturn(true);
+        when(blobStorageException.getStatusCode()).thenReturn(500);
+        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+                .thenThrow(blobStorageException);
+
+        blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
+
+        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+        assertNotNull(documentContentVersion.getContentChecksum());
+        assertNotNull(documentContentVersion.getContentUri());
+    }
+
+    @Test
+    void shouldLogSuccessWhenBlobDeletedSuccessfully() {
+        when(mockResponse.getStatusCode()).thenReturn(202);
+        when(blob.exists()).thenReturn(true);
+        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+                .thenReturn(mockResponse);
+
+        blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
+
+        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+    }
+
+    @Test
+    void shouldLogErrorWhenBlobDoesNotExist() {
+        when(blob.exists()).thenReturn(false);
+
+        blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
+
+        verify(blob, never()).deleteWithResponse(any(), any(), any(), any());
+    }
+
+    @Test
+    void shouldLogErrorWhenBlobDeletionThrowsGenericException() {
+        when(blob.exists()).thenReturn(true);
+        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+                .thenThrow(new RuntimeException("Generic exception"));
+
+        blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
+
+        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+    }
+
     private StoredDocument createStoredDocument() {
         return createStoredDocument(randomUUID());
     }
