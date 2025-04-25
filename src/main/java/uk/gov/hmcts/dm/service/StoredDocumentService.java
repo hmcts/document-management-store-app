@@ -1,14 +1,14 @@
 package uk.gov.hmcts.dm.service;
 
-import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
@@ -47,15 +47,6 @@ public class StoredDocumentService {
     private final BlobStorageWriteService blobStorageWriteService;
 
     private final BlobStorageDeleteService blobStorageDeleteService;
-
-    @Value("${spring.batch.caseDocumentsDeletion.batchSize}")
-    private int batchSize;
-
-    @Value("${spring.batch.caseDocumentsDeletion.noOfIterations}")
-    private int noOfIterations;
-
-    @Value("${spring.batch.caseDocumentsDeletion.threadLimit}")
-    private int threadLimit;
 
     @Autowired
     public StoredDocumentService(StoredDocumentRepository storedDocumentRepository,
@@ -215,46 +206,35 @@ public class StoredDocumentService {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
     }
 
-    /**
-     * This method will delete the Case Documents marked for hard deletion.
-     * It will delete the document Binary from the blob storage and delete the related rows from the database
-     * like the DocumentContentVersions and the Audit related Entries.
-     */
-    public void deleteCaseDocuments() {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void getAndDeleteCaseDocuments(int i, int batchSize, int threadLimit) {
+        StopWatch iterationStopWatch = new StopWatch();
+        iterationStopWatch.start();
 
-        log.info("threadLimit is : {}  and noOfIterations is {} and batchSize is : {}", threadLimit, noOfIterations,
-                batchSize);
+        StopWatch dbGetQueryStopWatch = new StopWatch();
+        dbGetQueryStopWatch.start();
 
-        for (int i = 0; i < noOfIterations; i++) {
-            StopWatch iterationStopWatch = new StopWatch();
-            iterationStopWatch.start();
+        List<StoredDocument> storedDocuments = storedDocumentRepository.findCaseDocumentsForDeletion(batchSize);
 
-            StopWatch dbGetQueryStopWatch = new StopWatch();
-            dbGetQueryStopWatch.start();
+        dbGetQueryStopWatch.stop();
+        log.info("Time taken to get {} rows from DB : {} ms", storedDocuments.size(),
+                dbGetQueryStopWatch.getDuration().toMillis());
 
-            List<StoredDocument> storedDocuments = storedDocumentRepository.findCaseDocumentsForDeletion(batchSize);
-
-            dbGetQueryStopWatch.stop();
-            log.info("Time taken to get {} rows from DB : {} ms", storedDocuments.size(),
-                    dbGetQueryStopWatch.getDuration().toMillis());
-
-            if (CollectionUtils.isEmpty(storedDocuments)) {
-                iterationStopWatch.stop();
-                log.info("Time taken to complete empty iteration :  {} was : {} ms", i,
-                        iterationStopWatch.getDuration().toMillis());
-                break;
-            }
-
-            try (ExecutorService executorService = Executors.newFixedThreadPool(threadLimit)) {
-                storedDocuments.forEach(
-                        storedDocument -> executorService.submit(() -> deleteDocumentDetails(storedDocument))
-                );
-            }
+        if (CollectionUtils.isEmpty(storedDocuments)) {
             iterationStopWatch.stop();
-            log.info("Time taken to complete iteration number :  {} was : {} ms", i,
+            log.info("Time taken to complete empty iteration :  {} was : {} ms", i,
                     iterationStopWatch.getDuration().toMillis());
-
+            return;
         }
+
+        try (ExecutorService executorService = Executors.newFixedThreadPool(threadLimit)) {
+            storedDocuments.forEach(
+                    storedDocument -> executorService.submit(() -> deleteDocumentDetails(storedDocument))
+            );
+        }
+        iterationStopWatch.stop();
+        log.info("Time taken to complete iteration number :  {} was : {} ms", i,
+                iterationStopWatch.getDuration().toMillis());
     }
 
     private void storeInAzureBlobStorage(StoredDocument storedDocument,

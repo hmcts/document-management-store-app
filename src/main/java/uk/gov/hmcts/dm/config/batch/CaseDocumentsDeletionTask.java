@@ -3,9 +3,8 @@ package uk.gov.hmcts.dm.config.batch;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 /**
@@ -15,12 +14,21 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
  */
 
 @Service
-@Transactional(propagation = Propagation.REQUIRED)
 public class CaseDocumentsDeletionTask implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(CaseDocumentsDeletionTask.class);
 
     private final StoredDocumentService storedDocumentService;
+
+
+    @Value("${spring.batch.caseDocumentsDeletion.batchSize}")
+    private int batchSize;
+
+    @Value("${spring.batch.caseDocumentsDeletion.noOfIterations}")
+    private int noOfIterations;
+
+    @Value("${spring.batch.caseDocumentsDeletion.threadLimit}")
+    private int threadLimit;
 
     public CaseDocumentsDeletionTask(StoredDocumentService storedDocumentService) {
         this.storedDocumentService = storedDocumentService;
@@ -32,7 +40,14 @@ public class CaseDocumentsDeletionTask implements Runnable {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         try {
-            storedDocumentService.deleteCaseDocuments();
+            log.info("threadLimit is : {}  and noOfIterations is {} and batchSize is : {}", threadLimit, noOfIterations,
+                    batchSize);
+
+            for (int i = 0; i < noOfIterations; i++) {
+                storedDocumentService.getAndDeleteCaseDocuments(i,
+                        batchSize, threadLimit);
+
+            }
         } catch (Exception e) {
             stopWatch.stop();
             log.error("Deletion job for Case Docs failed with Error message : {} in {} ms",

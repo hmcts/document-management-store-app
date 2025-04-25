@@ -8,7 +8,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
@@ -76,9 +75,6 @@ class StoredDocumentServiceTests {
 
     @BeforeEach
     public void setUp() {
-        ReflectionTestUtils.setField(storedDocumentService, "batchSize", 5);
-        ReflectionTestUtils.setField(storedDocumentService, "noOfIterations", 1);
-        ReflectionTestUtils.setField(storedDocumentService, "threadLimit", 1);
         when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
     }
 
@@ -399,7 +395,7 @@ class StoredDocumentServiceTests {
 
         when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of(storedDocument));
 
-        storedDocumentService.deleteCaseDocuments();
+        storedDocumentService.getAndDeleteCaseDocuments(1, 5, 1);
 
         verify(blobStorageDeleteService, times(1)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(1)).delete(any());
@@ -418,7 +414,7 @@ class StoredDocumentServiceTests {
         when(storedDocumentRepository.findCaseDocumentsForDeletion(5))
                 .thenReturn(List.of(storedDocument,storedDocument2));
 
-        storedDocumentService.deleteCaseDocuments();
+        storedDocumentService.getAndDeleteCaseDocuments(1, 5, 1);
 
         verify(blobStorageDeleteService, times(2)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(2)).delete(any());
@@ -435,7 +431,7 @@ class StoredDocumentServiceTests {
 
         when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of(storedDocument));
 
-        storedDocumentService.deleteCaseDocuments();
+        storedDocumentService.getAndDeleteCaseDocuments(1, 5, 1);
 
         verify(blobStorageDeleteService, times(2)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(1)).delete(any());
@@ -445,7 +441,7 @@ class StoredDocumentServiceTests {
     void shouldNotDeleteCaseDocumentsWhenNoneMarkedForDeletion() {
         when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of());
 
-        storedDocumentService.deleteCaseDocuments();
+        storedDocumentService.getAndDeleteCaseDocuments(1, 5, 1);
 
         verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(0)).delete(any());
