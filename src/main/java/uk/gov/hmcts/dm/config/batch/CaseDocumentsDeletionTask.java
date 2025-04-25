@@ -6,6 +6,8 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -77,7 +79,8 @@ public class CaseDocumentsDeletionTask implements Runnable {
         StopWatch dbGetQueryStopWatch = new StopWatch();
         dbGetQueryStopWatch.start();
 
-        List<StoredDocument> storedDocuments = storedDocumentRepository.findCaseDocumentsForDeletion(batchSize);
+        Pageable pageable = PageRequest.of(0, batchSize);
+        List<StoredDocument> storedDocuments = storedDocumentRepository.findCaseDocumentsForDeletion(pageable);
 
         dbGetQueryStopWatch.stop();
         log.info("Time taken to get {} rows from DB : {} ms", storedDocuments.size(),

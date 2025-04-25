@@ -12,7 +12,7 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -52,7 +52,7 @@ class CaseDocumentsDeletionTaskTest {
 
     @Test
     void shouldNotProcessWhenNoDocumentsAreFound() {
-        when(storedDocumentRepository.findCaseDocumentsForDeletion(anyInt())).thenReturn(List.of());
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(any())).thenReturn(List.of());
 
         caseDocumentsDeletionTask.run();
 
@@ -63,7 +63,7 @@ class CaseDocumentsDeletionTaskTest {
     void shouldProcessDocumentsInBatches() {
         StoredDocument document1 = new StoredDocument();
         StoredDocument document2 = new StoredDocument();
-        when(storedDocumentRepository.findCaseDocumentsForDeletion(anyInt())).thenReturn(List.of(document1, document2));
+        when(storedDocumentRepository.findCaseDocumentsForDeletion(any())).thenReturn(List.of(document1, document2));
 
         caseDocumentsDeletionTask.run();
 
