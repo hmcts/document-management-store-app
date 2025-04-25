@@ -40,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -388,60 +389,54 @@ class StoredDocumentServiceTests {
     }
 
     @Test
-    void shouldDeleteCaseDocumentsMarkedForDeletion() {
-        StoredDocument storedDocument = new StoredDocument();
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+    void shouldDeleteAllDocumentsAndLogCompletion() {
+        StoredDocument document1 = new StoredDocument();
+        DocumentContentVersion version1 = new DocumentContentVersion();
+        document1.getDocumentContentVersions().add(version1);
 
-        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of(storedDocument));
+        StoredDocument document2 = new StoredDocument();
+        DocumentContentVersion version2 = new DocumentContentVersion();
+        document2.getDocumentContentVersions().add(version2);
 
-        storedDocumentService.getAndDeleteCaseDocuments(1, 5, 1);
+        List<StoredDocument> documents = List.of(document1, document2);
 
-        verify(blobStorageDeleteService, times(1)).deleteCaseDocumentBinary(any());
-        verify(storedDocumentRepository, times(1)).delete(any());
+        storedDocumentService.deleteDocumentsDetails(documents);
+
+        verify(blobStorageDeleteService).deleteCaseDocumentBinary(version1);
+        verify(blobStorageDeleteService).deleteCaseDocumentBinary(version2);
+        verify(storedDocumentRepository).delete(document1);
+        verify(storedDocumentRepository).delete(document2);
     }
 
     @Test
-    void shouldDelete2CaseDocumentsMarkedForDeletion() {
-        StoredDocument storedDocument = new StoredDocument();
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+    void shouldLogErrorWhenDocumentDeletionFails() {
+        StoredDocument document = new StoredDocument();
+        DocumentContentVersion version = new DocumentContentVersion();
+        document.getDocumentContentVersions().add(version);
 
-        StoredDocument storedDocument2 = new StoredDocument();
-        DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
-        storedDocument2.getDocumentContentVersions().add(documentContentVersion2);
+        doThrow(new RuntimeException("Simulated failure"))
+                .when(blobStorageDeleteService).deleteCaseDocumentBinary(version);
 
-        when(storedDocumentRepository.findCaseDocumentsForDeletion(5))
-                .thenReturn(List.of(storedDocument,storedDocument2));
+        storedDocumentService.deleteDocumentsDetails(List.of(document));
 
-        storedDocumentService.getAndDeleteCaseDocuments(1, 5, 1);
-
-        verify(blobStorageDeleteService, times(2)).deleteCaseDocumentBinary(any());
-        verify(storedDocumentRepository, times(2)).delete(any());
+        verify(blobStorageDeleteService).deleteCaseDocumentBinary(version);
+        verify(storedDocumentRepository, times(0)).delete(document);
     }
 
     @Test
-    void shouldDeleteCaseDocuments2DocumentContentConversionsMarkedForDeletion() {
-        StoredDocument storedDocument = new StoredDocument();
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        storedDocument.getDocumentContentVersions().add(documentContentVersion);
+    void shouldSkipNullContentVersionsDuringDeletion() {
+        StoredDocument document = new StoredDocument();
+        document.getDocumentContentVersions().add(null);
 
-        DocumentContentVersion documentContentVersion2 = new DocumentContentVersion();
-        storedDocument.getDocumentContentVersions().add(documentContentVersion2);
+        storedDocumentService.deleteDocumentsDetails(List.of(document));
 
-        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of(storedDocument));
-
-        storedDocumentService.getAndDeleteCaseDocuments(1, 5, 1);
-
-        verify(blobStorageDeleteService, times(2)).deleteCaseDocumentBinary(any());
-        verify(storedDocumentRepository, times(1)).delete(any());
+        verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any());
+        verify(storedDocumentRepository).delete(document);
     }
 
     @Test
-    void shouldNotDeleteCaseDocumentsWhenNoneMarkedForDeletion() {
-        when(storedDocumentRepository.findCaseDocumentsForDeletion(5)).thenReturn(List.of());
-
-        storedDocumentService.getAndDeleteCaseDocuments(1, 5, 1);
+    void shouldHandleEmptyDocumentListGracefully() {
+        storedDocumentService.deleteDocumentsDetails(List.of());
 
         verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any());
         verify(storedDocumentRepository, times(0)).delete(any());

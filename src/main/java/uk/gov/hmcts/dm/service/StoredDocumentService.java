@@ -1,8 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
 import lombok.NonNull;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -206,37 +202,6 @@ public class StoredDocumentService {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void getAndDeleteCaseDocuments(int i, int batchSize, int threadLimit) {
-        StopWatch iterationStopWatch = new StopWatch();
-        iterationStopWatch.start();
-
-        StopWatch dbGetQueryStopWatch = new StopWatch();
-        dbGetQueryStopWatch.start();
-
-        List<StoredDocument> storedDocuments = storedDocumentRepository.findCaseDocumentsForDeletion(batchSize);
-
-        dbGetQueryStopWatch.stop();
-        log.info("Time taken to get {} rows from DB : {} ms", storedDocuments.size(),
-                dbGetQueryStopWatch.getDuration().toMillis());
-
-        if (CollectionUtils.isEmpty(storedDocuments)) {
-            iterationStopWatch.stop();
-            log.info("Time taken to complete empty iteration :  {} was : {} ms", i,
-                    iterationStopWatch.getDuration().toMillis());
-            return;
-        }
-
-        try (ExecutorService executorService = Executors.newFixedThreadPool(threadLimit)) {
-            storedDocuments.forEach(
-                    storedDocument -> executorService.submit(() -> deleteDocumentDetails(storedDocument))
-            );
-        }
-        iterationStopWatch.stop();
-        log.info("Time taken to complete iteration number :  {} was : {} ms", i,
-                iterationStopWatch.getDuration().toMillis());
-    }
-
     private void storeInAzureBlobStorage(StoredDocument storedDocument,
                                          DocumentContentVersion documentContentVersion,
                                          MultipartFile file) {
@@ -250,26 +215,24 @@ public class StoredDocumentService {
      * It will delete the document Binary from the blob storage and delete the related rows from the database
      * like the DocumentContentVersions and the Audit related Entries.
      */
-    private void deleteDocumentDetails(StoredDocument storedDocument) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteDocumentsDetails(List<StoredDocument> storedDocuments) {
 
-        try {
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
+        for (StoredDocument storedDocument : storedDocuments) {
+            try {
+                storedDocument.getDocumentContentVersions()
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .forEach(blobStorageDeleteService::deleteCaseDocumentBinary);
+                storedDocumentRepository.delete(storedDocument);
 
-            storedDocument.getDocumentContentVersions()
-                    .stream()
-                    .filter(Objects::nonNull)
-                    .forEach(blobStorageDeleteService::deleteCaseDocumentBinary);
-            storedDocumentRepository.delete(storedDocument);
+                log.info("Completed Deletion of StoredDocument with Id: {}",
+                        storedDocument.getId());
 
-            stopWatch.stop();
-            log.info("Deletion of StoredDocument with Id: {} took {} ms",
-                    storedDocument.getId(), stopWatch.getDuration().toMillis());
-
-        } catch (Exception e) {
-            log.error("Error while deleting the document with Id : {}. Error message : {}",
-                    storedDocument.getId(), e.getMessage());
+            } catch (Exception e) {
+                log.error("Error while deleting the document with Id : {}. Error message : {}",
+                        storedDocument.getId(), e.getMessage());
+            }
         }
-
     }
 }
