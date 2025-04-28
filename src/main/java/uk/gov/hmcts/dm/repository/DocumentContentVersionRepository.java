@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -25,4 +26,6 @@ public interface DocumentContentVersionRepository extends
 
     Long countByContentChecksumIsNotNull();
 
+    @Query("select dcv from DocumentContentVersion dcv where dcv.storedDocument.id = :storedDocumentId")
+    List<DocumentContentVersion> findAllByStoredDocumentId(@Param("storedDocumentId") UUID storedDocumentId);
 }

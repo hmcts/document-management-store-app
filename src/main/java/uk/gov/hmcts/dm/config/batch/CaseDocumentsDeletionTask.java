@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -80,7 +80,8 @@ public class CaseDocumentsDeletionTask implements Runnable {
         dbGetQueryStopWatch.start();
 
         Pageable pageable = PageRequest.of(0, batchSize);
-        List<StoredDocument> storedDocuments = storedDocumentRepository.findCaseDocumentsForDeletion(pageable);
+
+        List<UUID> storedDocuments = storedDocumentRepository.findCaseDocumentIdsForDeletion(pageable);
 
         dbGetQueryStopWatch.stop();
         log.info("Time taken to get {} rows from DB : {} ms", storedDocuments.size(),
@@ -94,7 +95,7 @@ public class CaseDocumentsDeletionTask implements Runnable {
         }
 
         int batchCommitSize = 500; // Define the batch size for committing to the DB
-        List<List<StoredDocument>> batches = Lists.partition(storedDocuments, batchCommitSize);
+        List<List<UUID>> batches = Lists.partition(storedDocuments, batchCommitSize);
 
         try (ExecutorService executorService = Executors.newFixedThreadPool(threadLimit)) {
             batches.forEach(

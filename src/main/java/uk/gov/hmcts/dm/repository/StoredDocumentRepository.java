@@ -42,11 +42,9 @@ public interface StoredDocumentRepository extends PagingAndSortingRepository<Sto
     Optional<StoredDocument> findByIdAndDeleted(UUID uuid, boolean deleted);
 
     @Query("""
-            select s from StoredDocument s
-            left join fetch s.documentContentVersions
-            left join fetch s.auditEntries
+            select s.id from StoredDocument s
             where s.deleted = true AND s.hardDeleted = false AND
             s.ttl < current_timestamp
-            order by s.ttl asc """)
-    List<StoredDocument> findCaseDocumentsForDeletion(Pageable pageable);
+            order by s.ttl asc""")
+    List<UUID> findCaseDocumentIdsForDeletion(Pageable pageable);
 }

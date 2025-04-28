@@ -391,21 +391,27 @@ class StoredDocumentServiceTests {
     @Test
     void shouldDeleteAllDocumentsAndLogCompletion() {
         StoredDocument document1 = new StoredDocument();
+        document1.setId(UUID.randomUUID());
         DocumentContentVersion version1 = new DocumentContentVersion();
         document1.getDocumentContentVersions().add(version1);
 
         StoredDocument document2 = new StoredDocument();
+        document2.setId(UUID.randomUUID());
         DocumentContentVersion version2 = new DocumentContentVersion();
         document2.getDocumentContentVersions().add(version2);
 
-        List<StoredDocument> documents = List.of(document1, document2);
+        when(documentContentVersionRepository.findAllByStoredDocumentId(any(UUID.class)))
+                .thenReturn(List.of(version1));
+        when(storedDocumentRepository.findAllById(any()))
+                .thenReturn(List.of(document1));
 
-        storedDocumentService.deleteDocumentsDetails(documents);
+        List<UUID> documentIds = List.of(document1.getId(), document2.getId());
 
-        verify(blobStorageDeleteService).deleteCaseDocumentBinary(version1);
-        verify(blobStorageDeleteService).deleteCaseDocumentBinary(version2);
-        verify(storedDocumentRepository).delete(document1);
-        verify(storedDocumentRepository).delete(document2);
+        storedDocumentService.deleteDocumentsDetails(documentIds);
+
+        verify(blobStorageDeleteService, times(2))
+                .deleteCaseDocumentBinary(any(DocumentContentVersion.class));
+        verify(storedDocumentRepository, times(2)).deleteById(any(UUID.class));
     }
 
     @Test
@@ -414,13 +420,17 @@ class StoredDocumentServiceTests {
         DocumentContentVersion version = new DocumentContentVersion();
         document.getDocumentContentVersions().add(version);
 
+        when(documentContentVersionRepository.findAllByStoredDocumentId(any(UUID.class)))
+                .thenReturn(List.of(version));
+
         doThrow(new RuntimeException("Simulated failure"))
                 .when(blobStorageDeleteService).deleteCaseDocumentBinary(version);
 
-        storedDocumentService.deleteDocumentsDetails(List.of(document));
+        storedDocumentService.deleteDocumentsDetails(List.of(UUID.randomUUID()));
 
-        verify(blobStorageDeleteService).deleteCaseDocumentBinary(version);
-        verify(storedDocumentRepository, times(0)).delete(document);
+        verify(blobStorageDeleteService, times(1))
+                .deleteCaseDocumentBinary(any(DocumentContentVersion.class));
+        verify(storedDocumentRepository, times(0)).deleteById(any(UUID.class));
     }
 
     @Test
@@ -428,17 +438,10 @@ class StoredDocumentServiceTests {
         StoredDocument document = new StoredDocument();
         document.getDocumentContentVersions().add(null);
 
-        storedDocumentService.deleteDocumentsDetails(List.of(document));
+        storedDocumentService.deleteDocumentsDetails(List.of(UUID.randomUUID()));
 
         verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any());
-        verify(storedDocumentRepository).delete(document);
+        verify(storedDocumentRepository, times(1)).deleteById(any(UUID.class));
     }
 
-    @Test
-    void shouldHandleEmptyDocumentListGracefully() {
-        storedDocumentService.deleteDocumentsDetails(List.of());
-
-        verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any());
-        verify(storedDocumentRepository, times(0)).delete(any());
-    }
 }

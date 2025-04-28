@@ -6,11 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
-import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -52,7 +52,7 @@ class CaseDocumentsDeletionTaskTest {
 
     @Test
     void shouldNotProcessWhenNoDocumentsAreFound() {
-        when(storedDocumentRepository.findCaseDocumentsForDeletion(any())).thenReturn(List.of());
+        when(storedDocumentRepository.findCaseDocumentIdsForDeletion(any())).thenReturn(List.of());
 
         caseDocumentsDeletionTask.run();
 
@@ -61,9 +61,8 @@ class CaseDocumentsDeletionTaskTest {
 
     @Test
     void shouldProcessDocumentsInBatches() {
-        StoredDocument document1 = new StoredDocument();
-        StoredDocument document2 = new StoredDocument();
-        when(storedDocumentRepository.findCaseDocumentsForDeletion(any())).thenReturn(List.of(document1, document2));
+        when(storedDocumentRepository.findCaseDocumentIdsForDeletion(any()))
+                .thenReturn(List.of(UUID.randomUUID(), UUID.randomUUID()));
 
         caseDocumentsDeletionTask.run();
 

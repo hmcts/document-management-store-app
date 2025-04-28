@@ -216,22 +216,29 @@ public class StoredDocumentService {
      * like the DocumentContentVersions and the Audit related Entries.
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteDocumentsDetails(List<StoredDocument> storedDocuments) {
+    public void deleteDocumentsDetails(List<UUID> storedDocumentIds) {
 
-        for (StoredDocument storedDocument : storedDocuments) {
+        for (UUID storedDocumentId : storedDocumentIds) {
             try {
-                storedDocument.getDocumentContentVersions()
+
+                List<DocumentContentVersion> documentContentVersions =
+                        documentContentVersionRepository.findAllByStoredDocumentId(storedDocumentId);
+
+
+                documentContentVersions
                         .stream()
                         .filter(Objects::nonNull)
                         .forEach(blobStorageDeleteService::deleteCaseDocumentBinary);
-                storedDocumentRepository.delete(storedDocument);
+
+                documentContentVersionRepository.deleteAll(documentContentVersions);
+                storedDocumentRepository.deleteById(storedDocumentId);
 
                 log.info("Completed Deletion of StoredDocument with Id: {}",
-                        storedDocument.getId());
+                        storedDocumentId);
 
             } catch (Exception e) {
                 log.error("Error while deleting the document with Id : {}. Error message : {}",
-                        storedDocument.getId(), e.getMessage());
+                        storedDocumentId, e.getMessage());
             }
         }
     }
