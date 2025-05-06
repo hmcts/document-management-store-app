@@ -1,13 +1,12 @@
 package uk.gov.hmcts.dm.service;
 
-import jakarta.transaction.Transactional;
 import lombok.NonNull;
-import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
@@ -44,9 +43,6 @@ public class StoredDocumentService {
     private final BlobStorageWriteService blobStorageWriteService;
 
     private final BlobStorageDeleteService blobStorageDeleteService;
-
-    @Value("${spring.batch.caseDocumentsDeletionLimit}")
-    private int limit;
 
     @Autowired
     public StoredDocumentService(StoredDocumentRepository storedDocumentRepository,
@@ -206,33 +202,44 @@ public class StoredDocumentService {
         return storedDocumentRepository.findByTtlLessThanAndHardDeleted(new Date(), false);
     }
 
-    /**
-     * This method will delete the Case Documents marked for hard deletion.
-     * It will delete the document Binary from the blob storage and delete the related rows from the database
-     * like the DocumentContentVersions and the Audit related Entries.
-     */
-    public void deleteCaseDocuments() {
-
-        storedDocumentRepository.findCaseDocumentsForDeletion(limit)
-                .forEach(storedDocument -> {
-                    StopWatch stopWatch = new StopWatch();
-                    stopWatch.start();
-                    storedDocument.getDocumentContentVersions()
-                        .parallelStream()
-                        .filter(Objects::nonNull)
-                        .forEach(blobStorageDeleteService::deleteDocumentContentVersion);
-                    storedDocumentRepository.delete(storedDocument);
-                    stopWatch.stop();
-                    log.info("Deletion of StoredDocument with Id: {} took {} ms",
-                            storedDocument.getId(),stopWatch.getDuration().toMillis());
-                });
-    }
-
     private void storeInAzureBlobStorage(StoredDocument storedDocument,
                                          DocumentContentVersion documentContentVersion,
                                          MultipartFile file) {
         blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
             documentContentVersion,
             file);
+    }
+
+    /**
+     * This method will delete the Case Documents marked for hard deletion.
+     * It will delete the document Binary from the blob storage and delete the related rows from the database
+     * like the DocumentContentVersions and the Audit related Entries.
+     */
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteDocumentsDetails(List<UUID> storedDocumentIds) {
+
+        for (UUID storedDocumentId : storedDocumentIds) {
+            try {
+
+                List<DocumentContentVersion> documentContentVersions =
+                        documentContentVersionRepository.findAllByStoredDocumentId(storedDocumentId);
+
+
+                documentContentVersions
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .forEach(blobStorageDeleteService::deleteCaseDocumentBinary);
+
+                documentContentVersionRepository.deleteAll(documentContentVersions);
+                storedDocumentRepository.deleteById(storedDocumentId);
+
+                log.info("Completed Deletion of StoredDocument with Id: {}",
+                        storedDocumentId);
+
+            } catch (Exception e) {
+                log.error("Error while deleting the document with Id : {}. Error message : {}",
+                        storedDocumentId, e.getMessage());
+            }
+        }
     }
 }
