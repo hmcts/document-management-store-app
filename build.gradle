@@ -93,10 +93,10 @@ def versions = [
     postgresql         : '42.7.5',
     jackson            : '2.19.0',
     serenity           : '4.2.22',
-    logging            : '6.1.8',
+    logging            : '6.1.9',
     pact_version       : '4.6.17',
     emTestHelper       : '2.1.1',
-    shedlock           : '6.5.0',
+    shedlock           : '6.6.0',
     hibernate          : '6.6.5.Final',
     jupiter            : '5.12.2',
     springSecurity     : '6.4.5'
@@ -208,7 +208,7 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.6'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.8'
 }
 
 dependencyManagement {
