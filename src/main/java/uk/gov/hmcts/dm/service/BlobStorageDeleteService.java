@@ -88,7 +88,11 @@ public class BlobStorageDeleteService {
     public void deleteCaseDocumentBinary(DocumentContentVersion documentContentVersion) {
         try {
             if (!deleteDocumentBinary(documentContentVersion)) {
-                throw new Exception("Blob could not be deleted");
+                log.info(
+                        "DocumentContentVersion deletion {}, Blob URL {} has failed.",
+                        documentContentVersion.getId(),
+                        documentContentVersion.getContentUri()
+                );
             }
         } catch (Exception e) {
             log.info(
