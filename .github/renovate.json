@@ -1,19 +1,4 @@
 {
-   "packageRules": [
-        {
-            "matchPackageNames": [
-                "net.serenity-bdd:serenity-single-page-report",
-                "net.serenity-bdd:serenity-gradle-plugin",
-                "net.serenity-bdd:serenity-rest-assured",
-                "net.serenity-bdd:serenity-core",
-                "net.serenity-bdd:serenity-junit",
-                "net.serenity-bdd:serenity-spring",
-                "au.com.dius.pact",
-                "info.solidsoft.pitest"
-            ],
-            "enabled": false
-        }
-    ],
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "labels": [
     "dependencies"
