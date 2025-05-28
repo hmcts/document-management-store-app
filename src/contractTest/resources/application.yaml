@@ -55,7 +55,8 @@ spring:
       threadLimit: ${CASE_DOCUMENTS_DELETION_THREAD_LIMIT:1}
       noOfIterations: ${CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS:1}
       batchSize: ${CASE_DOCUMENTS_DELETION_BATCH_SIZE:10}
-      
+      serviceName: ${CASE_DOCUMENTS_DELETION_SERVICE:'ccd_case_disposer'}
+
 server:
   port: ${SERVER_PORT:4603}
   forward-headers-strategy: none

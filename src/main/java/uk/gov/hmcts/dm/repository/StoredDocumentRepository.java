@@ -44,7 +44,7 @@ public interface StoredDocumentRepository extends PagingAndSortingRepository<Sto
     @Query("""
             select s.id from StoredDocument s
             where s.deleted = true AND s.hardDeleted = false AND
-            s.ttl < current_timestamp
+            s.ttl < current_timestamp AND s.lastModifiedByService = :serviceName
             order by s.ttl asc""")
-    List<UUID> findCaseDocumentIdsForDeletion(Pageable pageable);
+    List<UUID> findCaseDocumentIdsForDeletion(Pageable pageable, @Param("serviceName") String serviceName);
 }
