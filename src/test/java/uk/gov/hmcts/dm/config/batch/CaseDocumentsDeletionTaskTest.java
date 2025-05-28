@@ -14,7 +14,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -38,7 +38,6 @@ class CaseDocumentsDeletionTaskTest {
         ReflectionTestUtils.setField(caseDocumentsDeletionTask, "batchSize", 5);
         ReflectionTestUtils.setField(caseDocumentsDeletionTask, "noOfIterations", 1);
         ReflectionTestUtils.setField(caseDocumentsDeletionTask, "threadLimit", 1);
-        ReflectionTestUtils.setField(caseDocumentsDeletionTask, "serviceName", "ccd_case_disposer");
     }
 
     @Test
@@ -54,7 +53,8 @@ class CaseDocumentsDeletionTaskTest {
 
     @Test
     void shouldNotProcessWhenNoDocumentsAreFound() {
-        when(storedDocumentRepository.findCaseDocumentIdsForDeletion(any(), anyString())).thenReturn(List.of());
+        ReflectionTestUtils.setField(caseDocumentsDeletionTask, "serviceName", "sscs");
+        when(storedDocumentRepository.findCaseDocumentIdsForDeletion(any(), eq("sscs"))).thenReturn(List.of());
 
         caseDocumentsDeletionTask.run();
 
@@ -63,7 +63,8 @@ class CaseDocumentsDeletionTaskTest {
 
     @Test
     void shouldProcessDocumentsInBatches() {
-        when(storedDocumentRepository.findCaseDocumentIdsForDeletion(any(), anyString()))
+        ReflectionTestUtils.setField(caseDocumentsDeletionTask, "serviceName", "ccd_case_disposer");
+        when(storedDocumentRepository.findCaseDocumentIdsForDeletion(any(), eq("ccd_case_disposer")))
                 .thenReturn(List.of(UUID.randomUUID(), UUID.randomUUID()));
 
         caseDocumentsDeletionTask.run();
