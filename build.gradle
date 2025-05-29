@@ -90,14 +90,14 @@ repositories {
 
 def versions = [
     ehcache            : '3.10.8',
-    postgresql         : '42.7.5',
+    postgresql         : '42.7.6',
     jackson            : '2.19.0',
     serenity           : '4.2.30',
     logging            : '6.1.9',
     pact_version       : '4.6.17',
     emTestHelper       : '2.1.1',
-    shedlock           : '6.6.1',
-    hibernate          : '6.6.15.Final',
+    shedlock           : '6.7.0',
+    hibernate          : '6.6.17.Final',
     jupiter            : '5.12.2',
     springSecurity     : '6.5.0'
 ]
