@@ -65,6 +65,7 @@ spring:
       threadLimit: ${CASE_DOCUMENTS_DELETION_THREAD_LIMIT:1}
       noOfIterations: ${CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS:1}
       batchSize: ${CASE_DOCUMENTS_DELETION_BATCH_SIZE:10}
+      serviceName: ${CASE_DOCUMENTS_DELETION_SERVICE_NAME:ccd_case_disposer}
 
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}

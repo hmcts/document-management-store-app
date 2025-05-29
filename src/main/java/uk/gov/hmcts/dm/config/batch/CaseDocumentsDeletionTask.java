@@ -41,6 +41,9 @@ public class CaseDocumentsDeletionTask implements Runnable {
     @Value("${spring.batch.caseDocumentsDeletion.threadLimit}")
     private int threadLimit;
 
+    @Value("${spring.batch.caseDocumentsDeletion.serviceName}")
+    private String serviceName;
+
     public CaseDocumentsDeletionTask(StoredDocumentService storedDocumentService,
                                      StoredDocumentRepository storedDocumentRepository) {
         this.storedDocumentService = storedDocumentService;
@@ -81,7 +84,7 @@ public class CaseDocumentsDeletionTask implements Runnable {
 
         Pageable pageable = PageRequest.of(0, batchSize);
 
-        List<UUID> storedDocuments = storedDocumentRepository.findCaseDocumentIdsForDeletion(pageable);
+        List<UUID> storedDocuments = storedDocumentRepository.findCaseDocumentIdsForDeletion(pageable, serviceName);
 
         dbGetQueryStopWatch.stop();
         log.info("Time taken to get {} rows from DB : {} ms", storedDocuments.size(),
