@@ -9,7 +9,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.66'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '3.4.5'
+    id 'org.springframework.boot' version '3.5.0'
     id 'com.github.ben-manes.versions' version '0.52.0'
     id 'org.sonarqube' version '6.2.0.5505'
     id 'jacoco'
@@ -90,13 +90,13 @@ repositories {
 
 def versions = [
     ehcache            : '3.10.8',
-    postgresql         : '42.7.5',
+    postgresql         : '42.7.6',
     jackson            : '2.19.0',
     serenity           : '4.2.30',
     logging            : '6.1.9',
     pact_version       : '4.6.17',
     emTestHelper       : '2.1.1',
-    shedlock           : '6.6.1',
+    shedlock           : '6.7.0',
     hibernate          : '7.0.0.Final',
     jupiter            : '5.12.2',
     springSecurity     : '6.5.0'
@@ -154,8 +154,8 @@ dependencies {
     implementation group: 'com.github.hmcts', name: 'java-logging', version: versions.logging
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.2.1'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.2.1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.0'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.0'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
@@ -198,7 +198,7 @@ dependencies {
         exclude group: 'ch.qos.logback', module: 'logback-core'
     }
 
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.0'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.1'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
