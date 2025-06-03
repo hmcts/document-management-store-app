@@ -78,6 +78,7 @@ java:
     CASE_DOCUMENTS_DELETION_THREAD_LIMIT: 1
     CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS: 1
     CASE_DOCUMENTS_DELETION_BATCH_SIZE: 1
+    CASE_DOCUMENTS_DELETION_SERVICE_NAME: ccd_case_disposer
 
 blobstorage:
   resourceGroup: dm-store-aso-preview-rg
