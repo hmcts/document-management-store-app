@@ -90,7 +90,7 @@ repositories {
 
 def versions = [
     ehcache            : '3.10.8',
-    postgresql         : '42.7.6',
+    postgresql         : '42.7.7',
     jackson            : '2.19.0',
     serenity           : '4.2.31',
     logging            : '6.1.9',
