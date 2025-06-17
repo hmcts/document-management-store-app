@@ -110,6 +110,7 @@ dependencies {
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
+    implementation group:'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate5-jakarta', version: versions.fasterXmlJackson
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache, {
         exclude group: "org.glassfish.jaxb", module: "jaxb-runtime"
@@ -128,8 +129,8 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.16.0'
 
-    implementation group: 'org.hibernate.orm', name: 'hibernate-core', version: versions.hibernate
-    implementation group:'org.hibernate.orm', name: 'hibernate-envers', version: versions.hibernate
+    implementation group: 'org.hibernate', name: 'hibernate-core', version: versions.hibernate
+    implementation group:'org.hibernate', name: 'hibernate-envers', version: versions.hibernate
 
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
