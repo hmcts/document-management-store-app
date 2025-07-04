@@ -176,6 +176,19 @@ class BlobStorageDeleteServiceTest {
         verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
     }
 
+    @Test
+    void logsErrorWhenDocumentBinaryDeletionFails() {
+        when(blob.exists()).thenReturn(true);
+        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+                .thenReturn(mockResponse);
+        when(mockResponse.getStatusCode()).thenReturn(409);
+
+        blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
+
+        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+        assertNotNull(documentContentVersion.getContentUri());
+    }
+
     private StoredDocument createStoredDocument() {
         return createStoredDocument(randomUUID());
     }

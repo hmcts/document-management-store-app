@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -8,6 +9,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -53,4 +58,39 @@ class SecurityUtilServiceTests {
         assertNull(securityUtilService.getCurrentlyAuthenticatedServiceName());
     }
 
+    @Test
+    void retrievesUserIdWhenHeaderIsPresent() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+        when(request.getHeader(SecurityUtilService.USER_ID_HEADER)).thenReturn("user123");
+
+        assertEquals("user123", securityUtilService.getUserId());
+    }
+
+    @Test
+    void returnsNullWhenRequestIsNull() {
+        RequestContextHolder.setRequestAttributes(null);
+
+        assertNull(securityUtilService.getUserId());
+    }
+
+    @Test
+    void retrievesUserRolesWhenHeaderIsPresent() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+        when(request.getHeader(SecurityUtilService.USER_ROLES_HEADER)).thenReturn("role1, role2, role3");
+
+        Set<String> roles = securityUtilService.getUserRoles();
+
+        assertEquals(Set.of("role1", "role2", "role3"), roles);
+    }
+
+    @Test
+    void returnsNullWhenUserRolesHeaderIsMissing() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+        when(request.getHeader(SecurityUtilService.USER_ROLES_HEADER)).thenReturn(null);
+
+        assertNull(securityUtilService.getUserRoles());
+    }
 }

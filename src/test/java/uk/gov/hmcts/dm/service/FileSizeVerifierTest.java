@@ -8,12 +8,15 @@ import org.mockito.InjectMocks;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(SpringExtension.class)
@@ -67,6 +70,19 @@ class FileSizeVerifierTest {
     void verifyLowerThanMinFileSize() {
         MockMultipartFile kmlfile = new MockMultipartFile("data", "filename.kml", "text/plain", "".getBytes());
         assertFalse(fileSizeVerifier.verifyMinFileSize(kmlfile));
+    }
+
+    @Test
+    void returnsFalseWhenIOExceptionOccursDuringFileVerification() throws IOException {
+        MultipartFile mockFile = mock(MultipartFile.class);
+        when(mockFile.getInputStream()).thenThrow(new IOException("Mocked IOException"));
+
+        assertFalse(fileSizeVerifier.verifyFileSize(mockFile));
+    }
+
+    @Test
+    void returnsFalseWhenMultipartFileIsNull() {
+        assertFalse(fileSizeVerifier.verifyFileSize(null));
     }
 
     private byte[] fileToByteArray(String file) throws IOException {

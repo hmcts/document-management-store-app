@@ -12,6 +12,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.service.Constants;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -175,5 +177,20 @@ class DocumentContentVersionControllerTest extends ComponentTestBase {
             auditedStoredDocumentOperationsService
         ).initBinder(webDataBinder);
         assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
+    }
+
+    @Test
+    void returnsInternalServerErrorWhenIOExceptionOccurs() throws Exception {
+
+        when(documentContentVersionService.findById(id))
+                .thenReturn(Optional.of(documentContentVersion));
+        doThrow(new IOException("Mocked IOException"))
+                .when(auditedDocumentContentVersionOperationsService)
+                .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
+
+        restActions
+                .withAuthorizedUser("userId")
+                .get("/documents/" + id + "/versions/" + id + "/binary")
+                .andExpect(status().isInternalServerError());
     }
 }

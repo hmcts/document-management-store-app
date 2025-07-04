@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.connector.ClientAbortException;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,6 +27,7 @@ import java.util.stream.Stream;
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -175,8 +175,8 @@ class StoredDocumentControllerTests extends ComponentTestBase {
         );
 
         doThrow(UncheckedIOException.class).when(auditedDocumentContentVersionOperationsService)
-                .readDocumentContentVersionBinaryFromBlobStore(Mockito.any(DocumentContentVersion.class),
-                    Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
+                .readDocumentContentVersionBinaryFromBlobStore(any(DocumentContentVersion.class),
+                    any(HttpServletRequest.class), any(HttpServletResponse.class));
 
         restActions
             .withAuthorizedUser("userId")
@@ -193,8 +193,8 @@ class StoredDocumentControllerTests extends ComponentTestBase {
         );
 
         doThrow(ClientAbortException.class).when(auditedDocumentContentVersionOperationsService)
-            .readDocumentContentVersionBinaryFromBlobStore(Mockito.any(DocumentContentVersion.class),
-                Mockito.any(HttpServletRequest.class), Mockito.any(HttpServletResponse.class));
+            .readDocumentContentVersionBinaryFromBlobStore(any(DocumentContentVersion.class),
+                any(HttpServletRequest.class), any(HttpServletResponse.class));
 
         restActions
             .withAuthorizedUser("userId")
@@ -265,4 +265,18 @@ class StoredDocumentControllerTests extends ComponentTestBase {
         assertTrue(Arrays.asList(webDataBinder.getDisallowedFields()).contains(Constants.IS_ADMIN));
     }
 
+    @Test
+    void logsWarningWhenClientAbortExceptionOccurs() throws Exception {
+        UncheckedIOException uncheckedIOException = new UncheckedIOException(new ClientAbortException("Broken pipe"));
+        when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
+                .thenReturn(Optional.of(documentContentVersion));
+        doThrow(uncheckedIOException).when(auditedDocumentContentVersionOperationsService)
+                .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
+
+        restActions
+                .withAuthorizedUser("userId")
+                .get("/documents/" + id + "/binary")
+                .andExpect(status().isOk());
+
+    }
 }

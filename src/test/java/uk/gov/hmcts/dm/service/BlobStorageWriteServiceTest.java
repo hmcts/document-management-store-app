@@ -11,8 +11,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -24,10 +26,13 @@ import static org.apache.commons.io.IOUtils.copy;
 import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
@@ -84,6 +89,20 @@ class BlobStorageWriteServiceTest {
 
         assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
         verify(blob).upload(any(), eq(documentContentVersion.getSize()));
+    }
+
+    @Test
+    void writeBinaryStreamThrowsFileStorageExceptionOnIOException() throws Exception {
+        final StoredDocument storedDocument = createStoredDocument();
+        final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
+        given(file.getInputStream()).willThrow(new IOException("Mocked IOException"));
+
+        Exception exception = assertThrows(FileStorageException.class, () ->
+                blobStorageWriteService.uploadDocumentContentVersion(storedDocument, documentContentVersion, file)
+        );
+
+        assertThat(exception.getCause().getMessage(), is("Mocked IOException"));
+        verify(blob, never()).upload(any(InputStream.class), anyLong());
     }
 
     private StoredDocument createStoredDocument() {
