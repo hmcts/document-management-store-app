@@ -91,7 +91,7 @@ def versions = [
     emTestHelper       : '2.1.1',
     shedlock           : '6.9.0',
     hibernate          : '6.6.18.Final',
-    jupiter            : '5.13.1',
+    jupiter            : '5.13.2',
     springSecurity     : '6.5.1'
 ]
 
@@ -99,7 +99,7 @@ ext['hibernate.version'] = versions.hibernate
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.30.0'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.30.1'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.2.0'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.2.0'
 
@@ -139,7 +139,7 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.9.2'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.9.2'
 
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.2'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.1'
 
 
@@ -192,7 +192,7 @@ dependencies {
         exclude group: 'ch.qos.logback', module: 'logback-core'
     }
 
-    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.2'
+    testImplementation group: 'org.testcontainers', name: 'postgresql', version: '1.21.3'
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
@@ -207,7 +207,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.junit.platform', version: '1.13.1') {
+        dependencySet(group: 'org.junit.platform', version: '1.13.2') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }
