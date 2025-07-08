@@ -5,12 +5,15 @@ import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.exception.DocumentUpdateException;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
@@ -80,5 +83,31 @@ class StoredDocumentUpdateControllerTests extends ComponentTestBase {
                 )
             ))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void throwsDocumentUpdateExceptionWhenGenericExceptionOccurs() {
+        doThrow(new RuntimeException("Unexpected error")).when(auditedStoredDocumentOperationsService)
+                .updateDocument(any(UUID.class), any(), any(Date.class));
+
+        Exception exception = assertThrows(RuntimeException.class, () ->
+                restActions
+                        .withAuthorizedUser("userId")
+                        .patch("/documents", Map.of(
+                                "ttl", new Date(),
+                                "documents", Lists.newArrayList(
+                                        Map.of(
+                                                "documentId", UUID.randomUUID(),
+                                                "metadata", Map.of("key", "value")
+                                        )
+                                )
+                        ))
+        );
+
+        Throwable cause = exception.getCause();
+        while (cause != null && !(cause instanceof DocumentUpdateException)) {
+            cause = cause.getCause();
+        }
+        assertTrue(cause instanceof DocumentUpdateException);
     }
 }

@@ -138,4 +138,26 @@ class BlobStorageReadServiceTest {
         assertTrue(blobStorageReadService.doesBinaryExist(documentContentVersion.getId()));
     }
 
+    @Test
+    void returnsFullBlobWhenRangeStartIsNegative() throws IOException {
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=-2");
+
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
+
+        verify(response).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 2-4/4");
+        verify(response).setHeader(HttpHeaders.CONTENT_LENGTH, "3");
+    }
+
+    @Test
+    void returnsPartialContentWhenRangeHeaderHasValidStartAndEnd() throws IOException {
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        when(request.getHeader(HttpHeaders.RANGE.toLowerCase())).thenReturn("bytes=1-3");
+
+        blobStorageReadService.loadBlob(documentContentVersion, request, response);
+
+        verify(response).setStatus(HttpStatus.PARTIAL_CONTENT.value());
+        verify(response).setHeader(HttpHeaders.CONTENT_RANGE, "bytes 1-3/4");
+        verify(response).setHeader(HttpHeaders.CONTENT_LENGTH, "3");
+    }
 }
