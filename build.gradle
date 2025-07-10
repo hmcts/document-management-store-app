@@ -89,7 +89,7 @@ def versions = [
     logging            : '6.1.9',
     pact_version       : '4.6.17',
     emTestHelper       : '2.1.1',
-    shedlock           : '6.9.0',
+    shedlock           : '6.9.2',
     hibernate          : '6.6.18.Final',
     jupiter            : '5.13.3',
     springSecurity     : '6.5.1'
@@ -100,8 +100,8 @@ ext['hibernate.version'] = versions.hibernate
 dependencies {
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.30.1'
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.2.0'
-    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.2.0'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.2.1'
+    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.2.1'
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.4.8-jre'
 
