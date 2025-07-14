@@ -1,7 +1,7 @@
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.9.2")
+        classpath("org.flywaydb:flyway-database-postgresql:11.10.2")
     }
 }
 
@@ -18,8 +18,8 @@ plugins {
     id 'info.solidsoft.pitest' version '1.15.0'
     id 'org.owasp.dependencycheck' version '12.1.3'
     id 'au.com.dius.pact' version '4.6.17'
-    id 'org.flywaydb.flyway' version '11.9.1'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.33'
+    id 'org.flywaydb.flyway' version '11.10.2'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.34'
 }
 
 apply plugin: 'java'
@@ -90,7 +90,7 @@ def versions = [
     pact_version       : '4.6.17',
     emTestHelper       : '2.1.1',
     shedlock           : '6.9.2',
-    hibernate          : '6.6.18.Final',
+    hibernate          : '6.6.21.Final',
     jupiter            : '5.13.3',
     springSecurity     : '6.5.1'
 ]
@@ -126,7 +126,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.16.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.18.0'
 
     implementation group: 'org.hibernate.orm', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate.orm', name: 'hibernate-envers', version: versions.hibernate
@@ -136,8 +136,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.9.2'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.9.2'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.10.2'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.10.2'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.1'
@@ -219,7 +219,7 @@ dependencyCheck {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '10.25.0'
+    toolVersion = '10.26.1'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
