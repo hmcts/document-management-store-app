@@ -76,6 +76,9 @@ server:
   port: ${SERVER_PORT:4603}
   forward-headers-strategy: none
   shutdown: graceful
+  tomcat:
+    max-part-count: -1
+    max-part-header-size: -1
 
 connection:
   upload-timeout-min: ${UPLOAD_TIMEOUT_MIN:60}
