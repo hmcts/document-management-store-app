@@ -6,7 +6,8 @@ import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
-import au.com.dius.pact.provider.junitsupport.loader.VersionSelector;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
+import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
@@ -32,10 +33,11 @@ import java.util.UUID;
 import static org.mockito.Mockito.when;
 
 @Provider("em_dm_store")
-@PactBroker(scheme = "${PACT_BROKER_SCHEME:http}",
-    host = "${PACT_BROKER_URL:localhost}",
-    port = "${PACT_BROKER_PORT:80}",
-    consumerVersionSelectors = {@VersionSelector(tag = "master")})
+@PactBroker(
+    url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
+    providerBranch = "${pact.provider.branch}"
+)
+//@PactFolder("pacts")
 @WebMvcTest({StoredDocumentController.class, StoredDocumentDeleteController.class})
 @IgnoreNoPactsToVerify
 @AutoConfigureMockMvc(addFilters = false)
@@ -63,6 +65,14 @@ public class DocumentStoreProviderTest {
         if (context != null) {
             context.verifyInteraction();
         }
+    }
+
+    @PactBrokerConsumerVersionSelectors
+    public static SelectorBuilder consumerVersionSelectors() {
+        return new SelectorBuilder()
+            .matchingBranch()
+            .mainBranch()
+            .deployedOrReleased();
     }
 
     @BeforeEach
