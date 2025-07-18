@@ -55,11 +55,6 @@ public class BlobStorageWriteService {
             blob.upload(inputStream, documentContentVersion.getSize());
 
             documentContentVersion.setContentUri(blob.getBlobUrl());
-            log.info("Uploading document {} / version {} to Azure Blob Storage: OK: uri {}, size = {}",
-                      documentId,
-                      documentContentVersion.getId(),
-                      blob.getBlobUrl(),
-                      documentContentVersion.getSize());
         } catch (IOException e) {
             log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
                      documentId,
