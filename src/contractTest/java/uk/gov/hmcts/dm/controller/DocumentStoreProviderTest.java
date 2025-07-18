@@ -2,10 +2,8 @@ package uk.gov.hmcts.dm.controller;
 
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
-import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
@@ -13,13 +11,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.hmcts.dm.controller.provider.BaseProviderTest;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
@@ -33,17 +30,9 @@ import java.util.UUID;
 import static org.mockito.Mockito.when;
 
 @Provider("em_dm_store")
-@PactBroker(
-    url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
-    providerBranch = "${pact.provider.branch}"
-)
-//@PactFolder("pacts")
 @WebMvcTest({StoredDocumentController.class, StoredDocumentDeleteController.class})
-@IgnoreNoPactsToVerify
-@AutoConfigureMockMvc(addFilters = false)
-@ExtendWith(SpringExtension.class)
 @Import(StoreDocumentControllerTestConfiguration.class)
-public class DocumentStoreProviderTest {
+public class DocumentStoreProviderTest extends BaseProviderTest {
 
     @Autowired
     private MockMvc mockMvc;
