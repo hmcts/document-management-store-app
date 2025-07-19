@@ -32,7 +32,7 @@ public class StoredDocumentDeleteControllerProviderTest extends BaseProviderTest
     private SearchService searchService;
 
     @State("Document exists and can be deleted")
-    public void setupHearingRecordingsExist() {
+    public void documentExistToDelete() {
         doNothing().when(auditedStoredDocumentOperationsService).deleteStoredDocument(any(UUID.class), anyBoolean());
     }
 }
