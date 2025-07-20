@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.doNothing;
 
 @Provider("dm_store_delete_document_provider")
@@ -34,5 +35,11 @@ public class StoredDocumentDeleteControllerProviderTest extends BaseProviderTest
     @State("Document exists and can be deleted")
     public void documentExistToDelete() {
         doNothing().when(auditedStoredDocumentOperationsService).deleteStoredDocument(any(UUID.class), anyBoolean());
+    }
+
+    @State("Document exists and can be soft deleted")
+    public void documentExistToSoftDelete() {
+        doNothing().when(searchService.findStoredDocumentsIdsByCaseRef(any()));
+        doNothing().when(auditedStoredDocumentOperationsService).deleteCaseStoredDocuments(anyList());
     }
 }
