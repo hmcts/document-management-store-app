@@ -84,14 +84,14 @@ tasks.withType(JavaCompile) {
 def versions = [
     ehcache            : '3.10.8',
     postgresql         : '42.7.7',
-    jackson            : '2.19.1',
+    jackson            : '2.19.2',
     serenity           : '4.2.34',
     logging            : '6.1.9',
     pact_version       : '4.6.17',
     emTestHelper       : '2.1.1',
     shedlock           : '6.9.2',
-    hibernate          : '6.6.21.Final',
-    jupiter            : '5.13.3',
+    hibernate          : '6.6.22.Final',
+    jupiter            : '5.13.4',
     springSecurity     : '6.5.1'
 ]
 
@@ -215,7 +215,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.junit.platform', version: '1.13.3') {
+        dependencySet(group: 'org.junit.platform', version: '1.13.4') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }
