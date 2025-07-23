@@ -31,7 +31,7 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
             .uponReceiving("GET request for audit entries")
             .method("GET")
             .path(GET_AUDIT_PATH)
-            .headers( Map.of("ServiceAuthorization", "Bearer some-s2s-token"))
+            .headers(Map.of("ServiceAuthorization", "Bearer some-s2s-token"))
             .willRespondWith()
             .status(200)
             .headers(Map.of("Content-Type", "application/vnd.uk.gov.hmcts.dm.audit.v1+json"))
