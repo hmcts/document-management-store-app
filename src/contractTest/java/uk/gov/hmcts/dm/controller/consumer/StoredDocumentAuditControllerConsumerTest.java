@@ -34,7 +34,7 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
             .headers(Map.of("ServiceAuthorization", "Bearer some-s2s-token"))
             .willRespondWith()
             .status(200)
-            .headers(Map.of("Content-Type", "application/vnd.uk.gov.hmcts.dm.audit.v1+json"))
+            .headers(Map.of("Content-Type", "application/vnd.uk.gov.hmcts.dm.auditentry-collection.v1+hal+json;charset=UTF-8"))
             .body(createAuditEntriesResponseDsl())
             .toPact(V4Pact.class);
     }
