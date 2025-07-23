@@ -22,8 +22,8 @@ public class PasswordVerifier {
     public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
         if (!multipartFile.isEmpty()) {
             try {
-                new AutoDetectParser().parse(multipartFile.getInputStream(), new BodyContentHandler(),
-                    new Metadata(), new ParseContext());
+                new AutoDetectParser().parse(multipartFile.getInputStream(),
+                    new BodyContentHandler(1024 * 1024), new Metadata(), new ParseContext());
 
             } catch (TikaException e) {
                 logger.error("Document with Name : {} is password protected", multipartFile.getOriginalFilename());
