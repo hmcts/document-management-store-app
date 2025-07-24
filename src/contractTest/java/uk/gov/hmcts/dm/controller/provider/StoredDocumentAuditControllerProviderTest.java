@@ -38,7 +38,8 @@ import static org.mockito.Mockito.when;
 )
 @Import({
     HypermediaAutoConfiguration.class,
-    Jackson2HalModule.class
+    Jackson2HalModule.class,
+    TestJacksonConfiguration.class
 })
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class StoredDocumentAuditControllerProviderTest extends BaseProviderTest {
