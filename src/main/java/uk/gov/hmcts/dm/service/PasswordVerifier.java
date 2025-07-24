@@ -11,7 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 @Service
@@ -22,8 +24,12 @@ public class PasswordVerifier {
     public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
         if (!multipartFile.isEmpty()) {
             try {
-                new AutoDetectParser().parse(multipartFile.getInputStream(),
-                    new DefaultHandler(), new Metadata(), new ParseContext());
+                InputStream inputStream = multipartFile.getInputStream();
+                ByteArrayInputStream byteArrayInputStream =
+                        new ByteArrayInputStream(inputStream.readNBytes(1024 * 1024));
+                logger.info("Validating multipart files against pwd after reading first 1MB");
+                new AutoDetectParser().parse(byteArrayInputStream,
+                        new DefaultHandler(), new Metadata(), new ParseContext());
 
             } catch (TikaException e) {
                 logger.error("Document with Name : {} is password protected", multipartFile.getOriginalFilename());
@@ -33,6 +39,7 @@ public class PasswordVerifier {
                 return true;
             }
         }
+        logger.info("Validating multipart files against pwd completed");
         return true;
     }
 }
