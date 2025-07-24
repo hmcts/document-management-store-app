@@ -6,13 +6,10 @@ import org.springframework.boot.autoconfigure.hateoas.HypermediaAutoConfiguratio
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import uk.gov.hmcts.dm.config.WebConfig;
+import uk.gov.hmcts.dm.config.AddMediaTypeSupportConfiguration;
 import uk.gov.hmcts.dm.controller.StoredDocumentAuditController;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -33,15 +30,13 @@ import static org.mockito.Mockito.when;
 
 @Provider("dm_store_audit_provider")
 @WebMvcTest(value = StoredDocumentAuditController.class,
-    excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class},
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)
+    excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class}
 )
 @Import({
     HypermediaAutoConfiguration.class,
     Jackson2HalModule.class,
-    TestJacksonConfiguration.class
+    AddMediaTypeSupportConfiguration.class
 })
-@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class StoredDocumentAuditControllerProviderTest extends BaseProviderTest {
 
     @MockitoBean
