@@ -4,12 +4,12 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
-import org.apache.tika.sax.BodyContentHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class PasswordVerifier {
         if (!multipartFile.isEmpty()) {
             try {
                 new AutoDetectParser().parse(multipartFile.getInputStream(),
-                    new BodyContentHandler(1024 * 1024), new Metadata(), new ParseContext());
+                    new DefaultHandler(), new Metadata(), new ParseContext());
 
             } catch (TikaException e) {
                 logger.error("Document with Name : {} is password protected", multipartFile.getOriginalFilename());
