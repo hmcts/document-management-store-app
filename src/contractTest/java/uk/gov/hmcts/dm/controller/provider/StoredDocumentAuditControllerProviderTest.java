@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.dm.config.WebConfig;
@@ -39,6 +40,7 @@ import static org.mockito.Mockito.when;
     HypermediaAutoConfiguration.class,
     Jackson2HalModule.class
 })
+@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class StoredDocumentAuditControllerProviderTest extends BaseProviderTest {
 
     @MockitoBean
