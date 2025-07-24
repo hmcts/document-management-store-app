@@ -24,11 +24,10 @@ import java.util.concurrent.TimeoutException;
 public class PasswordVerifier {
 
     private final Logger logger = LoggerFactory.getLogger(PasswordVerifier.class);
+    private final SimpleTimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newCachedThreadPool());
 
     public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
         if (!multipartFile.isEmpty()) {
-
-            SimpleTimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newCachedThreadPool());
 
             Callable<Boolean> task = () -> {
                 try {
