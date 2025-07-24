@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.dm.config.AddMediaTypeSupportConfiguration;
+import uk.gov.hmcts.dm.config.WebConfig;
 import uk.gov.hmcts.dm.controller.StoredDocumentAuditController;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.when;
 
 
 @Provider("dm_store_audit_provider")
-@WebMvcTest(value = StoredDocumentAuditController.class,
+@WebMvcTest(value = {StoredDocumentAuditController.class, WebConfig.class},
     excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class}
 )
 @Import({
