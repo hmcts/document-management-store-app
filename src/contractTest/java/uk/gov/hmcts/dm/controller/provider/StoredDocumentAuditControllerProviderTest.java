@@ -45,6 +45,12 @@ public class StoredDocumentAuditControllerProviderTest extends BaseProviderTest 
     @MockitoBean
     private AuditEntryService auditEntryService;
 
+    @Override
+    protected Object[] getControllersUnderTest() {
+        return new Object[]{StoredDocumentAuditController.class};
+    }
+
+
     @State("Audit entries exist for a stored document")
     public void documentExistToSoftDelete() throws ParseException {
         UUID documentId = UUID.fromString("00351f93-dff5-46fa-af0d-b40c2cafb47f");

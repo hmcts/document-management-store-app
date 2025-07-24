@@ -48,6 +48,12 @@ public class DocumentStoreProviderTest extends BaseProviderTest {
 
     private final UUID id = UUID.fromString("5c3c3906-2b51-468e-8cbb-a4002eded075");
 
+    @Override
+    protected Object[] getControllersUnderTest() {
+        return new Object[]{StoredDocumentController.class, StoredDocumentDeleteController.class};
+    }
+
+
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void pactVerificationTestTemplate(PactVerificationContext context) {

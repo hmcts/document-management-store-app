@@ -35,6 +35,11 @@ public class StoredDocumentDeleteControllerProviderTest extends BaseProviderTest
     @MockitoBean
     private SearchService searchService;
 
+    @Override
+    protected Object[] getControllersUnderTest() {
+        return new Object[]{StoredDocumentDeleteController.class};
+    }
+
     @State("Document exists and can be deleted")
     public void documentExistToDelete() {
         doNothing().when(auditedStoredDocumentOperationsService).deleteStoredDocument(any(UUID.class), anyBoolean());
