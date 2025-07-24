@@ -44,8 +44,8 @@ public class PasswordVerifier {
             };
 
             try {
-                // 5 seconds timeout
-                return Boolean.TRUE.equals(timeLimiter.callWithTimeout(task, 5000L, TimeUnit.MILLISECONDS));
+                // 3 seconds timeout
+                return Boolean.TRUE.equals(timeLimiter.callWithTimeout(task, 3, TimeUnit.SECONDS));
             } catch (ExecutionException | TimeoutException e) {
                 logger.info("Document with Name : {} TimedOut while parsing", multipartFile.getOriginalFilename());
                 return true; // If an exception occurs, we assume the file is not password protected
