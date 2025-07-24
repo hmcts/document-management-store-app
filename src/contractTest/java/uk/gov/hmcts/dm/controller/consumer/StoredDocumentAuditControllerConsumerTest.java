@@ -23,6 +23,8 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
 
     private static final String GET_AUDIT_PATH = "/documents/" + DOCUMENT_ID + "/auditEntries";
 
+    private static final String HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE =
+        "application/vnd.uk.gov.hmcts.dm.auditentry-collection.v1+hal+json";
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact getAuditPact(PactDslWithProvider builder) {
@@ -31,7 +33,8 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
             .uponReceiving("GET request for audit entries")
             .method("GET")
             .path(GET_AUDIT_PATH)
-            .headers(Map.of("ServiceAuthorization", "Bearer some-s2s-token"))
+            .headers(Map.of("ServiceAuthorization", "Bearer some-s2s-token",
+                "Accept", HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE))
             .willRespondWith()
             .status(200)
             .headers(Map.of("Content-Type",
