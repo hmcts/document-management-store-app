@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.hateoas.mediatype.hal.HalConfiguration;
 import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilderFactory;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.dm.config.AddMediaTypeSupportConfiguration;
 import uk.gov.hmcts.dm.config.WebConfig;
@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
 )
 @Import({
     HalConfiguration.class,
-    WebMvcLinkBuilder.class,
+    WebMvcLinkBuilderFactory.class,
     Jackson2HalModule.class,
     HypermediaAutoConfiguration.class,
     Jackson2HalModule.class,
