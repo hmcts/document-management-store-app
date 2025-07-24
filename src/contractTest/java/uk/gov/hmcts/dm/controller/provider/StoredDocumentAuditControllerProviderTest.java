@@ -4,12 +4,10 @@ import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.dm.config.WebConfig;
 import uk.gov.hmcts.dm.controller.StoredDocumentAuditController;
@@ -30,13 +28,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
-@AutoConfigureJsonTesters
 @Provider("dm_store_audit_provider")
 @WebMvcTest(value = StoredDocumentAuditController.class,
     excludeAutoConfiguration = {SecurityAutoConfiguration.class, OAuth2ClientAutoConfiguration.class},
     excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = WebConfig.class)
 )
-@Import({Jackson2HalModule.class})
+@Import({TestJacksonConfiguration.class})
 public class StoredDocumentAuditControllerProviderTest extends BaseProviderTest {
 
     @MockitoBean
