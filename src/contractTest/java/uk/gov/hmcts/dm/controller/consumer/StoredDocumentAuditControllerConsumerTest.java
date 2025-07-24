@@ -57,7 +57,14 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
 
     private DslPart createAuditEntriesResponseDsl() {
         return newJsonBody(body -> body
-            .minArrayLike("auditEntries", 1, this::buildAuditEntryDslObject)
+            .object("_embedded", embedded -> embedded
+                .minArrayLike("auditEntries", 1, this::buildAuditEntryDslObject)
+            )
+            .object("_links", links -> {
+                links.object("self", self ->
+                    self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/auditEntries")
+                );
+            })
         ).build();
     }
 
@@ -66,10 +73,13 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
             .stringType("action", "READ")
             .stringType("username", "user@example.com")
             .stringType("type", "StoredDocumentAuditEntry")
-            .stringValue("recordedDateTime", "2025-07-22T10:00:00Z")
+            .stringType("recordedDateTime", "2025-07-22T10:00:00Z")
             .object("_links", links -> {
+                links.object("self", self ->
+                    self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/auditEntries/1")
+                );
                 links.object("document", docLink ->
-                    docLink.stringValue("href", "http://localhost/documents/" + DOCUMENT_ID)
+                    docLink.stringType("href", "http://localhost/documents/" + DOCUMENT_ID)
                 );
             });
     }
