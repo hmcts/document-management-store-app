@@ -4,11 +4,16 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilderFactory;
 
 @TestConfiguration
 public class TestJacksonConfiguration {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer halModuleCustomizer() {
         return builder -> builder.modulesToInstall(new Jackson2HalModule());
+    }
+    @Bean
+    public WebMvcLinkBuilderFactory linkBuilderFactory() {
+        return new WebMvcLinkBuilderFactory();
     }
 }
