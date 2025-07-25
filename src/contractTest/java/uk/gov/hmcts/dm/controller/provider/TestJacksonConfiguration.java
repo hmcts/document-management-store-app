@@ -8,10 +8,12 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilderFactory;
 
 @TestConfiguration
 public class TestJacksonConfiguration {
+
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer halModuleCustomizer() {
         return builder -> builder.modulesToInstall(new Jackson2HalModule());
     }
+
     @Bean
     public WebMvcLinkBuilderFactory linkBuilderFactory() {
         return new WebMvcLinkBuilderFactory();
