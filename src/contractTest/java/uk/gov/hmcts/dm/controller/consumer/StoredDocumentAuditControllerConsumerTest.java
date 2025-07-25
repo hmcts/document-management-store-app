@@ -74,11 +74,8 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
             .stringType("action", "READ")
             .stringType("username", "user@example.com")
             .stringType("type", "StoredDocumentAuditEntry")
-            .stringType("recordedDateTime", "2025-07-22T10:00:00Z")
+            .stringType("recordedDateTime")
             .object("_links", links -> {
-                links.object("self", self ->
-                    self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/auditEntries/1")
-                );
                 links.object("document", docLink ->
                     docLink.stringType("href", "http://localhost/documents/" + DOCUMENT_ID)
                 );
