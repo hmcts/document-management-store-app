@@ -7,11 +7,13 @@ import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -32,11 +34,17 @@ public abstract class BaseProviderTest {
 
     @Autowired
     protected MockMvc mockMvc;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+
     @MockitoBean
     protected ScheduledTaskRunner scheduledTaskRunner;
 
     @MockitoBean
     protected ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
+
+    protected abstract Object[] getControllersUnderTest();
 
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
@@ -60,6 +68,18 @@ public abstract class BaseProviderTest {
         if (context != null) {
             context.setTarget(new MockMvcTestTarget(mockMvc));
         }
+    }
+
+    @BeforeEach
+    void setupPactVerification(PactVerificationContext context) {
+        MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
+        testTarget.setControllers(getControllersUnderTest());
+
+        if (context != null) {
+            context.setTarget(testTarget);
+        }
+
+        testTarget.setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper));
     }
 
 }
