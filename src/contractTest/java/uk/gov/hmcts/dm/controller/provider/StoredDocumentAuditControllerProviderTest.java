@@ -3,13 +3,10 @@ package uk.gov.hmcts.dm.controller.provider;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import uk.gov.hmcts.dm.controller.StoredDocumentAuditController;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
-import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
-import uk.gov.hmcts.dm.service.AuditEntryService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,10 +26,6 @@ public class StoredDocumentAuditControllerProviderTest extends ComponentTestBase
     @Autowired
     private StoredDocumentAuditController storedDocumentAuditController;
 
-    @MockitoBean
-    private StoredDocumentRepository storedDocumentRepository;
-    @MockitoBean
-    private AuditEntryService auditEntryService;
 
     @Override
     protected Object[] getControllersUnderTest() {
