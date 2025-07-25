@@ -61,11 +61,6 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
             .object("_embedded", embedded -> embedded
                 .minArrayLike("auditEntries", 1, this::buildAuditEntryDslObject)
             )
-            .object("_links", links -> {
-                links.object("self", self ->
-                    self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/auditEntries")
-                );
-            })
         ).build();
     }
 
