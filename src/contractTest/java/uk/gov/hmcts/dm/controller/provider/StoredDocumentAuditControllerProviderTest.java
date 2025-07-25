@@ -38,7 +38,6 @@ import static org.mockito.Mockito.when;
 )
 @Import({
     HalConfiguration.class,
-    WebMvcLinkBuilderFactory.class,
     Jackson2HalModule.class,
     HypermediaAutoConfiguration.class,
     Jackson2HalModule.class,
