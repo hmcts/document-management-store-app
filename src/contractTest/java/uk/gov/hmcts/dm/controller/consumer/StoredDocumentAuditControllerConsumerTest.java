@@ -46,7 +46,8 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
         RestAssured
             .given()
             .baseUri(mockServer.getUrl())
-            .header("ServiceAuthorization", "Bearer some-s2s-token")
+            .headers(Map.of("ServiceAuthorization", "Bearer some-s2s-token",
+                "Accept", "application/hal+json"))
             .when()
             .get(GET_AUDIT_PATH)
             .then()
