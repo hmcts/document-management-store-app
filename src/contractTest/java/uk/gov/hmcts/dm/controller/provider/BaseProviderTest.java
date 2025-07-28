@@ -122,8 +122,6 @@ public abstract class BaseProviderTest {
     @MockitoBean
     protected ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
 
-    protected abstract Object[] getControllersUnderTest();
-
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
         return new SelectorBuilder()

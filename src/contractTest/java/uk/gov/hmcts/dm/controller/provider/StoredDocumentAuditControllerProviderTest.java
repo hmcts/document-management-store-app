@@ -21,15 +21,8 @@ import static org.mockito.Mockito.when;
 @Provider("dm_store_audit_provider")
 public class StoredDocumentAuditControllerProviderTest extends BaseProviderTest {
 
-
     @Autowired
     private StoredDocumentAuditController storedDocumentAuditController;
-
-
-    @Override
-    protected Object[] getControllersUnderTest() {
-        return new Object[]{storedDocumentAuditController};
-    }
 
 
     @State("Audit entries exist for a stored document")

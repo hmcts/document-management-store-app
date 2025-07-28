@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import uk.gov.hmcts.dm.controller.StoredDocumentDeleteController;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
 
@@ -16,12 +15,6 @@ import static org.mockito.Mockito.when;
 
 @Provider("dm_store_delete_document_provider")
 public class StoredDocumentDeleteControllerProviderTest extends BaseProviderTest {
-
-
-    @Override
-    protected Object[] getControllersUnderTest() {
-        return new Object[]{StoredDocumentDeleteController.class};
-    }
 
     @State("Document exists and can be deleted")
     public void documentExistToDelete() {
