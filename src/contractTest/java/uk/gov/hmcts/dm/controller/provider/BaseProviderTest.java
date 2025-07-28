@@ -151,8 +151,6 @@ public abstract class BaseProviderTest {
     @BeforeEach
     void setupPactVerification(PactVerificationContext context) {
         MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
-        testTarget.setControllers(getControllersUnderTest());
-
         if (context != null) {
             context.setTarget(testTarget);
         }

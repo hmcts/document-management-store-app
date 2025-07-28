@@ -428,18 +428,6 @@ task runAndPublishConsumerPactTests(type: Test) {
     classpath = sourceSets.contractTest.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang=ALL-UNNAMED']
     include '**/consumer/**'
-
-    testLogging {
-        exceptionFormat = 'full'
-        showStandardStreams = true
-
-        events "passed", "skipped", "failed"
-        exceptionFormat = 'full'
-        showCauses = true
-        showExceptions = true
-        showStackTraces = true
-    }
-
 }
 
 runAndPublishConsumerPactTests.dependsOn contract
@@ -458,15 +446,7 @@ tasks.register('providerContractTests', Test) {
     testLogging {
         exceptionFormat = 'full'
         showStandardStreams = true
-
-        events "passed", "skipped", "failed"
-        exceptionFormat = 'full'
-        showCauses = true
-        showExceptions = true
-        showStackTraces = true
     }
-
-
 
     if (project.hasProperty('pact.verifier.publishResults')) {
         systemProperty 'pact.verifier.publishResults', project.property('pact.verifier.publishResults')
