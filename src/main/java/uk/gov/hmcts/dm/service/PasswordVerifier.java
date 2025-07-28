@@ -26,7 +26,7 @@ public class PasswordVerifier {
     private final Logger logger = LoggerFactory.getLogger(PasswordVerifier.class);
     private final SimpleTimeLimiter timeLimiter = SimpleTimeLimiter.create(Executors.newCachedThreadPool());
 
-    public boolean checkPasswordProtectedFile(MultipartFile multipartFile) {
+    public boolean isNotPasswordProtected(MultipartFile multipartFile) {
         if (!multipartFile.isEmpty()) {
 
             Callable<Boolean> task = () -> {
