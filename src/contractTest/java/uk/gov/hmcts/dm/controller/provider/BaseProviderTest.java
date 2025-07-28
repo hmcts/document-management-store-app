@@ -51,7 +51,7 @@ import java.nio.file.Paths;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.MOCK;
 
 @ExtendWith(SpringExtension.class)
-@ActiveProfiles({"embedded", "local", "componenttest"})
+@ActiveProfiles({"embedded", "contract", "componenttest"})
 @SpringBootTest(webEnvironment = MOCK)
 @Transactional
 @EnableSpringDataWebSupport
