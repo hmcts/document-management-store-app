@@ -38,6 +38,7 @@ import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
+import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.ScheduledTaskRunner;
 import uk.gov.hmcts.dm.service.SearchService;
@@ -97,6 +98,9 @@ public abstract class BaseProviderTest {
 
     @MockitoBean
     protected AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+
+    @MockitoBean
+    protected BlobStorageWriteService blobStorageWriteService;
 
     @MockitoBean
     protected BlobStorageDeleteService blobStorageDeleteService;
