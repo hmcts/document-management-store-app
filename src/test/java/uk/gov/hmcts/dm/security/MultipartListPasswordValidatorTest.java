@@ -60,7 +60,7 @@ class MultipartListPasswordValidatorTest {
             new MockMultipartFile("files", file, mimetype, "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
-        Mockito.when(passwordVerifier.isNotPasswordProtected(any(MultipartFile.class))).thenReturn(true);
+        Mockito.when(passwordVerifier.checkPasswordProtectedFile(any(MultipartFile.class))).thenReturn(true);
 
         assertTrue(multipartFilePasswordValidator.isValid(files, null));
     }
@@ -96,7 +96,7 @@ class MultipartListPasswordValidatorTest {
             new MockMultipartFile("files", file, mimetype, "hello".getBytes(StandardCharsets.UTF_8))
         ).collect(Collectors.toList());
 
-        Mockito.when(passwordVerifier.isNotPasswordProtected(any())).thenReturn(false);
+        Mockito.when(passwordVerifier.checkPasswordProtectedFile(any())).thenReturn(false);
 
         assertFalse(multipartFilePasswordValidator.isValid(files, null));
     }
