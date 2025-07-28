@@ -61,7 +61,7 @@ class PasswordVerifierTest {
         MultipartFile file =
             new MockMultipartFile("files", filename, mimetype, "hello".getBytes(StandardCharsets.UTF_8));
 
-        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
+        assertTrue(passwordVerifier.isNotPasswordProtected(file));
     }
 
     @Test
@@ -70,7 +70,7 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource("files/passwordencryptedprotected.pdf").getInputStream();
         MockMultipartFile file = new MockMultipartFile("file", "passwordencryptedprotected.pdf",
             "application/pdf", inputStream);
-        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
+        assertTrue(passwordVerifier.isNotPasswordProtected(file));
     }
 
     @Test
@@ -79,7 +79,7 @@ class PasswordVerifierTest {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
         when(file.getInputStream()).thenThrow(new IOException("x"));
-        assertTrue(passwordVerifier.checkPasswordProtectedFile(file));
+        assertTrue(passwordVerifier.isNotPasswordProtected(file));
     }
 
     @DisplayName("Test passwordVerifier with password protected docx/pdf file and expect failure")
@@ -93,7 +93,38 @@ class PasswordVerifierTest {
         InputStream inputStream = new ClassPathResource(filePath).getInputStream();
         MockMultipartFile mockMultipartFile = new MockMultipartFile("file", fileName, mimetype, inputStream);
 
-        assertFalse(passwordVerifier.checkPasswordProtectedFile(mockMultipartFile));
+        assertFalse(passwordVerifier.isNotPasswordProtected(mockMultipartFile));
     }
 
+    @Test
+    @DisplayName("Test passwordVerifier for empty file and expect success")
+    void testEmptyFile() throws Exception {
+        MultipartFile file = Mockito.mock(MockMultipartFile.class);
+        when(file.isEmpty()).thenReturn(true);
+        assertTrue(passwordVerifier.isNotPasswordProtected(file));
+    }
+
+    @DisplayName("Returns true when parsing times out")
+    @Test
+    void returnsTrueWhenParsingTimesOut() throws Exception {
+        MultipartFile file = Mockito.mock(MockMultipartFile.class);
+        when(file.isEmpty()).thenReturn(false);
+        when(file.getInputStream()).thenAnswer(invocation -> {
+            Thread.sleep(6000); // Simulate delay
+            return null;
+        });
+
+        assertTrue(passwordVerifier.isNotPasswordProtected(file));
+    }
+
+    @DisplayName("Returns true when thread is interrupted")
+    @Test
+    void returnsTrueWhenThreadIsInterrupted() {
+        MultipartFile file = Mockito.mock(MockMultipartFile.class);
+        when(file.isEmpty()).thenReturn(false);
+
+        Thread.currentThread().interrupt(); // Simulate thread interruption
+        assertTrue(passwordVerifier.isNotPasswordProtected(file));
+        Thread.interrupted(); // Clear interrupted status
+    }
 }
