@@ -18,9 +18,8 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-
 @Provider("dm_store_audit_provider")
-public class StoredDocumentAuditControllerProviderTest extends ComponentTestBase {
+public class StoredDocumentAuditControllerProviderTest extends BaseProviderTest {
 
 
     @Autowired
