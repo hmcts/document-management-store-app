@@ -28,15 +28,10 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
 
     static {
         LocalDateTime targetDateTime = LocalDateTime.of(2025, 12, 29, 8, 28, 27);
-
-        // Convert to an Instant in UTC
         Instant instant = targetDateTime.toInstant(ZoneOffset.UTC);
-
         TTL_ISO_FORMATTED = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
-            .withZone(ZoneOffset.UTC) // Ensure formatting is done in UTC
+            .withZone(ZoneOffset.UTC)
             .format(instant);
-
-        System.out.println("Consumer will send TTL: " + TTL_ISO_FORMATTED);
     }
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
