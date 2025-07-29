@@ -195,7 +195,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
             .then()
             .statusCode(200)
             .contentType("application/vnd.uk.gov.hmcts.dm.document.v1+hal+json")
-            .body("_links.self.href", equalTo("http://localhost/documents/" + DOCUMENT_ID ))
+            .body("_links.self.href", equalTo("http://localhost/documents/" + DOCUMENT_ID))
             .body("metadata.caseId", equalTo("123456"))
             .body("metadata.docType", equalTo("evidence"));
     }
