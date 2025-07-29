@@ -38,6 +38,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
 
         System.out.println("Consumer will send TTL: " + TTL_ISO_FORMATTED);
     }
+
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact updateDocumentsPact(PactDslWithProvider builder) {
         DslPart responseBody = LambdaDsl.newJsonBody(body ->
