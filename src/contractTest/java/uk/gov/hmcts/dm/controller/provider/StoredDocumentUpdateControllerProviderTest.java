@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest {
 
 
-    @State("Documents exist and can be updated with new TTL and metadata")
+    @State("Documents exist and can be updated with new TTL")
     public void documentsExistToUpdate() {
         when(auditedStoredDocumentOperationsService.updateDocument(
             any(UUID.class),

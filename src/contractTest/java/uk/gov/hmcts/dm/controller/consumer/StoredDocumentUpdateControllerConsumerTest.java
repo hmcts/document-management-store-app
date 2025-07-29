@@ -24,20 +24,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
     private static final String CONSUMER = "dm_store_update_document_consumer";
     private static final UUID DOCUMENT_ID = UUID.randomUUID();
     private static final String PATCH_PATH = "/documents";
-    private static final Date TTL = Date.from(
-        LocalDate.now()
-            .plusMonths(5)
-            .atStartOfDay(ZoneId.systemDefault())
-            .toInstant()
-    );
-
-    private static final DateTimeFormatter TTL_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-
-    private String formattedTtl() {
-        return TTL.toInstant()
-            .atZone(ZoneId.systemDefault())
-            .format(TTL_FORMATTER);
-    }
+    private static final String TTL = "2025-12-29T00:00:00Z";
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact updateDocumentsPact(PactDslWithProvider builder) {
@@ -45,7 +32,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
             body.stringType("result", "Success")
         ).build();
         return builder
-            .given("Documents exist and can be updated with new TTL and metadata")
+            .given("Documents exist and can be updated with new TTL")
             .uponReceiving("PATCH request to update documents")
             .path(PATCH_PATH)
             .method("PATCH")
@@ -84,7 +71,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
     private DslPart requestBody() {
         return LambdaDsl.newJsonBody(body -> {
             body
-                .stringValue("ttl", formattedTtl())
+                .stringValue("ttl", TTL)
                 .minArrayLike("documents", 1, doc -> {
                     doc
                         .uuid("documentId", DOCUMENT_ID)
