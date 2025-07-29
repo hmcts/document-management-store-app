@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -29,6 +30,14 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
             .atStartOfDay(ZoneId.systemDefault())
             .toInstant()
     );
+
+    private static final DateTimeFormatter TTL_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+    private String formattedTtl() {
+        return TTL.toInstant()
+            .atZone(ZoneId.systemDefault())
+            .format(TTL_FORMATTER);
+    }
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact updateDocumentsPact(PactDslWithProvider builder) {
@@ -75,10 +84,10 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
     private DslPart requestBody() {
         return LambdaDsl.newJsonBody(body -> {
             body
-                .date("ttl", "yyyy-MM-dd'T'HH:mm:ss", TTL)
+                .stringValue("ttl", formattedTtl())
                 .minArrayLike("documents", 1, doc -> {
                     doc
-                        .stringType("documentId", UUID.randomUUID().toString())
+                        .uuid("documentId", DOCUMENT_ID)
                         .object("metadata", metadata -> {
                             metadata.stringType("classification", "PUBLIC");
                             metadata.stringType("caseTypeId", "TEST");
