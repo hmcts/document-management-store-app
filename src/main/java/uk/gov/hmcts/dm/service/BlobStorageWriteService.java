@@ -8,6 +8,7 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -24,6 +25,12 @@ public class BlobStorageWriteService {
 
     private BlobContainerClient cloudBlobContainer;
     private DocumentContentVersionRepository documentContentVersionRepository;
+
+    @Value("${azure.upload.blockSize}")
+    private int blockSize;
+
+    @Value("${azure.upload.maxConcurrency}")
+    private int maxConcurrency;
 
     @Autowired
     public BlobStorageWriteService(BlobContainerClient cloudBlobContainer,
@@ -51,9 +58,14 @@ public class BlobStorageWriteService {
 
         try {
             BlockBlobClient blob = getCloudFile(documentContentVersion.getId());
+            // The default values in BlockBlobClient (Azure Storage Blob SDK v12+) for
+            // uploading with ParallelTransferOptions are:
+            // Block size: 4 MB (4 * 1024 * 1024 bytes)
+            // Max concurrency: 5
+            // These defaults apply when you do not explicitly set ParallelTransferOptions during upload
             ParallelTransferOptions options = new ParallelTransferOptions()
-                    .setBlockSizeLong(4L * 1024L * 1024L) // 4MB block size
-                    .setMaxConcurrency(8); // 8 parallel threads
+                    .setBlockSizeLong(blockSize * 1024L * 1024L) // 8MB block size
+                    .setMaxConcurrency(maxConcurrency); // 10 parallel threads
 
             BlockBlobOutputStreamOptions blockBlobOutputStreamOptions = new BlockBlobOutputStreamOptions();
             blockBlobOutputStreamOptions.setParallelTransferOptions(options);

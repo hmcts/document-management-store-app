@@ -7,9 +7,10 @@ import com.azure.storage.blob.specialized.BlobOutputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.MockitoAnnotations;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -37,9 +38,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
 class BlobStorageWriteServiceTest {
 
+    @InjectMocks
     private BlobStorageWriteService blobStorageWriteService;
 
     @Mock
@@ -59,11 +60,12 @@ class BlobStorageWriteServiceTest {
 
     @BeforeEach
     void setUp() throws Exception {
+        MockitoAnnotations.openMocks(this);
+        ReflectionTestUtils.setField(blobStorageWriteService, "blockSize", 4);
+        ReflectionTestUtils.setField(blobStorageWriteService, "maxConcurrency", 5);
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
-
-        blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer, documentContentVersionRepository);
 
         byte[] fakeBytes = "test content".getBytes();
         when(file.getBytes()).thenReturn(fakeBytes);
