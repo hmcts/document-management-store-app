@@ -26,6 +26,6 @@ public class MultipartFilePasswordValidator
     public boolean isValid(List<MultipartFile> multipartFiles, ConstraintValidatorContext context) {
         log.info("Validating multipart files against password protection criteria");
         return CollectionUtils.isEmpty(multipartFiles) || multipartFiles.stream()
-            .allMatch(passwordVerifier::checkPasswordProtectedFile);
+            .allMatch(passwordVerifier::isNotPasswordProtected);
     }
 }
