@@ -101,36 +101,64 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact updateSpecificDocumentWithHalPact(PactDslWithProvider builder) {
         DslPart halResponse = newJsonBody(body -> {
-            body.uuid("id", DOCUMENT_ID);
+            body.numberType("size", 2048);
+            body.stringType("mimeType", "application/pdf");
             body.stringType("createdBy", "user@example.com");
             body.stringType("lastModifiedBy", "user@example.com");
-            body.stringType("mimeType", "application/pdf");
-            body.numberType("size", 2048);
+            body.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+0000",
+                "2025-07-29T17:24:59+0000");
+            body.stringMatcher("modifiedOn", "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+0000",
+                "2025-07-29T17:24:59+0000");
             body.array("roles", roles -> {
                 roles.stringValue("caseworker");
                 roles.stringValue("citizen");
             });
             body.object("metadata", meta -> {
-                meta.stringValue("caseId", "123456");
                 meta.stringValue("docType", "evidence");
+                meta.stringValue("caseId", "123456");
             });
+            body.stringMatcher("ttl", "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+0000",
+                "2025-07-30T17:24:59+0000");
+
             body.object("_links", links -> {
                 links.object("self", self ->
-                    self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/metadata")
+                    self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID)
                 );
                 links.object("binary", binary ->
                     binary.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/binary")
                 );
             });
-            body.object("_embedded", embedded ->
-                embedded.minArrayLike("allDocumentVersions", 1, docVer -> {
-                    docVer.uuid("id");
-                    docVer.stringType("createdBy", "user@example.com");
-                    docVer.stringType("mimeType", "application/pdf");
-                    docVer.numberType("size", 2048);
-                })
-            );
+
+            body.object("_embedded", embedded -> {
+                embedded.object("allDocumentVersions", allDocVersions -> {
+                    allDocVersions.object("_embedded", inner -> {
+                        inner.minArrayLike("documentVersions", 1, version -> {
+                            version.numberType("size", 2048);
+                            version.stringType("mimeType", "application/pdf");
+                            version.nullValue("originalDocumentName");
+                            version.stringType("createdBy", "user@example.com");
+                            version.stringMatcher("createdOn",
+                                "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\+0000",
+                                "2025-07-29T17:24:59+0000");
+                            version.object("_links", links -> {
+                                links.object("document", docLink ->
+                                    docLink.stringType("href",
+                                        "http://localhost/documents/" + DOCUMENT_ID));
+                                links.object("self", selfLink ->
+                                    selfLink.stringType("href",
+                                        "http://localhost/documents/"
+                                            + DOCUMENT_ID + "/versions/some-version-id"));
+                                links.object("binary", binLink ->
+                                    binLink.stringType("href",
+                                        "http://localhost/documents/"
+                                            + DOCUMENT_ID + "/versions/some-version-id/binary"));
+                            });
+                        });
+                    });
+                });
+            });
         }).build();
+
 
         return builder
             .given("Document exist and can be updated with new TTL")
