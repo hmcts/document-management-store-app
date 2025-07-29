@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
@@ -54,8 +55,7 @@ public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest
 
         when(auditedStoredDocumentOperationsService.updateDocument(
             any(UUID.class),
-            any(Map.class),
-            any(Date.class))
+            any(UpdateDocumentCommand.class))
         ).thenReturn(storedDocument);
     }
 
