@@ -2,6 +2,8 @@ package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.options.BlockBlobOutputStreamOptions;
+import com.azure.storage.blob.specialized.BlobOutputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,18 +24,18 @@ import java.util.UUID;
 
 import static java.util.Collections.singletonList;
 import static java.util.UUID.randomUUID;
-import static org.apache.commons.io.IOUtils.copy;
-import static org.apache.commons.io.IOUtils.toInputStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class BlobStorageWriteServiceTest {
@@ -56,15 +58,15 @@ class BlobStorageWriteServiceTest {
     private static final String UTF8 = "UTF8";
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
 
         blobStorageWriteService = new BlobStorageWriteService(cloudBlobContainer, documentContentVersionRepository);
-        try (final InputStream inputStream = toInputStream(MOCK_DATA, UTF8)) {
-            given(file.getInputStream()).willReturn(inputStream);
-        }
+
+        byte[] fakeBytes = "test content".getBytes();
+        when(file.getBytes()).thenReturn(fakeBytes);
     }
 
     @Test
@@ -75,12 +77,16 @@ class BlobStorageWriteServiceTest {
         given(blob.getBlobUrl()).willReturn(new URI(azureProvidedUri).toString());
 
         doAnswer(invocation -> {
-            try (final InputStream inputStream = toInputStream(MOCK_DATA, UTF8);
-                 final OutputStream outputStream = invocation.getArgument(0)
-            ) {
-                return copy(inputStream, outputStream);
-            }
+            final OutputStream outputStream = invocation.getArgument(0);
+            outputStream.write(MOCK_DATA.getBytes(UTF8));
+            return MOCK_DATA.getBytes(UTF8).length;
         }).when(blob).downloadStream(any(OutputStream.class));
+
+        BlobOutputStream mockBlobOutputStream = mock(BlobOutputStream.class);
+        when(blob.getBlobOutputStream(any(BlockBlobOutputStreamOptions.class))).thenReturn(mockBlobOutputStream);
+
+        doNothing().when(mockBlobOutputStream).write(any(byte[].class));
+        doNothing().when(mockBlobOutputStream).close();
 
         // upload
         blobStorageWriteService.uploadDocumentContentVersion(storedDocument,
@@ -88,14 +94,17 @@ class BlobStorageWriteServiceTest {
             file);
 
         assertThat(documentContentVersion.getContentUri(), is(azureProvidedUri));
-        verify(blob).upload(any(), eq(documentContentVersion.getSize()));
+        verify(blob).getBlobOutputStream(any(BlockBlobOutputStreamOptions.class));
+        verify(mockBlobOutputStream).write(any(byte[].class));
+        verify(mockBlobOutputStream).close();
+        verify(blob, never()).upload(any(), anyLong());
     }
 
     @Test
     void writeBinaryStreamThrowsFileStorageExceptionOnIOException() throws Exception {
         final StoredDocument storedDocument = createStoredDocument();
         final DocumentContentVersion documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
-        given(file.getInputStream()).willThrow(new IOException("Mocked IOException"));
+        given(file.getBytes()).willThrow(new IOException("Mocked IOException"));
 
         Exception exception = assertThrows(FileStorageException.class, () ->
                 blobStorageWriteService.uploadDocumentContentVersion(storedDocument, documentContentVersion, file)

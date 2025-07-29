@@ -1,6 +1,9 @@
 package uk.gov.hmcts.dm.service;
 
 import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.models.ParallelTransferOptions;
+import com.azure.storage.blob.options.BlockBlobOutputStreamOptions;
+import com.azure.storage.blob.specialized.BlobOutputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +15,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.FileStorageException;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 @Slf4j
@@ -48,12 +49,18 @@ public class BlobStorageWriteService {
                   documentId,
                   documentContentVersion.getId());
 
-        try (
-            final InputStream inputStream = new BufferedInputStream(multiPartFile.getInputStream())
-        ) {
+        try {
             BlockBlobClient blob = getCloudFile(documentContentVersion.getId());
-            blob.upload(inputStream, documentContentVersion.getSize());
+            ParallelTransferOptions options = new ParallelTransferOptions()
+                    .setBlockSizeLong(4L * 1024L * 1024L) // 4MB block size
+                    .setMaxConcurrency(8); // 8 parallel threads
 
+            BlockBlobOutputStreamOptions blockBlobOutputStreamOptions = new BlockBlobOutputStreamOptions();
+            blockBlobOutputStreamOptions.setParallelTransferOptions(options);
+
+            BlobOutputStream blobOutputStream = blob.getBlobOutputStream(blockBlobOutputStreamOptions);
+            blobOutputStream.write(multiPartFile.getBytes());
+            blobOutputStream.close();
             documentContentVersion.setContentUri(blob.getBlobUrl());
         } catch (IOException e) {
             log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
