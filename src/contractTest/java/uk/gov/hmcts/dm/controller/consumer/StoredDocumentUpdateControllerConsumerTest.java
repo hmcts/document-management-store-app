@@ -139,7 +139,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
             .method("PATCH")
             .headers(Map.of(
                 "Content-Type", "application/json",
-                "Accept", "application/hal+json",
+                "Accept", "application/vnd.uk.gov.hmcts.dm.document.v1+hal+json",
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "user-id", "some-user-id"
             ))
@@ -158,7 +158,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
             .given()
             .baseUri(mockServer.getUrl())
             .header("Content-Type", "application/json")
-            .header("Accept", "application/hal+json")
+            .header("Accept", "application/vnd.uk.gov.hmcts.dm.document.v1+hal+json")
             .header("ServiceAuthorization", "Bearer some-s2s-token")
             .header("user-id", "some-user-id")
             .body(singleDocumentRequestBody().getBody().toString())
