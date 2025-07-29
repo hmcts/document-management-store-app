@@ -146,7 +146,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
             .body(singleDocumentRequestBody())
             .willRespondWith()
             .status(200)
-            .headers(Map.of("Content-Type", "application/hal+json"))
+            .headers(Map.of("Content-Type", "application/vnd.uk.gov.hmcts.dm.document.v1+hal+json"))
             .body(halResponse)
             .toPact(V4Pact.class);
     }
