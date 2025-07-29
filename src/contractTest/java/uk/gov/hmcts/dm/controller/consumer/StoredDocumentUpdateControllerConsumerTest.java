@@ -11,6 +11,10 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,8 +24,20 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
     private static final String CONSUMER = "dm_store_update_document_consumer";
     private static final UUID DOCUMENT_ID = UUID.randomUUID();
     private static final String PATCH_PATH = "/documents";
-    private static final String TTL = "2025-12-29T08:28:27Z";
+    private static final String TTL_ISO_FORMATTED;
 
+    static {
+        LocalDateTime targetDateTime = LocalDateTime.of(2025, 12, 29, 8, 28, 27);
+
+        // Convert to an Instant in UTC
+        Instant instant = targetDateTime.toInstant(ZoneOffset.UTC);
+
+        TTL_ISO_FORMATTED = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
+            .withZone(ZoneOffset.UTC) // Ensure formatting is done in UTC
+            .format(instant);
+
+        System.out.println("Consumer will send TTL: " + TTL_ISO_FORMATTED);
+    }
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact updateDocumentsPact(PactDslWithProvider builder) {
         DslPart responseBody = LambdaDsl.newJsonBody(body ->
@@ -67,7 +83,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
     private DslPart requestBody() {
         return LambdaDsl.newJsonBody(body -> {
             body
-                .stringValue("ttl", TTL)
+                .stringValue("ttl", TTL_ISO_FORMATTED)
                 .minArrayLike("documents", 1, doc -> {
                     doc
                         .uuid("documentId", DOCUMENT_ID)
