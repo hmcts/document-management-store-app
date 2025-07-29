@@ -20,7 +20,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
     private static final String CONSUMER = "dm_store_update_document_consumer";
     private static final UUID DOCUMENT_ID = UUID.randomUUID();
     private static final String PATCH_PATH = "/documents";
-    private static final String TTL = "2025-12-29T08:28:27.04Z";
+    private static final String TTL = "2025-12-29T08:28:27Z";
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact updateDocumentsPact(PactDslWithProvider builder) {
