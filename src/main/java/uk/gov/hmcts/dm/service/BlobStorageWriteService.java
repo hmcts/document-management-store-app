@@ -69,8 +69,8 @@ public class BlobStorageWriteService {
             // These defaults apply when you do not explicitly set ParallelTransferOptions during upload
             ParallelTransferOptions options = new ParallelTransferOptions()
                     .setBlockSizeLong(blockSize * Long.valueOf(Constants.MB)) // 8MB block size
-                    .setMaxConcurrency(maxConcurrency)
-                    .setMaxSingleUploadSizeLong(maxSingleUploadSize * Long.valueOf(Constants.MB)); // 10 parallel threads
+                    .setMaxConcurrency(maxConcurrency)  // 10 parallel threads
+                    .setMaxSingleUploadSizeLong(maxSingleUploadSize * Long.valueOf(Constants.MB));
 
             BlockBlobOutputStreamOptions blockBlobOutputStreamOptions = new BlockBlobOutputStreamOptions();
             blockBlobOutputStreamOptions.setParallelTransferOptions(options);
