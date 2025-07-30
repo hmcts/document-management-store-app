@@ -5,6 +5,7 @@ import com.azure.storage.blob.models.ParallelTransferOptions;
 import com.azure.storage.blob.options.BlockBlobOutputStreamOptions;
 import com.azure.storage.blob.specialized.BlobOutputStream;
 import com.azure.storage.blob.specialized.BlockBlobClient;
+import com.azure.storage.common.implementation.Constants;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class BlobStorageWriteService {
 
     @Value("${azure.upload.blockSize}")
     private int blockSize;
+
+    @Value("${azure.upload.maxSingleUploadSize}")
+    private int maxSingleUploadSize;
 
     @Value("${azure.upload.maxConcurrency}")
     private int maxConcurrency;
@@ -64,8 +68,9 @@ public class BlobStorageWriteService {
             // Max concurrency: 5
             // These defaults apply when you do not explicitly set ParallelTransferOptions during upload
             ParallelTransferOptions options = new ParallelTransferOptions()
-                    .setBlockSizeLong(blockSize * 1024L * 1024L) // 8MB block size
-                    .setMaxConcurrency(maxConcurrency); // 10 parallel threads
+                    .setBlockSizeLong(blockSize * Long.valueOf(Constants.MB)) // 8MB block size
+                    .setMaxConcurrency(maxConcurrency)
+                    .setMaxSingleUploadSizeLong(maxSingleUploadSize * Long.valueOf(Constants.MB)); // 10 parallel threads
 
             BlockBlobOutputStreamOptions blockBlobOutputStreamOptions = new BlockBlobOutputStreamOptions();
             blockBlobOutputStreamOptions.setParallelTransferOptions(options);

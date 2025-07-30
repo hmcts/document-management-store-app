@@ -126,6 +126,7 @@ azure:
       orphandocument-blob-container-reference: ${STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME:orphandocuments}
   upload:
     blockSize : ${UPLOAD_BLOCK_SIZE:4}
+    maxSingleUploadSize : ${MAX_SINGLE_UPLOAD_SIZE:100}
     maxConcurrency: ${UPLOAD_MAX_CONCURRENCY:5}
 
 app-insights:
