@@ -62,6 +62,7 @@ class BlobStorageWriteServiceTest {
     void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
         ReflectionTestUtils.setField(blobStorageWriteService, "blockSize", 4);
+        ReflectionTestUtils.setField(blobStorageWriteService, "maxSingleUploadSize", 100);
         ReflectionTestUtils.setField(blobStorageWriteService, "maxConcurrency", 5);
 
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
