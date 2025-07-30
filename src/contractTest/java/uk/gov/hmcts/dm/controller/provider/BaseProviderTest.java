@@ -27,7 +27,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
-import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.controller.testing.TestController;
@@ -114,13 +113,14 @@ public abstract class BaseProviderTest {
     @MockitoBean
     protected AuditEntryService auditEntryService;
 
-    protected RestActions restActions;
-
     @MockitoBean
     protected ScheduledTaskRunner scheduledTaskRunner;
 
     @MockitoBean
     protected ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
+
+    @MockitoBean
+    protected TestController testController;
 
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
@@ -139,29 +139,13 @@ public abstract class BaseProviderTest {
     }
 
     @BeforeEach
-    void before(PactVerificationContext context) {
+    void setupPactVerification(PactVerificationContext context) {
         System.getProperties().setProperty("pact.verifier.publishResults", "true");
         if (context != null) {
-            context.setTarget(new MockMvcTestTarget(mockMvc));
-        }
-    }
-
-    @BeforeEach
-    void setupPactVerification(PactVerificationContext context) {
-        MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
-        if (context != null) {
+            MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
+            testTarget.setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper));
             context.setTarget(testTarget);
         }
-
-        testTarget.setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper));
-    }
-
-    @MockitoBean
-    protected TestController testController;
-
-    @BeforeEach
-    public void setUp() {
-        this.restActions = new RestActions(webApplicationContext, objectMapper);
     }
 
     @AfterEach
