@@ -2,8 +2,6 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import org.springframework.beans.factory.annotation.Autowired;
-import uk.gov.hmcts.dm.controller.StoredDocumentAuditController;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.domain.StoredDocumentAuditEntry;
@@ -20,10 +18,6 @@ import static org.mockito.Mockito.when;
 
 @Provider("dm_store_audit_provider")
 public class StoredDocumentAuditControllerProviderTest extends BaseProviderTest {
-
-    @Autowired
-    private StoredDocumentAuditController storedDocumentAuditController;
-
 
     @State("Audit entries exist for a stored document")
     public void documentExistToSoftDelete() throws ParseException {
