@@ -18,7 +18,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
-public class DocumentContentVersionConsumerTest extends BaseConsumerPactTest {
+public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPactTest {
 
     private static final String PROVIDER = "dm_store_document_content_version_provider";
     private static final String CONSUMER = "dm_store_document_content_version_consumer";
@@ -56,7 +56,7 @@ public class DocumentContentVersionConsumerTest extends BaseConsumerPactTest {
             ClassLoader.getSystemResource("test-files/sample.pdf").getPath());
         given()
             .baseUri(mockServer.getUrl())
-            .multiPart("file", dummyFile, ContentType.APPLICATION_PDF.getMimeType())
+            .multiPart("file", "sample.pdf", dummyFile, ContentType.APPLICATION_PDF.getMimeType())
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "Accept", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
