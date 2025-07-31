@@ -6,10 +6,12 @@ import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import org.apache.hc.core5.http.ContentType;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.UUID;
 
@@ -51,12 +53,14 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
 
     @Test
     @PactTestFor(pactMethod = "addDocumentContentVersionPact")
-    void testAddDocumentVersion(MockServer mockServer) {
-        File dummyFile = new File(
-            ClassLoader.getSystemResource("test-files/sample.pdf").getPath());
+    void testAddDocumentVersion(MockServer mockServer) throws URISyntaxException, IOException {
+        byte[] fileBytes =
+            Files.readAllBytes(
+                Paths.get(ClassLoader.getSystemResource("test-files/sample.pdf").toURI())
+        );
         given()
             .baseUri(mockServer.getUrl())
-            .multiPart("file", "sample.pdf", dummyFile, ContentType.APPLICATION_PDF.getMimeType())
+            .multiPart("file", "sample.pdf", fileBytes)
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "Accept", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
