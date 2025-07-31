@@ -99,7 +99,7 @@ ext['hibernate.version'] = versions.hibernate
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.31.0'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.31.1'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.2.1'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.2.1'
 
