@@ -20,11 +20,15 @@ import static org.mockito.Mockito.when;
 @Provider("dm_store_document_content_version_provider")
 public class DocumentContentVersionControllerProviderTest extends BaseProviderTest {
 
+    private static final String DOCUMENT_ID = "969983aa-52ae-41bd-8cf3-4aabcc120783";
+    private static final UUID DOCUMENT_CONTENT_VERSION_ID =
+        UUID.fromString("2216a872-81f7-4cad-a474-32a59608b038");
+
     @State("Can add Document Content Version and associate it with a given Stored Document.")
     public void documentExistToSoftDelete() {
 
         StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setId(UUID.randomUUID());
+        storedDocument.setId(UUID.fromString(DOCUMENT_ID));
         storedDocument.setClassification(Classifications.PUBLIC); // if required
         storedDocument.setCreatedBy("test-user");
         storedDocument.setCreatedOn(new Date());
@@ -36,9 +40,9 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
         when(file.getSize()).thenReturn(1024L);
 
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(
-            UUID.randomUUID(),
+            DOCUMENT_CONTENT_VERSION_ID,
             "application/pdf",
-            "test-document.pdf",
+            "sample.pdf",
             "test-user",
             "test-service",
             new Date(),

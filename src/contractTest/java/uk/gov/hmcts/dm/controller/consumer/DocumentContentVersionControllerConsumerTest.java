@@ -14,7 +14,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.UUID;
 
 import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static io.restassured.RestAssured.given;
@@ -26,7 +25,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     private static final String PROVIDER = "dm_store_document_content_version_provider";
     private static final String CONSUMER = "dm_store_document_content_version_consumer";
 
-    private static final String DOCUMENT_ID = UUID.randomUUID().toString();
+    private static final String DOCUMENT_ID = "969983aa-52ae-41bd-8cf3-4aabcc120783";
     private static final String PATH = "/documents/" + DOCUMENT_ID + "/versions";
 
     private static final byte[] FILE_BYTES;
@@ -75,10 +74,6 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     void testAddDocumentVersion(MockServer mockServer) throws URISyntaxException, IOException {
         given()
             .baseUri(mockServer.getUrl())
-            // FIX: Explicitly set the Content-Type for the request.
-            // While RestAssured's multiPart() method implies this, explicitly setting it
-            // helps ensure the header is generated in a way that consistently matches
-            // the expectation set by Pact's withFileUpload() DSL method.
             .contentType(ContentType.MULTIPART)
             .multiPart("file", "sample.pdf", FILE_BYTES, "application/pdf")
             .headers(Map.of(
