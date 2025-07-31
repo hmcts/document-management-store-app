@@ -8,6 +8,7 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import com.azure.storage.common.implementation.Constants;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,10 @@ public class BlobStorageWriteService {
                   documentContentVersion.getId());
 
         try {
+
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+
             BlockBlobClient blob = getCloudFile(documentContentVersion.getId());
             // The default values in BlockBlobClient (Azure Storage Blob SDK v12+) for
             // uploading with ParallelTransferOptions are:
@@ -79,6 +84,11 @@ public class BlobStorageWriteService {
             blobOutputStream.write(multiPartFile.getBytes());
             blobOutputStream.close();
             documentContentVersion.setContentUri(blob.getBlobUrl());
+
+            stopWatch.stop();
+            log.info("Doc Id {} with size {}  took {} ms", documentId, documentContentVersion.getSize(),
+                    stopWatch.getDuration().toMillis());
+
         } catch (IOException e) {
             log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
                      documentId,
