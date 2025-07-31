@@ -24,8 +24,8 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
 
     private static final String PROVIDER = "dm_store_document_content_version_provider";
     private static final String CONSUMER = "dm_store_document_content_version_consumer";
-
     private static final String DOCUMENT_ID = "969983aa-52ae-41bd-8cf3-4aabcc120783";
+    private static final String DOCUMENT_CONTENT_VERSION_ID = "2216a872-81f7-4cad-a474-32a59608b038";
     private static final String PATH = "/documents/" + DOCUMENT_ID + "/versions";
 
     private static final byte[] FILE_BYTES;
@@ -63,7 +63,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .status(201)
             .headers(Map.of(
                 "Content-Type", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8",
-                "Location", "http://localhost/documents/" + DOCUMENT_ID + "/versions/abc123"
+                "Location", "http://localhost/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID
             ))
             .body(buildResponseDsl())
             .toPact(V4Pact.class);
@@ -101,9 +101,15 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 .numberType("size", 1024)
                 .object("_links", links -> {
                     links
-                        .object("self", self -> self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/versions/abc123"))
-                        .object("binary", binary -> binary.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/versions/abc123/binary"))
-                        .object("document", document -> document.stringType("href", "http://localhost/documents/" + DOCUMENT_ID));
+                        .object("self", self -> self.stringType("href",
+                            "http://localhost/documents/" + DOCUMENT_ID
+                                + "/versions/" + DOCUMENT_CONTENT_VERSION_ID))
+                        .object("binary", binary -> binary.stringType("href",
+                            "http://localhost/documents/" + DOCUMENT_ID
+                                + "/versions/" + DOCUMENT_CONTENT_VERSION_ID + "/binary"))
+                        .object("document",
+                            document ->
+                                document.stringType("href", "http://localhost/documents/" + DOCUMENT_ID));
                 });
         }).build();
     }
