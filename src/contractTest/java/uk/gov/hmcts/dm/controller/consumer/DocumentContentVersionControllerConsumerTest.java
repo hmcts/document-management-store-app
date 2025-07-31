@@ -39,8 +39,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "Accept", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
             ))
-            .matchHeader("Content-Type", "multipart/form-data.*",
-                "multipart/form-data; boundary=--xyz")
+            .matchHeader("Content-Type", "multipart/form-data.*")
             .willRespondWith()
             .status(201)
             .headers(Map.of(
@@ -60,7 +59,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
         );
         given()
             .baseUri(mockServer.getUrl())
-            .multiPart("file", "sample.pdf", fileBytes)
+            .multiPart("file", "sample.pdf", fileBytes, "application/pdf")
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "Accept", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
