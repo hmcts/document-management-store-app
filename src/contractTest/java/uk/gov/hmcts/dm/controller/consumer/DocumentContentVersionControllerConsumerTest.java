@@ -28,12 +28,32 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     private static final String DOCUMENT_ID = UUID.randomUUID().toString();
     private static final String PATH = "/documents/" + DOCUMENT_ID + "/versions";
 
+    private static final byte[] FILE_BYTES;
+
+    static {
+        try {
+            FILE_BYTES = Files.readAllBytes(
+                Paths.get(ClassLoader.getSystemResource("test-files/sample.pdf").toURI())
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Pact(provider = PROVIDER, consumer = CONSUMER)
-    public V4Pact addDocumentContentVersionPact(PactDslWithProvider builder) {
+    public V4Pact addDocumentContentVersionPact(PactDslWithProvider builder) throws IOException {
         return builder
             .given("Can add Document Content Version and associate it with a given Stored Document.")
             .uponReceiving("POST multipart request to upload a document version")
             .method("POST")
+            .withFileUpload(
+                "file",
+                "sample.pdf",
+                "application/pdf",
+                FILE_BYTES
+            )
             .path(PATH)
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
@@ -53,13 +73,9 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     @Test
     @PactTestFor(pactMethod = "addDocumentContentVersionPact")
     void testAddDocumentVersion(MockServer mockServer) throws URISyntaxException, IOException {
-        byte[] fileBytes =
-            Files.readAllBytes(
-                Paths.get(ClassLoader.getSystemResource("test-files/sample.pdf").toURI())
-        );
         given()
             .baseUri(mockServer.getUrl())
-            .multiPart("file", "sample.pdf", fileBytes, "application/pdf")
+            .multiPart("file", "sample.pdf", FILE_BYTES, "application/pdf")
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "Accept", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
