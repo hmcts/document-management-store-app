@@ -6,6 +6,7 @@ import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -59,7 +60,6 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "Accept", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
             ))
-            .matchHeader("Content-Type", "multipart/form-data.*")
             .willRespondWith()
             .status(201)
             .headers(Map.of(
@@ -75,6 +75,11 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     void testAddDocumentVersion(MockServer mockServer) throws URISyntaxException, IOException {
         given()
             .baseUri(mockServer.getUrl())
+            // FIX: Explicitly set the Content-Type for the request.
+            // While RestAssured's multiPart() method implies this, explicitly setting it
+            // helps ensure the header is generated in a way that consistently matches
+            // the expectation set by Pact's withFileUpload() DSL method.
+            .contentType(ContentType.MULTIPART)
             .multiPart("file", "sample.pdf", FILE_BYTES, "application/pdf")
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
