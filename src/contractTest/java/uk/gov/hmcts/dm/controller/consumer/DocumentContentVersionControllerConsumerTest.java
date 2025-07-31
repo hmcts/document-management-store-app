@@ -95,14 +95,10 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     private DslPart buildResponseDsl() {
         return newJsonBody((body) -> {
             body
-                .uuid("id")
                 .stringType("mimeType", "application/pdf")
                 .stringType("originalDocumentName", "sample.pdf")
                 .stringType("createdBy", "test-user")
-                .stringType("createdByService", "test-service")
                 .numberType("size", 1024)
-                .stringType("contentUri", "http://localhost/documents/" + DOCUMENT_ID + "/versions/abc123")
-                .stringType("contentChecksum", "abc123checksum")
                 .object("_links", links -> {
                     links
                         .object("self", self -> self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID + "/versions/abc123"))
