@@ -45,7 +45,7 @@ public class DeleteDocumentsIT extends BaseIT {
     @Test
     public void s2AsAuthenticatedUserICanNotDeleteDocumentsForASpecificCaseThatDoesNotHaveAnyDocuments() {
 
-        String caseNo1 = RandomStringUtils.randomNumeric(16);
+        String caseNo1 = RandomStringUtils.secure().nextNumeric(16);
 
         Map<String, String> map = Map.of(CASE_REF_CONST, caseNo1);
         givenRequest(getCitizen())
@@ -61,7 +61,7 @@ public class DeleteDocumentsIT extends BaseIT {
     @Test
     public void s3AsAuthenticatedUserIReceiveAnErrorForIncorrectlyPostedDeleteCriteria() {
 
-        String caseNo1 = RandomStringUtils.randomNumeric(16);
+        String caseNo1 = RandomStringUtils.secure().nextNumeric(16);
 
         Map<String, String> map = Map.of("xyz", caseNo1);
         givenRequest(getCitizen())
@@ -100,7 +100,7 @@ public class DeleteDocumentsIT extends BaseIT {
     @Test
     public void s6AsAuthenticatedUserIReceiveABadRequestForShortCaseRef() {
 
-        String caseNo1 = RandomStringUtils.randomNumeric(15);
+        String caseNo1 = RandomStringUtils.secure().nextNumeric(15);
 
         Map<String, String> map = Map.of(CASE_REF_CONST, caseNo1);
         givenRequest(getCitizen())
@@ -115,7 +115,7 @@ public class DeleteDocumentsIT extends BaseIT {
     @Test
     public void s7AsAuthenticatedUserIReceiveABadRequestForLongCaseRef() {
 
-        String caseNo1 = RandomStringUtils.randomNumeric(17);
+        String caseNo1 = RandomStringUtils.secure().nextNumeric(17);
 
         Map<String, String> map = Map.of(CASE_REF_CONST, caseNo1);
         givenRequest(getCitizen())
@@ -130,7 +130,7 @@ public class DeleteDocumentsIT extends BaseIT {
     @Test
     public void s8AsAnUnauthenticatedUserIAmForbiddenToInvokeDocumentsDelete() {
 
-        String caseNo1 = RandomStringUtils.randomNumeric(16);
+        String caseNo1 = RandomStringUtils.secure().nextNumeric(16);
 
         Map<String, String> map = Map.of(CASE_REF_CONST, caseNo1);
         givenUnauthenticatedRequest()

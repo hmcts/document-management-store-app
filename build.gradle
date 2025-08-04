@@ -27,7 +27,11 @@ apply plugin: 'idea'
 
 group = 'uk.gov.hmcts.dm'
 version = '2.0.0'
-mainClassName = 'uk.gov.hmcts.dm.DmApp'
+
+application {
+    mainClass = 'uk.gov.hmcts.dm.DmApp'
+}
+
 
 java {
     toolchain {
@@ -323,7 +327,7 @@ bootJar {
 
 //This is used in get the version for fakeversion and buildInfo  (./gradlew -q printVersion)
 task printVersion {
-    description 'Prints the version of this project'
+    description = 'Prints the version of this project'
     doLast {
         print project.version
     }
