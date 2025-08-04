@@ -61,10 +61,10 @@ public class BlobStorageWriteService {
                   documentId,
                   documentContentVersion.getId());
 
-        try {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
-            StopWatch stopWatch = new StopWatch();
-            stopWatch.start();
+        try {
 
             BlockBlobClient blob = getCloudFile(documentContentVersion.getId());
             // The default values in BlockBlobClient (Azure Storage Blob SDK v12+) for
@@ -86,13 +86,14 @@ public class BlobStorageWriteService {
             documentContentVersion.setContentUri(blob.getBlobUrl());
 
             stopWatch.stop();
-            log.info("Doc Id {} with size {}  took {} ms", documentId, documentContentVersion.getSize(),
-                    stopWatch.getDuration().toMillis());
+            log.info("Doc Id {} with size {} in Mb took {} ms", documentId,
+                    documentContentVersion.getSize() / (1024 * 1024), stopWatch.getDuration().toMillis());
 
         } catch (IOException e) {
-            log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED",
+            stopWatch.stop();
+            log.warn("Uploading document {} / version {} to Azure Blob Storage: FAILED in {} ms",
                      documentId,
-                     documentContentVersion.getId());
+                     documentContentVersion.getId(), stopWatch.getDuration().toMillis());
             throw new FileStorageException(e, documentId, documentContentVersion.getId());
         }
     }
