@@ -64,6 +64,9 @@ java:
 
     # Document Storage
     STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME: dm-store-docstore-{{ .Values.global.environment }}
+    UPLOAD_BLOCK_SIZE: 8
+    UPLOAD_MAX_CONCURRENCY: 10
+    MAX_SINGLE_UPLOAD_SIZE: 100
 
     TASK_ENV: documentTaskLock-aat
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 3600000
