@@ -6,6 +6,8 @@ import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
+import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
+import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -49,16 +52,19 @@ import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.ScheduledTaskRunner;
 import uk.gov.hmcts.dm.service.SearchService;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(
@@ -101,6 +107,14 @@ public class StoredDocumentProviderTest {
 
     @MockitoBean
     SearchService searchService;
+
+    @PactBrokerConsumerVersionSelectors
+    public static SelectorBuilder consumerVersionSelectors() {
+        return new SelectorBuilder()
+            .matchingBranch()
+            .mainBranch()
+            .deployedOrReleased();
+    }
 
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
@@ -200,5 +214,21 @@ public class StoredDocumentProviderTest {
         UUID documentId = UUID.randomUUID();
         doNothing().when(auditedStoredDocumentOperationsService).deleteStoredDocument(documentId, true);
         return Map.of("documentId", documentId);
+    }
+
+    @State({"I have existing document"})
+    public void toDeleteDocuments() {
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(new StoredDocument(),
+            new MockMultipartFile("files",
+                "filename.txt",
+                "text/plain",
+                "hello".getBytes(
+                    StandardCharsets.UTF_8)),
+            "user");
+
+        documentContentVersion.setCreatedBy("userId");
+        UUID id = UUID.fromString("5c3c3906-2b51-468e-8cbb-a4002eded075");
+        when(this.documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
+            .thenReturn(Optional.of(documentContentVersion));
     }
 }
