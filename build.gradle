@@ -306,9 +306,6 @@ project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 sonarqube {
     group = "Verification"
     properties {
-        property "sonar.login", "admin"
-        property "sonar.password", "admin1"
-        property "sonar.host.url", "http://localhost:9000"
         property "sonar.projectName", "${rootProject.name}"
         property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.outputLocation}"
         property "sonar.exclusions", coverageExclusionList.join(", ")
