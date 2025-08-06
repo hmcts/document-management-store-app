@@ -23,9 +23,6 @@ plugins {
     id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.34'
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-
 group = 'uk.gov.hmcts.dm'
 version = '2.0.0'
 
