@@ -79,9 +79,6 @@ configurations.configureEach {
 
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << '-parameters' << '-Xlint:deprecation'
-}
-
-tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
