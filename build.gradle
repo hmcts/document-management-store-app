@@ -476,6 +476,7 @@ flyway {
 }
 
 tasks.register('migratePostgresDatabase', FlywayMigrateTask) {
+    classpath = sourceSets.main.runtimeClasspath
     baselineOnMigrate = true
     if (project.hasProperty("dburl")) {
         url = "jdbc:postgresql://${dburl}"
