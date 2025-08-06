@@ -1,3 +1,4 @@
+import org.flywaydb.gradle.task.FlywayMigrateTask
 
 buildscript {
     dependencies {
@@ -27,7 +28,10 @@ apply plugin: 'idea'
 
 group = 'uk.gov.hmcts.dm'
 version = '2.0.0'
-mainClassName = 'uk.gov.hmcts.dm.DmApp'
+
+application {
+    mainClass = 'uk.gov.hmcts.dm.DmApp'
+}
 
 java {
     toolchain {
@@ -66,18 +70,18 @@ configurations {
     contractTestRuntimeOnly.extendsFrom(testRuntimeOnly)
 }
 
-configurations.all {
+configurations.configureEach {
     exclude group: 'org.bouncycastle', module: 'bcprov-jdk15on'
     exclude group: 'org.springframework.boot', module: 'spring-boot-starter-security'
     exclude group: 'org.springframework.security', module: 'spring-security-rsa'
     exclude group: 'org.codehaus.jettison', module: 'jettison'
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << '-parameters' << '-Xlint:deprecation'
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -255,7 +259,7 @@ def coverageExclusionList = [
 //(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
     toolVersion = "0.8.13"
-    reportsDirectory = file("$buildDir/reports/jacoco")
+    reportsDirectory = file("${project.getLayout().getBuildDirectory()}/reports/jacoco")
 }
 
 jacocoTestReport {
@@ -265,7 +269,7 @@ jacocoTestReport {
         xml.required = true
         csv.required = false
 
-        xml.outputLocation = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        xml.outputLocation = file("${project.getLayout().getBuildDirectory()}/reports/jacoco/test/jacocoTestReport.xml")
     }
 
 }
@@ -297,18 +301,21 @@ pitest {
     pitestVersion = '1.17.3'
 }
 
-project.tasks['sonarqube'].group = "Verification"
-
 project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 
 sonarqube {
+    group = "Verification"
     properties {
+        property "sonar.login", "admin"
+        property "sonar.password", "admin1"
+        property "sonar.host.url", "http://localhost:9000"
         property "sonar.projectName", "${rootProject.name}"
         property "sonar.coverage.jacoco.xmlReportPaths", "${jacocoTestReport.reports.xml.outputLocation}"
         property "sonar.exclusions", coverageExclusionList.join(", ")
         property "sonar.pitest.mode", "reuseReport"
         property "sonar.pitest.reportsDirectory", "build/reports/pitest"
     }
+
 }
 
 bootJar {
@@ -322,8 +329,8 @@ bootJar {
 }
 
 //This is used in get the version for fakeversion and buildInfo  (./gradlew -q printVersion)
-task printVersion {
-    description 'Prints the version of this project'
+tasks.register('printVersion') {
+    description = 'Prints the version of this project'
     doLast {
         print project.version
     }
@@ -338,7 +345,7 @@ test {
     useJUnitPlatform()
 }
 
-task functional(type: Test, description: 'Runs the functional tests.', group: 'Verification') {
+tasks.register('functional', Test) {
 //    doFirst(){
 //        printf("Available processors:::::::::: " + Runtime.runtime.availableProcessors().intdiv(2).toString())
 //    }
@@ -368,7 +375,7 @@ processFunctionalTestResources {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-task smoke(type: Test) {
+tasks.register('smoke', Test) {
     group = 'Delivery pipeline'
     description = 'Executes non-destructive smoke tests'
     setTestClassesDirs(sourceSets.smokeTest.output.classesDirs)
@@ -378,7 +385,7 @@ task smoke(type: Test) {
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
 }
 
-task fortifyScan(type: JavaExec)  {
+tasks.register('fortifyScan', JavaExec) {
     mainClass.set("uk.gov.hmcts.fortifyclient.FortifyClientMainApp")
     classpath += sourceSets.test.runtimeClasspath
     jvmArgs = ['--add-opens=java.base/java.lang.reflect=ALL-UNNAMED']
@@ -393,7 +400,7 @@ static def getCheckedOutGitCommitHash() {
 }
 
 
-task contract(type: Test) {
+tasks.register('contract', Test) {
     group = 'Delivery pipeline'
     description = 'Runs the consumer Pact tests'
     useJUnitPlatform()
@@ -422,7 +429,7 @@ pactPublish {
     pactPublish = project.pact.publish
 }
 
-task runAndPublishConsumerPactTests(type: Test) {
+tasks.register('runAndPublishConsumerPactTests', Test) {
     logger.lifecycle("Runs pact Tests")
     testClassesDirs = sourceSets.contractTest.output.classesDirs
     classpath = sourceSets.contractTest.runtimeClasspath
@@ -484,7 +491,7 @@ flyway {
     baselineVersion = '1'
 }
 
-task migratePostgresDatabase(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+tasks.register('migratePostgresDatabase', FlywayMigrateTask) {
     baselineOnMigrate = true
     if (project.hasProperty("dburl")) {
         url = "jdbc:postgresql://${dburl}"
