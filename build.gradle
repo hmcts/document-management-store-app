@@ -247,7 +247,7 @@ def coverageExclusionList = [
 //(jacocoTestReport | jacocoTestCoverageVerification)
 jacoco {
     toolVersion = "0.8.13"
-    reportsDirectory = file("${project.getLayout().getBuildDirectory()}/reports/jacoco")
+    reportsDirectory = layout.buildDirectory.dir('reports/jacoco')
 }
 
 jacocoTestReport {
@@ -257,9 +257,8 @@ jacocoTestReport {
         xml.required = true
         csv.required = false
 
-        xml.outputLocation = file("${project.getLayout().getBuildDirectory()}/reports/jacoco/test/jacocoTestReport.xml")
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
     }
-
 }
 
 pitest {
