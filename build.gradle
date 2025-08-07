@@ -245,10 +245,10 @@ def coverageExclusionList = [
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
-jacoco {
-    toolVersion = "0.8.13"
-    reportsDirectory = layout.buildDirectory.dir('reports/jacoco')
-}
+//jacoco {
+//    toolVersion = "0.8.13"
+//    reportsDirectory = layout.buildDirectory.dir('reports/jacoco')
+//}
 
 jacocoTestReport {
     executionData(test)
@@ -288,7 +288,6 @@ pitest {
     pitestVersion = '1.17.3'
 }
 
-project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 
 sonarqube {
     properties {
@@ -300,6 +299,9 @@ sonarqube {
     }
 
 }
+
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport
+
 
 bootJar {
     getArchiveFileName().set(provider {
