@@ -1,5 +1,11 @@
 import org.flywaydb.gradle.task.FlywayMigrateTask
 
+buildscript {
+    dependencies {
+        classpath("org.flywaydb:flyway-database-postgresql:11.10.5")
+    }
+}
+
 plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.67'
