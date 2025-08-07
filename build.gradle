@@ -245,10 +245,10 @@ def coverageExclusionList = [
 ]
 
 //(jacocoTestReport | jacocoTestCoverageVerification)
-jacoco {
-    toolVersion = "0.8.13"
-    reportsDirectory = file("${project.getLayout().getBuildDirectory()}/reports/jacoco")
-}
+//jacoco {
+//    toolVersion = "0.8.13"
+//    reportsDirectory = layout.buildDirectory.dir('reports/jacoco')
+//}
 
 jacocoTestReport {
     executionData(test)
@@ -257,9 +257,8 @@ jacocoTestReport {
         xml.required = true
         csv.required = false
 
-        xml.outputLocation = file("${project.getLayout().getBuildDirectory()}/reports/jacoco/test/jacocoTestReport.xml")
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml")
     }
-
 }
 
 pitest {
@@ -289,7 +288,6 @@ pitest {
     pitestVersion = '1.17.3'
 }
 
-project.tasks['sonarqube'].dependsOn test, jacocoTestReport
 
 sonarqube {
     properties {
@@ -301,6 +299,9 @@ sonarqube {
     }
 
 }
+
+project.tasks['sonarqube'].dependsOn test, jacocoTestReport
+
 
 bootJar {
     getArchiveFileName().set(provider {
