@@ -1,15 +1,11 @@
 package uk.gov.hmcts.dm.domain;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
@@ -65,15 +61,6 @@ public class DocumentContentVersion implements RolesAware {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdOn;
 
-    /**
-     * We will use {@link DocumentContentVersion#contentUri} instead.
-     //     * @deprecated To be removed when we will migrate to AzureBlobStore.
-     */
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "documentContentVersion", fetch = FetchType.LAZY)
-    @Getter
-    @JoinColumn(name = "document_content_version_id")
-    private DocumentContent documentContent;
-
     @ManyToOne
     @Getter
     @Setter
@@ -110,7 +97,6 @@ public class DocumentContentVersion implements RolesAware {
                                   String createdBy,
                                   String createdByService,
                                   Date createdOn,
-                                  DocumentContent documentContent,
                                   StoredDocument storedDocument,
                                   Long size,
                                   String contentUri,

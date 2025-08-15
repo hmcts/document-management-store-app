@@ -46,7 +46,6 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
             "test-user",
             "test-service",
             new Date(),
-            null,
             storedDocument,
             1024L,
             "http://localhost/documents/1/versions/1",
