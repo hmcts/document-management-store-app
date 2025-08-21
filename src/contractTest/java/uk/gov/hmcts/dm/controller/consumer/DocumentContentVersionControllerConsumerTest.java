@@ -244,7 +244,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                     "data-source", "contentURI"
                 )
             )
-            .withBinaryData(DOWNLOAD_CONTENT, "application/pdf")
+            .withBinaryData(DOWNLOAD_CONTENT, "application/octet-stream")
             .toPact(V4Pact.class);
     }
 
