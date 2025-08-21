@@ -101,7 +101,7 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
 
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(
             DOCUMENT_CONTENT_VERSION_ID,
-            "application/pdf",
+            "application/octet-stream",
             "sample.pdf",
             "test-user",
             "test-service",

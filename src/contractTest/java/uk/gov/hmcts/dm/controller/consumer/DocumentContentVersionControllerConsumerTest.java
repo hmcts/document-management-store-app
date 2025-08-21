@@ -201,28 +201,6 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .body("_links.document.href", containsString("/documents/" + DOCUMENT_ID));
     }
 
-    private void testDownload(MockServer mockServer) {
-        Response response = SerenityRest
-            .given()
-            .headers(Map.of(
-                "ServiceAuthorization", "Bearer some-s2s-token",
-                "Accept", "application/pdf"
-            ))
-            .get(mockServer.getUrl() + PATH_BINARY);
-
-        response.then()
-            .statusCode(HttpStatus.OK.value())
-            .contentType("application/pdf");
-
-        assertThat(response.asByteArray()).hasSize(DOWNLOAD_CONTENT.length);
-        assertThat(response.getHeader(HttpHeaders.CONTENT_DISPOSITION))
-            .isEqualTo("fileName=\"sample.pdf\"");
-        assertThat(response.getHeader("OriginalFileName"))
-            .isEqualTo("sample.pdf");
-        assertThat(response.getHeader("data-source"))
-            .isEqualTo("contentURI");
-    }
-
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact downloadDocumentVersionBinaryPact(PactDslWithProvider builder) {
         return builder
@@ -232,12 +210,12 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .method("GET")
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
-                "Accept", "application/pdf"
+                "Accept", "application/octet-stream"
             ))
             .willRespondWith()
             .status(HttpStatus.OK.value())
             .headers(
-                Map.of(HttpHeaders.CONTENT_TYPE, "application/pdf",
+                Map.of(HttpHeaders.CONTENT_TYPE, "application/octet-stream",
                     HttpHeaders.CONTENT_LENGTH, String.valueOf(DOWNLOAD_CONTENT.length),
                     HttpHeaders.CONTENT_DISPOSITION, "fileName=\"sample.pdf\"",
                     "OriginalFileName", "sample.pdf",
@@ -253,6 +231,29 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     void testDownloadDocumentVersionBinary(MockServer mockServer) {
         testDownload(mockServer);
     }
+
+    private void testDownload(MockServer mockServer) {
+        Response response = SerenityRest
+            .given()
+            .headers(Map.of(
+                "ServiceAuthorization", "Bearer some-s2s-token",
+                "Accept", "application/octet-stream"
+            ))
+            .get(mockServer.getUrl() + PATH_BINARY);
+
+        response.then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType("application/octet-stream");
+
+        assertThat(response.asByteArray()).hasSize(DOWNLOAD_CONTENT.length);
+        assertThat(response.getHeader(HttpHeaders.CONTENT_DISPOSITION))
+            .isEqualTo("fileName=\"sample.pdf\"");
+        assertThat(response.getHeader("OriginalFileName"))
+            .isEqualTo("sample.pdf");
+        assertThat(response.getHeader("data-source"))
+            .isEqualTo("contentURI");
+    }
+
 
     private DslPart buildResponseDsl() {
         return newJsonBody((body) -> {
