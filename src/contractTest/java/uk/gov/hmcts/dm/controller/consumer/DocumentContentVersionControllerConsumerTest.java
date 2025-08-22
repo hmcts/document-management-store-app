@@ -29,6 +29,9 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     private static final String PATH_VERSIONS = "/documents/" + DOCUMENT_ID + "/versions";
     private static final String PATH_LEGACY_ENDPOINT = "/documents/" + DOCUMENT_ID;
 
+    private static final String PATH_GET_CONTENT =
+        "/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID;
+
     private static final byte[] FILE_BYTES;
 
     static {
@@ -145,6 +148,46 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .body("_links.document.href", containsString("/documents/" + DOCUMENT_ID));
     }
 
+    @Pact(provider = PROVIDER, consumer = CONSUMER)
+    public V4Pact getDocumentContentVersionPact(PactDslWithProvider builder) {
+        return builder
+            .given("A specific Document Content Version exists for a given Stored Document.")
+            .uponReceiving("GET request for a specific document content version")
+            .path(PATH_GET_CONTENT)
+            .method("GET")
+            .headers(Map.of(
+                "ServiceAuthorization", "Bearer some-s2s-token",
+                "Accept", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+            ))
+            .willRespondWith()
+            .status(200)
+            .headers(Map.of(
+                "Content-Type", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+            ))
+            .body(buildResponseDsl())
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "getDocumentContentVersionPact")
+    void testGetDocumentContentVersion(MockServer mockServer) {
+        given()
+            .baseUri(mockServer.getUrl())
+            .headers(Map.of(
+                "ServiceAuthorization", "Bearer some-s2s-token",
+                "Accept", "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+            ))
+            .when()
+            .get(PATH_GET_CONTENT)
+            .then()
+            .log().all()
+            .statusCode(200)
+            .body("mimeType", equalTo("application/pdf"))
+            .body("originalDocumentName", equalTo("sample.pdf"))
+            .body("_links.self.href", containsString(PATH_GET_CONTENT))
+            .body("_links.binary.href", containsString("/binary"))
+            .body("_links.document.href", containsString("/documents/" + DOCUMENT_ID));
+    }
 
     private DslPart buildResponseDsl() {
         return newJsonBody((body) -> {

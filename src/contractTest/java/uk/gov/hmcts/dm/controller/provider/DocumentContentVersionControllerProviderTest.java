@@ -58,5 +58,31 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
             .thenReturn(documentContentVersion);
     }
 
+
+    @State("A specific Document Content Version exists for a given Stored Document.")
+    public void documentContentVersionExists() {
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.fromString(DOCUMENT_ID));
+        storedDocument.setClassification(Classifications.PUBLIC);
+        storedDocument.setCreatedBy("test-user");
+        storedDocument.setCreatedOn(new Date());
+        storedDocument.setRoles(Set.of("citizen"));
+
+        DocumentContentVersion documentContentVersion = new DocumentContentVersion(
+            DOCUMENT_CONTENT_VERSION_ID,
+            "application/pdf",
+            "sample.pdf",
+            "test-user",
+            "test-service",
+            new Date(),
+            storedDocument,
+            1024L,
+            "http://localhost/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID,
+            "abc123checksum"
+        );
+
+        when(auditedDocumentContentVersionOperationsService.readDocumentContentVersion(DOCUMENT_CONTENT_VERSION_ID))
+            .thenReturn(documentContentVersion);
+    }
 }
 
