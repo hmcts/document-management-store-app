@@ -7,7 +7,11 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
+import net.serenitybdd.rest.SerenityRest;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -17,6 +21,7 @@ import java.util.Map;
 
 import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -31,6 +36,13 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
 
     private static final String PATH_GET_CONTENT =
         "/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID;
+
+    private static final String PATH_BINARY =
+        "/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID + "/binary";
+
+    private static final byte[] DOWNLOAD_CONTENT = new byte[]{
+        (byte) 0xFF, (byte) 0xD8, (byte) 0xFF, 0x00, 0x10, 0x20, 0x30, 0x40
+    };
 
     private static final byte[] FILE_BYTES;
 
@@ -188,6 +200,60 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .body("_links.binary.href", containsString("/binary"))
             .body("_links.document.href", containsString("/documents/" + DOCUMENT_ID));
     }
+
+    @Pact(provider = PROVIDER, consumer = CONSUMER)
+    public V4Pact downloadDocumentVersionBinaryPact(PactDslWithProvider builder) {
+        return builder
+            .given("A specific Document Content Version binary exists for a given Stored Document.")
+            .uponReceiving("GET request to download a specific document content version binary")
+            .path(PATH_BINARY)
+            .method("GET")
+            .headers(Map.of(
+                "ServiceAuthorization", "Bearer some-s2s-token",
+                "Accept", "application/octet-stream"
+            ))
+            .willRespondWith()
+            .status(HttpStatus.OK.value())
+            .headers(
+                Map.of(HttpHeaders.CONTENT_TYPE, "application/octet-stream",
+                    HttpHeaders.CONTENT_LENGTH, String.valueOf(DOWNLOAD_CONTENT.length),
+                    HttpHeaders.CONTENT_DISPOSITION, "fileName=\"sample.pdf\"",
+                    "OriginalFileName", "sample.pdf",
+                    "data-source", "contentURI"
+                )
+            )
+            .withBinaryData(DOWNLOAD_CONTENT, "application/octet-stream")
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "downloadDocumentVersionBinaryPact", providerName = PROVIDER)
+    void testDownloadDocumentVersionBinary(MockServer mockServer) {
+        testDownload(mockServer);
+    }
+
+    private void testDownload(MockServer mockServer) {
+        Response response = SerenityRest
+            .given()
+            .headers(Map.of(
+                "ServiceAuthorization", "Bearer some-s2s-token",
+                "Accept", "application/octet-stream"
+            ))
+            .get(mockServer.getUrl() + PATH_BINARY);
+
+        response.then()
+            .statusCode(HttpStatus.OK.value())
+            .contentType("application/octet-stream");
+
+        assertThat(response.asByteArray()).hasSize(DOWNLOAD_CONTENT.length);
+        assertThat(response.getHeader(HttpHeaders.CONTENT_DISPOSITION))
+            .isEqualTo("fileName=\"sample.pdf\"");
+        assertThat(response.getHeader("OriginalFileName"))
+            .isEqualTo("sample.pdf");
+        assertThat(response.getHeader("data-source"))
+            .isEqualTo("contentURI");
+    }
+
 
     private DslPart buildResponseDsl() {
         return newJsonBody((body) -> {
