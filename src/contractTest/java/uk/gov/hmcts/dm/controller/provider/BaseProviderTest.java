@@ -41,6 +41,7 @@ import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.ScheduledTaskRunner;
 import uk.gov.hmcts.dm.service.SearchService;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.nio.charset.StandardCharsets;
@@ -109,6 +110,9 @@ public abstract class BaseProviderTest {
 
     @MockitoBean
     protected SearchService searchService;
+
+    @MockitoBean
+    protected SecurityUtilService securityUtilService;
 
     @MockitoBean
     protected AuditEntryService auditEntryService;
