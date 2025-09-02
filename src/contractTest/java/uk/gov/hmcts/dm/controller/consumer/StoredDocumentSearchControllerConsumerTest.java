@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.controller.consumer;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.DslPart;
+import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.V4Pact;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -33,13 +33,13 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "Content-Type", "application/json",
-                "Accept", "application/vnd.uk.gov.hmcts.dm.document.v1+hal+json;charset=UTF-8"
+                "Accept", "application/vnd.uk.gov.hmcts.dm.document-page.v1+hal+json;charset=UTF-8"
             ))
-            .body("{\"metadata\":{\"caseId\":\"12345\"}}") // sample metadata search command
+            .body("{\"name\":\"caseId\",\"value\":\"12345\"}")
             .willRespondWith()
             .status(200)
             .headers(Map.of(
-                "Content-Type", "application/vnd.uk.gov.hmcts.dm.document.v1+hal+json;charset=UTF-8"
+                "Content-Type", "application/vnd.uk.gov.hmcts.dm.document-page.v1+hal+json;charset=UTF-8"
             ))
             .body(buildPagedResponseDsl())
             .toPact(V4Pact.class);
@@ -51,17 +51,17 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
         given()
             .baseUri(mockServer.getUrl())
             .contentType(ContentType.JSON)
-            .accept("application/vnd.uk.gov.hmcts.dm.document.v1+hal+json;charset=UTF-8")
+            .accept("application/vnd.uk.gov.hmcts.dm.document-page.v1+hal+json;charset=UTF-8")
             .headers(Map.of("ServiceAuthorization", "Bearer some-s2s-token"))
-            .body("{\"metadata\":{\"caseId\":\"12345\"}}")
+            .body("{\"name\":\"caseId\",\"value\":\"12345\"}")
             .when()
             .post("/documents/filter")
             .then()
             .log().all()
             .statusCode(200)
-            .body("_embedded.storedDocumentHalResources[0].classification", equalTo("PUBLIC"))
-            .body("_embedded.storedDocumentHalResources[0].createdBy", equalTo("test-user"))
-            .body("_embedded.storedDocumentHalResources[0]._links.self.href", containsString("/documents/" + DOCUMENT_ID));
+            .body("_embedded.documents[0].classification", equalTo("PUBLIC"))
+            .body("_embedded.documents[0].createdBy", equalTo("test-user"))
+            .body("_embedded.documents[0]._links.self.href", containsString("/documents/" + DOCUMENT_ID));
     }
 
     // Pact for /documents/owned
@@ -74,13 +74,14 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
             .method("POST")
             .headers(Map.of(
                 "ServiceAuthorization", "Bearer some-s2s-token",
-                "Accept", "application/vnd.uk.gov.hmcts.dm.document.v1+hal+json;charset=UTF-8"
+                "Accept", "application/vnd.uk.gov.hmcts.dm.document-page.v1+hal+json;charset=UTF-8"
             ))
             .willRespondWith()
             .status(200)
             .headers(Map.of(
-                "Content-Type", "application/vnd.uk.gov.hmcts.dm.document.v1+hal+json;charset=UTF-8"
+                "Content-Type", "application/vnd.uk.gov.hmcts.dm.document-page.v1+hal+json;charset=UTF-8"
             ))
+
             .body(buildPagedResponseDsl())
             .toPact(V4Pact.class);
     }
@@ -90,40 +91,47 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
     void testOwnedDocuments(MockServer mockServer) {
         given()
             .baseUri(mockServer.getUrl())
-            .accept("application/vnd.uk.gov.hmcts.dm.document.v1+hal+json;charset=UTF-8")
+            .accept("application/vnd.uk.gov.hmcts.dm.document-page.v1+hal+json;charset=UTF-8")
             .headers(Map.of("ServiceAuthorization", "Bearer some-s2s-token"))
             .when()
             .post("/documents/owned")
             .then()
             .log().all()
             .statusCode(200)
-            .body("_embedded.storedDocumentHalResources[0].classification", equalTo("PUBLIC"))
-            .body("_embedded.storedDocumentHalResources[0].createdBy", equalTo("test-user"))
-            .body("_embedded.storedDocumentHalResources[0]._links.self.href", containsString("/documents/" + DOCUMENT_ID));
+            .body("_embedded.documents[0].classification", equalTo("PUBLIC"))
+            .body("_embedded.documents[0].createdBy", equalTo("test-user"))
+            .body("_embedded.documents[0]._links.self.href", containsString("/documents/" + DOCUMENT_ID));
     }
 
-    // Build a sample HAL page response
     private DslPart buildPagedResponseDsl() {
-        return newJsonBody(body -> {
-            body.object("_embedded", embedded -> {
-                embedded.minArrayLike("storedDocumentHalResources", 1, 1, doc -> {
-                    doc.stringType("classification", "PUBLIC")
-                        .stringType("createdBy", "test-user")
-                        .stringType("createdOn", "2024-01-01T12:00:00Z")
-                        .object("_links", links -> {
-                            links.object("self", self ->
-                                self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID));
-                        });
-                });
-            });
-            body.object("_links", links -> {
-                links.object("self", self ->
-                    self.stringType("href", "http://localhost/documents"));
-            });
-            body.numberType("page.size", 20);
-            body.numberType("page.totalElements", 1);
-            body.numberType("page.totalPages", 1);
-            body.numberType("page.number", 0);
-        }).build();
+        return new PactDslJsonBody()
+            .object("_embedded")
+            .minArrayLike("documents", 1)
+            .stringType("classification", "PUBLIC")
+            .stringType("createdBy", "test-user")
+            .stringType("createdOn", "2025-09-02T14:20:42+0000")
+            .array("roles")
+            .stringType("citizen")
+            .closeArray()
+            .object("_links")
+            .object("self")
+            .stringMatcher("href", ".*/documents/[0-9a-f\\-]+",
+                "http://localhost/documents/" + DOCUMENT_ID)
+            .closeObject()
+            .closeObject()
+            .closeArray() // properly closes the "documents" array
+            .closeObject()
+            .object("_links")
+            .object("self")
+            .stringMatcher("href", ".*/documents/filter",
+                "http://localhost/documents/filter")
+            .closeObject()
+            .closeObject()
+            .object("page")
+            .numberValue("number", 0)
+            .numberValue("size", 1)
+            .numberValue("totalElements", 1)
+            .numberValue("totalPages", 1)
+            .closeObject();
     }
 }
