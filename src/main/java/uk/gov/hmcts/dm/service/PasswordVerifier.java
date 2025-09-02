@@ -1,7 +1,8 @@
 package uk.gov.hmcts.dm.service;
 
 import com.google.common.util.concurrent.SimpleTimeLimiter;
-import org.apache.tika.exception.TikaException;
+import org.apache.tika.exception.AccessPermissionException;
+import org.apache.tika.exception.EncryptedDocumentException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
@@ -9,10 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -34,12 +33,13 @@ public class PasswordVerifier {
                     new AutoDetectParser().parse(multipartFile.getInputStream(),
                             new DefaultHandler(), new Metadata(), new ParseContext());
                     return true;
-                } catch (TikaException e) {
+                } catch (EncryptedDocumentException | AccessPermissionException e) {
                     logger.error("Document with Name : {} is password protected. Failed with error msg {}",
                             multipartFile.getOriginalFilename(), e.getMessage());
                     return false;
-                } catch (IOException | SAXException e) {
-                    logger.info("Document with Name : {} could not be parsed", multipartFile.getOriginalFilename());
+                } catch (Exception e) {
+                    logger.info("Document with Name : {} could not be parsed. Failed with error msg {}",
+                            multipartFile.getOriginalFilename(), e.getMessage());
                     return true;
                 }
             };
