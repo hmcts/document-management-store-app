@@ -35,7 +35,8 @@ public class PasswordVerifier {
                             new DefaultHandler(), new Metadata(), new ParseContext());
                     return true;
                 } catch (TikaException e) {
-                    logger.error("Document with Name : {} is password protected", multipartFile.getOriginalFilename());
+                    logger.error("Document with Name : {} is password protected. Failed with error msg {}",
+                            multipartFile.getOriginalFilename(), e.getMessage());
                     return false;
                 } catch (IOException | SAXException e) {
                     logger.info("Document with Name : {} could not be parsed", multipartFile.getOriginalFilename());
