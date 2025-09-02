@@ -15,7 +15,7 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@Provider("dm_store_search_document _provider")
+@Provider("dm_store_search_document_provider")
 public class StoredDocumentSearchControllerProviderTest extends BaseProviderTest {
     private static final String DOCUMENT_ID = "969983aa-52ae-41bd-8cf3-4aabcc120783";
 
