@@ -91,6 +91,17 @@ public class DocumentContentVersion implements RolesAware {
         this.setCreatedBy(userId);
     }
 
+    public DocumentContentVersion(StoredDocument storedDocument,
+                                  MultipartFile file,
+                                  String userId,
+                                  String detectedMimeType) {
+        this.mimeType = detectedMimeType;
+        setOriginalDocumentName(file.getOriginalFilename());
+        this.size = file.getSize();
+        this.storedDocument = storedDocument;
+        this.setCreatedBy(userId);
+    }
+
     public DocumentContentVersion(UUID id,
                                   String mimeType,
                                   String originalDocumentName,

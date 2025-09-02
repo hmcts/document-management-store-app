@@ -15,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -29,17 +28,18 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
-import uk.gov.hmcts.dm.exception.ValidationErrorException;
 import uk.gov.hmcts.dm.hateos.DocumentContentVersionHalResource;
+import uk.gov.hmcts.dm.security.MultipartFileWhiteListValidator;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.FileVerificationResult;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(
@@ -89,8 +89,8 @@ public class DocumentContentVersionController {
     })
     public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
-                                                            BindingResult result) {
-        return addDocumentContentVersion(documentId, command, result);
+                                                                                        HttpServletRequest request) {
+        return addDocumentContentVersion(documentId, command, request);
     }
 
     @PostMapping(value = "/versions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -107,27 +107,36 @@ public class DocumentContentVersionController {
     })
     public ResponseEntity<Object> addDocumentContentVersion(@PathVariable UUID documentId,
                                                             @Valid UploadDocumentVersionCommand command,
-                                                            BindingResult result) {
-        if (result.hasErrors()) {
-            throw new ValidationErrorException(result.getFieldErrors().stream()
-                .map(fe -> String.format("%s - %s", fe.getField(), fe.getCode()))
-                .collect(Collectors.joining(",")));
-        } else {
-            StoredDocument storedDocument = storedDocumentService.findOne(documentId)
-                .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
+                                                            HttpServletRequest request) {
 
-            DocumentContentVersionHalResource resource =
-                new DocumentContentVersionHalResource(
-                    auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
-                );
+        FileVerificationResult verificationResult = (FileVerificationResult) request.getAttribute(
+            MultipartFileWhiteListValidator.VERIFICATION_RESULT_KEY
+        );
 
-            return ResponseEntity
-                .created(resource.getUri())
-                .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
-                .body(resource);
-
+        if (Objects.isNull(verificationResult)) {
+            throw new IllegalStateException("File verification result not found in request attributes.");
         }
+
+        String detectedMimeType = verificationResult.getDetectedMimeType()
+            .orElseThrow(() -> new IllegalStateException("MimeType not found in request after successful validation."));
+
+        StoredDocument storedDocument = storedDocumentService.findOne(documentId)
+            .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
+
+        DocumentContentVersion version = auditedStoredDocumentOperationsService.addDocumentVersion(
+            storedDocument,
+            command.getFile(),
+            detectedMimeType
+        );
+
+        DocumentContentVersionHalResource resource = new DocumentContentVersionHalResource(version);
+
+        return ResponseEntity
+            .created(resource.getUri())
+            .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
+            .body(resource);
     }
+
 
     @GetMapping(value = "/versions/{versionId}")
     @Operation(summary = "Returns a specific version of the content of a Stored Document.",

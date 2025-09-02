@@ -3,9 +3,11 @@ package uk.gov.hmcts.dm.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.connector.ClientAbortException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
@@ -14,6 +16,8 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.service.Constants;
+import uk.gov.hmcts.dm.service.FileContentVerifier;
+import uk.gov.hmcts.dm.service.FileVerificationResult;
 
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
@@ -21,36 +25,92 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class StoredDocumentControllerTests extends ComponentTestBase {
 
+    @MockitoBean
+    private FileContentVerifier fileContentVerifier;
+
     private final UUID id = UUID.randomUUID();
+    private DocumentContentVersion documentContentVersion;
+    private StoredDocument storedDocument;
 
-    private final DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
-        .id(id)
-        .size(1L)
-        .mimeType("text/plain")
-        .originalDocumentName("filename.txt")
-        .storedDocument(StoredDocument.builder().id(id).build())
-        .build();
+    @BeforeEach
+    void setupObjects() {
+        documentContentVersion = DocumentContentVersion.builder()
+            .id(id)
+            .size(1L)
+            .mimeType("text/plain")
+            .originalDocumentName("filename.txt")
+            .storedDocument(StoredDocument.builder().id(id).build())
+            .build();
 
-    private final StoredDocument storedDocument = StoredDocument.builder().id(id)
-        .documentContentVersions(
-            Stream.of(documentContentVersion)
-                .toList()
-        ).build();
+        storedDocument = StoredDocument.builder().id(id)
+            .documentContentVersions(List.of(documentContentVersion))
+            .build();
+    }
+
+
+    @Test
+    void testCreateFromDocuments() throws Exception {
+        MockMultipartFile file1 = new MockMultipartFile("files", "filename.txt",
+            "text/plain", "hello".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile file2 = new MockMultipartFile("files", "another.txt",
+            "text/plain", "hello2".getBytes(StandardCharsets.UTF_8));
+        List<MultipartFile> files = List.of(file1, file2);
+
+        when(fileContentVerifier.verifyContentType(any(MultipartFile.class)))
+            .thenReturn(new FileVerificationResult(true, "text/plain"));
+
+        List<StoredDocument> storedDocuments = files.stream()
+            .map(f -> new StoredDocument())
+            .toList();
+
+        when(this.auditedStoredDocumentOperationsService
+            .createStoredDocuments(any(UploadDocumentsCommand.class), anyMap()))
+            .thenReturn(storedDocuments);
+
+        restActions
+            .withAuthorizedUser("userId")
+            .postDocuments("/documents", files, Classifications.PUBLIC)
+            .andExpect(status().isOk());
+
+        verify(this.auditedStoredDocumentOperationsService)
+            .createStoredDocuments(any(UploadDocumentsCommand.class), anyMap());
+    }
+
+    @Test
+    void testCreateFromDocumentsWithNonWhitelistFile() throws Exception {
+        MockMultipartFile allowedFile = new MockMultipartFile("files", "filename.txt",
+            "text/plain", "hello".getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile disallowedFile = new MockMultipartFile("files", "filename.exe",
+            "application/x-msdownload", "danger".getBytes(StandardCharsets.UTF_8));
+        List<MultipartFile> files = List.of(allowedFile, disallowedFile);
+
+        when(fileContentVerifier.verifyContentType(allowedFile))
+            .thenReturn(new FileVerificationResult(true, "text/plain"));
+        when(fileContentVerifier.verifyContentType(disallowedFile))
+            .thenReturn(new FileVerificationResult(false, "application/x-msdownload"));
+
+        restActions
+            .withAuthorizedUser("userId")
+            .postDocuments("/documents", files, Classifications.PUBLIC)
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.error").value(UploadDocumentsCommand.DISALLOWED_FILE_ERR_MSG));
+    }
+
 
     @Test
     void testGetDocument() throws Exception {
@@ -105,51 +165,6 @@ class StoredDocumentControllerTests extends ComponentTestBase {
             .andExpect(status().isNotFound());
     }
 
-    @Test
-    void testCreateFromDocuments() throws Exception {
-        List<MultipartFile> files = Stream.of(
-            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
-            new MockMultipartFile("files", "filename.txt", "text/plain", "hello2".getBytes(StandardCharsets.UTF_8)))
-            .collect(Collectors.toList());
-
-        List<StoredDocument> storedDocuments = files.stream()
-            .map(f -> new StoredDocument())
-            .toList();
-
-        UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
-        uploadDocumentsCommand.setFiles(files);
-
-        when(this.auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand)).thenReturn(
-            storedDocuments);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .postDocuments("/documents", files, Classifications.PUBLIC)
-            .andExpect(status().isOk());
-
-    }
-
-    @Test
-    void testCreateFromDocumentsWithNonWhitelistFile() throws Exception {
-        List<MultipartFile> files = Stream.of(
-            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
-            new MockMultipartFile("files", "filename.exe", "", "hello2".getBytes(StandardCharsets.UTF_8)))
-            .collect(Collectors.toList());
-
-        List<StoredDocument> storedDocuments = files.stream()
-            .map(f -> new StoredDocument())
-            .toList();
-
-        UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
-        uploadDocumentsCommand.setFiles(files);
-        when(this.auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand)).thenReturn(
-            storedDocuments);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .postDocuments("/documents", files, Classifications.PUBLIC)
-            .andExpect(status().is4xxClientError());
-    }
 
     @Test
     void testGetBinary() throws Exception {
@@ -175,8 +190,8 @@ class StoredDocumentControllerTests extends ComponentTestBase {
         );
 
         doThrow(UncheckedIOException.class).when(auditedDocumentContentVersionOperationsService)
-                .readDocumentContentVersionBinaryFromBlobStore(any(DocumentContentVersion.class),
-                    any(HttpServletRequest.class), any(HttpServletResponse.class));
+            .readDocumentContentVersionBinaryFromBlobStore(any(DocumentContentVersion.class),
+                any(HttpServletRequest.class), any(HttpServletResponse.class));
 
         restActions
             .withAuthorizedUser("userId")
@@ -269,14 +284,14 @@ class StoredDocumentControllerTests extends ComponentTestBase {
     void logsWarningWhenClientAbortExceptionOccurs() throws Exception {
         UncheckedIOException uncheckedIOException = new UncheckedIOException(new ClientAbortException("Broken pipe"));
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(id))
-                .thenReturn(Optional.of(documentContentVersion));
+            .thenReturn(Optional.of(documentContentVersion));
         doThrow(uncheckedIOException).when(auditedDocumentContentVersionOperationsService)
-                .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
+            .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
 
         restActions
-                .withAuthorizedUser("userId")
-                .get("/documents/" + id + "/binary")
-                .andExpect(status().isOk());
+            .withAuthorizedUser("userId")
+            .get("/documents/" + id + "/binary")
+            .andExpect(status().isOk());
 
     }
 }
