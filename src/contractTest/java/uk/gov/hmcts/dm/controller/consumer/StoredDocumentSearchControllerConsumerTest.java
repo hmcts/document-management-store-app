@@ -41,7 +41,7 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
             .headers(Map.of(
                 "Content-Type", "application/vnd.uk.gov.hmcts.dm.document-page.v1+hal+json;charset=UTF-8"
             ))
-            .body(buildPagedResponseDsl())
+            .body(buildPagedResponseDsl("/documents/filter"))
             .toPact(V4Pact.class);
     }
 
@@ -82,7 +82,7 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
                 "Content-Type", "application/vnd.uk.gov.hmcts.dm.document-page.v1+hal+json;charset=UTF-8"
             ))
 
-            .body(buildPagedResponseDsl())
+            .body(buildPagedResponseDsl("/documents/owned"))
             .toPact(V4Pact.class);
     }
 
@@ -103,7 +103,7 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
             .body("_embedded.documents[0]._links.self.href", containsString("/documents/" + DOCUMENT_ID));
     }
 
-    private DslPart buildPagedResponseDsl() {
+    private DslPart buildPagedResponseDsl(String uri) {
         return new PactDslJsonBody()
             .object("_embedded")
             .minArrayLike("documents", 1)
@@ -123,8 +123,8 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
             .closeObject()
             .object("_links")
             .object("self")
-            .stringMatcher("href", ".*/documents/filter",
-                "http://localhost/documents/filter")
+            .stringMatcher("href", ".*" + uri,
+                "http://localhost/" + uri)
             .closeObject()
             .closeObject()
             .object("page")
