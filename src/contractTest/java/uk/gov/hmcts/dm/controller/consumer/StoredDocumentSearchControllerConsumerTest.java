@@ -124,7 +124,7 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
             .object("_links")
             .object("self")
             .stringMatcher("href", ".*" + uri,
-                "http://localhost/" + uri)
+                "http://localhost" + uri)
             .closeObject()
             .closeObject()
             .object("page")
