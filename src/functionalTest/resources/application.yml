@@ -16,7 +16,7 @@ base-urls:
     s2s-token: ${S2S_TOKEN:AAAAAAAAAAAAAAAA}
     ccd-case-disposer-s2s-token: ${CCD_CASE_DISPOSER_S2S_TOKEN:AAAAAAAAAAAAAAAA}
     dm-store: ${TEST_URL:http://localhost:4603}
-    
+
 toggle:
     metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:true}
     documentandmetadatauploadendpoint: ${ENABLE_DOCUMENT_AND_METADATA_UPLOAD:true}

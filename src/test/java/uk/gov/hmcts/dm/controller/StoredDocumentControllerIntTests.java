@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class StoredDocumentControllerTests extends ComponentTestBase {
+class StoredDocumentControllerIntTests extends ComponentTestBase {
 
     @MockitoBean
     private FileContentVerifier fileContentVerifier;
