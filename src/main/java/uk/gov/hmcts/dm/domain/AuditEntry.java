@@ -13,7 +13,7 @@ import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.util.Date;
 import java.util.UUID;
@@ -26,8 +26,8 @@ import java.util.UUID;
 public abstract class AuditEntry {
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    @GeneratedValue
+    @UuidGenerator
     @Getter
     @Setter
     private UUID id;
