@@ -182,7 +182,8 @@ class StoredDocumentControllerTest {
             .thenReturn(Optional.of(dcv));
         when(toggleConfiguration.isChunking()).thenReturn(false);
 
-        ResponseEntity<Void> result = storedDocumentController.getBinary(documentId, response, Collections.emptyMap(), request);
+        ResponseEntity<Void> result = storedDocumentController
+            .getBinary(documentId, response, Collections.emptyMap(), request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("text/plain", response.getHeader(HttpHeaders.CONTENT_TYPE));
@@ -203,7 +204,8 @@ class StoredDocumentControllerTest {
             .thenReturn(Optional.of(dcv));
         when(toggleConfiguration.isChunking()).thenReturn(true);
 
-        ResponseEntity<Void> result = storedDocumentController.getBinary(documentId, response, Collections.emptyMap(), request);
+        ResponseEntity<Void> result = storedDocumentController
+            .getBinary(documentId, response, Collections.emptyMap(), request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("bytes", response.getHeader("Accept-Ranges"));
@@ -232,7 +234,7 @@ class StoredDocumentControllerTest {
     @Test
     void testGetBinaryHandlesIoExceptionWithChunking() throws IOException {
         DocumentContentVersion dcv = createDocumentContentVersion();
-        MockHttpServletResponse response = mock(MockHttpServletResponse.class); // Mock to verify reset
+        MockHttpServletResponse response = mock(MockHttpServletResponse.class);
         MockHttpServletRequest request = new MockHttpServletRequest();
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId))
@@ -242,7 +244,8 @@ class StoredDocumentControllerTest {
             .when(auditedDocumentContentVersionOperationsService)
             .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
 
-        ResponseEntity<Void> result = storedDocumentController.getBinary(documentId, response, Collections.emptyMap(), request);
+        ResponseEntity<Void> result = storedDocumentController
+            .getBinary(documentId, response, Collections.emptyMap(), request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         verify(response).reset();
@@ -251,7 +254,7 @@ class StoredDocumentControllerTest {
     @Test
     void testGetBinaryHandlesIoExceptionWithoutChunking() throws IOException {
         DocumentContentVersion dcv = createDocumentContentVersion();
-        MockHttpServletResponse response = mock(MockHttpServletResponse.class); // Mock to verify reset
+        MockHttpServletResponse response = mock(MockHttpServletResponse.class);
         MockHttpServletRequest request = new MockHttpServletRequest();
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId))
@@ -261,7 +264,8 @@ class StoredDocumentControllerTest {
             .when(auditedDocumentContentVersionOperationsService)
             .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
 
-        ResponseEntity<Void> result = storedDocumentController.getBinary(documentId, response, Collections.emptyMap(), request);
+        ResponseEntity<Void> result = storedDocumentController
+            .getBinary(documentId, response, Collections.emptyMap(), request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         verify(response, never()).reset();
@@ -270,7 +274,7 @@ class StoredDocumentControllerTest {
     @Test
     void testGetBinaryHandlesClientAbortException() throws IOException {
         DocumentContentVersion dcv = createDocumentContentVersion();
-        MockHttpServletResponse response = mock(MockHttpServletResponse.class); // Mock to verify reset
+        MockHttpServletResponse response = mock(MockHttpServletResponse.class);
         MockHttpServletRequest request = new MockHttpServletRequest();
 
         UncheckedIOException uncheckedIoException = new UncheckedIOException(new ClientAbortException("Client closed"));
@@ -282,7 +286,8 @@ class StoredDocumentControllerTest {
             .when(auditedDocumentContentVersionOperationsService)
             .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
 
-        ResponseEntity<Void> result = storedDocumentController.getBinary(documentId, response, Collections.emptyMap(), request);
+        ResponseEntity<Void> result = storedDocumentController
+            .getBinary(documentId, response, Collections.emptyMap(), request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         verify(response).reset();

@@ -97,7 +97,8 @@ class DocumentContentVersionControllerTest {
         request.setAttribute(MultipartFileWhiteListValidator.VERIFICATION_RESULT_KEY, result);
 
         when(storedDocumentService.findOne(documentId)).thenReturn(Optional.of(storedDocument));
-        when(auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, file, "text/plain"))
+        when(auditedStoredDocumentOperationsService
+            .addDocumentVersion(storedDocument, file, "text/plain"))
             .thenReturn(documentContentVersion);
 
         ResponseEntity<Object> response = controller.addDocumentContentVersion(documentId, command, request);
@@ -117,10 +118,12 @@ class DocumentContentVersionControllerTest {
         request.setAttribute(MultipartFileWhiteListValidator.VERIFICATION_RESULT_KEY, result);
 
         when(storedDocumentService.findOne(documentId)).thenReturn(Optional.of(storedDocument));
-        when(auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, file, "text/plain"))
+        when(auditedStoredDocumentOperationsService
+            .addDocumentVersion(storedDocument, file, "text/plain"))
             .thenReturn(documentContentVersion);
 
-        ResponseEntity<Object> response = controller.addDocumentContentVersionForVersionsMappingNotPresent(documentId, command, request);
+        ResponseEntity<Object> response = controller
+            .addDocumentContentVersionForVersionsMappingNotPresent(documentId, command, request);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
@@ -135,7 +138,7 @@ class DocumentContentVersionControllerTest {
 
     @Test
     void testAddDocumentContentVersionThrowsWhenMimeTypeIsMissing() {
-        FileVerificationResult result = new FileVerificationResult(true, null); // MimeType is empty optional
+        FileVerificationResult result = new FileVerificationResult(true, null);
         request.setAttribute(MultipartFileWhiteListValidator.VERIFICATION_RESULT_KEY, result);
         UploadDocumentVersionCommand command = new UploadDocumentVersionCommand();
         assertThrows(IllegalStateException.class,
@@ -171,7 +174,8 @@ class DocumentContentVersionControllerTest {
 
         when(documentContentVersionService.findById(versionId)).thenReturn(Optional.of(documentContentVersion));
 
-        ResponseEntity<Object> result = controller.getDocumentContentVersionDocumentBinary(documentId, versionId, request, response);
+        ResponseEntity<Object> result = controller
+            .getDocumentContentVersionDocumentBinary(documentId, versionId, request, response);
 
         assertNull(result);
 
