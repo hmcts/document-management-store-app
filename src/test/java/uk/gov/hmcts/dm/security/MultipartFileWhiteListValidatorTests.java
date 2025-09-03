@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,6 +64,23 @@ class MultipartFileWhiteListValidatorTests {
 
         assertFalse(isValid, "Validation should fail for an invalid file");
         verify(request).setAttribute(MultipartFileWhiteListValidator.VERIFICATION_RESULT_KEY, failureResult);
+    }
+
+    @Test
+    void testIsValidWhenRequestAttributesAreNull() {
+        RequestContextHolder.setRequestAttributes(null);
+
+        MultipartFile file = mock(MultipartFile.class);
+        FileVerificationResult successResult = new FileVerificationResult(true, "application/pdf");
+        when(fileContentVerifier.verifyContentType(file)).thenReturn(successResult);
+
+        boolean isValid = multipartFileWhiteListValidator.isValid(file, null);
+
+        assertTrue(isValid, "Validation should still succeed based on the file's content");
+
+        verify(fileContentVerifier).verifyContentType(file);
+
+        verifyNoInteractions(request);
     }
 
 }

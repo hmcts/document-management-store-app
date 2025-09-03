@@ -114,4 +114,23 @@ class MultipartFileListWhiteListValidatorTest {
         verify(request, never()).setAttribute(anyString(), any());
     }
 
+    @Test
+    void testIsValidWhenRequestAttributesAreNull() {
+        RequestContextHolder.setRequestAttributes(null);
+
+        MultipartFile file = mock(MultipartFile.class);
+        List<MultipartFile> files = List.of(file);
+
+        FileVerificationResult successResult = new FileVerificationResult(true, "application/pdf");
+        when(fileContentVerifier.verifyContentType(file)).thenReturn(successResult);
+
+        boolean isValid = multipartFileListWhiteListValidator.isValid(files, null);
+
+        assertTrue(isValid, "Validation should still succeed based on file content");
+
+        verify(fileContentVerifier).verifyContentType(file);
+
+        verifyNoInteractions(request);
+    }
+
 }
