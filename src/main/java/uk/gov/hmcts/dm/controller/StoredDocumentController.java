@@ -8,20 +8,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -30,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
@@ -37,16 +34,20 @@ import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
+import uk.gov.hmcts.dm.security.MultipartFileListWhiteListValidator;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.FileVerificationResult;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -69,8 +70,6 @@ public class StoredDocumentController {
 
     private final AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
-    private MethodParameter uploadDocumentsCommandMethodParameter;
-
     private final ToggleConfiguration toggleConfiguration;
 
     public StoredDocumentController(DocumentContentVersionService documentContentVersionService,
@@ -82,15 +81,6 @@ public class StoredDocumentController {
         this.auditedStoredDocumentOperationsService = auditedStoredDocumentOperationsService;
         this.auditedDocumentContentVersionOperationsService = auditedDocumentContentVersionOperationsService;
         this.toggleConfiguration = toggleConfiguration;
-    }
-
-    @PostConstruct
-    void init() throws NoSuchMethodException {
-        uploadDocumentsCommandMethodParameter = new MethodParameter(
-                StoredDocumentController.class.getMethod(
-                        "createFrom",
-                        UploadDocumentsCommand.class,
-                        BindingResult.class), 0);
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -107,19 +97,36 @@ public class StoredDocumentController {
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> createFrom(
-            @Valid UploadDocumentsCommand uploadDocumentsCommand,
-            BindingResult result) throws MethodArgumentNotValidException {
+        @Valid UploadDocumentsCommand uploadDocumentsCommand,
+        HttpServletRequest request) {
 
-        if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
-        } else {
-            List<StoredDocument> storedDocuments =
-                    auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
-            return ResponseEntity
-                    .ok()
-                    .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
-                    .body(StoredDocumentHalResourceCollection.of(storedDocuments));
+        @SuppressWarnings("unchecked")
+        Map<MultipartFile, FileVerificationResult> verificationResults =
+            (Map<MultipartFile, FileVerificationResult>) request.getAttribute(
+                MultipartFileListWhiteListValidator.VERIFICATION_RESULTS_MAP_KEY
+            );
+
+        if (Objects.isNull(verificationResults)) {
+            throw new IllegalStateException("File verification results not found in request attributes.");
         }
+
+        Map<MultipartFile, String> mimeTypes = verificationResults.entrySet().stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> entry.getValue().getDetectedMimeType()
+                    .orElseThrow(() -> new IllegalStateException(
+                        "MimeType not found for " + entry.getKey().getOriginalFilename()
+                            + " after successful validation.")
+                    )
+            ));
+
+        List<StoredDocument> storedDocuments =
+            auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand, mimeTypes);
+
+        return ResponseEntity
+            .ok()
+            .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
+            .body(StoredDocumentHalResourceCollection.of(storedDocuments));
     }
 
     @GetMapping(value = "{documentId}")
