@@ -10,6 +10,7 @@ import uk.gov.hmcts.dm.security.Classifications;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -85,5 +86,29 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
         }).when(auditedDocumentContentVersionOperationsService)
             .readDocumentContentVersionBinaryFromBlobStore(eq(documentContentVersion), any(), any());
     }
+
+
+    @State("Can create Stored Documents from multipart upload")
+    public void canCreateStoredDocumentsFromMultipartUpload() {
+        StoredDocument doc1 = new StoredDocument();
+        doc1.setId(UUID.fromString("11111111-1111-1111-1111-111111111111"));
+        doc1.setClassification(Classifications.PUBLIC);
+        doc1.setCreatedBy("test-user-1");
+        doc1.setCreatedOn(new Date());
+        doc1.setModifiedOn(new Date());
+        doc1.setRoles(Set.of("citizen"));
+
+        StoredDocument doc2 = new StoredDocument();
+        doc2.setId(UUID.fromString("22222222-2222-2222-2222-222222222222"));
+        doc2.setClassification(Classifications.PUBLIC);
+        doc2.setCreatedBy("test-user-2");
+        doc2.setCreatedOn(new Date());
+        doc2.setModifiedOn(new Date());
+        doc2.setRoles(Set.of("citizen"));
+
+        when(auditedStoredDocumentOperationsService.createStoredDocuments(any()))
+            .thenReturn(List.of(doc1, doc2));
+    }
+
 
 }

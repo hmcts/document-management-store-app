@@ -136,4 +136,77 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
         assertThat(response.getHeader("data-source"))
             .isEqualTo("contentURI");
     }
+
+
+    @Pact(provider = PROVIDER, consumer = CONSUMER)
+    public V4Pact uploadDocumentsPact(PactDslWithProvider builder) {
+        return builder
+            .given("Can create Stored Documents from multipart upload")
+            .uponReceiving("POST request to upload documents")
+            .path("/documents")
+            .method("POST")
+            .headers(Map.of(
+                "ServiceAuthorization", "Bearer some-s2s-token",
+                "Content-Type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
+                "Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
+            ))
+            .willRespondWith()
+            .status(200)
+            .headers(Map.of(
+                "Content-Type", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
+            ))
+            .body(buildUploadResponseDsl())
+            .toPact(V4Pact.class);
+    }
+
+    @Test
+    @PactTestFor(pactMethod = "uploadDocumentsPact", providerName = PROVIDER)
+    void testUploadDocuments(MockServer mockServer) {
+        given()
+            .baseUri(mockServer.getUrl())
+            .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
+            .header("ServiceAuthorization", "Bearer some-s2s-token")
+            .multiPart("files", "test-file.txt", "Hello World".getBytes())
+            .multiPart("classification", "PUBLIC")
+            .multiPart("roles", "citizen")
+            .when()
+            .post("/documents")
+            .then()
+            .log().all()
+            .statusCode(200)
+            .body("_embedded.storedDocumentHalResources[0].classification", equalTo("PUBLIC"))
+            .body("_embedded.storedDocumentHalResources[0].createdBy", equalTo("test-user-1"))
+            .body("_embedded.storedDocumentHalResources[1].classification", equalTo("PUBLIC"))
+            .body("_embedded.storedDocumentHalResources[1].createdBy", equalTo("test-user-2"));
+    }
+
+    private DslPart buildUploadResponseDsl() {
+        return newJsonBody(root -> {
+            root.object("_embedded", embedded -> {
+                embedded.array("storedDocumentHalResources", docs -> {
+                    // Document 1
+                    docs.object(doc -> {
+                        doc.stringType("classification", "PUBLIC");
+                        doc.stringType("createdBy", "test-user-1");
+                        doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z", "2024-01-01T12:00:00Z");
+                        doc.object("_links", links -> {
+                            links.object("self", self ->
+                                self.stringType("href", "http://localhost/documents/11111111-1111-1111-1111-111111111111"));
+                        });
+                    });
+                    // Document 2
+                    docs.object(doc -> {
+                        doc.stringType("classification", "PUBLIC");
+                        doc.stringType("createdBy", "test-user-2");
+                        doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z", "2024-01-01T12:00:00Z");
+                        doc.object("_links", links -> {
+                            links.object("self", self ->
+                                self.stringType("href", "http://localhost/documents/22222222-2222-2222-2222-222222222222"));
+                        });
+                    });
+                });
+            });
+        }).build();
+    }
+
 }
