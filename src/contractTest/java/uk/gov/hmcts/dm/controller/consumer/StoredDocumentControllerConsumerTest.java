@@ -145,7 +145,8 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .path("/documents")
             .method("POST")
             .matchHeader("ServiceAuthorization", "Bearer .*", "Bearer some-s2s-token")
-            .matchHeader("Content-Type", "multipart/form-data; boundary=.*", "multipart/form-data; boundary=boundary")
+            // Match Content-Type with regex, ignoring the actual boundary
+            .matchHeader("Content-Type", "multipart/form-data; boundary=.*")
             .headers(Map.of(
                 "Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
             ))
@@ -165,9 +166,11 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .baseUri(mockServer.getUrl())
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
             .header("ServiceAuthorization", "Bearer some-s2s-token")
-            // Explicit content type for the file part!
+            // Must match DTO: "files"
             .multiPart("files", "test-file.txt", "Hello World".getBytes(), "text/plain")
+            // Must match DTO: "classification" and be one of PUBLIC/PRIVATE/RESTRICTED
             .multiPart("classification", "PUBLIC")
+            // Must match DTO: "roles"
             .multiPart("roles", "citizen")
             .when()
             .post("/documents")
@@ -179,6 +182,7 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .body("_embedded.storedDocumentHalResources[1].classification", equalTo("PUBLIC"))
             .body("_embedded.storedDocumentHalResources[1].createdBy", equalTo("test-user-2"));
     }
+
 
     private DslPart buildUploadResponseDsl() {
         return newJsonBody(root -> {
@@ -208,5 +212,4 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             });
         }).build();
     }
-
 }
