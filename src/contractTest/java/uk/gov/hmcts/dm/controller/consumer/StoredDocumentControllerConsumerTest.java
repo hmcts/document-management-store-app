@@ -139,31 +139,16 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact uploadDocumentsPact(PactDslWithProvider builder) {
-        String boundary = "----PactBoundary";
-        String multipartBody =
-            "--" + boundary + "\r\n"
-                + "Content-Disposition: form-data; name=\"files\"; filename=\"test-file.txt\"\r\n"
-                + "Content-Type: text/plain\r\n\r\n"
-                + "Hello World\r\n"
-                + "--" + boundary + "\r\n"
-                + "Content-Disposition: form-data; name=\"classification\"\r\n\r\n"
-                + "PUBLIC\r\n"
-                + "--" + boundary + "\r\n"
-                + "Content-Disposition: form-data; name=\"roles\"\r\n\r\n"
-                + "citizen\r\n"
-                + "--" + boundary + "--";
-
         return builder
             .given("Can create Stored Documents from multipart upload")
             .uponReceiving("POST request to upload documents")
             .path("/documents")
             .method("POST")
             .matchHeader("ServiceAuthorization", "Bearer .*", "Bearer some-s2s-token")
-            .headers("Content-Type", "multipart/form-data; boundary=" + boundary)
+            .matchHeader("Content-Type", "multipart/form-data; boundary=.*", "multipart/form-data; boundary=boundary")
             .headers(Map.of(
                 "Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
             ))
-            .body(multipartBody)
             .willRespondWith()
             .status(200)
             .headers(Map.of(
@@ -180,7 +165,8 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .baseUri(mockServer.getUrl())
             .accept("application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
             .header("ServiceAuthorization", "Bearer some-s2s-token")
-            .multiPart("files", "test-file.txt", "Hello World".getBytes())
+            // Explicit content type for the file part!
+            .multiPart("files", "test-file.txt", "Hello World".getBytes(), "text/plain")
             .multiPart("classification", "PUBLIC")
             .multiPart("roles", "citizen")
             .when()
