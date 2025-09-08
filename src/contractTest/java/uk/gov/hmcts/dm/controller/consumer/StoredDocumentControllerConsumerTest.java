@@ -145,8 +145,7 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .path("/documents")
             .method("POST")
             .matchHeader("ServiceAuthorization", "Bearer .*", "Bearer some-s2s-token")
-            // Match Content-Type with regex, ignoring the actual boundary
-            .matchHeader("Content-Type", "multipart/form-data; boundary=.*")
+            .matchHeader("Content-Type", "multipart/form-data;.*", "multipart/form-data; boundary=----PactBoundary")
             .headers(Map.of(
                 "Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
             ))
@@ -158,6 +157,7 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .body(buildUploadResponseDsl())
             .toPact(V4Pact.class);
     }
+
 
     @Test
     @PactTestFor(pactMethod = "uploadDocumentsPact", providerName = PROVIDER)
