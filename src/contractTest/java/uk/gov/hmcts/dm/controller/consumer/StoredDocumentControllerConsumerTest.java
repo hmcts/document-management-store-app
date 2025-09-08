@@ -141,17 +141,17 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
     public V4Pact uploadDocumentsPact(PactDslWithProvider builder) {
         String boundary = "----PactBoundary";
         String multipartBody =
-            "--" + boundary + "\r\n" +
-                "Content-Disposition: form-data; name=\"files\"; filename=\"test-file.txt\"\r\n" +
-                "Content-Type: text/plain\r\n\r\n" +
-                "Hello World\r\n" +
-                "--" + boundary + "\r\n" +
-                "Content-Disposition: form-data; name=\"classification\"\r\n\r\n" +
-                "PUBLIC\r\n" +
-                "--" + boundary + "\r\n" +
-                "Content-Disposition: form-data; name=\"roles\"\r\n\r\n" +
-                "citizen\r\n" +
-                "--" + boundary + "--";
+            "--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"files\"; filename=\"test-file.txt\"\r\n"
+                + "Content-Type: text/plain\r\n\r\n"
+                + "Hello World\r\n"
+                + "--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"classification\"\r\n\r\n"
+                + "PUBLIC\r\n"
+                + "--" + boundary + "\r\n"
+                + "Content-Disposition: form-data; name=\"roles\"\r\n\r\n"
+                + "citizen\r\n"
+                + "--" + boundary + "--";
 
         return builder
             .given("Can create Stored Documents from multipart upload")
