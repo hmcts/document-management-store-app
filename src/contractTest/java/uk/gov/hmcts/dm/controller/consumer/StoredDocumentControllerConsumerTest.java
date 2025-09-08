@@ -145,9 +145,12 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .uponReceiving("POST request to upload documents")
             .path("/documents")
             .method("POST")
+            .matchHeader("ServiceAuthorization", "Bearer .*", "Bearer some-s2s-token")
+            .matchHeader(
+                "Content-Type",
+                "multipart/form-data; boundary=.*"
+            )
             .headers(Map.of(
-                "ServiceAuthorization", "Bearer some-s2s-token",
-                "Content-Type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW",
                 "Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
             ))
             .willRespondWith()
