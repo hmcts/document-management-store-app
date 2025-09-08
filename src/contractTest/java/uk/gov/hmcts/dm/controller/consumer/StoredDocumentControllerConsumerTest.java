@@ -165,7 +165,9 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .method("POST")
             .matchHeader("ServiceAuthorization", "Bearer .*", "Bearer some-s2s-token")
             // 3. The Content-Type header MUST include the boundary you defined.
-            .matchHeader("Content-Type", "multipart/form-data; boundary=.*", "multipart/form-data; boundary=" + boundary)
+            .matchHeader("Content-Type",
+                "multipart/form-data; boundary=.*",
+                "multipart/form-data; boundary=" + boundary)
             .headers(Map.of(
                 "Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
             ))
