@@ -2,6 +2,8 @@ package uk.gov.hmcts.dm.controller.consumer;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.DslPart;
+import au.com.dius.pact.consumer.dsl.MultipartBuilder;
+import au.com.dius.pact.consumer.dsl.PactBuilder;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.V4Pact;
@@ -138,48 +140,31 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
     }
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
-    public V4Pact uploadDocumentsPact(PactDslWithProvider builder) {
-        // 1. Define the boundary string. It can be any unique string.
-        String boundary = "----PactBoundary";
-
-        // NOTE: The line endings (\r\n) are very important and must be correct.
-        String multipartBody = "--" + boundary + "\r\n"
-            + "Content-Disposition: form-data; name=\"files\"; filename=\"test-file.txt\"\r\n"
-            + "Content-Type: text/plain\r\n"
-            + "\r\n"
-            + "Hello World\r\n"
-            + "--" + boundary + "\r\n"
-            + "Content-Disposition: form-data; name=\"classification\"\r\n"
-            + "\r\n"
-            + "PUBLIC\r\n"
-            + "--" + boundary + "\r\n"
-            + "Content-Disposition: form-data; name=\"roles\"\r\n"
-            + "\r\n"
-            + "citizen\r\n"
-            + "--" + boundary + "--\r\n";
-
+    public V4Pact uploadDocumentsPact(PactBuilder builder) {
         return builder
             .given("Can create Stored Documents from multipart upload")
-            .uponReceiving("POST request to upload documents")
-            .path("/documents")
-            .method("POST")
-            .matchHeader("ServiceAuthorization", "Bearer .*", "Bearer some-s2s-token")
-            // 3. The Content-Type header MUST include the boundary you defined.
-            .matchHeader("Content-Type",
-                "multipart/form-data; boundary=.*",
-                "multipart/form-data; boundary=" + boundary)
-            .headers(Map.of(
-                "Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
-            ))
-            // 4. Use the .body() method with the manually constructed string.
-            .body(multipartBody)
-            .willRespondWith()
-            .status(200)
-            .headers(Map.of(
-                "Content-Type", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8"
-            ))
-            .body(buildUploadResponseDsl())
-            .toPact(V4Pact.class);
+
+            .expectsToReceiveHttpInteraction("POST request to upload documents", http -> http
+                .withRequest(request -> request  // This is the HttpRequestBuilder
+                    .path("/documents")
+                    .method("POST")
+                    .header("ServiceAuthorization", "Bearer some-s2s-token")
+                    .header("Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
+                    .body(new MultipartBuilder()
+                        .binaryPart("files", "test-file.txt", "Hello World".getBytes(), "text/plain")
+                        .textPart("classification", "PUBLIC")
+                        .textPart("roles", "citizen")
+                    )
+                ) // End of .withRequest() lambda
+
+                .willRespondWith(response -> response // This is the HttpResponseBuilder
+                    .status(200)
+                    .header("Content-Type",
+                        "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
+                    .body(buildUploadResponseDsl())
+                ) // End of .willRespondWith() lambda
+            ) // End of .expectsToReceiveHttpInteraction() lambda
+            .toPact();
     }
 
     @Test

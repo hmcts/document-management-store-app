@@ -87,7 +87,6 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
             .readDocumentContentVersionBinaryFromBlobStore(eq(documentContentVersion), any(), any());
     }
 
-
     @State("Can create Stored Documents from multipart upload")
     public void canCreateStoredDocumentsFromMultipartUpload() {
         StoredDocument doc1 = new StoredDocument();
@@ -109,6 +108,4 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
         when(auditedStoredDocumentOperationsService.createStoredDocuments(any()))
             .thenReturn(List.of(doc1, doc2));
     }
-
-
 }
