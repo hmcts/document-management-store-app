@@ -16,9 +16,24 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
+import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
+import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.domain.StoredDocument;
+import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
+import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.security.Classifications;
+import uk.gov.hmcts.dm.service.AuditEntryService;
+import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
+import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
+import uk.gov.hmcts.dm.service.BlobStorageReadService;
+import uk.gov.hmcts.dm.service.BlobStorageWriteService;
+import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.ScheduledTaskRunner;
+import uk.gov.hmcts.dm.service.SearchService;
+import uk.gov.hmcts.dm.service.SecurityUtilService;
+import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator; // Import the validator
 
 import java.util.List;
@@ -40,14 +55,56 @@ public class StoredDocumentMultipartProviderTest {
     @LocalServerPort
     private int port;
 
-    // This is the key dependency used by your DmServiceAuthFilter
+    @MockitoBean
+    protected DmServiceAuthFilter filter;
+
+    @MockitoBean
+    protected ToggleConfiguration toggleConfiguration;
+
+    @MockitoBean
+    protected StoredDocumentService storedDocumentService;
+
+    @MockitoBean
+    protected StoredDocumentRepository storedDocumentRepository;
+
+    @MockitoBean
+    protected DocumentContentVersionService documentContentVersionService;
+
+    @MockitoBean
+    protected AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
+
+    @MockitoBean
+    protected AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
+
+    @MockitoBean
+    protected BlobStorageWriteService blobStorageWriteService;
+
+    @MockitoBean
+    protected BlobStorageDeleteService blobStorageDeleteService;
+
+    @MockitoBean
+    protected BlobStorageReadService blobStorageReadService;
+
+    @MockitoBean
+    protected SearchService searchService;
+
+    @MockitoBean
+    protected SecurityUtilService securityUtilService;
+
+    @MockitoBean
+    protected AuditEntryService auditEntryService;
+
+    @MockitoBean
+    protected ScheduledTaskRunner scheduledTaskRunner;
+
+    @MockitoBean
+    protected ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
+
+    @MockitoBean
+    protected TestController testController;
+
     @MockitoBean
     private AuthTokenValidator authTokenValidator;
-
-    // We still need to mock the service used by the controller
-    @MockitoBean
-    private AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
-
 
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
