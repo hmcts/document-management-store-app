@@ -37,8 +37,6 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
                 )
                 .willRespondWith(response -> response
                     .status(200)
-                    .header("Content-Type",
-                        "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
                     .body(buildUploadResponseDsl())
                 )
             )
