@@ -30,7 +30,7 @@ public class PactProviderTestConfig {
                 halConverter.setSupportedMediaTypes(List.of(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE));
 
                 // Add our custom converter to the list used by the application during the test
-                converters.add(halConverter);
+                converters.add(0, halConverter);
             }
         };
     }
