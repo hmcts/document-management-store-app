@@ -51,8 +51,10 @@ public class StoredDocumentMultipartProviderTest {
 
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {
-        // ... (your existing selector logic)
-        return new SelectorBuilder().mainBranch();
+        return new SelectorBuilder()
+            .matchingBranch()
+            .mainBranch()
+            .deployedOrReleased();
     }
 
     @BeforeEach
