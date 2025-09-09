@@ -145,25 +145,24 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .given("Can create Stored Documents from multipart upload")
 
             .expectsToReceiveHttpInteraction("POST request to upload documents", http -> http
-                .withRequest(request -> request  // This is the HttpRequestBuilder
+                .withRequest(request -> request
                     .path("/documents")
                     .method("POST")
                     .header("ServiceAuthorization", "Bearer some-s2s-token")
                     .header("Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
                     .body(new MultipartBuilder()
                         .binaryPart("files", "test-file.txt", "Hello World".getBytes(), "text/plain")
-                        .textPart("classification", "PUBLIC")
-                        .textPart("roles", "citizen")
+                        .textPart("classification", "PUBLIC", "text/plain")
+                        .textPart("roles", "citizen", "text/plain")
                     )
-                ) // End of .withRequest() lambda
-
-                .willRespondWith(response -> response // This is the HttpResponseBuilder
+                )
+                .willRespondWith(response -> response
                     .status(200)
                     .header("Content-Type",
                         "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
                     .body(buildUploadResponseDsl())
-                ) // End of .willRespondWith() lambda
-            ) // End of .expectsToReceiveHttpInteraction() lambda
+                )
+            )
             .toPact();
     }
 
