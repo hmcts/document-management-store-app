@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -20,7 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,15 +82,6 @@ public class StoredDocumentController {
         this.toggleConfiguration = toggleConfiguration;
     }
 
-    @PostConstruct
-    void init() throws NoSuchMethodException {
-        uploadDocumentsCommandMethodParameter = new MethodParameter(
-                StoredDocumentController.class.getMethod(
-                        "createFrom",
-                        UploadDocumentsCommand.class,
-                        BindingResult.class), 0);
-    }
-
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Creates a list of Stored Documents by uploading a list of binary/text files.",
         parameters = {
@@ -106,20 +95,13 @@ public class StoredDocumentController {
         @ApiResponse(responseCode = "405", description = "Validation exception"),
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
-    public ResponseEntity<Object> createFrom(
-            @Valid UploadDocumentsCommand uploadDocumentsCommand,
-            BindingResult result) throws MethodArgumentNotValidException {
-
-        if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
-        } else {
-            List<StoredDocument> storedDocuments =
-                    auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
-            return ResponseEntity
-                    .ok()
-                    .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
-                    .body(StoredDocumentHalResourceCollection.of(storedDocuments));
-        }
+    public ResponseEntity<Object> createFrom(@Valid UploadDocumentsCommand uploadDocumentsCommand) {
+        List<StoredDocument> storedDocuments =
+            auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
+        return ResponseEntity
+            .ok()
+            .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
+            .body(StoredDocumentHalResourceCollection.of(storedDocuments));
     }
 
     @GetMapping(value = "{documentId}")
