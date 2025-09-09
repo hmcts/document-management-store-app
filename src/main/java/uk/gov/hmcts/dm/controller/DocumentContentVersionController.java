@@ -85,7 +85,7 @@ public class DocumentContentVersionController {
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
-                                                                                        @Valid UploadDocumentVersionCommand command) {
+                                                            @Valid UploadDocumentVersionCommand command) {
         return addDocumentContentVersion(documentId, command);
     }
 
