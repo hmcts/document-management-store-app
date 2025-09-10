@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockReset;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.WebApplicationContext;
@@ -40,7 +41,9 @@ import uk.gov.hmcts.dm.service.SecurityUtilService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator; // Import the validator
 
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -84,7 +87,7 @@ public class StoredDocumentMultipartProviderTest {
     @MockitoBean
     protected AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
-    @MockitoBean
+    @MockitoBean(reset = MockReset.NONE)
     protected AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
 
     @MockitoBean
@@ -145,23 +148,24 @@ public class StoredDocumentMultipartProviderTest {
 
     @State("Can create Stored Documents from multipart upload")
     public void canCreateStoredDocumentsFromMultipartUpload() {
-        // 1. Mock the AuthTokenValidator
-        // It needs to return a service name that would be in your "authorisedServices" list.
         when(authTokenValidator.getServiceName("Bearer some-s2s-token"))
             .thenReturn("some_authorised_service");
 
-        // 2. Mock the service that provides the data for the controller's response
         StoredDocument doc1 = new StoredDocument();
         doc1.setId(UUID.fromString("11111111-1111-1111-1111-111111111111"));
         doc1.setClassification(Classifications.PUBLIC);
         doc1.setCreatedBy("test-user-1");
-        // ... set other doc1 properties
+        doc1.setCreatedOn(new Date());
+        doc1.setModifiedOn(new Date());
+        doc1.setRoles(Set.of("citizen"));
 
         StoredDocument doc2 = new StoredDocument();
         doc2.setId(UUID.fromString("22222222-2222-2222-2222-222222222222"));
         doc2.setClassification(Classifications.PUBLIC);
         doc2.setCreatedBy("test-user-2");
-        // ... set other doc2 properties
+        doc2.setCreatedOn(new Date());
+        doc2.setModifiedOn(new Date());
+        doc2.setRoles(Set.of("citizen"));
 
         when(auditedStoredDocumentOperationsService.createStoredDocuments(any()))
             .thenReturn(List.of(doc1, doc2));
