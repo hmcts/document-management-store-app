@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.hateos;
 
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.RepresentationModel;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.List;
