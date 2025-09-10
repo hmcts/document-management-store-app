@@ -35,6 +35,12 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
                         .textPart("roles", "citizen", "text/plain")
                     )
                 )
+                .willRespondWith(response -> response
+                    .status(200)
+                    .header("Content-Type",
+                        "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
+                    .body("{}", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
+                )
             )
             .toPact();
     }
