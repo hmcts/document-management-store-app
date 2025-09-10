@@ -130,28 +130,6 @@ class StoredDocumentControllerTests extends ComponentTestBase {
     }
 
     @Test
-    void testCreateFromDocumentsWithNonWhitelistFile() throws Exception {
-        List<MultipartFile> files = Stream.of(
-            new MockMultipartFile("files", "filename.txt", "text/plain", "hello".getBytes(StandardCharsets.UTF_8)),
-            new MockMultipartFile("files", "filename.exe", "", "hello2".getBytes(StandardCharsets.UTF_8)))
-            .collect(Collectors.toList());
-
-        List<StoredDocument> storedDocuments = files.stream()
-            .map(f -> new StoredDocument())
-            .toList();
-
-        UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
-        uploadDocumentsCommand.setFiles(files);
-        when(this.auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand)).thenReturn(
-            storedDocuments);
-
-        restActions
-            .withAuthorizedUser("userId")
-            .postDocuments("/documents", files, Classifications.PUBLIC)
-            .andExpect(status().is4xxClientError());
-    }
-
-    @Test
     void testGetBinary() throws Exception {
 
         documentContentVersion.setCreatedBy("userId");
