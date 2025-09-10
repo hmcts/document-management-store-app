@@ -113,7 +113,7 @@ public class StoredDocumentController {
             @Valid UploadDocumentsCommand uploadDocumentsCommand,
             BindingResult result) throws MethodArgumentNotValidException {
 
-        System.out.println("request received to upload documents");
+        logger.info("request received to upload documents");
         if (result.hasErrors()) {
             throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
