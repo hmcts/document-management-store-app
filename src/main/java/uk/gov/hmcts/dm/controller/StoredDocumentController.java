@@ -115,13 +115,12 @@ public class StoredDocumentController {
 
         logger.info("request received to upload documents");
 
-            List<StoredDocument> storedDocuments =
-                    auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
+        List<StoredDocument> storedDocuments =
+            auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
         return ResponseEntity
             .ok()
             .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
             .body(StoredDocumentHalResourceCollection.of(storedDocuments));
-
     }
 
     @GetMapping(value = "{documentId}")
