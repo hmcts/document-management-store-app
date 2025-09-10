@@ -35,9 +35,6 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
                         .textPart("roles", "citizen", "text/plain")
                     )
                 )
-                .willRespondWith(response -> response
-                    .status(200)
-                )
             )
             .toPact();
     }
