@@ -1,7 +1,6 @@
 package uk.gov.hmcts.dm.controller.consumer;
 
 import au.com.dius.pact.consumer.MockServer;
-import au.com.dius.pact.consumer.dsl.DslPart;
 import au.com.dius.pact.consumer.dsl.MultipartBuilder;
 import au.com.dius.pact.consumer.dsl.PactBuilder;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
@@ -9,7 +8,6 @@ import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import org.junit.jupiter.api.Test;
 
-import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static io.restassured.RestAssured.given;
 
 public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerPactTest {
@@ -65,33 +63,4 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
             .statusCode(200);
     }
 
-
-    private DslPart buildUploadResponseDsl() {
-        return newJsonBody(root -> {
-            root.object("_embedded", embedded -> {
-                embedded.array("storedDocumentHalResources", docs -> {
-                    // Document 1
-                    docs.object(doc -> {
-                        doc.stringType("classification", "PUBLIC");
-                        doc.stringType("createdBy", "test-user-1");
-                        doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z", "2024-01-01T12:00:00Z");
-                        doc.object("_links", links -> {
-                            links.object("self", self ->
-                                self.stringType("href", "http://localhost/documents/11111111-1111-1111-1111-111111111111"));
-                        });
-                    });
-                    // Document 2
-                    docs.object(doc -> {
-                        doc.stringType("classification", "PUBLIC");
-                        doc.stringType("createdBy", "test-user-2");
-                        doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z", "2024-01-01T12:00:00Z");
-                        doc.object("_links", links -> {
-                            links.object("self", self ->
-                                self.stringType("href", "http://localhost/documents/22222222-2222-2222-2222-222222222222"));
-                        });
-                    });
-                });
-            });
-        }).build();
-    }
 }
