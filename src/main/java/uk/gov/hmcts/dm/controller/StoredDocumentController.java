@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,18 +110,20 @@ public class StoredDocumentController {
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<CollectionModel<StoredDocumentHalResource>> createFrom(
-            UploadDocumentsCommand uploadDocumentsCommand,
+            @Valid UploadDocumentsCommand uploadDocumentsCommand,
             BindingResult result) throws MethodArgumentNotValidException {
 
         logger.info("request received to upload documents");
-
-        List<StoredDocument> storedDocuments =
-            auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
-        return ResponseEntity
-            .ok()
-            .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
-            .body(StoredDocumentHalResourceCollection.of(storedDocuments));
-
+        if (result.hasErrors()) {
+            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
+        } else {
+            List<StoredDocument> storedDocuments =
+                    auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
+            return ResponseEntity
+                    .ok()
+                    .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
+                    .body(StoredDocumentHalResourceCollection.of(storedDocuments));
+        }
     }
 
     @GetMapping(value = "{documentId}")
