@@ -12,7 +12,7 @@ public class StoredDocumentHalResourceCollection {
     private StoredDocumentHalResourceCollection() {
     }
 
-    public static RepresentationModel<?> of(List<StoredDocument> storedDocuments) {
+    public static CollectionModel<StoredDocumentHalResource> of(List<StoredDocument> storedDocuments) {
         List<StoredDocumentHalResource> storedDocumentResource =
             storedDocuments.stream()
                 .map(StoredDocumentHalResource::new)

@@ -16,6 +16,7 @@ import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -108,10 +109,11 @@ public class StoredDocumentController {
         @ApiResponse(responseCode = "405", description = "Validation exception"),
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
-    public ResponseEntity<Object> createFrom(
+    public ResponseEntity<CollectionModel<StoredDocumentHalResource>> createFrom(
             @Valid UploadDocumentsCommand uploadDocumentsCommand,
             BindingResult result) throws MethodArgumentNotValidException {
 
+        System.out.println("request received to upload documents");
         if (result.hasErrors()) {
             throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
         } else {
