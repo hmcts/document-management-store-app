@@ -93,7 +93,9 @@ public class StoredDocumentController {
                         BindingResult.class), 0);
     }
 
-    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+        produces = V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE
+    )
     @Operation(summary = "Creates a list of Stored Documents by uploading a list of binary/text files.",
         parameters = {
             @Parameter(in = ParameterIn.HEADER, name = "serviceauthorization",
