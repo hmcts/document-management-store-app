@@ -113,16 +113,14 @@ public class StoredDocumentController {
             BindingResult result) throws MethodArgumentNotValidException {
 
         logger.info("request received to upload documents");
-        if (result.hasErrors()) {
-            throw new MethodArgumentNotValidException(uploadDocumentsCommandMethodParameter, result);
-        } else {
-            List<StoredDocument> storedDocuments =
-                    auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
-            return ResponseEntity
-                    .ok()
-                    .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
-                    .body(StoredDocumentHalResourceCollection.of(storedDocuments));
-        }
+
+        List<StoredDocument> storedDocuments =
+            auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
+        return ResponseEntity
+            .ok()
+            .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
+            .body(StoredDocumentHalResourceCollection.of(storedDocuments));
+
     }
 
     @GetMapping(value = "{documentId}")
