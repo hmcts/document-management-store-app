@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
 
 public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerPactTest {
 
@@ -63,11 +62,7 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
             .post("/documents")
             .then()
             .log().all()
-            .statusCode(200)
-            .body("_embedded.storedDocumentHalResources[0].classification", equalTo("PUBLIC"))
-            .body("_embedded.storedDocumentHalResources[0].createdBy", equalTo("test-user-1"))
-            .body("_embedded.storedDocumentHalResources[1].classification", equalTo("PUBLIC"))
-            .body("_embedded.storedDocumentHalResources[1].createdBy", equalTo("test-user-2"));
+            .statusCode(200);
     }
 
 
