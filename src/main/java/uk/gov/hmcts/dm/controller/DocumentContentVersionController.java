@@ -15,7 +15,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -29,7 +28,6 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
-import uk.gov.hmcts.dm.exception.ValidationErrorException;
 import uk.gov.hmcts.dm.hateos.DocumentContentVersionHalResource;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
@@ -39,7 +37,6 @@ import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.io.IOException;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(
@@ -88,9 +85,8 @@ public class DocumentContentVersionController {
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
-                                                            @Valid UploadDocumentVersionCommand command,
-                                                            BindingResult result) {
-        return addDocumentContentVersion(documentId, command, result);
+                                                            @Valid UploadDocumentVersionCommand command) {
+        return addDocumentContentVersion(documentId, command);
     }
 
     @PostMapping(value = "/versions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -106,27 +102,20 @@ public class DocumentContentVersionController {
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> addDocumentContentVersion(@PathVariable UUID documentId,
-                                                            @Valid UploadDocumentVersionCommand command,
-                                                            BindingResult result) {
-        if (result.hasErrors()) {
-            throw new ValidationErrorException(result.getFieldErrors().stream()
-                .map(fe -> String.format("%s - %s", fe.getField(), fe.getCode()))
-                .collect(Collectors.joining(",")));
-        } else {
-            StoredDocument storedDocument = storedDocumentService.findOne(documentId)
-                .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
+                                                            @Valid UploadDocumentVersionCommand command) {
+        StoredDocument storedDocument = storedDocumentService.findOne(documentId)
+            .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
 
-            DocumentContentVersionHalResource resource =
-                new DocumentContentVersionHalResource(
-                    auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
-                );
+        DocumentContentVersionHalResource resource =
+            new DocumentContentVersionHalResource(
+                auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
+            );
 
-            return ResponseEntity
-                .created(resource.getUri())
-                .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
-                .body(resource);
+        return ResponseEntity
+            .created(resource.getUri())
+            .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
+            .body(resource);
 
-        }
     }
 
     @GetMapping(value = "/versions/{versionId}")
