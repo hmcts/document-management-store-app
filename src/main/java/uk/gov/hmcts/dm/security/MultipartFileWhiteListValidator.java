@@ -33,6 +33,6 @@ public class MultipartFileWhiteListValidator implements ConstraintValidator<Mult
             request.setAttribute(VERIFICATION_RESULT_KEY, result);
         }
 
-        return result.isValid();
+        return result.valid();
     }
 }

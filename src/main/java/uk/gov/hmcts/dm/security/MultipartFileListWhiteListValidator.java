@@ -52,7 +52,7 @@ public class MultipartFileListWhiteListValidator
             request.setAttribute(VERIFICATION_RESULTS_MAP_KEY, resultsMap);
         }
 
-        boolean allValid = resultsMap.values().stream().allMatch(FileVerificationResult::isValid);
+        boolean allValid = resultsMap.values().stream().allMatch(FileVerificationResult::valid);
         if (!allValid) {
             log.error("One or more files failed content type validation.");
         }

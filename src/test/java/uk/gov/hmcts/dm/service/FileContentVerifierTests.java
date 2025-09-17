@@ -50,7 +50,7 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertTrue(result.isValid());
+        assertTrue(result.valid());
         assertEquals("text/plain", result.getDetectedMimeType().orElse(null));
     }
 
@@ -61,7 +61,7 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertTrue(result.isValid());
+        assertTrue(result.valid());
         assertEquals("application/pdf", result.getDetectedMimeType().orElse(null));
     }
 
@@ -73,7 +73,7 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertFalse(result.isValid());
+        assertFalse(result.valid());
         assertTrue(result.getDetectedMimeType().isEmpty(), "Mime type should be empty on IO exception");
     }
 
@@ -81,7 +81,7 @@ class FileContentVerifierTests {
     void testNull() {
         FileVerificationResult result = fileContentVerifier.verifyContentType(null);
 
-        assertFalse(result.isValid());
+        assertFalse(result.valid());
     }
 
     @Test
@@ -91,7 +91,7 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertFalse(result.isValid());
+        assertFalse(result.valid());
     }
 
     @Test
@@ -101,7 +101,7 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertFalse(result.isValid());
+        assertFalse(result.valid());
         assertEquals("application/xml", result.getDetectedMimeType().orElse(null),
             "Should return the detected mime type even on failure");
     }
@@ -113,7 +113,7 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertTrue(result.isValid());
+        assertTrue(result.valid());
         assertEquals("application/pdf", result.getDetectedMimeType().orElse(null));
     }
 
@@ -124,7 +124,7 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertFalse(result.isValid());
+        assertFalse(result.valid());
         assertTrue(result.getDetectedMimeType().isEmpty(), "Mime type should not be detected if extension fails");
     }
 
@@ -135,7 +135,7 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertFalse(result.isValid());
+        assertFalse(result.valid());
     }
 
     @Test
@@ -146,6 +146,6 @@ class FileContentVerifierTests {
 
         FileVerificationResult result = fileContentVerifier.verifyContentType(file);
 
-        assertFalse(result.isValid());
+        assertFalse(result.valid());
     }
 }
