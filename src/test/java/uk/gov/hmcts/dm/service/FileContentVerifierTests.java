@@ -1,22 +1,25 @@
 package uk.gov.hmcts.dm.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
+@ExtendWith(MockitoExtension.class)
 class FileContentVerifierTests {
 
     private final FileContentVerifier fileContentVerifier = new FileContentVerifier(
-        Arrays.asList(
+        List.of(
             "text/plain",
             "text/csv",
             "image/gif",
@@ -26,7 +29,7 @@ class FileContentVerifierTests {
             "image/webp",
             "application/pdf"
         ),
-        Arrays.asList(
+        List.of(
             ".txt",
             ".csv",
             ".gif",
@@ -44,73 +47,105 @@ class FileContentVerifierTests {
     void testUploadDocumentsSuccess() {
         MultipartFile file = new MockMultipartFile("files", "filename.txt",
             "text/plain", "hello".getBytes(StandardCharsets.UTF_8));
-        boolean b = fileContentVerifier.verifyContentType(file);
-        assertTrue(b);
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertTrue(result.valid());
+        assertEquals("text/plain", result.getDetectedMimeType().orElse(null));
     }
 
     @Test
-    void testUploadDifferentDocumentsTypesSuccess() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename.txt",
+    void testUploadDifferentDocumentsTypesSuccess() throws IOException {
+        MultipartFile file = new MockMultipartFile("files", "filename.pdf",
             "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        boolean b = fileContentVerifier.verifyContentType(file);
-        assertTrue(b);
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertTrue(result.valid());
+        assertEquals("application/pdf", result.getDetectedMimeType().orElse(null));
     }
 
     @Test
-    void testInputException() throws Exception {
-        MultipartFile file = Mockito.mock(MockMultipartFile.class);
-        Mockito.when(file.getContentType()).thenReturn("application/pdf");
+    void testInputException() throws IOException {
+        MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(file.getOriginalFilename()).thenReturn("test.pdf");
         Mockito.when(file.getInputStream()).thenThrow(new IOException("x"));
-        assertFalse(fileContentVerifier.verifyContentType(file));
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertFalse(result.valid());
+        assertTrue(result.getDetectedMimeType().isEmpty(), "Mime type should be empty on IO exception");
     }
 
     @Test
     void testNull() {
-        assertFalse(fileContentVerifier.verifyContentType(null));
+        FileVerificationResult result = fileContentVerifier.verifyContentType(null);
+
+        assertFalse(result.valid());
     }
 
     @Test
     void testUploadMimeTypeNotAllowed() {
         MultipartFile file =  new MockMultipartFile("file", "filename.xml",
             "application/xml", "hello".getBytes(StandardCharsets.UTF_8));
-        assertFalse(fileContentVerifier.verifyContentType(file));
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertFalse(result.valid());
     }
 
     @Test
     void testUploadMimeTypeNotAllowedWithAllowedExtension() {
         MultipartFile file =  new MockMultipartFile("file", "filename.txt",
-            "application/xml", "hello".getBytes(StandardCharsets.UTF_8));
-        assertFalse(fileContentVerifier.verifyContentType(file));
+            "application/xml", "<xml>hello</xml>".getBytes(StandardCharsets.UTF_8));
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertFalse(result.valid());
+        assertEquals("application/xml", result.getDetectedMimeType().orElse(null),
+            "Should return the detected mime type even on failure");
     }
 
     @Test
-    void testIgnoreClientMimeType() throws Exception {
-        MultipartFile file = new MockMultipartFile("files", "filename.txt",
-            "tex", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        assertTrue(fileContentVerifier.verifyContentType(file));
+    void testIgnoreClientMimeType() throws IOException {
+        MultipartFile file = new MockMultipartFile("files", "filename.pdf",
+            "some-incorrect-mime-type", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertTrue(result.valid());
+        assertEquals("application/pdf", result.getDetectedMimeType().orElse(null));
     }
 
     @Test
     void testFailureForDisallowedExt() throws Exception {
         MultipartFile file = new MockMultipartFile("files", "filename.dat",
             "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        assertFalse(fileContentVerifier.verifyContentType(file));
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertFalse(result.valid());
+        assertTrue(result.getDetectedMimeType().isEmpty(), "Mime type should not be detected if extension fails");
     }
 
     @Test
     void testFailureForNoExt() throws Exception {
         MultipartFile file = new MockMultipartFile("files", "filename",
             "application/pdf", getClass().getClassLoader().getResourceAsStream(EXAMPLE_PDF_FILE));
-        assertFalse(fileContentVerifier.verifyContentType(file));
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertFalse(result.valid());
     }
 
     @Test
     void testEmptyFileNameException() {
-        MultipartFile file = Mockito.mock(MockMultipartFile.class);
-        Mockito.when(file.getContentType()).thenReturn("application/pdf");
+        MultipartFile file = Mockito.mock(MultipartFile.class);
         Mockito.when(file.getOriginalFilename()).thenReturn(null);
-        assertFalse(fileContentVerifier.verifyContentType(file));
-    }
 
+
+        FileVerificationResult result = fileContentVerifier.verifyContentType(file);
+
+        assertFalse(result.valid());
+    }
 }

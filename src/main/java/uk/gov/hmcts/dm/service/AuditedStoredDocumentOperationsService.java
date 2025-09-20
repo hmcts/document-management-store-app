@@ -37,11 +37,12 @@ public class AuditedStoredDocumentOperationsService {
         this.auditEntryService = auditEntryService;
     }
 
-    public List<StoredDocument> createStoredDocuments(UploadDocumentsCommand uploadDocumentsCommand) {
-        List<StoredDocument> storedDocuments = storedDocumentService.saveItems(uploadDocumentsCommand);
+    public List<StoredDocument> createStoredDocuments(UploadDocumentsCommand uploadDocumentsCommand,
+                                                      Map<MultipartFile, String> mimeTypes) {
+        List<StoredDocument> storedDocuments = storedDocumentService.saveItems(uploadDocumentsCommand, mimeTypes);
         storedDocuments.forEach(storedDocument -> {
             auditEntryService.createAndSaveEntry(storedDocument, AuditActions.CREATED);
-            auditEntryService.createAndSaveEntry(storedDocument.getDocumentContentVersions().get(0),
+            auditEntryService.createAndSaveEntry(storedDocument.getDocumentContentVersions().getFirst(),
                 AuditActions.CREATED);
         });
         return storedDocuments;
@@ -83,9 +84,10 @@ public class AuditedStoredDocumentOperationsService {
     }
 
     @PreAuthorize("hasPermission(#storedDocument, 'UPDATE')")
-    public DocumentContentVersion addDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
+    public DocumentContentVersion addDocumentVersion(StoredDocument storedDocument,
+                                                     MultipartFile file, String detectedMimeType) {
         DocumentContentVersion documentContentVersion =
-            storedDocumentService.addStoredDocumentVersion(storedDocument, file);
+            storedDocumentService.addStoredDocumentVersion(storedDocument, file, detectedMimeType);
         auditEntryService.createAndSaveEntry(storedDocument, AuditActions.UPDATED);
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
 

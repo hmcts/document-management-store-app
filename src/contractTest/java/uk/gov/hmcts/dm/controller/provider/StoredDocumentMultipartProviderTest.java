@@ -154,7 +154,7 @@ public class StoredDocumentMultipartProviderTest {
         doc2.setModifiedOn(new Date());
         doc2.setRoles(Set.of("citizen"));
 
-        when(auditedStoredDocumentOperationsService.createStoredDocuments(any()))
+        when(auditedStoredDocumentOperationsService.createStoredDocuments(any(), any()))
             .thenReturn(List.of(doc1, doc2));
     }
 }

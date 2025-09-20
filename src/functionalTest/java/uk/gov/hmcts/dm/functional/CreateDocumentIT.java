@@ -501,4 +501,21 @@ public class CreateDocumentIT extends BaseIT {
             .when()
             .post(DOCUMENTS_PATH);
     }
+
+    @Test
+    public void mimeTypeIsCalculatedFromDocumentAndNotFromContentTypeHeader() {
+        givenRequest(getCitizen())
+            .multiPart(FILES_CONST, file(getAttachment4Pdf()), MediaType.ALL_VALUE)
+            .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
+            .multiPart(ROLES_CONST, CITIZEN_CONST)
+            .expect().log().all()
+            .statusCode(200)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
+            .body(EMBEDDED_DOCUMENTS_0_ORIGINALDOCUMENTNAME, equalTo(getAttachment4Pdf()))
+            .body(EMBEDDED_DOCUMENTS_0_MIMETYPE, equalTo(MediaType.APPLICATION_PDF_VALUE))
+            .body(EMBEDDED_DOCUMENTS_0_CLASSIFICATION, equalTo(String.valueOf(Classifications.PUBLIC)))
+            .body(EMBEDDED_DOCUMENTS_0_ROLES_0, equalTo(CITIZEN_CONST))
+            .when()
+            .post(DOCUMENTS_PATH);
+    }
 }

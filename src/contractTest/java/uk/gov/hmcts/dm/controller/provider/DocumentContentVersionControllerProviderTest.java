@@ -59,7 +59,7 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
         when(storedDocumentService
             .findOne(any()))
             .thenReturn(Optional.of(storedDocument));
-        when(auditedStoredDocumentOperationsService.addDocumentVersion(any(), any()))
+        when(auditedStoredDocumentOperationsService.addDocumentVersion(any(), any(), any()))
             .thenReturn(documentContentVersion);
     }
 

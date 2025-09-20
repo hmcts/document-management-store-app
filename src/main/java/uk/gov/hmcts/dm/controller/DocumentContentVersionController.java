@@ -29,13 +29,16 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentContentVersionNotFoundException;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
 import uk.gov.hmcts.dm.hateos.DocumentContentVersionHalResource;
+import uk.gov.hmcts.dm.security.MultipartFileWhiteListValidator;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.FileVerificationResult;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -85,8 +88,9 @@ public class DocumentContentVersionController {
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> addDocumentContentVersionForVersionsMappingNotPresent(@PathVariable UUID documentId,
-                                                            @Valid UploadDocumentVersionCommand command) {
-        return addDocumentContentVersion(documentId, command);
+                                                            @Valid UploadDocumentVersionCommand command,
+                                                                                        HttpServletRequest request) {
+        return addDocumentContentVersion(documentId, command, request);
     }
 
     @PostMapping(value = "/versions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -102,21 +106,37 @@ public class DocumentContentVersionController {
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
     public ResponseEntity<Object> addDocumentContentVersion(@PathVariable UUID documentId,
-                                                            @Valid UploadDocumentVersionCommand command) {
+                                                            @Valid UploadDocumentVersionCommand command,
+                                                            HttpServletRequest request) {
+
+        FileVerificationResult verificationResult = (FileVerificationResult) request.getAttribute(
+            MultipartFileWhiteListValidator.VERIFICATION_RESULT_KEY
+        );
+
+        if (Objects.isNull(verificationResult)) {
+            throw new IllegalStateException("File verification result not found in request attributes.");
+        }
+
+        String detectedMimeType = verificationResult.getDetectedMimeType()
+            .orElseThrow(() -> new IllegalStateException("MimeType not found in request after successful validation."));
+
         StoredDocument storedDocument = storedDocumentService.findOne(documentId)
             .orElseThrow(() -> new StoredDocumentNotFoundException(documentId));
 
-        DocumentContentVersionHalResource resource =
-            new DocumentContentVersionHalResource(
-                auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, command.getFile())
-            );
+        DocumentContentVersion version = auditedStoredDocumentOperationsService.addDocumentVersion(
+            storedDocument,
+            command.getFile(),
+            detectedMimeType
+        );
+
+        DocumentContentVersionHalResource resource = new DocumentContentVersionHalResource(version);
 
         return ResponseEntity
             .created(resource.getUri())
             .contentType(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE)
             .body(resource);
-
     }
+
 
     @GetMapping(value = "/versions/{versionId}")
     @Operation(summary = "Returns a specific version of the content of a Stored Document.",
