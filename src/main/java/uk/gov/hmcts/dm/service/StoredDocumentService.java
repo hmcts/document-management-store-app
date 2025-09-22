@@ -20,12 +20,12 @@ import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class StoredDocumentService {
@@ -80,24 +80,16 @@ public class StoredDocumentService {
     }
 
 
-    public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand) {
+    public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand,
+                                          Map<MultipartFile, String> mimeTypes) {
         String userId = securityUtilService.getUserId();
         return uploadDocumentsCommand.getFiles().stream().map(file -> {
-            StoredDocument document = new StoredDocument();
-            document.setCreatedBy(userId);
-            document.setLastModifiedBy(userId);
-            document.setClassification(uploadDocumentsCommand.getClassification());
-            document.setRoles(uploadDocumentsCommand.getRoles() != null
-                ? uploadDocumentsCommand.getRoles().stream().collect(Collectors.toSet()) : null);
-
-            if (toggleConfiguration.isMetadatasearchendpoint()) {
-                document.setMetadata(uploadDocumentsCommand.getMetadata());
-            }
-            document.setTtl(uploadDocumentsCommand.getTtl());
+            StoredDocument document = getStoredDocument(uploadDocumentsCommand, userId);
 
             DocumentContentVersion documentContentVersion = new DocumentContentVersion(document,
-                                                                                       file,
-                                                                                       userId);
+                file,
+                userId,
+                mimeTypes.get(file));
             document.getDocumentContentVersions().add(documentContentVersion);
             save(document);
             storeInAzureBlobStorage(document, documentContentVersion, file);
@@ -105,10 +97,19 @@ public class StoredDocumentService {
         }).toList();
     }
 
-    public List<StoredDocument> saveItems(List<MultipartFile> files) {
-        UploadDocumentsCommand command = new UploadDocumentsCommand();
-        command.setFiles(files);
-        return saveItems(command);
+    private StoredDocument getStoredDocument(UploadDocumentsCommand uploadDocumentsCommand, String userId) {
+        StoredDocument document = new StoredDocument();
+        document.setCreatedBy(userId);
+        document.setLastModifiedBy(userId);
+        document.setClassification(uploadDocumentsCommand.getClassification());
+        document.setRoles(uploadDocumentsCommand.getRoles() != null
+            ? new HashSet<>(uploadDocumentsCommand.getRoles()) : null);
+
+        if (toggleConfiguration.isMetadatasearchendpoint()) {
+            document.setMetadata(uploadDocumentsCommand.getMetadata());
+        }
+        document.setTtl(uploadDocumentsCommand.getTtl());
+        return document;
     }
 
     @Transactional
@@ -120,10 +121,11 @@ public class StoredDocumentService {
         }
     }
 
-    public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file) {
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(storedDocument,
-                                                                                   file,
-                                                                                   securityUtilService.getUserId());
+    public DocumentContentVersion addStoredDocumentVersion(StoredDocument storedDocument, MultipartFile file,
+                                                           String detectedMimeType) {
+        DocumentContentVersion documentContentVersion =
+            new DocumentContentVersion(storedDocument, file, securityUtilService.getUserId(), detectedMimeType);
+
         storedDocument.getDocumentContentVersions().add(documentContentVersion);
         documentContentVersionRepository.save(documentContentVersion);
         storeInAzureBlobStorage(storedDocument, documentContentVersion, file);

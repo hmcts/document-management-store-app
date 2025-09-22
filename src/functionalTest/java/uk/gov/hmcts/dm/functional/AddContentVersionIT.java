@@ -223,4 +223,29 @@ public class AddContentVersionIT extends BaseIT {
         }
 
     }
+
+    @Test
+    public void mimeTypeIsCalculatedFromDocumentAndNotHeader() {
+        String documentUrl = createDocumentAndGetUrlAs(getCitizen());
+
+        Response response = givenRequest(getCitizen())
+            .multiPart("file", file(getAttachment4Pdf()), MediaType.ALL_VALUE)
+            .expect().log().all()
+            .statusCode(201)
+            .contentType(V1MediaTypes.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE_VALUE)
+            .body(ORIGINAL_DOCUMENT_NAME, equalTo(getAttachment4Pdf()))
+            .body(MIME_TYPE, equalTo(MediaType.APPLICATION_PDF_VALUE))
+            .when()
+            .post(documentUrl)
+            .thenReturn();
+
+        String newVersionUrl = response.getHeader(LOCATION);
+        newVersionUrl = replaceHttp(newVersionUrl);
+
+        givenRequest(getCitizen())
+            .expect()
+            .statusCode(200)
+            .when()
+            .get(newVersionUrl);
+    }
 }

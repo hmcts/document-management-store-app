@@ -68,12 +68,20 @@ class AuditedStoredDocumentOperationsServiceTests {
         StoredDocument storedDocument = new StoredDocument();
         MultipartFile multipartFile = TestUtil.TEST_FILE;
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        when(storedDocumentService.addStoredDocumentVersion(storedDocument, multipartFile))
+
+        String detectedMimeType = "text/plain";
+
+        when(storedDocumentService.addStoredDocumentVersion(storedDocument, multipartFile, detectedMimeType))
             .thenReturn(documentContentVersion);
-        auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, multipartFile);
-        verify(storedDocumentService, times(1)).addStoredDocumentVersion(storedDocument, multipartFile);
-        verify(auditEntryService, times(1)).createAndSaveEntry(storedDocument, AuditActions.UPDATED);
-        verify(auditEntryService, times(1)).createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
+
+        auditedStoredDocumentOperationsService.addDocumentVersion(storedDocument, multipartFile, detectedMimeType);
+
+        verify(storedDocumentService, times(1))
+            .addStoredDocumentVersion(storedDocument, multipartFile, detectedMimeType);
+        verify(auditEntryService, times(1))
+            .createAndSaveEntry(storedDocument, AuditActions.UPDATED);
+        verify(auditEntryService, times(1))
+            .createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
     }
 
     @Test
@@ -85,12 +93,17 @@ class AuditedStoredDocumentOperationsServiceTests {
         documentsCommand.setRoles(List.of("role1"));
 
         List<StoredDocument> storedDocuments = Stream.of(TestUtil.STORED_DOCUMENT).toList();
-        when(storedDocumentService.saveItems(documentsCommand)).thenReturn(storedDocuments);
-        auditedStoredDocumentOperationsService.createStoredDocuments(documentsCommand);
-        verify(storedDocumentService, times(1)).saveItems(documentsCommand);
+
+        Map<MultipartFile, String> mimeTypes = Map.of(TestUtil.TEST_FILE, "text/plain");
+
+        when(storedDocumentService.saveItems(documentsCommand, mimeTypes)).thenReturn(storedDocuments);
+
+        auditedStoredDocumentOperationsService.createStoredDocuments(documentsCommand, mimeTypes);
+
+        verify(storedDocumentService, times(1)).saveItems(documentsCommand, mimeTypes);
         verify(auditEntryService, times(1)).createAndSaveEntry(TestUtil.STORED_DOCUMENT, AuditActions.CREATED);
         verify(auditEntryService, times(1)).createAndSaveEntry(
-            TestUtil.STORED_DOCUMENT.getDocumentContentVersions().get(0), AuditActions.CREATED);
+            TestUtil.STORED_DOCUMENT.getDocumentContentVersions().getFirst(), AuditActions.CREATED);
     }
 
     @Test
@@ -206,7 +219,7 @@ class AuditedStoredDocumentOperationsServiceTests {
         final CaseDocumentsDeletionResults caseDocumentsDeletionResults =
             auditedStoredDocumentOperationsService.deleteCaseStoredDocuments(storedDocuments);
 
-        assertThat(caseDocumentsDeletionResults.getCaseDocumentsFound().equals(storedDocuments.size()));
-        assertThat(caseDocumentsDeletionResults.getMarkedForDeletion().equals(storedDocuments.size()));
+        assertThat(caseDocumentsDeletionResults.getCaseDocumentsFound()).isEqualTo(storedDocuments.size());
+        assertThat(caseDocumentsDeletionResults.getMarkedForDeletion()).isEqualTo(storedDocuments.size());
     }
 }

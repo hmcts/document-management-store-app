@@ -14,7 +14,6 @@ import jakarta.validation.Valid;
 import org.apache.catalina.connector.ClientAbortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
@@ -34,16 +34,20 @@ import uk.gov.hmcts.dm.config.V1MediaType;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResource;
 import uk.gov.hmcts.dm.hateos.StoredDocumentHalResourceCollection;
+import uk.gov.hmcts.dm.security.MultipartFileListWhiteListValidator;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
 import uk.gov.hmcts.dm.service.AuditedStoredDocumentOperationsService;
 import uk.gov.hmcts.dm.service.Constants;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
+import uk.gov.hmcts.dm.service.FileVerificationResult;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -65,8 +69,6 @@ public class StoredDocumentController {
     private final AuditedStoredDocumentOperationsService auditedStoredDocumentOperationsService;
 
     private final AuditedDocumentContentVersionOperationsService auditedDocumentContentVersionOperationsService;
-
-    private MethodParameter uploadDocumentsCommandMethodParameter;
 
     private final ToggleConfiguration toggleConfiguration;
 
@@ -94,9 +96,33 @@ public class StoredDocumentController {
         @ApiResponse(responseCode = "405", description = "Validation exception"),
         @ApiResponse(responseCode = "403", description = "Access Denied")
     })
-    public ResponseEntity<Object> createFrom(@Valid UploadDocumentsCommand uploadDocumentsCommand) {
+    public ResponseEntity<Object> createFrom(
+        @Valid UploadDocumentsCommand uploadDocumentsCommand,
+        HttpServletRequest request) {
+
+        @SuppressWarnings("unchecked")
+        Map<MultipartFile, FileVerificationResult> verificationResults =
+            (Map<MultipartFile, FileVerificationResult>) request.getAttribute(
+                MultipartFileListWhiteListValidator.VERIFICATION_RESULTS_MAP_KEY
+            );
+
+        if (Objects.isNull(verificationResults)) {
+            throw new IllegalStateException("File verification results not found in request attributes.");
+        }
+
+        Map<MultipartFile, String> mimeTypes = verificationResults.entrySet().stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> entry.getValue().getDetectedMimeType()
+                    .orElseThrow(() -> new IllegalStateException(
+                        "MimeType not found for " + entry.getKey().getOriginalFilename()
+                            + " after successful validation.")
+                    )
+            ));
+
         List<StoredDocument> storedDocuments =
-            auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand);
+            auditedStoredDocumentOperationsService.createStoredDocuments(uploadDocumentsCommand, mimeTypes);
+
         return ResponseEntity
             .ok()
             .contentType(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE)
