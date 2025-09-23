@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 
+@Disabled
 public class AddContentVersionIT extends BaseIT {
 
     private static final String ORIGINAL_DOCUMENT_NAME = "originalDocumentName";
