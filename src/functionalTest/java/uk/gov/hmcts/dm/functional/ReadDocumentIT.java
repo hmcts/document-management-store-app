@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.functional;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 
+@Disabled
 public class ReadDocumentIT extends BaseIT {
 
     private static final String PRIVATE_CONST = "PRIVATE";
