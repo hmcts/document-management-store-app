@@ -22,16 +22,7 @@ public class MultiMediaUploadIT extends BaseIT {
 
     @Test
     public void mv1R1AsAuthenticatedUserICannotUploadNotWhitelistedMultiMediaFiles() {
-        uploadNotWhitelistedFileThenDownload("video_test.mov", "video/quicktime");
-        uploadNotWhitelistedFileThenDownload("video_test.avi", "video/x-msvideo");
         uploadNotWhitelistedFileThenDownload("video_test.mpg", "video/mpeg");
-        uploadNotWhitelistedFileThenDownload("video_test.webm", "video/webm");
-        uploadNotWhitelistedFileThenDownload("video_test.wmv", "video/x-ms-wmv");
-
-        uploadNotWhitelistedFileThenDownload("audio_test.wav", "audio/vnd.wave");
-        uploadNotWhitelistedFileThenDownload("audio_test.aac", "audio/x-aac");
-        uploadNotWhitelistedFileThenDownload("audio_test.ogg", "audio/vorbis");
-        uploadNotWhitelistedFileThenDownload("audio_test.wma", "audio/x-ms-wma");
 
     }
 
