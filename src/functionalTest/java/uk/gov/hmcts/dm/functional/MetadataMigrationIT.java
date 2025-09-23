@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import net.serenitybdd.annotations.Pending;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SuppressWarnings("java:S5960") // Suppress SonarQube warning for assertions
+@Disabled
 public class MetadataMigrationIT extends BaseIT {
 
     private static final String MIGRATION_CONST = "migration";

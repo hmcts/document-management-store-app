@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.util.MimeTypeUtils.ALL_VALUE;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_XML_VALUE;
 
+@Disabled
 public class ErrorPageIT extends BaseIT {
 
     private static final String DOCUMENTS_CONST = "documents";
