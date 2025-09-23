@@ -43,7 +43,7 @@ public class MultiMediaUploadIT extends BaseIT {
             .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
             .multiPart(ROLES_CONST, CITIZEN_CONST)
             .multiPart(ROLES_CONST, CASEWORKER_CONST)
-            .expect().log().all()
+            .expect()
             .statusCode(200)
             .contentType(V1MediaTypes.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE_VALUE)
 
@@ -99,7 +99,7 @@ public class MultiMediaUploadIT extends BaseIT {
             .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
             .multiPart(ROLES_CONST, CITIZEN_CONST)
             .multiPart(ROLES_CONST, CASEWORKER_CONST)
-            .expect().log().all()
+            .expect()
             .statusCode(422)
             .body(ERROR_CONST, equalTo("Your upload file is password protected."))
             .when()
