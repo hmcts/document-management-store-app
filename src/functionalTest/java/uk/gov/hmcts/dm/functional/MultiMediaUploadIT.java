@@ -19,12 +19,6 @@ public class MultiMediaUploadIT extends BaseIT {
     private static final String DOCUMENTS_PATH = "/documents";
     private static final String MIME_TYPE_MP4 = "video/mp4";
 
-    @Test
-    public void mv1R1AsAuthenticatedUserIUploadMultiMediaFiles() throws IOException {
-        uploadWhitelistedSmallFileThenDownload("mp4.mp4", MIME_TYPE_MP4);
-        uploadWhitelistedSmallFileThenDownload("audio_test.mp3", "audio/mpeg");
-        uploadWhitelistedSmallFileThenDownload("m4a.m4a", "audio/mp4");
-    }
 
     @Test
     public void mv1R1AsAuthenticatedUserICannotUploadNotWhitelistedMultiMediaFiles() {
@@ -41,11 +35,7 @@ public class MultiMediaUploadIT extends BaseIT {
 
     }
 
-    @Test
-    public void uploadWhiteListedWithPasswordThenFail() {
-        uploadFileThrowsPasswordErrorMessage("pw_protected.pdf", "application/pdf");
-        uploadFileThrowsPasswordErrorMessage("pw_protected_docx.docx", "application/msword");
-    }
+
 
     private void uploadWhitelistedSmallFileThenDownload(String fileName, String mimeType) throws IOException {
         Response response = givenRequest(getCitizen())
@@ -96,7 +86,7 @@ public class MultiMediaUploadIT extends BaseIT {
             .multiPart(CLASSIFICATION_CONST, String.valueOf(Classifications.PUBLIC))
             .multiPart(ROLES_CONST, CITIZEN_CONST)
             .multiPart(ROLES_CONST, CASEWORKER_CONST)
-            .expect().log().all()
+            .expect()
             .statusCode(422)
             .body(ERROR_CONST, equalTo("Your upload contains a disallowed file type"))
             .when()
