@@ -17,13 +17,19 @@ public class MultiMediaUploadIT extends BaseIT {
     private static final String CASEWORKER_CONST = "caseworker";
     private static final String ERROR_CONST = "error";
     private static final String DOCUMENTS_PATH = "/documents";
-    private static final String MIME_TYPE_MP4 = "video/mp4";
-
 
     @Test
     public void mv1R1AsAuthenticatedUserICannotUploadNotWhitelistedMultiMediaFiles() {
-        uploadNotWhitelistedFileThenDownload("video_test.mpg", "video/mpeg");
+        uploadNotWhitelistedFileThenDownload("video_test.mov", "video/quicktime");
+        uploadNotWhitelistedFileThenDownload("video_test.avi", "video/x-msvideo");
+       // uploadNotWhitelistedFileThenDownload("video_test.mpg", "video/mpeg");
+        uploadNotWhitelistedFileThenDownload("video_test.webm", "video/webm");
+        uploadNotWhitelistedFileThenDownload("video_test.wmv", "video/x-ms-wmv");
 
+        uploadNotWhitelistedFileThenDownload("audio_test.wav", "audio/vnd.wave");
+        uploadNotWhitelistedFileThenDownload("audio_test.aac", "audio/x-aac");
+        uploadNotWhitelistedFileThenDownload("audio_test.ogg", "audio/vorbis");
+        uploadNotWhitelistedFileThenDownload("audio_test.wma", "audio/x-ms-wma");
     }
 
 
