@@ -19,16 +19,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.FunctionalTestContextConfiguration;
 import uk.gov.hmcts.dm.StorageTestConfiguration;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
-import uk.gov.hmcts.dm.functional.DocumentMetadataPropertiesConfig.DocumentMetadata;
 import uk.gov.hmcts.reform.em.test.retry.RetryExtension;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -53,12 +48,6 @@ public abstract class BaseIT {
     private FileUtils fileUtils = new FileUtils();
     @Value("${base-urls.dm-store}")
     private String dmStoreBaseUri;
-    @Value("${base-urls.large-docs}")
-    private String largeDocsBaseUri;
-    @Value("${large-docs.metadata.mp4-111mb.id}")
-    private String video111mbId;
-    @Value("${large-docs.metadata.mp4-52mb.id}")
-    private String video52mbId;
     @Value("${toggle.ttl}")
     private boolean toggleTtlEnabled;
     @Value("${toggle.metadatamigration}")
@@ -180,28 +169,6 @@ public abstract class BaseIT {
         return request;
     }
 
-    public RequestSpecification givenLargeFileRequest(String username, List<String> userRoles) {
-        RequestSpecification request = SerenityRest.given().baseUri(largeDocsBaseUri).log().all();
-
-        if (username != null) {
-            request = request.header(SERVICE_AUTHORIZATION_HEADER, serviceToken());
-            request = request.header(USER_ID_CONST, username);
-        }
-        if (userRoles != null) {
-            request = request.header(USER_ROLES_CONST, String.join(", ", userRoles));
-        }
-
-        return request;
-    }
-
-    public RequestSpecification givenLargeFileRequest(String username) {
-        return givenLargeFileRequest(username, null);
-    }
-
-    public RequestSpecification givenLargeFileRequest() {
-        return givenLargeFileRequest(null, null);
-    }
-
     public RequestSpecification givenSpacedRolesRequest(String username, List<String> userRoles) {
 
         RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
@@ -259,29 +226,6 @@ public abstract class BaseIT {
             throw e;
         }
 
-    }
-
-    public File largeFile(String doc, String metadataKey) throws IOException {
-
-
-        DocumentMetadata metadata = metadataPropertiesConfig.getMetadata().get(metadataKey);
-        String name = metadata.getDocumentName();
-        String extension = metadata.getExtension();
-        File tmpFile = File.createTempFile(name, "." + extension);
-
-        try (
-            OutputStream outputStream = new FileOutputStream(tmpFile);
-
-            final InputStream inputStream = givenLargeFileRequest(CITIZEN,
-                new ArrayList<>(List.of(CASE_WORKER_ROLE_PROBATE)))
-                .get(doc)
-                .getBody()
-                .asInputStream()) {
-            outputStream.write(inputStream.readAllBytes());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return tmpFile;
     }
 
     public String authToken(Object username) {
@@ -469,30 +413,6 @@ public abstract class BaseIT {
 
     public void setDmStoreBaseUri(String dmStoreBaseUri) {
         this.dmStoreBaseUri = dmStoreBaseUri;
-    }
-
-    public String getLargeDocsBaseUri() {
-        return largeDocsBaseUri;
-    }
-
-    public void setLargeDocsBaseUri(String largeDocsBaseUri) {
-        this.largeDocsBaseUri = largeDocsBaseUri;
-    }
-
-    public String getVideo111mbId() {
-        return video111mbId;
-    }
-
-    public void setVideo111mbId(String video111mbId) {
-        this.video111mbId = video111mbId;
-    }
-
-    public String getVideo52mbId() {
-        return video52mbId;
-    }
-
-    public void setVideo52mbId(String video52mbId) {
-        this.video52mbId = video52mbId;
     }
 
     public boolean getToggleTtlEnabled() {
@@ -761,9 +681,5 @@ public abstract class BaseIT {
 
     public final String getXmlAsPng() {
         return XML_AS_PNG;
-    }
-
-    public boolean isDropBoxFile() {
-        return DROP_BOX_URL.equals(largeDocsBaseUri);
     }
 }
