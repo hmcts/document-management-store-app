@@ -18,10 +18,10 @@ import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 @SuppressWarnings("java:S6813") // Suppress SonarQube warning for autowired field
 public class LargeMultiMediaUploadIT extends BaseIT {
 
-    @Autowired(required = false)
+    @Autowired
     private BlobReader blobReader;
     private static final String ROLES_CONST = "roles";
-    
+
     private static final String CITIZEN_CONST = "citizen";
     private static final String CASEWORKER_CONST = "caseworker";
 
@@ -59,7 +59,6 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
     private void streamBlobToUpload(String fileName,String mimeType,
                                     TriConsumer<InputStream, String, String> uploadFunction) {
-        assumeTrue(Objects.nonNull(blobReader));
         BlockBlobClient blockBlobClient = blobReader.retrieveBlobToProcess(fileName);
         uploadFunction.accept(blockBlobClient.openInputStream(), fileName, mimeType);
     }
