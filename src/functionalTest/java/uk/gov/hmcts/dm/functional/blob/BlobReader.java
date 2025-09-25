@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConditionalOnBean(BlobServiceClient.class)
 public class BlobReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(BlobReader.class);
