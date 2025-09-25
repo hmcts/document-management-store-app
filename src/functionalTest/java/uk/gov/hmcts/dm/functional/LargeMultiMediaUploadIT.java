@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.dm.functional.blob.BlobReader;
 
 import java.io.InputStream;
-import java.util.Objects;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 
@@ -18,9 +16,10 @@ import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 @SuppressWarnings("java:S6813") // Suppress SonarQube warning for autowired field
 public class LargeMultiMediaUploadIT extends BaseIT {
 
-    @Autowired(required = false)
+    @Autowired
     private BlobReader blobReader;
     private static final String ROLES_CONST = "roles";
+
     private static final String CITIZEN_CONST = "citizen";
     private static final String CASEWORKER_CONST = "caseworker";
 
@@ -58,7 +57,6 @@ public class LargeMultiMediaUploadIT extends BaseIT {
 
     private void streamBlobToUpload(String fileName,String mimeType,
                                     TriConsumer<InputStream, String, String> uploadFunction) {
-        assumeTrue(Objects.nonNull(blobReader));
         BlockBlobClient blockBlobClient = blobReader.retrieveBlobToProcess(fileName);
         uploadFunction.accept(blockBlobClient.openInputStream(), fileName, mimeType);
     }
