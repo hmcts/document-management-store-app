@@ -21,6 +21,7 @@ public class LargeMultiMediaUploadIT extends BaseIT {
     @Autowired(required = false)
     private BlobReader blobReader;
     private static final String ROLES_CONST = "roles";
+    
     private static final String CITIZEN_CONST = "citizen";
     private static final String CASEWORKER_CONST = "caseworker";
 
