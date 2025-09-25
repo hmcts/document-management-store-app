@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.dm.functional.blob.BlobReader;
 
 import java.io.InputStream;
-import java.util.Objects;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 
