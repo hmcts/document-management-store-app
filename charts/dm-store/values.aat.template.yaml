@@ -1,6 +1,10 @@
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  devmemoryLimits: "3Gi"
+  devmemoryRequests: '3Gi'
+  devcpuRequests: "1000m"
+  devcpuLimits: "2000m"
   environment:
     REFORM_ENVIRONMENT: aat
     PACKAGES_ENVIRONMENT: aat
