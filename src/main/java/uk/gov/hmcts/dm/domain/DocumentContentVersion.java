@@ -46,6 +46,11 @@ public class DocumentContentVersion implements RolesAware {
     private String mimeType;
 
     @Getter
+    @Setter
+    @Column(name = "mime_type_updated")
+    private boolean mimeTypeUpdated;
+
+    @Getter
     private String originalDocumentName;
 
     @Getter
@@ -82,19 +87,13 @@ public class DocumentContentVersion implements RolesAware {
     private String contentChecksum;
 
 
-    @Getter
-    @Setter
-    @Column(name = "mime_type_updated")
-    private boolean mimeTypeUpdated;
-
-
     public DocumentContentVersion(
         StoredDocument item,
         MultipartFile file,
         String userId
     ) {
         this.mimeType = file.getContentType();
-        this.mimeTypeUpdated = true;
+        this.mimeTypeUpdated = false;
         setOriginalDocumentName(file.getOriginalFilename());
         this.size = file.getSize();
         this.storedDocument = item;
@@ -118,6 +117,7 @@ public class DocumentContentVersion implements RolesAware {
     public DocumentContentVersion(
         UUID id,
         String mimeType,
+        boolean mimeTypeUpdated,
         String originalDocumentName,
         String createdBy,
         String createdByService,
@@ -129,7 +129,7 @@ public class DocumentContentVersion implements RolesAware {
     ) {
         this.id = id;
         this.mimeType = mimeType;
-        this.mimeTypeUpdated = true;
+        this.mimeTypeUpdated = mimeTypeUpdated;
         setOriginalDocumentName(originalDocumentName);
         this.createdBy = createdBy;
         setCreatedOn(createdOn);
