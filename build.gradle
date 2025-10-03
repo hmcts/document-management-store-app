@@ -89,7 +89,7 @@ def versions = [
     emTestHelper       : '2.1.1',
     shedlock           : '6.10.0',
     hibernate          : '6.6.30.Final',
-    jupiter            : '5.14.0',
+    jupiter            : '6.0.0',
     springSecurity     : '6.5.5'
 ]
 
@@ -164,6 +164,7 @@ dependencies {
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.5.5'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
+    testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-params', version: versions.jupiter
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.4'
     testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.6'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
@@ -211,7 +212,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.junit.platform', version: '1.14.0') {
+        dependencySet(group: 'org.junit.platform', version: '6.0.0') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }

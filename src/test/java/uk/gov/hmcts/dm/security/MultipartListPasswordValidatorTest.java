@@ -7,8 +7,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.service.PasswordVerifier;
 
@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class MultipartListPasswordValidatorTest {
     @Mock
     PasswordVerifier passwordVerifier;
@@ -29,8 +29,8 @@ class MultipartListPasswordValidatorTest {
     @InjectMocks
     private MultipartFilePasswordValidator multipartFilePasswordValidator;
 
-    @DisplayName(value = """ 
-        Test MultipartListPasswordValidator with all accepted mime times for non-password protected files 
+    @DisplayName(value = """
+        Test MultipartListPasswordValidator with all accepted mime times for non-password protected files
             and expect success""")
     @ParameterizedTest
     @CsvSource({
@@ -65,8 +65,8 @@ class MultipartListPasswordValidatorTest {
         assertTrue(multipartFilePasswordValidator.isValid(files, null));
     }
 
-    @DisplayName(value = """ 
-        Test MultipartListPasswordValidator with all accepted mime times for password protected files 
+    @DisplayName(value = """
+        Test MultipartListPasswordValidator with all accepted mime times for password protected files
             and expect failure""")
     @ParameterizedTest
     @CsvSource({
