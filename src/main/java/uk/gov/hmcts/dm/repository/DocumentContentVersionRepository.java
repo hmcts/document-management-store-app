@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -28,4 +29,10 @@ public interface DocumentContentVersionRepository extends
 
     @Query("select dcv from DocumentContentVersion dcv where dcv.storedDocument.id = :storedDocumentId")
     List<DocumentContentVersion> findAllByStoredDocumentId(@Param("storedDocumentId") UUID storedDocumentId);
+
+    @Query("""
+        SELECT dcv.id FROM DocumentContentVersion dcv
+        WHERE dcv.mimeTypeUpdated = false
+        ORDER BY dcv.createdOn DESC""")
+    List<UUID> findDocumentContentVersionIdsForMimeTypeUpdate(Pageable pageable);
 }
