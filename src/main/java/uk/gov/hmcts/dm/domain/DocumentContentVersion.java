@@ -47,6 +47,7 @@ public class DocumentContentVersion implements RolesAware {
 
     @Getter
     @Setter
+    @Column(name = "mime_type_updated")
     private boolean mimeTypeUpdated;
 
     @Getter
