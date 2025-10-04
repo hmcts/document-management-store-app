@@ -47,6 +47,7 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(
             DOCUMENT_CONTENT_VERSION_ID,
             "application/pdf",
+            true,
             "sample.pdf",
             "test-user",
             "test-service",
@@ -76,6 +77,7 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(
             DOCUMENT_CONTENT_VERSION_ID,
             "application/pdf",
+            true,
             "sample.pdf",
             "test-user",
             "test-service",
@@ -102,6 +104,7 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
         DocumentContentVersion documentContentVersion = new DocumentContentVersion(
             DOCUMENT_CONTENT_VERSION_ID,
             "application/octet-stream",
+            true,
             "sample.pdf",
             "test-user",
             "test-service",

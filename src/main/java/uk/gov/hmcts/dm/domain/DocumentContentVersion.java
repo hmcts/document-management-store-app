@@ -46,6 +46,11 @@ public class DocumentContentVersion implements RolesAware {
     private String mimeType;
 
     @Getter
+    @Setter
+    @Column(name = "mime_type_updated")
+    private boolean mimeTypeUpdated;
+
+    @Getter
     private String originalDocumentName;
 
     @Getter
@@ -81,6 +86,7 @@ public class DocumentContentVersion implements RolesAware {
     @Column(name = "content_checksum")
     private String contentChecksum;
 
+
     public DocumentContentVersion(StoredDocument item,
                                   MultipartFile file,
                                   String userId) {
@@ -91,29 +97,36 @@ public class DocumentContentVersion implements RolesAware {
         this.setCreatedBy(userId);
     }
 
-    public DocumentContentVersion(StoredDocument storedDocument,
-                                  MultipartFile file,
-                                  String userId,
-                                  String detectedMimeType) {
+    public DocumentContentVersion(
+        StoredDocument storedDocument,
+        MultipartFile file,
+        String userId,
+        String detectedMimeType
+    ) {
         this.mimeType = detectedMimeType;
+        this.mimeTypeUpdated = true;
         setOriginalDocumentName(file.getOriginalFilename());
         this.size = file.getSize();
         this.storedDocument = storedDocument;
         this.setCreatedBy(userId);
     }
 
-    public DocumentContentVersion(UUID id,
-                                  String mimeType,
-                                  String originalDocumentName,
-                                  String createdBy,
-                                  String createdByService,
-                                  Date createdOn,
-                                  StoredDocument storedDocument,
-                                  Long size,
-                                  String contentUri,
-                                  String contentChecksum) {
+    public DocumentContentVersion(
+        UUID id,
+        String mimeType,
+        boolean mimeTypeUpdated,
+        String originalDocumentName,
+        String createdBy,
+        String createdByService,
+        Date createdOn,
+        StoredDocument storedDocument,
+        Long size,
+        String contentUri,
+        String contentChecksum
+    ) {
         this.id = id;
         this.mimeType = mimeType;
+        this.mimeTypeUpdated = mimeTypeUpdated;
         setOriginalDocumentName(originalDocumentName);
         this.createdBy = createdBy;
         setCreatedOn(createdOn);
