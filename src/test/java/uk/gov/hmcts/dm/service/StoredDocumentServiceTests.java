@@ -155,6 +155,7 @@ class StoredDocumentServiceTests {
         assertNotNull(storedDocument.getTtl());
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
         assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+        assertEquals(true, latestVersion.isMimeTypeUpdated());
     }
 
     @Test
@@ -182,6 +183,7 @@ class StoredDocumentServiceTests {
         assertNotNull(storedDocument.getTtl());
         assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
         assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+        assertEquals(true, latestVersion.isMimeTypeUpdated());
     }
 
     @Test

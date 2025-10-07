@@ -28,4 +28,5 @@ public interface DocumentContentVersionRepository extends
 
     @Query("select dcv from DocumentContentVersion dcv where dcv.storedDocument.id = :storedDocumentId")
     List<DocumentContentVersion> findAllByStoredDocumentId(@Param("storedDocumentId") UUID storedDocumentId);
+
 }
