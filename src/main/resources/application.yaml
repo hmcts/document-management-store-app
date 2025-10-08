@@ -66,7 +66,10 @@ spring:
       noOfIterations: ${CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS:1}
       batchSize: ${CASE_DOCUMENTS_DELETION_BATCH_SIZE:10}
       serviceName: ${CASE_DOCUMENTS_DELETION_SERVICE_NAME:ccd_case_disposer}
-
+    mimeTypeUpdate:
+      threadLimit: ${MIME_TYPE_UPDATE_THREAD_LIMIT:1}
+      noOfIterations: ${MIME_TYPE_UPDATE_NO_OF_ITERATIONS:1}
+      batchSize: ${MIME_TYPE_UPDATE_BATCH_SIZE:10}
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
