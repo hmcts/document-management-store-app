@@ -5,16 +5,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-@Transactional
 @Service
 public class DocumentContentVersionService {
 
@@ -37,6 +36,7 @@ public class DocumentContentVersionService {
         return documentContentVersionRepository.findById(id);
     }
 
+    @Transactional
     public Optional<DocumentContentVersion> findMostRecentDocumentContentVersionByStoredDocumentId(UUID id) {
         return storedDocumentRepository
             .findByIdAndDeleted(id, false)
@@ -49,6 +49,7 @@ public class DocumentContentVersionService {
      *
      * @param documentVersionId The UUID of the document version to update.
      */
+    @Transactional
     public void updateMimeType(UUID documentVersionId) {
         log.info("Processing MIME type update for ID: {}", documentVersionId);
 
@@ -68,14 +69,10 @@ public class DocumentContentVersionService {
         if (detectedMimeType == null) {
             log.warn("Could not detect MIME type for {}. Marking as processed to prevent retries.",
                 documentVersionId);
-            documentVersion.setMimeTypeUpdated(true);
-        } else if (!Objects.equals(documentVersion.getMimeType(), detectedMimeType)) {
+        } else {
             log.info("Updating MIME type for document {}. Old: [{}], New: [{}].",
                 documentVersionId, documentVersion.getMimeType(), detectedMimeType);
             documentVersion.setMimeType(detectedMimeType);
-        } else {
-            log.info("Detected MIME type for {} is the same as existing one [{}]. No update needed.",
-                documentVersionId, detectedMimeType);
         }
 
         documentVersion.setMimeTypeUpdated(true);
@@ -84,6 +81,9 @@ public class DocumentContentVersionService {
             documentVersion.getMimeType(),
             documentVersion.isMimeTypeUpdated()
         );
+        log.info("Transaction active: {}",
+            TransactionSynchronizationManager.isActualTransactionActive());
+
         documentContentVersionRepository.save(documentVersion);
     }
 }
