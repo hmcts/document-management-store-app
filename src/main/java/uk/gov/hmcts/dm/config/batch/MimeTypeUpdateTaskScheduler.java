@@ -2,7 +2,6 @@ package uk.gov.hmcts.dm.config.batch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +10,6 @@ import org.springframework.stereotype.Component;
  * This scheduler can be enabled or disabled via configuration properties.
  */
 @Component
-@ConditionalOnProperty(
-    value = "batch.mimeTypeUpdate.scheduler.enabled",
-    havingValue = "true"
-)
 public class MimeTypeUpdateTaskScheduler {
 
     private static final Logger log = LoggerFactory.getLogger(MimeTypeUpdateTaskScheduler.class);
@@ -30,7 +25,7 @@ public class MimeTypeUpdateTaskScheduler {
      * Runs the MimeTypeUpdateTask at a fixed rate defined in the application properties.
      * The default rate is every 30 seconds.
      */
-    @Scheduled(fixedRateString = "${batch.mimeTypeUpdate.scheduler.fixedRate:30000}")
+    @Scheduled(fixedRateString = "3000}")
     public void runMimeTypeUpdateTask() {
         log.info("Triggering MimeTypeUpdateTask...");
         mimeTypeUpdateTask.run();
