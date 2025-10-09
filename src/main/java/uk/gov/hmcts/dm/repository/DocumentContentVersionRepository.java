@@ -35,4 +35,9 @@ public interface DocumentContentVersionRepository extends
         WHERE dcv.mimeTypeUpdated = false
         ORDER BY dcv.createdOn DESC""")
     List<UUID> findDocumentContentVersionIdsForMimeTypeUpdate(Pageable pageable);
+
+
+    @Modifying
+    @Query("UPDATE DocumentContentVersion d SET d.mimeTypeUpdated = true WHERE d.id = :id")
+    void markMimeTypeUpdated(@Param("id") UUID id);
 }

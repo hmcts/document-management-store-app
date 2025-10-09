@@ -16,6 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -107,13 +108,13 @@ class DocumentContentVersionServiceTests {
 
         when(documentContentVersionRepository.findById(docId)).thenReturn(Optional.of(version));
         when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn(null);
+        doNothing().when(documentContentVersionRepository).markMimeTypeUpdated(docId);
 
         // When
         documentContentVersionService.updateMimeType(docId);
 
         // Then
-        assertEquals("application/octet-stream", version.getMimeType()); // MimeType should not change
-        assertTrue(version.isMimeTypeUpdated()); // Should be marked as updated to avoid reprocessing
+        verify(documentContentVersionRepository).markMimeTypeUpdated(docId);
     }
 
     @Test

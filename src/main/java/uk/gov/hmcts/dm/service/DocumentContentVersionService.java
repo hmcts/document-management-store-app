@@ -69,6 +69,8 @@ public class DocumentContentVersionService {
             if (detectedMimeType == null) {
                 log.warn("Could not detect MIME type for {}. Marking as processed to prevent retries.",
                     documentVersionId);
+                documentContentVersionRepository.markMimeTypeUpdated(documentVersionId);
+                return;
             } else if (!Objects.equals(documentVersion.getMimeType(), detectedMimeType)) {
                 log.info("Updating MIME type for document {}. Old: [{}], New: [{}].",
                     documentVersionId, documentVersion.getMimeType(), detectedMimeType);
@@ -78,7 +80,6 @@ public class DocumentContentVersionService {
                     documentVersionId, detectedMimeType);
             }
 
-            // Always mark the record as updated to prevent it from being processed again.
             documentVersion.setMimeTypeUpdated(true);
             documentContentVersionRepository.save(documentVersion);
         } catch (Exception e) {
