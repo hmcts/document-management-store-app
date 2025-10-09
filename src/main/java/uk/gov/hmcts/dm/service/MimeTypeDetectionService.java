@@ -48,11 +48,11 @@ public class MimeTypeDetectionService {
 
         } catch (IOException e) {
             log.error("Failed to read blob stream for MIME type detection on document version {}",
-                documentVersionId, e);
+                documentVersionId);
             return null;
         } catch (Exception e) {
             log.error("An unexpected error occurred during MIME type detection for document version {}",
-                documentVersionId, e);
+                documentVersionId);
             return null;
         }
     }
