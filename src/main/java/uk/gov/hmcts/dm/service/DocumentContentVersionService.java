@@ -50,39 +50,40 @@ public class DocumentContentVersionService {
      * @param documentVersionId The UUID of the document version to update.
      */
     public void updateMimeType(UUID documentVersionId) {
-        try {
-            log.info("Processing MIME type update for ID: {}", documentVersionId);
+        log.info("Processing MIME type update for ID: {}", documentVersionId);
 
-            Optional<DocumentContentVersion> versionOptional =
-                documentContentVersionRepository.findById(documentVersionId);
-            if (versionOptional.isEmpty()) {
-                log.warn(
-                    "DocumentContentVersion not found during MIME type update: {}. Nothing to process.",
-                    documentVersionId
-                );
-                return;
-            }
-
-            DocumentContentVersion documentVersion = versionOptional.get();
-            String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
-
-            if (detectedMimeType == null) {
-                log.warn("Could not detect MIME type for {}. Marking as processed to prevent retries.",
-                    documentVersionId);
-            } else if (!Objects.equals(documentVersion.getMimeType(), detectedMimeType)) {
-                log.info("Updating MIME type for document {}. Old: [{}], New: [{}].",
-                    documentVersionId, documentVersion.getMimeType(), detectedMimeType);
-                documentVersion.setMimeType(detectedMimeType);
-            } else {
-                log.info("Detected MIME type for {} is the same as existing one [{}]. No update needed.",
-                    documentVersionId, detectedMimeType);
-            }
-
-            documentVersion.setMimeTypeUpdated(true);
-            documentContentVersionRepository.save(documentVersion);
-        } catch (Exception e) {
-            log.error("Error updating MIME type for document {}: {}", documentVersionId, e.getMessage(), e);
+        Optional<DocumentContentVersion> versionOptional =
+            documentContentVersionRepository.findById(documentVersionId);
+        if (versionOptional.isEmpty()) {
+            log.warn(
+                "DocumentContentVersion not found during MIME type update: {}. Nothing to process.",
+                documentVersionId
+            );
+            return;
         }
+
+        DocumentContentVersion documentVersion = versionOptional.get();
+        String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
+
+        if (detectedMimeType == null) {
+            log.warn("Could not detect MIME type for {}. Marking as processed to prevent retries.",
+                documentVersionId);
+        } else if (!Objects.equals(documentVersion.getMimeType(), detectedMimeType)) {
+            log.info("Updating MIME type for document {}. Old: [{}], New: [{}].",
+                documentVersionId, documentVersion.getMimeType(), detectedMimeType);
+            documentVersion.setMimeType(detectedMimeType);
+        } else {
+            log.info("Detected MIME type for {} is the same as existing one [{}]. No update needed.",
+                documentVersionId, detectedMimeType);
+        }
+
+        documentVersion.setMimeTypeUpdated(true);
+        log.info("documentVersion id:{}, mimeType:{}, isUpdated: {}",
+            documentVersion.getId(),
+            documentVersion.getMimeType(),
+            documentVersion.isMimeTypeUpdated()
+        );
+        documentContentVersionRepository.save(documentVersion);
     }
 }
 

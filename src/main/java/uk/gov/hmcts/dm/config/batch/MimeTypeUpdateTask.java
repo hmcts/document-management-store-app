@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 
@@ -46,7 +45,6 @@ public class MimeTypeUpdateTask implements Runnable {
     }
 
     @Override
-    @Transactional
     public void run() {
         log.info("Started MIME Type Update job.");
         StopWatch stopWatch = new StopWatch();
