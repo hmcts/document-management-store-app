@@ -121,14 +121,11 @@ class DocumentContentVersionServiceTests {
         // Given
         UUID docId = UUID.randomUUID();
         when(documentContentVersionRepository.findById(docId)).thenReturn(Optional.empty());
-        when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn("application/pdf");
 
         // When
         documentContentVersionService.updateMimeType(docId);
 
         // Then
-        // No exception should be thrown, and the method should complete gracefully.
-        // We can also verify that the mimeTypeDetectionService was still called.
-        verify(mimeTypeDetectionService).detectMimeType(docId);
+        verify(mimeTypeDetectionService, never()).detectMimeType(docId);
     }
 }
