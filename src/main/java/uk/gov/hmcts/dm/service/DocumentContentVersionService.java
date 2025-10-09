@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -49,7 +50,7 @@ public class DocumentContentVersionService {
      *
      * @param documentVersionId The UUID of the document version to update.
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateMimeType(UUID documentVersionId) {
         log.info("Processing MIME type update for ID: {}", documentVersionId);
 
