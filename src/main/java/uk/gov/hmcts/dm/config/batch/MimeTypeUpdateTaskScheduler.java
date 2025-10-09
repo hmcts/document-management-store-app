@@ -25,7 +25,7 @@ public class MimeTypeUpdateTaskScheduler {
      * Runs the MimeTypeUpdateTask at a fixed rate defined in the application properties.
      * The default rate is every 30 seconds.
      */
-    @Scheduled(fixedRateString = "3000}")
+    @Scheduled(fixedRateString = "3000")
     public void runMimeTypeUpdateTask() {
         log.info("Triggering MimeTypeUpdateTask...");
         mimeTypeUpdateTask.run();
