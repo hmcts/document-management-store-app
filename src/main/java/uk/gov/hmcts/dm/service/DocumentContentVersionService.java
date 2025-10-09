@@ -44,12 +44,6 @@ public class DocumentContentVersionService {
             .map(StoredDocument::getMostRecentDocumentContentVersion);
     }
 
-    /**
-     * Updates the MIME type for a single DocumentContentVersion.
-     * This method is called by the MimeTypeUpdateTask batch job.
-     *
-     * @param documentVersionId The UUID of the document version to update.
-     */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateMimeType(UUID documentVersionId) {
         log.info("Processing MIME type update for ID: {}", documentVersionId);
