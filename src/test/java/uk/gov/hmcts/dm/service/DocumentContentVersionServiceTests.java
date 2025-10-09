@@ -92,7 +92,7 @@ class DocumentContentVersionServiceTests {
         documentContentVersionService.updateMimeType(docId);
 
         // Then
-        verify(documentContentVersionRepository, never()).save(version); // Assuming transactional boundary handles save
+        verify(documentContentVersionRepository).save(version);
         assertEquals("application/pdf", version.getMimeType());
         assertTrue(version.isMimeTypeUpdated());
     }

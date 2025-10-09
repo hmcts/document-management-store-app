@@ -63,24 +63,24 @@ public class DocumentContentVersionService {
                 return;
             }
 
-            DocumentContentVersion version = versionOptional.get();
+            DocumentContentVersion documentVersion = versionOptional.get();
             String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
 
             if (detectedMimeType == null) {
                 log.warn("Could not detect MIME type for {}. Marking as processed to prevent retries.",
                     documentVersionId);
-            } else if (!Objects.equals(version.getMimeType(), detectedMimeType)) {
+            } else if (!Objects.equals(documentVersion.getMimeType(), detectedMimeType)) {
                 log.info("Updating MIME type for document {}. Old: [{}], New: [{}].",
-                    documentVersionId, version.getMimeType(), detectedMimeType);
-                version.setMimeType(detectedMimeType);
+                    documentVersionId, documentVersion.getMimeType(), detectedMimeType);
+                documentVersion.setMimeType(detectedMimeType);
             } else {
                 log.info("Detected MIME type for {} is the same as existing one [{}]. No update needed.",
                     documentVersionId, detectedMimeType);
             }
 
             // Always mark the record as updated to prevent it from being processed again.
-            version.setMimeTypeUpdated(true);
-
+            documentVersion.setMimeTypeUpdated(true);
+            documentContentVersionRepository.save(documentVersion);
         } catch (Exception e) {
             log.error("Error updating MIME type for document {}: {}", documentVersionId, e.getMessage(), e);
         }
