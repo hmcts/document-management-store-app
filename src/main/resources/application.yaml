@@ -24,7 +24,7 @@ spring:
     active: dev
   jpa:
     database: postgresql
-    show-sql: true
+    show-sql: ${SHOW_SQL:false}
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
@@ -32,7 +32,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     properties:
       hibernate:
-        format_sql: true
         order_inserts: true
         order_updates: true
         jdbc:
@@ -115,8 +114,8 @@ logging:
     uk.gov.hmcts.dm: ${LOG_LEVEL_DM:DEBUG}
     org.postgresql: ${LOG_LEVEL_POSTGRES:DEBUG}
     org.springframework.jdbc.core: ${LOG_LEVEL_SPRING_JDBC:DEBUG}
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.SQL: ${LOG_LEVEL_HIBERNATE:DEBUG}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${LOG_LEVEL_HIBERNATE:DEBUG}
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
   application-insights:
@@ -235,6 +234,3 @@ dbMigration:
   # When true, the app will run DB migration on startup.
   # Otherwise, it will just check if all migrations have been applied (and fail to start if not).
   runOnStartup: ${RUN_DB_MIGRATION_ON_STARTUP:true}
-
-
-
