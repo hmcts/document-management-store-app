@@ -18,6 +18,7 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.exception.InvalidRangeRequestException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.Objects;
@@ -40,6 +41,18 @@ public class BlobStorageReadService {
     public BlobStorageReadService(BlobContainerClient cloudBlobContainer, ToggleConfiguration toggleConfiguration) {
         this.cloudBlobContainer = cloudBlobContainer;
         this.toggleConfiguration = toggleConfiguration;
+    }
+
+
+    /**
+     * Gets an InputStream for a given document/blob UUID.
+     * This is useful for internal processing like MIME type detection.
+     *
+     * @param documentId The UUID of the document content version.
+     * @return An InputStream of the blob's content.
+     */
+    public InputStream getInputStream(UUID documentId) {
+        return blockBlobClient(documentId.toString()).openInputStream();
     }
 
     /**
