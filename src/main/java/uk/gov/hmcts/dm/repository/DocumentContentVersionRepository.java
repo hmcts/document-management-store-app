@@ -38,6 +38,6 @@ public interface DocumentContentVersionRepository extends
 
 
     @Modifying
-    @Query("UPDATE DocumentContentVersion d SET d.mimeTypeUpdated = true WHERE d.id = :id")
-    void markMimeTypeUpdated(@Param("id") UUID id);
+    @Query("UPDATE DocumentContentVersion d SET d.mimeType = :mimeType, d.mimeTypeUpdated = true where d.id = :id")
+    int updateMimeType(@Param("id") UUID id, @Param("mimeType") String mimeType);
 }

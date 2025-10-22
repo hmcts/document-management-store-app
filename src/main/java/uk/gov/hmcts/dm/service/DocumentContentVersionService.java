@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
@@ -62,24 +61,22 @@ public class DocumentContentVersionService {
         String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
 
         if (detectedMimeType == null) {
-            log.warn("Could not detect MIME type for {}. Marking as processed to prevent retries.",
-                documentVersionId);
+            log.warn(
+                "Could not detect MIME type for {}. Marking as processed to prevent retries.",
+                documentVersionId
+            );
+            detectedMimeType = documentVersion.getMimeType();
         } else {
             log.info("Updating MIME type for document {}. Old: [{}], New: [{}].",
                 documentVersionId, documentVersion.getMimeType(), detectedMimeType);
-            documentVersion.setMimeType(detectedMimeType);
         }
+        documentContentVersionRepository.updateMimeType(documentVersionId, detectedMimeType);
 
-        documentVersion.setMimeTypeUpdated(true);
         log.info("documentVersion id:{}, mimeType:{}, isUpdated: {}",
             documentVersion.getId(),
             documentVersion.getMimeType(),
             documentVersion.isMimeTypeUpdated()
         );
-        log.info("Transaction active: {}",
-            TransactionSynchronizationManager.isActualTransactionActive());
-
-        documentContentVersionRepository.save(documentVersion);
     }
 }
 
