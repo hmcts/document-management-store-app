@@ -90,7 +90,7 @@ def versions = [
     shedlock           : '6.10.0',
     hibernate          : '6.6.33.Final',
     jupiter            : '6.0.0',
-    springSecurity     : '6.5.5'
+    springSecurity     : '6.5.6'
 ]
 
 ext['hibernate.version'] = versions.hibernate
@@ -161,7 +161,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.5.5'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.5.6'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-params', version: versions.jupiter
