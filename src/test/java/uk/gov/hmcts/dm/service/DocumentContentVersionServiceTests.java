@@ -59,43 +59,38 @@ class DocumentContentVersionServiceTests {
     }
 
     @Test
-    void updateMimeType_shouldUpdateMimeTypeWhenDetectedIsDifferent() {
+    void updateMimeType_shouldUpdateMimeTypeWhenDetectedSuccessfully() {
         UUID docId = UUID.randomUUID();
-        DocumentContentVersion version = new DocumentContentVersion();
-        version.setMimeType("application/octet-stream");
+        String detectedMimeType = "application/pdf";
 
-        when(documentContentVersionRepository.findById(docId)).thenReturn(Optional.of(version));
-        when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn("application/pdf");
+        when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn(detectedMimeType);
 
         documentContentVersionService.updateMimeType(docId);
 
-        verify(documentContentVersionRepository).updateMimeType(docId, "application/pdf");
+        verify(documentContentVersionRepository).updateMimeType(docId, detectedMimeType);
+        verify(documentContentVersionRepository, never()).markMimeTypeUpdated(any());
     }
 
     @Test
     void updateMimeType_shouldMarkAsUpdatedWhenDetectionFails() {
         UUID docId = UUID.randomUUID();
-        DocumentContentVersion version = new DocumentContentVersion();
-        version.setMimeType("application/octet-stream");
 
-        when(documentContentVersionRepository.findById(docId)).thenReturn(Optional.of(version));
         when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn(null);
 
         documentContentVersionService.updateMimeType(docId);
 
-        // Should fall back to existing mime type
-        verify(documentContentVersionRepository).updateMimeType(docId, "application/octet-stream");
+        verify(documentContentVersionRepository).markMimeTypeUpdated(docId);
+        verify(documentContentVersionRepository, never()).updateMimeType(any(), any());
     }
 
     @Test
     void updateMimeType_shouldDoNothingIfDocumentNotFound() {
         UUID docId = UUID.randomUUID();
-        when(documentContentVersionRepository.findById(docId)).thenReturn(Optional.empty());
+        when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn(null);
 
         documentContentVersionService.updateMimeType(docId);
 
-        verify(mimeTypeDetectionService, never()).detectMimeType(docId);
+        verify(mimeTypeDetectionService).detectMimeType(docId);
         verify(documentContentVersionRepository, never()).updateMimeType(any(), any());
     }
-
 }

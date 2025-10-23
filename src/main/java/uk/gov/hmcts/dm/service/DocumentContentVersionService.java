@@ -47,17 +47,6 @@ public class DocumentContentVersionService {
     public void updateMimeType(UUID documentVersionId) {
         log.info("Processing MIME type update for ID: {}", documentVersionId);
 
-        Optional<DocumentContentVersion> versionOptional =
-            documentContentVersionRepository.findById(documentVersionId);
-        if (versionOptional.isEmpty()) {
-            log.warn(
-                "DocumentContentVersion not found during MIME type update: {}. Nothing to process.",
-                documentVersionId
-            );
-            return;
-        }
-
-        DocumentContentVersion documentVersion = versionOptional.get();
         String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
 
         if (detectedMimeType == null) {
@@ -65,17 +54,17 @@ public class DocumentContentVersionService {
                 "Could not detect MIME type for {}. Marking as processed to prevent retries.",
                 documentVersionId
             );
-            detectedMimeType = documentVersion.getMimeType();
-        } else {
-            log.info("Updating MIME type for document {}. Old: [{}], New: [{}].",
-                documentVersionId, documentVersion.getMimeType(), detectedMimeType);
+            documentContentVersionRepository.markMimeTypeUpdated(documentVersionId);
+            return;
         }
+        log.info("Updating MIME type for document {}. New: [{}].",
+            documentVersionId, detectedMimeType);
+
         documentContentVersionRepository.updateMimeType(documentVersionId, detectedMimeType);
 
-        log.info("documentVersion id:{}, mimeType:{}, isUpdated: {}",
-            documentVersion.getId(),
-            documentVersion.getMimeType(),
-            documentVersion.isMimeTypeUpdated()
+        log.info("Updated documentVersion id:{}, mimeType:{}",
+            documentVersionId,
+            detectedMimeType
         );
     }
 }
