@@ -10,12 +10,14 @@ import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -60,37 +62,37 @@ class DocumentContentVersionServiceTests {
 
     @Test
     void updateMimeType_shouldUpdateMimeTypeWhenDetectedSuccessfully() {
-        UUID docId = UUID.randomUUID();
+        List<UUID> documentVersionIdList = List.of(UUID.randomUUID());
         String detectedMimeType = "application/pdf";
 
-        when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn(detectedMimeType);
+        when(mimeTypeDetectionService.detectMimeType(any())).thenReturn(detectedMimeType);
 
-        documentContentVersionService.updateMimeType(docId);
+        documentContentVersionService.updateMimeType(documentVersionIdList);
 
-        verify(documentContentVersionRepository).updateMimeType(docId, detectedMimeType);
+        verify(documentContentVersionRepository).updateMimeType(any(), eq(detectedMimeType));
         verify(documentContentVersionRepository, never()).markMimeTypeUpdated(any());
     }
 
     @Test
     void updateMimeType_shouldMarkAsUpdatedWhenDetectionFails() {
-        UUID docId = UUID.randomUUID();
+        List<UUID> documentVersionIdList = List.of(UUID.randomUUID());
 
-        when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn(null);
+        when(mimeTypeDetectionService.detectMimeType(any())).thenReturn(null);
 
-        documentContentVersionService.updateMimeType(docId);
+        documentContentVersionService.updateMimeType(documentVersionIdList);
 
-        verify(documentContentVersionRepository).markMimeTypeUpdated(docId);
+        verify(documentContentVersionRepository).markMimeTypeUpdated(any());
         verify(documentContentVersionRepository, never()).updateMimeType(any(), any());
     }
 
     @Test
     void updateMimeType_shouldDoNothingIfDocumentNotFound() {
-        UUID docId = UUID.randomUUID();
-        when(mimeTypeDetectionService.detectMimeType(docId)).thenReturn(null);
+        List<UUID> documentVersionIdList = List.of(UUID.randomUUID());
+        when(mimeTypeDetectionService.detectMimeType(any())).thenReturn(null);
 
-        documentContentVersionService.updateMimeType(docId);
+        documentContentVersionService.updateMimeType(documentVersionIdList);
 
-        verify(mimeTypeDetectionService).detectMimeType(docId);
+        verify(mimeTypeDetectionService).detectMimeType(any());
         verify(documentContentVersionRepository, never()).updateMimeType(any(), any());
     }
 }

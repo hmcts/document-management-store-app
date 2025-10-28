@@ -11,6 +11,7 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,28 +45,31 @@ public class DocumentContentVersionService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void updateMimeType(UUID documentVersionId) {
-        log.info("Processing MIME type update for ID: {}", documentVersionId);
+    public void updateMimeType(List<UUID> documentVersionIdList) {
 
-        String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
+        for (UUID documentVersionId : documentVersionIdList) {
+            log.info("Processing MIME type update for ID: {}", documentVersionId);
 
-        if (detectedMimeType == null) {
-            log.warn(
-                "Could not detect MIME type for {}. Marking as processed to prevent retries.",
-                documentVersionId
+            String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
+
+            if (detectedMimeType == null) {
+                log.warn(
+                    "Could not detect MIME type for {}. Marking as processed to prevent retries.",
+                    documentVersionId
+                );
+                documentContentVersionRepository.markMimeTypeUpdated(documentVersionId);
+                continue;
+            }
+            log.info("Updating MIME type for document {}. New: [{}].",
+                documentVersionId, detectedMimeType);
+
+            documentContentVersionRepository.updateMimeType(documentVersionId, detectedMimeType);
+
+            log.info("Updated documentVersion id:{}, mimeType:{}",
+                documentVersionId,
+                detectedMimeType
             );
-            documentContentVersionRepository.markMimeTypeUpdated(documentVersionId);
-            return;
         }
-        log.info("Updating MIME type for document {}. New: [{}].",
-            documentVersionId, detectedMimeType);
-
-        documentContentVersionRepository.updateMimeType(documentVersionId, detectedMimeType);
-
-        log.info("Updated documentVersion id:{}, mimeType:{}",
-            documentVersionId,
-            detectedMimeType
-        );
     }
 }
 

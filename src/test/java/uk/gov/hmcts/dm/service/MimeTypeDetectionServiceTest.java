@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -57,6 +58,22 @@ class MimeTypeDetectionServiceTest {
         String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
 
         // Then
+        assertNull(detectedMimeType);
+    }
+
+    @Test
+    void testDetectMimeTypeHandlesIOException() {
+        InputStream throwingStream = new InputStream() {
+            @Override
+            public int read() throws IOException {
+                throw new IOException("IO error");
+            }
+        };
+
+        when(blobStorageReadService.getInputStream(documentVersionId)).thenReturn(throwingStream);
+
+        String detectedMimeType = mimeTypeDetectionService.detectMimeType(documentVersionId);
+
         assertNull(detectedMimeType);
     }
 

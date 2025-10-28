@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.config.batch;
 
+import com.microsoft.applicationinsights.core.dependencies.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This task periodically checks for Document Content Versions where the mimeTypeUpdated flag is false.
@@ -87,22 +87,16 @@ public class MimeTypeUpdateTask implements Runnable {
 
         log.info("Iteration {}: Found {} records to process for MIME type update.", iteration, documentIds.size());
 
-        ExecutorService executorService = Executors.newFixedThreadPool(threadLimit);
-        try {
-            documentIds.forEach(
-                id -> executorService.submit(() -> documentContentVersionService.updateMimeType(id))
+        int batchCommitSize = 500; // Define the batch size for committing to the DB
+        List<List<UUID>> batches = Lists.partition(documentIds, batchCommitSize);
+
+        try (ExecutorService executorService = Executors.newFixedThreadPool(threadLimit)) {
+            batches.forEach(
+                batch -> executorService.submit(() ->
+                    documentContentVersionService.updateMimeType(batch))
             );
-        } finally {
-            executorService.shutdown();
         }
 
-        try {
-            // Wait for all tasks to complete
-            executorService.awaitTermination(1, TimeUnit.HOURS);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            log.error("MIME type update job was interrupted while waiting for tasks to complete.", e);
-        }
 
         iterationStopWatch.stop();
         log.info("Time taken to complete iteration number: {} was : {} ms", iteration,
