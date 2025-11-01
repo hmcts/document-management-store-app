@@ -4,29 +4,38 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class DocumentContentVersionServiceTests {
 
     @Mock
-    DocumentContentVersionRepository documentContentVersionRepository;
+    private DocumentContentVersionRepository documentContentVersionRepository;
 
     @Mock
-    StoredDocumentRepository storedDocumentRepository;
+    private StoredDocumentRepository storedDocumentRepository;
+
+    @Mock
+    private MimeTypeDetectionService mimeTypeDetectionService;
 
     @InjectMocks
-    DocumentContentVersionService documentContentVersionService;
+    private DocumentContentVersionService documentContentVersionService;
 
     @Test
     void testFindOne() {
@@ -51,4 +60,39 @@ class DocumentContentVersionServiceTests {
             documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(TestUtil.RANDOM_UUID));
     }
 
+    @Test
+    void updateMimeType_shouldUpdateMimeTypeWhenDetectedSuccessfully() {
+        List<UUID> documentVersionIdList = List.of(UUID.randomUUID());
+        String detectedMimeType = "application/pdf";
+
+        when(mimeTypeDetectionService.detectMimeType(any())).thenReturn(detectedMimeType);
+
+        documentContentVersionService.updateMimeType(documentVersionIdList);
+
+        verify(documentContentVersionRepository).updateMimeType(any(), eq(detectedMimeType));
+        verify(documentContentVersionRepository, never()).markMimeTypeUpdated(any());
+    }
+
+    @Test
+    void updateMimeType_shouldMarkAsUpdatedWhenDetectionFails() {
+        List<UUID> documentVersionIdList = List.of(UUID.randomUUID());
+
+        when(mimeTypeDetectionService.detectMimeType(any())).thenReturn(null);
+
+        documentContentVersionService.updateMimeType(documentVersionIdList);
+
+        verify(documentContentVersionRepository).markMimeTypeUpdated(any());
+        verify(documentContentVersionRepository, never()).updateMimeType(any(), any());
+    }
+
+    @Test
+    void updateMimeType_shouldDoNothingIfDocumentNotFound() {
+        List<UUID> documentVersionIdList = List.of(UUID.randomUUID());
+        when(mimeTypeDetectionService.detectMimeType(any())).thenReturn(null);
+
+        documentContentVersionService.updateMimeType(documentVersionIdList);
+
+        verify(mimeTypeDetectionService).detectMimeType(any());
+        verify(documentContentVersionRepository, never()).updateMimeType(any(), any());
+    }
 }
