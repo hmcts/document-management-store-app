@@ -20,7 +20,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '12.1.6'
     id 'au.com.dius.pact' version '4.6.17'
     id 'org.flywaydb.flyway' version '11.15.0'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.2.34'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.3.2'
 }
 
 group = 'uk.gov.hmcts.dm'
@@ -82,14 +82,14 @@ tasks.withType(JavaCompile).configureEach {
 def versions = [
     ehcache            : '3.11.1',
     postgresql         : '42.7.8',
-    jackson            : '2.20.0',
-    serenity           : '4.2.34',
+    jackson            : '2.20.1',
+    serenity           : '4.3.2',
     logging            : '6.1.9',
     pact_version       : '4.6.17',
     emTestHelper       : '2.1.1',
     shedlock           : '6.10.0',
-    hibernate          : '6.6.33.Final',
-    jupiter            : '6.0.0',
+    hibernate          : '6.6.34.Final',
+    jupiter            : '6.0.1',
     springSecurity     : '6.5.6'
 ]
 
@@ -138,7 +138,7 @@ dependencies {
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.15.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
-    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '8.1'
+    implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '9.0'
 
 
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
@@ -212,7 +212,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.junit.platform', version: '6.0.0') {
+        dependencySet(group: 'org.junit.platform', version: '6.0.1') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }
@@ -224,7 +224,7 @@ dependencyCheck {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '12.1.0'
+    toolVersion = '12.1.1'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
