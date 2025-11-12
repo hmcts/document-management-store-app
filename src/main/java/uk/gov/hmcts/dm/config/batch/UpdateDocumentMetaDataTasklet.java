@@ -87,7 +87,7 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
                 .lines()
                 .skip(1)
                 .map(line -> createDocumentUpdate(line.split(",")))
-                .collect(Collectors.toList());
+                .toList();
             log.info(" {} file processed ", client.getBlobName());
 
             documentService.updateItems(new UpdateDocumentsCommand(null, updates));

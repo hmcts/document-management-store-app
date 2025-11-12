@@ -32,7 +32,6 @@ public class WelcomeController {
         path = "/",
         produces = APPLICATION_JSON_VALUE
     )
-    @ResponseBody
     public ResponseEntity<Map<String, String>> welcome() {
 
         log.info("Welcome message : '{}'", MESSAGE);
