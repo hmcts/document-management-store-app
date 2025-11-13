@@ -3,6 +3,8 @@ package uk.gov.hmcts.dm.config.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,10 +22,25 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Profile("!contract")
 public class SpringSecurityConfiguration {
 
-    private DmServiceAuthFilter dmServiceAuthFilter;
+    private final DmServiceAuthFilter dmServiceAuthFilter;
+    private final PermissionEvaluator permissionEvaluator;
 
-    public SpringSecurityConfiguration(DmServiceAuthFilter dmServiceAuthFilter) {
+    public SpringSecurityConfiguration(
+        DmServiceAuthFilter dmServiceAuthFilter,
+        PermissionEvaluator permissionEvaluator) {
         this.dmServiceAuthFilter = dmServiceAuthFilter;
+        this.permissionEvaluator = permissionEvaluator;
+    }
+
+    /**
+     * Registers your custom PermissionEvaluator so @PreAuthorize("hasPermission(...)")
+     * expressions work with EnableMethodSecurity.
+     */
+    @Bean
+    public DefaultMethodSecurityExpressionHandler methodSecurityExpressionHandler() {
+        DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler();
+        handler.setPermissionEvaluator(permissionEvaluator);
+        return handler;
     }
 
     @Bean
@@ -64,5 +81,4 @@ public class SpringSecurityConfiguration {
                 "/metrics/**",
                 "/");
     }
-
 }
