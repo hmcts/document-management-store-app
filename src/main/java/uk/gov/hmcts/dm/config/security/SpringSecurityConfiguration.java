@@ -32,10 +32,6 @@ public class SpringSecurityConfiguration {
         this.permissionEvaluator = permissionEvaluator;
     }
 
-    /**
-     * Registers your custom PermissionEvaluator so @PreAuthorize("hasPermission(...)")
-     * expressions work with EnableMethodSecurity.
-     */
     @Bean
     public DefaultMethodSecurityExpressionHandler methodSecurityExpressionHandler() {
         DefaultMethodSecurityExpressionHandler handler = new DefaultMethodSecurityExpressionHandler();
