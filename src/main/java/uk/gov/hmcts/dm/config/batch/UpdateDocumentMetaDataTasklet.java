@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * This tasklet periodically checks for CSV files in the hmctsmetadata blob container. If it finds one it will download

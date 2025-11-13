@@ -109,7 +109,7 @@ public class OrphanDocumentDeletionTask {
         try (Stream<String> stream = Files.lines(Paths.get(csvPath), StandardCharsets.UTF_8)) {
             return stream
                 .flatMap(line -> Arrays.stream(line.split(",")))
-                .map(getStringUUIDFunction())
+                .map(getStringUuidFunction())
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         } catch (IOException e) {
@@ -118,7 +118,7 @@ public class OrphanDocumentDeletionTask {
         return Collections.emptySet();
     }
 
-    private static Function<String, UUID> getStringUUIDFunction() {
+    private static Function<String, UUID> getStringUuidFunction() {
         return str -> {
             try {
                 return UUID.fromString(str);

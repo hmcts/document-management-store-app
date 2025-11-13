@@ -88,8 +88,7 @@ public class BatchConfiguration {
         EntityManagerFactory entityManagerFactory,
         JobLauncher jobLauncher,
         DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor,
-        JdbcTemplate jdbcTemplate)
-    {
+        JdbcTemplate jdbcTemplate) {
         this.jobRepository = jobRepository;
         this.transactionManager = transactionManager;
         this.entityManagerFactory = entityManagerFactory;
