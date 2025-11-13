@@ -47,7 +47,7 @@ public class SpringSecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) ->
+        return web ->
             web.ignoring().requestMatchers(
                 "/swagger-ui.html",
                 "/swagger-ui/**",
