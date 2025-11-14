@@ -51,7 +51,7 @@ public class MetadataMigrationConfiguration {
     JdbcTemplate jdbcTemplate;
 
     @Autowired
-    @Qualifier("metadata-storage")
+    @Qualifier("metadataStorage")
     private BlobContainerClient blobClient;
 
     @Autowired
