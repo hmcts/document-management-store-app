@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * This tasklet periodically checks for CSV files in the hmctsmetadata blob container. If it finds one it will download
@@ -86,7 +87,7 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
                 .lines()
                 .skip(1)
                 .map(line -> createDocumentUpdate(line.split(",")))
-                .toList();
+                .collect(Collectors.toList());
             log.info(" {} file processed ", client.getBlobName());
 
             documentService.updateItems(new UpdateDocumentsCommand(null, updates));
