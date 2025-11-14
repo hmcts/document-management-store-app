@@ -16,16 +16,12 @@ import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * This tasklet periodically checks for CSV files in the hmctsmetadata blob container. If it finds one it will download
@@ -59,19 +55,8 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
     }
 
     private BufferedReader getCsvFile(BlobClient client) {
-        try {
-            final File csv = File.createTempFile("metadata", ".csv");
-            final String filename = csv.getAbsolutePath();
-
-            csv.delete();
-            client.downloadToFile(filename);
-
-            final InputStream stream = new FileInputStream(filename);
-
-            return new BufferedReader(new InputStreamReader(stream));
-        } catch (IOException e) {
-            throw new UpdateDocumentMetaDataException(e);
-        }
+        final InputStream stream = client.openInputStream();
+        return new BufferedReader(new InputStreamReader(stream));
     }
 
     private void processItem(BlobClient client) {
@@ -87,7 +72,7 @@ public class UpdateDocumentMetaDataTasklet implements Tasklet {
                 .lines()
                 .skip(1)
                 .map(line -> createDocumentUpdate(line.split(",")))
-                .collect(Collectors.toList());
+                .toList();
             log.info(" {} file processed ", client.getBlobName());
 
             documentService.updateItems(new UpdateDocumentsCommand(null, updates));
