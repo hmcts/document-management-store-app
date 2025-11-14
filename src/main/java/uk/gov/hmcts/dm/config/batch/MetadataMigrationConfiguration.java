@@ -38,24 +38,35 @@ import javax.sql.DataSource;
 public class MetadataMigrationConfiguration {
 
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final JobRepository jobRepository;
+
+    private final PlatformTransactionManager transactionManager;
+
+    public final JobLauncher jobLauncher;
+
+    public final JdbcTemplate jdbcTemplate;
+
+    private final BlobContainerClient blobClient;
+
+    private final StoredDocumentService storedDocumentService;
 
     @Autowired
-    private PlatformTransactionManager transactionManager;
-
-    @Autowired
-    public JobLauncher jobLauncher;
-
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    @Qualifier("metadata-storage")
-    private BlobContainerClient blobClient;
-
-    @Autowired
-    private StoredDocumentService storedDocumentService;
+    public MetadataMigrationConfiguration(
+        JobRepository jobRepository,
+        PlatformTransactionManager transactionManager,
+        JobLauncher jobLauncher,
+        JdbcTemplate jdbcTemplate,
+        @Qualifier("metadata-storage")
+        BlobContainerClient blobClient,
+        StoredDocumentService storedDocumentService
+    ) {
+        this.jobRepository = jobRepository;
+        this.transactionManager = transactionManager;
+        this.jobLauncher = jobLauncher;
+        this.jdbcTemplate = jdbcTemplate;
+        this.blobClient = blobClient;
+        this.storedDocumentService = storedDocumentService;
+    }
 
     @Scheduled(fixedDelayString = "${spring.batch.documentMetaDataUpdateMilliseconds}")
     @SchedulerLock(name = "${task.env}-documentMetaDataUpdate")

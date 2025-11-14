@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
+@AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 @ToString
@@ -131,30 +133,6 @@ public class StoredDocument implements RolesAware {
         setId(id);
     }
 
-    public StoredDocument(UUID id, String createdBy, String createdByService,
-                          String lastModifiedBy, String lastModifiedByService,
-                          Date modifiedOn, Date createdOn,
-                          boolean deleted, boolean hardDeleted,
-                          Folder folder, List<DocumentContentVersion> documentContentVersions,
-                          Set<StoredDocumentAuditEntry> auditEntries,
-                          Classifications classification, Set<String> roles, Map<String, String> metadata, Date ttl) {
-        setId(id);
-        setCreatedBy(createdBy);
-        setCreatedByService(createdByService);
-        this.lastModifiedBy = lastModifiedBy;
-        this.setLastModifiedByService(lastModifiedByService);
-        setModifiedOn(modifiedOn);
-        setCreatedOn(createdOn);
-        setDeleted(deleted);
-        setHardDeleted(hardDeleted);
-        setFolder(folder);
-        setDocumentContentVersions(documentContentVersions);
-        setAuditEntries(auditEntries);
-        setClassification(classification);
-        setRoles(roles);
-        setMetadata(metadata);
-        setTtl(ttl);
-    }
 
     public DocumentContentVersion getMostRecentDocumentContentVersion() {
         return CollectionUtils.isEmpty(documentContentVersions)

@@ -9,7 +9,6 @@ import uk.gov.hmcts.reform.authorisation.exceptions.ServiceException;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilter {
 
@@ -36,10 +35,10 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
         }
         this.authorisedServices = authorisedServices.stream()
             .map(String::toLowerCase)
-            .collect(Collectors.toList());
+            .toList();
         this.deleteAuthorisedServices = deleteAuthorisedServices.stream()
             .map(String::toLowerCase)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
@@ -55,17 +54,17 @@ public class DmServiceAuthFilter extends AbstractPreAuthenticatedProcessingFilte
                     request.getMethod()
                 );
                 return null;
-            } else if (request.getRequestURI().contains("/documents/delete")) {
-                if (!deleteAuthorisedServices.contains(serviceName)) {
-                    LOG.info(
-                        "service forbidden {} for DELETE endpoint: {} method: {} ",
-                        serviceName,
-                        request.getRequestURI(),
-                        request.getMethod()
-                    );
-                    return null;
-                }
+            } else if (request.getRequestURI().contains("/documents/delete")
+                && !deleteAuthorisedServices.contains(serviceName)) {
+                LOG.info(
+                    "service forbidden {} for DELETE endpoint: {} method: {} ",
+                    serviceName,
+                    request.getRequestURI(),
+                    request.getMethod()
+                );
+                return null;
             }
+
 
             LOG.info(
                 "service authorized {} for endpoint: {} method: {}  ",

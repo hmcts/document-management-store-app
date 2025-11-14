@@ -23,9 +23,12 @@ public class ExceptionStatusCodeAndMessageResolver {
 
     private Map<Class<? extends Throwable>, String> exceptionToMessageMap = new HashMap<>();
 
+    private final MessageSource messageSource;
 
     @Autowired
-    private MessageSource messageSource;
+    public ExceptionStatusCodeAndMessageResolver(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @PostConstruct
     public void init() {
