@@ -36,7 +36,6 @@ public class TestController {
     * MetadataMigrationConfiguration and MetaDataAzureStorageConfiguration.
     * Due to the tie in with Azure, it will have to stay in that format.
     * */
-    @SuppressWarnings("java:S6830")
     public TestController(
         BlobStorageReadService blobStorageReadService,
         @Autowired(required = false) @Qualifier("metadataStorage") BlobContainerClient blobClient
