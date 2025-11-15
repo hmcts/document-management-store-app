@@ -1,15 +1,19 @@
 package uk.gov.hmcts.dm.service;
 
-public interface Constants {
+public class Constants {
 
-    String IS_ADMIN = "isadmin";
+    private Constants() {
+    }
 
-    Boolean FALSE = false;
+    public static final String IS_ADMIN = "isadmin";
 
-    String CASE_REF_REGEX = "^\\d{16}$";
+    public static final Boolean FALSE = false;
 
-    String INVALID_CASEREF_EXCEPTION_MESSAGE = "Unable to verify caseRef pattern";
+    public static final String CASE_REF_REGEX = "^\\d{16}$";
 
-    String EMPTY_CASEREF_EXCEPTION_MESSAGE = "You need to populate all required parameters - caseRef";
+    public static final String INVALID_CASEREF_EXCEPTION_MESSAGE = "Unable to verify caseRef pattern";
+
+    public static final String EMPTY_CASEREF_EXCEPTION_MESSAGE
+        = "You need to populate all required parameters - caseRef";
 
 }
