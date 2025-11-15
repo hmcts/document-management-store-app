@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @EqualsAndHashCode(callSuper = true)
+@SuppressWarnings("java:S1452")
 public abstract class HalResource<T extends HalResource<T>>
     extends RepresentationModel<T> {
 
