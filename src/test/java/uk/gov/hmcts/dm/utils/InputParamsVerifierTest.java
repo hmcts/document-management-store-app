@@ -34,7 +34,9 @@ class InputParamsVerifierTest {
 
     @Test
     void shouldVerifyRequestParamsConditionsForCaseRef() {
-        assertDoesNotThrow(() -> verifyRequestParamsConditions(new DeleteCaseDocumentsCommand(secure().nextNumeric(16))));
+        assertDoesNotThrow(() -> verifyRequestParamsConditions(
+            new DeleteCaseDocumentsCommand(secure().nextNumeric(16)))
+        );
     }
 
     @Test
