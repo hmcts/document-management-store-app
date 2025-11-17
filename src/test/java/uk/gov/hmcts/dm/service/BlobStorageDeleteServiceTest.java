@@ -48,7 +48,7 @@ class BlobStorageDeleteServiceTest {
 
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
         given(blobClient.getBlockBlobClient()).willReturn(blob);
 

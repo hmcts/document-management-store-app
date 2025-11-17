@@ -6,7 +6,7 @@ import uk.gov.hmcts.dm.commandobject.DeleteCaseDocumentsCommand;
 import uk.gov.hmcts.dm.exception.InvalidRequestException;
 import uk.gov.hmcts.dm.service.Constants;
 
-import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
+import static org.apache.commons.lang3.RandomStringUtils.secure;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -34,14 +34,14 @@ class InputParamsVerifierTest {
 
     @Test
     void shouldVerifyRequestParamsConditionsForCaseRef() {
-        assertDoesNotThrow(() -> verifyRequestParamsConditions(new DeleteCaseDocumentsCommand(randomNumeric(16))));
+        assertDoesNotThrow(() -> verifyRequestParamsConditions(new DeleteCaseDocumentsCommand(secure().nextNumeric(16))));
     }
 
     @Test
     void shouldThrowExceptionWhenRequestParamsConditionsInvalidForCaseRef() {
         try {
             final DeleteCaseDocumentsCommand deleteCaseDocumentsCommand =
-                new DeleteCaseDocumentsCommand(randomNumeric(17));
+                new DeleteCaseDocumentsCommand(secure().nextNumeric(17));
             verifyRequestParamsConditions(deleteCaseDocumentsCommand);
             fail("The method should have thrown InvalidRequestException due to invalid caseRef");
         } catch (final InvalidRequestException invalidRequestException) {

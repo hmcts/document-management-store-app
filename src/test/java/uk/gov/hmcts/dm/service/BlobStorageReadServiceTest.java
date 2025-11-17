@@ -55,7 +55,7 @@ class BlobStorageReadServiceTest {
     private ToggleConfiguration toggleConfiguration;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         when(cloudBlobContainer.getBlobClient(any())).thenReturn(blobClient);
         when(blobClient.getBlockBlobClient()).thenReturn(blockBlobClient);
 
