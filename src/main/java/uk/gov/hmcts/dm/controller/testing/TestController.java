@@ -32,7 +32,6 @@ public class TestController {
     private final BlobContainerClient blobClient;
 
     /*
-    * Supressing sonar warning due to the metadataStorage name. This is also found in
     * MetadataMigrationConfiguration and MetaDataAzureStorageConfiguration.
     * Due to the tie in with Azure, it will have to stay in that format.
     * */
