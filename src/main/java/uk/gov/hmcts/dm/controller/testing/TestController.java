@@ -31,10 +31,6 @@ public class TestController {
 
     private final BlobContainerClient blobClient;
 
-    /*
-    * MetadataMigrationConfiguration and MetaDataAzureStorageConfiguration.
-    * Due to the tie in with Azure, it will have to stay in that format.
-    * */
     public TestController(
         BlobStorageReadService blobStorageReadService,
         @Autowired(required = false) @Qualifier("metadataStorage") BlobContainerClient blobClient
