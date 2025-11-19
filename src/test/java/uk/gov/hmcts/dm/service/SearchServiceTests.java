@@ -90,7 +90,7 @@ class SearchServiceTests {
     }
 
     @Test
-    public void testSearchByCreator() {
+    void testSearchByCreator() {
 
         List<StoredDocument> documents = Arrays.asList(
             new StoredDocument(),

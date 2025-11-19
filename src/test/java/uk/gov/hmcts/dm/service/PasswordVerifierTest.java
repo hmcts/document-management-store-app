@@ -15,7 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Callable;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -98,7 +101,7 @@ class PasswordVerifierTest {
 
     @Test
     @DisplayName("Test passwordVerifier for empty file and expect success")
-    void testEmptyFile() throws Exception {
+    void testEmptyFile() {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         when(file.isEmpty()).thenReturn(true);
         assertTrue(passwordVerifier.isNotPasswordProtected(file));
@@ -109,12 +112,14 @@ class PasswordVerifierTest {
     void returnsTrueWhenParsingTimesOut() throws Exception {
         MultipartFile file = Mockito.mock(MockMultipartFile.class);
         when(file.isEmpty()).thenReturn(false);
-        when(file.getInputStream()).thenAnswer(invocation -> {
-            Thread.sleep(6000); // Simulate delay
-            return null;
-        });
+        when(file.getInputStream()).thenAnswer(invocation -> null);
 
-        assertTrue(passwordVerifier.isNotPasswordProtected(file));
+        Callable<Boolean> verificationTask = () ->
+            passwordVerifier.isNotPasswordProtected(file); // Call the method under test
+
+        await()
+            .atMost(6, SECONDS)
+            .until(verificationTask::call, result -> result.equals(true));
     }
 
     @DisplayName("Returns true when thread is interrupted")

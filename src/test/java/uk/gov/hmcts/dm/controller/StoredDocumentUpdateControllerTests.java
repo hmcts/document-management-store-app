@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.junit.jupiter.api.Test;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
+import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.exception.DocumentUpdateException;
 import uk.gov.hmcts.dm.exception.StoredDocumentNotFoundException;
@@ -88,20 +89,25 @@ class StoredDocumentUpdateControllerTests extends ComponentTestBase {
     @Test
     void throwsDocumentUpdateExceptionWhenGenericExceptionOccurs() {
         doThrow(new RuntimeException("Unexpected error")).when(auditedStoredDocumentOperationsService)
-                .updateDocument(any(UUID.class), any(), any(Date.class));
+            .updateDocument(any(UUID.class), any(), any(Date.class));
+
+        UUID documentId = UUID.randomUUID();
+        Date newTtl = new Date();
+
+        Map<String, Object> requestBody = Map.of(
+            "ttl", newTtl,
+            "documents", Lists.newArrayList(
+                Map.of(
+                    "documentId", documentId,
+                    "metadata", Map.of("key", "value")
+                )
+            )
+        );
+
+        RestActions restAction = restActions.withAuthorizedUser("userId");
 
         Exception exception = assertThrows(RuntimeException.class, () ->
-                restActions
-                        .withAuthorizedUser("userId")
-                        .patch("/documents", Map.of(
-                                "ttl", new Date(),
-                                "documents", Lists.newArrayList(
-                                        Map.of(
-                                                "documentId", UUID.randomUUID(),
-                                                "metadata", Map.of("key", "value")
-                                        )
-                                )
-                        ))
+            restAction.patch("/documents", requestBody) // Single invocation
         );
 
         Throwable cause = exception.getCause();
