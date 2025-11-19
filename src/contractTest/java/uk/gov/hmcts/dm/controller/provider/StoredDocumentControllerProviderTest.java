@@ -54,19 +54,19 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
         storedDocument.setCreatedOn(new Date());
         storedDocument.setRoles(Set.of("citizen"));
 
-        DocumentContentVersion documentContentVersion = new DocumentContentVersion(
-            DOCUMENT_CONTENT_VERSION_ID,
-            "application/octet-stream",
-            true,
-            "sample.pdf",
-            "test-user",
-            "test-service",
-            new Date(),
-            storedDocument,
-            8L, // size matches dummyData length
-            "http://localhost/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID,
-            "abc123checksum"
-        );
+        DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
+            .id(DOCUMENT_CONTENT_VERSION_ID)
+            .mimeType("application/octet-stream")
+            .mimeTypeUpdated(true)
+            .originalDocumentName("sample.pdf")
+            .createdBy("test-user")
+            .createdByService("test-service")
+            .createdOn(new Date())
+            .storedDocument(storedDocument)
+            .size(8L)
+            .contentUri("http://localhost/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID)
+            .contentChecksum("abc123checksum")
+            .build();
 
         when(documentContentVersionService
             .findMostRecentDocumentContentVersionByStoredDocumentId(UUID.fromString(DOCUMENT_ID)))

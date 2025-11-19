@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ import static uk.gov.hmcts.dm.service.SecurityUtilService.sanitizedSetFrom;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 public class DocumentContentVersion implements RolesAware {
@@ -111,31 +113,6 @@ public class DocumentContentVersion implements RolesAware {
         this.setCreatedBy(userId);
     }
 
-    public DocumentContentVersion(
-        UUID id,
-        String mimeType,
-        boolean mimeTypeUpdated,
-        String originalDocumentName,
-        String createdBy,
-        String createdByService,
-        Date createdOn,
-        StoredDocument storedDocument,
-        Long size,
-        String contentUri,
-        String contentChecksum
-    ) {
-        this.id = id;
-        this.mimeType = mimeType;
-        this.mimeTypeUpdated = mimeTypeUpdated;
-        setOriginalDocumentName(originalDocumentName);
-        this.createdBy = createdBy;
-        setCreatedOn(createdOn);
-        setCreatedByService(createdByService);
-        this.storedDocument = storedDocument;
-        this.size = size;
-        this.contentUri = contentUri;
-        this.contentChecksum = contentChecksum;
-    }
 
     public Date getCreatedOn() {
         return (createdOn == null) ? null : new Date(createdOn.getTime());

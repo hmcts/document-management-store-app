@@ -28,8 +28,12 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
     @Value("${errors.globalIncludeStackTrace}")
     private boolean globalIncludeStackTrace = true;
 
-    @Autowired
     private ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
+
+    @Autowired
+    public ApiErrorAttributes(ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver) {
+        this.exceptionStatusCodeAndMessageResolver = exceptionStatusCodeAndMessageResolver;
+    }
 
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {

@@ -66,7 +66,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+    protected ResponseEntity handleMethodArgumentNotValid(
         MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
         if (ex.hasFieldErrors()) {
@@ -83,7 +83,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(
+    protected ResponseEntity handleExceptionInternal(
         Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
 
         if (responseCommitted(ex, request)) {

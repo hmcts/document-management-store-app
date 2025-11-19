@@ -23,9 +23,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,9 +51,9 @@ public class OrphanDocumentDeletionTask {
     private final BlobContainerClient blobClient;
     private final StoredDocumentService documentService;
     private final AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService;
-    private static String TMP_DIR = System.getProperty("java.io.tmpdir");
-    private static String FILE_NAME_REGEX =  "^(EM-\\d+|CHG.*|INC.*)\\.csv$";
-    private static String SERVICE_NAME = "orphan-document-deletion";
+    private static final String TMP_DIR = System.getProperty("java.io.tmpdir");
+    private static final String FILE_NAME_REGEX =  "^(EM-\\d+|CHG.*|INC.*)\\.csv$";
+    private static final String SERVICE_NAME = "orphan-document-deletion";
 
 
     public OrphanDocumentDeletionTask(
@@ -82,43 +85,48 @@ public class OrphanDocumentDeletionTask {
     }
 
     private Set<UUID> getCsvFileAndParse(BlobClient client) {
-        String csvPath = null;
+        String csvPath = TMP_DIR + File.separatorChar + "orphan-document.csv";
         try {
-            csvPath = TMP_DIR + File.separatorChar + "orphan-document.csv";
+
             client.downloadToFile(csvPath);
 
-            try (Stream<String> stream = Files.lines(Paths.get(csvPath), StandardCharsets.UTF_8)) {
-                Set<UUID> set = stream
-                    .flatMap(line -> Arrays.stream(line.split(",")))
-                    .map(str -> {
-                        try {
-                            return UUID.fromString(str);
-                        } catch (IllegalArgumentException e) {
-                            log.info("Skipping {} as it is not UUID", str);
-                            return null;
-                        }
-                    })
-                    .filter(uuid -> uuid != null)
-                    .collect(Collectors.toSet());
-
-                return set;
-            } catch (IOException e) {
-                log.info("File Parsing failed", e);
-            }
+            return getUuids(csvPath);
 
         } catch (Exception ex) {
             log.info("File processing failed", ex);
 
         } finally {
             try {
-                if (csvPath != null) {
-                    Files.delete(Paths.get(csvPath));
-                }
+                Files.delete(Paths.get(csvPath));
             } catch (Exception ex) {
                 log.info("Deleting temp file failed, {} ", csvPath);
             }
         }
-        return null;
+        return Collections.emptySet();
+    }
+
+    private static Set<UUID> getUuids(String csvPath) {
+        try (Stream<String> stream = Files.lines(Paths.get(csvPath), StandardCharsets.UTF_8)) {
+            return stream
+                .flatMap(line -> Arrays.stream(line.split(",")))
+                .map(getStringUuidFunction())
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        } catch (IOException e) {
+            log.info("File Parsing failed", e);
+        }
+        return Collections.emptySet();
+    }
+
+    private static Function<String, UUID> getStringUuidFunction() {
+        return str -> {
+            try {
+                return UUID.fromString(str);
+            } catch (IllegalArgumentException e) {
+                log.info("Skipping {} as it is not UUID", str);
+                return null;
+            }
+        };
     }
 
     private String extractTicketNumFromFileName(String blobName) {

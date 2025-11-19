@@ -11,8 +11,6 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StringUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class RemoveSpringBatchHistoryTasklet implements Tasklet {
@@ -42,11 +40,6 @@ public class RemoveSpringBatchHistoryTasklet implements Tasklet {
      */
     private static final String DEFAULT_TABLE_PREFIX = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
 
-    /**
-     * Default value for the data retention (in month).
-     */
-    private static final String tablePrefix = DEFAULT_TABLE_PREFIX;
-
     private final Integer historicRetentionMiliseconds;
 
     private final JdbcTemplate jdbcTemplate;
@@ -62,8 +55,7 @@ public class RemoveSpringBatchHistoryTasklet implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         int totalCount = 0;
         Date date = DateUtils.addMilliseconds(new Date(), -historicRetentionMiliseconds);
-        DateFormat df = new SimpleDateFormat();
-        LOG.info("Remove the Spring Batch history before the {}", df.format(date));
+        LOG.info("Remove the Spring Batch history before the {}", date);
 
         int rowCount = jdbcTemplate.update(getQuery(SQL_DELETE_BATCH_STEP_EXECUTION_CONTEXT), date);
         LOG.info("Deleted rows number from the BATCH_STEP_EXECUTION_CONTEXT table: {}", rowCount);
@@ -95,7 +87,7 @@ public class RemoveSpringBatchHistoryTasklet implements Tasklet {
     }
 
     protected String getQuery(String base) {
-        return StringUtils.replace(base, "%PREFIX%", tablePrefix);
+        return StringUtils.replace(base, "%PREFIX%", DEFAULT_TABLE_PREFIX);
     }
 
 }
