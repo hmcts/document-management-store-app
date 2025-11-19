@@ -28,7 +28,7 @@ public class MetaDataAzureStorageConfiguration {
 
     private static final String AZURE_STORAGE_EMULATOR_AZURITE =  "azure-storage-emulator-azurite";
 
-    @Bean(name = "metadata-storage")
+    @Bean(name = "metadataStorage")
     @ConditionalOnProperty(
         value = "toggle.metadatamigration",
         havingValue = "true")
@@ -55,7 +55,7 @@ public class MetaDataAzureStorageConfiguration {
             .buildClient();
     }
 
-    @Bean(name = "orphandocument-storage")
+    @Bean(name = "orphanDocumentStorage")
     @ConditionalOnProperty(
         value = "toggle.orphandocumentdeletion",
         havingValue = "true")

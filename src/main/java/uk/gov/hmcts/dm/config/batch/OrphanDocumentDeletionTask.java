@@ -57,7 +57,7 @@ public class OrphanDocumentDeletionTask {
 
 
     public OrphanDocumentDeletionTask(
-        @Qualifier("orphandocument-storage") BlobContainerClient blobClient,
+        @Qualifier("orphanDocumentStorage") BlobContainerClient blobClient,
         StoredDocumentService documentService,
         AuditedStoredDocumentBatchOperationsService auditedStoredDocumentBatchOperationsService
     ) {

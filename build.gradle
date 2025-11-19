@@ -87,10 +87,10 @@ def versions = [
     logging            : '6.1.9',
     pact_version       : '4.6.18',
     emTestHelper       : '2.1.1',
-    shedlock           : '6.10.0',
-    hibernate          : '6.6.34.Final',
+    shedlock           : '7.0.0',
+    hibernate          : '6.6.36.Final',
     jupiter            : '6.0.1',
-    springSecurity     : '6.5.6'
+    springSecurity     : '6.5.7'
 ]
 
 ext['hibernate.version'] = versions.hibernate
@@ -113,7 +113,7 @@ dependencies {
         exclude group: "org.glassfish.jaxb", module: "jaxb-runtime"
     }
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '6.2.12'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '7.0.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
@@ -124,7 +124,7 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.19.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
 
     implementation group: 'org.hibernate.orm', name: 'hibernate-core', version: versions.hibernate
     implementation group:'org.hibernate.orm', name: 'hibernate-envers', version: versions.hibernate
@@ -161,7 +161,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.5.6'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '6.5.7'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-params', version: versions.jupiter
