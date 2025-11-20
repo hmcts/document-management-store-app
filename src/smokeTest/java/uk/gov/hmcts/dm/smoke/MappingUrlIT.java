@@ -24,10 +24,6 @@ class MappingUrlIT extends BaseIT {
 
     @Value("${toggle.metadatasearchendpoint}")
     private boolean metadatasearchendpoint;
-    @Value("${toggle.documentandmetadatauploadendpoint}")
-    private boolean documentandmetadatauploadendpoint;
-    @Value("${toggle.ttl}")
-    private boolean ttl;
     @Value("${toggle.testing}")
     private boolean testing;
     private List<String> allEndpoints;
@@ -59,48 +55,12 @@ class MappingUrlIT extends BaseIT {
 
     }
 
-    public boolean getMetadatasearchendpoint() {
-        return metadatasearchendpoint;
-    }
-
-    public void setMetadatasearchendpoint(boolean metadatasearchendpoint) {
-        this.metadatasearchendpoint = metadatasearchendpoint;
-    }
-
-    public boolean getDocumentandmetadatauploadendpoint() {
-        return documentandmetadatauploadendpoint;
-    }
-
-    public void setDocumentandmetadatauploadendpoint(boolean documentandmetadatauploadendpoint) {
-        this.documentandmetadatauploadendpoint = documentandmetadatauploadendpoint;
-    }
-
-    public boolean getTtl() {
-        return ttl;
-    }
-
-    public void setTtl(boolean ttl) {
-        this.ttl = ttl;
-    }
-
     public boolean getTesting() {
-        return testing;
-    }
-
-    public boolean isTesting() {
         return testing;
     }
 
     public void setTesting(boolean testing) {
         this.testing = testing;
-    }
-
-    public List<String> getAllEndpoints() {
-        return allEndpoints;
-    }
-
-    public void setAllEndpoints(List<String> allEndpoints) {
-        this.allEndpoints = allEndpoints;
     }
 
 }
