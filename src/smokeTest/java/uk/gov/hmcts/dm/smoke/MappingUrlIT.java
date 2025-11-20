@@ -55,12 +55,4 @@ class MappingUrlIT extends BaseIT {
 
     }
 
-    public boolean getTesting() {
-        return testing;
-    }
-
-    public void setTesting(boolean testing) {
-        this.testing = testing;
-    }
-
 }
