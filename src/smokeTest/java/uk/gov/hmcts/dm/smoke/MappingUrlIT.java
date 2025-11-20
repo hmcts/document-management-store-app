@@ -63,10 +63,6 @@ class MappingUrlIT extends BaseIT {
         return metadatasearchendpoint;
     }
 
-    public boolean isMetadatasearchendpoint() {
-        return metadatasearchendpoint;
-    }
-
     public void setMetadatasearchendpoint(boolean metadatasearchendpoint) {
         this.metadatasearchendpoint = metadatasearchendpoint;
     }
@@ -75,19 +71,11 @@ class MappingUrlIT extends BaseIT {
         return documentandmetadatauploadendpoint;
     }
 
-    public boolean isDocumentandmetadatauploadendpoint() {
-        return documentandmetadatauploadendpoint;
-    }
-
     public void setDocumentandmetadatauploadendpoint(boolean documentandmetadatauploadendpoint) {
         this.documentandmetadatauploadendpoint = documentandmetadatauploadendpoint;
     }
 
     public boolean getTtl() {
-        return ttl;
-    }
-
-    public boolean isTtl() {
         return ttl;
     }
 
