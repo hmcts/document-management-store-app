@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -28,7 +27,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @EqualsAndHashCode(callSuper = true)
 @Relation(collectionRelation = "documents")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class StoredDocumentHalResource extends HalResource {
+public class StoredDocumentHalResource extends HalResource<StoredDocumentHalResource> {
 
     private Long size;
 
@@ -56,7 +55,7 @@ public class StoredDocumentHalResource extends HalResource {
         BeanUtils.copyProperties(storedDocument, this);
 
         roles = storedDocument.getRoles() != null
-            ? storedDocument.getRoles().stream().sorted().collect(Collectors.toList()) : null;
+            ? storedDocument.getRoles().stream().sorted().toList() : null;
 
         DocumentContentVersion mostRecentDocumentContentVersion = storedDocument.getMostRecentDocumentContentVersion();
         if (mostRecentDocumentContentVersion != null) {
@@ -74,7 +73,7 @@ public class StoredDocumentHalResource extends HalResource {
                 CollectionModel.of(new ArrayList<>(storedDocument.getDocumentContentVersions()
                     .stream()
                     .map(DocumentContentVersionHalResource::new)
-                    .collect(Collectors.toList())));
+                    .toList()));
             embedResource("allDocumentVersions", versionResources);
 
         }

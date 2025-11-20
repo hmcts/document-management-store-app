@@ -16,8 +16,13 @@ public class ScheduledTaskRunner {
 
     private static final Logger log = getLogger(ScheduledTaskRunner.class);
 
+
+    private final ApplicationContext context;
+
     @Autowired
-    ApplicationContext context;
+    public ScheduledTaskRunner(ApplicationContext context) {
+        this.context = context;
+    }
 
     public void run(String taskName) {
         final var beanName = toLowerCase(taskName.charAt(0)) + taskName.substring(1);

@@ -13,8 +13,12 @@ import java.io.Serializable;
 @Component
 public class RepositoryFinder {
 
+    private final ListableBeanFactory listableBeanFactory;
+
     @Autowired
-    private ListableBeanFactory listableBeanFactory;
+    public RepositoryFinder(ListableBeanFactory listableBeanFactory) {
+        this.listableBeanFactory = listableBeanFactory;
+    }
 
     public CrudRepository<Object, Serializable> find(@NotNull String domainClassName) {
         try {
