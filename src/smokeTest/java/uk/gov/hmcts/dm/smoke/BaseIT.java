@@ -78,37 +78,13 @@ public class BaseIT {
         return request.expect().statusCode(200).when().post("/documents");
     }
 
-    public Response createDocument(String filename, String classification, List<String> roles) {
-        return createDocument(filename, classification, roles, null);
-    }
-
-    public Response createDocumentContentVersion(String documentUrl, String username, String filename) {
+    public Response createDocumentContentVersion(String documentUrl, String filename) {
         return givenRequest()
             .multiPart("file", file(filename != null ? filename : ATTACHMENT_1), MediaType.TEXT_PLAIN_VALUE)
             .expect()
             .statusCode(201)
             .when()
             .post(documentUrl);
-    }
-
-    public Response createDocumentContentVersion(String documentUrl, String username) {
-        return createDocumentContentVersion(documentUrl, username, null);
-    }
-
-    public String createDocumentContentVersionAndGetUrlAs(String documentUrl, String username, String filename) {
-        return createDocumentContentVersion(documentUrl, username, filename).path("_links.self.href");
-    }
-
-    public String createDocumentContentVersionAndGetUrlAs(String documentUrl, String username) {
-        return createDocumentContentVersionAndGetUrlAs(documentUrl, username, null);
-    }
-
-    public String createDocumentContentVersionAndGetBinaryUrlAs(String documentUrl, String username, String filename) {
-        return createDocumentContentVersion(documentUrl, username, filename).path("_links.binary.href");
-    }
-
-    public String createDocumentContentVersionAndGetBinaryUrlAs(String documentUrl, String username) {
-        return createDocumentContentVersionAndGetBinaryUrlAs(documentUrl, username, null);
     }
 
     public AuthTokenProvider getAuthTokenProvider() {
