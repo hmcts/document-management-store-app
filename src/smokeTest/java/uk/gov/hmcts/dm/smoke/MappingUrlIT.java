@@ -9,6 +9,7 @@ import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
 class MappingUrlIT extends BaseIT {
 
+
     @Value("${toggle.metadatasearchendpoint}")
     private boolean metadatasearchendpoint;
     @Value("${toggle.documentandmetadatauploadendpoint}")
@@ -30,6 +32,7 @@ class MappingUrlIT extends BaseIT {
     private boolean testing;
     private List<String> allEndpoints;
 
+    @Autowired
     MappingUrlIT(AuthTokenProvider authTokenProvider) {
         super(authTokenProvider);
     }
@@ -68,8 +71,20 @@ class MappingUrlIT extends BaseIT {
         this.metadatasearchendpoint = metadatasearchendpoint;
     }
 
+    public boolean getDocumentandmetadatauploadendpoint() {
+        return documentandmetadatauploadendpoint;
+    }
+
+    public boolean isDocumentandmetadatauploadendpoint() {
+        return documentandmetadatauploadendpoint;
+    }
+
     public void setDocumentandmetadatauploadendpoint(boolean documentandmetadatauploadendpoint) {
         this.documentandmetadatauploadendpoint = documentandmetadatauploadendpoint;
+    }
+
+    public boolean getTtl() {
+        return ttl;
     }
 
     public boolean isTtl() {
@@ -78,6 +93,10 @@ class MappingUrlIT extends BaseIT {
 
     public void setTtl(boolean ttl) {
         this.ttl = ttl;
+    }
+
+    public boolean getTesting() {
+        return testing;
     }
 
     public boolean isTesting() {
