@@ -1,6 +1,8 @@
 package uk.gov.hmcts.dm.smoke;
 
 import io.restassured.RestAssured;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ public class AuthTokenProvider {
 
     private final String token;
 
+    private static final Logger LOG = LoggerFactory.getLogger(AuthTokenProvider.class);
+
     @Autowired
     public AuthTokenProvider(@Value("${base-urls.idam-s2s}") String idamS2SBaseUri,
                              @Value("${login.token}")String token
@@ -19,8 +23,8 @@ public class AuthTokenProvider {
         this.idamS2SBaseUri = idamS2SBaseUri;
 
         this.token = token;
-        System.out.println("IDAM S2S URL - " + idamS2SBaseUri);
-        System.out.println("JWT token - " + token);
+        LOG.info("IDAM S2S URL - {}", idamS2SBaseUri);
+        LOG.info("JWT token - {}", token);
     }
 
     public AuthTokens getTokens() {

@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
 class MappingUrlIT extends BaseIT {
 
-
     @Value("${toggle.metadatasearchendpoint}")
     private boolean metadatasearchendpoint;
     @Value("${toggle.documentandmetadatauploadendpoint}")
@@ -31,6 +30,10 @@ class MappingUrlIT extends BaseIT {
     private boolean testing;
     private List<String> allEndpoints;
 
+    MappingUrlIT(AuthTokenProvider authTokenProvider) {
+        super(authTokenProvider);
+    }
+
     @BeforeEach
     public void setup() throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -39,7 +42,7 @@ class MappingUrlIT extends BaseIT {
     }
 
     @Test
-    void toggle_metadatasearchendpoint_toggle_Mappings() {
+    void toggleMetadataSearchEndpointToggleMappings() {
         assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.contains("owned")), metadatasearchendpoint);
         assertEquals(allEndpoints.stream().anyMatch(endpoint ->
@@ -47,7 +50,7 @@ class MappingUrlIT extends BaseIT {
     }
 
     @Test
-    void toggle_testing_toggle_Testing() {
+    void toggleTestingToggleTesting() {
         assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.equals("{GET [/testing/azure-storage-binary-exists/{id}]}")), testing);
 
@@ -65,20 +68,8 @@ class MappingUrlIT extends BaseIT {
         this.metadatasearchendpoint = metadatasearchendpoint;
     }
 
-    public boolean getDocumentandmetadatauploadendpoint() {
-        return documentandmetadatauploadendpoint;
-    }
-
-    public boolean isDocumentandmetadatauploadendpoint() {
-        return documentandmetadatauploadendpoint;
-    }
-
     public void setDocumentandmetadatauploadendpoint(boolean documentandmetadatauploadendpoint) {
         this.documentandmetadatauploadendpoint = documentandmetadatauploadendpoint;
-    }
-
-    public boolean getTtl() {
-        return ttl;
     }
 
     public boolean isTtl() {
@@ -89,10 +80,6 @@ class MappingUrlIT extends BaseIT {
         this.ttl = ttl;
     }
 
-    public boolean getTesting() {
-        return testing;
-    }
-
     public boolean isTesting() {
         return testing;
     }
@@ -101,11 +88,11 @@ class MappingUrlIT extends BaseIT {
         this.testing = testing;
     }
 
-    public List getAllEndpoints() {
+    public List<String> getAllEndpoints() {
         return allEndpoints;
     }
 
-    public void setAllEndpoints(List allEndpoints) {
+    public void setAllEndpoints(List<String> allEndpoints) {
         this.allEndpoints = allEndpoints;
     }
 
