@@ -13,7 +13,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@SuppressWarnings("java:S5960") // Suppress SonarQube warning for assertions
+@SuppressWarnings({"java:S5960","java:S5443"}) // Suppress SonarQube warning for assertions
 public class MetadataMigrationIT extends BaseIT {
 
     private static final String MIGRATION_CONST = "migration";

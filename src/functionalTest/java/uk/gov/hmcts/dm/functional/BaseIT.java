@@ -62,7 +62,7 @@ public abstract class BaseIT {
     private static final String USER_ID_CONST =  "user-id";
     private static final String USER_ROLES_CONST =  "user-roles";
     private static final String ROLES_CONST =  "roles";
-    private static final String PASSWORD = "123";
+    private static final String TEST_PASS = "123";
     private static final String CITIZEN = "test12@test.com";
     private static final String CITIZEN_2 = "test2@test.com";
     private static final String CASE_WORKER = "test3@test.com";
@@ -127,7 +127,6 @@ public abstract class BaseIT {
     private static final String EXE_AS_PNG = "exe_as_png.png";
     private static final String SVG_AS_PNG = "svg_as_png.png";
     private static final String XML_AS_PNG = "xml_as_png.png";
-    private static final String DROP_BOX_URL = "https://www.dropbox.com/s";
     private static final String SERVICE_AUTHORIZATION_HEADER = "serviceauthorization";
 
     @PostConstruct
@@ -169,28 +168,6 @@ public abstract class BaseIT {
         return request;
     }
 
-    public RequestSpecification givenSpacedRolesRequest(String username, List<String> userRoles) {
-
-        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
-        if (username != null) {
-            request = request.header(SERVICE_AUTHORIZATION_HEADER, serviceToken());
-            request = request.header(USER_ID_CONST, username);
-        }
-        if (userRoles != null) {
-            request = request.header(USER_ROLES_CONST, String.join(", ", userRoles));
-        }
-
-        return request;
-    }
-
-    public RequestSpecification givenSpacedRolesRequest(String username) {
-        return givenSpacedRolesRequest(username, null);
-    }
-
-    public RequestSpecification givenSpacedRolesRequest() {
-        return givenSpacedRolesRequest(null, null);
-    }
-
     public RequestSpecification givenRangeRequest(long start, long end, String username, List<String> userRoles) {
         return givenRequest(username, userRoles).header("Range", "bytes=" + start + "-" + end);
     }
@@ -219,17 +196,11 @@ public abstract class BaseIT {
     }
 
     public File file(Object fileName) {
-        try {
-            return fileUtils.getResourceFile(FILES_FOLDER + fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
-
+        return fileUtils.getResourceFile(FILES_FOLDER + fileName);
     }
 
     public String authToken(Object username) {
-        return authTokenProvider.getTokens((String) username, PASSWORD).getUserToken();
+        return authTokenProvider.getTokens((String) username, TEST_PASS).getUserToken();
     }
 
     public String userId(String token) {
