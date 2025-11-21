@@ -18,7 +18,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @EqualsAndHashCode(callSuper = true)
 @Relation(collectionRelation = "auditEntries")
-public class StoredDocumentAuditEntryHalResource extends HalResource {
+public class StoredDocumentAuditEntryHalResource extends HalResource<StoredDocumentAuditEntryHalResource> {
 
     @Getter
     @Setter
@@ -39,9 +39,7 @@ public class StoredDocumentAuditEntryHalResource extends HalResource {
         setType(storedDocumentAuditEntry.getClass().getSimpleName());
         add(linkTo(methodOn(StoredDocumentController.class)
             .getMetaData(storedDocumentAuditEntry.getStoredDocument().getId(), null)).withRel("document"));
-        if (storedDocumentAuditEntry instanceof DocumentContentVersionAuditEntry) {
-            DocumentContentVersionAuditEntry documentContentVersionAuditEntry =
-                (DocumentContentVersionAuditEntry) storedDocumentAuditEntry;
+        if (storedDocumentAuditEntry instanceof DocumentContentVersionAuditEntry documentContentVersionAuditEntry) {
             add(linkTo(methodOn(DocumentContentVersionController.class)
                     .getDocumentContentVersionDocument(
                             storedDocumentAuditEntry.getStoredDocument().getId(),
