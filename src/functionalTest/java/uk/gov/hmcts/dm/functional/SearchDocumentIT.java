@@ -17,8 +17,8 @@ public class SearchDocumentIT extends BaseIT {
     @Test
     public void s1AsAuthenticatedUserICanSearchForDocumentUsingSpecificMetadataProperty() {
 
-        final String caseNo1 = RandomStringUtils.randomAlphabetic(50);
-        final String caseNo2 = RandomStringUtils.randomAlphabetic(50);
+        final String caseNo1 = RandomStringUtils.secure().nextAlphabetic(50);
+        final String caseNo2 = RandomStringUtils.secure().nextAlphabetic(50);
 
         Map<String, String> map = Map.of("case", caseNo1);
         createDocument(getCitizen(), null, null, Collections.emptyList(), map);

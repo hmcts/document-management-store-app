@@ -19,7 +19,7 @@ public class DeleteDocumentIT extends BaseIT {
 
     private String caseWorkerDocumentUrl;
 
-    private static final String TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH = "/testing/azure-storage-binary-exists/";
+    private static final String TESTING_AZURE_STORAGE_BINARY_EXISTS_URI = "/testing/azure-storage-binary-exists/";
     private static final String PERMANENT_TRUE_CONST = "?permanent=true";
     private static final String DOCUMENT_WITH_VERSION_TEXT_CONST = "Document with version ";
 
@@ -97,7 +97,7 @@ public class DeleteDocumentIT extends BaseIT {
         assertTrue(
             Boolean.parseBoolean(givenRequest(getCaseWorker())
                 .when()
-                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId)
+                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_URI + versionId)
                 .print()),
             DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should exist (" + metadata.body().print() + ")"
         );
@@ -117,7 +117,7 @@ public class DeleteDocumentIT extends BaseIT {
 
         assertFalse(
             Boolean.parseBoolean(
-                givenRequest(getCaseWorker()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId).print()),
+                givenRequest(getCaseWorker()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_URI + versionId).print()),
             DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
@@ -134,7 +134,7 @@ public class DeleteDocumentIT extends BaseIT {
         assertTrue(
             Boolean.parseBoolean(givenRequest(getCitizen())
                 .when()
-                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId)
+                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_URI + versionId)
                 .print()),
             DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should exist (" + metadata.body().print() + ")");
 
@@ -152,7 +152,7 @@ public class DeleteDocumentIT extends BaseIT {
 
         assertFalse(
             Boolean.parseBoolean(givenRequest(
-                getCitizen()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_PATH + versionId).print()),
+                getCitizen()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_URI + versionId).print()),
             DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
