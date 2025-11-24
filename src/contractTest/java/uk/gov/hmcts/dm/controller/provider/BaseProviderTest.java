@@ -121,7 +121,7 @@ public abstract class BaseProviderTest {
     protected TestController testController;
 
     @Autowired
-    public BaseProviderTest(
+    protected BaseProviderTest(
         MockMvc mockMvc,
         WebApplicationContext webApplicationContext,
         ObjectMapper objectMapper,

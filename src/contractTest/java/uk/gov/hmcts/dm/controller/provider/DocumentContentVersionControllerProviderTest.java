@@ -34,6 +34,11 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
     private static final String DOCUMENT_ID = "969983aa-52ae-41bd-8cf3-4aabcc120783";
     private static final UUID DOCUMENT_CONTENT_VERSION_ID =
         UUID.fromString("2216a872-81f7-4cad-a474-32a59608b038");
+    public static final String DUMMY_CHECKSUM = "abc123checksum";
+    public static final String TEST_USER = "test-user";
+    public static final String DOCUMENT_NAME = "sample.pdf";
+    public static final String CONTENT_TYPE = "application/pdf";
+    public static final String CITIZEN_ROLE = "citizen";
 
     @Autowired
     public DocumentContentVersionControllerProviderTest(
@@ -51,28 +56,28 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
 
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.fromString(DOCUMENT_ID));
-        storedDocument.setClassification(Classifications.PUBLIC); // if required
-        storedDocument.setCreatedBy("test-user");
+        storedDocument.setClassification(Classifications.PUBLIC);
+        storedDocument.setCreatedBy(TEST_USER);
         storedDocument.setCreatedOn(new Date());
-        storedDocument.setRoles(Set.of("citizen")); // example roles
+        storedDocument.setRoles(Set.of(CITIZEN_ROLE));
 
         MultipartFile file = mock(MultipartFile.class);
-        when(file.getContentType()).thenReturn("application/pdf");
+        when(file.getContentType()).thenReturn(CONTENT_TYPE);
         when(file.getOriginalFilename()).thenReturn("test-document.pdf");
         when(file.getSize()).thenReturn(1024L);
 
         DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
             .id(DOCUMENT_CONTENT_VERSION_ID)
-            .mimeType("application/pdf")
+            .mimeType(CONTENT_TYPE)
             .mimeTypeUpdated(true)
-            .originalDocumentName("sample.pdf")
-            .createdBy("test-user")
-            .createdByService("test-user")
+            .originalDocumentName(DOCUMENT_NAME)
+            .createdBy(TEST_USER)
+            .createdByService(TEST_USER)
             .createdOn(new Date())
             .storedDocument(storedDocument)
             .size(1024L)
             .contentUri("http://localhost/documents/1/versions/1")
-            .contentChecksum("abc123checksum")
+            .contentChecksum(DUMMY_CHECKSUM)
             .build();
         when(storedDocumentService
             .findOne(any()))
@@ -87,22 +92,22 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.fromString(DOCUMENT_ID));
         storedDocument.setClassification(Classifications.PUBLIC);
-        storedDocument.setCreatedBy("test-user");
+        storedDocument.setCreatedBy(TEST_USER);
         storedDocument.setCreatedOn(new Date());
-        storedDocument.setRoles(Set.of("citizen"));
+        storedDocument.setRoles(Set.of(CITIZEN_ROLE));
 
         DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
             .id(DOCUMENT_CONTENT_VERSION_ID)
-            .mimeType("application/pdf")
+            .mimeType(CONTENT_TYPE)
             .mimeTypeUpdated(true)
-            .originalDocumentName("sample.pdf")
-            .createdBy("test-user")
+            .originalDocumentName(DOCUMENT_NAME)
+            .createdBy(TEST_USER)
             .createdByService("test-service")
             .createdOn(new Date())
             .storedDocument(storedDocument)
             .size(1024L)
             .contentUri("http://localhost/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID)
-            .contentChecksum("abc123checksum")
+            .contentChecksum(DUMMY_CHECKSUM)
             .build();
 
         when(auditedDocumentContentVersionOperationsService.readDocumentContentVersion(DOCUMENT_CONTENT_VERSION_ID))
@@ -114,22 +119,22 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.fromString(DOCUMENT_ID));
         storedDocument.setClassification(Classifications.PUBLIC);
-        storedDocument.setCreatedBy("test-user");
+        storedDocument.setCreatedBy(TEST_USER);
         storedDocument.setCreatedOn(new Date());
-        storedDocument.setRoles(Set.of("citizen"));
+        storedDocument.setRoles(Set.of(CITIZEN_ROLE));
 
         DocumentContentVersion documentContentVersion = DocumentContentVersion.builder()
             .id(DOCUMENT_CONTENT_VERSION_ID)
             .mimeType("application/octet-stream")
             .mimeTypeUpdated(true)
-            .originalDocumentName("sample.pdf")
-            .createdBy("test-user")
+            .originalDocumentName(DOCUMENT_NAME)
+            .createdBy(TEST_USER)
             .createdByService("test-service")
             .createdOn(new Date())
             .storedDocument(storedDocument)
             .size(8L)
             .contentUri("http://localhost/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID)
-            .contentChecksum("abc123checksum")
+            .contentChecksum(DUMMY_CHECKSUM)
             .build();
 
         when(documentContentVersionService.findById(DOCUMENT_CONTENT_VERSION_ID))

@@ -19,6 +19,7 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static uk.gov.hmcts.dm.controller.Const.PUBLIC_CLASSIFICATION;
 
 public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
 
@@ -64,14 +65,14 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
             .then()
             .log().all()
             .statusCode(200)
-            .body("classification", equalTo("PUBLIC"))
+            .body("classification", equalTo(PUBLIC_CLASSIFICATION))
             .body("createdBy", equalTo("test-user"))
             .body("_links.self.href", containsString("/documents/" + DOCUMENT_ID));
     }
 
     private DslPart buildResponseDsl() {
         return newJsonBody(body ->
-            body.stringType("classification", "PUBLIC")
+            body.stringType("classification", PUBLIC_CLASSIFICATION)
                 .stringType("createdBy", "test-user")
                 .stringType("createdOn", "2024-01-01T12:00:00Z")
                 .object("_links", links ->
@@ -92,7 +93,7 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "user-id", "test-user",
                 "user-roles", "citizen",
-                "classification", "PUBLIC",
+                "classification", PUBLIC_CLASSIFICATION,
                 "Accept", "application/octet-stream"
             ))
             .willRespondWith()
@@ -119,7 +120,7 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
                 "ServiceAuthorization", "Bearer some-s2s-token",
                 "user-id", "test-user",
                 "user-roles", "citizen",
-                "classification", "PUBLIC",
+                "classification", PUBLIC_CLASSIFICATION,
                 "Accept", "application/octet-stream"
             ))
             .get(mockServer.getUrl() + PATH_BINARY);

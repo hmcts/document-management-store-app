@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static uk.gov.hmcts.dm.controller.Const.PUBLIC_CLASSIFICATION;
 
 public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerPactTest {
 
@@ -31,7 +32,7 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
                     .header("Accept", "application/vnd.uk.gov.hmcts.dm.document-collection.v1+hal+json;charset=UTF-8")
                     .body(new MultipartBuilder()
                         .binaryPart("files", "test-file.txt", "Hello World".getBytes(), "text/plain")
-                        .textPart("classification", "PUBLIC", "text/plain")
+                        .textPart("classification", PUBLIC_CLASSIFICATION, "text/plain")
                         .textPart("roles", "citizen", "text/plain")
                     )
                 )
@@ -55,7 +56,7 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
             // Must match DTO: "files"
             .multiPart("files", "test-file.txt", "Hello World".getBytes(), "text/plain")
             // Must match DTO: "classification" and be one of PUBLIC/PRIVATE/RESTRICTED
-            .multiPart("classification", "PUBLIC")
+            .multiPart("classification", PUBLIC_CLASSIFICATION)
             // Must match DTO: "roles"
             .multiPart("roles", "citizen")
             .when()
@@ -63,9 +64,9 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
             .then()
             .log().all()
             .statusCode(200)
-            .body("_embedded.documents[0].classification", equalTo("PUBLIC"))
+            .body("_embedded.documents[0].classification", equalTo(PUBLIC_CLASSIFICATION))
             .body("_embedded.documents[0].createdBy", equalTo("test-user-1"))
-            .body("_embedded.documents[1].classification", equalTo("PUBLIC"))
+            .body("_embedded.documents[1].classification", equalTo(PUBLIC_CLASSIFICATION))
             .body("_embedded.documents[1].createdBy", equalTo("test-user-2"));
     }
 
@@ -76,7 +77,7 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
                 embedded.array("documents", docs -> {
                     // Document 1
                     docs.object(doc -> {
-                        doc.stringType("classification", "PUBLIC");
+                        doc.stringType("classification", PUBLIC_CLASSIFICATION);
                         doc.stringType("createdBy", "test-user-1");
                         doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z?", "2024-01-01T12:00:00");
                         doc.object("_links", links ->
@@ -86,7 +87,7 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
                     });
                     // Document 2
                     docs.object(doc -> {
-                        doc.stringType("classification", "PUBLIC");
+                        doc.stringType("classification", PUBLIC_CLASSIFICATION);
                         doc.stringType("createdBy", "test-user-2");
                         doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z?", "2024-01-01T12:00:00");
                         doc.object("_links", links ->

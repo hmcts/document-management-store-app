@@ -21,6 +21,8 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.dm.controller.Const.EXAMPLE_SERVICE;
+import static uk.gov.hmcts.dm.controller.Const.EXAMPLE_USER;
 
 @Provider("dm_store_update_document_provider")
 public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest {
@@ -53,10 +55,10 @@ public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest
 
         StoredDocument storedDocument = StoredDocument.builder()
             .id(documentId)
-            .createdBy("user@example.com")
-            .createdByService("some-service")
-            .lastModifiedBy("user@example.com")
-            .lastModifiedByService("some-service")
+            .createdBy(EXAMPLE_USER)
+            .createdByService(EXAMPLE_SERVICE)
+            .lastModifiedBy(EXAMPLE_USER)
+            .lastModifiedByService(EXAMPLE_SERVICE)
             .createdOn(new Date())
             .modifiedOn(new Date())
             .deleted(false)
@@ -82,8 +84,8 @@ public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest
         version.setCreatedOn(new Date());
         version.setMimeType("application/pdf");
         version.setSize(2048L);
-        version.setCreatedBy("user@example.com");
-        version.setCreatedByService("some-service");
+        version.setCreatedBy(EXAMPLE_USER);
+        version.setCreatedByService(EXAMPLE_SERVICE);
         return version;
     }
 }

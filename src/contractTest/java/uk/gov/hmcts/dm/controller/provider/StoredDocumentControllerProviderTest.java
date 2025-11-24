@@ -32,6 +32,7 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
 
     private static final UUID DOCUMENT_CONTENT_VERSION_ID =
         UUID.fromString("2216a872-81f7-4cad-a474-32a59608b038");
+    public static final String TEST_USER = "test-user";
 
     @Autowired
     public StoredDocumentControllerProviderTest(
@@ -48,7 +49,7 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.fromString(DOCUMENT_ID));
         storedDocument.setClassification(Classifications.PUBLIC);
-        storedDocument.setCreatedBy("test-user");
+        storedDocument.setCreatedBy(TEST_USER);
         storedDocument.setCreatedOn(new Date());
         storedDocument.setModifiedOn(new Date());
         storedDocument.setRoles(Set.of("citizen"));
@@ -67,7 +68,7 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.fromString(DOCUMENT_ID));
         storedDocument.setClassification(Classifications.PUBLIC);
-        storedDocument.setCreatedBy("test-user");
+        storedDocument.setCreatedBy(TEST_USER);
         storedDocument.setCreatedOn(new Date());
         storedDocument.setRoles(Set.of("citizen"));
 
@@ -76,7 +77,7 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
             .mimeType("application/octet-stream")
             .mimeTypeUpdated(true)
             .originalDocumentName("sample.pdf")
-            .createdBy("test-user")
+            .createdBy(TEST_USER)
             .createdByService("test-service")
             .createdOn(new Date())
             .storedDocument(storedDocument)

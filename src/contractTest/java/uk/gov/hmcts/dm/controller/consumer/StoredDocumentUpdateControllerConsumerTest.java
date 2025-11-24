@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 import static org.hamcrest.Matchers.equalTo;
+import static uk.gov.hmcts.dm.controller.Const.PUBLIC_CLASSIFICATION;
 
 public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPactTest {
 
@@ -90,7 +91,7 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
                     doc
                         .uuid("documentId", DOCUMENT_ID)
                         .object("metadata", metadata -> {
-                            metadata.stringType("classification", "PUBLIC");
+                            metadata.stringType("classification", PUBLIC_CLASSIFICATION);
                             metadata.stringType("caseTypeId", "TEST");
                         })
                 )

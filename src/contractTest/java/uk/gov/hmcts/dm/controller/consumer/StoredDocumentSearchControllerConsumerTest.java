@@ -15,6 +15,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static uk.gov.hmcts.dm.controller.Const.PUBLIC_CLASSIFICATION;
 
 public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPactTest {
 
@@ -59,7 +60,7 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
             .then()
             .log().all()
             .statusCode(200)
-            .body("_embedded.documents[0].classification", equalTo("PUBLIC"))
+            .body("_embedded.documents[0].classification", equalTo(PUBLIC_CLASSIFICATION))
             .body("_embedded.documents[0].createdBy", equalTo("test-user"))
             .body("_embedded.documents[0]._links.self.href", containsString("/documents/" + DOCUMENT_ID));
     }
@@ -98,7 +99,8 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
             .then()
             .log().all()
             .statusCode(200)
-            .body("_embedded.documents[0].classification", equalTo("PUBLIC"))
+            .body("_embedded.documents[0].classification", equalTo(PUBLIC_CLASSIFICATION
+            ))
             .body("_embedded.documents[0].createdBy", equalTo("test-user"))
             .body("_embedded.documents[0]._links.self.href", containsString("/documents/" + DOCUMENT_ID));
     }
@@ -107,7 +109,7 @@ public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPact
         return new PactDslJsonBody()
             .object("_embedded")
             .minArrayLike("documents", 1)
-            .stringType("classification", "PUBLIC")
+            .stringType("classification", PUBLIC_CLASSIFICATION)
             .stringType("createdBy", "test-user")
             .stringType("createdOn", "2025-09-02T14:20:42+0000")
             .array("roles")
