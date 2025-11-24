@@ -141,7 +141,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
 
     @Test
     @PactTestFor(pactMethod = "addDocumentContentVersionLegacyMappingPact")
-    void testAddDocumentVersionLegacy(MockServer mockServer){
+    void testAddDocumentVersionLegacy(MockServer mockServer) {
         given()
             .baseUri(mockServer.getUrl())
             .contentType(ContentType.MULTIPART)
