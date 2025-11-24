@@ -83,18 +83,18 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
 
 
     private DslPart requestBody() {
-        return newJsonBody(body -> {
+        return newJsonBody(body ->
             body
                 .stringValue("ttl", TTL_ISO_FORMATTED)
-                .minArrayLike("documents", 1, doc -> {
+                .minArrayLike("documents", 1, doc ->
                     doc
                         .uuid("documentId", DOCUMENT_ID)
                         .object("metadata", metadata -> {
                             metadata.stringType("classification", "PUBLIC");
                             metadata.stringType("caseTypeId", "TEST");
-                        });
-                });
-        }).build();
+                        })
+                )
+        ).build();
     }
 
 
@@ -129,9 +129,9 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
                 );
             });
 
-            body.object("_embedded", embedded -> {
-                embedded.object("allDocumentVersions", allDocVersions -> {
-                    allDocVersions.object("_embedded", inner -> {
+            body.object("_embedded", embedded ->
+                embedded.object("allDocumentVersions", allDocVersions ->
+                    allDocVersions.object("_embedded", inner ->
                         inner.minArrayLike("documentVersions", 1, version -> {
                             version.numberType("size", 2048);
                             version.stringType("mimeType", "application/pdf");
@@ -153,10 +153,10 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
                                         "http://localhost/documents/"
                                             + DOCUMENT_ID + "/versions/some-version-id/binary"));
                             });
-                        });
-                    });
-                });
-            });
+                        })
+                    )
+                )
+            );
         }).build();
 
 
@@ -201,15 +201,15 @@ public class StoredDocumentUpdateControllerConsumerTest extends BaseConsumerPact
     }
 
     private DslPart singleDocumentRequestBody() {
-        return LambdaDsl.newJsonBody(body -> {
+        return LambdaDsl.newJsonBody(body ->
             body
                 .stringValue("ttl", TTL_ISO_FORMATTED)
                 .object("metadata", metadata -> {
                     metadata.stringValue("classification", "PRIVATE");
                     metadata.stringValue("caseId", "123456");
                     metadata.stringValue("docType", "evidence");
-                });
-        }).build();
+                })
+        ).build();
     }
 }
 

@@ -14,6 +14,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @ExtendWith(PactConsumerTestExt.class)
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@SuppressWarnings("secrets:S8217")
 public class BaseConsumerPactTest {
 
     private static final String AUTH_TOKEN = "Bearer someAuthorizationToken";

@@ -70,15 +70,15 @@ public class StoredDocumentControllerConsumerTest extends BaseConsumerPactTest {
     }
 
     private DslPart buildResponseDsl() {
-        return newJsonBody(body -> {
+        return newJsonBody(body ->
             body.stringType("classification", "PUBLIC")
                 .stringType("createdBy", "test-user")
                 .stringType("createdOn", "2024-01-01T12:00:00Z")
-                .object("_links", links -> {
+                .object("_links", links ->
                     links.object("self", self ->
-                        self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID));
-                });
-        }).build();
+                        self.stringType("href", "http://localhost/documents/" + DOCUMENT_ID))
+                )
+        ).build();
     }
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)

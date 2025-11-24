@@ -58,7 +58,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @IgnoreNoPactsToVerify
 @AutoConfigureMockMvc(addFilters = false)
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
-//using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 //@PactFolder("target/pacts")
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}",

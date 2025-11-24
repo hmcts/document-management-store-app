@@ -9,11 +9,13 @@ import au.com.dius.pact.core.model.annotations.Pact;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import net.serenitybdd.rest.SerenityRest;
+import org.apache.commons.lang3.exception.UncheckedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -52,9 +54,9 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 Paths.get(ClassLoader.getSystemResource("test-files/sample.pdf").toURI())
             );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedException(e);
         }
     }
 
@@ -87,7 +89,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
 
     @Test
     @PactTestFor(pactMethod = "addDocumentContentVersionPact")
-    void testAddDocumentVersion(MockServer mockServer) throws URISyntaxException, IOException {
+    void testAddDocumentVersion(MockServer mockServer) {
         given()
             .baseUri(mockServer.getUrl())
             .contentType(ContentType.MULTIPART)
@@ -139,7 +141,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
 
     @Test
     @PactTestFor(pactMethod = "addDocumentContentVersionLegacyMappingPact")
-    void testAddDocumentVersionLegacy(MockServer mockServer) throws URISyntaxException, IOException {
+    void testAddDocumentVersionLegacy(MockServer mockServer){
         given()
             .baseUri(mockServer.getUrl())
             .contentType(ContentType.MULTIPART)
@@ -256,13 +258,13 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
 
 
     private DslPart buildResponseDsl() {
-        return newJsonBody((body) -> {
+        return newJsonBody(body ->
             body
                 .stringType("mimeType", "application/pdf")
                 .stringType("originalDocumentName", "sample.pdf")
                 .stringType("createdBy", "test-user")
                 .numberType("size", 1024)
-                .object("_links", links -> {
+                .object("_links", links ->
                     links
                         .object("self", self -> self.stringType("href",
                             "http://localhost/documents/" + DOCUMENT_ID
@@ -272,8 +274,8 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                                 + "/versions/" + DOCUMENT_CONTENT_VERSION_ID + "/binary"))
                         .object("document",
                             document ->
-                                document.stringType("href", "http://localhost/documents/" + DOCUMENT_ID));
-                });
-        }).build();
+                                document.stringType("href", "http://localhost/documents/" + DOCUMENT_ID))
+                )
+        ).build();
     }
 }

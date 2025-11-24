@@ -71,31 +71,31 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
 
 
     private DslPart buildUploadResponseDsl() {
-        return newJsonBody(root -> {
-            root.object("_embedded", embedded -> {
+        return newJsonBody(root ->
+            root.object("_embedded", embedded ->
                 embedded.array("documents", docs -> {
                     // Document 1
                     docs.object(doc -> {
                         doc.stringType("classification", "PUBLIC");
                         doc.stringType("createdBy", "test-user-1");
                         doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z?", "2024-01-01T12:00:00");
-                        doc.object("_links", links -> {
+                        doc.object("_links", links ->
                             links.object("self", self ->
-                                self.stringType("href", "http://localhost/documents/11111111-1111-1111-1111-111111111111"));
-                        });
+                                self.stringType("href", "http://localhost/documents/11111111-1111-1111-1111-111111111111"))
+                        );
                     });
                     // Document 2
                     docs.object(doc -> {
                         doc.stringType("classification", "PUBLIC");
                         doc.stringType("createdBy", "test-user-2");
                         doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z?", "2024-01-01T12:00:00");
-                        doc.object("_links", links -> {
+                        doc.object("_links", links ->
                             links.object("self", self ->
-                                self.stringType("href", "http://localhost/documents/22222222-2222-2222-2222-222222222222"));
-                        });
+                                self.stringType("href", "http://localhost/documents/22222222-2222-2222-2222-222222222222"))
+                        );
                     });
-                });
-            });
-        }).build();
+                })
+            )
+        ).build();
     }
 }
