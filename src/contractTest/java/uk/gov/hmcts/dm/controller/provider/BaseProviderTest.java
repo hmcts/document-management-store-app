@@ -65,19 +65,14 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 )
 public abstract class BaseProviderTest {
 
-    @Autowired
     protected MockMvc mockMvc;
 
-    @Autowired
     protected WebApplicationContext webApplicationContext;
 
-    @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
-    @Autowired
     protected DmServiceAuthFilter filter;
 
     @MockitoBean
@@ -124,6 +119,21 @@ public abstract class BaseProviderTest {
 
     @MockitoBean
     protected TestController testController;
+
+    @Autowired
+    public BaseProviderTest(
+        MockMvc mockMvc,
+        WebApplicationContext webApplicationContext,
+        ObjectMapper objectMapper,
+        ConfigurableListableBeanFactory configurableListableBeanFactory,
+        DmServiceAuthFilter filter
+    ) {
+        this.mockMvc = mockMvc;
+        this.webApplicationContext = webApplicationContext;
+        this.objectMapper = objectMapper;
+        this.configurableListableBeanFactory = configurableListableBeanFactory;
+        this.filter = filter;
+    }
 
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {

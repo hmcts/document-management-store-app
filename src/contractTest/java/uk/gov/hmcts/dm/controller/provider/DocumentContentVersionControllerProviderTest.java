@@ -2,9 +2,15 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
@@ -28,6 +34,17 @@ public class DocumentContentVersionControllerProviderTest extends BaseProviderTe
     private static final String DOCUMENT_ID = "969983aa-52ae-41bd-8cf3-4aabcc120783";
     private static final UUID DOCUMENT_CONTENT_VERSION_ID =
         UUID.fromString("2216a872-81f7-4cad-a474-32a59608b038");
+
+    @Autowired
+    public DocumentContentVersionControllerProviderTest(
+        MockMvc mockMvc,
+        WebApplicationContext webApplicationContext,
+        ObjectMapper objectMapper,
+        ConfigurableListableBeanFactory configurableListableBeanFactory,
+        DmServiceAuthFilter filter
+    ) {
+        super(mockMvc, webApplicationContext, objectMapper, configurableListableBeanFactory, filter);
+    }
 
     @State("Can add Document Content Version and associate it with a given Stored Document.")
     public void documentExistToSoftDelete() {
