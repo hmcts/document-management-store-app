@@ -13,7 +13,6 @@ import org.apache.commons.lang3.exception.UncheckedException;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import uk.gov.hmcts.dm.controller.Const;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -29,6 +28,10 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static uk.gov.hmcts.dm.controller.Const.ACCEPT_HEADER;
 import static uk.gov.hmcts.dm.controller.Const.APPLICATION_OCTET_STREAM;
+import static uk.gov.hmcts.dm.controller.Const.BINARY;
+import static uk.gov.hmcts.dm.controller.Const.BODY_FIELD_LINKS_BINARY_HREF;
+import static uk.gov.hmcts.dm.controller.Const.BODY_FIELD_LINKS_DOCUMENT_HREF;
+import static uk.gov.hmcts.dm.controller.Const.BODY_FIELD_LINKS_SELF_HREF;
 import static uk.gov.hmcts.dm.controller.Const.BODY_FIELD_MIME_TYPE;
 import static uk.gov.hmcts.dm.controller.Const.BODY_FIELD_ORIGINAL_DOCUMENT_NAME;
 import static uk.gov.hmcts.dm.controller.Const.CONTENT_TYPE;
@@ -36,6 +39,7 @@ import static uk.gov.hmcts.dm.controller.Const.CONTENT_TYPE_HEADER;
 import static uk.gov.hmcts.dm.controller.Const.DOCUMENTS_IN_URI;
 import static uk.gov.hmcts.dm.controller.Const.DOCUMENT_NAME;
 import static uk.gov.hmcts.dm.controller.Const.DUMMY_SERVICE_AUTHORIZATION_VALUE;
+import static uk.gov.hmcts.dm.controller.Const.HTTP_LOCALHOST_DOCUMENTS_URL;
 import static uk.gov.hmcts.dm.controller.Const.LOCATION_HEADER;
 import static uk.gov.hmcts.dm.controller.Const.SERVICE_AUTHORIZATION_HEADER;
 import static uk.gov.hmcts.dm.controller.Const.VERSIONS_IN_URI;
@@ -53,13 +57,15 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
         DOCUMENTS_IN_URI + DOCUMENT_ID + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID;
 
     private static final String PATH_DOCUMENT_CONTENT_VERSION_BINARY =
-        DOCUMENTS_IN_URI + DOCUMENT_ID + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID + Const.BINARY;
+        DOCUMENTS_IN_URI + DOCUMENT_ID + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID + BINARY;
 
     private static final byte[] DOWNLOAD_CONTENT = new byte[]{
         (byte) 0xFF, (byte) 0xD8, (byte) 0xFF, 0x00, 0x10, 0x20, 0x30, 0x40
     };
 
     private static final byte[] FILE_BYTES;
+    public static final String APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8 =
+        "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8";
 
     static {
         try {
@@ -88,13 +94,16 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .path(PATH_VERSIONS)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
-                ACCEPT_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+                ACCEPT_HEADER,
+                APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
             .willRespondWith()
             .status(201)
             .headers(Map.of(
-                CONTENT_TYPE_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8",
-                LOCATION_HEADER, "http://localhost/documents/" + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID
+                CONTENT_TYPE_HEADER,
+                APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8,
+                LOCATION_HEADER,
+                HTTP_LOCALHOST_DOCUMENTS_URL + DOCUMENT_ID + "/versions/" + DOCUMENT_CONTENT_VERSION_ID
             ))
             .body(buildResponseDsl())
             .toPact(V4Pact.class);
@@ -109,7 +118,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .multiPart("file", DOCUMENT_NAME, FILE_BYTES, CONTENT_TYPE)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
-                ACCEPT_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+                ACCEPT_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
             .when()
             .post(PATH_VERSIONS)
@@ -118,9 +127,9 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .statusCode(201)
             .body(BODY_FIELD_MIME_TYPE, equalTo(CONTENT_TYPE))
             .body(BODY_FIELD_ORIGINAL_DOCUMENT_NAME, equalTo(DOCUMENT_NAME))
-            .body("_links.self.href", containsString(DOCUMENTS_IN_URI + DOCUMENT_ID + VERSIONS_IN_URI))
-            .body("_links.binary.href", containsString(Const.BINARY))
-            .body("_links.document.href", containsString(DOCUMENTS_IN_URI + DOCUMENT_ID));
+            .body(BODY_FIELD_LINKS_SELF_HREF, containsString(DOCUMENTS_IN_URI + DOCUMENT_ID + VERSIONS_IN_URI))
+            .body(BODY_FIELD_LINKS_BINARY_HREF, containsString(BINARY))
+            .body(BODY_FIELD_LINKS_DOCUMENT_HREF, containsString(DOCUMENTS_IN_URI + DOCUMENT_ID));
     }
 
 
@@ -140,13 +149,16 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .path(PATH_LEGACY_ENDPOINT)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
-                ACCEPT_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+                ACCEPT_HEADER,
+                APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
             .willRespondWith()
             .status(201)
             .headers(Map.of(
-                CONTENT_TYPE_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8",
-                LOCATION_HEADER, "http://localhost/documents/" + DOCUMENT_ID + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID
+                CONTENT_TYPE_HEADER,
+                APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8,
+                LOCATION_HEADER,
+                HTTP_LOCALHOST_DOCUMENTS_URL + DOCUMENT_ID + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID
             ))
             .body(buildResponseDsl())
             .toPact(V4Pact.class);
@@ -161,7 +173,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .multiPart("file", DOCUMENT_NAME, FILE_BYTES, CONTENT_TYPE)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
-                ACCEPT_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+                ACCEPT_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
             .when()
             .post(PATH_LEGACY_ENDPOINT)
@@ -170,9 +182,9 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .statusCode(201)
             .body(BODY_FIELD_MIME_TYPE, equalTo(CONTENT_TYPE))
             .body(BODY_FIELD_ORIGINAL_DOCUMENT_NAME, equalTo(DOCUMENT_NAME))
-            .body("_links.self.href", containsString(DOCUMENTS_IN_URI + DOCUMENT_ID + VERSIONS_IN_URI))
-            .body("_links.binary.href", containsString(Const.BINARY))
-            .body("_links.document.href", containsString(DOCUMENTS_IN_URI + DOCUMENT_ID));
+            .body(BODY_FIELD_LINKS_SELF_HREF, containsString(DOCUMENTS_IN_URI + DOCUMENT_ID + VERSIONS_IN_URI))
+            .body(BODY_FIELD_LINKS_BINARY_HREF, containsString(BINARY))
+            .body(BODY_FIELD_LINKS_DOCUMENT_HREF, containsString(DOCUMENTS_IN_URI + DOCUMENT_ID));
     }
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
@@ -184,12 +196,12 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .method("GET")
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
-                ACCEPT_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+                ACCEPT_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
             .willRespondWith()
             .status(200)
             .headers(Map.of(
-                CONTENT_TYPE_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+                CONTENT_TYPE_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
             .body(buildResponseDsl())
             .toPact(V4Pact.class);
@@ -202,7 +214,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .baseUri(mockServer.getUrl())
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
-                ACCEPT_HEADER, "application/vnd.uk.gov.hmcts.dm.documentContentVersion.v1+hal+json;charset=UTF-8"
+                ACCEPT_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
             .when()
             .get(PATH_GET_CONTENT)
@@ -211,9 +223,9 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
             .statusCode(200)
             .body(BODY_FIELD_MIME_TYPE, equalTo(CONTENT_TYPE))
             .body(BODY_FIELD_ORIGINAL_DOCUMENT_NAME, equalTo(DOCUMENT_NAME))
-            .body("_links.self.href", containsString(PATH_GET_CONTENT))
-            .body("_links.binary.href", containsString(Const.BINARY))
-            .body("_links.document.href", containsString("/documents/" + DOCUMENT_ID));
+            .body(BODY_FIELD_LINKS_SELF_HREF, containsString(PATH_GET_CONTENT))
+            .body(BODY_FIELD_LINKS_BINARY_HREF, containsString(BINARY))
+            .body(BODY_FIELD_LINKS_DOCUMENT_HREF, containsString("/documents/" + DOCUMENT_ID));
     }
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
@@ -280,14 +292,14 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 .object("_links", links ->
                     links
                         .object("self", self -> self.stringType("href",
-                            "http://localhost/documents/" + DOCUMENT_ID
+                            HTTP_LOCALHOST_DOCUMENTS_URL + DOCUMENT_ID
                                 + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID))
                         .object("binary", binary -> binary.stringType("href",
-                            "http://localhost/documents/" + DOCUMENT_ID
-                                + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID + Const.BINARY))
+                            HTTP_LOCALHOST_DOCUMENTS_URL + DOCUMENT_ID
+                                + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID + BINARY))
                         .object("document",
                             document ->
-                                document.stringType("href", "http://localhost/documents/" + DOCUMENT_ID))
+                                document.stringType("href", HTTP_LOCALHOST_DOCUMENTS_URL + DOCUMENT_ID))
                 )
         ).build();
     }
