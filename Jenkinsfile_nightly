@@ -64,7 +64,6 @@ withNightlyPipeline(type, product, component) {
 //    }
 //
     enableFullFunctionalTest()
-    // TODO enable when docker issue resolved
     enableMutationTest()
     enableSecurityScan()
 
