@@ -2,8 +2,14 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
+import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
@@ -26,12 +32,24 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
 
     private static final UUID DOCUMENT_CONTENT_VERSION_ID =
         UUID.fromString("2216a872-81f7-4cad-a474-32a59608b038");
+    public static final String TEST_USER = "test-user";
+
+    @Autowired
+    public StoredDocumentControllerProviderTest(
+        MockMvc mockMvc,
+        WebApplicationContext webApplicationContext,
+        ObjectMapper objectMapper,
+        ConfigurableListableBeanFactory configurableListableBeanFactory,
+        DmServiceAuthFilter filter
+    ) {
+        super(mockMvc, webApplicationContext, objectMapper, configurableListableBeanFactory, filter);
+    }
 
     private StoredDocument createSampleStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.fromString(DOCUMENT_ID));
         storedDocument.setClassification(Classifications.PUBLIC);
-        storedDocument.setCreatedBy("test-user");
+        storedDocument.setCreatedBy(TEST_USER);
         storedDocument.setCreatedOn(new Date());
         storedDocument.setModifiedOn(new Date());
         storedDocument.setRoles(Set.of("citizen"));
@@ -50,7 +68,7 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
         StoredDocument storedDocument = new StoredDocument();
         storedDocument.setId(UUID.fromString(DOCUMENT_ID));
         storedDocument.setClassification(Classifications.PUBLIC);
-        storedDocument.setCreatedBy("test-user");
+        storedDocument.setCreatedBy(TEST_USER);
         storedDocument.setCreatedOn(new Date());
         storedDocument.setRoles(Set.of("citizen"));
 
@@ -59,7 +77,7 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
             .mimeType("application/octet-stream")
             .mimeTypeUpdated(true)
             .originalDocumentName("sample.pdf")
-            .createdBy("test-user")
+            .createdBy(TEST_USER)
             .createdByService("test-service")
             .createdOn(new Date())
             .storedDocument(storedDocument)

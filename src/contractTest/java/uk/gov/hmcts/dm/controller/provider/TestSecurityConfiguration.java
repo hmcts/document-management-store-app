@@ -12,7 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class TestSecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) {
         http.csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                 // This rule allows all requests to any endpoint without authentication
