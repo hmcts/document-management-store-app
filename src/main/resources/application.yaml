@@ -66,7 +66,10 @@ spring:
       noOfIterations: ${CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS:1}
       batchSize: ${CASE_DOCUMENTS_DELETION_BATCH_SIZE:10}
       serviceName: ${CASE_DOCUMENTS_DELETION_SERVICE_NAME:ccd_case_disposer}
-
+    mimeTypeUpdate:
+      threadLimit: ${MIME_TYPE_UPDATE_THREAD_LIMIT:1}
+      noOfIterations: ${MIME_TYPE_UPDATE_NO_OF_ITERATIONS:1}
+      batchSize: ${MIME_TYPE_UPDATE_BATCH_SIZE:300}
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
@@ -113,7 +116,6 @@ logging:
     org.springframework.jdbc.core: ${LOG_LEVEL_SPRING_JDBC:DEBUG}
     org.hibernate.SQL: ${LOG_LEVEL_HIBERNATE:DEBUG}
     org.hibernate.type.descriptor.sql.BasicBinder: ${LOG_LEVEL_HIBERNATE:DEBUG}
-
 azure:
   app_insights_key: ${APPINSIGHTS_INSTRUMENTATIONKEY:true}
   application-insights:
@@ -232,4 +234,3 @@ dbMigration:
   # When true, the app will run DB migration on startup.
   # Otherwise, it will just check if all migrations have been applied (and fail to start if not).
   runOnStartup: ${RUN_DB_MIGRATION_ON_STARTUP:true}
-
