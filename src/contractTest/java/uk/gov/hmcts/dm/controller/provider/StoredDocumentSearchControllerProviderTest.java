@@ -2,8 +2,14 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
+import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
 
@@ -18,6 +24,17 @@ import static org.mockito.Mockito.when;
 @Provider("dm_store_stored_document_search_provider")
 public class StoredDocumentSearchControllerProviderTest extends BaseProviderTest {
     private static final String DOCUMENT_ID = "969983aa-52ae-41bd-8cf3-4aabcc120783";
+
+    @Autowired
+    public StoredDocumentSearchControllerProviderTest(
+        MockMvc mockMvc,
+        WebApplicationContext webApplicationContext,
+        ObjectMapper objectMapper,
+        ConfigurableListableBeanFactory configurableListableBeanFactory,
+        DmServiceAuthFilter filter
+    ) {
+        super(mockMvc, webApplicationContext, objectMapper, configurableListableBeanFactory, filter);
+    }
 
     private StoredDocument createSampleStoredDocument() {
         StoredDocument storedDocument = new StoredDocument();

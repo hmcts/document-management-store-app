@@ -33,7 +33,7 @@ class ExceptionStatusCodeAndMessageResolverTest {
     private ExceptionStatusCodeAndMessageResolver resolver;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         resolver.init();
     }
 

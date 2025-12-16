@@ -174,8 +174,9 @@ public class BlobStorageReadService {
         return blockBlobClient(uuid.toString()).exists();
     }
 
+
     private long subLong(String value, int beginIndex, int endIndex) {
         String substring = value.substring(beginIndex, endIndex);
-        return (substring.length() > 0) ? Long.parseLong(substring) : -1;
+        return substring.isEmpty() ? -1 : Long.parseLong(substring);
     }
 }

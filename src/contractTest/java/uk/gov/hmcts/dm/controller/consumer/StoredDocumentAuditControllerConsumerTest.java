@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
+import static uk.gov.hmcts.dm.controller.Const.DOCUMENTS_IN_URI;
+import static uk.gov.hmcts.dm.controller.Const.DUMMY_SERVICE_AUTHORIZATION_VALUE;
+import static uk.gov.hmcts.dm.controller.Const.EXAMPLE_USER;
 
 public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactTest {
 
@@ -21,7 +24,7 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
 
     private static final String DOCUMENT_ID = "00351f93-dff5-46fa-af0d-b40c2cafb47f";
 
-    private static final String GET_AUDIT_PATH = "/documents/" + DOCUMENT_ID + "/auditEntries";
+    private static final String GET_AUDIT_PATH = DOCUMENTS_IN_URI + DOCUMENT_ID + "/auditEntries";
 
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
@@ -46,7 +49,7 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
         RestAssured
             .given()
             .baseUri(mockServer.getUrl())
-            .headers(Map.of("ServiceAuthorization", "Bearer some-s2s-token",
+            .headers(Map.of("ServiceAuthorization", DUMMY_SERVICE_AUTHORIZATION_VALUE,
                 "Accept", "application/hal+json"))
             .when()
             .get(GET_AUDIT_PATH)
@@ -67,12 +70,12 @@ public class StoredDocumentAuditControllerConsumerTest extends BaseConsumerPactT
     private void buildAuditEntryDslObject(LambdaDslObject audit) {
         audit
             .stringType("action", "READ")
-            .stringType("username", "user@example.com")
+            .stringType("username", EXAMPLE_USER)
             .stringType("type", "StoredDocumentAuditEntry")
-            .object("_links", links -> {
+            .object("_links", links ->
                 links.object("document", docLink ->
                     docLink.stringType("href", "http://localhost/documents/" + DOCUMENT_ID)
-                );
-            });
+                )
+            );
     }
 }

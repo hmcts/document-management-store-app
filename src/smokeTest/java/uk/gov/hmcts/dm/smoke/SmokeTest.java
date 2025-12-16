@@ -29,7 +29,7 @@ class SmokeTest {
     void testHealthEndpoint() {
         SerenityRest.useRelaxedHTTPSValidation();
 
-        Map responseMap =
+        Map<String, String> responseMap =
             SerenityRest
                 .given()
                 .baseUri(testUrl)

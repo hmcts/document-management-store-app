@@ -26,7 +26,7 @@ class FileSizeVerifierTest {
     private FileSizeVerifier fileSizeVerifier;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         ReflectionTestUtils.setField(fileSizeVerifier, "mediaMimeTypes", Arrays.asList("audio/mpeg","video/mp4"));
         ReflectionTestUtils.setField(fileSizeVerifier, "mediaFileSize", 500L);
         ReflectionTestUtils.setField(fileSizeVerifier, "nonMediaFileSize", 1024L);

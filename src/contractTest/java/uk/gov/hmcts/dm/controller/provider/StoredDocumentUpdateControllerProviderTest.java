@@ -2,7 +2,13 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
+import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.security.Classifications;
@@ -15,10 +21,22 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static uk.gov.hmcts.dm.controller.Const.EXAMPLE_SERVICE;
+import static uk.gov.hmcts.dm.controller.Const.EXAMPLE_USER;
 
 @Provider("dm_store_update_document_provider")
 public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest {
 
+    @Autowired
+    public StoredDocumentUpdateControllerProviderTest(
+        MockMvc mockMvc,
+        WebApplicationContext webApplicationContext,
+        ObjectMapper objectMapper,
+        ConfigurableListableBeanFactory configurableListableBeanFactory,
+        DmServiceAuthFilter filter
+    ) {
+        super(mockMvc, webApplicationContext, objectMapper, configurableListableBeanFactory, filter);
+    }
 
     @State("Documents exist and can be updated with new TTL")
     public void documentsExistToUpdate() {
@@ -37,10 +55,10 @@ public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest
 
         StoredDocument storedDocument = StoredDocument.builder()
             .id(documentId)
-            .createdBy("user@example.com")
-            .createdByService("some-service")
-            .lastModifiedBy("user@example.com")
-            .lastModifiedByService("some-service")
+            .createdBy(EXAMPLE_USER)
+            .createdByService(EXAMPLE_SERVICE)
+            .lastModifiedBy(EXAMPLE_USER)
+            .lastModifiedByService(EXAMPLE_SERVICE)
             .createdOn(new Date())
             .modifiedOn(new Date())
             .deleted(false)
@@ -66,8 +84,8 @@ public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest
         version.setCreatedOn(new Date());
         version.setMimeType("application/pdf");
         version.setSize(2048L);
-        version.setCreatedBy("user@example.com");
-        version.setCreatedByService("some-service");
+        version.setCreatedBy(EXAMPLE_USER);
+        version.setCreatedByService(EXAMPLE_SERVICE);
         return version;
     }
 }

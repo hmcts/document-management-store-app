@@ -9,6 +9,7 @@ import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -23,13 +24,14 @@ class MappingUrlIT extends BaseIT {
 
     @Value("${toggle.metadatasearchendpoint}")
     private boolean metadatasearchendpoint;
-    @Value("${toggle.documentandmetadatauploadendpoint}")
-    private boolean documentandmetadatauploadendpoint;
-    @Value("${toggle.ttl}")
-    private boolean ttl;
     @Value("${toggle.testing}")
     private boolean testing;
     private List<String> allEndpoints;
+
+    @Autowired
+    MappingUrlIT(AuthTokenProvider authTokenProvider) {
+        super(authTokenProvider);
+    }
 
     @BeforeEach
     public void setup() throws JsonProcessingException {
@@ -39,7 +41,7 @@ class MappingUrlIT extends BaseIT {
     }
 
     @Test
-    void toggle_metadatasearchendpoint_toggle_Mappings() {
+    void toggleMetadataSearchEndpointToggleMappings() {
         assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.contains("owned")), metadatasearchendpoint);
         assertEquals(allEndpoints.stream().anyMatch(endpoint ->
@@ -47,66 +49,10 @@ class MappingUrlIT extends BaseIT {
     }
 
     @Test
-    void toggle_testing_toggle_Testing() {
+    void toggleTestingToggleTesting() {
         assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.equals("{GET [/testing/azure-storage-binary-exists/{id}]}")), testing);
 
-    }
-
-    public boolean getMetadatasearchendpoint() {
-        return metadatasearchendpoint;
-    }
-
-    public boolean isMetadatasearchendpoint() {
-        return metadatasearchendpoint;
-    }
-
-    public void setMetadatasearchendpoint(boolean metadatasearchendpoint) {
-        this.metadatasearchendpoint = metadatasearchendpoint;
-    }
-
-    public boolean getDocumentandmetadatauploadendpoint() {
-        return documentandmetadatauploadendpoint;
-    }
-
-    public boolean isDocumentandmetadatauploadendpoint() {
-        return documentandmetadatauploadendpoint;
-    }
-
-    public void setDocumentandmetadatauploadendpoint(boolean documentandmetadatauploadendpoint) {
-        this.documentandmetadatauploadendpoint = documentandmetadatauploadendpoint;
-    }
-
-    public boolean getTtl() {
-        return ttl;
-    }
-
-    public boolean isTtl() {
-        return ttl;
-    }
-
-    public void setTtl(boolean ttl) {
-        this.ttl = ttl;
-    }
-
-    public boolean getTesting() {
-        return testing;
-    }
-
-    public boolean isTesting() {
-        return testing;
-    }
-
-    public void setTesting(boolean testing) {
-        this.testing = testing;
-    }
-
-    public List getAllEndpoints() {
-        return allEndpoints;
-    }
-
-    public void setAllEndpoints(List allEndpoints) {
-        this.allEndpoints = allEndpoints;
     }
 
 }

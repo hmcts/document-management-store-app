@@ -28,7 +28,7 @@ class PermissionEvaluatorImplTests {
     PermissionEvaluatorImpl permissionEvaluator;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         permissionEvaluator = new PermissionEvaluatorImpl(securityUtilService,
             domainPermissionEvaluator, repositoryFinder);
         when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("em_gw");

@@ -15,8 +15,8 @@ public class AuditorAwareImpl implements AuditorAware<String> {
         if (authentication != null) {
             if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
                 return Optional.ofNullable(springSecurityUser.getUsername());
-            } else if (authentication.getPrincipal() instanceof String) {
-                return Optional.ofNullable((String) authentication.getPrincipal());
+            } else if (authentication.getPrincipal() instanceof String principal) {
+                return Optional.ofNullable(principal);
             }
         }
         return Optional.empty();

@@ -58,7 +58,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @IgnoreNoPactsToVerify
 @AutoConfigureMockMvc(addFilters = false)
 //Uncomment @PactFolder and comment the @PactBroker line to test local consumer.
-//using this, import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 //@PactFolder("target/pacts")
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
@@ -66,19 +65,14 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 )
 public abstract class BaseProviderTest {
 
-    @Autowired
     protected MockMvc mockMvc;
 
-    @Autowired
     protected WebApplicationContext webApplicationContext;
 
-    @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
-    @Autowired
     protected DmServiceAuthFilter filter;
 
     @MockitoBean
@@ -125,6 +119,21 @@ public abstract class BaseProviderTest {
 
     @MockitoBean
     protected TestController testController;
+
+    @Autowired
+    protected BaseProviderTest(
+        MockMvc mockMvc,
+        WebApplicationContext webApplicationContext,
+        ObjectMapper objectMapper,
+        ConfigurableListableBeanFactory configurableListableBeanFactory,
+        DmServiceAuthFilter filter
+    ) {
+        this.mockMvc = mockMvc;
+        this.webApplicationContext = webApplicationContext;
+        this.objectMapper = objectMapper;
+        this.configurableListableBeanFactory = configurableListableBeanFactory;
+        this.filter = filter;
+    }
 
     @PactBrokerConsumerVersionSelectors
     public static SelectorBuilder consumerVersionSelectors() {

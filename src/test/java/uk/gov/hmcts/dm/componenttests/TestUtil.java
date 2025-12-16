@@ -71,7 +71,7 @@ public class TestUtil {
         .build();
 
 
-
+    @SuppressWarnings("java:S6204")
     public static final StoredDocument STORED_DOCUMENT = StoredDocument.builder().id(RANDOM_UUID)
         .documentContentVersions(
             Stream.of(DOCUMENT_CONTENT_VERSION)
@@ -81,21 +81,21 @@ public class TestUtil {
     public static final StoredDocument DELETED_DOCUMENT = StoredDocument.builder()
         .id(RANDOM_UUID)
         .deleted(true)
-        .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList()))
+        .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).toList())
         .build();
 
     public static final StoredDocument HARD_DELETED_DOCUMENT = StoredDocument.builder()
         .id(RANDOM_UUID)
         .deleted(true)
         .hardDeleted(true)
-        .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).collect(Collectors.toList()))
+        .documentContentVersions(Stream.of(DOCUMENT_CONTENT_VERSION).toList())
         .build();
 
     private TestUtil() {
     }
 
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
-        ObjectMapper om = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        ObjectMapper om = new ObjectMapper().setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
         return om.writeValueAsBytes(object);
     }
 

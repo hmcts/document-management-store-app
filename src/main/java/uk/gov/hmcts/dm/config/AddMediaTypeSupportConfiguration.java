@@ -16,9 +16,9 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String s) {
-        if (bean instanceof RequestMappingHandlerAdapter) {
-            ((RequestMappingHandlerAdapter) bean).getMessageConverters().stream()
-                .filter(converter -> converter instanceof MappingJackson2HttpMessageConverter)
+        if (bean instanceof RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
+            requestMappingHandlerAdapter.getMessageConverters().stream()
+                .filter(MappingJackson2HttpMessageConverter.class::isInstance)
                 .forEach(converter -> {
                     MappingJackson2HttpMessageConverter halConverterCandidate =
                         (MappingJackson2HttpMessageConverter) converter;

@@ -46,7 +46,7 @@ class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
     }
 
     @Test
-    public void testDelete() throws Exception {
+    void testDelete() throws Exception {
         restActions
                 .withAuthorizedUser("userId")
                 .delete("/documents/" + id)
@@ -54,7 +54,7 @@ class StoredDocumentControllerNoDeleteTests extends ComponentTestBase {
     }
 
     @Test
-    public void testHardDelete() throws Exception {
+    void testHardDelete() throws Exception {
         restActions
                 .withAuthorizedUser("userId")
                 .delete("/documents/" + id + "?permanent=true")

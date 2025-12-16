@@ -16,7 +16,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Relation(collectionRelation = "documentVersions")
-public class DocumentContentVersionHalResource extends HalResource {
+public class DocumentContentVersionHalResource extends HalResource<DocumentContentVersionHalResource> {
 
     private Long size;
 

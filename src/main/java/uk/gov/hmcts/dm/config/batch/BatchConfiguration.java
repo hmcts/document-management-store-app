@@ -49,24 +49,17 @@ public class BatchConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(BatchConfiguration.class);
 
+    private final JobRepository jobRepository;
 
-    @Autowired
-    private JobRepository jobRepository;
+    private final PlatformTransactionManager transactionManager;
 
-    @Autowired
-    private PlatformTransactionManager transactionManager;
+    private final EntityManagerFactory entityManagerFactory;
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    private final JobLauncher jobLauncher;
 
-    @Autowired
-    private JobLauncher jobLauncher;
+    private final DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor;
 
-    @Autowired
-    private DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Value("${spring.batch.historicExecutionsRetentionMilliseconds}")
     private int historicExecutionsRetentionMilliseconds;
@@ -87,6 +80,22 @@ public class BatchConfiguration {
     private int deleteDocumentsChunkSize;
 
     private Random random = new Random();
+
+    @Autowired
+    public BatchConfiguration(
+        JobRepository jobRepository,
+        PlatformTransactionManager transactionManager,
+        EntityManagerFactory entityManagerFactory,
+        JobLauncher jobLauncher,
+        DeleteExpiredDocumentsProcessor deleteExpiredDocumentsProcessor,
+        JdbcTemplate jdbcTemplate) {
+        this.jobRepository = jobRepository;
+        this.transactionManager = transactionManager;
+        this.entityManagerFactory = entityManagerFactory;
+        this.jobLauncher = jobLauncher;
+        this.deleteExpiredDocumentsProcessor = deleteExpiredDocumentsProcessor;
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
 
     @Scheduled(cron = "${spring.batch.document-delete-task-cron}", zone = "Europe/London")
@@ -122,7 +131,7 @@ public class BatchConfiguration {
             .toJobParameters());
     }
 
-    public JpaPagingItemReader undeletedDocumentsWithTtl() {
+    public JpaPagingItemReader<StoredDocument> undeletedDocumentsWithTtl() {
         return new JpaPagingItemReaderBuilder<StoredDocument>()
             .name("documentTaskReader")
             .entityManagerFactory(entityManagerFactory)
@@ -133,8 +142,8 @@ public class BatchConfiguration {
             .build();
     }
 
-    public JpaItemWriter itemWriter() {
-        JpaItemWriter writer = new JpaItemWriter<StoredDocument>();
+    public JpaItemWriter<StoredDocument> itemWriter() {
+        JpaItemWriter<StoredDocument> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
         return writer;
     }
@@ -164,6 +173,7 @@ public class BatchConfiguration {
         taskExecutor.setMaxPoolSize(deleteThreadCount);
         taskExecutor.setQueueCapacity(deleteExecutorQueueCapacity);
         taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy() {
+            @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
                 log.info("Delete execution rejected");
                 super.rejectedExecution(r, e);

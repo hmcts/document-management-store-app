@@ -10,27 +10,26 @@ import org.springframework.hateoas.RepresentationModel;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @EqualsAndHashCode(callSuper = true)
-public abstract class HalResource extends RepresentationModel {
+@SuppressWarnings("java:S1452")
+public abstract class HalResource<T extends HalResource<T>>
+    extends RepresentationModel<T> {
 
-    private final Map<String, RepresentationModel> embedded = new HashMap<>();
+    private final Map<String, RepresentationModel<?>> embedded = new HashMap<>();
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("_embedded")
-    public Map<String, RepresentationModel> getEmbeddedResources() {
+    public Map<String, RepresentationModel<?>> getEmbeddedResources() {
         return embedded;
     }
 
-    public void embedResource(String relationship, RepresentationModel resource) {
-        embedded.put(relationship, resource);
+    public void embedResource(String relation, RepresentationModel<?> resource) {
+        embedded.put(relation, resource);
     }
 
     @JsonIgnore
     public final URI getUri() {
-        Optional<Link> link = getLink("self");
-
-        return link.map(Link::toUri).orElse(null);
+        return getLink("self").map(Link::toUri).orElse(null);
     }
 }
