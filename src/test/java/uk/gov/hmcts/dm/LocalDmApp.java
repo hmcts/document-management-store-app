@@ -7,7 +7,7 @@ public class LocalDmApp {
 
     public static void main(String[] args) {
         new SpringApplicationBuilder()
-                .sources(DmApp.class)
+                .sources(DocumentDeletionApplication.class)
                 .profiles("local")
                 .run();
     }
