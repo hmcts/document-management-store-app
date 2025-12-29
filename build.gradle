@@ -27,7 +27,7 @@ group = 'uk.gov.hmcts.dm'
 version = '2.0.0'
 
 application {
-    mainClass = 'uk.gov.hmcts.dm.DmApp'
+    mainClass = 'uk.gov.hmcts.dm.DocumentDeletionApplication'
 }
 
 java {
@@ -272,7 +272,7 @@ pitest {
     excludedClasses = [
         'uk.gov.hmcts.dm.authchecker.*' ,
         'uk.gov.hmcts.dm.domain.*',
-        'uk.gov.hmcts.dm.DmApp.java',
+        'uk.gov.hmcts.dm.DocumentDeletionApplication.java',
         'uk.gov.hmcts.dm.service.util.*'
     ]
 
