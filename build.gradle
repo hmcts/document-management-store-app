@@ -230,7 +230,7 @@ checkstyle {
 }
 
 def coverageExclusionList = [
-    '**uk/gov/hmcts/dm/DmApp.java',
+    '**uk/gov/hmcts/dm/DocumentDeletionApplication.java',
     '**uk/gov/hmcts/dm/hateos/*',
     '**uk/gov/hmcts/dm/exception/*',
     '**uk/gov/hmcts/dm/domain/*',
@@ -244,6 +244,7 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/service/Constants.java',
     '**uk/gov/hmcts/dm/service/FileContentVerifier*',
     '**uk/gov/hmcts/dm/service/DocumentContentVersionModel.java',
+    '**uk/gov/hmcts/dm/service/DocumentDeletionService.java',
     '**uk/gov/hmcts/dm/data/migration/PendingMigrationScriptException*',
     '**uk/gov/hmcts/dm/data/migration/FlywayNoOpStrategy*',
     '**uk/gov/hmcts/dm/config/security/DmServiceAuthFilter*'
