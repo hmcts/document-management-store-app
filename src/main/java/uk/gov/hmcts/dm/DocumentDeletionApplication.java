@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,13 +36,17 @@ public class DocumentDeletionApplication {
     public void scheduledDeletion() {
         LocalDate cutoff = parseOrDefaultCutoff(cutoffDateProp);
         LOGGER.info("Starting batched deletion with cutoffDate = {} ", cutoff);
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         try {
             deletionService.runBatchedDeletion(cutoff);
             LOGGER.info("Batched deletion data prep completed for cutoffDate = {} ", cutoff);
         } catch (Exception e) {
-            LOGGER.error("Batched deletion failed for cutoffDate={}", cutoff, e);
+            LOGGER.error("Batched deletion data prep failed for cutoffDate={}", cutoff, e);
             throw e;
         }
+        stopWatch.stop();
+        LOGGER.info("Batched deletion data prep job took {} ms", stopWatch.getDuration().toMillis());
     }
 
     private LocalDate parseOrDefaultCutoff(String prop) {
