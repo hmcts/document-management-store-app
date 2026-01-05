@@ -178,8 +178,8 @@ dependencies {
 
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'2.3.0'
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.22'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.22'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.23'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.23'
 
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all', {
