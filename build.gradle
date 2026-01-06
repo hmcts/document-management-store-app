@@ -84,7 +84,7 @@ def versions = [
     postgresql         : '42.7.8',
     jackson            : '2.20.1',
     serenity           : '5.0.2',
-    logging            : '6.1.9',
+    logging            : '7.0.0',
     pact_version       : '4.6.19',
     emTestHelper       : '2.1.1',
     shedlock           : '7.5.0',
