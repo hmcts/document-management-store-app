@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "labels": [
+    "dependencies"
+  ],
+  "helm-requirements": {
+    "fileMatch": [
+      "\\Chart.yaml|requirements.yaml$"
+    ],
+    "aliases": {
+      "hmctspublic": "https://hmctspublic.azurecr.io/helm/v1/repo/"
+    }
+  },
+  "extends": [
+    "local>hmcts/.github:renovate-config"
+  ]
+}
