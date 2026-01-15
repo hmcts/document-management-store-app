@@ -6,67 +6,6 @@ java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 60
-  secrets:
-    BLOB_ACCOUNT_NAME:
-      secretRef: storage-account-{{ .Release.Name }}-blobstorage
-      key: storage_account_name
-    BLOB_ACCESS_KEY:
-      secretRef: storage-secret-{{ .Release.Name }}-blobstorage
-      key: accessKey
-    BLOB_SERVICE_ENDPOINT:
-      secretRef: storage-secret-{{ .Release.Name }}-blobstorage
-      key: blobEndpoint
-  keyVaults:
-    dm: # Need to override only to get rid of the BlobStorage URL/details mapping.
-      resourceGroup: dm-shared
-      secrets:
-        - name: RpaAppInsightsInstrumentationKey
-          alias: azure.application-insights.instrumentation-key
-  environment:
-    # Endpoints
-    IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
-    IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-    SPRING_DATASOURCE_HOST: "{{ .Release.Name }}-postgresql"
-    SPRING_DATASOURCE_NAME: "{{ .Values.postgresql.auth.database}}"
-    SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.auth.username}}"
-    SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.auth.password}}"
-    # logging vars & healthcheck
-    REFORM_ENVIRONMENT: preview
-    PACKAGES_ENVIRONMENT: preview
-    ENABLE_DB_MIGRATE: 'true'
-    RUN_DB_MIGRATION_ON_STARTUP: true
-    STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(BLOB_ACCOUNT_NAME);AccountKey=$(BLOB_ACCESS_KEY);EndpointSuffix=core.windows.net"
-    DOCUMENT_METADATA_UPDATE_MILLISECONDS: 1000
-    ENABLE_METADATA_MIGRATION: 'false'
-    STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
-    STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME: orphandocumentdeletion{{ .Release.Name }}
-  postgresql:
-    enabled: true
-blobstorage:
-  enabled: true
 
-xui-webapp:
-  enabled: true
-  nodejs:
-    imagePullPolicy: Always
-    releaseNameOverride: ${SERVICE_NAME}-xui-webapp
-    image: hmctspublic.azurecr.io/xui/webapp:latest
-    ingressHost: xui-${SERVICE_FQDN}
-    environment:
-      HEALTH_DOCUMENTS_API: https://${SERVICE_FQDN}/health
-      SERVICES_DOCUMENTS_API: https://${SERVICE_FQDN}
-      FEATURE_REDIS_ENABLED: false
-      FEATURE_APP_INSIGHTS_ENABLED: false
-      FEATURE_SECURE_COOKIE_ENABLED: false
-      FEATURE_HELMET_ENABLED: false
-      REDISCLOUD_URL: http://dummyrediscloudurl
-      UV_THREADPOOL_SIZE: 128
-      PROTOCOL: http
-
-idam-pr:
-  enabled: true
-  redirect_uris:
-    XUI:
-      - https://xui-${SERVICE_FQDN}/oauth2/callback
 
 
