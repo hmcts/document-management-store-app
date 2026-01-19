@@ -171,7 +171,7 @@ class StoredDocumentServiceTests {
 
         assertEquals(Set.of("a", "b"), storedDocument.getRoles());
         assertEquals(PRIVATE, storedDocument.getClassification());
-        assertNull(storedDocument.getMetadata()); // Null because toggleConfiguration.isMetadatasearchendpoint() is false by default mock
+        assertNull(storedDocument.getMetadata());
         assertNotNull(storedDocument.getTtl());
         assertEquals(testFile.getContentType(), latestVersion.getMimeType());
         assertEquals(testFile.getOriginalFilename(), latestVersion.getOriginalDocumentName());
@@ -271,7 +271,8 @@ class StoredDocumentServiceTests {
 
         when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
 
-        DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), new HashMap<>(Map.of("UpdateKey", "UpdateValue")));
+        DocumentUpdate update = new DocumentUpdate(storedDocument.getId(),
+            new HashMap<>(Map.of("UpdateKey", "UpdateValue")));
         UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, List.of(update));
 
         storedDocumentService.updateItems(command);
