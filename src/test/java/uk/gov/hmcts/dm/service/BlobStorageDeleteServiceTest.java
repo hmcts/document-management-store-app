@@ -9,28 +9,27 @@ import com.azure.storage.blob.specialized.BlockBlobClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 
 import java.util.UUID;
 
-import static java.util.Collections.singletonList;
-import static java.util.UUID.randomUUID;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class BlobStorageDeleteServiceTest {
-
-    private BlobStorageDeleteService blobStorageDeleteService;
 
     @Mock
     private BlobContainerClient cloudBlobContainer;
@@ -39,176 +38,166 @@ class BlobStorageDeleteServiceTest {
     private BlobClient blobClient;
 
     @Mock
-    private BlockBlobClient blob;
+    private BlockBlobClient blockBlobClient;
 
-    StoredDocument storedDocument;
-    DocumentContentVersion documentContentVersion;
+    @Mock
+    private Response<Void> mockResponse;
 
-    private Response mockResponse = mock(Response.class);
+    @InjectMocks
+    private BlobStorageDeleteService blobStorageDeleteService;
 
+    private DocumentContentVersion documentContentVersion;
 
     @BeforeEach
     void setUp() {
-        given(cloudBlobContainer.getBlobClient(any())).willReturn(blobClient);
-        given(blobClient.getBlockBlobClient()).willReturn(blob);
+        when(cloudBlobContainer.getBlobClient(anyString())).thenReturn(blobClient);
+        when(blobClient.getBlockBlobClient()).thenReturn(blockBlobClient);
 
-        storedDocument = createStoredDocument();
-        documentContentVersion = storedDocument.getDocumentContentVersions().get(0);
+        StoredDocument storedDocument = new StoredDocument();
+        storedDocument.setId(UUID.randomUUID());
 
-        documentContentVersion.setContentChecksum("");
-        documentContentVersion.setContentUri("");
-
-        blobStorageDeleteService = new BlobStorageDeleteService(cloudBlobContainer);
+        documentContentVersion = new DocumentContentVersion();
+        documentContentVersion.setId(UUID.randomUUID());
+        documentContentVersion.setStoredDocument(storedDocument);
+        documentContentVersion.setContentUri("http://azure/blob");
+        documentContentVersion.setContentChecksum("checksum123");
     }
 
     @Test
-    void delete_documentContentVersion() {
+    void shouldDeleteDocumentContentVersionWhenResponseIs202() {
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(
+            eq(DeleteSnapshotsOptionType.INCLUDE), isNull(), isNull(), isNull())
+        ).thenReturn(mockResponse);
         when(mockResponse.getStatusCode()).thenReturn(202);
-        given(blob.exists()).willReturn(true);
-        given(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .willReturn(mockResponse);
+
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+
+        verify(blockBlobClient).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
         assertNull(documentContentVersion.getContentChecksum());
         assertNull(documentContentVersion.getContentUri());
-
     }
 
     @Test
-    void delete_documentContentVersion_if_responseCode_404() {
+    void shouldDeleteDocumentContentVersionWhenResponseIs404() {
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(any(), any(), any(), any())).thenReturn(mockResponse);
         when(mockResponse.getStatusCode()).thenReturn(404);
-        when(blob.exists()).thenReturn(true);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenReturn(mockResponse);
+
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+
         assertNull(documentContentVersion.getContentChecksum());
         assertNull(documentContentVersion.getContentUri());
     }
 
     @Test
-    void not_delete_documentContentVersion_if_responseCode_not_202_or_404() {
+    void shouldNotDeleteDocumentContentVersionFieldsWhenResponseIsNot202Or404() {
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(any(), any(), any(), any())).thenReturn(mockResponse);
         when(mockResponse.getStatusCode()).thenReturn(409);
-        when(blob.exists()).thenReturn(true);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-            .thenReturn(mockResponse);
+
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+
         assertNotNull(documentContentVersion.getContentChecksum());
         assertNotNull(documentContentVersion.getContentUri());
     }
 
     @Test
-    void not_delete_DocumentContentVersion_if_blob_delete_fails_with_exception() {
-        var blobStorageException = mock(BlobStorageException.class);
-        when(blob.exists()).thenReturn(true);
+    void shouldNotDeleteDocumentContentVersionFieldsWhenBlobDeleteThrowGenericException() {
+        BlobStorageException blobStorageException = mock(BlobStorageException.class);
         when(blobStorageException.getStatusCode()).thenReturn(409);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(any(), any(), any(), any()))
             .thenThrow(blobStorageException);
+
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+
         assertNotNull(documentContentVersion.getContentChecksum());
         assertNotNull(documentContentVersion.getContentUri());
     }
 
     @Test
-    void delete_documentContentVersion_if_delete_blob_fails_with_404() {
-        var blobStorageException = mock(BlobStorageException.class);
-        when(blob.exists()).thenReturn(true);
+    void shouldClearDocumentContentVersionFieldsWhenBlobDeleteThrows404Exception() {
+        BlobStorageException blobStorageException = mock(BlobStorageException.class);
         when(blobStorageException.getStatusCode()).thenReturn(404);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
+
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(any(), any(), any(), any()))
             .thenThrow(blobStorageException);
+
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
+
         assertNull(documentContentVersion.getContentChecksum());
         assertNull(documentContentVersion.getContentUri());
     }
 
     @Test
-    void delete_documentContentVersion_if_blob_not_exist() {
-        when(blob.exists()).thenReturn(false);
+    void shouldClearFieldsEvenIfBlobDoesNotExist() {
+        when(blockBlobClient.exists()).thenReturn(false);
+
         blobStorageDeleteService.deleteDocumentContentVersion(documentContentVersion);
-        verify(blob, never()).deleteWithResponse(any(), any(), any(), any());
+
+        verify(blockBlobClient, never()).deleteWithResponse(any(), any(), any(), any());
+
         assertNull(documentContentVersion.getContentChecksum());
         assertNull(documentContentVersion.getContentUri());
     }
 
     @Test
-    void shouldLogErrorWhenBlobDeletionFails() {
-        var blobStorageException = mock(BlobStorageException.class);
-        when(blob.exists()).thenReturn(true);
-        when(blobStorageException.getStatusCode()).thenReturn(500);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-                .thenThrow(blobStorageException);
+    void shouldLogAndContinueWhenDeleteCaseDocumentBinaryFailsWithException() {
+        BlobStorageException blobStorageException = mock(BlobStorageException.class);
+
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(any(), any(), any(), any()))
+            .thenThrow(blobStorageException);
 
         blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
 
-        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+        verify(blockBlobClient).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
         assertNotNull(documentContentVersion.getContentChecksum());
-        assertNotNull(documentContentVersion.getContentUri());
     }
 
     @Test
-    void shouldLogSuccessWhenBlobDeletedSuccessfully() {
+    void shouldLogSuccessWhenDeleteCaseDocumentBinarySucceeds() {
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(any(), any(), any(), any())).thenReturn(mockResponse);
         when(mockResponse.getStatusCode()).thenReturn(202);
-        when(blob.exists()).thenReturn(true);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-                .thenReturn(mockResponse);
 
         blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
 
-        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+        verify(blockBlobClient).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
     }
 
     @Test
-    void shouldLogErrorWhenBlobDoesNotExist() {
-        when(blob.exists()).thenReturn(false);
+    void shouldLogInfoWhenDeleteCaseDocumentBinaryFindsNoBlob() {
+        when(blockBlobClient.exists()).thenReturn(false);
 
         blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
 
-        verify(blob, never()).deleteWithResponse(any(), any(), any(), any());
+        verify(blockBlobClient, never()).deleteWithResponse(any(), any(), any(), any());
     }
 
     @Test
-    void shouldLogErrorWhenBlobDeletionThrowsGenericException() {
-        when(blob.exists()).thenReturn(true);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-                .thenThrow(new RuntimeException("Generic exception"));
+    void shouldLogInfoWhenDeleteCaseDocumentBinaryThrowsGenericException() {
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(any(), any(), any(), any()))
+            .thenThrow(new RuntimeException("Generic exception"));
 
         blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
 
-        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+        verify(blockBlobClient).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
     }
 
     @Test
-    void logsErrorWhenDocumentBinaryDeletionFails() {
-        when(blob.exists()).thenReturn(true);
-        when(blob.deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null))
-                .thenReturn(mockResponse);
+    void shouldLogInfoWhenDeleteCaseDocumentBinaryReturnsNonSuccessCode() {
+        when(blockBlobClient.exists()).thenReturn(true);
+        when(blockBlobClient.deleteWithResponse(any(), any(), any(), any())).thenReturn(mockResponse);
         when(mockResponse.getStatusCode()).thenReturn(409);
 
         blobStorageDeleteService.deleteCaseDocumentBinary(documentContentVersion);
 
-        verify(blob).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
+        verify(blockBlobClient).deleteWithResponse(DeleteSnapshotsOptionType.INCLUDE, null, null, null);
         assertNotNull(documentContentVersion.getContentUri());
-    }
-
-    private StoredDocument createStoredDocument() {
-        return createStoredDocument(randomUUID());
-    }
-
-    private StoredDocument createStoredDocument(UUID documentContentVersionUuid) {
-        storedDocument = new StoredDocument();
-        storedDocument.setId(randomUUID());
-        storedDocument.setDocumentContentVersions(
-            singletonList(buildDocumentContentVersion(documentContentVersionUuid, storedDocument)));
-        return storedDocument;
-    }
-
-    private DocumentContentVersion buildDocumentContentVersion(
-        UUID documentContentVersionUuid,
-        StoredDocument storedDocument
-    ) {
-        DocumentContentVersion doc = new DocumentContentVersion();
-        doc.setId(documentContentVersionUuid);
-        doc.setStoredDocument(storedDocument);
-        doc.setSize(1L);
-        return doc;
     }
 }
