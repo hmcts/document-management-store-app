@@ -90,7 +90,7 @@ class SecurityUtilServiceTests {
 
     @Test
     void returnsNullUserIdWhenRequestIsNull() {
-        RequestContextHolder.resetRequestAttributes(); // Ensure null
+        RequestContextHolder.resetRequestAttributes();
         assertNull(securityUtilService.getUserId());
     }
 

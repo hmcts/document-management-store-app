@@ -59,7 +59,7 @@ class BlobStorageDeleteServiceTest {
         documentContentVersion = new DocumentContentVersion();
         documentContentVersion.setId(UUID.randomUUID());
         documentContentVersion.setStoredDocument(storedDocument);
-        documentContentVersion.setContentUri("http://azure/blob");
+        documentContentVersion.setContentUri("uri");
         documentContentVersion.setContentChecksum("checksum123");
     }
 
