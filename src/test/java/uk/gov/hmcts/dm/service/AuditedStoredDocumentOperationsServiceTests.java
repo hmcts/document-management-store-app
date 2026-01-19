@@ -69,7 +69,6 @@ class AuditedStoredDocumentOperationsServiceTests {
         StoredDocument readStoredDocument = auditedStoredDocumentOperationsService.readStoredDocument(docId);
 
         assertNull(readStoredDocument);
-        // Resolved ambiguity by specifying the class
         verify(auditEntryService, never()).createAndSaveEntry(any(StoredDocument.class), any(AuditActions.class));
     }
 
@@ -134,7 +133,6 @@ class AuditedStoredDocumentOperationsServiceTests {
 
         verify(storedDocumentService).findOne(docId);
         verify(storedDocumentService, never()).deleteDocument(any(StoredDocument.class), any(Boolean.class));
-        // Resolved ambiguity
         verify(auditEntryService, never()).createAndSaveEntry(any(StoredDocument.class), any(AuditActions.class));
     }
 
@@ -146,7 +144,6 @@ class AuditedStoredDocumentOperationsServiceTests {
 
         verify(storedDocumentService).findOne(docId);
         verify(storedDocumentService, never()).deleteDocument(any(StoredDocument.class), any(Boolean.class));
-        // Resolved ambiguity
         verify(auditEntryService, never()).createAndSaveEntry(any(StoredDocument.class), any(AuditActions.class));
     }
 
@@ -168,7 +165,6 @@ class AuditedStoredDocumentOperationsServiceTests {
         auditedStoredDocumentOperationsService.deleteStoredDocument(storedDocument, true);
 
         verify(storedDocumentService, never()).deleteDocument(any(StoredDocument.class), any(Boolean.class));
-        // Resolved ambiguity
         verify(auditEntryService, never()).createAndSaveEntry(any(StoredDocument.class), any(AuditActions.class));
     }
 

@@ -47,7 +47,6 @@ class DocumentContentVersionServiceTests {
     void testMostRecentFileContentVersionByStoredFileId() {
         UUID id = UUID.randomUUID();
 
-        // Create a StoredDocument with one DocumentContentVersion
         StoredDocument storedDocument = new StoredDocument();
         DocumentContentVersion dcv = new DocumentContentVersion();
         storedDocument.setDocumentContentVersions(Collections.singletonList(dcv));
