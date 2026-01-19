@@ -56,6 +56,12 @@ sourceSets {
             runtimeClasspath += main.output
         }
     }
+    integrationTest {
+        java {
+            compileClasspath += main.output
+            runtimeClasspath += main.output
+        }
+    }
 }
 
 configurations {
@@ -206,6 +212,9 @@ dependencies {
     contractTestImplementation sourceSets.main.runtimeClasspath
     contractTestImplementation sourceSets.test.runtimeClasspath
 
+    integrationTestImplementation sourceSets.main.runtimeClasspath
+    integrationTestImplementation sourceSets.test.runtimeClasspath
+
 
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.15'
 }
@@ -220,6 +229,16 @@ dependencyManagement {
 }
 dependencyCheck {
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
+}
+
+
+tasks.register('integration', Test) {
+    failFast = true
+    useJUnitPlatform()
+    description = "Runs integration tests"
+    group = "Verification"
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 checkstyle {
@@ -256,7 +275,8 @@ def coverageExclusionList = [
 //}
 
 jacocoTestReport {
-    executionData(test)
+    dependsOn test, integration
+    executionData(test, integration)
 
     reports {
         xml.required = true
