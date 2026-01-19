@@ -2,10 +2,10 @@ package uk.gov.hmcts.dm.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import uk.gov.hmcts.dm.componenttests.TestUtil;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.DocumentContentVersionAuditEntry;
@@ -15,15 +15,13 @@ import uk.gov.hmcts.dm.repository.DocumentContentVersionAuditEntryRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentAuditEntryRepository;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class AuditEntryServiceTests {
 
     @Mock
@@ -36,37 +34,67 @@ class AuditEntryServiceTests {
     private SecurityUtilService securityUtilService;
 
     @InjectMocks
-    AuditEntryService auditEntryService;
+    private AuditEntryService auditEntryService;
 
     @Test
     void testCreateAndSaveEntryForStoredDocument() {
+        StoredDocument storedDocument = new StoredDocument();
+        when(securityUtilService.getUserId()).thenReturn("user_x");
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("service_s");
 
-        when(securityUtilService.getUserId()).thenReturn("x");
-        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("s");
+        StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(storedDocument, AuditActions.READ);
 
-        StoredDocumentAuditEntry entry = auditEntryService.createAndSaveEntry(new StoredDocument(), AuditActions.READ);
+        assertEquals("user_x", entry.getUsername());
+        assertEquals("service_s", entry.getServiceName());
+        assertEquals(AuditActions.READ, entry.getAction());
+        assertEquals(storedDocument, entry.getStoredDocument());
+        assertNotNull(entry.getRecordedDateTime());
 
-        assertEquals("x", entry.getUsername());
-        assertEquals("s", entry.getServiceName());
+        ArgumentCaptor<StoredDocumentAuditEntry> captor = ArgumentCaptor.forClass(StoredDocumentAuditEntry.class);
+        verify(storedDocumentAuditEntryRepository).save(captor.capture());
 
-        verify(storedDocumentAuditEntryRepository, times(1)).save(any(StoredDocumentAuditEntry.class));
+        StoredDocumentAuditEntry savedEntry = captor.getValue();
+        assertEquals("user_x", savedEntry.getUsername());
+        assertEquals("service_s", savedEntry.getServiceName());
+        assertEquals(AuditActions.READ, savedEntry.getAction());
     }
 
     @Test
     void testCreateAndSaveEntryForDocumentContentVersion() {
+        StoredDocument storedDocument = new StoredDocument();
         DocumentContentVersion documentContentVersion = new DocumentContentVersion();
-        when(securityUtilService.getUserId()).thenReturn("x");
-        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("s");
+        documentContentVersion.setStoredDocument(storedDocument);
+
+        when(securityUtilService.getUserId()).thenReturn("user_y");
+        when(securityUtilService.getCurrentlyAuthenticatedServiceName()).thenReturn("service_t");
+
         auditEntryService.createAndSaveEntry(documentContentVersion, AuditActions.CREATED);
-        verify(documentContentVersionAuditEntryRepository, times(1)).save(any(DocumentContentVersionAuditEntry.class));
+
+        ArgumentCaptor<DocumentContentVersionAuditEntry> captor =
+            ArgumentCaptor.forClass(DocumentContentVersionAuditEntry.class);
+
+        verify(documentContentVersionAuditEntryRepository).save(captor.capture());
+
+        DocumentContentVersionAuditEntry savedEntry = captor.getValue();
+        assertEquals("user_y", savedEntry.getUsername());
+        assertEquals("service_t", savedEntry.getServiceName());
+        assertEquals(AuditActions.CREATED, savedEntry.getAction());
+        assertEquals(documentContentVersion, savedEntry.getDocumentContentVersion());
+        assertEquals(storedDocument, savedEntry.getStoredDocument());
+        assertNotNull(savedEntry.getRecordedDateTime());
     }
 
     @Test
     void testFindStoredDocumentAudits() {
-        when(storedDocumentAuditEntryRepository
-                .findByStoredDocumentOrderByRecordedDateTimeAsc(TestUtil.STORED_DOCUMENT))
-                .thenReturn(Stream.of(new StoredDocumentAuditEntry()).toList());
-        List<StoredDocumentAuditEntry> entries = auditEntryService.findStoredDocumentAudits(TestUtil.STORED_DOCUMENT);
+        StoredDocument storedDocument = new StoredDocument();
+        List<StoredDocumentAuditEntry> expectedList = List.of(new StoredDocumentAuditEntry());
+
+        when(storedDocumentAuditEntryRepository.findByStoredDocumentOrderByRecordedDateTimeAsc(storedDocument))
+            .thenReturn(expectedList);
+
+        List<StoredDocumentAuditEntry> entries = auditEntryService.findStoredDocumentAudits(storedDocument);
+
         assertEquals(1, entries.size());
+        assertEquals(expectedList, entries);
     }
 }
