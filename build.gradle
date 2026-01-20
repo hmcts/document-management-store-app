@@ -16,7 +16,7 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'io.freefair.lombok' version '9.2.0'
-    id 'info.solidsoft.pitest' version '1.19.0-rc.2'
+    id 'info.solidsoft.pitest' version '1.19.0-rc.3'
     id 'org.owasp.dependencycheck' version '12.1.6'
     id 'au.com.dius.pact' version '4.6.19'
     id 'org.flywaydb.flyway' version '11.20.2'
