@@ -1,58 +1,51 @@
 package uk.gov.hmcts.dm.service;
 
-import org.assertj.core.util.Maps;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.commandobject.DocumentUpdate;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentCommand;
 import uk.gov.hmcts.dm.commandobject.UpdateDocumentsCommand;
 import uk.gov.hmcts.dm.commandobject.UploadDocumentsCommand;
-import uk.gov.hmcts.dm.componenttests.TestUtil;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.repository.DocumentContentVersionRepository;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
-import static com.google.common.collect.Sets.newHashSet;
-import static java.util.Collections.singletonList;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.DELETED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.HARD_DELETED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.STORED_DOCUMENT;
-import static uk.gov.hmcts.dm.componenttests.TestUtil.TEST_FILE;
 import static uk.gov.hmcts.dm.security.Classifications.PRIVATE;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class StoredDocumentServiceTests {
 
     @Mock
@@ -76,56 +69,83 @@ class StoredDocumentServiceTests {
     @InjectMocks
     private StoredDocumentService storedDocumentService;
 
+    private final MockMultipartFile testFile = new MockMultipartFile(
+        "file",
+        "filename.txt",
+        "text/plain",
+        "some content".getBytes(StandardCharsets.UTF_8)
+    );
+
     @BeforeEach
     void setUp() {
-        when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
+        lenient().when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
     }
 
     @Test
     void testFindOne() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(STORED_DOCUMENT));
-        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
-        assertThat(storedDocument.get(), equalTo(STORED_DOCUMENT));
+        StoredDocument storedDocument = new StoredDocument();
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
+
+        Optional<StoredDocument> result = storedDocumentService.findOne(UUID.randomUUID());
+
+        assertTrue(result.isPresent());
+        assertEquals(storedDocument, result.get());
     }
 
     @Test
     void testFindOneThatDoesNotExist() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
-        assertFalse(storedDocument.isPresent());
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+
+        Optional<StoredDocument> result = storedDocumentService.findOne(UUID.randomUUID());
+
+        assertFalse(result.isPresent());
     }
 
     @Test
     void testFindOneThatIsMarkedDeleted() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(DELETED_DOCUMENT));
-        Optional<StoredDocument> storedDocument = storedDocumentService.findOne(TestUtil.RANDOM_UUID);
-        assertFalse(storedDocument.isPresent());
+        StoredDocument deletedDoc = new StoredDocument();
+        deletedDoc.setDeleted(true);
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(deletedDoc));
+
+        Optional<StoredDocument> result = storedDocumentService.findOne(UUID.randomUUID());
+
+        assertFalse(result.isPresent());
     }
 
     @Test
     void testFindOneWithBinaryDataThatDoesNotExist() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
-        assertFalse(storedDocument.isPresent());
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
+
+        Optional<StoredDocument> result = storedDocumentService.findOneWithBinaryData(UUID.randomUUID());
+
+        assertFalse(result.isPresent());
     }
 
     @Test
     void testFindOneWithBinaryDataThatIsMarkedHardDeleted() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(HARD_DELETED_DOCUMENT));
-        Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
-        assertFalse(storedDocument.isPresent());
+        StoredDocument hardDeletedDoc = new StoredDocument();
+        hardDeletedDoc.setHardDeleted(true);
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(hardDeletedDoc));
+
+        Optional<StoredDocument> result = storedDocumentService.findOneWithBinaryData(UUID.randomUUID());
+
+        assertFalse(result.isPresent());
     }
 
     @Test
     void testFindOneWithBinaryDataThatIsMarkedDeleted() {
-        when(this.storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(DELETED_DOCUMENT));
-        Optional<StoredDocument> storedDocument = storedDocumentService.findOneWithBinaryData(TestUtil.RANDOM_UUID);
-        assertTrue(storedDocument.isPresent());
+        StoredDocument deletedDoc = new StoredDocument();
+        deletedDoc.setDeleted(true);
+        when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(deletedDoc));
+
+        Optional<StoredDocument> result = storedDocumentService.findOneWithBinaryData(UUID.randomUUID());
+
+        assertTrue(result.isPresent());
     }
 
     @Test
     void testSave() {
-        final StoredDocument storedDocument = STORED_DOCUMENT;
+        StoredDocument storedDocument = new StoredDocument();
         storedDocumentService.save(storedDocument);
         verify(storedDocumentRepository).save(storedDocument);
     }
@@ -133,29 +153,29 @@ class StoredDocumentServiceTests {
     @Test
     void testSaveItemsWithCommand() {
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
-        uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
+        uploadDocumentsCommand.setFiles(List.of(testFile));
         uploadDocumentsCommand.setRoles(List.of("a", "b"));
         uploadDocumentsCommand.setClassification(PRIVATE);
         uploadDocumentsCommand.setMetadata(Map.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
-        Map<MultipartFile, String> mimeTypes = Map.of(TEST_FILE, Objects.requireNonNull(TEST_FILE.getContentType()));
+        Map<MultipartFile, String> mimeTypes = Map.of(testFile, Objects.requireNonNull(testFile.getContentType()));
 
         when(storedDocumentRepository.save(any(StoredDocument.class))).thenReturn(new StoredDocument());
 
         List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand, mimeTypes);
 
+        assertEquals(1, documents.size());
         final StoredDocument storedDocument = documents.getFirst();
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().getFirst();
 
-        assertEquals(1, documents.size());
-        assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
+        assertEquals(Set.of("a", "b"), storedDocument.getRoles());
         assertEquals(PRIVATE, storedDocument.getClassification());
         assertNull(storedDocument.getMetadata());
         assertNotNull(storedDocument.getTtl());
-        assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
-        assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
-        assertEquals(true, latestVersion.isMimeTypeUpdated());
+        assertEquals(testFile.getContentType(), latestVersion.getMimeType());
+        assertEquals(testFile.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+        assertTrue(latestVersion.isMimeTypeUpdated());
     }
 
     @Test
@@ -163,55 +183,54 @@ class StoredDocumentServiceTests {
         when(toggleConfiguration.isMetadatasearchendpoint()).thenReturn(true);
 
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
-        uploadDocumentsCommand.setFiles(singletonList(TEST_FILE));
+        uploadDocumentsCommand.setFiles(List.of(testFile));
         uploadDocumentsCommand.setRoles(List.of("a", "b"));
         uploadDocumentsCommand.setClassification(PRIVATE);
         uploadDocumentsCommand.setMetadata(Map.of("prop1", "value1"));
         uploadDocumentsCommand.setTtl(new Date());
 
-        Map<MultipartFile, String> mimeTypes = Map.of(TEST_FILE, Objects.requireNonNull(TEST_FILE.getContentType()));
+        Map<MultipartFile, String> mimeTypes = Map.of(testFile, Objects.requireNonNull(testFile.getContentType()));
 
         List<StoredDocument> documents = storedDocumentService.saveItems(uploadDocumentsCommand, mimeTypes);
 
+        assertEquals(1, documents.size());
         final StoredDocument storedDocument = documents.getFirst();
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().getFirst();
 
-        assertEquals(1, documents.size());
-        assertEquals(storedDocument.getRoles(), newHashSet("a", "b"));
+        assertEquals(Set.of("a", "b"), storedDocument.getRoles());
         assertEquals(PRIVATE, storedDocument.getClassification());
-        assertEquals(storedDocument.getMetadata(), Map.of("prop1", "value1"));
+        assertEquals(Map.of("prop1", "value1"), storedDocument.getMetadata());
         assertNotNull(storedDocument.getTtl());
-        assertEquals(TEST_FILE.getContentType(), latestVersion.getMimeType());
-        assertEquals(TEST_FILE.getOriginalFilename(), latestVersion.getOriginalDocumentName());
-        assertEquals(true, latestVersion.isMimeTypeUpdated());
+        assertEquals(testFile.getContentType(), latestVersion.getMimeType());
+        assertEquals(testFile.getOriginalFilename(), latestVersion.getOriginalDocumentName());
+        assertTrue(latestVersion.isMimeTypeUpdated());
     }
 
     @Test
     void testAddStoredDocumentVersionWhenAzureBlobStoreEnabled() {
         StoredDocument storedDocument = new StoredDocument();
-        String detectedMimeType = TEST_FILE.getContentType();
+        String detectedMimeType = testFile.getContentType();
 
         DocumentContentVersion documentContentVersion = storedDocumentService.addStoredDocumentVersion(
-            storedDocument, TEST_FILE, detectedMimeType);
+            storedDocument, testFile, detectedMimeType);
 
-        assertThat(storedDocument.getDocumentContentVersions().size(), equalTo(1));
-        assertThat(documentContentVersion, notNullValue());
+        assertEquals(1, storedDocument.getDocumentContentVersions().size());
+        assertNotNull(documentContentVersion);
 
         final DocumentContentVersion latestVersion = storedDocument.getDocumentContentVersions().getFirst();
-        assertThat(latestVersion.getMimeType(), equalTo(detectedMimeType));
-        assertThat(latestVersion.getOriginalDocumentName(), equalTo(TEST_FILE.getOriginalFilename()));
+        assertEquals(detectedMimeType, latestVersion.getMimeType());
+        assertEquals(testFile.getOriginalFilename(), latestVersion.getOriginalDocumentName());
 
         ArgumentCaptor<DocumentContentVersion> captor = ArgumentCaptor.forClass(DocumentContentVersion.class);
-        verify(blobStorageWriteService).uploadDocumentContentVersion(storedDocument, documentContentVersion, TEST_FILE);
+        verify(blobStorageWriteService).uploadDocumentContentVersion(storedDocument, documentContentVersion, testFile);
         verify(documentContentVersionRepository).save(captor.capture());
-        assertThat(captor.getValue(), is(documentContentVersion));
+        assertEquals(documentContentVersion, captor.getValue());
     }
 
     @Test
     void testHardDeleteWithManyVersions() {
-        StoredDocument storedDocumentWithContent = STORED_DOCUMENT;
-        String detectedMimeType = TEST_FILE.getContentType();
-        storedDocumentService.addStoredDocumentVersion(STORED_DOCUMENT, TEST_FILE, detectedMimeType);
+        StoredDocument storedDocumentWithContent = new StoredDocument();
+        storedDocumentService.addStoredDocumentVersion(storedDocumentWithContent, testFile, testFile.getContentType());
 
         storedDocumentService.deleteDocument(storedDocumentWithContent, true);
 
@@ -226,15 +245,14 @@ class StoredDocumentServiceTests {
         StoredDocument storedDocument = new StoredDocument();
         storedDocumentService.deleteDocument(storedDocument, false);
 
-        assertThat(storedDocument.isDeleted(), is(true));
+        assertTrue(storedDocument.isDeleted());
         verify(storedDocumentRepository).save(storedDocument);
     }
 
     @Test
     void testHardDeleteAzureBlobEnabled() {
         StoredDocument storedDocumentWithContent = StoredDocument.builder()
-            .documentContentVersions(List.of(DocumentContentVersion.builder()
-                .build()))
+            .documentContentVersions(List.of(DocumentContentVersion.builder().build()))
             .build();
 
         storedDocumentService.deleteDocument(storedDocumentWithContent, true);
@@ -246,14 +264,16 @@ class StoredDocumentServiceTests {
 
     @Test
     void testUpdateItems() {
+        UUID docId = UUID.randomUUID();
         StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setId(UUID.randomUUID());
-        storedDocument.setMetadata(Maps.newHashMap("Key", "Value"));
+        storedDocument.setId(docId);
+        storedDocument.setMetadata(new HashMap<>(Map.of("Key", "Value")));
 
         when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
 
-        DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), Maps.newHashMap("UpdateKey", "UpdateValue"));
-        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, singletonList(update));
+        DocumentUpdate update = new DocumentUpdate(storedDocument.getId(),
+            new HashMap<>(Map.of("UpdateKey", "UpdateValue")));
+        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, List.of(update));
 
         storedDocumentService.updateItems(command);
 
@@ -274,10 +294,10 @@ class StoredDocumentServiceTests {
     @Test
     void testUpdateDocumentWithMetaData() {
         StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setMetadata(Maps.newHashMap("Key", "Value"));
+        storedDocument.setMetadata(new HashMap<>(Map.of("Key", "Value")));
 
         Date newTtl = new Date();
-        storedDocumentService.updateStoredDocument(storedDocument, newTtl, Maps.newHashMap("UpdateKey", "UpdateValue"));
+        storedDocumentService.updateStoredDocument(storedDocument, newTtl, Map.of("UpdateKey", "UpdateValue"));
 
         assertEquals(newTtl, storedDocument.getTtl());
         assertEquals("Value", storedDocument.getMetadata().get("Key"));
@@ -317,7 +337,6 @@ class StoredDocumentServiceTests {
         );
     }
 
-
     @Test
     void testUpdateMigratedStoredDocumentNullStoredDocument() {
         assertThrows(NullPointerException.class, () ->
@@ -343,18 +362,19 @@ class StoredDocumentServiceTests {
 
     @Test
     void testUpdateItemsOverrideTrue() {
+        UUID docId = UUID.randomUUID();
         StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setId(UUID.randomUUID());
-        storedDocument.setMetadata(Maps.newHashMap("Key1", "Value1"));
+        storedDocument.setId(docId);
+        storedDocument.setMetadata(new HashMap<>(Map.of("Key1", "Value1")));
 
         when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
         when(toggleConfiguration.isOverridemetadata()).thenReturn(true);
 
-        Map newMetadata = new HashMap();
+        Map<String, String> newMetadata = new HashMap<>();
         newMetadata.put("Key1", "UpdatedValue");
         newMetadata.put("Key2", "Value2");
         DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), newMetadata);
-        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, singletonList(update));
+        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, List.of(update));
 
         storedDocumentService.updateItems(command);
 
@@ -364,18 +384,19 @@ class StoredDocumentServiceTests {
 
     @Test
     void testUpdateItemsOverrideFalse() {
+        UUID docId = UUID.randomUUID();
         StoredDocument storedDocument = new StoredDocument();
-        storedDocument.setId(UUID.randomUUID());
-        storedDocument.setMetadata(Maps.newHashMap("Key1", "Value1"));
+        storedDocument.setId(docId);
+        storedDocument.setMetadata(new HashMap<>(Map.of("Key1", "Value1")));
 
         when(storedDocumentRepository.findById(any(UUID.class))).thenReturn(Optional.of(storedDocument));
         when(toggleConfiguration.isOverridemetadata()).thenReturn(false);
 
-        Map newMetadata = new HashMap();
+        Map<String, String> newMetadata = new HashMap<>();
         newMetadata.put("Key1", "UpdatedValue");
         newMetadata.put("Key2", "Value2");
         DocumentUpdate update = new DocumentUpdate(storedDocument.getId(), newMetadata);
-        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, singletonList(update));
+        UpdateDocumentsCommand command = new UpdateDocumentsCommand(null, List.of(update));
 
         storedDocumentService.updateItems(command);
 
@@ -395,10 +416,10 @@ class StoredDocumentServiceTests {
         DocumentContentVersion version2 = new DocumentContentVersion();
         document2.getDocumentContentVersions().add(version2);
 
-        when(documentContentVersionRepository.findAllByStoredDocumentId(any(UUID.class)))
+        when(documentContentVersionRepository.findAllByStoredDocumentId(document1.getId()))
             .thenReturn(List.of(version1));
-        when(storedDocumentRepository.findAllById(any()))
-            .thenReturn(List.of(document1));
+        when(documentContentVersionRepository.findAllByStoredDocumentId(document2.getId()))
+            .thenReturn(List.of(version2));
 
         List<UUID> documentIds = List.of(document1.getId(), document2.getId());
 
@@ -411,17 +432,19 @@ class StoredDocumentServiceTests {
 
     @Test
     void shouldLogErrorWhenDocumentDeletionFails() {
+        UUID docId = UUID.randomUUID();
         StoredDocument document = new StoredDocument();
+        document.setId(docId);
         DocumentContentVersion version = new DocumentContentVersion();
         document.getDocumentContentVersions().add(version);
 
-        when(documentContentVersionRepository.findAllByStoredDocumentId(any(UUID.class)))
+        when(documentContentVersionRepository.findAllByStoredDocumentId(docId))
             .thenReturn(List.of(version));
 
         doThrow(new RuntimeException("Simulated failure"))
             .when(blobStorageDeleteService).deleteCaseDocumentBinary(version);
 
-        storedDocumentService.deleteDocumentsDetails(List.of(UUID.randomUUID()));
+        storedDocumentService.deleteDocumentsDetails(List.of(docId));
 
         verify(blobStorageDeleteService, times(1))
             .deleteCaseDocumentBinary(any(DocumentContentVersion.class));
@@ -430,13 +453,19 @@ class StoredDocumentServiceTests {
 
     @Test
     void shouldSkipNullContentVersionsDuringDeletion() {
+        UUID docId = UUID.randomUUID();
         StoredDocument document = new StoredDocument();
-        document.getDocumentContentVersions().add(null);
+        document.setId(docId);
 
-        storedDocumentService.deleteDocumentsDetails(List.of(UUID.randomUUID()));
+        List<DocumentContentVersion> versions = new ArrayList<>();
+        versions.add(null);
+
+        when(documentContentVersionRepository.findAllByStoredDocumentId(docId))
+            .thenReturn(versions);
+
+        storedDocumentService.deleteDocumentsDetails(List.of(docId));
 
         verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any());
-        verify(storedDocumentRepository, times(1)).deleteById(any(UUID.class));
+        verify(storedDocumentRepository, times(1)).deleteById(docId);
     }
-
 }
