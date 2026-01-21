@@ -6,28 +6,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.MessageSource;
 import org.springframework.core.MethodParameter;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.validation.FieldError;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Stream;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class ExceptionStatusCodeAndMessageResolverTest {
 
     @Mock
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     @InjectMocks
     private ExceptionStatusCodeAndMessageResolver resolver;
@@ -38,55 +37,78 @@ class ExceptionStatusCodeAndMessageResolverTest {
     }
 
     @Test
-    void should_throw_404_when_MethodArgumentTypeMismatchException_thrown() throws Exception {
-        final MethodArgumentTypeMismatchException exception =
-                new MethodArgumentTypeMismatchException(new HashMap<String, String>(), Map.class,
-                        "test", new MethodParameter(Object.class.getMethod("toString"), -1), null);
+    void shouldReturn404WhenMethodArgumentTypeMismatchExceptionThrown() throws NoSuchMethodException {
+        MethodParameter methodParam = new MethodParameter(Object.class.getMethod("toString"), -1);
 
-        final ErrorStatusCodeAndMessage errorStatusCodeAndMessage =
-                resolver.resolveStatusCodeAndMessage(exception, "It broke", 500, null);
+        MethodArgumentTypeMismatchException exception = new MethodArgumentTypeMismatchException(
+            new HashMap<String, String>(),
+            Map.class,
+            "test",
+            methodParam,
+            null
+        );
 
-        assertThat(errorStatusCodeAndMessage.getStatusCode(), equalTo(404));
+        ErrorStatusCodeAndMessage result = resolver.resolveStatusCodeAndMessage(
+            exception,
+            "Default Message",
+            500,
+            null
+        );
+
+        assertEquals(404, result.getStatusCode());
+        assertEquals(exception.getLocalizedMessage(), result.getMessage());
     }
 
     @Test
-    void should_find_cause_from_exception_and_return_appropriate_code() {
-        final FileSizeLimitExceededException fileSizeLimitExceededException =
-                new FileSizeLimitExceededException("Too Big", 1234, 1024);
-        final MultipartException multipartException =
-                new MultipartException("Limit exceeded", fileSizeLimitExceededException);
+    void shouldFindCauseFromExceptionAndReturnAppropriateCode() {
+        FileSizeLimitExceededException innerException =
+            new FileSizeLimitExceededException("Too Big", 1234, 1024);
 
-        final ErrorStatusCodeAndMessage statusCodeAndMessage =
-                resolver.resolveStatusCodeAndMessage(multipartException, "It broke", 500, null);
+        MultipartException outerException =
+            new MultipartException("Limit exceeded", innerException);
 
-        assertThat(statusCodeAndMessage.getStatusCode(), equalTo(413));
+        ErrorStatusCodeAndMessage result = resolver.resolveStatusCodeAndMessage(
+            outerException,
+            "Default Message",
+            500,
+            null
+        );
+
+        assertEquals(413, result.getStatusCode());
     }
 
     @Test
-    void should_return_default_code_when_exception_not_in_map() {
-        final int defaultStatusCode = 500;
-        final String message = "It broke";
-        final ErrorStatusCodeAndMessage errorStatusCodeAndMessage =
-                resolver.resolveStatusCodeAndMessage(new RuntimeException("Test"), message, defaultStatusCode, null);
+    void shouldReturnDefaultCodeWhenExceptionNotInMap() {
+        int defaultStatusCode = 500;
+        String defaultMessage = "It broke";
+        RuntimeException exception = new RuntimeException("Test Exception");
 
-        assertThat(errorStatusCodeAndMessage.getStatusCode(), equalTo(defaultStatusCode));
+        ErrorStatusCodeAndMessage result = resolver.resolveStatusCodeAndMessage(
+            exception,
+            defaultMessage,
+            defaultStatusCode,
+            null
+        );
+
+        assertEquals(defaultStatusCode, result.getStatusCode());
+        assertEquals("Test Exception", result.getMessage());
     }
 
     @Test
-    void should_return_validation_message_instead_of_override_if_present() {
-        FieldError fieldError1 = Mockito.mock(FieldError.class);
-        FieldError fieldError2 = Mockito.mock(FieldError.class);
+    void shouldReturnValidationMessageInsteadOfOverrideIfFieldErrorsPresent() {
+        FieldError fieldError1 = mock(FieldError.class);
+        FieldError fieldError2 = mock(FieldError.class);
 
-        Mockito.when(messageSource.getMessage(fieldError1, Locale.UK)).thenReturn("The validation message");
-        Mockito.when(messageSource.getMessage(fieldError2, Locale.UK)).thenReturn("The validation message 2");
+        when(messageSource.getMessage(fieldError1, Locale.UK)).thenReturn("Validation error 1");
+        when(messageSource.getMessage(fieldError2, Locale.UK)).thenReturn("Validation error 2");
 
-        final ErrorStatusCodeAndMessage errorStatusCodeAndMessage =
-            resolver.resolveStatusCodeAndMessage(new RuntimeException("Test"),
-                "x",
-                100,
-                Stream.of(fieldError1, fieldError2).toList());
+        ErrorStatusCodeAndMessage result = resolver.resolveStatusCodeAndMessage(
+            new RuntimeException("Test"),
+            "Default Message",
+            100,
+            List.of(fieldError1, fieldError2)
+        );
 
-
-        assertEquals("The validation message AND The validation message 2", errorStatusCodeAndMessage.getMessage());
+        assertEquals("Validation error 1 AND Validation error 2", result.getMessage());
     }
 }

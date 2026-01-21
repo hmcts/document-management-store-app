@@ -105,7 +105,6 @@ class StoredDocumentControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE, response.getHeaders().getContentType());
-
         assertInstanceOf(CollectionModel.class, response.getBody());
 
         CollectionModel<?> model = (CollectionModel<?>) response.getBody();
@@ -146,9 +145,10 @@ class StoredDocumentControllerTest {
 
     @Test
     void testGetMetaDataSuccess() {
+        Map<String, String> headers = Map.of("header-key", "header-value");
         when(auditedStoredDocumentOperationsService.readStoredDocument(documentId)).thenReturn(storedDocument);
 
-        ResponseEntity<Object> response = storedDocumentController.getMetaData(documentId, Collections.emptyMap());
+        ResponseEntity<Object> response = storedDocumentController.getMetaData(documentId, headers);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE, response.getHeaders().getContentType());
@@ -159,7 +159,7 @@ class StoredDocumentControllerTest {
         assertTrue(resource.getLink("self").isPresent());
         String expectedSelfLink = linkTo(methodOn(StoredDocumentController.class).getMetaData(documentId, null))
             .withSelfRel().getHref();
-        Link self = (Link) resource.getLink("self").get();
+        Link self = resource.getLink("self").get();
         assertEquals(expectedSelfLink, self.getHref());
     }
 
@@ -177,13 +177,14 @@ class StoredDocumentControllerTest {
         DocumentContentVersion dcv = createDocumentContentVersion();
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockHttpServletRequest request = new MockHttpServletRequest();
+        Map<String, String> headers = Map.of("x-azure-ref", "some-ref");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId))
             .thenReturn(Optional.of(dcv));
         when(toggleConfiguration.isChunking()).thenReturn(false);
 
         ResponseEntity<Void> result = storedDocumentController
-            .getBinary(documentId, response, Collections.emptyMap(), request);
+            .getBinary(documentId, response, headers, request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("text/plain", response.getHeader(HttpHeaders.CONTENT_TYPE));
@@ -236,6 +237,7 @@ class StoredDocumentControllerTest {
         DocumentContentVersion dcv = createDocumentContentVersion();
         MockHttpServletResponse response = mock(MockHttpServletResponse.class);
         MockHttpServletRequest request = new MockHttpServletRequest();
+        Map<String, String> headers = Map.of("header-key", "header-value");
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId))
             .thenReturn(Optional.of(dcv));
@@ -245,14 +247,14 @@ class StoredDocumentControllerTest {
             .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
 
         ResponseEntity<Void> result = storedDocumentController
-            .getBinary(documentId, response, Collections.emptyMap(), request);
+            .getBinary(documentId, response, headers, request);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
         verify(response).reset();
     }
 
     @Test
-    void testGetBinaryHandlesIoExceptionWithoutChunking() throws IOException {
+    void getBinaryShouldHandleIoExceptionWithoutChunking() throws IOException {
         DocumentContentVersion dcv = createDocumentContentVersion();
         MockHttpServletResponse response = mock(MockHttpServletResponse.class);
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -278,6 +280,28 @@ class StoredDocumentControllerTest {
         MockHttpServletRequest request = new MockHttpServletRequest();
 
         UncheckedIOException uncheckedIoException = new UncheckedIOException(new ClientAbortException("Client closed"));
+
+        when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId))
+            .thenReturn(Optional.of(dcv));
+        when(toggleConfiguration.isChunking()).thenReturn(true);
+        doThrow(uncheckedIoException)
+            .when(auditedDocumentContentVersionOperationsService)
+            .readDocumentContentVersionBinaryFromBlobStore(any(), any(), any());
+
+        ResponseEntity<Void> result = storedDocumentController
+            .getBinary(documentId, response, Collections.emptyMap(), request);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        verify(response).reset();
+    }
+
+    @Test
+    void testGetBinaryHandlesGenericUncheckedIoException() throws IOException {
+        DocumentContentVersion dcv = createDocumentContentVersion();
+        MockHttpServletResponse response = mock(MockHttpServletResponse.class);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+
+        UncheckedIOException uncheckedIoException = new UncheckedIOException(new IOException("Generic IO Error"));
 
         when(documentContentVersionService.findMostRecentDocumentContentVersionByStoredDocumentId(documentId))
             .thenReturn(Optional.of(dcv));
