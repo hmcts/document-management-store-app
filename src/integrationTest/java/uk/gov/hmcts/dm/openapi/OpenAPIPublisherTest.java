@@ -7,9 +7,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import uk.gov.hmcts.dm.config.batch.CaseDocumentsDeletionTask;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -32,7 +32,7 @@ class OpenAPIPublisherTest {
     private final MockMvc mockMvc;
 
     @MockitoBean
-    private ClientRegistrationRepository clientRegistrationRepository;
+    private CaseDocumentsDeletionTask caseDocumentsDeletionTask;
 
     @Autowired
     OpenAPIPublisherTest(MockMvc mockMvc) {
