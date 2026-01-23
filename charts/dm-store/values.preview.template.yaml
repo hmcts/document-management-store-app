@@ -22,6 +22,8 @@ java:
       secrets:
         - name: RpaAppInsightsInstrumentationKey
           alias: azure.application-insights.instrumentation-key
+        - name: microservicekey-dm-store
+          alias: S2S_KEY
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
