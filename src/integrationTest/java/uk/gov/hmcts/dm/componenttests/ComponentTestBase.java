@@ -30,7 +30,6 @@ import uk.gov.hmcts.dm.service.BlobStorageWriteService;
 import uk.gov.hmcts.dm.service.DocumentContentVersionService;
 import uk.gov.hmcts.dm.service.SearchService;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
-import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -90,9 +89,6 @@ public abstract class ComponentTestBase {
 
     @MockitoBean
     protected AuditEntryService auditEntryService;
-
-    @MockitoBean
-    private IdamClient idamClient;
 
     protected RestActions restActions;
 

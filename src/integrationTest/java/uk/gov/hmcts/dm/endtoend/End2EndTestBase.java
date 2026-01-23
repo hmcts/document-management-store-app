@@ -26,7 +26,6 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
-import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,9 +65,6 @@ public abstract class End2EndTestBase {
 
     @MockitoBean
     protected TestController testController;
-
-    @MockitoBean
-    private IdamClient idamClient;
 
     @BeforeEach
     public void setUp() throws IOException {
