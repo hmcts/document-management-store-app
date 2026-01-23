@@ -88,6 +88,22 @@ data "azurerm_key_vault" "shared_key_vault" {
   resource_group_name = "rpa-${var.env}"
 }
 
+data "azurerm_key_vault" "s2s_vault" {
+  name                = "s2s-${local.local_env}"
+  resource_group_name = "rpe-service-auth-provider-${local.local_env}"
+}
+
+data "azurerm_key_vault_secret" "s2s_key" {
+  name         = "microservicekey-dm-store"
+  key_vault_id = data.azurerm_key_vault.s2s_vault.id
+}
+
+resource "azurerm_key_vault_secret" "dm_s2s_key" {
+  name         = "microservicekey-dm-store"
+  value        = data.azurerm_key_vault_secret.s2s_key.value
+  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
+}
+
 # Load AppInsights key from rpa vault
 data "azurerm_key_vault_secret" "app_insights_key" {
   name         = "EmAppInsightsInstrumentationKey"
@@ -146,18 +162,18 @@ module "db-v15" {
   providers = {
     azurerm.postgres_network = azurerm.cft_vnet
   }
-  source                      = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
-  env                         = var.env
-  product                     = var.product
-  component                   = var.component
-  common_tags                 = var.common_tags
-  name                        = local.db_name
-  pgsql_version               = "15"
-  admin_user_object_id        = var.jenkins_AAD_objectId
-  business_area               = "CFT"
-  action_group_name           = join("-", [local.db_name, var.action_group_name, var.env])
-  email_address_key           = var.email_address_key
-  email_address_key_vault_id  = data.azurerm_key_vault.dm_shared_vault.id
+  source                     = "git@github.com:hmcts/terraform-module-postgresql-flexible?ref=master"
+  env                        = var.env
+  product                    = var.product
+  component                  = var.component
+  common_tags                = var.common_tags
+  name                       = local.db_name
+  pgsql_version              = "15"
+  admin_user_object_id       = var.jenkins_AAD_objectId
+  business_area              = "CFT"
+  action_group_name          = join("-", [local.db_name, var.action_group_name, var.env])
+  email_address_key          = var.email_address_key
+  email_address_key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
   # The original subnet is full, this is required to use the new subnet for new databases
   subnet_suffix = "expanded"
   pgsql_databases = [
