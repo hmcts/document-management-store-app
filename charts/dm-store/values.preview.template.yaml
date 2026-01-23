@@ -24,6 +24,14 @@ java:
           alias: azure.application-insights.instrumentation-key
         - name: microservicekey-dm-store
           alias: S2S_KEY
+        - name: dm-store-idam-secret
+          alias: DM_STORE_IDAM_CLIENT_SECRET
+        - name: dm-store-idam-client-id
+          alias: DM_STORE_IDAM_CLIENT_ID
+        - name: dm-store-system-update-idam-user
+          alias: DM_STORE_SYSTEM_UPDATE_IDAM_USER
+        - name: dm-store-system-update-idam-password
+          alias: DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD
   environment:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
