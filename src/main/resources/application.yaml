@@ -95,7 +95,24 @@ auth:
       client:
         baseUrl: ${IDAM_S2S_BASE_URI:http://localhost:4502}
 
+em-npa:
+  api:
+    url: ${EM_NPA_API_URL:http://localhost:4623}
+
+em-anno:
+  api:
+    url: ${EM_ANNO_API_URL:http://localhost:4623}
+
 idam:
+  api:
+    url: ${IDAM_USER_BASE_URI:http://localhost:4501}
+  client:
+    id: ${DM_STORE_IDAM_CLIENT_ID:dm-store}
+    secret: ${DM_STORE_IDAM_CLIENT_SECRET:}
+    redirect_uri: ${IDAM_CLIENT_REDIRECT_URI:http://localhost:4603/oauth2/callback}
+  system-user:
+    username: ${DM_STORE_SYSTEM_UPDATE_IDAM_USER:}
+    password: ${DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD:}
   s2s-auth:
     url: ${IDAM_S2S_BASE_URI:http://localhost:4502}
     totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
@@ -217,6 +234,7 @@ toggle:
   overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
   chunking: ${ENABLE_CHUNKING:false}
   orphandocumentdeletion: ${ENABLE_ORPHAN_DOCUMENT_DELETION:false}
+  deletemetadatafordocument: ${ENABLE_DELETE_METADATA_FOR_DOCUMENT:false}
 
 task:
   env: ${TASK_ENV:documentTaskLock-local}

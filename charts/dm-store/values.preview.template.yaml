@@ -26,6 +26,9 @@ java:
     # Endpoints
     IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    EM_NPA_API_URL: "http://em-npa-aat.service.core-compute-aat.internal"
+    EM_ANNO_API_URL: "http://em-anno-aat.service.core-compute-aat.internal"
+
     SPRING_DATASOURCE_HOST: "{{ .Release.Name }}-postgresql"
     SPRING_DATASOURCE_NAME: "{{ .Values.postgresql.auth.database}}"
     SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.auth.username}}"
@@ -40,6 +43,7 @@ java:
     ENABLE_METADATA_MIGRATION: 'false'
     STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
     STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME: orphandocumentdeletion{{ .Release.Name }}
+    ENABLE_DELETE_METADATA_FOR_DOCUMENT: true
   postgresql:
     enabled: true
 blobstorage:

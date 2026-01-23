@@ -3,12 +3,14 @@ package uk.gov.hmcts.dm;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import uk.gov.hmcts.dm.service.ScheduledTaskRunner;
 
 import java.util.Objects;
 
 @EnableScheduling
+@EnableFeignClients
 @SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, it's not a utility class
 @SpringBootApplication(scanBasePackages = {
     "uk.gov.hmcts.dm",
