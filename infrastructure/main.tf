@@ -88,6 +88,22 @@ data "azurerm_key_vault" "shared_key_vault" {
   resource_group_name = "rpa-${var.env}"
 }
 
+data "azurerm_key_vault" "s2s_vault" {
+  name                = "s2s-${local.local_env}"
+  resource_group_name = "rpe-service-auth-provider-${local.local_env}"
+}
+
+data "azurerm_key_vault_secret" "s2s_key" {
+  name         = "microservicekey-dm-store"
+  key_vault_id = data.azurerm_key_vault.s2s_vault.id
+}
+
+resource "azurerm_key_vault_secret" "dm_s2s_key" {
+  name         = "microservicekey-dm-store"
+  value        = data.azurerm_key_vault_secret.s2s_key.value
+  key_vault_id = data.azurerm_key_vault.dm_shared_vault.id
+}
+
 # Load AppInsights key from rpa vault
 data "azurerm_key_vault_secret" "app_insights_key" {
   name         = "EmAppInsightsInstrumentationKey"
