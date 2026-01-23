@@ -26,6 +26,28 @@ toggle:
     includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
     metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
     secureurl: ${ENABLE_SECURE_URL:false}
+    deletemetadatafordocument: ${ENABLE_DELETE_METADATA_FOR_DOCUMENT:true}
+
+em-anno:
+  api:
+    url: ${EM_ANNO_API_URL:http://localhost:4623}
+
+em-npa:
+  api:
+    url: ${EM_NPA_API_URL:http://localhost:4685}
+
+idam:
+  s2s-auth:
+    url: ${IDAM_S2S_BASE_URI:http://localhost:4502}
+    totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
+    microservice: ${S2S_SERVICE_NAME:dm-store}
+  client:
+    id: ${DM_STORE_IDAM_CLIENT_ID:webshow}
+    secret: ${DM_STORE_IDAM_CLIENT_SECRET:AAAAAAAAAAAAAAAA}
+    redirect_uri: ${IDAM_CLIENT_REDIRECT_URI:http://localhost:4603/oauth2redirect}
+  system-user:
+    username: ${DM_STORE_SYSTEM_UPDATE_IDAM_USER:system.update@hmcts.net}
+    password: ${DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD:Password12}
 
 azure:
   storage:
