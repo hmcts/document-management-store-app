@@ -1,10 +1,11 @@
-package uk.gov.hmcts.dm.config;
+package uk.gov.hmcts.dm.functional;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
 import uk.gov.hmcts.dm.service.EmAnnoService;
 import uk.gov.hmcts.dm.service.EmNpaService;
@@ -14,17 +15,22 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGeneratorFactory;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 /**
- * Test configuration for DocumentMetadataDeletionService functional tests.
- * This configuration provides the necessary beans for testing the service.
+ * Isolated test configuration for DocumentMetadataDeletionIT.
+ * This configuration is separate from the main FunctionalTestContextConfiguration
+ * to avoid affecting other functional tests.
  */
 @Configuration
+@EnableAutoConfiguration
 @EnableFeignClients(basePackages = {
     "uk.gov.hmcts.dm.client",
     "uk.gov.hmcts.reform.authorisation",
     "uk.gov.hmcts.reform.idam.client"
 })
-@ConditionalOnProperty(name = "toggle.deletemetadatafordocument", havingValue = "true")
-public class DocumentMetadataDeletionTestConfiguration {
+@Import({
+    EmAnnoService.class,
+    EmNpaService.class
+})
+public class DocumentMetadataDeletionTestConfig {
 
     @Bean
     public AuthTokenGenerator authTokenGenerator(

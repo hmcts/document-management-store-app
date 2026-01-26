@@ -11,11 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.StorageTestConfiguration;
-import uk.gov.hmcts.dm.config.DocumentMetadataDeletionTestConfiguration;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
-import uk.gov.hmcts.dm.service.EmAnnoService;
-import uk.gov.hmcts.dm.service.EmNpaService;
 
 import java.util.UUID;
 
@@ -30,9 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @NotThreadSafe
 @ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
 @SpringBootTest(classes = {
-    DocumentMetadataDeletionTestConfiguration.class,
-    EmAnnoService.class,
-    EmNpaService.class,
+    DocumentMetadataDeletionTestConfig.class,
     StorageTestConfiguration.class,
     ToggleConfiguration.class
 })
