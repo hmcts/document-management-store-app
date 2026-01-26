@@ -5,50 +5,48 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.springframework.boot.web.error.ErrorAttributeOptions;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.context.request.WebRequest;
 
+import java.util.Collections;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
-
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class ApiErrorControllerTest {
 
     @Mock
     private HttpServletRequest request;
 
     @Mock
-    private ApiErrorAttributes apiErrorAttributes;
-
-    @Mock
-    private WebRequest webRequest;
-
-    @Mock
-    private ErrorAttributeOptions errorAttributeOptions;
+    private ErrorAttributes errorAttributes;
 
     @Test
     void shouldReturnResponseEntityNoContent() {
+        ApiErrorController apiErrorController = new ApiErrorController(errorAttributes);
         when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).thenReturn(204);
-        ApiErrorController apiErrorController = new ApiErrorController(apiErrorAttributes);
-        assertThat(apiErrorController.error(request), equalTo(new ResponseEntity<>(HttpStatus.NO_CONTENT)));
+
+        ResponseEntity<Map<String, Object>> response = apiErrorController.error(request);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertNull(response.getBody());
     }
 
     @Test
     void shouldReturnResponseEntityInternalServerError() {
-        Map<String, Object> body = apiErrorAttributes.getErrorAttributes(webRequest, errorAttributeOptions);
+        ApiErrorController apiErrorController = new ApiErrorController(errorAttributes);
         when(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).thenReturn(500);
-        ApiErrorController apiErrorController = new ApiErrorController(apiErrorAttributes);
-        assertThat(apiErrorController.error(request),
-            equalTo(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .contentType(MediaType.APPLICATION_JSON).body(body)));
-    }
 
+        ResponseEntity<Map<String, Object>> response = apiErrorController.error(request);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        assertEquals(Collections.emptyMap(), response.getBody());
+    }
 }
