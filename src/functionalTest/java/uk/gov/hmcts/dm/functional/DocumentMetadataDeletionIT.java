@@ -31,7 +31,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
     StorageTestConfiguration.class,
     ToggleConfiguration.class
 })
-@TestPropertySource({"classpath:application.yml"})
+@TestPropertySource(
+    locations = {"classpath:application.yml"},
+    properties = {"toggle.deletemetadatafordocument=true"}
+)
 @WithTags(@WithTag("testType:Functional"))
 public class DocumentMetadataDeletionIT {
 
