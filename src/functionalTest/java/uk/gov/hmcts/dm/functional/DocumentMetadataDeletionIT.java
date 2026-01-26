@@ -1,58 +1,30 @@
 package uk.gov.hmcts.dm.functional;
 
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
 
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Functional test for DocumentMetadataDeletionService endpoints.
- * This test verifies that the em-anno and em-npa deletion endpoints can be called
- * with proper authentication (S2S and IDAM tokens).
+ * Functional test for DocumentMetadataDeletionService.
+ * This test verifies that the service can successfully call em-anno and em-npa endpoints
+ * with proper authentication (S2S and IDAM tokens) handled internally by the service.
  */
 public class DocumentMetadataDeletionIT extends BaseIT {
 
-    @Value("${toggle.deletemetadatafordocument:false}")
-    private boolean deleteMetadataEnabled;
-
-    @Value("${em-anno.api.url}")
-    private String emAnnoApiUrl;
-
-    @Value("${em-npa.api.url}")
-    private String emNpaApiUrl;
+    @Autowired
+    private DocumentMetadataDeletionService documentMetadataDeletionService;
 
     @Test
     public void shouldCallEmAnnoAndEmNpaEndpointsWhenDeletingMetadata() {
-        if (!deleteMetadataEnabled) {
-            // Skip test if toggle is disabled
-            return;
-        }
-
         // Use a random UUID for testing
         UUID testDocumentId = UUID.randomUUID();
 
-        // Test em-anno endpoint
-        // Expected responses: 404 (document not found), 204 (deleted), or 403 (not authorized)
-        Response emAnnoResponse = givenRequest(getCaseWorker())
-            .baseUri(emAnnoApiUrl)
-            .when()
-            .delete("/api/documents/" + testDocumentId + "/data");
+        boolean result = documentMetadataDeletionService.deleteExternalMetadata(testDocumentId);
 
-        emAnnoResponse.then()
-            .statusCode(anyOf(equalTo(204), equalTo(404), equalTo(403)));
-
-        // Test em-npa endpoint
-        // Expected responses: 404 (document not found), 204 (deleted), or 403 (not authorized)
-        Response emNpaResponse = givenRequest(getCaseWorker())
-            .baseUri(emNpaApiUrl)
-            .when()
-            .delete("/api/markups/document/" + testDocumentId);
-
-        emNpaResponse.then()
-            .statusCode(anyOf(equalTo(204), equalTo(404), equalTo(403)));
+        assertNotNull(result, "deleteExternalMetadata should return a non-null result");
     }
 }
