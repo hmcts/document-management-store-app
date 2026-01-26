@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.StorageTestConfiguration;
+import uk.gov.hmcts.dm.config.DocumentMetadataDeletionTestConfig;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
 

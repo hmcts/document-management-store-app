@@ -1,4 +1,4 @@
-package uk.gov.hmcts.dm.functional;
+package uk.gov.hmcts.dm.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
