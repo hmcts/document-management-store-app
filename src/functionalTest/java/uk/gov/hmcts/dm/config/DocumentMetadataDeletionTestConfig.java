@@ -13,6 +13,7 @@ import uk.gov.hmcts.reform.authorisation.ServiceAuthorisationApi;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGeneratorFactory;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
+import uk.gov.hmcts.reform.idam.client.OAuth2Configuration;
 
 
 @Configuration
@@ -25,7 +26,8 @@ import uk.gov.hmcts.reform.idam.client.IdamClient;
     FeignAutoConfiguration.class,
     EmAnnoService.class,
     EmNpaService.class,
-    IdamClient.class
+    IdamClient.class,
+    OAuth2Configuration.class
 })
 public class DocumentMetadataDeletionTestConfig {
 
