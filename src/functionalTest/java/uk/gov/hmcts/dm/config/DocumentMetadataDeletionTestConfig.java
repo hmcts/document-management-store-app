@@ -1,11 +1,8 @@
 package uk.gov.hmcts.dm.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -19,20 +16,16 @@ import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 
 @Configuration
-@EnableAutoConfiguration(exclude = {
-    DataSourceAutoConfiguration.class,
-    DataSourceTransactionManagerAutoConfiguration.class,
-    HibernateJpaAutoConfiguration.class
-})
 @EnableFeignClients(basePackages = {
     "uk.gov.hmcts.dm.client",
     "uk.gov.hmcts.reform.authorisation",
     "uk.gov.hmcts.reform.idam.client"
 })
 @Import({
-    IdamClient.class,
+    FeignAutoConfiguration.class,
     EmAnnoService.class,
-    EmNpaService.class
+    EmNpaService.class,
+    IdamClient.class
 })
 public class DocumentMetadataDeletionTestConfig {
 
