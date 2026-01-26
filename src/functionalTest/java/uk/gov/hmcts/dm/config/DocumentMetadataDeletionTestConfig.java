@@ -24,7 +24,8 @@ import uk.gov.hmcts.reform.idam.client.IdamClient;
 @Import({
     FeignAutoConfiguration.class,
     EmAnnoService.class,
-    EmNpaService.class
+    EmNpaService.class,
+    IdamClient.class
 })
 public class DocumentMetadataDeletionTestConfig {
 
