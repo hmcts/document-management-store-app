@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
 import uk.gov.hmcts.dm.service.EmAnnoService;
@@ -14,8 +14,7 @@ import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGeneratorFactory;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 
-
-@TestConfiguration
+@Configuration
 @EnableFeignClients(basePackages = {
     "uk.gov.hmcts.dm.client",
     "uk.gov.hmcts.reform.authorisation",
