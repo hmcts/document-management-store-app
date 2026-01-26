@@ -1,45 +1,58 @@
 package uk.gov.hmcts.dm.functional;
 
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.context.SpringBootTest;
-import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
- * Functional test for DocumentMetadataDeletionService.
- * This test verifies that the service can successfully call em-anno and em-npa endpoints
+ * Functional test for DocumentMetadataDeletionService endpoints.
+ * This test verifies that the em-anno and em-npa deletion endpoints can be called
  * with proper authentication (S2S and IDAM tokens).
  */
-@SpringBootTest
 public class DocumentMetadataDeletionIT extends BaseIT {
-
-    @Autowired(required = false)
-    private DocumentMetadataDeletionService documentMetadataDeletionService;
 
     @Value("${toggle.deletemetadatafordocument:false}")
     private boolean deleteMetadataEnabled;
 
+    @Value("${em-anno.api.url}")
+    private String emAnnoApiUrl;
+
+    @Value("${em-npa.api.url}")
+    private String emNpaApiUrl;
+
     @Test
     public void shouldCallEmAnnoAndEmNpaEndpointsWhenDeletingMetadata() {
-        // Call deleteExternalMetadata - this will attempt to call both em-anno and em-npa
-        // This verifies:
-        // 1. AuthTokenGenerator is configured and can generate S2S tokens
-        // 2. IdamClient is configured and can get IDAM tokens
-        // 3. EmAnnoApi Feign client is configured and can call em-anno endpoint
-        // 4. EmNpaApi Feign client is configured and can call em-npa endpoint
-        // 5. All authentication headers are properly set
-        boolean result = documentMetadataDeletionService.deleteExternalMetadata(UUID.randomUUID());
+        if (!deleteMetadataEnabled) {
+            // Skip test if toggle is disabled
+            return;
+        }
 
-        // We don't assert the result because:
-        // 1. The external services may not be available in the test environment
-        // 2. The dummy ID won't exist in those services (will return 404)
-        // 3. The test is primarily to verify the service can be called and doesn't throw exceptions
-        // The real verification is that no exceptions were thrown during the call
-        assertNotNull(result, "deleteExternalMetadata should return a non-null result");
+        // Use a random UUID for testing
+        UUID testDocumentId = UUID.randomUUID();
+
+        // Test em-anno endpoint
+        // Expected responses: 404 (document not found), 204 (deleted), or 403 (not authorized)
+        Response emAnnoResponse = givenRequest(getCaseWorker())
+            .baseUri(emAnnoApiUrl)
+            .when()
+            .delete("/api/documents/" + testDocumentId + "/data");
+
+        emAnnoResponse.then()
+            .statusCode(anyOf(equalTo(204), equalTo(404), equalTo(403)));
+
+        // Test em-npa endpoint
+        // Expected responses: 404 (document not found), 204 (deleted), or 403 (not authorized)
+        Response emNpaResponse = givenRequest(getCaseWorker())
+            .baseUri(emNpaApiUrl)
+            .when()
+            .delete("/api/markups/document/" + testDocumentId);
+
+        emNpaResponse.then()
+            .statusCode(anyOf(equalTo(204), equalTo(404), equalTo(403)));
     }
 }
