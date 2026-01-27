@@ -3,18 +3,20 @@ package uk.gov.hmcts.dm;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import uk.gov.hmcts.dm.service.ScheduledTaskRunner;
 
 import java.util.Objects;
 
 @EnableScheduling
-@SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, it's not a utility class
-@SpringBootApplication(scanBasePackages = {
+@EnableFeignClients(basePackages = {
     "uk.gov.hmcts.dm",
     "uk.gov.hmcts.reform.authorisation",
     "uk.gov.hmcts.reform.idam.client"
 })
+@SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, it's not a utility class
+@SpringBootApplication(scanBasePackages = {"uk.gov.hmcts.dm"})
 public class DmApp implements CommandLineRunner {
 
     private static final String TASK_NAME = "TASK_NAME";
