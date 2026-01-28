@@ -2,7 +2,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.20.2")
+        classpath("org.flywaydb:flyway-database-postgresql:11.20.3")
     }
 }
 
@@ -19,7 +19,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.19.0-rc.3'
     id 'org.owasp.dependencycheck' version '12.1.6'
     id 'au.com.dius.pact' version '4.6.19'
-    id 'org.flywaydb.flyway' version '11.20.2'
+    id 'org.flywaydb.flyway' version '11.20.3'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '5.1.0'
 }
 
@@ -93,7 +93,7 @@ def versions = [
     logging            : '6.1.9',
     pact_version       : '4.6.19',
     emTestHelper       : '2.1.1',
-    shedlock           : '7.5.0',
+    shedlock           : '7.6.0',
     hibernate          : '6.6.41.Final',
     jupiter            : '6.0.2',
     springSecurity     : '7.0.2'
@@ -140,8 +140,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.20.2'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.20.2'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.20.3'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.20.3'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '9.0'
