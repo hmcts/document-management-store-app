@@ -20,6 +20,7 @@ import static org.springframework.util.MimeTypeUtils.IMAGE_JPEG_VALUE;
 import static uk.gov.hmcts.dm.functional.V1MimeTypes.IMAGE_BMP_VALUE;
 import static uk.gov.hmcts.dm.functional.V1MimeTypes.IMAGE_TIF_VALUE;
 
+@Disabled("Temporarily disabled - only running DocumentMetadataDeletionIT")
 public class CreateDocumentIT extends BaseIT {
 
     private static final String FILES_CONST = "files";

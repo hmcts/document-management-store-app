@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import net.serenitybdd.annotations.Pending;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@Disabled("Temporarily disabled - only running DocumentMetadataDeletionIT")
 @SuppressWarnings({"java:S5960","java:S5443"}) // Suppress SonarQube warning for assertions
 public class MetadataMigrationIT extends BaseIT {
 

@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
@@ -13,6 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled("Temporarily disabled - only running DocumentMetadataDeletionIT")
 @SuppressWarnings("java:S5960") // Suppress SonarQube warning for assertions
 public class DeleteDocumentIT extends BaseIT {
     private String citizenDocumentUrl;

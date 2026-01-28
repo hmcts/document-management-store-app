@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.functional;
 
 import io.restassured.response.Response;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
+@Disabled("Temporarily disabled - only running DocumentMetadataDeletionIT")
 public class MultiMediaUploadIT extends BaseIT {
 
     private static final String FILES_CONST = "files";

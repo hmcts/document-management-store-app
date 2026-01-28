@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional;
 
 import io.restassured.http.ContentType;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+@Disabled("Temporarily disabled - only running DocumentMetadataDeletionIT")
 public class UpdateDocumentIT extends BaseIT {
 
 

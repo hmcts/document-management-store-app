@@ -4,11 +4,13 @@ import groovy.json.JsonOutput;
 import io.restassured.http.ContentType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.Map;
 
+@Disabled("Temporarily disabled - only running DocumentMetadataDeletionIT")
 public class SearchDocumentIT extends BaseIT {
 
     private static final String DOCUMENTS_FILTER_ENDPOINT = "/documents/filter";

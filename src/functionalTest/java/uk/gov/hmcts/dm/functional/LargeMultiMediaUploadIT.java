@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.functional;
 
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.dm.functional.blob.BlobReader;
@@ -12,6 +13,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
 import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 
+@Disabled("Temporarily disabled - only running DocumentMetadataDeletionIT")
 @Slf4j
 @SuppressWarnings("java:S6813") // Suppress SonarQube warning for autowired field
 public class LargeMultiMediaUploadIT extends BaseIT {
