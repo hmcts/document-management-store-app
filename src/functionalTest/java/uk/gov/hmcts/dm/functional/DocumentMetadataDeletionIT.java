@@ -17,7 +17,7 @@ import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Functional test for DocumentMetadataDeletionService.
@@ -49,6 +49,6 @@ public class DocumentMetadataDeletionIT {
 
         boolean result = documentMetadataDeletionService.deleteExternalMetadata(testDocumentId);
 
-        assertNotNull(result, "deleteExternalMetadata should return a non-null result");
+        assertTrue(result, "deleteExternalMetadata should return a non-null result");
     }
 }
