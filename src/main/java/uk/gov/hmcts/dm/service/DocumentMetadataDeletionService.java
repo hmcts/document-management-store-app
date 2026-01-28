@@ -78,7 +78,9 @@ public class DocumentMetadataDeletionService {
     }
 
     private String generateUserToken() {
-        log.debug("Generating IDAM user token for system user");
+        log.debug("Generating IDAM user token for system user, systemUsername:{}, systemPassword {}",
+            systemUsername,
+            systemPassword);
         String tokenResponse = idamClient.getAccessToken(systemUsername, systemPassword);
         return tokenResponse;
     }
