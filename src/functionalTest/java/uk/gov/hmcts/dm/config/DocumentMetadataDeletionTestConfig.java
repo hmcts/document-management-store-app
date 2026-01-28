@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.config;
 
+import feign.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -37,6 +38,11 @@ import uk.gov.hmcts.reform.idam.client.OAuth2Configuration;
     OAuth2Configuration.class
 })
 public class DocumentMetadataDeletionTestConfig {
+
+    @Bean
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.FULL;
+    }
 
     @Bean
     public AuthTokenGenerator authTokenGenerator(
