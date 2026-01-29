@@ -58,15 +58,17 @@ public class DocumentMetadataDeletionService {
             String userToken = generateUserToken();
             String serviceToken = generateServiceToken();
 
+            // Step 2: Delete from em-npa
+            log.info("Attempting to delete redactions from em-npa for document: {}", docId);
+            emNpaService.deleteRedactionsForDocument(docId, userToken, serviceToken);
+            log.info("Successfully deleted redactions from em-npa for document: {}", docId);
+
+
             // Step 1: Delete from em-anno first
             log.info("Attempting to delete metadata from em-anno for document: {}", docId);
             emAnnoService.deleteDocumentData(docId, userToken, serviceToken);
             log.info("Successfully deleted metadata from em-anno for document: {}", docId);
 
-            // Step 2: Delete from em-npa
-            log.info("Attempting to delete redactions from em-npa for document: {}", docId);
-            emNpaService.deleteRedactionsForDocument(docId, userToken, serviceToken);
-            log.info("Successfully deleted redactions from em-npa for document: {}", docId);
 
             return true;
 

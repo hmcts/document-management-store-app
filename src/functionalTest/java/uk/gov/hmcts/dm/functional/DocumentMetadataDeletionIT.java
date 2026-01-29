@@ -44,8 +44,7 @@ public class DocumentMetadataDeletionIT {
 
     @Test
     public void shouldCallEmAnnoAndEmNpaEndpointsWhenDeletingMetadata() {
-        // Use a random UUID for testing
-        UUID testDocumentId = UUID.randomUUID();
+        UUID testDocumentId = UUID.fromString("4fee044b-c820-44e5-a951-397c77e43aeb");
 
         boolean result = documentMetadataDeletionService.deleteExternalMetadata(testDocumentId);
 
