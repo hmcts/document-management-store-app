@@ -28,7 +28,7 @@ def secrets = [
     ],
     'dm-${env}': [
         secret('dm-store-storage-account-primary-connection-string', 'STORAGEACCOUNT_PRIMARY_CONNECTION_STRING'),
-        secret('microservicekey-dm-store', 'S2S_KEY'),
+        secret('microservicekey-dm-store', 'DM_S2S_KEY'),
         secret('dm-store-idam-client-id', 'DM_STORE_IDAM_CLIENT_ID'),
         secret('dm-store-idam-secret', 'DM_STORE_IDAM_CLIENT_SECRET'),
         secret('dm-store-system-update-idam-user', 'DM_STORE_SYSTEM_UPDATE_IDAM_USER'),
