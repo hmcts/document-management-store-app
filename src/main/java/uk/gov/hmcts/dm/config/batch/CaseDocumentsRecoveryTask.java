@@ -131,7 +131,7 @@ public class CaseDocumentsRecoveryTask implements Runnable {
     }
 
     private Set<UUID> getCsvFileAndParse(BlobClient client) {
-        String csvPath = TMP_DIR + File.separatorChar + "recovered-documents.csv";
+        String csvPath = TMP_DIR + File.separatorChar + "recovered-documents.xlsx";
         try {
 
             client.downloadToFile(csvPath);
