@@ -23,7 +23,7 @@ java:
         - name: RpaAppInsightsInstrumentationKey
           alias: azure.application-insights.instrumentation-key
         - name: microservicekey-dm-store
-          alias: S2S_KEY
+          alias: DM_S2S_KEY
         - name: dm-store-idam-secret
           alias: DM_STORE_IDAM_CLIENT_SECRET
         - name: dm-store-idam-client-id

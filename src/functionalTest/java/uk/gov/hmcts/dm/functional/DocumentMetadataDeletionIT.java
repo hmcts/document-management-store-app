@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.functional;
 
-import net.jcip.annotations.NotThreadSafe;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
@@ -17,7 +16,7 @@ import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Functional test for DocumentMetadataDeletionService.
@@ -25,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * with proper authentication (S2S and IDAM tokens) handled internally by the service.
  * This test uses its own isolated Spring context to avoid affecting other functional tests.
  */
-@NotThreadSafe
 @ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
 @SpringBootTest(classes = {
     DocumentMetadataDeletionTestConfig.class,
@@ -44,11 +42,9 @@ public class DocumentMetadataDeletionIT {
 
     @Test
     public void shouldCallEmAnnoAndEmNpaEndpointsWhenDeletingMetadata() {
-        // Use a random UUID for testing
-        UUID testDocumentId = UUID.randomUUID();
-
+        UUID testDocumentId = UUID.fromString("4fee044b-c820-44e5-a951-397c77e43aeb");
         boolean result = documentMetadataDeletionService.deleteExternalMetadata(testDocumentId);
 
-        assertNotNull(result, "deleteExternalMetadata should return a non-null result");
+        assertTrue(result, "deleteExternalMetadata should return a non-null result");
     }
 }
