@@ -73,13 +73,13 @@ class CaseDocumentsRecoveryTaskTest {
     }
 
     @Test
-    void shouldContinueIfXlsxFileEmpty() {
+    void shouldContinueIfcsvFileEmpty() {
 
         PagedIterable pagedIterable = mock(PagedIterable.class);
         when(blobContainerClient.listBlobs()).thenReturn(pagedIterable);
 
         BlobItem mockedBlobItem = mock(BlobItem.class);
-        String deleteFileName = "CHG-12345.xlsx";
+        String deleteFileName = "CHG-12345.csv";
         given(mockedBlobItem.getName()).willReturn(deleteFileName);
         BlobClient mockedBlobClient = mock(BlobClient.class);
         given(blobContainerClient.getBlobClient(deleteFileName)).willReturn(mockedBlobClient);
@@ -90,7 +90,7 @@ class CaseDocumentsRecoveryTaskTest {
 
         caseDocumentsRecoveryTask.run();
 
-        verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.xlsx");
+        verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.csv");
         verify(storedDocumentRepository, never()).findById(any(UUID.class));
         verify(storedDocumentRepository, never()).save(any());
         verify(mockedBlobClient).delete();
@@ -98,7 +98,7 @@ class CaseDocumentsRecoveryTaskTest {
 
     @Test
     void shouldSkipIfStoredDocumentsNotFound() throws IOException {
-        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/recovered-documents.xlsx");
+        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/recovered-documents.csv");
         try {
             Path tempFile = Files.createFile(filePath);
 
@@ -129,8 +129,8 @@ class CaseDocumentsRecoveryTaskTest {
 
             caseDocumentsRecoveryTask.run();
 
-            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.xlsx");
-            verify(storedDocumentRepository, times(3)).findById(any(UUID.class));
+            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.csv");
+            verify(storedDocumentRepository, times(1)).findById(any(UUID.class));
             verify(storedDocumentRepository, never()).save(any());
             verify(mockedBlobClient).delete();
         } finally {
@@ -140,7 +140,7 @@ class CaseDocumentsRecoveryTaskTest {
 
     @Test
     void shouldSkipIfDocumentContentVersionNotFound() throws IOException {
-        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/recovered-documents.xlsx");
+        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/recovered-documents.csv");
         try {
             Path tempFile = Files.createFile(filePath);
 
@@ -171,8 +171,8 @@ class CaseDocumentsRecoveryTaskTest {
 
             caseDocumentsRecoveryTask.run();
 
-            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.xlsx");
-            verify(storedDocumentRepository, times(3)).findById(any(UUID.class));
+            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.csv");
+            verify(storedDocumentRepository, times(1)).findById(any(UUID.class));
             verify(storedDocumentRepository, never()).save(any());
             verify(mockedBlobClient).delete();
         } finally {
@@ -182,7 +182,7 @@ class CaseDocumentsRecoveryTaskTest {
 
     @Test
     void shouldProcessAllValidDocumentIds() throws IOException {
-        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/recovered-documents.xlsx");
+        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/recovered-documents.csv");
         try {
             Path tempFile = Files.createFile(filePath);
             UUID uuidRepeat = UUID.randomUUID();
@@ -214,10 +214,11 @@ class CaseDocumentsRecoveryTaskTest {
 
             caseDocumentsRecoveryTask.run();
 
-            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.xlsx");
-            verify(storedDocumentRepository, times(3)).findById(any(UUID.class));
-            verify(storedDocumentRepository, times(3)).save(any(StoredDocument.class));
-            verify(auditEntryService, times(3)).createAndSaveEntry(any(StoredDocument.class),any(AuditActions.class));
+            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.csv");
+            verify(storedDocumentRepository, times(2)).findById(any(UUID.class));
+            verify(storedDocumentRepository, times(2)).save(any(StoredDocument.class));
+            verify(auditEntryService, times(2)).createAndSaveEntry(any(StoredDocument.class),any(AuditActions.class)
+                    ,any(String.class),any(String.class));
             verify(mockedBlobClient).delete();
 
             Assertions.assertNotNull(mockedStoredDocument.getDocumentContentVersions().getFirst().getContentUri());
