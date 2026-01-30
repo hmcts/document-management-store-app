@@ -66,7 +66,8 @@ spring:
       noOfIterations: ${CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS:1}
       batchSize: ${CASE_DOCUMENTS_DELETION_BATCH_SIZE:10}
       serviceName: ${CASE_DOCUMENTS_DELETION_SERVICE_NAME:ccd_case_disposer}
-
+    caseDocumentsRecovery:
+      blobPath: ${CASE_DOCUMENTS_RECOVERY_BLOB_PATH:dummyvalue}
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
@@ -141,6 +142,7 @@ azure:
       enabled: true
       metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
       orphandocument-blob-container-reference: ${STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME:orphandocuments}
+      recovereddocuments-blob-container-reference: ${STORAGE_CONTAINER_RECOVERED_DOCUMENTS_CONTAINER_NAME:recovereddocuments}
   upload:
     blockSize : ${UPLOAD_BLOCK_SIZE:4}
     maxSingleUploadSize : ${MAX_SINGLE_UPLOAD_SIZE:100}

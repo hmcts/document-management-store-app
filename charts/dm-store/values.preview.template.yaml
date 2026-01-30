@@ -55,6 +55,7 @@ java:
     STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
     STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME: orphandocumentdeletion{{ .Release.Name }}
     ENABLE_DELETE_METADATA_FOR_DOCUMENT: true
+    STORAGE_CONTAINER_RECOVERED_DOCUMENTS_CONTAINER_NAME: recovereddocument{{ .Release.Name }}
   postgresql:
     enabled: true
 blobstorage:
