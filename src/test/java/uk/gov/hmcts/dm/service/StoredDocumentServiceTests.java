@@ -66,6 +66,9 @@ class StoredDocumentServiceTests {
     @Mock
     private BlobStorageDeleteService blobStorageDeleteService;
 
+    @Mock
+    private DocumentMetadataDeletionService documentMetadataDeletionService;
+
     @InjectMocks
     private StoredDocumentService storedDocumentService;
 
@@ -79,6 +82,7 @@ class StoredDocumentServiceTests {
     @BeforeEach
     void setUp() {
         lenient().when(securityUtilService.getUserId()).thenReturn("Corín Tellado");
+        lenient().when(documentMetadataDeletionService.deleteExternalMetadata(any(UUID.class))).thenReturn(true);
     }
 
     @Test
@@ -431,6 +435,33 @@ class StoredDocumentServiceTests {
     }
 
     @Test
+    void shouldSkipDmStoreDeletionWhenExternalMetadataDeletionFails() {
+        UUID docId = UUID.randomUUID();
+
+        when(documentMetadataDeletionService.deleteExternalMetadata(docId)).thenReturn(false);
+
+        storedDocumentService.deleteDocumentsDetails(List.of(docId));
+
+        verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any(DocumentContentVersion.class));
+        verify(documentContentVersionRepository, times(0)).deleteAll(any());
+        verify(storedDocumentRepository, times(0)).deleteById(any(UUID.class));
+    }
+
+    @Test
+    void shouldSkipDmStoreDeletionWhenExternalMetadataDeletionThrows() {
+        UUID docId = UUID.randomUUID();
+
+        doThrow(new RuntimeException("External deletion failure"))
+            .when(documentMetadataDeletionService).deleteExternalMetadata(docId);
+
+        storedDocumentService.deleteDocumentsDetails(List.of(docId));
+
+        verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any(DocumentContentVersion.class));
+        verify(documentContentVersionRepository, times(0)).deleteAll(any());
+        verify(storedDocumentRepository, times(0)).deleteById(any(UUID.class));
+    }
+
+    @Test
     void shouldLogErrorWhenDocumentDeletionFails() {
         UUID docId = UUID.randomUUID();
         StoredDocument document = new StoredDocument();
@@ -466,6 +497,31 @@ class StoredDocumentServiceTests {
         storedDocumentService.deleteDocumentsDetails(List.of(docId));
 
         verify(blobStorageDeleteService, times(0)).deleteCaseDocumentBinary(any());
+        verify(storedDocumentRepository, times(1)).deleteById(docId);
+    }
+
+    @Test
+    void shouldProceedWithDmStoreDeletionWhenDocumentMetadataDeletionServiceIsNull() {
+        StoredDocumentService serviceWithNullMetadataDeletion = new StoredDocumentService(
+            storedDocumentRepository,
+            documentContentVersionRepository,
+            toggleConfiguration,
+            securityUtilService,
+            blobStorageWriteService,
+            blobStorageDeleteService,
+            null
+        );
+
+        UUID docId = UUID.randomUUID();
+        DocumentContentVersion version = new DocumentContentVersion();
+
+        when(documentContentVersionRepository.findAllByStoredDocumentId(docId))
+            .thenReturn(List.of(version));
+
+        serviceWithNullMetadataDeletion.deleteDocumentsDetails(List.of(docId));
+
+        verify(blobStorageDeleteService, times(1)).deleteCaseDocumentBinary(version);
+        verify(documentContentVersionRepository, times(1)).deleteAll(List.of(version));
         verify(storedDocumentRepository, times(1)).deleteById(docId);
     }
 }

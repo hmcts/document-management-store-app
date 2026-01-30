@@ -172,7 +172,8 @@ public class StoreDocumentControllerTestConfiguration {
             toggleConfiguration,
             securityUtilService,
             blobStorageWriteService,
-            blobStorageDeleteService);
+            blobStorageDeleteService,
+            null);
     }
 
     @Bean

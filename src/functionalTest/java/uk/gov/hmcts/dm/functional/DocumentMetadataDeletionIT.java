@@ -1,0 +1,50 @@
+package uk.gov.hmcts.dm.functional;
+
+import net.serenitybdd.annotations.WithTag;
+import net.serenitybdd.annotations.WithTags;
+import net.serenitybdd.junit5.SerenityJUnit5Extension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import uk.gov.hmcts.dm.StorageTestConfiguration;
+import uk.gov.hmcts.dm.config.DocumentMetadataDeletionTestConfig;
+import uk.gov.hmcts.dm.config.ToggleConfiguration;
+import uk.gov.hmcts.dm.service.DocumentMetadataDeletionService;
+
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+/**
+ * Functional test for DocumentMetadataDeletionService.
+ * This test verifies that the service can successfully call em-anno and em-npa endpoints
+ * with proper authentication (S2S and IDAM tokens) handled internally by the service.
+ * This test uses its own isolated Spring context to avoid affecting other functional tests.
+ */
+@ExtendWith(value = {SerenityJUnit5Extension.class, SpringExtension.class})
+@SpringBootTest(classes = {
+    DocumentMetadataDeletionTestConfig.class,
+    StorageTestConfiguration.class,
+    ToggleConfiguration.class
+})
+@TestPropertySource(
+    locations = {"classpath:application.yml"},
+    properties = {"toggle.deletemetadatafordocument=true"}
+)
+@WithTags(@WithTag("testType:Functional"))
+public class DocumentMetadataDeletionIT {
+
+    @Autowired
+    private DocumentMetadataDeletionService documentMetadataDeletionService;
+
+    @Test
+    public void shouldCallEmAnnoAndEmNpaEndpointsWhenDeletingMetadata() {
+        UUID testDocumentId = UUID.fromString("4fee044b-c820-44e5-a951-397c77e43aeb");
+        boolean result = documentMetadataDeletionService.deleteExternalMetadata(testDocumentId);
+
+        assertTrue(result, "deleteExternalMetadata should return a non-null result");
+    }
+}
