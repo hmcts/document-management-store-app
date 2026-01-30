@@ -13,7 +13,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
@@ -61,8 +60,8 @@ class DocumentMetadataDeletionServiceTest {
 
     @Test
     void deleteExternalMetadata_Success() {
-        doNothing().when(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
-        doNothing().when(emNpaService).deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+        when(emAnnoService.deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(true);
+        when(emNpaService.deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(true);
 
         boolean result = documentMetadataDeletionService.deleteExternalMetadata(DOCUMENT_ID);
 
@@ -75,8 +74,8 @@ class DocumentMetadataDeletionServiceTest {
 
     @Test
     void deleteExternalMetadata_CallsServicesInCorrectOrder() {
-        doNothing().when(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
-        doNothing().when(emNpaService).deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+        when(emAnnoService.deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(true);
+        when(emNpaService.deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(true);
 
         documentMetadataDeletionService.deleteExternalMetadata(DOCUMENT_ID);
 
@@ -87,8 +86,7 @@ class DocumentMetadataDeletionServiceTest {
 
     @Test
     void deleteExternalMetadata_EmAnnoFailure_ReturnsFalse() {
-        doThrow(new RuntimeException("em-anno API error"))
-            .when(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+        when(emAnnoService.deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(false);
 
         boolean result = documentMetadataDeletionService.deleteExternalMetadata(DOCUMENT_ID);
 
@@ -99,9 +97,8 @@ class DocumentMetadataDeletionServiceTest {
 
     @Test
     void deleteExternalMetadata_EmNpaFailure_ReturnsFalse() {
-        doNothing().when(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
-        doThrow(new RuntimeException("em-npa API error"))
-            .when(emNpaService).deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+        when(emAnnoService.deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(true);
+        when(emNpaService.deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(false);
 
         boolean result = documentMetadataDeletionService.deleteExternalMetadata(DOCUMENT_ID);
 
@@ -139,12 +136,24 @@ class DocumentMetadataDeletionServiceTest {
 
     @Test
     void deleteExternalMetadata_GeneratesTokensOnce() {
-        doNothing().when(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
-        doNothing().when(emNpaService).deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+        when(emAnnoService.deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(true);
+        when(emNpaService.deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(true);
 
         documentMetadataDeletionService.deleteExternalMetadata(DOCUMENT_ID);
 
         verify(idamClient).getAccessToken(SYSTEM_USERNAME, SYSTEM_PASSWORD);
         verify(authTokenGenerator).generate();
+    }
+
+    @Test
+    void deleteExternalMetadata_EmAnnoThrows_DoesNotCallEmNpa_ReturnsFalse() {
+        doThrow(new RuntimeException("em-anno API error"))
+            .when(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+
+        boolean result = documentMetadataDeletionService.deleteExternalMetadata(DOCUMENT_ID);
+
+        assertFalse(result);
+        verify(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+        verify(emNpaService, never()).deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
     }
 }

@@ -60,12 +60,22 @@ public class DocumentMetadataDeletionService {
 
             // Step 1: Delete from em-anno first
             log.info("Attempting to delete metadata from em-anno for document: {}", docId);
-            emAnnoService.deleteDocumentData(docId, userToken, serviceToken);
+            boolean isEmAnnoDeleted = emAnnoService.deleteDocumentData(docId, userToken, serviceToken);
+            if (!isEmAnnoDeleted) {
+                log.error("EM_ANNO_METADATA_DELETION_FAILED - Aborting external metadata deletion for document: {}",
+                    docId);
+                return false;
+            }
             log.info("Successfully deleted metadata from em-anno for document: {}", docId);
 
             // Step 2: Delete from em-npa
             log.info("Attempting to delete redactions from em-npa for document: {}", docId);
-            emNpaService.deleteRedactionsForDocument(docId, userToken, serviceToken);
+            boolean isEmNpaDeleted = emNpaService.deleteRedactionsForDocument(docId, userToken, serviceToken);
+            if (!isEmNpaDeleted) {
+                log.error("EM_NPA_METADATA_DELETION_FAILED - External metadata deletion incomplete for document: {}",
+                    docId);
+                return false;
+            }
             log.info("Successfully deleted redactions from em-npa for document: {}", docId);
 
             return true;

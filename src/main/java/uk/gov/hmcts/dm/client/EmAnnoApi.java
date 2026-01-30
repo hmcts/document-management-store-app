@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.client;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,7 +14,7 @@ public interface EmAnnoApi {
     String SERVICE_AUTHORIZATION = "ServiceAuthorization";
 
     @DeleteMapping("/api/documents/{docId}/data")
-    void deleteDocumentData(
+    ResponseEntity<Void> deleteDocumentData(
         @PathVariable("docId") String docId,
         @RequestHeader(AUTHORIZATION) String authorization,
         @RequestHeader(SERVICE_AUTHORIZATION) String serviceAuthorization

@@ -5,13 +5,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.client.EmNpaApi;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doNothing;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
 class EmNpaServiceTest {
@@ -33,10 +36,24 @@ class EmNpaServiceTest {
 
     @Test
     void deleteRedactionsForDocument_Success() {
-        doNothing().when(emNpaApi).deleteRedactions(DOCUMENT_ID, USER_TOKEN, SERVICE_TOKEN);
+        when(emNpaApi.deleteRedactions(DOCUMENT_ID, USER_TOKEN, SERVICE_TOKEN))
+            .thenReturn(ResponseEntity.noContent().build());
 
-        emNpaService.deleteRedactionsForDocument(DOCUMENT_ID, USER_TOKEN, SERVICE_TOKEN);
+        boolean result = emNpaService.deleteRedactionsForDocument(DOCUMENT_ID, USER_TOKEN, SERVICE_TOKEN);
 
+        assertTrue(result);
+
+        verify(emNpaApi).deleteRedactions(DOCUMENT_ID, USER_TOKEN, SERVICE_TOKEN);
+    }
+
+    @Test
+    void deleteRedactionsForDocument_Non204_ReturnsFalse() {
+        when(emNpaApi.deleteRedactions(DOCUMENT_ID, USER_TOKEN, SERVICE_TOKEN))
+            .thenReturn(ResponseEntity.ok().build());
+
+        boolean result = emNpaService.deleteRedactionsForDocument(DOCUMENT_ID, USER_TOKEN, SERVICE_TOKEN);
+
+        assertFalse(result);
         verify(emNpaApi).deleteRedactions(DOCUMENT_ID, USER_TOKEN, SERVICE_TOKEN);
     }
 
@@ -54,9 +71,12 @@ class EmNpaServiceTest {
 
     @Test
     void deleteRedactionsForDocument_WithNullDocumentId() {
-        doNothing().when(emNpaApi).deleteRedactions(null, USER_TOKEN, SERVICE_TOKEN);
+        when(emNpaApi.deleteRedactions(null, USER_TOKEN, SERVICE_TOKEN))
+            .thenReturn(ResponseEntity.noContent().build());
 
-        emNpaService.deleteRedactionsForDocument(null, USER_TOKEN, SERVICE_TOKEN);
+        boolean result = emNpaService.deleteRedactionsForDocument(null, USER_TOKEN, SERVICE_TOKEN);
+
+        assertTrue(result);
 
         verify(emNpaApi).deleteRedactions(null, USER_TOKEN, SERVICE_TOKEN);
     }
@@ -64,9 +84,12 @@ class EmNpaServiceTest {
     @Test
     void deleteRedactionsForDocument_WithEmptyTokens() {
         String emptyToken = "";
-        doNothing().when(emNpaApi).deleteRedactions(DOCUMENT_ID, emptyToken, emptyToken);
+        when(emNpaApi.deleteRedactions(DOCUMENT_ID, emptyToken, emptyToken))
+            .thenReturn(ResponseEntity.noContent().build());
 
-        emNpaService.deleteRedactionsForDocument(DOCUMENT_ID, emptyToken, emptyToken);
+        boolean result = emNpaService.deleteRedactionsForDocument(DOCUMENT_ID, emptyToken, emptyToken);
+
+        assertTrue(result);
 
         verify(emNpaApi).deleteRedactions(DOCUMENT_ID, emptyToken, emptyToken);
     }
