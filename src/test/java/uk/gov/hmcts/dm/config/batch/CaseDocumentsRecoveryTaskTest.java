@@ -217,8 +217,8 @@ class CaseDocumentsRecoveryTaskTest {
             verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/recovered-documents.csv");
             verify(storedDocumentRepository, times(2)).findById(any(UUID.class));
             verify(storedDocumentRepository, times(2)).save(any(StoredDocument.class));
-            verify(auditEntryService, times(2)).createAndSaveEntry(any(StoredDocument.class),any(AuditActions.class)
-                    ,any(String.class),any(String.class));
+            verify(auditEntryService, times(2)).createAndSaveEntry(any(StoredDocument.class),any(AuditActions.class),
+                    any(String.class),any(String.class));
             verify(mockedBlobClient).delete();
 
             Assertions.assertNotNull(mockedStoredDocument.getDocumentContentVersions().getFirst().getContentUri());
