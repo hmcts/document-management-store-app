@@ -61,7 +61,6 @@ withNightlyPipeline(type, product, component) {
     env.MP4_52MB = "e58a9fa5-4f6f-438f-b44a-8c0877e945d0/binary"
     env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
 
-    env.IDAM_S2S_BASE_URI = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.DM_S2S_SERVICE_NAME = "dm_store"
     // DocumentMetadataDeletionService configuration
     env.EM_ANNO_API_URL = "http://em-anno-aat.service.core-compute-aat.internal"

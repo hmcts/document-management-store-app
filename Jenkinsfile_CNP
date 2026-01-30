@@ -55,6 +55,8 @@ withPipeline(type , product, component) {
     env.IDAM_S2S_BASE_URI = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.EM_ANNO_API_URL = "http://em-anno-aat.service.core-compute-aat.internal"
     env.EM_NPA_API_URL = "http://em-npa-aat.service.core-compute-aat.internal"
+    env.DM_S2S_SERVICE_NAME = "dm_store"
+
 
     enableDbMigration('dm')
     overrideVaultEnvironments(vaultOverrides)

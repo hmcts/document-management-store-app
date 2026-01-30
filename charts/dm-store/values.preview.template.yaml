@@ -38,6 +38,7 @@ java:
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     EM_NPA_API_URL: "http://em-npa-aat.service.core-compute-aat.internal"
     EM_ANNO_API_URL: "http://em-anno-aat.service.core-compute-aat.internal"
+    DM_S2S_SERVICE_NAME: dm_store
 
     SPRING_DATASOURCE_HOST: "{{ .Release.Name }}-postgresql"
     SPRING_DATASOURCE_NAME: "{{ .Values.postgresql.auth.database}}"
