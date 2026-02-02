@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.dm.domain.AuditActions;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
@@ -31,11 +32,13 @@ import java.util.stream.Stream;
 
 /*
  * Reads a CSV/line-delimited spreadsheet of StoredDocument UUIDs and "recovers" them:
+ * - expects single header line followed by document UUIDs, one per line
  * - sets deleted = false and hardDeleted = false on StoredDocument
  * - recalculates contentUri for each DocumentContentVersion and saves it
  * - logs creation of RECOVERED audit action
  */
 @Service
+@Transactional
 public class CaseDocumentsRecoveryTask implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(CaseDocumentsRecoveryTask.class);
@@ -48,6 +51,9 @@ public class CaseDocumentsRecoveryTask implements Runnable {
 
     @Value("${spring.batch.caseDocumentsRecovery.blobPath}")
     private String blobPath;
+
+    private static final String USER_NAME = "recovery_task_job";
+    private static final String SERVICE_NAME = "finrem";
 
     public CaseDocumentsRecoveryTask(@Qualifier("recoveredDocumentsStorage") BlobContainerClient blobClient,
                                      StoredDocumentRepository storedDocumentRepository,
@@ -109,7 +115,8 @@ public class CaseDocumentsRecoveryTask implements Runnable {
                     }
 
                     storedDocumentRepository.save(storedDocument);
-                    auditEntryService.createAndSaveEntry(storedDocument, AuditActions.RECOVERED);
+                    auditEntryService.createAndSaveEntry(storedDocument, AuditActions.RECOVERED,
+                            USER_NAME, SERVICE_NAME);
 
                 } catch (Exception e) {
                     log.error("Failed to recover document {} : {}", id, e.getMessage(), e);
@@ -131,7 +138,7 @@ public class CaseDocumentsRecoveryTask implements Runnable {
     }
 
     private Set<UUID> getCsvFileAndParse(BlobClient client) {
-        String csvPath = TMP_DIR + File.separatorChar + "recovered-documents.xlsx";
+        String csvPath = TMP_DIR + File.separatorChar + "recovered-documents.csv";
         try {
 
             client.downloadToFile(csvPath);
@@ -154,6 +161,7 @@ public class CaseDocumentsRecoveryTask implements Runnable {
     private static Set<UUID> getUuids(String csvPath) {
         try (Stream<String> stream = Files.lines(Paths.get(csvPath), StandardCharsets.UTF_8)) {
             return stream
+                    .skip(1)// skip the first line (header)
                     .flatMap(line -> Arrays.stream(line.split(",")))
                     .map(getStringUuidFunction())
                     .filter(Objects::nonNull)
