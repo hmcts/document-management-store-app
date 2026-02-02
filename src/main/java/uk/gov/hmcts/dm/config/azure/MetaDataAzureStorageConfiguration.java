@@ -26,6 +26,9 @@ public class MetaDataAzureStorageConfiguration {
     @Value("${azure.storage.orphandocument-blob-container-reference}")
     private String orphanDocumentContainerName;
 
+    @Value("${azure.storage.recovereddocuments-blob-container-reference}")
+    private String recoveredDocumentsContainerName;
+
     private static final String AZURE_STORAGE_EMULATOR_AZURITE =  "azure-storage-emulator-azurite";
 
     @Bean(name = "metadataStorage")
@@ -66,6 +69,23 @@ public class MetaDataAzureStorageConfiguration {
             : connectionString;
 
         final BlobContainerClient client = getClient(blobAddress, orphanDocumentContainerName);
+
+        try {
+            client.create();
+            return client;
+        } catch (Exception e) {
+            return client;
+        }
+    }
+
+    @Bean(name = "recoveredDocumentsStorage")
+    BlobContainerClient recoveredDocumentsBlobContainer() throws UnknownHostException {
+        final String blobAddress = connectionString.contains(AZURE_STORAGE_EMULATOR_AZURITE)
+                ? connectionString.replace(AZURE_STORAGE_EMULATOR_AZURITE,
+                InetAddress.getByName(AZURE_STORAGE_EMULATOR_AZURITE).getHostAddress())
+                : connectionString;
+
+        final BlobContainerClient client = getClient(blobAddress, recoveredDocumentsContainerName);
 
         try {
             client.create();

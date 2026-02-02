@@ -7,5 +7,6 @@ public enum AuditActions {
     UPDATED,
     MIGRATED,
     DELETED,
-    HARD_DELETED;
+    HARD_DELETED,
+    RECOVERED;
 }
