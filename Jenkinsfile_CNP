@@ -79,8 +79,13 @@ withPipeline(type , product, component) {
         env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
     }
 
+    enableFortifyScan('dm-aat')
+
+    afterAlways('fortify-scan') {
+        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+    }
+
     afterAlways('test') {
-        enableFortifyScan('dm-aat')
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/checkstyle/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/integration/**/*'
