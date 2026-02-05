@@ -225,7 +225,8 @@ public class StoredDocumentController {
                     e.getMessage()
                 );
             } else {
-                logger.warn("IOException streaming error, for  {} ", documentId, e);
+                logger.warn("IOException streaming error, for  {}, {} ", documentId, e.getMessage());
+                logger.debug("IOException streaming error details: ", e);
             }
 
             logger.debug("ContentType for documentId : {} is : {} ", documentId, documentContentVersion.getMimeType());

@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.functional;
 import com.azure.storage.blob.specialized.BlockBlobClient;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import uk.gov.hmcts.dm.functional.blob.BlobReader;
 
@@ -14,6 +15,7 @@ import static uk.gov.hmcts.dm.functional.V1MimeTypes.VIDEO_MPEG_VALUE;
 
 @Slf4j
 @SuppressWarnings("java:S6813") // Suppress SonarQube warning for autowired field
+@EnabledIfEnvironmentVariable(named = "TEST_URL", matches = ".*")
 public class LargeMultiMediaUploadIT extends BaseIT {
 
     @Autowired

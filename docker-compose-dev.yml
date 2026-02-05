@@ -11,13 +11,13 @@ services:
             - POSTGRES_USER=evidence
             - POSTGRES_PASSWORD=evidence
         ports:
-            - 5432:5432
+            - 6432:5432
 
     azure-storage-emulator-azurite:
         image: mcr.microsoft.com/azure-storage/azurite
         ports:
             - 10000:10000
-        command: "azurite-blob --blobHost 0.0.0.0 --loose"
+        command: "azurite-blob --blobHost 0.0.0.0 --loose --skipApiVersionCheck"
         volumes:
             - ccd-docker-azure-blob-data:/opt/azurite/folder
 
