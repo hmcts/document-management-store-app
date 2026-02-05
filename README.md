@@ -40,12 +40,6 @@ repository).
 # Cloning repo and running though docker
 git clone https://github.com/hmcts/document-management-store-app.git
 cd document-management-store-app/
-
-docker-compose -f docker-compose-dev.yml pull
-docker-compose -f docker-compose-dev.yml up -d
-
-# Run application
-./gradlew bootRun
 ```
 
 #### Clean and build the application:
