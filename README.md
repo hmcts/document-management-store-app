@@ -37,30 +37,40 @@ repository).
 
 ## Setup
 ```bash
-# Get the connection string for Azure Blob Store and put it in place of getOneFromPortalAzure in application.yaml
-# Do not commit it!!!
-azure:
-  storage:
-      connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:getOneFromPortalAzure}
-```
-
-```bash
 # Cloning repo and running though docker
 git clone https://github.com/hmcts/document-management-store-app.git
 cd document-management-store-app/
+```
 
-az login
-az acr login --name hmctspublic && az acr login --name hmctsprivate
+#### Clean and build the application:
+```
+./gradlew clean
+./gradlew build
+```
+To run just the unit tests:
+```
+./gradlew test
+```
+To run the integration tests:
 
+Requires docker desktop running
+
+```
+./gradlew integration
+```
+
+#### To run the application:
+
+Requires docker desktop running
+
+```bash
 docker-compose -f docker-compose-dev.yml pull
 docker-compose -f docker-compose-dev.yml up -d
 
-#Run below script to create the Batch related tables for local set up ONLY
-./bin/create-batch-related-tables-postresql.sh
-
 # Run application
-./gradlew bootRun
+./gradlew bootRun```
 ```
+
 ### Integration
 There is currently a Java Client available here:
 https://github.com/hmcts/document-management-client
@@ -75,20 +85,16 @@ On local machine with server up and running, link to swagger is as below
 A list of our endpoints can be found here
 > https://hmcts.github.io/cnp-api-docs/swagger.html?url=https://hmcts.github.io/cnp-api-docs/specs/document-management-store-app.json
 
-### Functional Tests
-To use the functional tests locally for large .mp4 and .doc files please first download them
-from here : [Large Files](https://portal.azure.com/#blade/Microsoft_Azure_Storage/ContainerMenuBlade/overview/storageAccountId/%2Fsubscriptions%2Fbf308a5c-0624-4334-8ff8-8dca9fd43783%2FresourceGroups%2Fdm-store-sandbox%2Fproviders%2FMicrosoft.Storage%2FstorageAccounts%2Fdmstorefiles/path/dm-store-files/etag/%220x8D83471B8B0648C%22/defaultEncryptionScope/%24account-encryption-key/denyEncryptionScopeOverride//defaultId//publicAccessVal/None)
-and place them under your resources folder document-management-store-app/src/functionalTest/resources
-This would make them available to be used in the Functional Test -
-```bash
-MV1 (R1) As authenticated user I should not be able to upload files that exceed permitted sizes
-```
-- Ensure the @Pending annotation is removed before running the test locally.
-- Revert your changes after tests are run  as these are for running the above F-Test on local only.
-
 ### Contract Tests (Pact)
-For Executing the contract provider test  execute
-```./gradlew contractTest```
-For Publishing the verification results to broker execute
-```./gradlew runProviderPactVerification```
+For executing the pact consumer test run
+
+```./gradlew contract```
+
+The results of the  consumer test will be published to the pact folder in the root directory of the project.
+
+To run the provider pact tests, first comment the broker configuration
+in the BaseProviderTest and StoredDocumentMultipartProviderTest classes and uncomment the pact folder configuration,
+then run the below command to execute the provider pact tests locally.
+
+```./gradlew providerContractTests```
 

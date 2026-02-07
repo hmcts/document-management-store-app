@@ -16,6 +16,9 @@ spring:
     date-format: "yyyy-MM-dd'T'HH:mm:ssZ"
     serialization:
       indent_output: true
+  flyway:
+    postgresql:
+      transactional-lock: false
   servlet:
     multipart:
       max-file-size: ${MAX_FILE_SIZE:4000MB}
@@ -41,7 +44,7 @@ spring:
     allow-bean-definition-overriding: true
 
   datasource:
-    url: jdbc:postgresql://${SPRING_DATASOURCE_HOST:localhost}:${SPRING_DATASOURCE_PORT:5432}/${SPRING_DATASOURCE_NAME:evidence}${SPRING_DATASOURCE_OPTIONS:?ssl=disable}
+    url: jdbc:postgresql://${SPRING_DATASOURCE_HOST:localhost}:${SPRING_DATASOURCE_PORT:6432}/${SPRING_DATASOURCE_NAME:evidence}${SPRING_DATASOURCE_OPTIONS:?ssl=disable}
     username: ${SPRING_DATASOURCE_USERNAME:evidence}
     password: ${SPRING_DATASOURCE_PASSWORD:evidence}
     hikari:
