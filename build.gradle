@@ -87,7 +87,7 @@ tasks.withType(JavaCompile).configureEach {
 
 def versions = [
     ehcache            : '3.11.1',
-    postgresql         : '42.7.9',
+    postgresql         : '42.7.10',
     jackson            : '2.21.0',
     serenity           : '5.2.2',
     logging            : '6.1.9',
