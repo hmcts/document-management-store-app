@@ -1,4 +1,4 @@
-FROM postgres:18.1
+FROM postgres:18.2
 
 LABEL maintainer = "HMCTS Evidence Team <https://github.com/hmcts>"
 
