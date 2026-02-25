@@ -21,7 +21,7 @@ public class DocumentDeletionApplication {
     private final DocumentDeletionService deletionService;
 
     // optional ISO date (e.g. 2025-08-01). If blank, falls back to 1 year ago.
-    @Value("${deletion.cutoffDate:2025-08-01}")
+    @Value("${deletion.cutoffDate:2025-09-01}")
     private String cutoffDateProp;
 
     public DocumentDeletionApplication(DocumentDeletionService deletionService) {
