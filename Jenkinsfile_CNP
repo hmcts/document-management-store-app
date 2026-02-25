@@ -68,6 +68,12 @@ withPipeline(type , product, component) {
             sh ./publish-swagger-docs.sh
              '''
         }
+
+        enableFortifyScan('dm-aat')
+    
+        afterAlways('fortify-scan') {
+            steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/Fortify Scan/**/*'
+        }
     }
 
     onPR {
@@ -79,7 +85,6 @@ withPipeline(type , product, component) {
         env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
     }
 
-    enableFortifyScan('dm-aat')
     afterAlways('test') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/checkstyle/**/*'
