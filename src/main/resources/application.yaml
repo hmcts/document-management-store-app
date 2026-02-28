@@ -99,11 +99,28 @@ auth:
       client:
         baseUrl: ${IDAM_S2S_BASE_URI:http://localhost:4502}
 
+em-npa:
+  api:
+    url: ${EM_NPA_API_URL:http://localhost:4623}
+
+em-anno:
+  api:
+    url: ${EM_ANNO_API_URL:http://localhost:4623}
+
 idam:
+  api:
+    url: ${IDAM_USER_BASE_URI:http://localhost:4501}
+  client:
+    id: ${DM_STORE_IDAM_CLIENT_ID:dm-store}
+    secret: ${DM_STORE_IDAM_CLIENT_SECRET:}
+    redirect_uri: ${IDAM_CLIENT_REDIRECT_URI:http://localhost:4603/oauth2/callback}
+  system-user:
+    username: ${DM_STORE_SYSTEM_UPDATE_IDAM_USER:}
+    password: ${DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD:}
   s2s-auth:
     url: ${IDAM_S2S_BASE_URI:http://localhost:4502}
-    totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
-    microservice: ${S2S_SERVICE_NAME:em_gw}
+    totp_secret: ${DM_S2S_KEY:AAAAAAAAAAAAAAAA}
+    microservice: ${DM_S2S_SERVICE_NAME:dm_store}
   s2s-authorised:
     services: ${S2S_NAMES_WHITELIST:divorce,ccd,em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,cmc_claim_store,em_npa_app,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals,xui_webapp,ccd_case_document_am_api,unspec_service,nfdiv_case_api,wa_task_management_api,wa_task_configuration_api,adoption_web,adoption_cos_api,et_cos,ccd_case_disposer,finrem_case_orchestration}
 
@@ -222,6 +239,7 @@ toggle:
   overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
   chunking: ${ENABLE_CHUNKING:false}
   orphandocumentdeletion: ${ENABLE_ORPHAN_DOCUMENT_DELETION:false}
+  deletemetadatafordocument: ${ENABLE_DELETE_METADATA_FOR_DOCUMENT:false}
 
 task:
   env: ${TASK_ENV:documentTaskLock-local}

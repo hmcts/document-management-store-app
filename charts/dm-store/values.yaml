@@ -23,6 +23,16 @@ java:
           alias: spring.datasource.password
         - name: app-insights-connection-string
           alias: app-insights-connection-string
+        - name: microservicekey-dm-store
+          alias: DM_S2S_KEY
+        - name: dm-store-idam-secret
+          alias: DM_STORE_IDAM_CLIENT_SECRET
+        - name: dm-store-idam-client-id
+          alias: DM_STORE_IDAM_CLIENT_ID
+        - name: dm-store-system-update-idam-user
+          alias: DM_STORE_SYSTEM_UPDATE_IDAM_USER
+        - name: dm-store-system-update-idam-password
+          alias: DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD
   environment:
     # db
     SPRING_DATASOURCE_PORT: 5432
@@ -36,10 +46,13 @@ java:
       # idam
     IDAM_USER_BASE_URI: 'https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net'
     IDAM_S2S_BASE_URI: 'http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal'
+    EM_NPA_API_URL: "http://em-npa-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
+    EM_ANNO_API_URL: "http://em-anno-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
 
     S2S_NAMES_WHITELIST: divorce,ccd,em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,em_npa_app,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals,xui_webapp,ccd_case_document_am_api,unspec_service,nfdiv_case_api,wa_task_management_api,wa_task_configuration_api,adoption_web,adoption_cos_api,et_cos,ccd_case_disposer,finrem_case_orchestration
     DELETE_ENDPOINT_WHITELIST: ccd_case_disposer,em_gw
     RUN_DB_MIGRATION_ON_STARTUP: 'false'
+    DM_S2S_SERVICE_NAME: dm_store
 
     # Toggles
     ENABLE_IDAM_HEALTH_CHECK: 'false'
@@ -82,7 +95,7 @@ java:
     CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS: 1
     CASE_DOCUMENTS_DELETION_BATCH_SIZE: 1
     CASE_DOCUMENTS_DELETION_SERVICE_NAME: ccd_case_disposer
-
+    ENABLE_DELETE_METADATA_FOR_DOCUMENT: false
 blobstorage:
   resourceGroup: dm-store-aso-preview-rg
   teamName: "CCD"

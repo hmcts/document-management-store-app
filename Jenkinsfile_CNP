@@ -21,7 +21,12 @@ def secrets = [
         secret('microservicekey-ccd-case-disposer', 'CCD_CASE_DISPOSER_S2S_TOKEN')
     ],
     'dm-${env}': [
-        secret('dm-store-storage-account-primary-connection-string', 'STORAGEACCOUNT_PRIMARY_CONNECTION_STRING')
+        secret('dm-store-storage-account-primary-connection-string', 'STORAGEACCOUNT_PRIMARY_CONNECTION_STRING'),
+        secret('microservicekey-dm-store', 'DM_S2S_KEY'),
+        secret('dm-store-idam-client-id', 'DM_STORE_IDAM_CLIENT_ID'),
+        secret('dm-store-idam-secret', 'DM_STORE_IDAM_CLIENT_SECRET'),
+        secret('dm-store-system-update-idam-user', 'DM_STORE_SYSTEM_UPDATE_IDAM_USER'),
+        secret('dm-store-system-update-idam-password', 'DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD')
     ]
 ]
 
@@ -47,6 +52,11 @@ withPipeline(type , product, component) {
     env.PACT_BROKER_PORT = "443"
     env.PACT_BROKER_SCHEME = "https"
     env.ENABLE_SECURE_URL = true
+    env.IDAM_S2S_BASE_URI = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+    env.EM_ANNO_API_URL = "http://em-anno-aat.service.core-compute-aat.internal"
+    env.EM_NPA_API_URL = "http://em-npa-aat.service.core-compute-aat.internal"
+    env.DM_S2S_SERVICE_NAME = "dm_store"
+
 
     enableDbMigration('dm')
     overrideVaultEnvironments(vaultOverrides)
