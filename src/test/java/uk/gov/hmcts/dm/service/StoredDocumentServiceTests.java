@@ -171,7 +171,7 @@ class StoredDocumentServiceTests {
 
         assertEquals(Set.of("a", "b"), storedDocument.getRoles());
         assertEquals(PRIVATE, storedDocument.getClassification());
-        assertNull(storedDocument.getMetadata());
+        assertNotNull(storedDocument.getMetadata());
         assertNotNull(storedDocument.getTtl());
         assertEquals(testFile.getContentType(), latestVersion.getMimeType());
         assertEquals(testFile.getOriginalFilename(), latestVersion.getOriginalDocumentName());
@@ -180,7 +180,6 @@ class StoredDocumentServiceTests {
 
     @Test
     void testSaveItemsWithCommandAndToggleConfiguration() {
-        when(toggleConfiguration.isMetadatasearchendpoint()).thenReturn(true);
 
         UploadDocumentsCommand uploadDocumentsCommand = new UploadDocumentsCommand();
         uploadDocumentsCommand.setFiles(List.of(testFile));
