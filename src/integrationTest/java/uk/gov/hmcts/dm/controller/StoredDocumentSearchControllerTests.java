@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Disabled("Serach endpoint is awaiting removal, this test will be removed once the endpoint is removed")
+@Disabled("Search endpoint is awaiting removal, this test will be removed once the endpoint is removed")
 class StoredDocumentSearchControllerTests extends ComponentTestBase {
 
     @Mock

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.Map;
 
-@Disabled("Serach endpoint is awaiting removal, this test will be removed once the endpoint is removed")
+@Disabled("Search endpoint is awaiting removal, this test will be removed once the endpoint is removed")
 public class SearchDocumentIT extends BaseIT {
 
     private static final String DOCUMENTS_FILTER_ENDPOINT = "/documents/filter";
