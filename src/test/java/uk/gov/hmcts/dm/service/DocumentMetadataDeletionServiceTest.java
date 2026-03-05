@@ -156,4 +156,17 @@ class DocumentMetadataDeletionServiceTest {
         verify(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
         verify(emNpaService, never()).deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
     }
+
+    @Test
+    void deleteExternalMetadata_EmNpaThrows_ReturnsFalse() {
+        when(emAnnoService.deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN)).thenReturn(true);
+        doThrow(new RuntimeException("em-npa API error"))
+            .when(emNpaService).deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+
+        boolean result = documentMetadataDeletionService.deleteExternalMetadata(DOCUMENT_ID);
+
+        assertFalse(result);
+        verify(emAnnoService).deleteDocumentData(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+        verify(emNpaService).deleteRedactionsForDocument(DOCUMENT_ID_STRING, USER_TOKEN, SERVICE_TOKEN);
+    }
 }
