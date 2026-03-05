@@ -4,6 +4,7 @@ import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,6 +42,7 @@ public class DocumentMetadataDeletionIT {
     private DocumentMetadataDeletionService documentMetadataDeletionService;
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "ENABLE_DELETE_METADATA_FOR_DOCUMENT", matches = "true")
     public void shouldCallEmAnnoAndEmNpaEndpointsWhenDeletingMetadata() {
         UUID testDocumentId = UUID.fromString("4fee044b-c820-44e5-a951-397c77e43aeb");
         boolean result = documentMetadataDeletionService.deleteExternalMetadata(testDocumentId);

@@ -48,9 +48,3 @@ idam:
   system-user:
     username: ${DM_STORE_SYSTEM_UPDATE_IDAM_USER:system.update@hmcts.net}
     password: ${DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD:Password12}
-
-azure:
-  storage:
-    connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:false}
-    blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
-
