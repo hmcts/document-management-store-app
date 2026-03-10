@@ -28,7 +28,6 @@ public class EmNpaService {
                     documentId,
                     response != null ? response.getStatusCode() : null);
             }
-            log.info("Successfully deleted redactions for document: {}", documentId);
             return isNoContent;
         } catch (Exception e) {
             log.error("Failed to delete redactions for document: {}", documentId, e);

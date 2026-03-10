@@ -28,7 +28,6 @@ public class EmAnnoService {
                     docId,
                     response != null ? response.getStatusCode() : null);
             }
-            log.info("Successfully deleted document data for docId: {}", docId);
             return isNoContent;
         } catch (Exception e) {
             log.error("Failed to delete document data for docId: {}", docId, e);
