@@ -16,4 +16,3 @@ toggle.folderendpoint=${ENABLE_FOLDER_API:true}
 toggle.includeidamhealth=${ENABLE_IDAM_HEALTH_CHECK:false}
 toggle.ttl=${ENABLE_TTL:false}
 toggle.thumbnail=${ENABLE_THUMBNAIL:true}
-toggle.testing=${ENABLE_TESTING:true}

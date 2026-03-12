@@ -29,7 +29,6 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
-import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.AuditEntryService;
@@ -116,9 +115,6 @@ public abstract class BaseProviderTest {
 
     @MockitoBean
     protected ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
-
-    @MockitoBean
-    protected TestController testController;
 
     @Autowired
     protected BaseProviderTest(

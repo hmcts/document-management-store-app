@@ -37,8 +37,6 @@ java:
     RUN_DB_MIGRATION_ON_STARTUP: true
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(BLOB_ACCOUNT_NAME);AccountKey=$(BLOB_ACCESS_KEY);EndpointSuffix=core.windows.net"
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 1000
-    ENABLE_METADATA_MIGRATION: 'false'
-    STORAGE_CONTAINER_METADATA_CONTAINER_NAME: metadatamigration{{ .Release.Name }}
     STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME: orphandocumentdeletion{{ .Release.Name }}
     STORAGE_CONTAINER_RECOVERED_DOCUMENTS_CONTAINER_NAME: recovereddocument{{ .Release.Name }}
   postgresql:
