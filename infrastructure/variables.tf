@@ -110,10 +110,6 @@ variable "enable_idam_healthcheck" {
   default = "false"
 }
 
-variable "enable_metadata_search" {
-  default = "true"
-}
-
 variable "enable_document_and_metadata_upload" {
   default = "true"
 }
