@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.errorhandler;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,9 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
             } else {
                 problemDetail = ProblemDetail.forStatusAndDetail(statusCode, ex.getLocalizedMessage());
             }
+
+            String rootCauseMessage = ExceptionUtils.getRootCauseMessage(ex);
+            problemDetail.setProperty("error", rootCauseMessage.substring(rootCauseMessage.indexOf(":") + 2));
             body = problemDetail;
         }
 
