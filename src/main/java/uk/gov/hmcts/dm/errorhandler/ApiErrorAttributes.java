@@ -3,7 +3,6 @@ package uk.gov.hmcts.dm.errorhandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.stereotype.Component;
@@ -24,9 +23,6 @@ import static org.springframework.boot.web.error.ErrorAttributeOptions.Include.S
 public class ApiErrorAttributes extends DefaultErrorAttributes {
 
     private static final Logger log = LoggerFactory.getLogger(ApiErrorAttributes.class);
-
-    @Value("${errors.globalIncludeStackTrace}")
-    private boolean globalIncludeStackTrace = true;
 
     private ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
 
@@ -58,10 +54,6 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
         errorAttributes.put("status", errorStatusCodeAndMessage.getStatusCode());
         if (throwable != null) {
             log.error(throwable.getMessage(), throwable);
-        }
-
-        if (!globalIncludeStackTrace) {
-            errorAttributes.remove("exception");
         }
 
         errorAttributes.remove("trace");
