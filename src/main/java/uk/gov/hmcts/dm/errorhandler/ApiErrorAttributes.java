@@ -56,6 +56,7 @@ public class ApiErrorAttributes extends DefaultErrorAttributes {
             log.error(throwable.getMessage(), throwable);
         }
 
+        errorAttributes.remove("exception");
         errorAttributes.remove("trace");
         errorAttributes.remove("message");
 
