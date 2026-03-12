@@ -1,11 +1,9 @@
 package uk.gov.hmcts.dm.errorhandler;
 
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,9 +30,6 @@ import java.util.stream.Collectors;
 public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
     MessageSource messageSource;
-
-    @Value("${errors.globalIncludeStackTrace}")
-    private boolean globalIncludeStackTrace;
 
     @Autowired
     public ExceptionTranslator(MessageSource messageSource) {
@@ -100,12 +95,6 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
             } else {
                 problemDetail = ProblemDetail.forStatusAndDetail(statusCode, ex.getLocalizedMessage());
             }
-
-            String rootCauseMessage = ExceptionUtils.getRootCauseMessage(ex);
-            if (globalIncludeStackTrace) {
-                problemDetail.setProperty("exception", ExceptionUtils.getRootCause(ex).getClass().getName());
-            }
-            problemDetail.setProperty("error", rootCauseMessage.substring(rootCauseMessage.indexOf(":") + 2));
             body = problemDetail;
         }
 
