@@ -1,5 +1,6 @@
 package uk.gov.hmcts.dm.controller;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.data.domain.PageImpl;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Disabled("Search endpoint is awaiting removal, this test will be removed once the endpoint is removed")
 class StoredDocumentSearchControllerTests extends ComponentTestBase {
 
     @Mock

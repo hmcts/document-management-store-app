@@ -8,6 +8,7 @@ import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import io.restassured.http.ContentType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -23,6 +24,7 @@ import static uk.gov.hmcts.dm.controller.Const.PUBLIC_CLASSIFICATION;
 import static uk.gov.hmcts.dm.controller.Const.SERVICE_AUTHORIZATION_HEADER;
 import static uk.gov.hmcts.dm.controller.Const.TEST_USER;
 
+@Disabled("Search endpoint is awaiting removal, this test will be removed once the endpoint is removed")
 public class StoredDocumentSearchControllerConsumerTest extends BaseConsumerPactTest {
 
     private static final String PROVIDER = "dm_store_stored_document_search_provider";

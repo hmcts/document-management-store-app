@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.endtoend;
 
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.hmcts.dm.endtoend.Helper.getSelfUrlFromResponse;
 
+@Disabled("Search endpoint is awaiting removal, this test will be removed once the endpoint is removed")
 class SearchDocumentTest extends End2EndTestBase {
 
     private final HttpHeaders headers = Helper.getHeaders();

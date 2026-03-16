@@ -105,7 +105,7 @@ public class StoredDocumentService {
         document.setRoles(uploadDocumentsCommand.getRoles() != null
             ? new HashSet<>(uploadDocumentsCommand.getRoles()) : null);
 
-        if (toggleConfiguration.isMetadatasearchendpoint()) {
+        if (Objects.nonNull(uploadDocumentsCommand.getMetadata())) {
             document.setMetadata(uploadDocumentsCommand.getMetadata());
         }
         document.setTtl(uploadDocumentsCommand.getTtl());
