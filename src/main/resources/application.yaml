@@ -138,9 +138,6 @@ app-insights:
   request-component: on
   telemetry-component: on
 
-errors:
-  globalIncludeStackTrace: ${SHOW_STACK_TRACE:true}
-
 info:
   app:
     environment: ${PACKAGES_ENVIRONMENT:local}
