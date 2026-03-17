@@ -9,9 +9,8 @@ spring:
   data:
     rest:
       detection-strategy: annotated
-  # cloud:
-  #   compatibility-verifier:
-  #     enabled: false
+  lifecycle:
+    timeout-per-shutdown-phase: ${TIMEOUT_SERVER_SHUTDOWN_PHASE:1m}
   jackson:
     date-format: "yyyy-MM-dd'T'HH:mm:ssZ"
     serialization:
