@@ -20,7 +20,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '12.1.6'
     id 'au.com.dius.pact' version '4.6.20'
     id 'org.flywaydb.flyway' version '11.20.3'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.3'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.4'
 }
 
 group = 'uk.gov.hmcts.dm'
@@ -89,7 +89,7 @@ def versions = [
     ehcache            : '3.11.1',
     postgresql         : '42.7.10',
     jackson            : '2.21.1',
-    serenity           : '5.3.3',
+    serenity           : '5.3.5',
     logging            : '8.0.0',
     pact_version       : '4.6.20',
     emTestHelper       : '2.1.1',
@@ -171,7 +171,7 @@ dependencies {
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-params', version: versions.jupiter
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.5'
-    testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.6'
+    testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.7'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
