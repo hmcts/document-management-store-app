@@ -49,7 +49,6 @@ java:
     ENABLE_FOLDER_API: 'true'
     ENABLE_TTL: 'false'
     ENABLE_THUMBNAIL: 'true'
-    ENABLE_METADATA_MIGRATION: 'false'
     ENABLE_OVERRIDE_METADATA: 'false'
     ENABLE_CHUNKING: 'false'
     ENABLE_ORPHAN_DOCUMENT_DELETION: 'false'

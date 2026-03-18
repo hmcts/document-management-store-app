@@ -125,7 +125,6 @@ azure:
       connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1}
       blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
       enabled: true
-      metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
       orphandocument-blob-container-reference: ${STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME:orphandocuments}
       recovereddocuments-blob-container-reference: ${STORAGE_CONTAINER_RECOVERED_DOCUMENTS_CONTAINER_NAME:recovereddocuments}
   upload:
@@ -213,8 +212,6 @@ toggle:
   folderendpoint: ${ENABLE_FOLDER_API:true}
   ttl: ${ENABLE_TTL:false}
   thumbnail: ${ENABLE_THUMBNAIL:true}
-  testing: ${ENABLE_TESTING:true}
-  metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
   overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
   chunking: ${ENABLE_CHUNKING:false}
   orphandocumentdeletion: ${ENABLE_ORPHAN_DOCUMENT_DELETION:false}
