@@ -2,7 +2,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.20.3")
+        classpath("org.flywaydb:flyway-database-postgresql:12.1.1")
     }
 }
 
@@ -19,8 +19,8 @@ plugins {
     id 'info.solidsoft.pitest' version '1.19.0-rc.3'
     id 'org.owasp.dependencycheck' version '12.1.6'
     id 'au.com.dius.pact' version '4.6.20'
-    id 'org.flywaydb.flyway' version '11.20.3'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.3'
+    id 'org.flywaydb.flyway' version '12.1.1'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.7'
 }
 
 group = 'uk.gov.hmcts.dm'
@@ -89,11 +89,11 @@ def versions = [
     ehcache            : '3.11.1',
     postgresql         : '42.7.10',
     jackson            : '2.21.1',
-    serenity           : '5.3.3',
+    serenity           : '5.3.7',
     logging            : '8.0.0',
     pact_version       : '4.6.20',
     emTestHelper       : '2.1.1',
-    shedlock           : '7.6.0',
+    shedlock           : '7.7.0',
     hibernate          : '6.6.44.Final',
     jupiter            : '6.0.3',
     springSecurity     : '7.0.2'
@@ -119,7 +119,7 @@ dependencies {
         exclude group: "org.glassfish.jaxb", module: "jaxb-runtime"
     }
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '7.0.5'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '7.0.6'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
@@ -140,8 +140,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.20.3'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.20.3'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '12.1.1'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '12.1.1'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.4'
@@ -172,7 +172,7 @@ dependencies {
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-params', version: versions.jupiter
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.5'
-    testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.6'
+    testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.7'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
@@ -260,6 +260,7 @@ def coverageExclusionList = [
     '**uk/gov/hmcts/dm/actuate/health/IdamHealth.java',
     '**uk/gov/hmcts/dm/actuate/health/IdamServiceHealth.java',
     '**uk/gov/hmcts/dm/controller/WelcomeController.java',
+    '**uk/gov/hmcts/dm/controller/StoredDocumentSearchController.java',
     '**uk/gov/hmcts/dm/service/Constants.java',
     '**uk/gov/hmcts/dm/service/FileContentVerifier*',
     '**uk/gov/hmcts/dm/service/DocumentContentVersionModel.java',

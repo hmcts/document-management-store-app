@@ -19,7 +19,6 @@ import org.springframework.web.context.WebApplicationContext;
 import uk.gov.hmcts.dm.componenttests.sugar.RestActions;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
-import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
 import uk.gov.hmcts.dm.service.AuditEntryService;
 import uk.gov.hmcts.dm.service.AuditedDocumentContentVersionOperationsService;
@@ -95,9 +94,6 @@ public abstract class ComponentTestBase {
     private IdamClient idamClient;
 
     protected RestActions restActions;
-
-    @MockitoBean
-    protected TestController testController;
 
     @BeforeEach
     public void setUp() {

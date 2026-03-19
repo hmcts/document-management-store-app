@@ -24,8 +24,6 @@ class MappingUrlIT extends BaseIT {
 
     @Value("${toggle.metadatasearchendpoint}")
     private boolean metadatasearchendpoint;
-    @Value("${toggle.testing}")
-    private boolean testing;
     private List<String> allEndpoints;
 
     @Autowired
@@ -46,13 +44,6 @@ class MappingUrlIT extends BaseIT {
             endpoint.contains("owned")), metadatasearchendpoint);
         assertEquals(allEndpoints.stream().anyMatch(endpoint ->
             endpoint.contains("filter")), metadatasearchendpoint);
-    }
-
-    @Test
-    void toggleTestingToggleTesting() {
-        assertEquals(allEndpoints.stream().anyMatch(endpoint ->
-            endpoint.equals("{GET [/testing/azure-storage-binary-exists/{id}]}")), testing);
-
     }
 
 }

@@ -18,13 +18,12 @@ base-urls:
     dm-store: ${TEST_URL:http://localhost:4603}
 
 toggle:
-    metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:true}
+    metadatasearchendpoint: ${ENABLE_METADATA_SEARCH:false}
     documentandmetadatauploadendpoint: ${ENABLE_DOCUMENT_AND_METADATA_UPLOAD:true}
     folderendpoint: ${ENABLE_FOLDER_API:true}
     ttl: ${ENABLE_TTL:false}
     thumbnail: ${ENABLE_THUMBNAIL:true}
     includeidamhealth: ${ENABLE_IDAM_HEALTH_CHECK:false}
-    metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
     secureurl: ${ENABLE_SECURE_URL:false}
     deletemetadatafordocument: ${ENABLE_DELETE_METADATA_FOR_DOCUMENT:false}
 

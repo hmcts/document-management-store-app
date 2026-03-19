@@ -19,12 +19,10 @@ show_sql                  = "false"
 // Toggle Features
 ////////////////////////////////////////////////
 enable_idam_healthcheck             = "false"
-enable_metadata_search              = "true"
 enable_document_and_metadata_upload = "false"
 enable_folder_api                   = "true"
 enable_ttl                          = "false"
 enable_thumbnail                    = "true"
-enable_testing                      = "false"
 
 ////////////////////////////////////////////////
 // Addtional
