@@ -44,19 +44,24 @@ public class StoredDocumentService {
 
     private final BlobStorageDeleteService blobStorageDeleteService;
 
+    private final DocumentMetadataDeletionService documentMetadataDeletionService;
+
     @Autowired
     public StoredDocumentService(StoredDocumentRepository storedDocumentRepository,
                                  DocumentContentVersionRepository documentContentVersionRepository,
                                  ToggleConfiguration toggleConfiguration,
                                  SecurityUtilService securityUtilService,
                                  BlobStorageWriteService blobStorageWriteService,
-                                 BlobStorageDeleteService blobStorageDeleteService) {
+                                 BlobStorageDeleteService blobStorageDeleteService,
+                                 @Autowired(required = false)
+                                 DocumentMetadataDeletionService documentMetadataDeletionService) {
         this.storedDocumentRepository = storedDocumentRepository;
         this.documentContentVersionRepository = documentContentVersionRepository;
         this.toggleConfiguration = toggleConfiguration;
         this.securityUtilService = securityUtilService;
         this.blobStorageWriteService = blobStorageWriteService;
         this.blobStorageDeleteService = blobStorageDeleteService;
+        this.documentMetadataDeletionService = documentMetadataDeletionService;
     }
 
     public Optional<StoredDocument> findOne(UUID id) {
@@ -78,7 +83,6 @@ public class StoredDocumentService {
     public StoredDocument save(StoredDocument storedDocument) {
         return storedDocumentRepository.save(storedDocument);
     }
-
 
     public List<StoredDocument> saveItems(UploadDocumentsCommand uploadDocumentsCommand,
                                           Map<MultipartFile, String> mimeTypes) {
@@ -166,7 +170,6 @@ public class StoredDocumentService {
         save(storedDocument);
     }
 
-
     public void updateMigratedStoredDocument(
         @NonNull StoredDocument storedDocument,
         Map<String, String> metadata
@@ -217,6 +220,15 @@ public class StoredDocumentService {
 
         for (UUID storedDocumentId : storedDocumentIds) {
             try {
+
+                if (documentMetadataDeletionService != null) {
+                    boolean isDeleted = documentMetadataDeletionService.deleteExternalMetadata(storedDocumentId);
+                    if (!isDeleted) {
+                        log.error("EXTERNAL_METADATA_DELETION_FAILED - Skipping DM-Store deletion for documentId: {}",
+                            storedDocumentId);
+                        continue;
+                    }
+                }
 
                 List<DocumentContentVersion> documentContentVersions =
                         documentContentVersionRepository.findAllByStoredDocumentId(storedDocumentId);
