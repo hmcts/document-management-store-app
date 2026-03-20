@@ -19,7 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.hmcts.dm.DmApp;
+
+import uk.gov.hmcts.dm.DocumentDeletionApplication;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
@@ -38,7 +39,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = DmApp.class)
+    classes = DocumentDeletionApplication.class)
 @AutoConfigureMockMvc
 @WithMockUser
 @ActiveProfiles("local")
