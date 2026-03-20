@@ -1,7 +1,6 @@
 {
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/v2/api-docs_GET":"ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId?permanent=false_DELETE": "ignore",
-    "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/testing/azure-storage-binary-exists/id_GET": "ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/folders_POST": "ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/thumbnail_GET": "ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions_POST":"ignore",
@@ -11,7 +10,6 @@
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_GET":"ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_PATCH":"ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/folders/id_DELETE":"ignore",
-    "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/testing/metadata-migration-csv_POST":"ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/owned?page=10\u0026size=10\u0026sort=sort_POST":"ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId/versions/versionId/binary_GET":"ignore",
     "100000_A Client Error response code was returned by the server_http://dm-store-aat.service.core-compute-aat.internal/documents/documentId_POST":"ignore",

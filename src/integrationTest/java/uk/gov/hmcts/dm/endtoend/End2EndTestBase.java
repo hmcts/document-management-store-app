@@ -19,8 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+
 import uk.gov.hmcts.dm.DocumentDeletionApplication;
-import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
@@ -62,10 +62,6 @@ public abstract class End2EndTestBase {
 
     @MockitoBean
     protected BlobStorageDeleteService blobStorageDeleteService;
-
-    @MockitoBean
-    protected TestController testController;
-
 
     @BeforeEach
     public void setUp() throws IOException {

@@ -32,6 +32,7 @@ java:
     SPRING_DATASOURCE_USERNAME: pgadmin
     HIKARI_MAX_POOL_SIZE: 10
     DB_CONNECTION_TIMEOUT: 5000
+    TIMEOUT_SERVER_SHUTDOWN_PHASE: 1m
 
       # idam
     IDAM_USER_BASE_URI: 'https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net'
@@ -48,7 +49,6 @@ java:
     ENABLE_FOLDER_API: 'true'
     ENABLE_TTL: 'false'
     ENABLE_THUMBNAIL: 'true'
-    ENABLE_METADATA_MIGRATION: 'false'
     ENABLE_OVERRIDE_METADATA: 'false'
     ENABLE_CHUNKING: 'false'
     ENABLE_ORPHAN_DOCUMENT_DELETION: 'false'
