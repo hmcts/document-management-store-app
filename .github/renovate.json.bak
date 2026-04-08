@@ -8,7 +8,7 @@
       "\\Chart.yaml|requirements.yaml$"
     ],
     "aliases": {
-      "hmctspublic": "https://hmctspublic.azurecr.io/helm/v1/repo/"
+      "hmctsprod": "https://hmctsprod.azurecr.io/helm/v1/repo/"
     }
   },
   "extends": [
