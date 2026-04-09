@@ -38,7 +38,6 @@ java:
     STORAGEACCOUNT_PRIMARY_CONNECTION_STRING: "DefaultEndpointsProtocol=https;AccountName=$(BLOB_ACCOUNT_NAME);AccountKey=$(BLOB_ACCESS_KEY);EndpointSuffix=core.windows.net"
     DOCUMENT_METADATA_UPDATE_MILLISECONDS: 1000
     STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME: orphandocumentdeletion{{ .Release.Name }}
-    STORAGE_CONTAINER_RECOVERED_DOCUMENTS_CONTAINER_NAME: recovereddocument{{ .Release.Name }}
   postgresql:
     enabled: true
 blobstorage:
