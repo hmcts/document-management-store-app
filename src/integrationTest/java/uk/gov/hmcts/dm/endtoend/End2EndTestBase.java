@@ -64,9 +64,6 @@ public abstract class End2EndTestBase {
     protected BlobStorageDeleteService blobStorageDeleteService;
 
     @MockitoBean
-    protected TestController testController;
-
-    @MockitoBean
     private IdamClient idamClient;
 
     @BeforeEach
