@@ -2,7 +2,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:12.1.1")
+        classpath("org.flywaydb:flyway-database-postgresql:12.3.0")
     }
 }
 
@@ -10,17 +10,17 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.68'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '3.5.12'
+    id 'org.springframework.boot' version '3.5.13'
     id 'com.github.ben-manes.versions' version '0.53.0'
     id 'org.sonarqube' version '7.2.3.7755'
     id 'jacoco'
     id 'checkstyle'
     id 'io.freefair.lombok' version '9.2.0'
-    id 'info.solidsoft.pitest' version '1.19.0-rc.3'
+    id 'info.solidsoft.pitest' version '1.19.0'
     id 'org.owasp.dependencycheck' version '12.1.6'
     id 'au.com.dius.pact' version '4.6.20'
-    id 'org.flywaydb.flyway' version '12.1.1'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.7'
+    id 'org.flywaydb.flyway' version '12.3.0'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
 }
 
 group = 'uk.gov.hmcts.dm'
@@ -86,15 +86,15 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 def versions = [
-    ehcache            : '3.11.1',
+    ehcache            : '3.12.0',
     postgresql         : '42.7.10',
     jackson            : '2.21.2',
-    serenity           : '5.3.7',
+    serenity           : '5.3.10',
     logging            : '8.0.0',
     pact_version       : '4.6.20',
     emTestHelper       : '2.1.1',
     shedlock           : '7.7.0',
-    hibernate          : '6.6.45.Final',
+    hibernate          : '6.6.47.Final',
     jupiter            : '6.0.3',
     springSecurity     : '7.0.2'
 ]
@@ -103,7 +103,7 @@ ext['hibernate.version'] = versions.hibernate
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.33.2'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.33.3'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.0'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.3.0'
 
@@ -140,8 +140,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '12.1.1'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '12.1.1'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '12.3.0'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '12.3.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.4'
@@ -149,11 +149,11 @@ dependencies {
 
 
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
-    implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.7'
+    implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.8'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.1'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.2'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.2'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
@@ -243,7 +243,7 @@ tasks.register('integration', Test) {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '13.3.0'
+    toolVersion = '13.4.0'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
