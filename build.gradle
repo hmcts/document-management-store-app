@@ -15,7 +15,7 @@ plugins {
     id 'org.sonarqube' version '7.2.3.7755'
     id 'jacoco'
     id 'checkstyle'
-    id 'io.freefair.lombok' version '9.2.0'
+    id 'io.freefair.lombok' version '9.4.0'
     id 'info.solidsoft.pitest' version '1.19.0'
     id 'org.owasp.dependencycheck' version '12.2.1'
     id 'au.com.dius.pact' version '4.7.0'
