@@ -4,6 +4,7 @@ ARG PLATFORM=""
 
 FROM hmctsprod.azurecr.io/base/java${PLATFORM}:21-distroless
 
+USER hmcts
 COPY lib/applicationinsights.json /opt/app/
 COPY build/libs/dm-store.jar /opt/app/
 
