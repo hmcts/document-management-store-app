@@ -96,7 +96,7 @@ def versions = [
     shedlock           : '7.7.0',
     hibernate          : '6.6.50.Final',
     jupiter            : '6.0.3',
-    springSecurity     : '7.0.2'
+    springSecurity     : '7.0.4'
 ]
 
 ext['hibernate.version'] = versions.hibernate
@@ -167,7 +167,7 @@ dependencies {
         exclude(module: 'commons-logging')
     }
 
-    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '7.0.2'
+    testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: '7.0.4'
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-params', version: versions.jupiter
@@ -224,6 +224,38 @@ dependencyManagement {
         dependencySet(group: 'org.junit.platform', version: '6.0.3') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
+        }
+        dependency 'com.github.junrar:junrar:7.6.0'
+        dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.55') {
+            entry 'tomcat-embed-core'
+            entry 'tomcat-embed-websocket'
+            entry 'tomcat-embed-el'
+        }
+        dependencySet(group: 'io.netty', version: '4.1.133.Final') {
+            entry 'netty-buffer'
+            entry 'netty-codec'
+            entry 'netty-codec-dns'
+            entry 'netty-codec-http'
+            entry 'netty-codec-http2'
+            entry 'netty-codec-socks'
+            entry 'netty-common'
+            entry 'netty-handler'
+            entry 'netty-handler-proxy'
+            entry 'netty-resolver'
+            entry 'netty-resolver-dns'
+            entry 'netty-resolver-dns-classes-macos'
+            entry 'netty-resolver-dns-native-macos'
+            entry 'netty-transport'
+            entry 'netty-transport-classes-epoll'
+            entry 'netty-transport-classes-kqueue'
+            entry 'netty-transport-native-epoll'
+            entry 'netty-transport-native-kqueue'
+            entry 'netty-transport-native-unix-common'
+        }
+        dependencySet(group: 'org.apache.logging.log4j', version: '2.26.0') {
+            entry 'log4j-api'
+            entry 'log4j-core'
+            entry 'log4j-to-slf4j'
         }
     }
 }
