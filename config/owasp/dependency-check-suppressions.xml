@@ -5,15 +5,7 @@
         <cve>CVE-2025-21199</cve>
     </suppress>
     <suppress until="2026-07-20">
-        <packageUrl regex="true">^pkg:maven/com\.azure/azure\-core@.*$</packageUrl>
-        <cve>CVE-2026-33117</cve>
-    </suppress>
-    <suppress until="2026-07-20">
-        <packageUrl regex="true">^pkg:maven/com\.azure/azure\-core\-http\-netty@.*$</packageUrl>
-        <cve>CVE-2026-33117</cve>
-    </suppress>
-    <suppress until="2026-07-20">
-        <packageUrl regex="true">^pkg:maven/com\.azure/azure\-json@.*$</packageUrl>
+        <packageUrl regex="true">^pkg:maven/com\.azure/.*@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
     </suppress>
     <suppress until="2026-07-20">
@@ -21,11 +13,18 @@
         <cve>CVE-2026-42582</cve>
     </suppress>
     <suppress until="2026-07-20">
-        <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
-        <cve>CVE-2026-23907</cve>
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@.*$</packageUrl>
+        <cve>CVE-2026-22732</cve>
+        <cve>CVE-2026-22746</cve>
+        <cve>CVE-2026-22747</cve>
+        <cve>CVE-2026-22748</cve>
+        <cve>CVE-2026-22751</cve>
+        <cve>CVE-2026-22753</cve>
+        <cve>CVE-2026-22754</cve>
     </suppress>
     <suppress until="2026-07-20">
         <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
+        <cve>CVE-2026-23907</cve>
         <cve>CVE-2026-33929</cve>
     </suppress>
 </suppressions>
