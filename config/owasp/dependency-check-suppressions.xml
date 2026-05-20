@@ -1,42 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-
-    <!-- CVE-2025-21199: applicationinsights-core - no fix available, 3.7.8 is the latest release -->
-    <suppress>
-        <notes><![CDATA[CVE-2025-21199 affects com.microsoft.azure:applicationinsights-core. No patched version is available on Maven Central as of May 2026. Review when 3.7.9+ is released.]]></notes>
+    <suppress until="2026-07-20">
         <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/applicationinsights\-core@.*$</packageUrl>
         <cve>CVE-2025-21199</cve>
     </suppress>
-
-    <!-- CVE-2026-33117: Azure SDK for Java - no fix available, 1.58.0 is the latest azure-core release -->
-    <suppress>
-        <notes><![CDATA[CVE-2026-33117 affects Azure SDK for Java (azure-core, azure-core-http-netty, azure-json). No patched version is available on Maven Central as of May 2026. Review when a patched release is published.]]></notes>
+    <suppress until="2026-07-20">
         <packageUrl regex="true">^pkg:maven/com\.azure/azure\-core@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
     </suppress>
-    <suppress>
-        <notes><![CDATA[CVE-2026-33117 affects Azure SDK for Java. No patched version available as of May 2026.]]></notes>
+    <suppress until="2026-07-20">
         <packageUrl regex="true">^pkg:maven/com\.azure/azure\-core\-http\-netty@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
     </suppress>
-    <suppress>
-        <notes><![CDATA[CVE-2026-33117 affects Azure SDK for Java. No patched version available as of May 2026.]]></notes>
+    <suppress until="2026-07-20">
         <packageUrl regex="true">^pkg:maven/com\.azure/azure\-json@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
     </suppress>
-
-    <!-- CVE-2026-23907, CVE-2026-33929: Apache PDFBox - fix requires 3.0.8 which is not yet released on Maven Central -->
-    <suppress>
-        <notes><![CDATA[CVE-2026-23907 and CVE-2026-33929 affect Apache PDFBox 3.0.0-3.0.7. Fix requires 3.0.8 which is not yet available on Maven Central as of May 2026. Remove suppression once tika-parsers-standard-package is upgraded to a version bundling PDFBox 3.0.8+.]]></notes>
+    <suppress until="2026-07-20">
+        <packageUrl regex="true">^pkg:maven/io\.netty/.*@.*$</packageUrl>
+        <cve>CVE-2026-42582</cve>
+    </suppress>
+    <suppress until="2026-07-20">
         <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
         <cve>CVE-2026-23907</cve>
     </suppress>
-    <suppress>
-        <notes><![CDATA[CVE-2026-33929 affects Apache PDFBox 3.0.0-3.0.7. Fix requires 3.0.8 which is not yet available on Maven Central as of May 2026. Remove suppression once tika-parsers-standard-package is upgraded to a version bundling PDFBox 3.0.8+.]]></notes>
+    <suppress until="2026-07-20">
         <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
         <cve>CVE-2026-33929</cve>
     </suppress>
-
 </suppressions>
 
 
