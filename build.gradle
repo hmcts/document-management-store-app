@@ -225,6 +225,7 @@ dependencyManagement {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }
+        dependency 'com.github.junrar:junrar:7.6.0'
         dependencySet(group: 'org.apache.tomcat.embed', version: '10.1.55') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
