@@ -94,7 +94,6 @@ def versions = [
     pact_version       : '4.7.1',
     emTestHelper       : '2.1.1',
     shedlock           : '7.7.0',
-    hibernate          : '7.3.5.Final',
     jupiter            : '6.1.0',
     springSecurity     : '7.0.2'
 ]
@@ -122,18 +121,13 @@ dependencies {
     implementation group: 'org.springframework', name: 'spring-context-support', version: '7.0.7'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
-        exclude group: "org.hibernate", module: "hibernate-core"
-    }
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
-
-    implementation group: 'org.hibernate.orm', name: 'hibernate-core', version: versions.hibernate
-    implementation group:'org.hibernate.orm', name: 'hibernate-envers', version: versions.hibernate
 
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
