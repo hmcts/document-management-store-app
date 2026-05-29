@@ -103,8 +103,8 @@ ext['hibernate.version'] = versions.hibernate
 dependencies {
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.34.0'
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.0'
-    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.3.0'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.1'
+    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.3.1'
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.6.0-jre'
 
