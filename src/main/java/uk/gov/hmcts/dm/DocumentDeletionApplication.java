@@ -6,14 +6,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import uk.gov.hmcts.dm.service.DocumentDeletionService;
 
 import java.time.LocalDate;
 
-@SpringBootApplication(scanBasePackages = {"uk.gov.hmcts.dm","uk.gov.hmcts.reform.authorisation"})
 @EnableScheduling
+@EnableFeignClients(basePackages = {
+    "uk.gov.hmcts.dm",
+    "uk.gov.hmcts.reform.authorisation",
+    "uk.gov.hmcts.reform.idam.client"
+})
+@SuppressWarnings("HideUtilityClassConstructor") // Spring needs a constructor, it's not a utility class
+@SpringBootApplication(scanBasePackages = {"uk.gov.hmcts.dm"})
 public class DocumentDeletionApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DocumentDeletionService.class);
