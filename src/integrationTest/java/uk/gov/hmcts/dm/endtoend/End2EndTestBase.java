@@ -20,12 +20,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import uk.gov.hmcts.dm.DocumentDeletionApplication;
-import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.BlobStorageDeleteService;
 import uk.gov.hmcts.dm.service.BlobStorageReadService;
 import uk.gov.hmcts.dm.service.BlobStorageWriteService;
+import uk.gov.hmcts.reform.idam.client.IdamClient;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +64,7 @@ public abstract class End2EndTestBase {
     protected BlobStorageDeleteService blobStorageDeleteService;
 
     @MockitoBean
-    protected TestController testController;
+    private IdamClient idamClient;
 
 
     @BeforeEach
