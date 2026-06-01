@@ -22,7 +22,7 @@ services:
             - ccd-docker-azure-blob-data:/opt/azurite/folder
 
     service-auth-provider-app:
-        image: hmctspublic.azurecr.io/rpe/service-auth-provider:latest
+        image: hmctsprod.azurecr.io/rpe/service-auth-provider:latest
         environment:
             - microserviceKeys_em_gw=AAAAAAAAAAAAAAAA
             - microserviceKeys_ccd_case_disposer=AAAAAAAAAAAAAAAA

@@ -9,9 +9,8 @@ spring:
   data:
     rest:
       detection-strategy: annotated
-  # cloud:
-  #   compatibility-verifier:
-  #     enabled: false
+  lifecycle:
+    timeout-per-shutdown-phase: ${TIMEOUT_SERVER_SHUTDOWN_PHASE:1m}
   jackson:
     date-format: "yyyy-MM-dd'T'HH:mm:ssZ"
     serialization:
@@ -69,8 +68,6 @@ spring:
       noOfIterations: ${CASE_DOCUMENTS_DELETION_NO_OF_ITERATIONS:1}
       batchSize: ${CASE_DOCUMENTS_DELETION_BATCH_SIZE:10}
       serviceName: ${CASE_DOCUMENTS_DELETION_SERVICE_NAME:ccd_case_disposer}
-    caseDocumentsRecovery:
-      blobPath: ${CASE_DOCUMENTS_RECOVERY_BLOB_PATH:dummyvalue}
     # run cleanup every 1 hour (since a single execution should not run longer than 1 hour)
     historicExecutionsRetentionMilliseconds: ${HISTORIC_EXECUTIONS_RETENTION_MILLISECONDS:3600000}
     documentMetaDataUpdateMilliseconds: ${DOCUMENT_METADATA_UPDATE_MILLISECONDS:10000}
@@ -99,11 +96,28 @@ auth:
       client:
         baseUrl: ${IDAM_S2S_BASE_URI:http://localhost:4502}
 
+em-npa:
+  api:
+    url: ${EM_NPA_API_URL:http://localhost:4623}
+
+em-anno:
+  api:
+    url: ${EM_ANNO_API_URL:http://localhost:4623}
+
 idam:
+  api:
+    url: ${IDAM_USER_BASE_URI:http://localhost:4501}
+  client:
+    id: ${DM_STORE_IDAM_CLIENT_ID:dm-store}
+    secret: ${DM_STORE_IDAM_CLIENT_SECRET:}
+    redirect_uri: ${IDAM_CLIENT_REDIRECT_URI:http://localhost:4603/oauth2/callback}
+  system-user:
+    username: ${DM_STORE_SYSTEM_UPDATE_IDAM_USER:}
+    password: ${DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD:}
   s2s-auth:
     url: ${IDAM_S2S_BASE_URI:http://localhost:4502}
-    totp_secret: ${S2S_KEY:AAAAAAAAAAAAAAAA}
-    microservice: ${S2S_SERVICE_NAME:em_gw}
+    totp_secret: ${DM_S2S_KEY:AAAAAAAAAAAAAAAA}
+    microservice: ${DM_S2S_SERVICE_NAME:dm_store}
   s2s-authorised:
     services: ${S2S_NAMES_WHITELIST:divorce,ccd,em_api,em_gw,ccd_gw,ccd_data,sscs,sscs_bulkscan,divorce_document_upload,divorce_frontend,divorce_document_generator,probate_backend,cmc_claim_store,em_npa_app,fpl_case_service,finrem_document_generator,iac,em_stitching_api,dg_docassembly_api,ethos_repl_service,employment_tribunals,xui_webapp,ccd_case_document_am_api,unspec_service,nfdiv_case_api,wa_task_management_api,wa_task_configuration_api,adoption_web,adoption_cos_api,et_cos,ccd_case_disposer,finrem_case_orchestration}
 
@@ -126,9 +140,7 @@ azure:
       connection-string: ${STORAGEACCOUNT_PRIMARY_CONNECTION_STRING:DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1}
       blob-container-reference: ${STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME:hmctstestcontainer}
       enabled: true
-      metadata-blob-container-reference: ${STORAGE_CONTAINER_METADATA_CONTAINER_NAME:hmctsmetadata}
       orphandocument-blob-container-reference: ${STORAGE_CONTAINER_ORPHAN_DOCUMENTS_CONTAINER_NAME:orphandocuments}
-      recovereddocuments-blob-container-reference: ${STORAGE_CONTAINER_RECOVERED_DOCUMENTS_CONTAINER_NAME:recovereddocuments}
   upload:
     blockSize : ${UPLOAD_BLOCK_SIZE:4}
     maxSingleUploadSize : ${MAX_SINGLE_UPLOAD_SIZE:100}
@@ -138,9 +150,6 @@ app-insights:
   dev-mode: off
   request-component: on
   telemetry-component: on
-
-errors:
-  globalIncludeStackTrace: ${SHOW_STACK_TRACE:true}
 
 info:
   app:
@@ -217,11 +226,10 @@ toggle:
   folderendpoint: ${ENABLE_FOLDER_API:true}
   ttl: ${ENABLE_TTL:false}
   thumbnail: ${ENABLE_THUMBNAIL:true}
-  testing: ${ENABLE_TESTING:true}
-  metadatamigration: ${ENABLE_METADATA_MIGRATION:false}
   overridemetadata: ${ENABLE_OVERRIDE_METADATA:false}
   chunking: ${ENABLE_CHUNKING:false}
   orphandocumentdeletion: ${ENABLE_ORPHAN_DOCUMENT_DELETION:false}
+  deletemetadatafordocument: ${ENABLE_DELETE_METADATA_FOR_DOCUMENT:false}
 
 task:
   env: ${TASK_ENV:documentTaskLock-local}

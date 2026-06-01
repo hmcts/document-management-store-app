@@ -50,8 +50,6 @@ public abstract class BaseIT {
     private String dmStoreBaseUri;
     @Value("${toggle.ttl}")
     private boolean toggleTtlEnabled;
-    @Value("${toggle.metadatamigration}")
-    private boolean metadataMigrationEnabled;
 
     @Value("${toggle.secureurl}")
     private boolean secureurl;
@@ -392,10 +390,6 @@ public abstract class BaseIT {
 
     public void setToggleTtlEnabled(boolean toggleTtlEnabled) {
         this.toggleTtlEnabled = toggleTtlEnabled;
-    }
-
-    public boolean getMetadataMigrationEnabled() {
-        return metadataMigrationEnabled;
     }
 
     public String getCitizen() {

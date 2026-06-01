@@ -10,18 +10,13 @@ import org.springframework.http.MediaType;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SuppressWarnings("java:S5960") // Suppress SonarQube warning for assertions
 public class DeleteDocumentIT extends BaseIT {
     private String citizenDocumentUrl;
 
     private String caseWorkerDocumentUrl;
 
-    private static final String TESTING_AZURE_STORAGE_BINARY_EXISTS_URI = "/testing/azure-storage-binary-exists/";
     private static final String PERMANENT_TRUE_CONST = "?permanent=true";
-    private static final String DOCUMENT_WITH_VERSION_TEXT_CONST = "Document with version ";
 
     @BeforeEach
     public void setup() {
@@ -88,20 +83,6 @@ public class DeleteDocumentIT extends BaseIT {
 
     @Test
     public void d6CaseWorkerCanHardDeleteTheirOwnDocument() {
-        final Response metadata = fetchDocumentMetaDataAs(getCaseWorker(), caseWorkerDocumentUrl);
-
-        String doc = metadata.body().jsonPath().get("_embedded.allDocumentVersions._embedded.documentVersions[0]._links.self.href");
-        String[] split = doc
-            .split("/");
-        String versionId = split[split.length - 1];
-        assertTrue(
-            Boolean.parseBoolean(givenRequest(getCaseWorker())
-                .when()
-                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_URI + versionId)
-                .print()),
-            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should exist (" + metadata.body().print() + ")"
-        );
-
         givenRequest(getCaseWorker())
             .expect()
             .statusCode(204)
@@ -115,28 +96,10 @@ public class DeleteDocumentIT extends BaseIT {
             .when()
             .get(caseWorkerDocumentUrl);
 
-        assertFalse(
-            Boolean.parseBoolean(
-                givenRequest(getCaseWorker()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_URI + versionId).print()),
-            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
     @Test
     public void d7UserCanHardDeleteTheirOwnDocument() {
-
-        final Response metadata = fetchDocumentMetaDataAs(getCitizen(), citizenDocumentUrl);
-
-        String doc = metadata.body().jsonPath().get("_embedded.allDocumentVersions._embedded.documentVersions[0]._links.self.href");
-        String[] split = doc
-            .split("/");
-        String versionId = split[split.length - 1];
-
-        assertTrue(
-            Boolean.parseBoolean(givenRequest(getCitizen())
-                .when()
-                .get(TESTING_AZURE_STORAGE_BINARY_EXISTS_URI + versionId)
-                .print()),
-            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should exist (" + metadata.body().print() + ")");
 
         givenRequest(getCitizen())
             .expect()
@@ -149,11 +112,6 @@ public class DeleteDocumentIT extends BaseIT {
             .statusCode(404)
             .when()
             .get(citizenDocumentUrl);
-
-        assertFalse(
-            Boolean.parseBoolean(givenRequest(
-                getCitizen()).when().get(TESTING_AZURE_STORAGE_BINARY_EXISTS_URI + versionId).print()),
-            DOCUMENT_WITH_VERSION_TEXT_CONST + versionId + " should NOT exist (" + metadata.body().print() + ")");
     }
 
     @Test

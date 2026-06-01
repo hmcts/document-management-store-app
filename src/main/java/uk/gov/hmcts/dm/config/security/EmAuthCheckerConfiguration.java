@@ -12,6 +12,8 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
 import uk.gov.hmcts.reform.authorisation.ServiceAuthorisationApi;
+import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
+import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGeneratorFactory;
 import uk.gov.hmcts.reform.authorisation.validators.AuthTokenValidator;
 import uk.gov.hmcts.reform.authorisation.validators.ServiceAuthTokenValidator;
 
@@ -70,6 +72,14 @@ public class EmAuthCheckerConfiguration {
     public AuthenticationManager authenticationManager(
         PreAuthenticatedAuthenticationProvider preAuthenticatedAuthenticationProvider) {
         return new ProviderManager(Collections.singletonList(preAuthenticatedAuthenticationProvider));
+    }
+
+    @Bean
+    public AuthTokenGenerator authTokenGenerator(
+        @Value("${idam.s2s-auth.totp_secret}") final String secret,
+        @Value("${idam.s2s-auth.microservice}") final String microservice,
+        final ServiceAuthorisationApi serviceAuthorisationApi) {
+        return AuthTokenGeneratorFactory.createDefaultGenerator(secret, microservice, serviceAuthorisationApi);
     }
 
 }

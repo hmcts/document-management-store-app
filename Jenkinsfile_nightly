@@ -27,7 +27,12 @@ def secrets = [
         secret('microservicekey-ccd-case-disposer', 'CCD_CASE_DISPOSER_S2S_TOKEN')
     ],
     'dm-${env}': [
-        secret('dm-store-storage-account-primary-connection-string', 'STORAGEACCOUNT_PRIMARY_CONNECTION_STRING')
+        secret('dm-store-storage-account-primary-connection-string', 'STORAGEACCOUNT_PRIMARY_CONNECTION_STRING'),
+        secret('microservicekey-dm-store', 'DM_S2S_KEY'),
+        secret('dm-store-idam-client-id', 'DM_STORE_IDAM_CLIENT_ID'),
+        secret('dm-store-idam-secret', 'DM_STORE_IDAM_CLIENT_SECRET'),
+        secret('dm-store-system-update-idam-user', 'DM_STORE_SYSTEM_UPDATE_IDAM_USER'),
+        secret('dm-store-system-update-idam-password', 'DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD')
     ]
 ]
 
@@ -50,10 +55,17 @@ withNightlyPipeline(type, product, component) {
 
     // Vars for Kubernetes
     env.IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
+    env.IDAM_S2S_BASE_URI = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.S2S_URL  = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
     env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
     env.MP4_52MB = "e58a9fa5-4f6f-438f-b44a-8c0877e945d0/binary"
     env.MP4_111MB = "50f9dd86-1615-461d-bca8-e437103dd734/binary"
+
+    env.DM_S2S_SERVICE_NAME = "dm_store"
+    // DocumentMetadataDeletionService configuration
+    env.EM_ANNO_API_URL = "http://em-anno-aat.service.core-compute-aat.internal"
+    env.EM_NPA_API_URL = "http://em-npa-aat.service.core-compute-aat.internal"
+    env.ENABLE_DELETE_METADATA_FOR_DOCUMENT = "true"
 
     loadVaultSecrets(secrets)
     overrideVaultEnvironments(vaultOverrides)

@@ -2,25 +2,25 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:11.20.3")
+        classpath("org.flywaydb:flyway-database-postgresql:12.6.2")
     }
 }
 
 plugins {
     id 'application'
-    id 'uk.gov.hmcts.java' version '0.12.68'
+    id 'uk.gov.hmcts.java' version '0.12.70'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '3.5.11'
-    id 'com.github.ben-manes.versions' version '0.53.0'
-    id 'org.sonarqube' version '7.2.3.7755'
+    id 'org.springframework.boot' version '3.5.14'
+    id 'com.github.ben-manes.versions' version '0.54.0'
+    id 'org.sonarqube' version '7.3.0.8198'
     id 'jacoco'
     id 'checkstyle'
-    id 'io.freefair.lombok' version '9.2.0'
-    id 'info.solidsoft.pitest' version '1.19.0-rc.3'
-    id 'org.owasp.dependencycheck' version '12.1.6'
-    id 'au.com.dius.pact' version '4.6.20'
-    id 'org.flywaydb.flyway' version '11.20.3'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.4'
+    id 'io.freefair.lombok' version '9.5.0'
+    id 'info.solidsoft.pitest' version '1.19.0'
+    id 'org.owasp.dependencycheck' version '12.2.1'
+    id 'au.com.dius.pact' version '4.7.1'
+    id 'org.flywaydb.flyway' version '12.6.2'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
 }
 
 group = 'uk.gov.hmcts.dm'
@@ -86,16 +86,15 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 def versions = [
-    ehcache            : '3.11.1',
-    postgresql         : '42.7.10',
-    jackson            : '2.21.1',
-    serenity           : '5.3.5',
+    ehcache            : '3.12.0',
+    postgresql         : '42.7.11',
+    jackson            : '2.21.4',
+    serenity           : '5.3.10',
     logging            : '8.0.0',
-    pact_version       : '4.6.20',
+    pact_version       : '4.7.1',
     emTestHelper       : '2.1.1',
-    shedlock           : '7.6.0',
-    hibernate          : '6.6.44.Final',
-    jupiter            : '6.0.3',
+    shedlock           : '7.7.0',
+    jupiter            : '6.1.0',
     springSecurity     : '7.0.2'
 ]
 
@@ -103,13 +102,13 @@ ext['hibernate.version'] = versions.hibernate
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.33.2'
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.2.3'
-    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.2.3'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.34.0'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.1'
+    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.3.1'
 
-    implementation group: 'com.google.guava', name: 'guava', version: '33.5.0-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '33.6.0-jre'
 
-    implementation group: 'commons-io', name: 'commons-io', version: '2.21.0'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.22.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.21'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
@@ -119,12 +118,10 @@ dependencies {
         exclude group: "org.glassfish.jaxb", module: "jaxb-runtime"
     }
 
-    implementation group: 'org.springframework', name: 'spring-context-support', version: '7.0.5'
+    implementation group: 'org.springframework', name: 'spring-context-support', version: '7.0.7'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', {
-        exclude group: "org.hibernate", module: "hibernate-core"
-    }
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
@@ -132,27 +129,25 @@ dependencies {
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
 
-    implementation group: 'org.hibernate.orm', name: 'hibernate-core', version: versions.hibernate
-    implementation group:'org.hibernate.orm', name: 'hibernate-envers', version: versions.hibernate
-
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '11.20.3'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '11.20.3'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '12.6.2'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '12.6.2'
 
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.3'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.4'
+    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '9.0'
 
 
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
-    implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.7'
+    implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.8'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.1'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.2'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.2'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
@@ -171,7 +166,7 @@ dependencies {
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-engine', version: versions.jupiter
     testRuntimeOnly group: 'org.junit.jupiter', name:  'junit-jupiter-params', version: versions.jupiter
     testImplementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.5'
-    testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.7'
+    testImplementation group:  'org.glassfish.jaxb', name: 'jaxb-runtime', version: '4.0.9'
     testImplementation group: 'com.warrenstrange', name: 'googleauth', version: '1.5.0'
     testImplementation group: 'com.github.stephenc.jcip', name :'jcip-annotations', version:'1.0-1'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
@@ -181,10 +176,10 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
 
-    functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'2.3.0'
+    functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'3.1.0'
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.32'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.32'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.33'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.33'
 
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all', {
@@ -215,14 +210,47 @@ dependencies {
     integrationTestImplementation sourceSets.test.runtimeClasspath
 
 
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.16'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.17'
 }
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.junit.platform', version: '6.0.3') {
+        dependencySet(group: 'org.junit.platform', version: '6.1.0') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
+        }
+        dependency 'com.github.junrar:junrar:7.6.0'
+        dependency 'org.eclipse.angus:angus-activation:2.1.0-M1'
+        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.22') {
+            entry 'tomcat-embed-core'
+            entry 'tomcat-embed-websocket'
+            entry 'tomcat-embed-el'
+        }
+        dependencySet(group: 'io.netty', version: '4.2.14.Final') {
+            entry 'netty-buffer'
+            entry 'netty-codec'
+            entry 'netty-codec-dns'
+            entry 'netty-codec-http'
+            entry 'netty-codec-http2'
+            entry 'netty-codec-socks'
+            entry 'netty-common'
+            entry 'netty-handler'
+            entry 'netty-handler-proxy'
+            entry 'netty-resolver'
+            entry 'netty-resolver-dns'
+            entry 'netty-resolver-dns-classes-macos'
+            entry 'netty-resolver-dns-native-macos'
+            entry 'netty-transport'
+            entry 'netty-transport-classes-epoll'
+            entry 'netty-transport-classes-kqueue'
+            entry 'netty-transport-native-epoll'
+            entry 'netty-transport-native-kqueue'
+            entry 'netty-transport-native-unix-common'
+        }
+        dependencySet(group: 'org.apache.logging.log4j', version: '2.26.0') {
+            entry 'log4j-api'
+            entry 'log4j-core'
+            entry 'log4j-to-slf4j'
         }
     }
 }
@@ -242,7 +270,7 @@ tasks.register('integration', Test) {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '13.3.0'
+    toolVersion = '13.4.2'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }

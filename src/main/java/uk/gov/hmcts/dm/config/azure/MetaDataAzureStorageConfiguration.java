@@ -20,36 +20,10 @@ public class MetaDataAzureStorageConfiguration {
     @Value("${azure.storage.connection-string}")
     private String connectionString;
 
-    @Value("${azure.storage.metadata-blob-container-reference}")
-    private String metadataContainerName;
-
     @Value("${azure.storage.orphandocument-blob-container-reference}")
     private String orphanDocumentContainerName;
 
-    @Value("${azure.storage.recovereddocuments-blob-container-reference}")
-    private String recoveredDocumentsContainerName;
-
     private static final String AZURE_STORAGE_EMULATOR_AZURITE =  "azure-storage-emulator-azurite";
-
-    @Bean(name = "metadataStorage")
-    @ConditionalOnProperty(
-        value = "toggle.metadatamigration",
-        havingValue = "true")
-    BlobContainerClient cloudBlobContainer() throws UnknownHostException {
-        final String blobAddress = connectionString.contains(AZURE_STORAGE_EMULATOR_AZURITE)
-            ? connectionString.replace(AZURE_STORAGE_EMULATOR_AZURITE,
-                InetAddress.getByName(AZURE_STORAGE_EMULATOR_AZURITE).getHostAddress())
-            : connectionString;
-
-        final BlobContainerClient client = getClient(blobAddress, metadataContainerName);
-
-        try {
-            client.create();
-            return client;
-        } catch (Exception e) {
-            return client;
-        }
-    }
 
     BlobContainerClient getClient(String blobAddress, String containerName) {
         return new BlobContainerClientBuilder()
@@ -77,22 +51,4 @@ public class MetaDataAzureStorageConfiguration {
             return client;
         }
     }
-
-    @Bean(name = "recoveredDocumentsStorage")
-    BlobContainerClient recoveredDocumentsBlobContainer() throws UnknownHostException {
-        final String blobAddress = connectionString.contains(AZURE_STORAGE_EMULATOR_AZURITE)
-                ? connectionString.replace(AZURE_STORAGE_EMULATOR_AZURITE,
-                InetAddress.getByName(AZURE_STORAGE_EMULATOR_AZURITE).getHostAddress())
-                : connectionString;
-
-        final BlobContainerClient client = getClient(blobAddress, recoveredDocumentsContainerName);
-
-        try {
-            client.create();
-            return client;
-        } catch (Exception e) {
-            return client;
-        }
-    }
-
 }

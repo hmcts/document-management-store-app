@@ -1,7 +1,7 @@
 version: 1.0-preview-1
 steps:
   - id: pull-base-image-amd64
-    cmd: docker pull --platform linux/amd64 hmctspublic.azurecr.io/base/java:21-distroless && docker tag hmctspublic.azurecr.io/base/java:21-distroless hmctspublic.azurecr.io/base/java/linux/amd64:21-distroless
+    cmd: docker pull --platform linux/amd64 hmctsprod.azurecr.io/base/java:21-distroless && docker tag hmctsprod.azurecr.io/base/java:21-distroless hmctsprod.azurecr.io/base/java/linux/amd64:21-distroless
     retries: 10
     retryDelay: 5
     when: ["-"]
@@ -18,7 +18,7 @@ steps:
       - pull-base-image-amd64
 
   - id: pull-base-image-arm64
-    cmd: docker pull --platform linux/arm64 hmctspublic.azurecr.io/base/java:21-distroless && docker tag hmctspublic.azurecr.io/base/java:21-distroless hmctspublic.azurecr.io/base/java/linux/arm64:21-distroless
+    cmd: docker pull --platform linux/arm64 hmctsprod.azurecr.io/base/java:21-distroless && docker tag hmctsprod.azurecr.io/base/java:21-distroless hmctsprod.azurecr.io/base/java/linux/arm64:21-distroless
     retries: 10
     retryDelay: 5
     when:

@@ -126,10 +126,6 @@ variable "enable_thumbnail" {
   default = "true"
 }
 
-variable "enable_testing" {
-  default = "true"
-}
-
 variable "enable_azure_media_service" {
   default = false
 }

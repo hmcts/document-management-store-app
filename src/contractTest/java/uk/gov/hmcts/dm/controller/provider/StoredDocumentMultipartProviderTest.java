@@ -18,7 +18,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
-import uk.gov.hmcts.dm.controller.testing.TestController;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
 import uk.gov.hmcts.dm.repository.StoredDocumentRepository;
@@ -100,9 +99,6 @@ public class StoredDocumentMultipartProviderTest {
 
     @MockitoBean
     protected ExceptionStatusCodeAndMessageResolver exceptionStatusCodeAndMessageResolver;
-
-    @MockitoBean
-    protected TestController testController;
 
     @MockitoBean
     private AuthTokenValidator authTokenValidator;
