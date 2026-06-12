@@ -60,7 +60,6 @@ public abstract class BaseIT {
     private static final String USER_ID_CONST =  "user-id";
     private static final String USER_ROLES_CONST =  "user-roles";
     private static final String ROLES_CONST =  "roles";
-    private static final String TEST_PASS = "123";
     private static final String CITIZEN = "test12@test.com";
     private static final String CITIZEN_2 = "test2@test.com";
     private static final String CASE_WORKER = "test3@test.com";
@@ -195,10 +194,6 @@ public abstract class BaseIT {
 
     public File file(Object fileName) {
         return fileUtils.getResourceFile(FILES_FOLDER + fileName);
-    }
-
-    public String authToken(Object username) {
-        return authTokenProvider.getTokens((String) username, TEST_PASS).getUserToken();
     }
 
     public String userId(String token) {
