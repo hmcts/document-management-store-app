@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,11 +37,6 @@ public class AuthTokenProvider {
         this.idamUserBaseUrl = idamUserBaseUri;
         this.s2sSecret = s2sSecret;
         this.ccdCaseDisposerS2sSecret = ccdCaseDisposerS2sSecret;
-    }
-
-    public AuthTokens getTokens(String email, String password) {
-        String userToken = findUserToken(email, password);
-        return new AuthTokens(userToken, "");
     }
 
     public void createIdamUser(String email, String password, Optional<String> maybeRole)
@@ -105,16 +99,6 @@ public class AuthTokenProvider {
         return BEARER_PREFIX + response
             .getBody()
             .print();
-    }
-
-    private String findUserToken(String email, String password) {
-        final String encoded = Base64.getEncoder().encodeToString((email + ":" + password).getBytes());
-        final Response authorization = RestAssured.given().baseUri(idamUserBaseUrl)
-                .header("Authorization", "Basic " + encoded)
-                .post("oauth2/authorize");
-        authorization.then().statusCode(200);
-        final Map<String, String> userResponse = authorization.andReturn().as(Map.class);
-        return userResponse.get("access-token");
     }
 
     public int findUserId(String userToken) {
