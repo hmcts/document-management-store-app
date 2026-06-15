@@ -95,7 +95,7 @@ def versions = [
     emTestHelper       : '2.1.1',
     shedlock           : '7.7.0',
     jupiter            : '6.1.0',
-    springSecurity     : '7.0.3'
+    springSecurity     : '7.0.2'
 ]
 
 ext['hibernate.version'] = versions.hibernate
