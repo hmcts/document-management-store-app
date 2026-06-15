@@ -12,7 +12,7 @@
         <packageUrl regex="true">^pkg:maven/io\.netty/.*@.*$</packageUrl>
         <cve>CVE-2026-42582</cve>
     </suppress>
-    <suppress until="2026-07-20">
+    <suppress until="2026-08-20">
         <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@.*$</packageUrl>
         <cve>CVE-2026-22732</cve>
         <cve>CVE-2026-22746</cve>
@@ -21,6 +21,9 @@
         <cve>CVE-2026-22751</cve>
         <cve>CVE-2026-22753</cve>
         <cve>CVE-2026-22754</cve>
+        <cve>CVE-2026-40988</cve>
+        <cve>CVE-2026-41003</cve>
+        <cve>CVE-2026-41694</cve>
     </suppress>
     <suppress until="2026-07-20">
         <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
