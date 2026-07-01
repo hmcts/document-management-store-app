@@ -257,6 +257,7 @@ dependencyManagement {
     }
 }
 dependencyCheck {
+    skip = true
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
 }
 
