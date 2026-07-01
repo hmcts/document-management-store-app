@@ -18,7 +18,7 @@ plugins {
     id 'io.freefair.lombok' version '9.5.0'
     id 'info.solidsoft.pitest' version '1.19.0'
     id 'org.owasp.dependencycheck' version '12.2.1'
-    id 'au.com.dius.pact' version '4.7.1'
+    id 'au.com.dius.pact' version '4.7.3'
     id 'org.flywaydb.flyway' version '12.8.1'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
 }
@@ -143,11 +143,11 @@ dependencies {
 
 
     implementation group: 'com.github.hmcts.java-logging', name: 'logging', version: versions.logging
-    implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.8'
+    implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.9'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.2'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.2'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.3'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.3'
 
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
     implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
@@ -223,7 +223,7 @@ dependencyManagement {
         dependency 'org.springframework.hateoas:spring-hateoas:2.5.3'
         dependency 'com.github.junrar:junrar:7.6.0'
         dependency 'org.eclipse.angus:angus-activation:2.1.0-M1'
-        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.22') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.23') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
             entry 'tomcat-embed-el'
