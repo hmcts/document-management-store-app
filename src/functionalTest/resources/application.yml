@@ -36,6 +36,8 @@ em-npa:
     url: ${EM_NPA_API_URL:http://localhost:4685}
 
 idam:
+  api:
+    url: ${TEST_IDAM_API_URL:http://localhost:4501}
   s2s-auth:
     url: ${IDAM_S2S_BASE_URI:http://localhost:4502}
     totp_secret: ${DM_S2S_KEY:AAAAAAAAAAAAAAAA}
