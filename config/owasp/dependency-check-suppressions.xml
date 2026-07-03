@@ -39,18 +39,6 @@
         <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson-databind@.*$</packageUrl>
         <cve>CVE-2026-54515</cve>
     </suppress>
-    <suppress until="2026-08-30Z">
-        <notes>Same jackson-databind CVEs affecting tools.jackson.core groupId (jackson 3.x repackaging).
-            No patched release is available yet. Suppress until a fixed version is published.</notes>
-        <packageUrl regex="true">^pkg:maven/tools\.jackson\.core/jackson-databind@.*$</packageUrl>
-        <cve>CVE-2026-54512</cve>
-        <cve>CVE-2026-54513</cve>
-        <cve>CVE-2026-54514</cve>
-        <cve>CVE-2026-54515</cve>
-        <cve>CVE-2026-54516</cve>
-        <cve>CVE-2026-54517</cve>
-        <cve>CVE-2026-54518</cve>
-    </suppress>
 </suppressions>
 
 
