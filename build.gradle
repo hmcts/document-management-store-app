@@ -91,7 +91,7 @@ def versions = [
     jackson            : '2.22.0',
     serenity           : '5.3.10',
     logging            : '8.0.0',
-    pact_version       : '4.7.1',
+    pact_version       : '4.7.3',
     emTestHelper       : '2.1.1',
     shedlock           : '7.7.0',
     jupiter            : '6.1.1',
