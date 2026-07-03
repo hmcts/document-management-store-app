@@ -254,6 +254,8 @@ dependencyManagement {
             entry 'log4j-core'
             entry 'log4j-to-slf4j'
         }
+        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.0'
+        dependency 'tools.jackson.core:jackson-databind:3.2.0'
     }
 }
 dependencyCheck {
