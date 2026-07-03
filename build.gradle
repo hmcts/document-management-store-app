@@ -2,7 +2,7 @@ import org.flywaydb.gradle.task.FlywayMigrateTask
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:12.8.1")
+        classpath("org.flywaydb:flyway-database-postgresql:12.10.0")
     }
 }
 
@@ -10,7 +10,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.70'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '3.5.15'
+    id 'org.springframework.boot' version '3.5.16'
     id 'com.github.ben-manes.versions' version '0.54.0'
     id 'org.sonarqube' version '7.3.1.8318'
     id 'jacoco'
@@ -19,7 +19,7 @@ plugins {
     id 'info.solidsoft.pitest' version '1.19.0'
     id 'org.owasp.dependencycheck' version '12.2.1'
     id 'au.com.dius.pact' version '4.7.3'
-    id 'org.flywaydb.flyway' version '12.8.1'
+    id 'org.flywaydb.flyway' version '12.10.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
 }
 
@@ -87,14 +87,14 @@ tasks.withType(JavaCompile).configureEach {
 
 def versions = [
     ehcache            : '3.12.0',
-    postgresql         : '42.7.11',
+    postgresql         : '42.7.12',
     jackson            : '2.22.0',
     serenity           : '5.3.10',
     logging            : '8.0.0',
-    pact_version       : '4.7.1',
+    pact_version       : '4.7.3',
     emTestHelper       : '2.1.1',
     shedlock           : '7.7.0',
-    jupiter            : '6.1.0',
+    jupiter            : '6.1.1',
     springSecurity     : '7.0.2'
 ]
 
@@ -102,7 +102,7 @@ ext['hibernate.version'] = versions.hibernate
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.34.0'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.35.0'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.1'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.3.1'
 
@@ -134,8 +134,8 @@ dependencies {
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    implementation group: 'org.flywaydb', name: 'flyway-core', version: '12.8.1'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '12.8.1'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '12.10.0'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '12.10.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.4'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
@@ -178,8 +178,8 @@ dependencies {
 
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'3.1.0'
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.35'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.35'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.37'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.37'
 
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all', {
@@ -215,7 +215,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        dependencySet(group: 'org.junit.platform', version: '6.1.0') {
+        dependencySet(group: 'org.junit.platform', version: '6.1.1') {
             entry 'junit-platform-commons'
             entry 'junit-platform-engine'
         }
@@ -249,11 +249,13 @@ dependencyManagement {
             entry 'netty-transport-native-kqueue'
             entry 'netty-transport-native-unix-common'
         }
-        dependencySet(group: 'org.apache.logging.log4j', version: '2.26.0') {
+        dependencySet(group: 'org.apache.logging.log4j', version: '2.26.1') {
             entry 'log4j-api'
             entry 'log4j-core'
             entry 'log4j-to-slf4j'
         }
+        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.0'
+        dependency 'tools.jackson.core:jackson-databind:3.2.0'
     }
 }
 dependencyCheck {
@@ -273,7 +275,7 @@ tasks.register('integration', Test) {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '13.5.0'
+    toolVersion = '13.7.0'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
