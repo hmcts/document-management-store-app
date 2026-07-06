@@ -45,7 +45,7 @@ java:
     TIMEOUT_SERVER_SHUTDOWN_PHASE: 1m
 
       # idam
-    IDAM_USER_BASE_URI: 'https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net'
+    IDAM_USER_BASE_URI: 'https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net'
     IDAM_S2S_BASE_URI: 'http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal'
     EM_NPA_API_URL: "http://em-npa-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"
     EM_ANNO_API_URL: "http://em-anno-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal"

@@ -34,7 +34,7 @@ java:
           alias: DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD
   environment:
     # Endpoints
-    IDAM_USER_BASE_URI: https://idam-api.aat.platform.hmcts.net
+    IDAM_USER_BASE_URI: https://idam-web-public.aat.platform.hmcts.net
     IDAM_S2S_BASE_URI: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     EM_NPA_API_URL: "http://em-npa-aat.service.core-compute-aat.internal"
     EM_ANNO_API_URL: "http://em-anno-aat.service.core-compute-aat.internal"
