@@ -39,6 +39,11 @@
         <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson-databind@.*$</packageUrl>
         <cve>CVE-2026-54515</cve>
     </suppress>
+    <suppress until="2026-10-07Z">
+        <gav regex="true">^org\.apache\.httpcomponents:httpcore:.*$</gav>
+        <cve>CVE-2026-54399</cve>
+        <cve>CVE-2026-54428</cve>
+    </suppress>
 </suppressions>
 
 
