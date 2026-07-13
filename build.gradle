@@ -274,7 +274,7 @@ tasks.register('integration', Test) {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '13.7.0'
+    toolVersion = '13.8.0'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
