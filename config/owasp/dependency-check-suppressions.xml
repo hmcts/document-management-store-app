@@ -24,6 +24,11 @@
         <cve>CVE-2026-41008</cve>
         <cve>CVE-2026-41706</cve>
     </suppress>
+    <suppress until="2026-10-20">
+        <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
+        <cve>CVE-2026-23907</cve>
+        <cve>CVE-2026-33929</cve>
+    </suppress>
     <suppress until="2026-08-30Z">
         <notes>CVE-2026-54515 affects com.fasterxml.jackson.core:jackson-databind 2.21.x.
             No patched release is available yet. Suppress until a fixed version is published.</notes>
