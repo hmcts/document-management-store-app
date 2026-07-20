@@ -1,8 +1,6 @@
 ARG APP_INSIGHTS_AGENT_VERSION=3.4.18
 
-ARG PLATFORM=""
-
-FROM hmctsprod.azurecr.io/base/java${PLATFORM}:25-distroless
+FROM hmctsprod.azurecr.io/base/java:25-distroless
 
 USER hmcts
 COPY lib/applicationinsights.json /opt/app/
