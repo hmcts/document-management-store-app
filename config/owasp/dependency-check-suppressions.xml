@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2026-07-20">
+    <suppress until="2026-10-20">
         <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/applicationinsights\-core@.*$</packageUrl>
         <cve>CVE-2025-21199</cve>
     </suppress>
-    <suppress until="2026-07-20">
+    <suppress until="2026-10-20">
         <packageUrl regex="true">^pkg:maven/com\.azure/.*@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
-    </suppress>
-    <suppress until="2026-07-20">
-        <packageUrl regex="true">^pkg:maven/io\.netty/.*@.*$</packageUrl>
-        <cve>CVE-2026-42582</cve>
     </suppress>
     <suppress until="2026-08-20">
         <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@.*$</packageUrl>
@@ -27,11 +23,6 @@
         <cve>CVE-2026-40993</cve>
         <cve>CVE-2026-41008</cve>
         <cve>CVE-2026-41706</cve>
-    </suppress>
-    <suppress until="2026-07-20">
-        <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
-        <cve>CVE-2026-23907</cve>
-        <cve>CVE-2026-33929</cve>
     </suppress>
     <suppress until="2026-08-30Z">
         <notes>CVE-2026-54515 affects com.fasterxml.jackson.core:jackson-databind 2.21.x.
