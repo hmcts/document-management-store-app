@@ -1,4 +1,4 @@
-ARG APP_INSIGHTS_AGENT_VERSION=3.4.18
+ARG APP_INSIGHTS_AGENT_VERSION=3.7.9
 
 FROM hmctsprod.azurecr.io/base/java:25-distroless
 
