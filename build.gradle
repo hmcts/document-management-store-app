@@ -221,7 +221,7 @@ dependencyManagement {
         }
         //CVE-2026-41006, CVE-2026-41007
         dependency 'org.springframework.hateoas:spring-hateoas:2.5.3'
-        dependency 'com.github.junrar:junrar:7.6.0'
+        dependency 'com.github.junrar:junrar:7.6.1'
         dependency 'org.eclipse.angus:angus-activation:2.1.0-M1'
         dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.24') {
             entry 'tomcat-embed-core'
