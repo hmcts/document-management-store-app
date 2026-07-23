@@ -40,6 +40,15 @@
         <cve>CVE-2026-54399</cve>
         <cve>CVE-2026-54428</cve>
     </suppress>
+    <suppress until="2027-01-31Z">
+        <notes>CVE-2026-44891, CVE-2026-55831, CVE-2026-55833 were fixed in io.netty 4.2.16.Final per the Netty
+          security release notes (https://netty.io/news/2026/07/06/4-2-16-Final.html). This is a false positive
+          caused by NVD not yet reflecting the patched version range. Re-evaluate when NVD data is updated.</notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/.*@.*$</packageUrl>
+        <cve>CVE-2026-44891</cve>
+        <cve>CVE-2026-55831</cve>
+        <cve>CVE-2026-55833</cve>
+    </suppress>
 </suppressions>
 
 
