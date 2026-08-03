@@ -59,9 +59,6 @@ variable "java_opts" {
 ////////////////////////////////////////////////
 // Endpoints
 ////////////////////////////////////////////////
-variable "idam_api_url" {
-  default = "http://betaDevBccidamAppLB.reform.hmcts.net:80"
-}
 
 variable "s2s_url" {
   default = "rpe-service-auth-provider"

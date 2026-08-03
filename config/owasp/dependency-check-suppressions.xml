@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2026-07-20">
+    <suppress until="2026-10-20">
         <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/applicationinsights\-core@.*$</packageUrl>
         <cve>CVE-2025-21199</cve>
     </suppress>
-    <suppress until="2026-07-20">
+    <suppress until="2026-10-20">
         <packageUrl regex="true">^pkg:maven/com\.azure/.*@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
-    </suppress>
-    <suppress until="2026-07-20">
-        <packageUrl regex="true">^pkg:maven/io\.netty/.*@.*$</packageUrl>
-        <cve>CVE-2026-42582</cve>
     </suppress>
     <suppress until="2026-08-20">
         <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@.*$</packageUrl>
@@ -24,11 +20,34 @@
         <cve>CVE-2026-40988</cve>
         <cve>CVE-2026-41003</cve>
         <cve>CVE-2026-41694</cve>
+        <cve>CVE-2026-40993</cve>
+        <cve>CVE-2026-41008</cve>
+        <cve>CVE-2026-41706</cve>
     </suppress>
-    <suppress until="2026-07-20">
+    <suppress until="2026-10-20">
         <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
         <cve>CVE-2026-23907</cve>
         <cve>CVE-2026-33929</cve>
+    </suppress>
+    <suppress until="2026-08-30Z">
+        <notes>CVE-2026-54515 affects com.fasterxml.jackson.core:jackson-databind 2.21.x.
+            No patched release is available yet. Suppress until a fixed version is published.</notes>
+        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson-databind@.*$</packageUrl>
+        <cve>CVE-2026-54515</cve>
+    </suppress>
+    <suppress until="2026-10-07Z">
+        <gav regex="true">^org\.apache\.httpcomponents:httpcore:.*$</gav>
+        <cve>CVE-2026-54399</cve>
+        <cve>CVE-2026-54428</cve>
+    </suppress>
+    <suppress until="2027-01-31Z">
+        <notes>CVE-2026-44891, CVE-2026-55831, CVE-2026-55833 were fixed in io.netty 4.2.16.Final per the Netty
+          security release notes (https://netty.io/news/2026/07/06/4-2-16-Final.html). This is a false positive
+          caused by NVD not yet reflecting the patched version range. Re-evaluate when NVD data is updated.</notes>
+        <packageUrl regex="true">^pkg:maven/io\.netty/.*@.*$</packageUrl>
+        <cve>CVE-2026-44891</cve>
+        <cve>CVE-2026-55831</cve>
+        <cve>CVE-2026-55833</cve>
     </suppress>
 </suppressions>
 
