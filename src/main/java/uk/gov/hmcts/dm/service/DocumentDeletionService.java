@@ -32,10 +32,10 @@ public class DocumentDeletionService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public int deleteOneBatch(LocalDate cutoffDate) {
         String sql = """
-                update storeddocument set ttl = createdon, deleted = true, harddeleted = false,
+                update storeddocument set ttl = current_timestamp, deleted = true, harddeleted = false,
                 lastmodifiedbyservice='ccd_case_disposer'
                 where id in (select id from storeddocument where cast(createdon as DATE) <= ?
-                and deleted = false order by createdon asc limit ?)
+                order by createdon asc limit ?)
                 """;
         return jdbcTemplate.update(sql, java.sql.Date.valueOf(cutoffDate), batchSize);
     }
