@@ -46,7 +46,7 @@ data "azurerm_storage_account" "dm_store_storageaccount" {
 
 resource "azurerm_storage_container" "document_container" {
   name                  = "${local.app_full_name}-docstore-${var.env}"
-  storage_account_id    = data.azurerm_storage_account.dm_store_storageaccount.id
+  storage_account_id    = data.azurerm_storage_account.dm_store_storageaccount.storageaccount_id
   container_access_type = "private"
 }
 
