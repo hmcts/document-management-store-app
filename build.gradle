@@ -264,6 +264,8 @@ dependencyManagement {
 }
 dependencyCheck {
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
+    // Force the plugin to drop the report directly into build/reports/
+    outputDirectory = layout.buildDirectory.dir("reports").get().asFile.absolutePath
 }
 
 
