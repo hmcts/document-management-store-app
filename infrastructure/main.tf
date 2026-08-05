@@ -8,9 +8,9 @@ provider "azurerm" {
 
 provider "azurerm" {
   features {}
-  skip_provider_registration = true
-  alias                      = "cft_vnet"
-  subscription_id            = var.aks_subscription_id
+  resource_provider_registrations = "none"
+  alias                           = "cft_vnet"
+  subscription_id                 = var.aks_subscription_id
 }
 
 locals {
@@ -39,9 +39,14 @@ locals {
   vaultName           = (var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName
 }
 
+data "azurerm_storage_account" "dm_store_storageaccount" {
+  name                = local.storageAccountNameDM
+  resource_group_name = local.sharedResourceGroup
+}
+
 resource "azurerm_storage_container" "document_container" {
   name                  = "${local.app_full_name}-docstore-${var.env}"
-  storage_account_name  = local.storageAccountNameDM
+  storage_account_id    = data.azurerm_storage_account.dm_store_storageaccount.id
   container_access_type = "private"
 }
 
