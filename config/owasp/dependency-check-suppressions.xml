@@ -49,6 +49,9 @@
         <cve>CVE-2026-55831</cve>
         <cve>CVE-2026-55833</cve>
     </suppress>
+    <suppress until="2026-10-07Z">
+        <cve>CVE-2026-66299</cve>
+    </suppress>
 </suppressions>
 
 
