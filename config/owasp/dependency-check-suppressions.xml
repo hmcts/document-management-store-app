@@ -50,6 +50,7 @@
         <cve>CVE-2026-55833</cve>
     </suppress>
     <suppress until="2026-10-07Z">
+        <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat-embed-(core|websocket)@.*$</packageUrl>
         <cve>CVE-2026-66299</cve>
     </suppress>
 </suppressions>
