@@ -9,7 +9,7 @@ properties([
     ],
 ])
 
-@Library("Infrastructure@2.4.9") _
+@Library("Infrastructure@2.5.0") _
 
 def type = "java"
 def product = "dm"
