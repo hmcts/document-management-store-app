@@ -91,7 +91,7 @@ def versions = [
     jackson            : '2.22.1',
     serenity           : '5.3.11',
     logging            : '8.0.0',
-    pact_version       : '4.7.4',
+    pact_version       : '4.7.5',
     emTestHelper       : '2.1.1',
     shedlock           : '7.7.0',
     jupiter            : '6.1.3',
@@ -264,8 +264,6 @@ dependencyManagement {
 }
 dependencyCheck {
     suppressionFile = 'config/owasp/dependency-check-suppressions.xml'
-    // Force the plugin to drop the report directly into build/reports/
-    outputDirectory = layout.buildDirectory.dir("reports").get().asFile.absolutePath
 }
 
 
@@ -280,7 +278,7 @@ tasks.register('integration', Test) {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '13.9.0'
+    toolVersion = '13.10.0'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
