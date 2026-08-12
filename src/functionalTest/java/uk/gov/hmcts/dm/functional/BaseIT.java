@@ -137,7 +137,11 @@ public abstract class BaseIT {
 
     public RequestSpecification givenRequest(String username, List<String> userRoles) {
 
-        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().method().log().uri().log().headers();
+        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri)
+            .log().method()
+            .log().uri()
+            .log().headers();
+
         if (username != null) {
             request = request.header(SERVICE_AUTHORIZATION_HEADER, serviceToken());
             request = request.header(USER_ID_CONST, username);
@@ -159,7 +163,11 @@ public abstract class BaseIT {
 
     public RequestSpecification givenCcdCaseDisposerRequest() {
 
-        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().method().log().uri().log().headers();
+        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri)
+            .log().method()
+            .log().uri()
+            .log().headers();
+        
         request = request.header(SERVICE_AUTHORIZATION_HEADER, authTokenProvider.findCcdCaseDisposerServiceToken());
 
         return request;
