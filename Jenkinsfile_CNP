@@ -9,7 +9,7 @@ properties([
     ],
 ])
 
-@Library("Infrastructure@d54cc50b7b0724be26d2eddb3f23be9952e2b757") _
+@Library("Infrastructure@feature/remove-state") _
 
 def type = "java"
 def product = "dm"
