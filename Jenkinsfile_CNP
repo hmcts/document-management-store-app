@@ -9,7 +9,7 @@ properties([
     ],
 ])
 
-@Library("git@github.com:HMCTS/cnp-jenkins-library.git@feature/remove-state") _
+@Library("Infrastructure@d54cc50b7b0724be26d2eddb3f23be9952e2b757") _
 
 def type = "java"
 def product = "dm"
