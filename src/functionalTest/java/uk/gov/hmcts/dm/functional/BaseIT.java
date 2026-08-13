@@ -132,12 +132,16 @@ public abstract class BaseIT {
     }
 
     public RequestSpecification givenUnauthenticatedRequest() {
-        return SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
+        return SerenityRest.given().baseUri(dmStoreBaseUri).log().method().log().uri().log().headers();
     }
 
     public RequestSpecification givenRequest(String username, List<String> userRoles) {
 
-        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
+        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri)
+            .log().method()
+            .log().uri()
+            .log().headers();
+
         if (username != null) {
             request = request.header(SERVICE_AUTHORIZATION_HEADER, serviceToken());
             request = request.header(USER_ID_CONST, username);
@@ -159,7 +163,11 @@ public abstract class BaseIT {
 
     public RequestSpecification givenCcdCaseDisposerRequest() {
 
-        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri).log().all();
+        RequestSpecification request = SerenityRest.given().baseUri(dmStoreBaseUri)
+            .log().method()
+            .log().uri()
+            .log().headers();
+        
         request = request.header(SERVICE_AUTHORIZATION_HEADER, authTokenProvider.findCcdCaseDisposerServiceToken());
 
         return request;
@@ -187,7 +195,7 @@ public abstract class BaseIT {
 
     public RequestSpecification givenS2SRequest() {
         return SerenityRest.given().baseUri(dmStoreBaseUri)
-            .log().all()
+            .log().method().log().uri().log().headers()
             .header(SERVICE_AUTHORIZATION_HEADER, serviceToken())
             .header("cache-control", "no-cache");
     }
