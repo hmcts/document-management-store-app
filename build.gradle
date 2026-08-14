@@ -176,7 +176,7 @@ dependencies {
     testImplementation group: 'net.serenity-bdd', name: 'serenity-spring', version: versions.serenity
     testImplementation group: 'net.serenity-bdd', name: 'serenity-single-page-report', version: versions.serenity
 
-    functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'3.2.0'
+    functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'3.3.0'
 
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.6.3'
     testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.6.3'
