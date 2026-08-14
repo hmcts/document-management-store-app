@@ -216,6 +216,7 @@ dependencies {
 dependencyManagement {
     dependencies {
         dependency 'com.github.hmcts:core-case-data-store-client:5.3.0'
+        dependency 'com.github.hmcts:ccd-case-document-am-client:1.60.0'
         dependency 'org.springframework.cloud:spring-cloud-starter-openfeign:4.3.3'
         dependency 'org.springframework.cloud:spring-cloud-openfeign-core:4.3.3'
         dependency 'org.springframework.cloud:spring-cloud-starter-bootstrap:4.3.3'
