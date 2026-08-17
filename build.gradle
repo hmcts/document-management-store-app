@@ -88,7 +88,7 @@ tasks.withType(JavaCompile).configureEach {
 def versions = [
     ehcache            : '3.12.0',
     postgresql         : '42.7.13',
-    jackson            : '2.22.1',
+    jackson            : '2.22.2',
     serenity           : '5.3.11',
     logging            : '8.0.0',
     pact_version       : '4.7.5',
@@ -258,8 +258,8 @@ dependencyManagement {
             entry 'log4j-core'
             entry 'log4j-to-slf4j'
         }
-        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.1'
-        dependency 'tools.jackson.core:jackson-databind:3.2.1'
+        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.2'
+        dependency 'tools.jackson.core:jackson-databind:3.2.2'
     }
 }
 dependencyCheck {
@@ -278,7 +278,7 @@ tasks.register('integration', Test) {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '13.10.0'
+    toolVersion = '13.11.0'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
@@ -346,7 +346,7 @@ pitest {
     failWhenNoMutations = false
     detectInlinedCode = true
     junit5PluginVersion = '1.2.1'
-    pitestVersion = '1.17.3'
+    pitestVersion = '1.22.1'
 }
 
 
