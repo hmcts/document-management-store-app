@@ -8,7 +8,7 @@
         <packageUrl regex="true">^pkg:maven/com\.azure/.*@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
     </suppress>
-    <suppress until="2026-08-20">
+    <suppress until="2026-11-20">
         <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@.*$</packageUrl>
         <cve>CVE-2026-22732</cve>
         <cve>CVE-2026-22746</cve>
