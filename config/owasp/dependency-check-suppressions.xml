@@ -47,6 +47,17 @@
         <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat-embed-(core|websocket)@.*$</packageUrl>
         <cve>CVE-2026-66299</cve>
     </suppress>
+    <suppress until="2027-01-10Z">
+        <notes>Spring Framework 6.2.x is EOL with no public fix for these CVEs. Fixed in Spring Framework 7.0.9
+            (Spring Boot 4.0.8+). Upgrading to Spring Boot 4.x is required for a public OSS fix.
+            CVE-2026-59313: Stream corruption when using SSE with the functional web framework.
+            CVE-2026-59314: HTTP response splitting via Content-Disposition from untrusted filename input.
+            See https://www.cve.org/CVERecord?id=CVE-2026-59313
+            See https://www.cve.org/CVERecord?id=CVE-2026-59314</notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring-.*@6\.2\..*$</packageUrl>
+        <cve>CVE-2026-59313</cve>
+        <cve>CVE-2026-59314</cve>
+    </suppress>
 </suppressions>
 
 
