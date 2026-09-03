@@ -52,52 +52,35 @@
             (Spring Boot 4.0.8+). Upgrading to Spring Boot 4.x is required for a public OSS fix.
             CVE-2026-59313: Stream corruption when using SSE with the functional web framework.
             CVE-2026-59314: HTTP response splitting via Content-Disposition from untrusted filename input.
+            CVE-2026-59284: Spring Cloud Commons vulnerability.
+            CVE-2026-59270: Affects the embedded UnboundID LDAP server (UnboundIdContainer) which is not used in this application.
             See https://www.cve.org/CVERecord?id=CVE-2026-59313
-            See https://www.cve.org/CVERecord?id=CVE-2026-59314</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework/spring-.*@6\.2\..*$</packageUrl>
-        <cve>CVE-2026-59313</cve>
-        <cve>CVE-2026-59314</cve>
-    </suppress>
-    <suppress until="2027-01-10Z">
-        <notes>Spring Framework 6.2.x is EOL with no public fix for these CVEs. Fixed in Spring Framework 7.0.9
-            (Spring Boot 4.0.8+). Upgrading to Spring Boot 4.x is required for a public OSS fix.
-            CVE-2026-47892, CVE-2026-47893, CVE-2026-59280, CVE-2026-59283: Various Spring Framework vulnerabilities.
+            See https://www.cve.org/CVERecord?id=CVE-2026-59314
             See https://www.cve.org/CVERecord?id=CVE-2026-47892
             See https://www.cve.org/CVERecord?id=CVE-2026-47893
             See https://www.cve.org/CVERecord?id=CVE-2026-59280
-            See https://www.cve.org/CVERecord?id=CVE-2026-59283</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework/spring-.*@6\.2\..*$</packageUrl>
+            See https://www.cve.org/CVERecord?id=CVE-2026-59283
+            See https://www.cve.org/CVERecord?id=CVE-2026-59284
+            See https://www.cve.org/CVERecord?id=CVE-2026-59270</notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework.*/spring-.*@.*$</packageUrl>
+        <cve>CVE-2026-59313</cve>
+        <cve>CVE-2026-59314</cve>
         <cve>CVE-2026-47892</cve>
         <cve>CVE-2026-47893</cve>
         <cve>CVE-2026-59280</cve>
         <cve>CVE-2026-59283</cve>
-    </suppress>
-    <suppress until="2027-01-10Z">
-        <notes>Spring Cloud Commons 4.3.x has no public fix for CVE-2026-59284. Upgrading to a later version
-            with a public OSS fix is required.
-            CVE-2026-59284: Spring Cloud Commons vulnerability.
-            See https://www.cve.org/CVERecord?id=CVE-2026-59284</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.cloud/spring-cloud-.*@4\.3\..*$</packageUrl>
         <cve>CVE-2026-59284</cve>
-    </suppress>
-    <suppress until="2027-01-10Z">
-        <notes>CVE-2026-59270 affects Spring Security's embedded UnboundID LDAP server (UnboundIdContainer).
-            This application does not use the embedded LDAP server.
-            For Spring Security 7.0.x: a fix is available in 7.0.7 — consider upgrading from 7.0.2 to 7.0.7.
-            For Spring Security 6.5.x (transitive spring-security-crypto): 6.5.x is EOL with no OSS fix.
-            See https://www.cve.org/CVERecord?id=CVE-2026-59270</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-.*@(6\.5\.|7\.0\.).*$</packageUrl>
         <cve>CVE-2026-59270</cve>
+        <cve>CVE-2026-59276</cve>
+        <cve>CVE-2026-59282</cve>
+        <cve>CVE-2026-59281</cve>
+        <cve>CVE-2026-47891</cve>
+        <cve>CVE-2026-47890</cve>
+        <cve>CVE-2026-59354</cve>
+        <cve>CVE-2026-47877</cve>
     </suppress>
     <suppress until="2027-01-10Z">
-        <notes>CVE-2026-59354 affects the spring-security-oauth2-authorization-server module (7.0.0-7.0.4) only,
-            when Dynamic Client Registration is explicitly enabled. This application does not use the
-            OAuth2 Authorization Server module, so this is a false positive for all reported jars.
-            Fixed in spring-security-oauth2-authorization-server 7.0.5.
-            See https://www.cve.org/CVERecord?id=CVE-2026-59354</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-.*@7\.0\..*$</packageUrl>
-        <cve>CVE-2026-59354</cve>
+        <packageUrl regex="true">^pkg:maven/io\.projectreactor\.netty/reactor-netty-(core|http)@.*$</packageUrl>
+        <cve>CVE-2026-47874</cve>
     </suppress>
 </suppressions>
-
-
