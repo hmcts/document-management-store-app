@@ -76,7 +76,7 @@ public class AuthTokenProvider {
 
         return BEARER_PREFIX + response
             .getBody()
-            .print();
+            .asString();
     }
 
     public String findCcdCaseDisposerServiceToken() {
@@ -98,7 +98,7 @@ public class AuthTokenProvider {
 
         return BEARER_PREFIX + response
             .getBody()
-            .print();
+            .asString();
     }
 
     public int findUserId(String userToken) {

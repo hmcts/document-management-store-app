@@ -8,7 +8,7 @@
         <packageUrl regex="true">^pkg:maven/com\.azure/.*@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
     </suppress>
-    <suppress until="2026-08-20">
+    <suppress until="2026-11-20">
         <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@.*$</packageUrl>
         <cve>CVE-2026-22732</cve>
         <cve>CVE-2026-22746</cve>
@@ -29,12 +29,6 @@
         <cve>CVE-2026-23907</cve>
         <cve>CVE-2026-33929</cve>
     </suppress>
-    <suppress until="2026-08-30Z">
-        <notes>CVE-2026-54515 affects com.fasterxml.jackson.core:jackson-databind 2.21.x.
-            No patched release is available yet. Suppress until a fixed version is published.</notes>
-        <packageUrl regex="true">^pkg:maven/com\.fasterxml\.jackson\.core/jackson-databind@.*$</packageUrl>
-        <cve>CVE-2026-54515</cve>
-    </suppress>
     <suppress until="2026-10-07Z">
         <gav regex="true">^org\.apache\.httpcomponents:httpcore:.*$</gav>
         <cve>CVE-2026-54399</cve>
@@ -49,6 +43,47 @@
         <cve>CVE-2026-55831</cve>
         <cve>CVE-2026-55833</cve>
     </suppress>
+    <suppress until="2026-10-07Z">
+        <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat-embed-(core|websocket)@.*$</packageUrl>
+        <cve>CVE-2026-66299</cve>
+    </suppress>
+    <suppress until="2027-01-10Z">
+        <notes>Spring Framework 6.2.x is EOL with no public fix for these CVEs. Fixed in Spring Framework 7.0.9
+            (Spring Boot 4.0.8+). Upgrading to Spring Boot 4.x is required for a public OSS fix.
+            CVE-2026-59313: Stream corruption when using SSE with the functional web framework.
+            CVE-2026-59314: HTTP response splitting via Content-Disposition from untrusted filename input.
+            CVE-2026-59284: Spring Cloud Commons vulnerability.
+            CVE-2026-59270: Affects the embedded UnboundID LDAP server (UnboundIdContainer) which is not used in this application.
+            See https://www.cve.org/CVERecord?id=CVE-2026-59313
+            See https://www.cve.org/CVERecord?id=CVE-2026-59314
+            See https://www.cve.org/CVERecord?id=CVE-2026-47892
+            See https://www.cve.org/CVERecord?id=CVE-2026-47893
+            See https://www.cve.org/CVERecord?id=CVE-2026-59280
+            See https://www.cve.org/CVERecord?id=CVE-2026-59283
+            See https://www.cve.org/CVERecord?id=CVE-2026-59284
+            See https://www.cve.org/CVERecord?id=CVE-2026-59270</notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework.*/spring-.*@.*$</packageUrl>
+        <cve>CVE-2026-59313</cve>
+        <cve>CVE-2026-59314</cve>
+        <cve>CVE-2026-47892</cve>
+        <cve>CVE-2026-47893</cve>
+        <cve>CVE-2026-59280</cve>
+        <cve>CVE-2026-59283</cve>
+        <cve>CVE-2026-59284</cve>
+        <cve>CVE-2026-59270</cve>
+        <cve>CVE-2026-59276</cve>
+        <cve>CVE-2026-59282</cve>
+        <cve>CVE-2026-59281</cve>
+        <cve>CVE-2026-47891</cve>
+        <cve>CVE-2026-47890</cve>
+        <cve>CVE-2026-59354</cve>
+        <cve>CVE-2026-47877</cve>
+        <cve>CVE-2026-47842</cve>
+        <cve>CVE-2026-47841</cve>
+        <cve>CVE-2026-47834</cve>
+    </suppress>
+    <suppress until="2027-01-10Z">
+        <packageUrl regex="true">^pkg:maven/io\.projectreactor\.netty/reactor-netty-(core|http)@.*$</packageUrl>
+        <cve>CVE-2026-47874</cve>
+    </suppress>
 </suppressions>
-
-
