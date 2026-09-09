@@ -48,22 +48,26 @@ public class FileSizeVerifier {
             if (multipartFile.getOriginalFilename() != null) {
                 metadata.add(TikaCoreProperties.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
                 metadata.add(HttpHeaders.CONTENT_TYPE, multipartFile.getContentType());
-                log.error("CONTENT_TYPE {}", multipartFile.getContentType());
             }
             String detected = tika.detect(tikaInputStream, metadata);
             String detectedBase = detected.split(";")[0].trim();
-            log.error("fileSizeInBytes: {}, detected: {} detectedBase: {}", fileSizeInBytes, detected, detectedBase);
             if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(detectedBase))
                     && fileSizeInBytes > mediaFileSizeInBytes) {
-                log.error("The uploaded Media file size {} is more than the allowed limit of: {} MB",
-                        fileSizeInBytes,
-                        mediaFileSize);
+                log.error(
+                    "The uploaded Media file size {} is more than the allowed limit of: {} MB, for mimetype: {}",
+                    fileSizeInBytes,
+                    mediaFileSize,
+                    detected
+                );
                 return false;
             } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(detectedBase))
                     && fileSizeInBytes > nonMediaFileSizeInBytes) {
-                log.error("The uploaded Non-Media file size {} is more than the allowed limit of : {} MB",
+                log.error(
+                    "The uploaded Non-Media file size {} is more than the allowed limit of : {} MB, for mimetype: {}",
                     fileSizeInBytes,
-                    nonMediaFileSize);
+                    nonMediaFileSize,
+                    detected
+                );
                 return false;
             }
         } catch (IOException e) {
