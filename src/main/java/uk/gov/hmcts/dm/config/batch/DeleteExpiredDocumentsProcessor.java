@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.config.batch;
 
-import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService;

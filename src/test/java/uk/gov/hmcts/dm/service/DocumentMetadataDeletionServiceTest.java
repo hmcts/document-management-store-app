@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
 import org.mockito.Mock;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.hmcts.reform.authorisation.generators.AuthTokenGenerator;
 import uk.gov.hmcts.reform.idam.client.IdamClient;
 
@@ -15,11 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class DocumentMetadataDeletionServiceTest {
 
     @Mock
@@ -54,8 +55,8 @@ class DocumentMetadataDeletionServiceTest {
             SYSTEM_PASSWORD
         );
 
-        when(idamClient.getAccessToken(SYSTEM_USERNAME, SYSTEM_PASSWORD)).thenReturn(USER_TOKEN);
-        when(authTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
+        lenient().when(idamClient.getAccessToken(SYSTEM_USERNAME, SYSTEM_PASSWORD)).thenReturn(USER_TOKEN);
+        lenient().when(authTokenGenerator.generate()).thenReturn(SERVICE_TOKEN);
     }
 
     @Test
