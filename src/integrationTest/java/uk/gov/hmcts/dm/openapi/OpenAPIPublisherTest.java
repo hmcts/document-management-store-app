@@ -3,13 +3,13 @@ package uk.gov.hmcts.dm.openapi;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 import uk.gov.hmcts.dm.componenttests.ComponentTestBase;
 
 import java.io.OutputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,7 +33,8 @@ class OpenAPIPublisherTest extends ComponentTestBase {
             .getResponse()
             .getContentAsByteArray();
 
-        try (OutputStream outputStream = Files.newOutputStream(Paths.get("/tmp/openapi-specs.json"))) {
+        Path outputPath = Path.of(System.getProperty("java.io.tmpdir"), "openapi-specs.json");
+        try (OutputStream outputStream = Files.newOutputStream(outputPath)) {
             outputStream.write(specs);
         }
     }
