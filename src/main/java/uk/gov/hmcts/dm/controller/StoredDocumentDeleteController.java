@@ -119,7 +119,7 @@ public class StoredDocumentDeleteController {
                 invalidRequestException.getMessage(),
                 invalidRequestException
             );
-            return new ResponseEntity<>(null, BAD_REQUEST);
+            return ResponseEntity.status(BAD_REQUEST).build();
         }
     }
 

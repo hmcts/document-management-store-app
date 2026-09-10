@@ -10,17 +10,17 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @ConditionalOnProperty("toggle.includeidamhealth")
-public class IdamHealth implements HealthIndicator {
+public class IdamServiceHealth implements HealthIndicator {
 
-    private final WebChecker idamWebChecker;
+    private final WebChecker idamServiceWebChecker;
 
     @Autowired
-    public IdamHealth(@Value("${auth.idam.client.baseUrl}") String idam) {
-        idamWebChecker = new WebChecker("Idam", idam, new RestTemplate());
+    public IdamServiceHealth(@Value("${auth.provider.service.client.baseUrl}") String idamService) {
+        idamServiceWebChecker = new WebChecker("Idam Service", idamService, new RestTemplate());
     }
 
     @Override
     public Health health() {
-        return idamWebChecker.health();
+        return idamServiceWebChecker.health();
     }
 }
