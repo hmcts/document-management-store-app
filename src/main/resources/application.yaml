@@ -11,7 +11,8 @@ spring:
       detection-strategy: annotated
   lifecycle:
     timeout-per-shutdown-phase: ${TIMEOUT_SERVER_SHUTDOWN_PHASE:1m}
-  jackson:
+  # Boot 4 keeps this service on Jackson 2 while controllers and HAL migrate.
+  jackson2:
     date-format: "yyyy-MM-dd'T'HH:mm:ssZ"
     serialization:
       indent_output: true
