@@ -144,7 +144,7 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '13.3.0'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '13.3.0'
 
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.5'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '6.1.0'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '9.0'
 
@@ -219,7 +219,7 @@ dependencies {
     integrationTestImplementation sourceSets.test.runtimeClasspath
 
 
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.9.0'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.1.1'
 }
 
 dependencyManagement {
@@ -229,7 +229,7 @@ dependencyManagement {
             entry 'junit-platform-engine'
         }
         //CVE-2026-41006, CVE-2026-41007
-        dependency 'org.springframework.hateoas:spring-hateoas:2.5.3'
+        dependency 'org.springframework.hateoas:spring-hateoas:3.1.1'
         dependency 'com.github.junrar:junrar:8.1.0'
         dependency 'org.eclipse.angus:angus-activation:2.1.0-M1'
         dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.25') {
