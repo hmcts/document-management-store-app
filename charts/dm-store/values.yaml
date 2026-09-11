@@ -56,7 +56,7 @@ java:
     DM_S2S_SERVICE_NAME: dm_store
 
     # Toggles
-    ENABLE_IDAM_HEALTH_CHECK: 'false'
+    ENABLE_IDAM_HEALTH_CHECK: 'true'
     ENABLE_METADATA_SEARCH: 'false'
     ENABLE_DOCUMENT_AND_METADATA_UPLOAD: 'false'
     ENABLE_FOLDER_API: 'true'
