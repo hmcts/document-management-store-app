@@ -145,7 +145,7 @@ dependencies {
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '13.3.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '6.1.0'
-    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
+    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '4.0.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '9.0'
 
 
@@ -207,7 +207,7 @@ dependencies {
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version : versions.jupiter
 
     contractTestImplementation group: 'au.com.dius.pact', name: 'provider', version: versions.pact_version
-    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring6', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring7', version: versions.pact_version
 
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version

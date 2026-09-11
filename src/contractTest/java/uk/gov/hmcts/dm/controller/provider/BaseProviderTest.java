@@ -6,7 +6,7 @@ import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
-import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
+import au.com.dius.pact.provider.spring.spring7.Spring7MockMvcTestTarget;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
@@ -152,7 +152,7 @@ public abstract class BaseProviderTest {
     void setupPactVerification(PactVerificationContext context) {
         System.getProperties().setProperty("pact.verifier.publishResults", "true");
         if (context != null) {
-            MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
+            Spring7MockMvcTestTarget testTarget = new Spring7MockMvcTestTarget(mockMvc);
             testTarget.setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper));
             context.setTarget(testTarget);
         }

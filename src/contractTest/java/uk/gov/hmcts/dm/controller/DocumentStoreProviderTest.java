@@ -5,7 +5,7 @@ import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
-import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
+import au.com.dius.pact.provider.spring.spring7.Spring7MockMvcTestTarget;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class DocumentStoreProviderTest extends BaseProviderTest {
     void before(PactVerificationContext context) {
         System.getProperties().setProperty("pact.verifier.publishResults", "true");
         if (context != null) {
-            context.setTarget(new MockMvcTestTarget(mockMvc));
+            context.setTarget(new Spring7MockMvcTestTarget(mockMvc));
         }
     }
 
