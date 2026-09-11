@@ -43,25 +43,31 @@ public class FileSizeVerifier {
 
         try (InputStream inputStream = multipartFile.getInputStream();
              TikaInputStream tikaInputStream = TikaInputStream.get(inputStream)) {
-            long fileSizeInBytes = tikaInputStream.getLength();
-
+            long fileSizeInBytes = multipartFile.getSize();
             Metadata metadata = new Metadata();
             if (multipartFile.getOriginalFilename() != null) {
                 metadata.add(TikaCoreProperties.RESOURCE_NAME_KEY, multipartFile.getOriginalFilename());
                 metadata.add(HttpHeaders.CONTENT_TYPE, multipartFile.getContentType());
             }
             String detected = tika.detect(tikaInputStream, metadata);
-            if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(detected))
+            String detectedBase = detected.split(";")[0].trim();
+            if (mediaMimeTypes.stream().anyMatch(m -> m.equalsIgnoreCase(detectedBase))
                     && fileSizeInBytes > mediaFileSizeInBytes) {
-                log.error("The uploaded Media file size {} is more than the allowed limit of: {} MB",
-                        fileSizeInBytes,
-                        mediaFileSize);
-                return false;
-            } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(detected))
-                    && fileSizeInBytes > nonMediaFileSizeInBytes) {
-                log.error("The uploaded Non-Media file size {} is more than the allowed limit of : {} MB",
+                log.error(
+                    "The uploaded Media file size {} is more than the allowed limit of: {} MB, for mimetype: {}",
                     fileSizeInBytes,
-                    nonMediaFileSize);
+                    mediaFileSize,
+                    detected
+                );
+                return false;
+            } else if (mediaMimeTypes.stream().noneMatch(m -> m.equalsIgnoreCase(detectedBase))
+                    && fileSizeInBytes > nonMediaFileSizeInBytes) {
+                log.error(
+                    "The uploaded Non-Media file size {} is more than the allowed limit of : {} MB, for mimetype: {}",
+                    fileSizeInBytes,
+                    nonMediaFileSize,
+                    detected
+                );
                 return false;
             }
         } catch (IOException e) {
