@@ -415,6 +415,7 @@ tasks.register('functional', Test) {
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+    jvmArgs '-XX:+EnableDynamicAgentLoading', '-Djdk.attach.allowAttachSelf=true'
     useJUnitPlatform()
     //finalizedBy aggregate
 }
