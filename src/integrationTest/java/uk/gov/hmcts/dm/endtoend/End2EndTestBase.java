@@ -7,8 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.invocation.InvocationOnMock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
@@ -47,7 +47,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 public abstract class End2EndTestBase {
 
     protected static final MockMultipartFile FILE =
-        new MockMultipartFile("files", "test.txt","text/plain", "test".getBytes(StandardCharsets.UTF_8));
+        new MockMultipartFile("files", "test.txt", "text/plain", "test".getBytes(StandardCharsets.UTF_8));
 
     protected MockMvc mvc;
 
