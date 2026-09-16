@@ -103,9 +103,6 @@ variable "show_sql" {
 ////////////////////////////////////////////////
 // Toggle Features
 ////////////////////////////////////////////////
-variable "enable_idam_healthcheck" {
-  default = "false"
-}
 
 variable "enable_document_and_metadata_upload" {
   default = "true"
