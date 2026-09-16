@@ -50,7 +50,8 @@ import static org.mockito.Mockito.when;
 @PactBroker(
     url = "${PACT_BROKER_FULL_URL:http://localhost:80}",
     providerBranch = "${pact.provider.branch}",
-    enablePendingPacts = "${pactbroker.enablePending:true}"
+    enablePendingPacts = "${pactbroker.enablePending:true}",
+    includeWipPactsSince = "${pactbroker.includeWipPactsSince:}"
 )
 //@PactFolder("pacts")
 @Import({TestSecurityConfiguration.class})
