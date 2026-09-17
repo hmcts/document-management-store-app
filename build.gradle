@@ -1,5 +1,7 @@
 import org.flywaydb.gradle.task.FlywayMigrateTask
 
+import java.time.LocalDate
+
 buildscript {
     dependencies {
         classpath("org.flywaydb:flyway-database-postgresql:13.7.0")
@@ -523,6 +525,13 @@ tasks.withType(Test).configureEach { t ->
         systemProperty 'pact.provider.branch', project.property('pact.provider.branch')
     } else {
         systemProperty 'pact.provider.branch', System.getenv("PACT_BRANCH_NAME") ?: "Dev"
+    }
+
+    // Dynamic 6-month look back for WIP pacts
+    if (project.hasProperty('pactbroker.includeWipPactsSince')) {
+        systemProperty 'pactbroker.includeWipPactsSince', project.property('pactbroker.includeWipPactsSince')
+    } else {
+        systemProperty 'pactbroker.includeWipPactsSince', LocalDate.now().minusMonths(6).toString()
     }
 
     doFirst {
