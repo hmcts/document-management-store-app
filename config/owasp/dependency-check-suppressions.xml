@@ -99,7 +99,5 @@
             Re-evaluate when an OSS-compatible fix is available for this Spring Boot line.
             See https://spring.io/security/cve-2026-47849 and https://spring.io/security/cve-2026-47850</notes>
         <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring-boot-data-rest@.*$</packageUrl>
-        <cve>CVE-2026-47849</cve>
-        <cve>CVE-2026-47850</cve>
     </suppress>
 </suppressions>
