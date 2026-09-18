@@ -93,11 +93,4 @@
         <packageUrl regex="true">^pkg:maven/io\.projectreactor\.netty/reactor-netty-(core|http)@.*$</packageUrl>
         <cve>CVE-2026-47874</cve>
     </suppress>
-    <suppress until="2027-01-10Z">
-        <notes>Spring Data REST 4.1.x is affected by these CVEs. The public OSS fix is available only
-            for Spring Data REST 5.0.7 and later; the corresponding 4.x fix is enterprise-only.
-            Re-evaluate when an OSS-compatible fix is available for this Spring Boot line.
-            See https://spring.io/security/cve-2026-47849 and https://spring.io/security/cve-2026-47850</notes>
-        <packageUrl regex="true">^pkg:maven/org\.springframework\.boot/spring-boot-data-rest@.*$</packageUrl>
-    </suppress>
 </suppressions>
