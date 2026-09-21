@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.componenttests.sugar;
 
-import tools.jackson.databind.json.JsonMapper;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.List;
