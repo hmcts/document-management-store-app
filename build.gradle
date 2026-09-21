@@ -90,7 +90,6 @@ tasks.withType(JavaCompile).configureEach {
 def versions = [
     ehcache            : '3.12.0',
     postgresql         : '42.7.13',
-    jackson            : '2.22.2',
     serenity           : '5.3.11',
     logging            : '8.0.0',
     pact_version       : '4.7.5',
@@ -111,10 +110,6 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '33.7.1-jre'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.22.0'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.22'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache, {
         exclude group: "org.glassfish.jaxb", module: "jaxb-runtime"
@@ -131,8 +126,6 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch-jdbc'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-flyway'
-    // Existing controllers, HAL customisation and tests use Jackson 2 APIs.
-    implementation group: 'org.springframework.boot', name: 'spring-boot-jackson2'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
 
@@ -269,8 +262,6 @@ dependencyManagement {
             entry 'log4j-core'
             entry 'log4j-to-slf4j'
         }
-        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.2'
-        dependency 'tools.jackson.core:jackson-databind:3.2.2'
     }
 }
 dependencyCheck {

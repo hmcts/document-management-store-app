@@ -1,8 +1,8 @@
 package uk.gov.hmcts.dm.componenttests;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import tools.jackson.databind.ObjectWriter;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import uk.gov.hmcts.dm.domain.DocumentContentVersion;
@@ -95,12 +95,14 @@ public class TestUtil {
     }
 
     public static byte[] convertObjectToJsonBytes(Object object) throws IOException {
-        ObjectMapper om = new ObjectMapper().setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+        JsonMapper om = JsonMapper.builder()
+            .changeDefaultPropertyInclusion(inclusion -> inclusion.withValueInclusion(JsonInclude.Include.NON_NULL))
+            .build();
         return om.writeValueAsBytes(object);
     }
 
     public static String convertObjectToJsonString(Object object) throws IOException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        ObjectWriter ow = JsonMapper.builder().build().writer().withDefaultPrettyPrinter();
         return ow.writeValueAsString(object);
     }
 

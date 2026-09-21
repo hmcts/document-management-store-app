@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -76,7 +76,7 @@ class AuditTest extends End2EndTestBase {
     }
 
     private JsonNode getAuditEntriesFromResponse(MvcResult auditResponse) throws IOException {
-        return new ObjectMapper().readTree(auditResponse.getResponse().getContentAsString())
+        return JsonMapper.builder().build().readTree(auditResponse.getResponse().getContentAsString())
                 .at("/_embedded/auditEntries");
     }
 

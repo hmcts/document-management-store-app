@@ -1,6 +1,6 @@
 package uk.gov.hmcts.dm.componenttests;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +49,7 @@ public abstract class ComponentTestBase {
     protected WebApplicationContext webApplicationContext;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
 
     @Autowired
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;

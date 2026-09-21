@@ -2,7 +2,7 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class StoredDocumentControllerProviderTest extends BaseProviderTest {
     public StoredDocumentControllerProviderTest(
         MockMvc mockMvc,
         WebApplicationContext webApplicationContext,
-        ObjectMapper objectMapper,
+        JsonMapper objectMapper,
         ConfigurableListableBeanFactory configurableListableBeanFactory,
         DmServiceAuthFilter filter
     ) {

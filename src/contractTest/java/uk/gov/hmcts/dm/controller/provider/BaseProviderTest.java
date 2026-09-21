@@ -7,7 +7,7 @@ import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 import au.com.dius.pact.provider.spring.spring7.Spring7MockMvcTestTarget;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -70,7 +70,7 @@ public abstract class BaseProviderTest {
 
     protected WebApplicationContext webApplicationContext;
 
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
 
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
@@ -122,7 +122,7 @@ public abstract class BaseProviderTest {
     protected BaseProviderTest(
         MockMvc mockMvc,
         WebApplicationContext webApplicationContext,
-        ObjectMapper objectMapper,
+        JsonMapper objectMapper,
         ConfigurableListableBeanFactory configurableListableBeanFactory,
         DmServiceAuthFilter filter
     ) {
@@ -154,7 +154,7 @@ public abstract class BaseProviderTest {
         System.getProperties().setProperty("pact.verifier.publishResults", "true");
         if (context != null) {
             Spring7MockMvcTestTarget testTarget = new Spring7MockMvcTestTarget(mockMvc);
-            testTarget.setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper));
+            testTarget.setMessageConverters(new JacksonJsonHttpMessageConverter(objectMapper));
             context.setTarget(testTarget);
         }
     }
