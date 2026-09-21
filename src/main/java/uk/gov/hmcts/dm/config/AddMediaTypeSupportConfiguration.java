@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.server.mvc.TypeConstrainedJacksonJsonHttpMessageConverter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
     public Object postProcessBeforeInitialization(Object bean, String s) {
         if (bean instanceof RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
             requestMappingHandlerAdapter.getMessageConverters().stream()
-                .filter(converter -> converter instanceof MappingJackson2HttpMessageConverter
+                .filter(converter -> converter instanceof JacksonJsonHttpMessageConverter
                     || converter instanceof TypeConstrainedJacksonJsonHttpMessageConverter)
                 .forEach(converter -> {
                     List<MediaType> vendorSpecificTypes =
@@ -32,8 +32,8 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
     }
 
     private void setSupportedMediaTypes(HttpMessageConverter<?> converter, List<MediaType> mediaTypes) {
-        if (converter instanceof MappingJackson2HttpMessageConverter jackson2Converter) {
-            jackson2Converter.setSupportedMediaTypes(mediaTypes);
+        if (converter instanceof JacksonJsonHttpMessageConverter jacksonConverter) {
+            jacksonConverter.setSupportedMediaTypes(mediaTypes);
         } else if (converter instanceof TypeConstrainedJacksonJsonHttpMessageConverter hateoasConverter) {
             hateoasConverter.setSupportedMediaTypes(mediaTypes);
         }

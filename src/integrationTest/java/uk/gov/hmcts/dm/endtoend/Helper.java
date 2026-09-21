@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.endtoend;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -14,7 +14,7 @@ import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ROLES_HEADER;
 
 public class Helper {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final JsonMapper MAPPER = JsonMapper.builder().build();
 
     private Helper() {
     }

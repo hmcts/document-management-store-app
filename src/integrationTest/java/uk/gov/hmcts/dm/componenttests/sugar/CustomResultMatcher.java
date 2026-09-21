@@ -1,7 +1,7 @@
 package uk.gov.hmcts.dm.componenttests.sugar;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
+import tools.jackson.databind.type.CollectionType;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
 
@@ -12,15 +12,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CustomResultMatcher implements ResultMatcher {
 
-    private final ObjectMapper objectMapper;
+    private final JsonMapper objectMapper;
     private final Class<Object> expectedClass;
     private final List<ResultMatcher> matchers = new ArrayList<>();
 
-    public CustomResultMatcher(ObjectMapper objectMapper) {
+    public CustomResultMatcher(JsonMapper objectMapper) {
         this(objectMapper, null);
     }
 
-    public CustomResultMatcher(ObjectMapper objectMapper, Class<Object> expectedClass) {
+    public CustomResultMatcher(JsonMapper objectMapper, Class<Object> expectedClass) {
         this.objectMapper = objectMapper;
         this.expectedClass = expectedClass;
     }
