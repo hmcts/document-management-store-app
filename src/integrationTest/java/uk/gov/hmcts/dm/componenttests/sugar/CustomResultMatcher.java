@@ -1,9 +1,9 @@
 package uk.gov.hmcts.dm.componenttests.sugar;
 
-import tools.jackson.databind.type.CollectionType;
-import tools.jackson.databind.json.JsonMapper;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.type.CollectionType;
 
 import java.util.ArrayList;
 import java.util.List;
