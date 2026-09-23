@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.service;
 import com.google.common.util.concurrent.SimpleTimeLimiter;
 import org.apache.tika.exception.AccessPermissionException;
 import org.apache.tika.exception.EncryptedDocumentException;
+import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
@@ -30,7 +31,7 @@ public class PasswordVerifier {
 
             Callable<Boolean> task = () -> {
                 try {
-                    new AutoDetectParser().parse(multipartFile.getInputStream(),
+                    new AutoDetectParser().parse(TikaInputStream.get(multipartFile.getInputStream()),
                             new DefaultHandler(), new Metadata(), new ParseContext());
                     return true;
                 } catch (EncryptedDocumentException | AccessPermissionException e) {
