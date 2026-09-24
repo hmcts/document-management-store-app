@@ -12,7 +12,7 @@ plugins {
     id 'application'
     id 'uk.gov.hmcts.java' version '0.12.70'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.springframework.boot' version '3.5.16'
+    id 'org.springframework.boot' version '4.1.1'
     id 'com.github.ben-manes.versions' version '0.64.0'
     id 'org.sonarqube' version '7.5.0.8588'
     id 'jacoco'
@@ -90,14 +90,13 @@ tasks.withType(JavaCompile).configureEach {
 def versions = [
     ehcache            : '3.12.0',
     postgresql         : '42.7.13',
-    jackson            : '2.22.2',
     serenity           : '5.3.11',
     logging            : '8.0.0',
     pact_version       : '4.7.5',
     emTestHelper       : '2.1.1',
     shedlock           : '7.10.1',
     jupiter            : '6.1.3',
-    springSecurity     : '7.0.2'
+    springCloud        : '5.0.3'
 ]
 
 ext['hibernate.version'] = versions.hibernate
@@ -111,10 +110,6 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '33.7.1-jre'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.22.0'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.22'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
 
     implementation group: 'org.ehcache', name: 'ehcache', version: versions.ehcache, {
         exclude group: "org.glassfish.jaxb", module: "jaxb-runtime"
@@ -122,12 +117,15 @@ dependencies {
 
     implementation group: 'org.springframework', name: 'spring-context-support', version: '7.0.9'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-health'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aspectj'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-rest'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-restclient'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch-jdbc'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-flyway'
 
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
 
@@ -139,8 +137,8 @@ dependencies {
     implementation group: 'org.flywaydb', name: 'flyway-core', version: '13.7.0'
     runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '13.7.0'
 
-    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '5.3.5'
-    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '3.0.5'
+    implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '6.1.0'
+    implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '4.0.0'
     implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '9.0'
 
 
@@ -148,20 +146,22 @@ dependencies {
     implementation group: 'com.microsoft.azure', name: 'applicationinsights-core', version: '3.7.10'
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.14'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.3.3'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.3.3'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: versions.springCloud
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: versions.springCloud
 
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
-    implementation group: 'org.springframework.security', name: 'spring-security-core', version: versions.springSecurity
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-resource-server'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-client'
+    implementation group: 'org.springframework.security', name: 'spring-security-web'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-jose'
+    implementation group: 'org.springframework.security', name: 'spring-security-oauth2-core'
+    implementation group: 'org.springframework.security', name: 'spring-security-config'
+    implementation group: 'org.springframework.security', name: 'spring-security-core'
 
-    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', {
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test-classic', {
         exclude(module: 'commons-logging')
     }
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-webmvc-test'
+    testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-security-test'
 
     testImplementation group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
@@ -195,12 +195,11 @@ dependencies {
 
     //pact
     contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5', version: versions.pact_version
-    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'junit5spring', version: versions.pact_version
     contractTestImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: versions.jupiter
     contractTestRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version : versions.jupiter
 
     contractTestImplementation group: 'au.com.dius.pact', name: 'provider', version: versions.pact_version
-    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring6', version: versions.pact_version
+    contractTestImplementation group: 'au.com.dius.pact.provider', name: 'spring7', version: versions.pact_version
 
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit', version: versions.pact_version
     contractTestImplementation group: 'au.com.dius.pact.consumer', name: 'junit5', version: versions.pact_version
@@ -212,7 +211,7 @@ dependencies {
     integrationTestImplementation sourceSets.test.runtimeClasspath
 
 
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.9.1'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '3.1.1'
 }
 
 dependencyManagement {
@@ -222,7 +221,6 @@ dependencyManagement {
             entry 'junit-platform-engine'
         }
         //CVE-2026-41006, CVE-2026-41007
-        dependency 'org.springframework.hateoas:spring-hateoas:2.5.3'
         dependency 'com.github.junrar:junrar:8.1.1'
         dependency 'org.eclipse.angus:angus-activation:2.1.0-M1'
         dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.26') {
@@ -234,11 +232,14 @@ dependencyManagement {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-codec-base'
+            entry 'netty-codec-classes-quic'
             entry 'netty-codec-compression'
             entry 'netty-codec-dns'
             entry 'netty-codec-http'
             entry 'netty-codec-http2'
+            entry 'netty-codec-http3'
             entry 'netty-codec-marshalling'
+            entry 'netty-codec-native-quic'
             entry 'netty-codec-protobuf'
             entry 'netty-codec-socks'
             entry 'netty-common'
@@ -260,8 +261,6 @@ dependencyManagement {
             entry 'log4j-core'
             entry 'log4j-to-slf4j'
         }
-        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.2'
-        dependency 'tools.jackson.core:jackson-databind:3.2.2'
     }
 }
 dependencyCheck {
@@ -408,6 +407,7 @@ tasks.register('functional', Test) {
     setClasspath(sourceSets.functionalTest.runtimeClasspath)
 
     environment("APPINSIGHTS_INSTRUMENTATIONKEY", "test-key")
+    jvmArgs '-XX:+EnableDynamicAgentLoading', '-Djdk.attach.allowAttachSelf=true'
     useJUnitPlatform()
     //finalizedBy aggregate
 }
