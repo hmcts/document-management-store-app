@@ -90,7 +90,7 @@ tasks.withType(JavaCompile).configureEach {
 def versions = [
     ehcache            : '3.12.0',
     postgresql         : '42.7.13',
-    jackson            : '2.22.2',
+    jackson            : '2.22.3',
     serenity           : '5.3.11',
     logging            : '8.0.0',
     pact_version       : '4.7.5',
@@ -260,8 +260,8 @@ dependencyManagement {
             entry 'log4j-core'
             entry 'log4j-to-slf4j'
         }
-        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.2'
-        dependency 'tools.jackson.core:jackson-databind:3.2.2'
+        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.3'
+        dependency 'tools.jackson.core:jackson-databind:3.2.3'
     }
 }
 dependencyCheck {
