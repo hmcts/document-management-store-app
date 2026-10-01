@@ -46,11 +46,14 @@ steps:
       - runtime-arm64
 
   - id: manifest-create
-    cmd: docker manifest create {{.Run.Registry}}/{{CI_IMAGE_TAG}} {{.Run.Registry}}/{{CI_IMAGE_TAG}}-amd64 {{.Run.Registry}}/{{CI_IMAGE_TAG}}-arm64
+    cmd: |
+      docker manifest rm {{.Run.Registry}}/{{CI_IMAGE_TAG}} {{.Run.Registry}}/{{CI_IMAGE_TAG}}-amd64 {{.Run.Registry}}/{{CI_IMAGE_TAG}}-arm64 || true
+      docker manifest create {{.Run.Registry}}/{{CI_IMAGE_TAG}} {{.Run.Registry}}/{{CI_IMAGE_TAG}}-amd64 {{.Run.Registry}}/{{CI_IMAGE_TAG}}-arm64
     retries: 10
     retryDelay: 5
     when:
       - push-images
+    keep: true
 
   - id: manifest-push
     cmd: docker manifest push --purge {{.Run.Registry}}/{{CI_IMAGE_TAG}}
@@ -58,3 +61,4 @@ steps:
     retryDelay: 5
     when:
       - manifest-create
+    keep: true
