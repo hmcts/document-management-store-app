@@ -1,7 +1,5 @@
 package uk.gov.hmcts.dm.functional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import io.restassured.RestAssured;
@@ -10,6 +8,8 @@ import org.hamcrest.CoreMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -40,7 +40,7 @@ public class AuthTokenProvider {
     }
 
     public void createIdamUser(String email, String password, Optional<String> maybeRole)
-        throws JsonProcessingException {
+        throws JacksonException {
         ImmutableMap<String, Object> body = ImmutableMap.of("email", email,
                 "forename", "test",
                 "surname", "test",
@@ -50,7 +50,7 @@ public class AuthTokenProvider {
 
         RestAssured
                 .given().log().all().baseUri(idamUserBaseUrl)
-                .body(new ObjectMapper().writeValueAsBytes(body))
+                .body(JsonMapper.builder().build().writeValueAsBytes(body))
                 .contentType("application/json")
                 .post("testing-support/accounts")
                 .then()
