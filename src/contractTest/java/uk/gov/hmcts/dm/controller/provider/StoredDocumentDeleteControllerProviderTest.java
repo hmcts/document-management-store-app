@@ -2,11 +2,11 @@ package uk.gov.hmcts.dm.controller.provider;
 
 import au.com.dius.pact.provider.junitsupport.Provider;
 import au.com.dius.pact.provider.junitsupport.State;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.response.CaseDocumentsDeletionResults;
@@ -26,7 +26,7 @@ public class StoredDocumentDeleteControllerProviderTest extends BaseProviderTest
     public StoredDocumentDeleteControllerProviderTest(
         MockMvc mockMvc,
         WebApplicationContext webApplicationContext,
-        ObjectMapper objectMapper,
+        JsonMapper objectMapper,
         ConfigurableListableBeanFactory configurableListableBeanFactory,
         DmServiceAuthFilter filter
     ) {

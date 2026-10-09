@@ -1,6 +1,5 @@
 package uk.gov.hmcts.dm.componenttests.sugar;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.dm.security.Classifications;
 
 import java.util.List;
@@ -28,7 +28,7 @@ import static uk.gov.hmcts.dm.service.SecurityUtilService.USER_ID_HEADER;
 public class RestActions {
     private final HttpHeaders httpHeaders = new HttpHeaders();
     private final MockMvc mvc;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper objectMapper;
 
     @Mock
     protected Authentication authentication;
@@ -36,7 +36,7 @@ public class RestActions {
     @Mock
     protected SecurityContext securityContext;
 
-    public RestActions(WebApplicationContext webApplicationContext, ObjectMapper objectMapper) {
+    public RestActions(WebApplicationContext webApplicationContext, JsonMapper objectMapper) {
         MockitoAnnotations.openMocks(this);
         doReturn(authentication).when(securityContext).getAuthentication();
         SecurityContextHolder.setContext(securityContext);
