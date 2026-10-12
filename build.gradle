@@ -230,7 +230,7 @@ dependencyManagement {
             entry 'tomcat-embed-websocket'
             entry 'tomcat-embed-el'
         }
-        dependencySet(group: 'io.netty', version: '4.2.18.Final') {
+        dependencySet(group: 'io.netty', version: '4.2.19.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-codec-base'
