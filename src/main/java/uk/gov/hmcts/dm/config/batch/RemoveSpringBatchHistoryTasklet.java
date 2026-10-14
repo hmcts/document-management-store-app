@@ -3,6 +3,7 @@ package uk.gov.hmcts.dm.config.batch;
 import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.repository.dao.AbstractJdbcBatchMetadataDao;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.StepContribution;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -37,7 +38,7 @@ public class RemoveSpringBatchHistoryTasklet implements Tasklet {
     /**
      * Default value for the table prefix property.
      */
-    private static final String DEFAULT_TABLE_PREFIX = "BATCH_";
+    private static final String DEFAULT_TABLE_PREFIX = AbstractJdbcBatchMetadataDao.DEFAULT_TABLE_PREFIX;
 
     private final Integer historicRetentionMiliseconds;
 
