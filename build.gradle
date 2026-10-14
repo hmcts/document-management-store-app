@@ -4,7 +4,7 @@ import java.time.LocalDate
 
 buildscript {
     dependencies {
-        classpath("org.flywaydb:flyway-database-postgresql:13.8.0")
+        classpath("org.flywaydb:flyway-database-postgresql:13.10.0")
     }
 }
 
@@ -13,15 +13,15 @@ plugins {
     id 'uk.gov.hmcts.java' version '0.12.70'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springframework.boot' version '4.1.1'
-    id 'com.github.ben-manes.versions' version '0.64.0'
+    id 'com.github.ben-manes.versions' version '0.65.0'
     id 'org.sonarqube' version '7.5.0.8588'
     id 'jacoco'
     id 'checkstyle'
-    id 'io.freefair.lombok' version '9.7.0'
+    id 'io.freefair.lombok' version '9.8.0'
     id 'info.solidsoft.pitest' version '1.19.0'
     id 'org.owasp.dependencycheck' version '13.0.0'
     id 'au.com.dius.pact' version '4.7.5'
-    id 'org.flywaydb.flyway' version '13.8.0'
+    id 'org.flywaydb.flyway' version '13.10.0'
     id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
 }
 
@@ -89,11 +89,8 @@ tasks.withType(JavaCompile).configureEach {
 
 def versions = [
     ehcache            : '3.12.0',
-    postgresql         : '42.7.13',
-    serenity           : '5.3.11',
-    logging            : '8.0.0',
+    postgresql         : '42.7.14',
     pact_version       : '4.7.5',
-    emTestHelper       : '2.1.1',
     shedlock           : '7.10.1',
     jupiter            : '6.1.3',
     springCloud        : '5.0.3'
@@ -103,11 +100,11 @@ ext['hibernate.version'] = versions.hibernate
 
 dependencies {
 
-    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.35.1'
+    implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.36.0'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.2'
     implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.3.2'
 
-    implementation group: 'com.google.guava', name: 'guava', version: '33.7.1-jre'
+    implementation group: 'com.google.guava', name: 'guava', version: '33.7.2-jre'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.22.0'
 
@@ -127,16 +124,16 @@ dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-flyway'
 
-    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.20.0'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.21.0'
 
     implementation group: 'org.postgresql', name: 'postgresql', version: versions.postgresql
 
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-spring", version: versions.shedlock
     implementation group: "net.javacrumbs.shedlock", name: "shedlock-provider-jdbc-template", version: versions.shedlock
 
-    // Explicitly upgrades to flyway 13.8 as spring boot 4.1 auto-manages up to version 12.4
-    //implementation group: 'org.flywaydb', name: 'flyway-core', version: '13.8.0'
-    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '13.8.0'
+    // Explicitly upgrades to flyway 13.10 as spring boot 4.1 auto-manages up to version 12.4
+    // implementation group: 'org.flywaydb', name: 'flyway-core', version: '13.10.0'
+    runtimeOnly group: 'org.flywaydb', name: 'flyway-database-postgresql', version: '13.10.0'
 
     implementation group: 'com.github.hmcts', name: 'service-auth-provider-java-client', version: '6.1.0'
     implementation group: 'com.github.hmcts', name: 'idam-java-client', version: '4.0.0'
@@ -181,8 +178,8 @@ dependencies {
 
     functionalTestImplementation group: 'com.github.hmcts', name: 'em-test-helper', version:'3.3.0'
 
-    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.6.3'
-    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.6.3'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.6.5'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.6.5'
 
 
     testImplementation group: 'com.github.hmcts', name: 'fortify-client', version: '1.4.10', classifier: 'all', {
@@ -222,14 +219,10 @@ dependencyManagement {
             entry 'junit-platform-engine'
         }
         //CVE-2026-41006, CVE-2026-41007
-        dependency 'com.github.junrar:junrar:8.1.1'
-        dependency 'org.eclipse.angus:angus-activation:2.1.0-M1'
-        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.26') {
-            entry 'tomcat-embed-core'
+        dependency 'com.github.junrar:junrar:8.1.2'
             entry 'tomcat-embed-websocket'
-            entry 'tomcat-embed-el'
         }
-        dependencySet(group: 'io.netty', version: '4.2.18.Final') {
+        dependencySet(group: 'io.netty', version: '4.2.19.Final') {
             entry 'netty-buffer'
             entry 'netty-codec'
             entry 'netty-codec-base'
@@ -280,7 +273,7 @@ tasks.register('integration', Test) {
 
 checkstyle {
     maxWarnings = 0
-    toolVersion = '14.1.0'
+    toolVersion = '14.3.0'
     // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
     getConfigDirectory().set(new File(rootDir, 'config/checkstyle'))
 }
