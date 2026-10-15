@@ -50,7 +50,6 @@ public class StoredDocumentHalResource extends HalResource<StoredDocumentHalReso
 
     private Map<String, String> metadata;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "UTC")
     private Date ttl;
 
     public StoredDocumentHalResource(@NonNull StoredDocument storedDocument) {
