@@ -172,5 +172,5 @@ variable "email_address_key" {
 variable "auto_grow_enabled" {
   type        = bool
   default     = false
-  description = "Specifies whether the storage auto grow for PostgreSQL Flexible Server is enabled? Defaults to false."
+  description = "Specifies whether the storage auto grow for PostgreSQL Flexible Server is enabled. Defaults to false."
 }
