@@ -102,4 +102,3 @@ in the BaseProviderTest and StoredDocumentMultipartProviderTest classes and unco
 then run the below command to execute the provider pact tests locally.
 
 ```./gradlew providerContractTests```
-
