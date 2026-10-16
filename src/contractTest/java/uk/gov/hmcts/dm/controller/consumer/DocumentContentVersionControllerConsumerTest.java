@@ -10,13 +10,17 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import net.serenitybdd.rest.SerenityRest;
 import org.apache.commons.lang3.exception.UncheckedException;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.HttpEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -53,6 +57,13 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     private static final String PATH_VERSIONS = DOCUMENTS_IN_URI + DOCUMENT_ID + "/versions";
     private static final String PATH_LEGACY_ENDPOINT = DOCUMENTS_IN_URI + DOCUMENT_ID;
 
+    // Apache HttpClient generates a random multipart boundary per run, which makes the
+    // generated pact differ between builds for the same commit - the broker then rejects
+    // the publish with HTTP 409. Pinning the boundary keeps the pact byte-identical.
+    private static final String BOUNDARY = "pactBoundaryDocumentContentVersion";
+    private static final String MULTIPART_CONTENT_TYPE = "multipart/form-data; boundary=" + BOUNDARY;
+    private static final String FILE_PART_NAME = "file";
+
     private static final String PATH_GET_CONTENT =
         DOCUMENTS_IN_URI + DOCUMENT_ID + VERSIONS_IN_URI + DOCUMENT_CONTENT_VERSION_ID;
 
@@ -79,24 +90,41 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
         }
     }
 
+    /**
+     * Builds the multipart payload with a fixed boundary so the generated pact is
+     * identical on every run. ISO-8859-1 is byte-preserving, so the PDF bytes
+     * round-trip through String without corruption.
+     */
+    private static String multipartBody() {
+        try {
+            HttpEntity entity = MultipartEntityBuilder.create()
+                .setBoundary(BOUNDARY)
+                .addBinaryBody(FILE_PART_NAME, FILE_BYTES,
+                    org.apache.hc.core5.http.ContentType.create(CONTENT_TYPE), DOCUMENT_NAME)
+                .build();
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            entity.writeTo(out);
+            return out.toString(StandardCharsets.ISO_8859_1);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     @Pact(provider = PROVIDER, consumer = CONSUMER)
-    public V4Pact addDocumentContentVersionPact(PactDslWithProvider builder) throws IOException {
+    public V4Pact addDocumentContentVersionPact(PactDslWithProvider builder) {
         return builder
             .given("Can add Document Content Version and associate it with a given Stored Document.")
             .uponReceiving("POST multipart request to upload a document version")
             .method("POST")
-            .withFileUpload(
-                "file",
-                DOCUMENT_NAME,
-                CONTENT_TYPE,
-                FILE_BYTES
-            )
             .path(PATH_VERSIONS)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
                 ACCEPT_HEADER,
-                APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
+                APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8,
+                CONTENT_TYPE_HEADER, MULTIPART_CONTENT_TYPE
             ))
+            .body(multipartBody(), MULTIPART_CONTENT_TYPE)
             .willRespondWith()
             .status(201)
             .headers(Map.of(
@@ -115,7 +143,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
         given()
             .baseUri(mockServer.getUrl())
             .contentType(ContentType.MULTIPART)
-            .multiPart("file", DOCUMENT_NAME, FILE_BYTES, CONTENT_TYPE)
+            .multiPart(FILE_PART_NAME, DOCUMENT_NAME, FILE_BYTES, CONTENT_TYPE)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
                 ACCEPT_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
@@ -135,23 +163,19 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
 
 
     @Pact(provider = PROVIDER, consumer = CONSUMER)
-    public V4Pact addDocumentContentVersionLegacyMappingPact(PactDslWithProvider builder) throws IOException {
+    public V4Pact addDocumentContentVersionLegacyMappingPact(PactDslWithProvider builder) {
         return builder
             .given("Can add Document Content Version and associate it with a given Stored Document.")
             .uponReceiving("POST multipart request to upload a document version using legacy endpoint")
             .method("POST")
-            .withFileUpload(
-                "file",
-                DOCUMENT_NAME,
-                CONTENT_TYPE,
-                FILE_BYTES
-            )
             .path(PATH_LEGACY_ENDPOINT)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
                 ACCEPT_HEADER,
-                APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
+                APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8,
+                CONTENT_TYPE_HEADER, MULTIPART_CONTENT_TYPE
             ))
+            .body(multipartBody(), MULTIPART_CONTENT_TYPE)
             .willRespondWith()
             .status(201)
             .headers(Map.of(
@@ -170,7 +194,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
         given()
             .baseUri(mockServer.getUrl())
             .contentType(ContentType.MULTIPART)
-            .multiPart("file", DOCUMENT_NAME, FILE_BYTES, CONTENT_TYPE)
+            .multiPart(FILE_PART_NAME, DOCUMENT_NAME, FILE_BYTES, CONTENT_TYPE)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
                 ACCEPT_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
