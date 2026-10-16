@@ -24,5 +24,6 @@ enable_thumbnail                    = "true"
 max_file_size_in_mb = "100"
 
 //v15 Flexiserver DB
-pgsql_sku        = "MO_Standard_E16ds_v4"
-pgsql_storage_mb = "524288"
+pgsql_sku         = "MO_Standard_E16ds_v4"
+pgsql_storage_mb  = "524288"
+auto_grow_enabled = true
