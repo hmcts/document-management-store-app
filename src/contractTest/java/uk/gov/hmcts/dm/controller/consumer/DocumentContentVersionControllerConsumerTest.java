@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     // Apache HttpClient generates a random multipart boundary per run, which made the
     // published pact differ between builds for the same commit and the broker reject it
     // with HTTP 409. The boundary is pinned here, and both the pact expectation and the
-    // test's actual request are built from the same bytes so they match exactly.
+    // request the test sends are built from the same bytes so they match exactly.
     private static final String BOUNDARY = "pactBoundaryDocumentContentVersion";
     private static final String MULTIPART_CONTENT_TYPE = "multipart/form-data; boundary=" + BOUNDARY;
     private static final String FILE_PART_NAME = "file";
@@ -91,8 +92,8 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     }
 
     /**
-     * Multipart payload with a fixed boundary. Used for both the pact expectation and
-     * the request the test actually sends, so the two are byte-identical.
+     * Multipart payload with a fixed boundary. Used for both the pact expectation and the
+     * request the test actually sends, so the two are byte-identical and match on equality.
      */
     private static byte[] multipartBody() {
         try {
@@ -109,6 +110,15 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
         }
     }
 
+    /**
+     * ISO-8859-1 is byte-preserving, so the payload round-trips through String intact.
+     * body(String, contentType) is used rather than withBinaryData(...) because the latter
+     * installs a ContentTypeMatcher that sniffs the payload and never matches multipart.
+     */
+    private static String multipartBodyAsString() {
+        return new String(multipartBody(), StandardCharsets.ISO_8859_1);
+    }
+
     @Pact(provider = PROVIDER, consumer = CONSUMER)
     public V4Pact addDocumentContentVersionPact(PactDslWithProvider builder) {
         return builder
@@ -122,7 +132,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8,
                 CONTENT_TYPE_HEADER, MULTIPART_CONTENT_TYPE
             ))
-            .withBinaryData(multipartBody(), MULTIPART_CONTENT_TYPE)
+            .body(multipartBodyAsString(), MULTIPART_CONTENT_TYPE)
             .willRespondWith()
             .status(201)
             .headers(Map.of(
@@ -173,7 +183,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8,
                 CONTENT_TYPE_HEADER, MULTIPART_CONTENT_TYPE
             ))
-            .withBinaryData(multipartBody(), MULTIPART_CONTENT_TYPE)
+            .body(multipartBodyAsString(), MULTIPART_CONTENT_TYPE)
             .willRespondWith()
             .status(201)
             .headers(Map.of(
