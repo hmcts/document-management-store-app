@@ -79,7 +79,7 @@ public class StoredDocumentUpdateControllerProviderTest extends BaseProviderTest
 
     private DocumentContentVersion mockDocumentContentVersion(UUID documentId) {
         DocumentContentVersion version = new DocumentContentVersion();
-        version.setId(UUID.randomUUID());
+        version.setId(UUID.fromString("11111111-1111-1111-1111-111111111111"));
         version.setStoredDocument(new StoredDocument(documentId));
         version.setCreatedOn(new Date());
         version.setMimeType("application/pdf");
