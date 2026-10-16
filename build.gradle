@@ -22,7 +22,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '13.0.0'
     id 'au.com.dius.pact' version '4.7.5'
     id 'org.flywaydb.flyway' version '13.10.0'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.4.1'
 }
 
 group = 'uk.gov.hmcts.dm'
