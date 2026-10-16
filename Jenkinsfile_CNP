@@ -64,7 +64,7 @@ withPipeline(type , product, component) {
     disableLegacyDeployment()
     enableAksStagingDeployment()
     enableSlackNotifications('#em-dev-chat')
-    enablePactAs([AppPipelineDsl.PactRoles.CONSUMER, AppPipelineDsl.PactRoles.PROVIDER])
+//    enablePactAs([AppPipelineDsl.PactRoles.CONSUMER, AppPipelineDsl.PactRoles.PROVIDER])
     onMaster {
         env.TEST_URL = "http://dm-store-aat.service.core-compute-aat.internal"
         env.TEST_IDAM_API_URL = "https://idam-api.aat.platform.hmcts.net"
@@ -93,13 +93,13 @@ withPipeline(type , product, component) {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/integration/**/*'
     }
 
-    afterAlways('pact-consumer-tests') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
-    }
-
-    afterAlways('pact-provider-verification') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
-    }
+//    afterAlways('pact-consumer-tests') {
+//        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+//    }
+//
+//    afterAlways('pact-provider-verification') {
+//        steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
+//    }
 
     afterAlways('smoketest:preview') {
         steps.archiveArtifacts allowEmptyArchive: true, artifacts: '**/reports/tests/**/*'
