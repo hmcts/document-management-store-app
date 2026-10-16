@@ -6,11 +6,11 @@ import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.V4Pact;
 import au.com.dius.pact.core.model.annotations.Pact;
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import net.serenitybdd.rest.SerenityRest;
 import org.apache.commons.lang3.exception.UncheckedException;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
@@ -57,9 +56,10 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     private static final String PATH_VERSIONS = DOCUMENTS_IN_URI + DOCUMENT_ID + "/versions";
     private static final String PATH_LEGACY_ENDPOINT = DOCUMENTS_IN_URI + DOCUMENT_ID;
 
-    // Apache HttpClient generates a random multipart boundary per run, which makes the
-    // generated pact differ between builds for the same commit - the broker then rejects
-    // the publish with HTTP 409. Pinning the boundary keeps the pact byte-identical.
+    // Apache HttpClient generates a random multipart boundary per run, which made the
+    // published pact differ between builds for the same commit and the broker reject it
+    // with HTTP 409. The boundary is pinned here, and both the pact expectation and the
+    // test's actual request are built from the same bytes so they match exactly.
     private static final String BOUNDARY = "pactBoundaryDocumentContentVersion";
     private static final String MULTIPART_CONTENT_TYPE = "multipart/form-data; boundary=" + BOUNDARY;
     private static final String FILE_PART_NAME = "file";
@@ -91,21 +91,19 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     }
 
     /**
-     * Builds the multipart payload with a fixed boundary so the generated pact is
-     * identical on every run. ISO-8859-1 is byte-preserving, so the PDF bytes
-     * round-trip through String without corruption.
+     * Multipart payload with a fixed boundary. Used for both the pact expectation and
+     * the request the test actually sends, so the two are byte-identical.
      */
-    private static String multipartBody() {
+    private static byte[] multipartBody() {
         try {
             HttpEntity entity = MultipartEntityBuilder.create()
                 .setBoundary(BOUNDARY)
-                .addBinaryBody(FILE_PART_NAME, FILE_BYTES,
-                    org.apache.hc.core5.http.ContentType.create(CONTENT_TYPE), DOCUMENT_NAME)
+                .addBinaryBody(FILE_PART_NAME, FILE_BYTES, ContentType.create(CONTENT_TYPE), DOCUMENT_NAME)
                 .build();
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             entity.writeTo(out);
-            return out.toString(StandardCharsets.ISO_8859_1);
+            return out.toByteArray();
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -124,7 +122,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8,
                 CONTENT_TYPE_HEADER, MULTIPART_CONTENT_TYPE
             ))
-            .body(multipartBody(), MULTIPART_CONTENT_TYPE)
+            .withBinaryData(multipartBody(), MULTIPART_CONTENT_TYPE)
             .willRespondWith()
             .status(201)
             .headers(Map.of(
@@ -142,12 +140,12 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     void testAddDocumentVersion(MockServer mockServer) {
         given()
             .baseUri(mockServer.getUrl())
-            .contentType(ContentType.MULTIPART)
-            .multiPart(FILE_PART_NAME, DOCUMENT_NAME, FILE_BYTES, CONTENT_TYPE)
+            .contentType(MULTIPART_CONTENT_TYPE)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
                 ACCEPT_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
+            .body(multipartBody())
             .when()
             .post(PATH_VERSIONS)
             .then()
@@ -175,7 +173,7 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
                 APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8,
                 CONTENT_TYPE_HEADER, MULTIPART_CONTENT_TYPE
             ))
-            .body(multipartBody(), MULTIPART_CONTENT_TYPE)
+            .withBinaryData(multipartBody(), MULTIPART_CONTENT_TYPE)
             .willRespondWith()
             .status(201)
             .headers(Map.of(
@@ -193,12 +191,12 @@ public class DocumentContentVersionControllerConsumerTest extends BaseConsumerPa
     void testAddDocumentVersionLegacy(MockServer mockServer) {
         given()
             .baseUri(mockServer.getUrl())
-            .contentType(ContentType.MULTIPART)
-            .multiPart(FILE_PART_NAME, DOCUMENT_NAME, FILE_BYTES, CONTENT_TYPE)
+            .contentType(MULTIPART_CONTENT_TYPE)
             .headers(Map.of(
                 SERVICE_AUTHORIZATION_HEADER, DUMMY_SERVICE_AUTHORIZATION_VALUE,
                 ACCEPT_HEADER, APPLICATION_VND_UK_GOV_HMCTS_DM_DOCUMENT_CONTENT_VERSION_V_1_HAL_JSON_CHARSET_UTF_8
             ))
+            .body(multipartBody())
             .when()
             .post(PATH_LEGACY_ENDPOINT)
             .then()
