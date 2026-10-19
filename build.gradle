@@ -22,7 +22,7 @@ plugins {
     id 'org.owasp.dependencycheck' version '13.0.0'
     id 'au.com.dius.pact' version '4.7.5'
     id 'org.flywaydb.flyway' version '13.10.0'
-    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.3.9'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '5.4.1'
 }
 
 group = 'uk.gov.hmcts.dm'
@@ -90,7 +90,7 @@ tasks.withType(JavaCompile).configureEach {
 def versions = [
     ehcache            : '3.12.0',
     postgresql         : '42.7.14',
-    serenity           : '5.3.11',
+    serenity           : '5.4.1',
     logging            : '8.0.0',
     pact_version       : '4.7.5',
     shedlock           : '7.10.1',
@@ -103,8 +103,8 @@ ext['hibernate.version'] = versions.hibernate
 dependencies {
 
     implementation group: 'com.azure', name: 'azure-storage-blob', version: '12.36.0'
-    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.2'
-    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.3.2'
+    implementation group: 'org.apache.tika', name: 'tika-core', version: '3.3.3'
+    implementation group: 'org.apache.tika', name: 'tika-parsers-standard-package', version: '3.3.3'
 
     implementation group: 'com.google.guava', name: 'guava', version: '33.7.2-jre'
 
@@ -441,8 +441,12 @@ project.ext {
     pacticipantVersion = getCheckedOutGitCommitHash()
 }
 
-static def getCheckedOutGitCommitHash() {
-    'git rev-parse --verify --short HEAD'.execute().text.trim()
+def getCheckedOutGitCommitHash() {
+    providers.exec {
+        commandLine 'git', 'rev-parse', '--verify', '--short', 'HEAD'
+        // Jenkins stages may not have a checked-out HEAD.
+        ignoreExitValue = true
+    }.standardOutput.asText.map { it.trim() }.get()
 }
 
 
