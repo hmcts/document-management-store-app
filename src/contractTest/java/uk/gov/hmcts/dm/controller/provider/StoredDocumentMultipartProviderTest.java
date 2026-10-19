@@ -137,7 +137,7 @@ public class StoredDocumentMultipartProviderTest {
             .thenReturn("some_authorised_service");
 
         StoredDocument doc1 = new StoredDocument();
-        doc1.setId(UUID.fromString("11111111-1111-1111-1111-111111111111"));
+        doc1.setId(UUID.fromString("0e72e5df-ef4e-42ae-a9e3-968601586336"));
         doc1.setClassification(Classifications.PUBLIC);
         doc1.setCreatedBy("test-user-1");
         doc1.setCreatedOn(new Date());
@@ -145,7 +145,7 @@ public class StoredDocumentMultipartProviderTest {
         doc1.setRoles(Set.of("citizen"));
 
         StoredDocument doc2 = new StoredDocument();
-        doc2.setId(UUID.fromString("22222222-2222-2222-2222-222222222222"));
+        doc2.setId(UUID.fromString("48f76e57-92b6-41ce-9df8-8235273b7b95"));
         doc2.setClassification(Classifications.PUBLIC);
         doc2.setCreatedBy("test-user-2");
         doc2.setCreatedOn(new Date());

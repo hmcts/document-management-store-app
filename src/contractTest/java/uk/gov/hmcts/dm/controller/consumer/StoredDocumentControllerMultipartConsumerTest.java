@@ -134,7 +134,7 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
                         doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z?", "2024-01-01T12:00:00");
                         doc.object("_links", links ->
                             links.object("self", self ->
-                                self.stringType("href", "http://localhost/documents/11111111-1111-1111-1111-111111111111"))
+                                self.stringType("href", "http://localhost/documents/0e72e5df-ef4e-42ae-a9e3-968601586336"))
                         );
                     });
                     // Document 2
@@ -144,7 +144,7 @@ public class StoredDocumentControllerMultipartConsumerTest extends BaseConsumerP
                         doc.stringMatcher("createdOn", "\\d{4}-\\d{2}-\\d{2}T.*Z?", "2024-01-01T12:00:00");
                         doc.object("_links", links ->
                             links.object("self", self ->
-                                self.stringType("href", "http://localhost/documents/22222222-2222-2222-2222-222222222222"))
+                                self.stringType("href", "http://localhost/documents/48f76e57-92b6-41ce-9df8-8235273b7b95"))
                         );
                     });
                 })

@@ -21,7 +21,7 @@ public class StoredDocumentDeleteControllerConsumerTest extends BaseConsumerPact
     private static final String PROVIDER = "dm_store_delete_document_provider";
     private static final String CONSUMER = "dm_store_delete_document_consumer";
 
-    private static final UUID DOCUMENT_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+    private static final UUID DOCUMENT_ID = UUID.fromString("0e72e5df-ef4e-42ae-a9e3-968601586336");
     private static final String DELETE_PATH = "/documents/" + DOCUMENT_ID;
     private static final String SOFT_DELETE_PATH = "/documents/delete";
 
