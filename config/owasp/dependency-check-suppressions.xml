@@ -71,4 +71,8 @@
         <cve>CVE-2026-47885</cve>
         <cve>CVE-2026-41707</cve>
     </suppress>
+    <suppress until="2027-01-10Z">
+        <packageUrl regex="true">^pkg:maven/io\.projectreactor\.netty/reactor-netty-(core|http)@.*$</packageUrl>
+        <cve>CVE-2026-47874</cve>
+    </suppress>
 </suppressions>
