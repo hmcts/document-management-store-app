@@ -28,15 +28,6 @@
         <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
         <cve>CVE-2026-33929</cve>
     </suppress>
-    <suppress until="2027-01-31Z">
-        <notes>CVE-2026-44891, CVE-2026-55831, CVE-2026-55833 were fixed in io.netty 4.2.16.Final per the Netty
-          security release notes (https://netty.io/news/2026/07/06/4-2-16-Final.html). This is a false positive
-          caused by NVD not yet reflecting the patched version range. Re-evaluate when NVD data is updated.</notes>
-        <packageUrl regex="true">^pkg:maven/io\.netty/.*@.*$</packageUrl>
-        <cve>CVE-2026-44891</cve>
-        <cve>CVE-2026-55831</cve>
-        <cve>CVE-2026-55833</cve>
-    </suppress>
     <suppress until="2027-01-10Z">
         <notes>Spring Framework 6.2.x is EOL with no public fix for these CVEs. Fixed in Spring Framework 7.0.9
             (Spring Boot 4.0.8+). Upgrading to Spring Boot 4.x is required for a public OSS fix.
@@ -79,9 +70,5 @@
         <cve>CVE-2026-47886</cve>
         <cve>CVE-2026-47885</cve>
         <cve>CVE-2026-41707</cve>
-    </suppress>
-    <suppress until="2027-01-10Z">
-        <packageUrl regex="true">^pkg:maven/io\.projectreactor\.netty/reactor-netty-(core|http)@.*$</packageUrl>
-        <cve>CVE-2026-47874</cve>
     </suppress>
 </suppressions>
