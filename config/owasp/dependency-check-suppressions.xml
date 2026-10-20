@@ -8,6 +8,22 @@
         <packageUrl regex="true">^pkg:maven/com\.azure/.*@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
     </suppress>
+    <suppress until="2026-11-20">
+        <packageUrl regex="true">^pkg:maven/org\.springframework\.security/.*@.*$</packageUrl>
+        <cve>CVE-2026-22732</cve>
+        <cve>CVE-2026-22746</cve>
+        <cve>CVE-2026-22747</cve>
+        <cve>CVE-2026-22748</cve>
+        <cve>CVE-2026-22751</cve>
+        <cve>CVE-2026-22753</cve>
+        <cve>CVE-2026-22754</cve>
+        <cve>CVE-2026-40988</cve>
+        <cve>CVE-2026-41003</cve>
+        <cve>CVE-2026-41694</cve>
+        <cve>CVE-2026-40993</cve>
+        <cve>CVE-2026-41008</cve>
+        <cve>CVE-2026-41706</cve>
+    </suppress>
     <suppress until="2027-01-31">
         <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
         <cve>CVE-2026-33929</cve>
