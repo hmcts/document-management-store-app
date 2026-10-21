@@ -40,12 +40,12 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
     private boolean isHalConverter(HttpMessageConverter<?> converter) {
         // Do not make a generic JSON converters claim vendor media types.
         if (converter instanceof TypeConstrainedJacksonJsonHttpMessageConverter) {
-            // TypeConstrainedJacksonJsonHttpMessageConverter is a Spring HATEOS converter, so return true
+            // TypeConstrainedJacksonJsonHttpMessageConverter is a Spring HATEOAS converter, so return true
             return true;
         }
 
         if (converter instanceof JacksonJsonHttpMessageConverter jacksonConverter) {
-            // Return true if the converter maps a RepresentationModel which uses HATEOS to produce HAL format data
+            // Return true if the converter maps a RepresentationModel which uses HATEOAS to produce HAL format data
             return !jacksonConverter.getMappersForType(RepresentationModel.class).isEmpty();
         }
 
@@ -63,7 +63,7 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
             Map<MediaType, JsonMapper> registeredMappers =
                 jacksonConverter.getMappersForType(RepresentationModel.class);
 
-            if (!registeredMappers.isEmpty()) {
+            if (registeredMappers.size() == 1) {
                 JsonMapper hypermediaMapper = registeredMappers.values().iterator().next();
                 jacksonConverter.registerMappersForType(RepresentationModel.class,
                     mappers -> mediaTypes.forEach(mediaType -> mappers.putIfAbsent(mediaType, hypermediaMapper)));
