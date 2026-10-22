@@ -22,8 +22,6 @@ java:
       secrets:
         - name: RpaAppInsightsInstrumentationKey
           alias: azure.application-insights.instrumentation-key
-        - name: app-insights-connection-string
-          alias: app-insights-connection-string
         - name: microservicekey-dm-store
           alias: DM_S2S_KEY
         - name: dm-store-idam-secret
