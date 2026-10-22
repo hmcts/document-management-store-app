@@ -27,6 +27,13 @@ class AddMediaTypeSupportConfigurationTest {
                 List.of(MediaType.APPLICATION_JSON),
                 new JsonMapper()
             );
+        JsonMapper halMapper = new JsonMapper();
+        halConverter.registerMappersForType(RepresentationModel.class,
+            mappers -> {
+                mappers.put(MediaType.parseMediaType("application/hal+json"), halMapper);
+                // A second mapper models converters supporting more than one hypermedia format.
+                mappers.put(MediaType.parseMediaType("application/uber+json"), new JsonMapper());
+            });
         RequestMappingHandlerAdapter handlerAdapter = new RequestMappingHandlerAdapter();
         handlerAdapter.setMessageConverters(List.of(genericConverter, halConverter));
 
@@ -36,5 +43,7 @@ class AddMediaTypeSupportConfigurationTest {
         assertEquals(genericMediaTypes, genericConverter.getSupportedMediaTypes());
         assertTrue(halConverter.getSupportedMediaTypes()
             .contains(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE));
+        assertTrue(halConverter.canWrite(RepresentationModel.class,
+            V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE));
     }
 }

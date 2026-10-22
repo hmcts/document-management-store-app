@@ -63,8 +63,15 @@ public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
             Map<MediaType, JsonMapper> registeredMappers =
                 jacksonConverter.getMappersForType(RepresentationModel.class);
 
-            if (registeredMappers.size() == 1) {
-                JsonMapper hypermediaMapper = registeredMappers.values().iterator().next();
+            // Keep the mapper selected by Spring HATEOAS for HAL responses. A converter may
+            // have more than one mapper (for example, HAL and another hypermedia format).
+            JsonMapper hypermediaMapper = registeredMappers.entrySet().stream()
+                .filter(entry -> entry.getKey().getSubtype().contains("hal+json"))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElse(null);
+
+            if (hypermediaMapper != null) {
                 jacksonConverter.registerMappersForType(RepresentationModel.class,
                     mappers -> mediaTypes.forEach(mediaType -> mappers.putIfAbsent(mediaType, hypermediaMapper)));
             }
