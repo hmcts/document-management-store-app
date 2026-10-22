@@ -19,7 +19,7 @@ class AddMediaTypeSupportConfigurationTest {
     void addsVendorMediaTypesOnlyToHalConverter() {
         JacksonJsonHttpMessageConverter genericConverter =
             new JacksonJsonHttpMessageConverter(new JsonMapper());
-        List<MediaType> genericMediaTypes = List.copyOf(genericConverter.getSupportedMediaTypes());
+        final List<MediaType> genericMediaTypes = List.copyOf(genericConverter.getSupportedMediaTypes());
 
         TypeConstrainedJacksonJsonHttpMessageConverter halConverter =
             new TypeConstrainedJacksonJsonHttpMessageConverter(
