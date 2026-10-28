@@ -17,10 +17,10 @@ import uk.gov.hmcts.dm.domain.StoredDocument;
 import uk.gov.hmcts.dm.service.StoredDocumentService;
 import uk.gov.hmcts.dm.service.batch.AuditedStoredDocumentBatchOperationsService;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
@@ -85,7 +85,7 @@ public class OrphanDocumentDeletionTask {
     }
 
     private Set<UUID> getCsvFileAndParse(BlobClient client) {
-        String csvPath = TMP_DIR + File.separatorChar + "orphan-document.csv";
+        String csvPath = Path.of(TMP_DIR, "orphan-document.csv").toString();
         try {
 
             client.downloadToFile(csvPath);

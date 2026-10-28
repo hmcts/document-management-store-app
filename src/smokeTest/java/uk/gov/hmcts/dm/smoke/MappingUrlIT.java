@@ -1,8 +1,5 @@
 package uk.gov.hmcts.dm.smoke;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import net.serenitybdd.annotations.WithTag;
 import net.serenitybdd.annotations.WithTags;
 import net.serenitybdd.junit5.SerenityJUnit5Extension;
@@ -12,6 +9,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -32,8 +32,8 @@ class MappingUrlIT extends BaseIT {
     }
 
     @BeforeEach
-    public void setup() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
+    public void setup() throws JacksonException {
+        JsonMapper objectMapper = JsonMapper.builder().build();
         JsonNode jsonNode = objectMapper.readTree(givenUnauthenticatedRequest().get("/mappings").print());
         allEndpoints = jsonNode.findValues("predicate").stream().map(JsonNode::asText).toList();
     }
