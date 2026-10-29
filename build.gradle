@@ -93,7 +93,7 @@ def versions = [
     jackson            : '2.22.4',
     serenity           : '5.4.1',
     logging            : '8.0.0',
-    pact_version       : '4.7.5',
+    pact_version       : '4.7.6',
     emTestHelper       : '2.1.1',
     shedlock           : '7.10.1',
     jupiter            : '6.1.3',
