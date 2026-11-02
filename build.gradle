@@ -535,7 +535,7 @@ tasks.withType(Test).configureEach { t ->
     if (project.hasProperty('pactbroker.includeWipPactsSince')) {
         systemProperty 'pactbroker.includeWipPactsSince', project.property('pactbroker.includeWipPactsSince')
     } else {
-        systemProperty 'pactbroker.includeWipPactsSince', LocalDate.now().minusMonths(6).toString()
+        systemProperty 'pactbroker.includeWipPactsSince', LocalDate.now().minusMonths(1).toString()
     }
 
     doFirst {
