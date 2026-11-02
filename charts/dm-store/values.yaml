@@ -107,7 +107,3 @@ blobstorage:
 
 xui-webapp:
   enabled: false
-
-idam-pr:
-  enabled: false
-

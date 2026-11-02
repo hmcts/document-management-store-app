@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
-    <suppress until="2026-10-20">
+    <suppress until="2027-01-31">
         <packageUrl regex="true">^pkg:maven/com\.microsoft\.azure/applicationinsights\-core@.*$</packageUrl>
         <cve>CVE-2025-21199</cve>
     </suppress>
-    <suppress until="2026-10-20">
+    <suppress until="2027-01-31">
         <packageUrl regex="true">^pkg:maven/com\.azure/.*@.*$</packageUrl>
         <cve>CVE-2026-33117</cve>
     </suppress>
@@ -24,28 +24,9 @@
         <cve>CVE-2026-41008</cve>
         <cve>CVE-2026-41706</cve>
     </suppress>
-    <suppress until="2026-10-20">
+    <suppress until="2027-01-31">
         <packageUrl regex="true">^pkg:maven/org\.apache\.pdfbox/.*@.*$</packageUrl>
-        <cve>CVE-2026-23907</cve>
         <cve>CVE-2026-33929</cve>
-    </suppress>
-    <suppress until="2026-10-07Z">
-        <gav regex="true">^org\.apache\.httpcomponents:httpcore:.*$</gav>
-        <cve>CVE-2026-54399</cve>
-        <cve>CVE-2026-54428</cve>
-    </suppress>
-    <suppress until="2027-01-31Z">
-        <notes>CVE-2026-44891, CVE-2026-55831, CVE-2026-55833 were fixed in io.netty 4.2.16.Final per the Netty
-          security release notes (https://netty.io/news/2026/07/06/4-2-16-Final.html). This is a false positive
-          caused by NVD not yet reflecting the patched version range. Re-evaluate when NVD data is updated.</notes>
-        <packageUrl regex="true">^pkg:maven/io\.netty/.*@.*$</packageUrl>
-        <cve>CVE-2026-44891</cve>
-        <cve>CVE-2026-55831</cve>
-        <cve>CVE-2026-55833</cve>
-    </suppress>
-    <suppress until="2026-10-07Z">
-        <packageUrl regex="true">^pkg:maven/org\.apache\.tomcat\.embed/tomcat-embed-(core|websocket)@.*$</packageUrl>
-        <cve>CVE-2026-66299</cve>
     </suppress>
     <suppress until="2027-01-10Z">
         <notes>Spring Framework 6.2.x is EOL with no public fix for these CVEs. Fixed in Spring Framework 7.0.9
