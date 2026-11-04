@@ -2,6 +2,7 @@ package uk.gov.hmcts.dm.config;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.TypeConstrainedJacksonJsonHttpMessageConverter;
 import org.springframework.http.MediaType;
@@ -11,85 +12,90 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+/**
+ * Lets the HAL message converter also produce and accept the V1 vendor media types.
+ *
+ * Boot 3.x: the HAL converter's default ObjectMapper had the HAL module registered,
+ * so adding the media types was enough.
+ *
+ * Boot 4.x: HAL may come from either
+ *  1. a single-mapper TypeConstrainedJacksonJsonHttpMessageConverter (same as 3.x), or
+ *  2. a per-type mapper entry for RepresentationModel on the shared Jackson converter.
+ *     A media type with no mapper entry gets no mapper at all, so the HAL mapper must
+ *     also be registered for each vendor type.
+ */
 @Configuration
 public class AddMediaTypeSupportConfiguration implements BeanPostProcessor {
 
+    private static final List<MediaType> VENDOR_SPECIFIC_TYPES = List.of(
+        V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE,
+        V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE,
+        V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE,
+        V1MediaType.V1_HAL_AUDIT_ENTRY_MEDIA_TYPE,
+        V1MediaType.V1_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE,
+        V1MediaType.V1_DOCUMENT_COLLECTION_MEDIA_TYPE,
+        V1MediaType.V1_DOCUMENT_MEDIA_TYPE,
+        V1MediaType.V1_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE,
+        V1MediaType.V1_AUDIT_ENTRY_MEDIA_TYPE,
+        V1MediaType.V1_HAL_DOCUMENT_PAGE_MEDIA_TYPE,
+        V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE
+    );
+
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
-        if (bean instanceof RequestMappingHandlerAdapter handlerAdapter) {
-            configureConverters(handlerAdapter.getMessageConverters());
+        if (bean instanceof RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
+            requestMappingHandlerAdapter.getMessageConverters()
+                .forEach(this::addVendorSpecificMediaTypeSupport);
         }
         return bean;
     }
 
-    private void configureConverters(List<HttpMessageConverter<?>> converters) {
-        converters.stream()
-            .filter(this::isHalConverter)
-            .forEach(converter -> {
-                List<MediaType> vendorSpecificTypes =
-                    new ArrayList<>(converter.getSupportedMediaTypes());
-                addVendorSpecificMediaTypes(vendorSpecificTypes);
-                setSupportedMediaTypes(converter, vendorSpecificTypes);
-                registerVendorSpecificMappers(converter, vendorSpecificTypes);
-            });
-    }
+    private void addVendorSpecificMediaTypeSupport(HttpMessageConverter<?> converter) {
+        if (!(converter instanceof JacksonJsonHttpMessageConverter jacksonConverter)) {
+            return;
+        }
 
-    private boolean isHalConverter(HttpMessageConverter<?> converter) {
-        // Do not make a generic JSON converters claim vendor media types.
+        // Case 1: Spring HATEOAS single-mapper converter (the Boot 3.x situation).
+        // Its default mapper is the hypermedia mapper, so only HAL ones are extended.
         if (converter instanceof TypeConstrainedJacksonJsonHttpMessageConverter) {
-            // TypeConstrainedJacksonJsonHttpMessageConverter is a Spring HATEOAS converter, so return true
-            return true;
-        }
-
-        if (converter instanceof JacksonJsonHttpMessageConverter jacksonConverter) {
-            // Return true if the converter maps a RepresentationModel which uses HATEOAS to produce HAL format data
-            return !jacksonConverter.getMappersForType(RepresentationModel.class).isEmpty();
-        }
-
-        return false;
-    }
-
-    private void setSupportedMediaTypes(HttpMessageConverter<?> converter, List<MediaType> mediaTypes) {
-        if (converter instanceof JacksonJsonHttpMessageConverter jacksonConverter) {
-            jacksonConverter.setSupportedMediaTypes(mediaTypes);
-        }
-    }
-
-    private void registerVendorSpecificMappers(HttpMessageConverter<?> converter, List<MediaType> mediaTypes) {
-        if (converter instanceof JacksonJsonHttpMessageConverter jacksonConverter) {
-            Map<MediaType, JsonMapper> registeredMappers =
-                jacksonConverter.getMappersForType(RepresentationModel.class);
-
-            // Keep the mapper selected by Spring HATEOAS for HAL responses. A converter may
-            // have more than one mapper (for example, HAL and another hypermedia format).
-            JsonMapper hypermediaMapper = registeredMappers.entrySet().stream()
-                .filter(entry -> entry.getKey().getSubtype().contains("hal+json"))
-                .map(Map.Entry::getValue)
-                .findFirst()
-                .orElse(null);
-
-            if (hypermediaMapper != null) {
-                jacksonConverter.registerMappersForType(RepresentationModel.class,
-                    mappers -> mediaTypes.forEach(mediaType -> mappers.putIfAbsent(mediaType, hypermediaMapper)));
+            if (supportsHal(jacksonConverter)) {
+                addSupportedMediaTypes(jacksonConverter);
             }
+            return;
+        }
+
+        // Case 2: HAL registered as a per-type mapper on the shared Jackson converter.
+        // Media types and mapper entries must be changed together, or canWrite() fails.
+        JsonMapper halMapper = findHalMapper(jacksonConverter);
+        if (halMapper != null) {
+            addSupportedMediaTypes(jacksonConverter);
+            jacksonConverter.registerMappersForType(RepresentationModel.class,
+                mappers -> VENDOR_SPECIFIC_TYPES.forEach(type -> mappers.putIfAbsent(type, halMapper)));
         }
     }
 
-    private void addVendorSpecificMediaTypes(List<MediaType> mediaTypes) {
-        mediaTypes.add(V1MediaType.V1_HAL_DOCUMENT_COLLECTION_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_HAL_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_HAL_AUDIT_ENTRY_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_HAL_DOCUMENT_AND_METADATA_COLLECTION_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_DOCUMENT_COLLECTION_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_DOCUMENT_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_DOCUMENT_CONTENT_VERSION_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_AUDIT_ENTRY_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_HAL_DOCUMENT_PAGE_MEDIA_TYPE);
-        mediaTypes.add(V1MediaType.V1_HAL_AUDIT_ENTRY_COLLECTION_MEDIA_TYPE);
+    private boolean supportsHal(JacksonJsonHttpMessageConverter converter) {
+        return converter.getSupportedMediaTypes().stream()
+            .anyMatch(MediaTypes.HAL_JSON::isCompatibleWith);
     }
 
+    private JsonMapper findHalMapper(JacksonJsonHttpMessageConverter converter) {
+        Map<MediaType, JsonMapper> mappers = converter.getMappersForType(RepresentationModel.class);
+        return mappers.entrySet().stream()
+            .filter(entry -> MediaTypes.HAL_JSON.isCompatibleWith(entry.getKey()))
+            .map(Map.Entry::getValue)
+            .findFirst()
+            .orElse(null);
+    }
+
+    private void addSupportedMediaTypes(JacksonJsonHttpMessageConverter converter) {
+        Set<MediaType> mediaTypes = new LinkedHashSet<>(converter.getSupportedMediaTypes());
+        mediaTypes.addAll(VENDOR_SPECIFIC_TYPES);
+        converter.setSupportedMediaTypes(new ArrayList<>(mediaTypes));
+    }
 }
