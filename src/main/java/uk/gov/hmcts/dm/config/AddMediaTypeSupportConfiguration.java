@@ -20,10 +20,10 @@ import java.util.Set;
 /**
  * Lets the HAL message converter also produce and accept the V1 vendor media types.
  *
- * Boot 3.x: the HAL converter's default ObjectMapper had the HAL module registered,
+ * <p>Boot 3.x: the HAL converter's default ObjectMapper had the HAL module registered,
  * so adding the media types was enough.
  *
- * Boot 4.x: HAL may come from either
+ * <p>Boot 4.x: HAL may come from either
  *  1. a single-mapper TypeConstrainedJacksonJsonHttpMessageConverter (same as 3.x), or
  *  2. a per-type mapper entry for RepresentationModel on the shared Jackson converter.
  *     A media type with no mapper entry gets no mapper at all, so the HAL mapper must

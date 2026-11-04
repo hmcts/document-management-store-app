@@ -1,6 +1,7 @@
 package uk.gov.hmcts.dm.config;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.mvc.TypeConstrainedJacksonJsonHttpMessageConverter;
 import org.springframework.http.MediaType;
@@ -24,7 +25,7 @@ class AddMediaTypeSupportConfigurationTest {
         TypeConstrainedJacksonJsonHttpMessageConverter halConverter =
             new TypeConstrainedJacksonJsonHttpMessageConverter(
                 RepresentationModel.class,
-                List.of(MediaType.APPLICATION_JSON),
+                List.of(MediaTypes.HAL_JSON),
                 new JsonMapper()
             );
         RequestMappingHandlerAdapter handlerAdapter = new RequestMappingHandlerAdapter();
