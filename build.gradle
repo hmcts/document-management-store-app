@@ -90,7 +90,7 @@ tasks.withType(JavaCompile).configureEach {
 def versions = [
     ehcache            : '3.12.0',
     postgresql         : '42.7.14',
-    jackson            : '2.22.4',
+    jackson            : '2.23.0',
     serenity           : '5.4.2',
     logging            : '8.0.0',
     pact_version       : '4.7.7',
@@ -111,7 +111,7 @@ dependencies {
     implementation group: 'com.google.guava', name: 'guava', version: '33.7.2-jre'
 
     implementation group: 'commons-io', name: 'commons-io', version: '2.22.0'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.22'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.23'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: versions.jackson
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: versions.jackson
@@ -260,8 +260,8 @@ dependencyManagement {
             entry 'log4j-core'
             entry 'log4j-to-slf4j'
         }
-        dependency 'com.fasterxml.jackson.core:jackson-databind:2.22.4'
-        dependency 'tools.jackson.core:jackson-databind:3.2.4'
+        dependency 'com.fasterxml.jackson.core:jackson-databind:2.23.0'
+        dependency 'tools.jackson.core:jackson-databind:3.3.0'
     }
 }
 dependencyCheck {
