@@ -31,6 +31,9 @@ import static org.mockito.Mockito.when;
 
 class OrphanDocumentDeletionTaskTest {
 
+    private static final String ORPHAN_DOCUMENT_PATH =
+        Path.of(System.getProperty("java.io.tmpdir"), "orphan-document.csv").toString();
+
     @InjectMocks
     private OrphanDocumentDeletionTask orphanDocumentDeletionTask;
 
@@ -65,7 +68,7 @@ class OrphanDocumentDeletionTaskTest {
 
     @Test
     void shouldProcessAllValidDocumentIds() throws IOException {
-        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+        Path filePath = Path.of(ORPHAN_DOCUMENT_PATH);
         try {
             Path tempFile = Files.createFile(filePath);
             UUID uuidRepeat = UUID.randomUUID();
@@ -92,7 +95,7 @@ class OrphanDocumentDeletionTaskTest {
             given(mockedOpt.get()).willReturn(mockedStoredDocument);
             given(mockedOpt.isPresent()).willReturn(true);
             orphanDocumentDeletionTask.execute();
-            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+            verify(mockedBlobClient).downloadToFile(ORPHAN_DOCUMENT_PATH);
             verify(documentService, times(3)).findOne(any(UUID.class));
             verify(auditedStoredDocumentBatchOperationsService, times(3))
                 .hardDeleteStoredDocument(mockedStoredDocument, "INC23423", "orphan-document-deletion");
@@ -119,7 +122,7 @@ class OrphanDocumentDeletionTaskTest {
         given(pagedIterable.stream())
             .willReturn(Stream.of(mockedBlobItem));
         orphanDocumentDeletionTask.execute();
-        verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+        verify(mockedBlobClient).downloadToFile(ORPHAN_DOCUMENT_PATH);
         verify(documentService, never()).findOne(any());
         verify(auditedStoredDocumentBatchOperationsService, never())
             .hardDeleteStoredDocument(any());
@@ -151,7 +154,7 @@ class OrphanDocumentDeletionTaskTest {
 
     @Test
     void shouldSkipIfStoredDocumentsNotFound() throws IOException {
-        Path filePath = Path.of(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+        Path filePath = Path.of(ORPHAN_DOCUMENT_PATH);
         try {
             Path tempFile = Files.createFile(filePath);
 
@@ -179,7 +182,7 @@ class OrphanDocumentDeletionTaskTest {
             given(mockedOpt.get()).willReturn(mockedStoredDocument);
             given(mockedOpt.isPresent()).willReturn(false);
             orphanDocumentDeletionTask.execute();
-            verify(mockedBlobClient).downloadToFile(System.getProperty("java.io.tmpdir") + "/orphan-document.csv");
+            verify(mockedBlobClient).downloadToFile(ORPHAN_DOCUMENT_PATH);
             verify(documentService, times(3)).findOne(any());
             verify(auditedStoredDocumentBatchOperationsService, never())
                 .hardDeleteStoredDocument(any());
