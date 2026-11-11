@@ -2,7 +2,7 @@ description: Helm chart for the HMCTS CDM Document Management APO
 apiVersion: v2
 name: dm-store
 home: https://github.com/hmcts/document-management-store-app
-version: 2.3.21
+version: 3.0.0
 maintainers:
   - name: HMCTS Evidence Management Team
     email: EvidenceManagement@HMCTS.NET
@@ -10,6 +10,11 @@ dependencies:
   - name: java
     version: 6.1.1
     repository: oci://hmctsprod.azurecr.io/helm
+    condition: java.enabled
+  - name: job
+    version: 2.2.2
+    repository: oci://hmctsprod.azurecr.io/helm
+    condition: job.enabled
   - name: blobstorage
     version: 2.3.2
     repository: oci://hmctsprod.azurecr.io/helm

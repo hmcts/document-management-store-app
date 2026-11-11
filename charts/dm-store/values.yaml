@@ -1,5 +1,6 @@
 java:
-  image: 'hmctsprod.azurecr.io/dm/store:latest'
+  enabled: true
+  image: &shared_img 'hmctsprod.azurecr.io/dm/store:latest'
   ingressHost: dm-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   readinessDelay: 40
   readinessTimeout: 5
@@ -10,8 +11,8 @@ java:
   livenessPeriod: 15
   livenessFailureThreshold: 10
   applicationPort: '4603'
-  aadIdentityName: dm-store
-  keyVaults:
+  aadIdentityName: &shared_identity dm-store
+  keyVaults: &shared_kv
     dm:
       resourceGroup: dm-shared
       secrets:
@@ -33,7 +34,7 @@ java:
           alias: DM_STORE_SYSTEM_UPDATE_IDAM_USER
         - name: dm-store-system-update-idam-password
           alias: DM_STORE_SYSTEM_UPDATE_IDAM_PASSWORD
-  environment:
+  environment: &shared_env
     # db
     SPRING_DATASOURCE_PORT: 5432
     SPRING_DATASOURCE_NAME: evidence
@@ -96,6 +97,15 @@ java:
     CASE_DOCUMENTS_DELETION_BATCH_SIZE: 1
     CASE_DOCUMENTS_DELETION_SERVICE_NAME: ccd_case_disposer
     ENABLE_DELETE_METADATA_FOR_DOCUMENT: false
+
+job:
+  enabled: false
+  image: *shared_img
+  aadIdentityName: *shared_identity
+  keyVaults: *shared_kv
+  environment:
+    <<: *shared_env
+
 blobstorage:
   resourceGroup: dm-store-aso-preview-rg
   teamName: "CCD"
