@@ -1,4 +1,5 @@
 java:
+  enabled: true
   image: &shared_img 'hmctsprod.azurecr.io/dm/store:latest'
   ingressHost: dm-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
   readinessDelay: 40
