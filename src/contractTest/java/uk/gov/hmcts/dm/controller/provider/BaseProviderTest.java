@@ -6,8 +6,7 @@ import au.com.dius.pact.provider.junitsupport.IgnoreNoPactsToVerify;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
-import au.com.dius.pact.provider.spring.junit5.MockMvcTestTarget;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import au.com.dius.pact.provider.spring.spring7.Spring7MockMvcTestTarget;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,10 +14,10 @@ import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -27,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.WebApplicationContext;
+import tools.jackson.databind.json.JsonMapper;
 import uk.gov.hmcts.dm.config.ToggleConfiguration;
 import uk.gov.hmcts.dm.config.security.DmServiceAuthFilter;
 import uk.gov.hmcts.dm.errorhandler.ExceptionStatusCodeAndMessageResolver;
@@ -70,7 +70,7 @@ public abstract class BaseProviderTest {
 
     protected WebApplicationContext webApplicationContext;
 
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
 
     protected ConfigurableListableBeanFactory configurableListableBeanFactory;
 
@@ -122,7 +122,7 @@ public abstract class BaseProviderTest {
     protected BaseProviderTest(
         MockMvc mockMvc,
         WebApplicationContext webApplicationContext,
-        ObjectMapper objectMapper,
+        JsonMapper objectMapper,
         ConfigurableListableBeanFactory configurableListableBeanFactory,
         DmServiceAuthFilter filter
     ) {
@@ -153,8 +153,8 @@ public abstract class BaseProviderTest {
     void setupPactVerification(PactVerificationContext context) {
         System.getProperties().setProperty("pact.verifier.publishResults", "true");
         if (context != null) {
-            MockMvcTestTarget testTarget = new MockMvcTestTarget(mockMvc);
-            testTarget.setMessageConverters(new MappingJackson2HttpMessageConverter(objectMapper));
+            Spring7MockMvcTestTarget testTarget = new Spring7MockMvcTestTarget(mockMvc);
+            testTarget.setMessageConverters(new JacksonJsonHttpMessageConverter(objectMapper));
             context.setTarget(testTarget);
         }
     }
