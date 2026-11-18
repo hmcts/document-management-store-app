@@ -34,12 +34,12 @@ public class PasswordVerifier {
                             new DefaultHandler(), new Metadata(), new ParseContext());
                     return true;
                 } catch (EncryptedDocumentException | AccessPermissionException e) {
-                    logger.error("Document with Name : {} is password protected. Failed with error msg {}",
-                            multipartFile.getOriginalFilename(), e.getMessage());
+                    logger.error("Document is password protected. Failed with error msg {}",
+                            e.getMessage());
                     return false;
                 } catch (Exception e) {
-                    logger.info("Document with Name : {} could not be parsed. Failed with error msg {}",
-                            multipartFile.getOriginalFilename(), e.getMessage());
+                    logger.info("Document could not be parsed. Failed with error msg {}",
+                            e.getMessage());
                     return true;
                 }
             };
@@ -48,11 +48,11 @@ public class PasswordVerifier {
                 // 3 seconds timeout
                 return Boolean.TRUE.equals(timeLimiter.callWithTimeout(task, 3, TimeUnit.SECONDS));
             } catch (ExecutionException | TimeoutException e) {
-                logger.info("Document with Name : {} TimedOut while parsing", multipartFile.getOriginalFilename());
+                logger.info("Document TimedOut while parsing");
                 return true; // If an exception occurs, we assume the file is not password protected
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // Restore the interrupted status
-                logger.info("Document with Name : {} Thread was interrupted", multipartFile.getOriginalFilename());
+                logger.info("Document Thread was interrupted");
                 return true; // If an exception occurs, we assume the file is not password protected
             }
         }

@@ -38,7 +38,7 @@ public class StoredDocumentAuditEntryHalResource extends HalResource<StoredDocum
         BeanUtils.copyProperties(storedDocumentAuditEntry, this);
         setType(storedDocumentAuditEntry.getClass().getSimpleName());
         add(linkTo(methodOn(StoredDocumentController.class)
-            .getMetaData(storedDocumentAuditEntry.getStoredDocument().getId(), null)).withRel("document"));
+            .getMetaData(storedDocumentAuditEntry.getStoredDocument().getId())).withRel("document"));
         if (storedDocumentAuditEntry instanceof DocumentContentVersionAuditEntry documentContentVersionAuditEntry) {
             add(linkTo(methodOn(DocumentContentVersionController.class)
                     .getDocumentContentVersionDocument(

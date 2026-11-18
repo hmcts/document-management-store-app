@@ -148,7 +148,7 @@ class StoredDocumentControllerTest {
         Map<String, String> headers = Map.of("header-key", "header-value");
         when(auditedStoredDocumentOperationsService.readStoredDocument(documentId)).thenReturn(storedDocument);
 
-        ResponseEntity<Object> response = storedDocumentController.getMetaData(documentId, headers);
+        ResponseEntity<Object> response = storedDocumentController.getMetaData(documentId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(V1MediaType.V1_HAL_DOCUMENT_MEDIA_TYPE, response.getHeaders().getContentType());
@@ -157,7 +157,7 @@ class StoredDocumentControllerTest {
 
         StoredDocumentHalResource resource = (StoredDocumentHalResource) response.getBody();
         assertTrue(resource.getLink("self").isPresent());
-        String expectedSelfLink = linkTo(methodOn(StoredDocumentController.class).getMetaData(documentId, null))
+        String expectedSelfLink = linkTo(methodOn(StoredDocumentController.class).getMetaData(documentId))
             .withSelfRel().getHref();
         Link self = resource.getLink("self").get();
         assertEquals(expectedSelfLink, self.getHref());
@@ -167,7 +167,7 @@ class StoredDocumentControllerTest {
     void testGetMetaDataNotFound() {
         when(auditedStoredDocumentOperationsService.readStoredDocument(documentId)).thenReturn(null);
 
-        ResponseEntity<Object> response = storedDocumentController.getMetaData(documentId, Collections.emptyMap());
+        ResponseEntity<Object> response = storedDocumentController.getMetaData(documentId);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }

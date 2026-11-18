@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.hmcts.dm.security.Classifications;
 import uk.gov.hmcts.dm.security.Permissions;
 import uk.gov.hmcts.dm.service.SecurityUtilService;
-import uk.gov.hmcts.dm.utils.StringUtils;
 
 import java.util.Collection;
 import java.util.Set;
@@ -50,10 +49,6 @@ public class DomainPermissionEvaluator {
             || Classifications.PUBLIC.equals(rolesAware.getClassification()))
             )) {
             Set<String> documentRoles = sanitizedSetFrom(rolesAware.getRoles());
-            log.debug("User with roles {} accessing document that accepts roles {}",
-                StringUtils.convertValidLogStrings(authenticatedUserRolesSet),
-                StringUtils.convertValidLogStrings(documentRoles));
-
             documentRoles.retainAll(authenticatedUserRolesSet);
             if (!documentRoles.isEmpty()) {
                 result = true;
@@ -72,16 +67,6 @@ public class DomainPermissionEvaluator {
                 && securityUtilService.getCurrentlyAuthenticatedServiceName().equalsIgnoreCase(CCD_CASE_DISPOSER)) {
             result = true;
         }
-        log.debug(
-            "AuthenticatedUserId {}, CreatorAware CreatedBy {}, Permissions {}, "
-                + "CurrentlyAuthenticatedServiceName {}, Result {}",
-            authenticatedUserId,
-            creatorAware.getCreatedBy(),
-            permission,
-            securityUtilService.getCurrentlyAuthenticatedServiceName(),
-            result
-        );
-
         return result;
     }
 }
