@@ -220,7 +220,7 @@ dependencyManagement {
         }
         //CVE-2026-41006, CVE-2026-41007
         dependency 'com.github.junrar:junrar:8.1.2'
-        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.26') {
+        dependencySet(group: 'org.apache.tomcat.embed', version: '11.0.29') {
             entry 'tomcat-embed-core'
             entry 'tomcat-embed-websocket'
             entry 'tomcat-embed-el'
