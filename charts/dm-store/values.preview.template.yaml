@@ -44,6 +44,7 @@ java:
     SPRING_DATASOURCE_NAME: "{{ .Values.postgresql.auth.database}}"
     SPRING_DATASOURCE_USERNAME: "{{ .Values.postgresql.auth.username}}"
     SPRING_DATASOURCE_PASSWORD: "{{ .Values.postgresql.auth.password}}"
+    SPRING_DATASOURCE_OPTIONS: "?sslmode=disable"
     # logging vars & healthcheck
     REFORM_ENVIRONMENT: preview
     PACKAGES_ENVIRONMENT: preview
