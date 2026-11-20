@@ -1,8 +1,6 @@
 package uk.gov.hmcts.dm.security.domain;
 
 import lombok.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uk.gov.hmcts.dm.security.Classifications;
