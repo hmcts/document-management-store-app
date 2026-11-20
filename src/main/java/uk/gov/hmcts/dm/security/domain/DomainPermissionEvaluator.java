@@ -18,7 +18,6 @@ import static uk.gov.hmcts.dm.service.SecurityUtilService.sanitizedSetFrom;
 public class DomainPermissionEvaluator {
 
     public static final String CASE_WORKER_PREFIX = "caseworker";
-    private final Logger log = LoggerFactory.getLogger(DomainPermissionEvaluator.class);
 
     private static final String CCD_CASE_DISPOSER = "ccd_case_disposer";
 

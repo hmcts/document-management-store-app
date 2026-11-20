@@ -226,8 +226,6 @@ public class StoredDocumentController {
 
             logger.debug("ContentType for documentId : {} is : {} ", documentId, documentContentVersion.getMimeType());
             logger.debug("Size for documentId : {} is : {} ", documentId, documentContentVersion.getSize());
-            headers.forEach((key, value) ->
-                logger.debug("documentId : {} has Request Header {} = {}", documentId, key, value));
         }
         if (toggleConfiguration.isChunking()) {
             logger.debug("DocumentId : {} has Response: Content-Length, {}", documentId,
