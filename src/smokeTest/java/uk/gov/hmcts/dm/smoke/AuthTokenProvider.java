@@ -21,33 +21,6 @@ public class AuthTokenProvider {
         this.token = token;
     }
 
-    public AuthTokens getTokens() {
-        return new AuthTokens(token, "");
-    }
-
-
-
-    public class AuthTokens {
-        private final String userToken;
-        private final String serviceToken;
-
-        public AuthTokens(String userToken, String serviceToken) {
-            this.userToken = userToken;
-            this.serviceToken = serviceToken;
-        }
-
-        public String getUserToken() {
-            return userToken;
-        }
-
-        @Override
-        public String toString() {
-            return "AuthTokens{"
-                + "userToken='" + userToken + '\''
-                + ", serviceToken='" + serviceToken + '\''
-                + '}';
-        }
-    }
 
     public String findServiceToken() {
         return RestAssured
