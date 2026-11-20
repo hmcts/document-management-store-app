@@ -51,8 +51,8 @@ public class FileContentVerifier {
 
         String fileNameExtension = getOriginalFileNameExtension(multipartFile);
         if (extensionsList.stream().noneMatch(ext -> ext.equalsIgnoreCase(fileNameExtension))) {
-            log.error("The extension {} of uploaded file with name : {} is not white-listed",
-                sanitiseFileName(fileNameExtension), sanitiseFileName(multipartFile.getOriginalFilename()));
+            log.error("The extension {} of uploaded file is not white-listed",
+                sanitiseFileName(fileNameExtension));
             return FileVerificationResult.invalid();
         }
 
@@ -70,8 +70,8 @@ public class FileContentVerifier {
             String finalDetectedMimeType = detectedMimeType;
             if (!Strings.CI.endsWith(detectedMimeType, PROTECTED)
                 && mimeTypeList.stream().noneMatch(m -> m.equalsIgnoreCase(finalDetectedMimeType))) {
-                log.error("The mime-type {} of uploaded file with name : {} is not white-listed: ",
-                    detectedMimeType, sanitiseFileName(multipartFile.getOriginalFilename()));
+                log.error("The mime-type {} of uploaded file is not white-listed: ",
+                    detectedMimeType);
                 return new FileVerificationResult(false, detectedMimeType);
             }
         } catch (IOException e) {

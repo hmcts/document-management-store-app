@@ -32,7 +32,7 @@ public class DocumentContentVersionHalResource extends HalResource<DocumentConte
         BeanUtils.copyProperties(documentContentVersion, this);
 
         add(linkTo(methodOn(StoredDocumentController.class)
-            .getMetaData(documentContentVersion.getStoredDocument().getId(), null)).withRel("document"));
+            .getMetaData(documentContentVersion.getStoredDocument().getId())).withRel("document"));
 
         add(linkTo(methodOn(DocumentContentVersionController.class).getDocumentContentVersionDocument(
             documentContentVersion.getStoredDocument().getId(),
